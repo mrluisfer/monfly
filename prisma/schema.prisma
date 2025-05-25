@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  email           String           @id @unique
+  password        String
+  name            String?
+  transactions    Transaction[]
+  budgets         Budget[]
+  pots            Pot[]
+  recurringBills  RecurringBill[]
+  categories      Category[]
+  createdAt       DateTime         @default(now())
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userEmail], references: [email])
+  userEmail   String
+  amount      Float
+  type        String
+  category    String
+  description String?
+  date        DateTime
+  createdAt   DateTime @default(now())
+}
+
+model Budget {
+  id           String   @id @default(uuid())
+  user         User     @relation(fields: [userEmail], references: [email])
+  userEmail    String
+  category     String
+  amountLimit  Float
+  amountSpent  Float    @default(0)
+  startDate    DateTime
+  endDate      DateTime
+  createdAt    DateTime @default(now())
+}
+
+model Pot {
+  id            String   @id @default(uuid())
+  user          User     @relation(fields: [userEmail], references: [email])
+  userEmail     String
+  title         String
+  goalAmount    Float
+  currentAmount Float    @default(0)
+  category      String?
+  createdAt     DateTime @default(now())
+}
+
+model RecurringBill {
+  id           String   @id @default(uuid())
+  user         User     @relation(fields: [userEmail], references: [email])
+  userEmail    String
+  title        String
+  amount       Float
+  frequency    String 
+  nextDueDate  DateTime
+  category     String
+  createdAt    DateTime @default(now())
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  icon      String
+  user      User     @relation(fields: [userEmail], references: [email])
+  userEmail String
+  createdAt DateTime @default(now())
+}
