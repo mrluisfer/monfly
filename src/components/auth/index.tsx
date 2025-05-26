@@ -1,4 +1,4 @@
-import { ClientOnly } from "@tanstack/react-router";
+import { ClientOnly, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
@@ -43,7 +43,9 @@ export function Auth<T extends z.ZodType<any, any, any>>({
 		<ClientOnly>
 			<div className="fixed inset-0 bg-white dark:bg-black flex items-start justify-center p-8">
 				<div className="bg-white dark:bg-gray-900 p-8 rounded-lg shadow-lg">
-					<h1 className="text-2xl font-bold mb-4">{actionText}</h1>
+					<h1 className="text-2xl font-bold mb-4 w-full text-center">
+						{actionText}
+					</h1>
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
 							<FormField
@@ -110,6 +112,24 @@ export function Auth<T extends z.ZodType<any, any, any>>({
 								{status === "pending" ? "..." : actionText}
 							</Button>
 							{afterSubmit ? afterSubmit : null}
+							{actionText === actions.login && (
+								<div>
+									<Button asChild className="w-full" variant="secondary">
+										<Link to="/signup" type="button">
+											Sign up
+										</Link>
+									</Button>
+								</div>
+							)}
+							{actionText === actions.signup && (
+								<div>
+									<Button asChild className="w-full" variant="secondary">
+										<Link to="/login" type="button">
+											Login
+										</Link>
+									</Button>
+								</div>
+							)}
 						</form>
 					</Form>
 				</div>

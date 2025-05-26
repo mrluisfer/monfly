@@ -76,11 +76,7 @@ function Login() {
 						<div className="text-red-400">{loginMutation.data.message}</div>
 						{loginMutation.data.userNotFound ? (
 							<div>
-								<Button asChild>
-									<Link to="/signup" type="button">
-										Sign up instead?
-									</Link>
-								</Button>
+								<div>User not found, but you can sign up!</div>
 							</div>
 						) : null}
 					</>
