@@ -8,7 +8,8 @@ datasource db {
 }
 
 model User {
-  email           String           @id @unique
+  id              String          @id @default(uuid())
+  email           String          @unique
   password        String
   name            String?
   transactions    Transaction[]
