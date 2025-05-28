@@ -1,4 +1,9 @@
-import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+	Link,
+	useLocation,
+	useNavigate,
+	useRouter,
+} from "@tanstack/react-router";
 import clsx from "clsx";
 import {
 	ArrowRight,
@@ -65,8 +70,8 @@ const sidebarFooterItems: SidebarItemType[] = [
 ];
 
 const Sidebar = () => {
-	const { state } = useRouter();
-	const currentPath = state.location.pathname;
+	const location = useLocation();
+	const currentPath = location.pathname;
 	const navigate = useNavigate();
 
 	const handleLogOut = async () => {
