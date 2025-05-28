@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
+import Layout from "~/components/layout";
 import { fetchUser } from "~/utils/auth/fetch-user";
 
 export const Route = createFileRoute("/_authed")({
@@ -17,5 +18,12 @@ export const Route = createFileRoute("/_authed")({
 			return <div>Not authenticated</div>;
 		}
 		throw error;
+	},
+	component: () => {
+		return (
+			<Layout>
+				<Outlet />
+			</Layout>
+		);
 	},
 });
