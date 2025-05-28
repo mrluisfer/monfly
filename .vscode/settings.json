@@ -8,20 +8,27 @@
 	"files.readonlyInclude": {
 		"**/routeTree.gen.ts": true
 	},
-	"tailwindCSS.experimental.configFile": "../tailwind.config.js",
+	"tailwindCSS.experimental.configFile": "tailwind.config.js",
 	"files.associations": {
 		"*.css": "tailwindcss"
 	},
 	"editor.quickSuggestions": {
-		"strings": "on"
+		"strings": true
 	},
 	"tailwindCSS.includeLanguages": {
+		"html": "html",
+		"javascript": "javascript",
+		"typescript": "typescript",
+		"javascriptreact": "javascriptreact",
+		"typescriptreact": "typescriptreact",
+		"css": "css",
 		"plaintext": "html"
 	},
 	"tailwindCSS.classFunctions": ["tw", "clsx", "tw\\.[a-z-]+"],
 	"editor.defaultFormatter": "biomejs.biome",
 	"editor.codeActionsOnSave": {
 		"quickfix.biome": "explicit",
-		"source.organizeImports.biome": "explicit"
+		"source.organizeImports.biome": "explicit",
+		"source.organizeImports": "explicit"
 	}
 }

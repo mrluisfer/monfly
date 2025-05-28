@@ -15,7 +15,7 @@ const Card = ({
 	return (
 		<div
 			className={clsx(
-				"p-6 rounded-[1rem] shadow-xs transition duration-200 ease-in-out hover:scale-105 hover:brightness-105 border-2",
+				"p-4 transition duration-200 ease-in-out hover:brightness-105 border-2 rounded-xl border bg-card text-card-foreground shadow",
 				className,
 			)}
 		>
