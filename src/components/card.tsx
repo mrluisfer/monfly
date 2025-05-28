@@ -5,24 +5,21 @@ const Card = ({
 	children,
 	className,
 	variant = "primary",
+	title,
 }: {
 	children: ReactNode;
 	className?: string;
 	variant?: "primary" | "secondary";
+	title?: string;
 }) => {
-	const cardStyles = {
-		primary: "bg-neutral-100",
-		secondary: "bg-neutral-900 text-white",
-	};
-
 	return (
 		<div
 			className={clsx(
-				"p-6 rounded-[1rem] shadow-xs border-2 border-transparent transition duration-200 ease-in-out hover:scale-105 hover:brightness-105",
-				cardStyles[variant],
+				"p-6 rounded-[1rem] shadow-xs transition duration-200 ease-in-out hover:scale-105 hover:brightness-105 border-2",
 				className,
 			)}
 		>
+			<h3 className="text-lg font-bold">{title}</h3>
 			{children}
 		</div>
 	);
