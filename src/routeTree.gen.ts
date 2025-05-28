@@ -16,6 +16,7 @@ import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthedTransactionsIndexImport } from './routes/_authed/transactions.index'
 import { Route as AuthedMvpIndexImport } from './routes/_authed/mvp.index'
 import { Route as AuthedHomeIndexImport } from './routes/_authed/home.index'
 
@@ -48,6 +49,12 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthedTransactionsIndexRoute = AuthedTransactionsIndexImport.update({
+  id: '/transactions/',
+  path: '/transactions/',
+  getParentRoute: () => AuthedRoute,
 } as any)
 
 const AuthedMvpIndexRoute = AuthedMvpIndexImport.update({
@@ -115,6 +122,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedMvpIndexImport
       parentRoute: typeof AuthedImport
     }
+    '/_authed/transactions/': {
+      id: '/_authed/transactions/'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof AuthedTransactionsIndexImport
+      parentRoute: typeof AuthedImport
+    }
   }
 }
 
@@ -123,11 +137,13 @@ declare module '@tanstack/react-router' {
 interface AuthedRouteChildren {
   AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
   AuthedMvpIndexRoute: typeof AuthedMvpIndexRoute
+  AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
   AuthedMvpIndexRoute: AuthedMvpIndexRoute,
+  AuthedTransactionsIndexRoute: AuthedTransactionsIndexRoute,
 }
 
 const AuthedRouteWithChildren =
@@ -141,6 +157,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/home': typeof AuthedHomeIndexRoute
   '/mvp': typeof AuthedMvpIndexRoute
+  '/transactions': typeof AuthedTransactionsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -151,6 +168,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/home': typeof AuthedHomeIndexRoute
   '/mvp': typeof AuthedMvpIndexRoute
+  '/transactions': typeof AuthedTransactionsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -162,13 +180,30 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authed/home/': typeof AuthedHomeIndexRoute
   '/_authed/mvp/': typeof AuthedMvpIndexRoute
+  '/_authed/transactions/': typeof AuthedTransactionsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/login' | '/logout' | '/signup' | '/home' | '/mvp'
+  fullPaths:
+    | '/'
+    | ''
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/home'
+    | '/mvp'
+    | '/transactions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/logout' | '/signup' | '/home' | '/mvp'
+  to:
+    | '/'
+    | ''
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/home'
+    | '/mvp'
+    | '/transactions'
   id:
     | '__root__'
     | '/'
@@ -178,6 +213,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authed/home/'
     | '/_authed/mvp/'
+    | '/_authed/transactions/'
   fileRoutesById: FileRoutesById
 }
 
@@ -221,7 +257,8 @@ export const routeTree = rootRoute
       "filePath": "_authed.tsx",
       "children": [
         "/_authed/home/",
-        "/_authed/mvp/"
+        "/_authed/mvp/",
+        "/_authed/transactions/"
       ]
     },
     "/login": {
@@ -239,6 +276,10 @@ export const routeTree = rootRoute
     },
     "/_authed/mvp/": {
       "filePath": "_authed/mvp.index.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/transactions/": {
+      "filePath": "_authed/transactions.index.tsx",
       "parent": "/_authed"
     }
   }

@@ -76,7 +76,7 @@ const Transactions = () => {
 	};
 
 	return (
-		<div className="max-w-xl p-4 bg-white border-px border-neutral-100 rounded-lg">
+		<div className="max-w-xl p-4 border-2 rounded-lg">
 			<h2>Transactions</h2>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>

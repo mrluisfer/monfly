@@ -2,12 +2,18 @@ import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import clsx from "clsx";
 import {
 	ArrowRight,
+	BarChart,
 	ChevronDown,
 	ChevronRight,
 	ChevronUp,
+	CreditCard,
+	Home,
 	LogOut,
+	Settings,
 	User2,
+	Wallet,
 } from "lucide-react";
+import type { ReactNode } from "react";
 import { logoutFn } from "~/utils/auth/logoutfn";
 import {
 	Collapsible,
@@ -42,19 +48,20 @@ import OverviewSection from "./overview-section";
 
 type SidebarItemType = {
 	title: string;
-	icon: string;
+	icon: string | ReactNode;
 	url?: string;
 };
 
 const sidebarItems: SidebarItemType[] = [
-	{ title: "Transactions", icon: "💰", url: "/transactions" },
-	{ title: "Budgets", icon: "📊", url: "/budget" },
-	{ title: "Reports", icon: "📈", url: "/reports" },
+	{ title: "Overview", icon: <Home />, url: "/home" },
+	{ title: "Transactions", icon: <CreditCard />, url: "/transactions" },
+	{ title: "Budgets", icon: <Wallet />, url: "/budget" },
+	{ title: "Reports", icon: <BarChart />, url: "/reports" },
 ];
 
 const sidebarFooterItems: SidebarItemType[] = [
 	{ title: "Help", icon: "❓", url: "/help" },
-	{ title: "Settings", icon: "⚙️", url: "/settings" },
+	{ title: "Settings", icon: <Settings />, url: "/settings" },
 ];
 
 const Sidebar = () => {
@@ -77,10 +84,6 @@ const Sidebar = () => {
 				<Title>Finance</Title>
 			</SidebarHeader>
 			<SidebarContent>
-				<OverviewSection
-					currentPath={currentPath}
-					fullPath={state.location.href}
-				/>
 				<SidebarGroup>
 					<SidebarGroupContent>
 						<SidebarMenu>

@@ -9,6 +9,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type * as React from "react";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js";
 import { NotFound } from "~/components/NotFound.js";
+import { ThemeProvider } from "~/context/ThemeProvider";
 import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo.js";
 
@@ -67,9 +68,11 @@ const queryClient = new QueryClient();
 function RootComponent() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<RootDocument>
-				<Outlet />
-			</RootDocument>
+			<ThemeProvider key="theme-provider">
+				<RootDocument>
+					<Outlet />
+				</RootDocument>
+			</ThemeProvider>
 		</QueryClientProvider>
 	);
 }
