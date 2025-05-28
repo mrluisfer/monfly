@@ -18,6 +18,7 @@ model User {
   recurringBills  RecurringBill[]
   categories      Category[]
   createdAt       DateTime         @default(now())
+  totalBalance    Float            @default(0)
 }
 
 model Transaction {
