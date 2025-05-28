@@ -4,7 +4,7 @@ import type { Prisma } from "@prisma/client";
 import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { postTransactionByEmail } from "~/lib/api/postTransactionByEmail";
+import { postTransactionByEmail } from "~/lib/api/transactionByEmail";
 import { fetchUser } from "~/utils/auth/fetch-user";
 import { Button } from "./ui/button";
 import {
