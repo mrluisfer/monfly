@@ -11,6 +11,8 @@ export const Route = createFileRoute("/_authed")({
 				to: "/login",
 			});
 		}
+
+		return { user };
 	},
 	errorComponent: ({ error }) => {
 		if (error.message === "Not authenticated") {
