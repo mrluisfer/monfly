@@ -1,8 +1,9 @@
-import { ClientOnly, createFileRoute } from "@tanstack/react-router";
-import Transactions from "~/components/Transactions";
+import { ClientOnly, Link, createFileRoute } from "@tanstack/react-router";
 import Card from "~/components/card";
 import Layout from "~/components/layout";
 import { overviewSections } from "~/components/sidebar/overview-section";
+import Transactions from "~/components/transactions";
+import { Button } from "~/components/ui/button";
 import Title from "~/components/ui/title";
 
 export const Route = createFileRoute("/_authed/home/")({
@@ -13,7 +14,7 @@ function RouteComponent() {
 	// const { isPending, data, error } = useQuery(usersQueryOptions);
 
 	return (
-		<Layout>
+		<>
 			<Title className="pb-12">Overview</Title>
 			{/* <div
 					className="grid grid-cols-3 gap-6 w-full"
@@ -34,8 +35,10 @@ function RouteComponent() {
 				</div> */}
 			<div>
 				<h2>Balance</h2>
-				<Transactions />
+				<Button asChild>
+					<Link to="/mvp">MVP</Link>
+				</Button>
 			</div>
-		</Layout>
+		</>
 	);
 }
