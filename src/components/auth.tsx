@@ -2,7 +2,7 @@ import { ClientOnly, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
-import { Button } from "../ui/button";
+import { Button } from "./ui/button";
 import {
 	Form,
 	FormControl,
@@ -11,8 +11,8 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from "./ui/form";
+import { Input } from "./ui/input";
 
 const actions = {
 	login: "Login",
