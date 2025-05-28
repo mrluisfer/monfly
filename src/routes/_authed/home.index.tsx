@@ -1,8 +1,8 @@
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
+import Transactions from "~/components/Transactions";
 import Card from "~/components/card";
 import Layout from "~/components/layout";
 import { overviewSections } from "~/components/sidebar/overview-section";
-import Transactions from "~/components/transactions";
 import Title from "~/components/ui/title";
 
 export const Route = createFileRoute("/_authed/home/")({
