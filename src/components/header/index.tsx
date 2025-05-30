@@ -1,4 +1,6 @@
+import { Settings } from "lucide-react";
 import ToggleTheme from "../toggleTheme";
+import { Button } from "../ui/button";
 import { SidebarTrigger, useSidebar } from "../ui/sidebar";
 import Navigation from "./navigation";
 
@@ -11,7 +13,12 @@ const Header = () => {
 				<SidebarTrigger />
 				{!open && <Navigation />}
 			</div>
-			<ToggleTheme />
+			<div className="flex items-center gap-2">
+				<ToggleTheme />
+				<Button>
+					<Settings />
+				</Button>
+			</div>
 		</header>
 	);
 };
