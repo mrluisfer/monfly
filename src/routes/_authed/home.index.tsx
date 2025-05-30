@@ -1,44 +1,46 @@
-import { ClientOnly, Link, createFileRoute } from "@tanstack/react-router";
-import Card from "~/components/card";
-import Layout from "~/components/layout";
-import { overviewSections } from "~/components/sidebar/overview-section";
-import Transactions from "~/components/transactions";
+import { createFileRoute } from "@tanstack/react-router";
+import { Plus } from "lucide-react";
+import TotalBalance from "~/components/total-balance";
+import TransactionsList from "~/components/transactions-list";
 import { Button } from "~/components/ui/button";
-import Title from "~/components/ui/title";
+import { useRouteUser } from "~/hooks/use-route-user";
+import { useUser } from "~/hooks/use-user";
 
 export const Route = createFileRoute("/_authed/home/")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	// const { isPending, data, error } = useQuery(usersQueryOptions);
+	const { email } = useRouteUser();
+	const { data: user, isPending, error } = useUser(email);
 
 	return (
-		<>
-			<Title className="pb-12">Overview</Title>
-			{/* <div
-					className="grid grid-cols-3 gap-6 w-full"
-					id={overviewSections.balance}
-				>
-					<Card variant="secondary">
-						<p>Current Balance</p>
-						<p className="text-2xl font-bold">$1,000.00</p>
-					</Card>
-					<Card>
-						<p>Current Balance</p>
-						<p className="text-2xl font-bold">$1,000.00</p>
-					</Card>
-					<Card>
-						<p>Current Balance</p>
-						<p className="text-2xl font-bold">$1,000.00</p>
-					</Card>
-				</div> */}
-			<div>
-				<h2>Balance</h2>
-				<Button asChild>
-					<Link to="/mvp">MVP</Link>
-				</Button>
-			</div>
-		</>
+		<main>
+			<header className="mb-6 flex justify-between items-center">
+				<div>
+					<h1 className="text-2xl font-medium">
+						Welcome back
+						{!isPending && <span className="capitalize">, {user?.name}</span>}
+					</h1>
+					<span className="opacity-50">This is your overview dashboard</span>
+				</div>
+				<div>
+					<Button>
+						<Plus />
+						Income
+					</Button>
+				</div>
+			</header>
+			<section className="flex flex-col gap-4">
+				<div className="grid grid-cols-3 gap-6 w-full">
+					<TotalBalance />
+				</div>
+				<div className="grid grid-cols-6 gap-6 w-full">
+					<div className="col-span-3">
+						<TransactionsList />
+					</div>
+				</div>
+			</section>
+		</main>
 	);
 }
