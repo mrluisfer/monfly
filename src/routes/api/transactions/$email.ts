@@ -2,13 +2,16 @@ import { json } from "@tanstack/react-start";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { prismaClient } from "~/utils/prisma";
 
-export const APIRoute = createAPIFileRoute("/api/transaction/$email")({
+export const APIRoute = createAPIFileRoute("/api/transactions/$email")({
 	GET: async ({ request, params }) => {
 		try {
 			const { email } = params;
 			const transactions = await prismaClient.transaction.findMany({
 				where: {
 					userEmail: email,
+				},
+				include: {
+					user: true,
 				},
 			});
 
