@@ -380,6 +380,9 @@
   .min-h-svh {
     min-height: 100svh;
   }
+  .w-\(--radix-popper-anchor-width\) {
+    width: var(--radix-popper-anchor-width);
+  }
   .w-\(--sidebar-width\) {
     width: var(--sidebar-width);
   }
@@ -391,9 +394,6 @@
   }
   .w-5 {
     width: calc(var(--spacing) * 5);
-  }
-  .w-\[--radix-popper-anchor-width\] {
-    width: --radix-popper-anchor-width;
   }
   .w-auto {
     width: auto;
@@ -416,8 +416,8 @@
   .min-w-5 {
     min-width: calc(var(--spacing) * 5);
   }
-  .min-w-\[8rem\] {
-    min-width: 8rem;
+  .min-w-32 {
+    min-width: calc(var(--spacing) * 32);
   }
   .flex-1 {
     flex: 1;
@@ -443,7 +443,7 @@
     --tw-translate-x: 1px;
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
-  .translate-y-\[calc\(-50\%_-_2px\)\] {
+  .translate-y-\[calc\(-50\%-2px\)\] {
     --tw-translate-y: calc(-50% - 2px);
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
@@ -1476,6 +1476,21 @@
       }
     }
   }
+  .data-disabled\:pointer-events-none {
+    &[data-disabled] {
+      pointer-events: none;
+    }
+  }
+  .data-disabled\:opacity-50 {
+    &[data-disabled] {
+      opacity: 50%;
+    }
+  }
+  .data-inset\:pl-8 {
+    &[data-inset] {
+      padding-left: calc(var(--spacing) * 8);
+    }
+  }
   .data-\[active\=true\]\:bg-sidebar-accent {
     &[data-active="true"] {
       background-color: var(--sidebar-accent);
@@ -1492,24 +1507,9 @@
       color: var(--sidebar-accent-foreground);
     }
   }
-  .data-\[disabled\]\:pointer-events-none {
-    &[data-disabled] {
-      pointer-events: none;
-    }
-  }
-  .data-\[disabled\]\:opacity-50 {
-    &[data-disabled] {
-      opacity: 50%;
-    }
-  }
   .data-\[error\=true\]\:text-destructive {
     &[data-error="true"] {
       color: var(--destructive);
-    }
-  }
-  .data-\[inset\]\:pl-8 {
-    &[data-inset] {
-      padding-left: calc(var(--spacing) * 8);
     }
   }
   .data-\[orientation\=horizontal\]\:h-px {
@@ -1898,7 +1898,7 @@
       color: var(--muted-foreground);
     }
   }
-  .data-\[variant\=destructive\]\:\*\:\[svg\]\:\!text-destructive {
+  .data-\[variant\=destructive\]\:\*\:\[svg\]\:text-destructive\! {
     &[data-variant="destructive"] {
       :is(& > *) {
         &:is(svg) {
@@ -2092,12 +2092,15 @@
     --sidebar-ring: oklch(0.552 0.016 285.938);
   }
   body {
-    background-color: --background;
-    color: --foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
   * {
-    border-color: --border;
-    outline-color: color-mix(in oklab, --ring 50%, transparent);
+    border-color: var(--border);
+    outline-color: var(--ring);
+    @supports (color: color-mix(in lab, red, red)) {
+      outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+    }
   }
 }
 html {

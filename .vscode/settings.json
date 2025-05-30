@@ -8,7 +8,6 @@
 	"files.readonlyInclude": {
 		"**/routeTree.gen.ts": true
 	},
-	"tailwindCSS.experimental.configFile": "tailwind.config.js",
 	"files.associations": {
 		"*.css": "tailwindcss"
 	},
@@ -30,5 +29,18 @@
 		"quickfix.biome": "explicit",
 		"source.organizeImports.biome": "explicit",
 		"source.organizeImports": "explicit"
+	},
+	"editor.formatOnSave": true,
+	"[typescript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "biomejs.biome"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "biomejs.biome"
 	}
 }
