@@ -1,6 +1,6 @@
 import type { User } from "@prisma/client";
 
-export const fetchUsers = async () => {
+export const getUsers = async () => {
 	try {
 		const response = await fetch("/api/users", {
 			method: "GET",
