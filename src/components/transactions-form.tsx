@@ -1,11 +1,10 @@
-import { prismaClient } from "@/utils/prisma";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Prisma } from "@prisma/client";
-import React, { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { postTransactionByEmail } from "~/lib/api/transactionByEmail";
 import { fetchUser } from "~/utils/auth/fetch-user";
+import Card from "./card";
 import { Button } from "./ui/button";
 import {
 	Form,
@@ -40,7 +39,7 @@ const FormSchema = z.object({
 
 type FormValues = z.infer<typeof FormSchema>;
 
-const Transactions = () => {
+const TransactionsForm = () => {
 	const form = useForm<FormValues>({
 		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		resolver: zodResolver(FormSchema as any),
@@ -76,7 +75,7 @@ const Transactions = () => {
 	};
 
 	return (
-		<div className="max-w-xl p-4 border-2 rounded-lg">
+		<Card className="">
 			<h2>Transactions</h2>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)}>
@@ -167,8 +166,8 @@ const Transactions = () => {
 					</Button>
 				</form>
 			</Form>
-		</div>
+		</Card>
 	);
 };
 
-export default Transactions;
+export default TransactionsForm;

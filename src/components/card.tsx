@@ -1,27 +1,39 @@
-import clsx from "clsx";
 import type { ReactNode } from "react";
+import {
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+	Card as CardUI,
+} from "./ui/card";
 
 const Card = ({
 	children,
 	className,
-	variant = "primary",
 	title,
+	subtitle,
+	Footer,
 }: {
 	children: ReactNode;
 	className?: string;
-	variant?: "primary" | "secondary";
-	title?: string;
+	title?: string | ReactNode;
+	subtitle?: string | ReactNode;
+	Footer?: ReactNode;
 }) => {
 	return (
-		<div
-			className={clsx(
-				"p-4 transition duration-200 ease-in-out hover:brightness-105 border-2 rounded-xl border bg-card text-card-foreground shadow",
-				className,
+		<CardUI className={className}>
+			{title && (
+				<CardHeader>
+					<CardTitle>
+						{title}
+						<CardDescription>{subtitle}</CardDescription>
+					</CardTitle>
+				</CardHeader>
 			)}
-		>
-			<h3 className="text-lg font-bold">{title}</h3>
-			{children}
-		</div>
+			<CardContent>{children}</CardContent>
+			{Footer && <CardFooter>{Footer}</CardFooter>}
+		</CardUI>
 	);
 };
 

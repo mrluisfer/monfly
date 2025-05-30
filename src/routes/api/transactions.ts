@@ -2,7 +2,7 @@ import { json } from "@tanstack/react-start";
 import { createAPIFileRoute } from "@tanstack/react-start/api";
 import { prismaClient } from "~/utils/prisma";
 
-export const APIRoute = createAPIFileRoute("/api/transaction")({
+export const APIRoute = createAPIFileRoute("/api/transactions")({
 	GET: async ({ request, params }) => {
 		const transactions = await prismaClient.transaction.findMany();
 		return json({ transactions });

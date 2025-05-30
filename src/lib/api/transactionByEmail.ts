@@ -1,4 +1,4 @@
-import type { Prisma, Transaction } from "@prisma/client";
+import type { Prisma, Transaction, User } from "@prisma/client";
 import type { QueryFunctionContext } from "@tanstack/react-query";
 
 export const postTransactionByEmail = async (
@@ -6,7 +6,7 @@ export const postTransactionByEmail = async (
 	data: Prisma.TransactionCreateInput,
 ) => {
 	try {
-		const response = await fetch(`/api/transaction/${email}`, {
+		const response = await fetch(`/api/transactions/${email}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -25,12 +25,16 @@ export const postTransactionByEmail = async (
 	}
 };
 
+export type TTransaction = Transaction & {
+	user: User
+}
+
 export const getTransactionByEmail = async ({
 	queryKey,
 }: QueryFunctionContext<["transactionByEmail", string]>) => {
 	try {
 		const [_, email] = queryKey;
-		const response = await fetch(`/api/transaction/${email}`, {
+		const response = await fetch(`/api/transactions/${email}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -46,7 +50,7 @@ export const getTransactionByEmail = async ({
 			throw new Error(responseData.error);
 		}
 
-		return responseData.transactions;
+		return responseData.transactions as TTransaction[];
 	} catch (error) {
 		console.error("Error fetching transactions:", error);
 		throw error;

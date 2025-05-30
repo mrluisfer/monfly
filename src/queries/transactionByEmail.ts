@@ -1,6 +1,4 @@
-import type { User } from "@prisma/client";
-import { type QueryOptions, queryOptions } from "@tanstack/react-query";
-import { fetchUsers } from "~/lib/api/fetchUsers";
+import { queryOptions } from "@tanstack/react-query";
 import { getTransactionByEmail } from "~/lib/api/transactionByEmail";
 
 // export const usersQueryOptions = queryOptions({
