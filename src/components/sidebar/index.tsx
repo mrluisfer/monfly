@@ -1,30 +1,12 @@
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { ChevronUp, LogOut, Settings, User2 } from "lucide-react";
 import {
-	Link,
-	useLocation,
-	useNavigate,
-	useRouter,
-} from "@tanstack/react-router";
-import clsx from "clsx";
-import {
-	ArrowRight,
-	BarChart,
-	ChevronDown,
-	ChevronRight,
-	ChevronUp,
-	CreditCard,
-	Home,
-	LogOut,
-	Settings,
-	User2,
-	Wallet,
-} from "lucide-react";
-import type { ReactNode } from "react";
+	type SidebarItemType,
+	sidebarRoutes,
+} from "~/constants/sidebar-routes";
+import { useRouteUser } from "~/hooks/use-route-user";
+import { useUser } from "~/hooks/use-user";
 import { logoutFn } from "~/utils/auth/logoutfn";
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "../ui/collapsible";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -36,33 +18,12 @@ import {
 	SidebarFooter,
 	SidebarGroup,
 	SidebarGroupContent,
-	SidebarGroupLabel,
 	SidebarHeader,
 	SidebarMenu,
-	SidebarMenuAction,
 	SidebarMenuButton,
 	SidebarMenuItem,
-	SidebarMenuSub,
-	SidebarMenuSubButton,
-	SidebarMenuSubItem,
-	SidebarProvider,
 	Sidebar as UiSidebar,
 } from "../ui/sidebar";
-import Title from "../ui/title";
-import OverviewSection from "./overview-section";
-
-type SidebarItemType = {
-	title: string;
-	icon: string | ReactNode;
-	url?: string;
-};
-
-const sidebarItems: SidebarItemType[] = [
-	{ title: "Overview", icon: <Home />, url: "/home" },
-	{ title: "Transactions", icon: <CreditCard />, url: "/transactions" },
-	{ title: "Budgets", icon: <Wallet />, url: "/budget" },
-	{ title: "Reports", icon: <BarChart />, url: "/reports" },
-];
 
 const sidebarFooterItems: SidebarItemType[] = [
 	{ title: "Help", icon: "❓", url: "/help" },
@@ -73,6 +34,8 @@ const Sidebar = () => {
 	const location = useLocation();
 	const currentPath = location.pathname;
 	const navigate = useNavigate();
+	const { email } = useRouteUser();
+	const { data: user } = useUser(email);
 
 	const handleLogOut = async () => {
 		await logoutFn({
@@ -86,13 +49,13 @@ const Sidebar = () => {
 	return (
 		<UiSidebar>
 			<SidebarHeader>
-				<Title>Finance</Title>
+				<h1 className="text-2xl font-bold">Finance</h1>
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
 					<SidebarGroupContent>
 						<SidebarMenu>
-							{sidebarItems.map((item) => (
+							{sidebarRoutes.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton
 										asChild
@@ -114,14 +77,14 @@ const Sidebar = () => {
 					<SidebarMenuItem>
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
-								<SidebarMenuButton>
-									<User2 /> Username
+								<SidebarMenuButton className="capitalize">
+									<User2 /> {user?.name}
 									<ChevronUp className="ml-auto" />
 								</SidebarMenuButton>
 							</DropdownMenuTrigger>
 							<DropdownMenuContent
 								side="top"
-								className="w-[--radix-popper-anchor-width]"
+								className="w-(--radix-popper-anchor-width)"
 							>
 								{sidebarFooterItems.map((item) => (
 									<DropdownMenuItem key={item.title} asChild>
