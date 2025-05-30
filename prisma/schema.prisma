@@ -19,6 +19,7 @@ model User {
   categories      Category[]
   createdAt       DateTime         @default(now())
   totalBalance    Float            @default(0)
+  MonthlySummary MonthlySummary[]
 }
 
 model Transaction {
@@ -75,4 +76,16 @@ model Category {
   user      User     @relation(fields: [userEmail], references: [email])
   userEmail String
   createdAt DateTime @default(now())
+}
+
+model MonthlySummary {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userEmail], references: [email])
+  userEmail   String
+  month       Int     
+  year        Int
+  incomeTotal Float    @default(0)
+  expenseTotal Float   @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
