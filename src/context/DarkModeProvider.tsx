@@ -6,30 +6,30 @@ import {
 	useState,
 } from "react";
 
-export type Theme = "light" | "dark";
+export type DarkMode = "light" | "dark";
 
-const applyThemeClass = (themeToApply: Theme) => {
+const applyThemeClass = (themeToApply: DarkMode) => {
 	if (typeof window !== "undefined") {
 		document.documentElement.classList.toggle("dark", themeToApply === "dark");
 	}
 };
 
-const ThemeContext = createContext<{
-	theme: Theme;
-	setTheme: (theme: Theme) => void;
-	toggleTheme: () => void;
+const DarkModeContext = createContext<{
+	theme: DarkMode;
+	setTheme: (theme: DarkMode) => void;
+	toggleDarkMode: () => void;
 }>({
 	theme: "light",
 	setTheme: () => {},
-	toggleTheme: () => {},
+	toggleDarkMode: () => {},
 });
 
 export const DarkModeProvider = ({
 	children,
 }: { children: React.ReactNode }) => {
-	const [theme, setThemeState] = useState<Theme>("light");
+	const [theme, setThemeState] = useState<DarkMode>("light");
 
-	const setTheme = useCallback((t: Theme) => {
+	const setTheme = useCallback((t: DarkMode) => {
 		setThemeState(t);
 		if (typeof window !== "undefined") {
 			localStorage.setItem("theme", t);
@@ -37,14 +37,14 @@ export const DarkModeProvider = ({
 		}
 	}, []);
 
-	const toggleTheme = () => {
+	const toggleDarkMode = () => {
 		setTheme(theme === "light" ? "dark" : "light");
 	};
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
 
-		const stored = localStorage.getItem("theme") as Theme | null;
+		const stored = localStorage.getItem("theme") as DarkMode | null;
 		const prefersDark = window.matchMedia(
 			"(prefers-color-scheme: dark)",
 		).matches;
@@ -62,10 +62,10 @@ export const DarkModeProvider = ({
 	}, [setTheme]);
 
 	return (
-		<ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+		<DarkModeContext.Provider value={{ theme, setTheme, toggleDarkMode }}>
 			{children}
-		</ThemeContext.Provider>
+		</DarkModeContext.Provider>
 	);
 };
 
-export const useTheme = () => useContext(ThemeContext);
+export const useDarkMode = () => useContext(DarkModeContext);

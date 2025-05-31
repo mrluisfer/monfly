@@ -1,6 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { ArrowLeft, Settings } from "lucide-react";
-import ToggleTheme from "../toggleTheme";
+import ToggleDarkMode from "../toggleDarkMode";
 import { Button } from "../ui/button";
 import { SidebarTrigger, useSidebar } from "../ui/sidebar";
 import Navigation from "./navigation";
@@ -18,7 +18,7 @@ const Header = () => {
 				<Button>
 					<Settings />
 				</Button>
-				<ToggleTheme />
+				<ToggleDarkMode />
 			</div>
 		</header>
 	);
@@ -42,7 +42,7 @@ export const GlobalHeader = () => {
 				)}
 			</div>
 			<div>
-				<ToggleTheme />
+				<ToggleDarkMode />
 			</div>
 		</header>
 	);
