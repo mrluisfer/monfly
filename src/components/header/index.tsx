@@ -14,10 +14,10 @@ const Header = () => {
 				{!open && <Navigation />}
 			</div>
 			<div className="flex items-center gap-2">
-				<ToggleTheme />
 				<Button>
 					<Settings />
 				</Button>
+				<ToggleTheme />
 			</div>
 		</header>
 	);
