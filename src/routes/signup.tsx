@@ -54,7 +54,7 @@ function SignupComp() {
 					<Button variant="link" asChild>
 						<Link to="/">
 							<ArrowLeft className="text-white" />
-							Go back
+							Go to home
 						</Link>
 					</Button>
 				</div>

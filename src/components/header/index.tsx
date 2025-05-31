@@ -36,7 +36,7 @@ export const GlobalHeader = () => {
 					<Button variant="link" asChild>
 						<Link to="/">
 							<ArrowLeft />
-							Go Back
+							Go to home
 						</Link>
 					</Button>
 				)}
