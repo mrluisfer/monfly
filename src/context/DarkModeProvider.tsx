@@ -1,9 +1,8 @@
 import {
 	createContext,
 	useCallback,
-	useContext,
 	useEffect,
-	useState,
+	useState
 } from "react";
 
 export type DarkMode = "light" | "dark";
@@ -14,7 +13,7 @@ const applyThemeClass = (themeToApply: DarkMode) => {
 	}
 };
 
-const DarkModeContext = createContext<{
+export const DarkModeContext = createContext<{
 	theme: DarkMode;
 	setTheme: (theme: DarkMode) => void;
 	toggleDarkMode: () => void;
@@ -68,4 +67,3 @@ export const DarkModeProvider = ({
 	);
 };
 
-export const useDarkMode = () => useContext(DarkModeContext);
