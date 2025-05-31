@@ -9,6 +9,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type * as React from "react";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js";
 import { NotFound } from "~/components/NotFound.js";
+import { Toaster } from "~/components/ui/sonner";
 import { ThemeProvider } from "~/context/ThemeProvider";
 import appCss from "~/styles/app.css?url";
 // import appCss from "~/styles/output.css?url";
@@ -91,6 +92,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				{children}
 				<TanStackRouterDevtools position="bottom-right" />
 				<Scripts />
+				<Toaster position="top-center" />
 			</body>
 		</html>
 	);
