@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
+import IncomeChart from "~/components/income-chart";
 import TotalBalance from "~/components/total-balance";
 import TransactionsList from "~/components/transactions-list";
 import { Button } from "~/components/ui/button";
@@ -34,6 +35,7 @@ function RouteComponent() {
 			<section className="flex flex-col gap-4">
 				<div className="grid grid-cols-3 gap-6 w-full">
 					<TotalBalance />
+					<IncomeChart />
 				</div>
 				<div className="grid grid-cols-6 gap-6 w-full">
 					<div className="col-span-3">

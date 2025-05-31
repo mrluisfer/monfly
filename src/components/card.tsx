@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { ReactNode } from "react";
 import {
 	CardContent,
@@ -22,7 +23,7 @@ const Card = ({
 	Footer?: ReactNode;
 }) => {
 	return (
-		<CardUI className={className}>
+		<CardUI className={clsx("h-fit", className)}>
 			{title && (
 				<CardHeader>
 					<CardTitle>
