@@ -10,7 +10,8 @@
 		"prisma-generate": "prisma generate",
 		"prisma-studio": "prisma studio",
 		"prisma-migrate": "prisma migrate dev",
-		"migrate:prod": "prisma migrate deploy"
+		"migrate:prod": "prisma migrate deploy",
+		"install:legacy": "pnpm install --no-strict-peer-dependencies"
 	},
 	"dependencies": {
 		"@dicebear/collection": "~9.2.2",
@@ -40,6 +41,7 @@
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"react-hook-form": "^7.56.4",
+		"recharts": "^2.15.3",
 		"redaxios": "^0.5.1",
 		"sonner": "^2.0.4",
 		"tailwind-merge": "^2.6.0",
@@ -60,5 +62,8 @@
 		"tw-animate-css": "^1.3.0",
 		"typescript": "^5.7.2",
 		"vite-tsconfig-paths": "^5.1.4"
+	},
+	"overrides": {
+		"react-is": "^19.0.0-rc-69d4b800-20241021"
 	}
 }
