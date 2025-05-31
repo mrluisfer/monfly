@@ -23,6 +23,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 	Sidebar as UiSidebar,
+	useSidebar,
 } from "../ui/sidebar";
 
 const sidebarFooterItems: SidebarItemType[] = [
@@ -36,6 +37,7 @@ const Sidebar = () => {
 	const navigate = useNavigate();
 	const { email } = useRouteUser();
 	const { data: user } = useUser(email);
+	const { open } = useSidebar();
 
 	const handleLogOut = async () => {
 		await logoutFn({
@@ -49,7 +51,7 @@ const Sidebar = () => {
 	return (
 		<UiSidebar collapsible="icon">
 			<SidebarHeader>
-				<h1 className="text-2xl font-bold">Finance</h1>
+				{open && <h1 className="text-2xl font-bold">Finance</h1>}
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
@@ -58,6 +60,7 @@ const Sidebar = () => {
 							{sidebarRoutes.map((item) => (
 								<SidebarMenuItem key={item.title}>
 									<SidebarMenuButton
+										tooltip={item.title}
 										asChild
 										isActive={currentPath === item.url}
 									>
