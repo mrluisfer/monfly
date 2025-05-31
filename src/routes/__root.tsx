@@ -10,7 +10,7 @@ import type * as React from "react";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js";
 import { NotFound } from "~/components/NotFound.js";
 import { Toaster } from "~/components/ui/sonner";
-import { ThemeProvider } from "~/context/ThemeProvider";
+import { DarkModeProvider } from "~/context/DarkModeProvider";
 import appCss from "~/styles/app.css?url";
 // import appCss from "~/styles/output.css?url";
 import { seo } from "~/utils/seo.js";
@@ -70,11 +70,11 @@ const queryClient = new QueryClient();
 function RootComponent() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<ThemeProvider key="theme-provider">
+			<DarkModeProvider key="theme-provider">
 				<RootDocument>
 					<Outlet />
 				</RootDocument>
-			</ThemeProvider>
+			</DarkModeProvider>
 		</QueryClientProvider>
 	);
 }
