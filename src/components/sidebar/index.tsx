@@ -47,7 +47,7 @@ const Sidebar = () => {
 	};
 
 	return (
-		<UiSidebar>
+		<UiSidebar collapsible="icon">
 			<SidebarHeader>
 				<h1 className="text-2xl font-bold">Finance</h1>
 			</SidebarHeader>
