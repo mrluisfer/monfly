@@ -1,19 +1,26 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { ArrowLeft, Settings } from "lucide-react";
+import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { ThemeSelector } from "../theme-selector";
 import ToggleDarkMode from "../toggleDarkMode";
 import { Button } from "../ui/button";
-import { SidebarTrigger, useSidebar } from "../ui/sidebar";
-import Navigation from "./navigation";
+import { SidebarTrigger } from "../ui/sidebar";
 
 const Header = () => {
-	const { open } = useSidebar();
+	const location = useLocation();
 
 	return (
 		<header className="flex justify-between items-center mb-4">
 			<div className="flex items-center gap-2">
 				<SidebarTrigger />
-				{!open && <Navigation />}
+
+				{/* {!open && <Navigation />} */}
+				<span>
+					{
+						sidebarRoutes.find((route) => route.url === location.pathname)
+							?.title
+					}
+				</span>
 			</div>
 			<div className="flex items-center gap-2">
 				<ThemeSelector />
@@ -28,7 +35,6 @@ const Header = () => {
 
 export const GlobalHeader = () => {
 	const location = useLocation();
-
 	const isHome = location.pathname === "/";
 
 	return (
