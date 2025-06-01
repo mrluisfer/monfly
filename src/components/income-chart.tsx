@@ -96,9 +96,9 @@ function IncomeChart() {
 					<Area
 						dataKey="desktop"
 						type="linear"
-						fill="var(--color-desktop)"
+						fill="var(--primary)"
 						fillOpacity={0.4}
-						stroke="var(--color-desktop)"
+						stroke="var(--primary)"
 					/>
 				</AreaChart>
 			</ChartContainer>
