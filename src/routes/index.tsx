@@ -4,7 +4,13 @@ export const Route = createFileRoute("/")({
 	component: Home,
 });
 
-import { BarChart2, ShieldCheck, TrendingUp } from "lucide-react";
+import {
+	BarChart2,
+	Percent,
+	ShieldCheck,
+	Star,
+	TrendingUp,
+} from "lucide-react";
 import type { ReactNode } from "react";
 import Card from "~/components/card";
 import { GlobalHeader } from "~/components/header";
@@ -104,18 +110,30 @@ export default function Home() {
 			<Card className="max-w-4xl mx-auto px-4 flex flex-col gap-4">
 				<div className="flex flex-col md:flex-row items-center justify-between gap-6">
 					<div>
-						<h3 className="font-semibold text-xl">Join 200K+ users</h3>
+						<h3 className="font-semibold text-xl">
+							Join <span className="text-primary">200K+</span> users
+						</h3>
 						<p className="text-muted-foreground">
 							Managing their finances with Monfly.
 						</p>
 					</div>
 					<div className="flex gap-10">
 						<div>
-							<span className="text-2xl font-bold">4.9★</span>
+							<span className="text-2xl font-bold flex items-center gap-1">
+								4.9
+								<span className="text-primary">
+									<Star className="w-4 h-4" />
+								</span>
+							</span>
 							<p className="text-xs text-muted-foreground">Avg. Rating</p>
 						</div>
 						<div>
-							<span className="text-2xl font-bold">98%</span>
+							<span className="text-2xl font-bold flex items-center gap-1">
+								98
+								<span className="text-primary">
+									<Percent className="w-4 h-4" />
+								</span>
+							</span>
 							<p className="text-xs text-muted-foreground">User Satisfaction</p>
 						</div>
 					</div>
@@ -134,7 +152,7 @@ export default function Home() {
 					<div className="flex items-center gap-2">
 						<span className="font-bold text-primary text-lg">Monfly</span>
 						<span className="text-sm text-zinc-500">
-							© new Date().getFullYear()
+							© {new Date().getFullYear()}
 						</span>
 					</div>
 					<p className="text-xs text-zinc-500 text-center md:text-right max-w-xl">
