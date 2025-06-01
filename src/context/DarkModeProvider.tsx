@@ -2,7 +2,8 @@ import {
 	createContext,
 	useCallback,
 	useEffect,
-	useState
+	useMemo,
+	useState,
 } from "react";
 
 export type DarkMode = "light" | "dark";
@@ -17,10 +18,12 @@ export const DarkModeContext = createContext<{
 	theme: DarkMode;
 	setTheme: (theme: DarkMode) => void;
 	toggleDarkMode: () => void;
+	isDark: boolean;
 }>({
 	theme: "light",
 	setTheme: () => {},
 	toggleDarkMode: () => {},
+	isDark: false,
 });
 
 export const DarkModeProvider = ({
@@ -39,6 +42,8 @@ export const DarkModeProvider = ({
 	const toggleDarkMode = () => {
 		setTheme(theme === "light" ? "dark" : "light");
 	};
+
+	const isDark = useMemo(() => theme === "dark", [theme]);
 
 	useEffect(() => {
 		if (typeof window === "undefined") return;
@@ -61,9 +66,10 @@ export const DarkModeProvider = ({
 	}, [setTheme]);
 
 	return (
-		<DarkModeContext.Provider value={{ theme, setTheme, toggleDarkMode }}>
+		<DarkModeContext.Provider
+			value={{ theme, setTheme, toggleDarkMode, isDark }}
+		>
 			{children}
 		</DarkModeContext.Provider>
 	);
 };
-

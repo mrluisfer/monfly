@@ -11,6 +11,7 @@ import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js";
 import { NotFound } from "~/components/NotFound.js";
 import { Toaster } from "~/components/ui/sonner";
 import { DarkModeProvider } from "~/context/DarkModeProvider";
+import { ActiveThemeProvider } from "~/context/ThemeProvider";
 import appCss from "~/styles/app.css?url";
 // import appCss from "~/styles/output.css?url";
 import { seo } from "~/utils/seo.js";
@@ -71,9 +72,11 @@ function RootComponent() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<DarkModeProvider key="theme-provider">
-				<RootDocument>
-					<Outlet />
-				</RootDocument>
+				<ActiveThemeProvider key="theme-provider" initialTheme="default">
+					<RootDocument>
+						<Outlet />
+					</RootDocument>
+				</ActiveThemeProvider>
 			</DarkModeProvider>
 		</QueryClientProvider>
 	);
