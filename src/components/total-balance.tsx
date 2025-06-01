@@ -6,7 +6,7 @@ import { useRouteUser } from "~/hooks/use-route-user";
 import { useMutation } from "~/hooks/useMutation";
 import { userByEmailQueryOptions } from "~/queries/usersByEmail";
 import { formatCurrency } from "~/utils/formatCurrency";
-import { putUserTotalBalance } from "~/utils/putUserTotalBalance";
+import { putUserTotalBalance } from "~/utils/user/putUserTotalBalance";
 import Card from "./card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -63,18 +63,14 @@ const TotalBalance = () => {
 	if (error) return <div>Error</div>;
 
 	return (
-		<Card
-			className="group"
-			title={
-				<div className="flex items-center justify-between">
-					Current Balance <DollarSign className="w-4 h-4 opacity-50" />
-				</div>
-			}
-		>
+		<Card className="group">
 			{isPending ? (
 				<Skeleton className="w-24 h-4" />
 			) : (
 				<>
+					<div className="flex items-center justify-between">
+						Current Balance <DollarSign className="w-4 h-4 opacity-50" />
+					</div>
 					{isEditing ? (
 						<form onSubmit={handleSubmit} className="flex items-center gap-2">
 							<Input
