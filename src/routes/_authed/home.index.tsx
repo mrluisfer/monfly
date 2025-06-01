@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Plus } from "lucide-react";
 import IncomeChart from "~/components/income-chart";
 import TotalBalance from "~/components/total-balance";
-import TransactionsList from "~/components/transactions-list";
+import TransactionsList from "~/components/transactions/list";
 import { Button } from "~/components/ui/button";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { useUser } from "~/hooks/use-user";
@@ -21,7 +21,7 @@ function RouteComponent() {
 				<div>
 					<h1 className="text-2xl font-medium">
 						Welcome back
-						{!isPending && <span className="capitalize">, {user?.name}</span>}
+						{!isPending && <span className="capitalize">, {user?.name}!</span>}
 					</h1>
 					<span className="opacity-50">This is your overview dashboard</span>
 				</div>
