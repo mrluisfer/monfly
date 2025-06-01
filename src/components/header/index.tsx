@@ -1,5 +1,6 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { ArrowLeft, Settings } from "lucide-react";
+import { ThemeSelector } from "../theme-selector";
 import ToggleDarkMode from "../toggleDarkMode";
 import { Button } from "../ui/button";
 import { SidebarTrigger, useSidebar } from "../ui/sidebar";
@@ -15,7 +16,8 @@ const Header = () => {
 				{!open && <Navigation />}
 			</div>
 			<div className="flex items-center gap-2">
-				<Button>
+				<ThemeSelector />
+				<Button variant="outline">
 					<Settings />
 				</Button>
 				<ToggleDarkMode />
@@ -41,7 +43,8 @@ export const GlobalHeader = () => {
 					</Button>
 				)}
 			</div>
-			<div>
+			<div className="flex items-center gap-2">
+				<ThemeSelector />
 				<ToggleDarkMode />
 			</div>
 		</header>
