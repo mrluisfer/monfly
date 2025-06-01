@@ -3,11 +3,11 @@ import { createAvatar } from "@dicebear/core";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import clsx from "clsx";
 import { Edit } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { transactionTypes } from "~/constants/transactionTypes";
 import type { TTransaction } from "~/lib/api/transactionByEmail";
 import { formatCurrency } from "~/utils/formatCurrency";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -15,11 +15,14 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "../ui/dialog";
+} from "../../ui/dialog";
+import EditTransaction from "../edit-transaction";
 
 export default function TransactionItem({
 	transaction,
 }: { transaction: TTransaction }) {
+	const [isOpenDialog, setIsOpenDialog] = useState(false);
+
 	const avatar = useMemo(() => {
 		return createAvatar(notionists, {
 			seed: transaction.user.name ?? "",
@@ -32,7 +35,7 @@ export default function TransactionItem({
 	const textMuted = "text-sm opacity-50";
 
 	return (
-		<Dialog>
+		<Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
 			<div className="flex items-center gap-2">
 				<Avatar className="w-10 h-10">
 					<AvatarImage
@@ -76,6 +79,10 @@ export default function TransactionItem({
 					<DialogTitle>Edit Transaction</DialogTitle>
 					<DialogDescription>Edit the transaction details</DialogDescription>
 				</DialogHeader>
+				<EditTransaction
+					transaction={transaction}
+					onClose={() => setIsOpenDialog(false)}
+				/>
 			</DialogContent>
 		</Dialog>
 	);

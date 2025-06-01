@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouteUser } from "~/hooks/use-route-user";
 import type { TTransaction } from "~/lib/api/transactionByEmail";
 import { transactionByEmailQueryOptions } from "~/queries/transactionByEmail";
-import Card from "../card";
+import Card from "../../card";
 import TransactionItem from "./transaction-item";
 
 const TransactionsList = () => {
@@ -11,8 +11,6 @@ const TransactionsList = () => {
 	const { data, error, isPending } = useQuery(
 		transactionByEmailQueryOptions(user.email),
 	);
-
-	console.log(data);
 
 	return (
 		<Card

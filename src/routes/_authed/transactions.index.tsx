@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import TransactionsForm from "~/components/transactions-form";
-import TransactionsList from "~/components/transactions-list";
+import AddTransaction from "~/components/transactions/add-transaction";
+import TransactionsList from "~/components/transactions/list";
 import { useRouteUser } from "~/hooks/use-route-user";
 
 export const Route = createFileRoute("/_authed/transactions/")({
@@ -22,7 +22,7 @@ function RouteComponent() {
 					<TransactionsList />
 				</div>
 				<div className="col-span-2">
-					<TransactionsForm />
+					<AddTransaction />
 				</div>
 			</div>
 		</div>

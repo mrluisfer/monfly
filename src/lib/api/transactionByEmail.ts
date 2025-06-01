@@ -18,7 +18,7 @@ export const postTransactionByEmail = async (
 			throw new Error("Failed to create transaction");
 		}
 
-		return response.json();
+		return { success: true };
 	} catch (error) {
 		console.error("Error creating transaction:", error);
 		throw error;
@@ -26,8 +26,8 @@ export const postTransactionByEmail = async (
 };
 
 export type TTransaction = Transaction & {
-	user: User
-}
+	user: User;
+};
 
 export const getTransactionByEmail = async ({
 	queryKey,

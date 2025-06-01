@@ -13,6 +13,9 @@ export const APIRoute = createAPIFileRoute("/api/transactions/$email")({
 				include: {
 					user: true,
 				},
+				orderBy: {
+					date: "desc",
+				},
 			});
 
 			return json({ transactions });
