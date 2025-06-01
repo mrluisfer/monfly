@@ -1,28 +1,47 @@
 import { Link } from "@tanstack/react-router";
+import { AlertTriangle } from "lucide-react";
 import type { ReactNode } from "react";
+import { Button } from "./ui/button";
 
 export function NotFound({ children }: { children?: ReactNode }) {
 	return (
-		<div className="space-y-2 p-2">
-			<div className="text-gray-600 dark:text-gray-400">
-				{children || <p>The page you are looking for does not exist.</p>}
+		<main
+			className="min-h-[60vh] flex flex-col items-center justify-center px-4"
+			role="alert"
+			aria-label="Page Not Found"
+		>
+			<div className="flex flex-col items-center gap-4 bg-white/90 dark:bg-zinc-900/80 p-8 rounded-2xl shadow-lg max-w-md w-full">
+				<AlertTriangle
+					className="w-14 h-14 text-amber-400 mb-2"
+					aria-hidden="true"
+				/>
+				<h1 className="text-3xl font-bold text-zinc-800 dark:text-white mb-1">
+					404 – Page Not Found
+				</h1>
+				<div className="text-zinc-600 dark:text-zinc-400 text-center mb-2 text-base">
+					{children || (
+						<p>
+							The page you are looking for doesn&apos;t exist or has been moved.
+						</p>
+					)}
+				</div>
+				<div className="flex gap-3 mt-4 w-full justify-center">
+					<Button
+						type="button"
+						aria-label="Go back"
+						onClick={() => window.history.back()}
+						size="lg"
+						variant="outline"
+					>
+						Previous Page
+					</Button>
+					<Button asChild size="lg" variant="default">
+						<Link to="/" aria-label="Go to home page">
+							Go to Home
+						</Link>
+					</Button>
+				</div>
 			</div>
-			<p className="flex items-center gap-2 flex-wrap">
-				<button
-					type="button"
-					aria-label="Go back"
-					onClick={() => window.history.back()}
-					className="bg-emerald-500 text-white px-2 py-1 rounded uppercase font-black text-sm"
-				>
-					Go back
-				</button>
-				<Link
-					to="/"
-					className="bg-cyan-600 text-white px-2 py-1 rounded uppercase font-black text-sm"
-				>
-					Start Over
-				</Link>
-			</p>
-		</div>
+		</main>
 	);
 }
