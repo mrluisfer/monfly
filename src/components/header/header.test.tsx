@@ -44,8 +44,6 @@ describe("Header", () => {
 		render(<Header />);
 		expect(screen.getByTestId("sidebar-trigger")).toBeInTheDocument();
 		expect(screen.getByTestId("settings-dialog")).toBeInTheDocument();
-		expect(screen.getByTestId("theme-selector")).toBeInTheDocument();
-		expect(screen.getByTestId("toggle-dark-mode")).toBeInTheDocument();
 	});
 
 	it("renders the correct title for current route", () => {

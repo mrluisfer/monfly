@@ -1,8 +1,6 @@
 import { useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { SettingsDialog } from "../settings-dialog";
-import { ThemeSelector } from "../theme-selector";
-import ToggleDarkMode from "../toggle-dark-mode";
 import { SidebarTrigger } from "../ui/sidebar";
 
 const Header = () => {
@@ -23,8 +21,6 @@ const Header = () => {
 			</div>
 			<div className="flex items-center gap-2">
 				<SettingsDialog />
-				<ThemeSelector />
-				<ToggleDarkMode />
 			</div>
 		</header>
 	);

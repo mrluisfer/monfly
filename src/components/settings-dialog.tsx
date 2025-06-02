@@ -18,6 +18,7 @@ export const SettingsDialog = () => {
 			<DialogTrigger>
 				<Button variant="outline">
 					<Settings />
+					<span className="hidden md:block">Settings</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
