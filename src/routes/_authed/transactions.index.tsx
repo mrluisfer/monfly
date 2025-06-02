@@ -8,9 +8,9 @@ export const Route = createFileRoute("/_authed/transactions/")({
 });
 
 function RouteComponent() {
-	const user = useRouteUser();
+	const userEmail = useRouteUser();
 
-	if (!user.email) {
+	if (!userEmail) {
 		return <div>No user email</div>;
 	}
 

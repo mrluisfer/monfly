@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { Edit } from "lucide-react";
 import { useMemo, useState } from "react";
 import { transactionTypes } from "~/constants/transactionTypes";
-import type { TTransaction } from "~/lib/api/transactionByEmail";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/formatCurrency";
 import { Button } from "../../ui/button";
 import {
@@ -20,7 +20,7 @@ import EditTransaction from "../edit-transaction";
 
 export default function TransactionItem({
 	transaction,
-}: { transaction: TTransaction }) {
+}: { transaction: TransactionWithUser }) {
 	const [isOpenDialog, setIsOpenDialog] = useState(false);
 
 	const avatar = useMemo(() => {

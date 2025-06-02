@@ -11,7 +11,9 @@ import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js";
 import { NotFound } from "~/components/NotFound.js";
 import { Toaster } from "~/components/ui/sonner";
 import { DarkModeProvider } from "~/context/DarkModeProvider";
+import { SonnerPositionProvider } from "~/context/SonnerPosition";
 import { ActiveThemeProvider } from "~/context/ThemeProvider";
+import { useSonnerPosition } from "~/hooks/use-sonner-position";
 import appCss from "~/styles/app.css?url";
 // import appCss from "~/styles/output.css?url";
 import { seo } from "~/utils/seo.js";
@@ -73,9 +75,11 @@ function RootComponent() {
 		<QueryClientProvider client={queryClient}>
 			<DarkModeProvider key="theme-provider">
 				<ActiveThemeProvider key="theme-provider" initialTheme="default">
-					<RootDocument>
-						<Outlet />
-					</RootDocument>
+					<SonnerPositionProvider initialPosition="bottom-right">
+						<RootDocument>
+							<Outlet />
+						</RootDocument>
+					</SonnerPositionProvider>
 				</ActiveThemeProvider>
 			</DarkModeProvider>
 		</QueryClientProvider>
@@ -83,8 +87,7 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-	// const { user } = Route.useRouteContext();
-	// console.log("user", user);
+	const { position } = useSonnerPosition();
 
 	return (
 		<html lang="en">
@@ -95,7 +98,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 				{children}
 				<TanStackRouterDevtools position="bottom-right" />
 				<Scripts />
-				<Toaster position="top-center" />
+				<Toaster position={position} closeButton richColors key="sonner" />
 			</body>
 		</html>
 	);

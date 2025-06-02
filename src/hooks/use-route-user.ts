@@ -1,7 +1,7 @@
 import { useRouteContext } from "@tanstack/react-router";
 
-export const useRouteUser = () => {
-	const authedRouteContext: { user: { email: string } } = useRouteContext({
+export const useRouteUser = (): string => {
+	const authedRouteContext: { user: string } = useRouteContext({
 		from: "/_authed",
 	});
 

@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, DollarSign, Edit2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { useMutation } from "~/hooks/useMutation";
-import { userByEmailQueryOptions } from "~/queries/usersByEmail";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance.server";
 import { formatCurrency } from "~/utils/formatCurrency";
-import { putUserTotalBalance } from "~/utils/user/putUserTotalBalance";
 import Card from "./card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -14,17 +14,24 @@ import { Skeleton } from "./ui/skeleton";
 
 const TotalBalance = () => {
 	const [isEditing, setIsEditing] = useState(false);
-	const [totalBalance, setTotalBalance] = useState(0);
+	const [totalBalance, setTotalBalance] = useState<number>(0);
+	const queryClient = useQueryClient();
+	const userEmail = useRouteUser();
 
-	const user = useRouteUser();
-	if (!user.email) return <div>No user email</div>;
+	const { error, isPending, data } = useQuery({
+		queryKey: ["user", userEmail],
+		queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+		enabled: !!userEmail,
+	});
 
-	const { isPending, data, error } = useQuery(
-		userByEmailQueryOptions(user.email),
-	);
+	useEffect(() => {
+		if (data?.data?.totalBalance !== undefined) {
+			setTotalBalance(data.data.totalBalance);
+		}
+	}, [data]);
 
 	const putUserTotalBalanceMutation = useMutation({
-		fn: putUserTotalBalance,
+		fn: putUserTotalBalanceServer,
 		onSuccess: async (ctx) => {
 			if (ctx.data?.error) {
 				toast.error(ctx.data.message);
@@ -32,12 +39,16 @@ const TotalBalance = () => {
 			}
 			toast.success(ctx.data.message);
 			setIsEditing(false);
+			if (ctx.data?.data?.totalBalance !== undefined) {
+				setTotalBalance(ctx.data.data.totalBalance);
+				queryClient.invalidateQueries({
+					queryKey: ["user", userEmail],
+				});
+			}
 		},
 	});
 
-	const handleEditClick = () => {
-		setIsEditing(true);
-	};
+	const handleEditClick = () => setIsEditing(true);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = Number(e.target.value);
@@ -51,14 +62,10 @@ const TotalBalance = () => {
 		putUserTotalBalanceMutation.mutate({
 			data: {
 				totalBalance: Number(totalBalance),
-				email: user.email,
+				email: userEmail,
 			},
 		});
 	};
-
-	useEffect(() => {
-		if (data) setTotalBalance(data.totalBalance);
-	}, [data]);
 
 	if (error) return <div>Error</div>;
 

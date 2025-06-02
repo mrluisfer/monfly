@@ -6,18 +6,18 @@ import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { z } from "zod";
 import { Auth } from "~/components/auth";
-import { GlobalHeader } from "~/components/header";
+import GlobalHeader from "~/components/header/global-header";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { fetchUser } from "~/utils/auth/fetch-user";
 import { loginFn } from "~/utils/auth/loginfn";
+import { getUserSession } from "~/utils/user/get-user-session";
 import { useMutation } from "../hooks/useMutation";
 
 export const Route = createFileRoute("/login")({
 	component: Login,
 	beforeLoad: async () => {
-		const user = await fetchUser();
-		if (user?.email) {
+		const { data: userEmail } = await getUserSession();
+		if (userEmail) {
 			// This means the user is authenticated
 			return redirect({
 				to: "/home",
@@ -104,7 +104,7 @@ function Login() {
 									<div className="text-red-400">
 										{loginMutation.data.message}
 									</div>
-									{loginMutation.data.userNotFound ? (
+									{loginMutation.data.error ? (
 										<div>
 											<div>User not found, but you can sign up!</div>
 										</div>
@@ -119,8 +119,9 @@ function Login() {
 				<div className="bg-white/30 backdrop-blur-md rounded-2xl p-12 text-center max-w-md shadow-lg dark:bg-black/30">
 					<div className="flex items-center justify-center mb-6">
 						<span className="font-medium text-lg text-black dark:text-white">
-							Manage all your <span className="text-primary font-bold">Funds</span> at
-							one place.
+							Manage all your{" "}
+							<span className="text-primary font-bold">Funds</span> at one
+							place.
 						</span>
 					</div>
 					<p className="text-base text-zinc-700 mb-4 font-medium dark:text-white opacity-60">

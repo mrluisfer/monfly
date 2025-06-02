@@ -12,7 +12,7 @@ import {
 import { useEffect, useRef } from "react";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { useMutation } from "~/hooks/useMutation";
-import { getMonthlySummaryByEmail } from "~/utils/getMonthlySummaryByEmail";
+import { getMonthlySummaryByEmailServer } from "~/lib/api/monthly-summary/get-monthly-summary-by-email.server";
 import Card from "./card";
 
 export const description = "A linear area chart";
@@ -34,11 +34,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 function IncomeChart() {
-	const { email } = useRouteUser();
-	const emailRef = useRef(email);
+	const userEmail = useRouteUser();
+	const emailRef = useRef(userEmail);
 
 	const putUserTotalBalanceMutation = useMutation({
-		fn: getMonthlySummaryByEmail,
+		fn: getMonthlySummaryByEmailServer,
 		onSuccess: async (ctx) => {
 			if (ctx.data?.error) {
 				console.log(ctx.data);

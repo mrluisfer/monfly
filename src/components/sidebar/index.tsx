@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { ChevronUp, LogOut, Settings, User2 } from "lucide-react";
 import {
@@ -5,7 +6,7 @@ import {
 	sidebarRoutes,
 } from "~/constants/sidebar-routes";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { useUser } from "~/hooks/use-user";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { logoutFn } from "~/utils/auth/logoutfn";
 import {
 	DropdownMenu,
@@ -25,6 +26,7 @@ import {
 	Sidebar as UiSidebar,
 	useSidebar,
 } from "../ui/sidebar";
+import { Skeleton } from "../ui/skeleton";
 
 const sidebarFooterItems: SidebarItemType[] = [
 	{ title: "Help", icon: "❓", url: "/help" },
@@ -35,9 +37,14 @@ const Sidebar = () => {
 	const location = useLocation();
 	const currentPath = location.pathname;
 	const navigate = useNavigate();
-	const { email } = useRouteUser();
-	const { data: user } = useUser(email);
+	const userEmail = useRouteUser();
 	const { open } = useSidebar();
+
+	const { data, isPending, error } = useQuery({
+		queryKey: ["user", userEmail],
+		queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+		enabled: !!userEmail,
+	});
 
 	const handleLogOut = async () => {
 		await logoutFn({
@@ -81,7 +88,12 @@ const Sidebar = () => {
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
 								<SidebarMenuButton className="capitalize">
-									<User2 /> {user?.name}
+									<User2 />{" "}
+									{isPending ? (
+										<Skeleton className="w-18 h-4" />
+									) : (
+										data?.data?.name
+									)}
 									<ChevronUp className="ml-auto" />
 								</SidebarMenuButton>
 							</DropdownMenuTrigger>

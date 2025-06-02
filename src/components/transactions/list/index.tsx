@@ -1,29 +1,34 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouteUser } from "~/hooks/use-route-user";
-import type { TTransaction } from "~/lib/api/transactionByEmail";
-import { transactionByEmailQueryOptions } from "~/queries/transactionByEmail";
+import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import Card from "../../card";
 import TransactionItem from "./transaction-item";
 
 const TransactionsList = () => {
-	const user = useRouteUser();
+	const userEmail = useRouteUser();
 
-	const { data, error, isPending } = useQuery(
-		transactionByEmailQueryOptions(user.email),
-	);
+	const { data, isPending, error } = useQuery({
+		queryKey: ["transactions", userEmail],
+		queryFn: () => getTransactionByEmailServer({ data: { email: userEmail } }),
+		enabled: !!userEmail,
+	});
 
 	return (
 		<Card
 			title="Transactions"
-			subtitle={`You made ${data?.length} transactions`}
+			subtitle={`You made ${data?.data?.length} transactions`}
 		>
 			{isPending && <div>Loading...</div>}
-			{error && <div>Error: {error.message}</div>}
-			{data && (
+			{error && <div>Error: {error?.message}</div>}
+			{data?.data && (
 				<div className="flex flex-col gap-6">
-					{data.map((transaction: TTransaction) => (
+					{data?.data?.map((transaction) => (
 						<div key={transaction.id}>
-							<TransactionItem transaction={transaction} key={transaction.id} />
+							<TransactionItem
+								transaction={transaction as TransactionWithUser}
+								key={transaction.id}
+							/>
 						</div>
 					))}
 				</div>

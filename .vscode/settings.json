@@ -42,5 +42,6 @@
 	},
 	"[json]": {
 		"editor.defaultFormatter": "biomejs.biome"
-	}
+	},
+	"cSpell.words": ["notionists", "Sonner"]
 }

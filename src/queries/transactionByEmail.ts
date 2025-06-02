@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getTransactionByEmail } from "~/lib/api/transactionByEmail";
+import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
 
 // export const usersQueryOptions = queryOptions({
 // 	queryKey: ["users"] as const,
@@ -8,6 +8,8 @@ import { getTransactionByEmail } from "~/lib/api/transactionByEmail";
 
 export const transactionByEmailQueryOptions = (email: string) =>
 	queryOptions({
-		queryKey: ["transactionByEmail", email] as const,
-		queryFn: getTransactionByEmail,
+		queryKey: ["getTransactionByEmailServer", email] as const,
+		queryFn: async ({ queryKey: [_, email] }) => {
+			return getTransactionByEmailServer({ data: { email } });
+		},
 	});

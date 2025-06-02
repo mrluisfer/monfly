@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import Card from "~/components/card";
-import { GlobalHeader } from "~/components/header";
+import GlobalHeader from "~/components/header/global-header";
 import { Button } from "~/components/ui/button";
 
 const partners: { name: string; image: string | ReactNode }[] = [

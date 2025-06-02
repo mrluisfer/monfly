@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import type { z } from "zod";
 import { transactionFormNames } from "~/constants/transaction-form-names";
 import { useMutation } from "~/hooks/useMutation";
-import { putTransactionById } from "~/utils/transactions/putTransactionById";
+import { putTransactionByIdServer } from "~/lib/api/transaction/put-transaction-by-id.server";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { TransactionForm } from "./transaction-form";
 
@@ -32,7 +32,7 @@ const EditTransaction = ({
 	});
 
 	const putTransactionByIdMutation = useMutation({
-		fn: putTransactionById,
+		fn: putTransactionByIdServer,
 		onSuccess: (ctx) => {
 			if (ctx.data?.error) {
 				toast.error(ctx.data.message);
@@ -41,7 +41,7 @@ const EditTransaction = ({
 			toast.success(ctx.data.message);
 			onClose();
 			queryClient.invalidateQueries({
-				queryKey: ["transactionByEmail", transaction.userEmail],
+				queryKey: ["transactions", transaction.userEmail],
 			});
 		},
 	});
