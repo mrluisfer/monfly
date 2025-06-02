@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, BadgeCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/use-mutation";
 import { signupFn } from "~/utils/auth/signupfn";
+import { getUserSession } from "~/utils/user/get-user-session";
 
 const FormSchema = z.object({
 	email: z.string().email(),
@@ -19,6 +20,15 @@ const FormSchema = z.object({
 
 export const Route = createFileRoute("/signup")({
 	component: SignupComp,
+	beforeLoad: async () => {
+		const { data: userEmail } = await getUserSession();
+		if (userEmail) {
+			// This means the user is authenticated
+			return redirect({
+				to: "/home",
+			});
+		}
+	},
 });
 
 function SignupComp() {
