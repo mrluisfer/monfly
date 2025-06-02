@@ -1,7 +1,7 @@
 import { Settings } from "lucide-react";
 import { SonnerPositionSelector } from "./sonner-position-selector";
 import { ThemeSelector } from "./theme-selector";
-import ToggleDarkMode from "./toggleDarkMode";
+import ToggleDarkMode from "./toggle-dark-mode";
 import { Button } from "./ui/button";
 import {
 	Dialog,

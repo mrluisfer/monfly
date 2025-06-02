@@ -11,7 +11,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { loginFn } from "~/utils/auth/loginfn";
 import { getUserSession } from "~/utils/user/get-user-session";
-import { useMutation } from "../hooks/useMutation";
+import { useMutation } from "../hooks/use-mutation";
 
 export const Route = createFileRoute("/login")({
 	component: Login,

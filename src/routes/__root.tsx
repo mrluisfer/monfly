@@ -7,12 +7,12 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type * as React from "react";
-import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary.js";
-import { NotFound } from "~/components/NotFound.js";
+import { DefaultCatchBoundary } from "~/components/default-catch-boundary.js";
+import { NotFound } from "~/components/not-found.js";
 import { Toaster } from "~/components/ui/sonner";
-import { DarkModeProvider } from "~/context/DarkModeProvider";
-import { SonnerPositionProvider } from "~/context/SonnerPosition";
-import { ActiveThemeProvider } from "~/context/ThemeProvider";
+import { DarkModeProvider } from "~/context/dark-mode-provider";
+import { SonnerPositionProvider } from "~/context/sonner-position-provider";
+import { ActiveThemeProvider } from "~/context/theme-provider";
 import { useSonnerPosition } from "~/hooks/use-sonner-position";
 import appCss from "~/styles/app.css?url";
 // import appCss from "~/styles/output.css?url";

@@ -4,9 +4,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import clsx from "clsx";
 import { Edit } from "lucide-react";
 import { useMemo, useState } from "react";
-import { transactionTypes } from "~/constants/transactionTypes";
+import { transactionTypes } from "~/constants/transaction-types";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-import { formatCurrency } from "~/utils/formatCurrency";
+import { formatCurrency } from "~/utils/format-currency";
 import { Button } from "../../ui/button";
 import {
 	Dialog,

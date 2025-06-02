@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SonnerPositionContext } from "~/context/SonnerPosition";
+import { SonnerPositionContext } from "~/context/sonner-position-provider";
 
 export const useSonnerPosition = () => {
 	const context = useContext(SonnerPositionContext);

@@ -8,7 +8,7 @@ import { z } from "zod";
 import { Auth } from "~/components/auth";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { useMutation } from "~/hooks/useMutation";
+import { useMutation } from "~/hooks/use-mutation";
 import { signupFn } from "~/utils/auth/signupfn";
 
 const FormSchema = z.object({

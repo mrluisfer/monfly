@@ -2,7 +2,7 @@ import { useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { SettingsDialog } from "../settings-dialog";
 import { ThemeSelector } from "../theme-selector";
-import ToggleDarkMode from "../toggleDarkMode";
+import ToggleDarkMode from "../toggle-dark-mode";
 import { SidebarTrigger } from "../ui/sidebar";
 
 const Header = () => {

@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { useLocation } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 import { ThemeSelector } from "../theme-selector";
-import ToggleDarkMode from "../toggleDarkMode";
+import ToggleDarkMode from "../toggle-dark-mode";
 import { Button } from "../ui/button";
 
 const GlobalHeader = () => {
