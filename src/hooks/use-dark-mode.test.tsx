@@ -24,11 +24,4 @@ describe("useDarkMode", () => {
 
 		expect(result.current).toBe(mockDarkModeValue);
 	});
-
-	// it("should throw error when used outside DarkModeProvider", () => {
-	// 	const { result } = renderHook(() => useDarkMode());
-	// 	expect(result.current).toEqual(
-	// 		new Error("useDarkMode must be used within an DarkModeProvider"),
-	// 	);
-	// });
 });

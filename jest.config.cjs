@@ -10,10 +10,11 @@ module.exports = {
 		"\\.(css|less|scss|sass)$": "identity-obj-proxy",
 	},
 	transform: {
-		"^.+\\.(ts|tsx)$": [
+		"^.+\\.(ts|tsx|js|jsx|mjs)$": [
 			"ts-jest",
 			{
 				tsconfig: "tsconfig.json",
+				useESM: true,
 			},
 		],
 	},
@@ -21,7 +22,24 @@ module.exports = {
 		"**/__tests__/**/*.+(ts|tsx|js)",
 		"**/?(*.)+(spec|test).+(ts|tsx|js)",
 	],
-	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+	moduleFileExtensions: [
+		"ts",
+		"tsx",
+		"js",
+		"jsx",
+		"json",
+		"node",
+		"mjs",
+		"cjs",
+		"d.cts",
+		"d.mts",
+		"d.cts",
+		"d.mts",
+		".ts",
+		".tsx",
+		".mjs",
+		".js",
+	],
 	testPathIgnorePatterns: ["/node_modules/", "/.next/"],
 	collectCoverageFrom: [
 		"src/**/*.{ts,tsx}",
