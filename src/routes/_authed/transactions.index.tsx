@@ -18,11 +18,11 @@ function RouteComponent() {
 		<div>
 			<h1 className="text-2xl font-bold">Transactions</h1>
 			<div className="grid grid-cols-5 gap-4">
-				<div className="col-span-3">
-					<TransactionsList />
-				</div>
 				<div className="col-span-2">
 					<AddTransaction />
+				</div>
+				<div className="col-span-3">
+					<TransactionsList />
 				</div>
 			</div>
 		</div>

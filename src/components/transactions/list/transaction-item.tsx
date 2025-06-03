@@ -36,7 +36,7 @@ export default function TransactionItem({
 
 	return (
 		<Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
-			<div className="flex items-center gap-2">
+			<div className="flex items-center gap-4 hover:bg-muted px-2 rounded-md transition-colors">
 				<Avatar className="w-10 h-10">
 					<AvatarImage
 						src={avatar}
@@ -47,14 +47,14 @@ export default function TransactionItem({
 						{transaction.user.name?.charAt(0).toUpperCase()}
 					</AvatarFallback>
 				</Avatar>
-				<div className="flex justify-between w-full">
+				<div className="flex justify-between items-center w-full">
 					<div>
 						<p className={clsx(textBase, "capitalize")}>
 							{transaction.user.name}
 						</p>
 						<span className={textMuted}>{transaction.user.email}</span>
 					</div>
-					<div className="flex items-start gap-1">
+					<div className="flex items-center gap-4">
 						<div>
 							<p className={textBase}>
 								{transaction.type === transactionTypes.INCOME ? "+" : "-"}
@@ -64,9 +64,9 @@ export default function TransactionItem({
 								{new Date(transaction.createdAt).toLocaleDateString()}
 							</span>
 						</div>
-						<div className="flex flex-col gap-2">
+						<div className="flex flex-col gap-4">
 							<DialogTrigger asChild>
-								<Button variant="ghost" size="icon">
+								<Button variant="outline" size="icon">
 									<Edit />
 								</Button>
 							</DialogTrigger>

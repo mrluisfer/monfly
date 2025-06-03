@@ -26,7 +26,7 @@ export const SettingsDialog = () => {
 					<DialogTitle>Settings</DialogTitle>
 					<DialogDescription>Change the settings of your app</DialogDescription>
 				</DialogHeader>
-				<div className="flex flex-col gap-6">
+				<div className="flex flex-col gap-4">
 					<SettingsItem label="Sonner Position:">
 						<SonnerPositionSelector />
 					</SettingsItem>
@@ -47,7 +47,7 @@ const SettingsItem = ({
 	children,
 }: { label: string; children: React.ReactNode }) => {
 	return (
-		<div className="flex items-center gap-2 justify-between">
+		<div className="flex items-center gap-4 justify-between">
 			<p>{label}</p>
 			{children}
 		</div>

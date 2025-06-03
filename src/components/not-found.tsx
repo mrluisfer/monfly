@@ -25,7 +25,7 @@ export function NotFound({ children }: { children?: ReactNode }) {
 						</p>
 					)}
 				</div>
-				<div className="flex gap-3 mt-4 w-full justify-center">
+				<div className="flex gap-4 mt-4 w-full justify-center">
 					<Button
 						type="button"
 						aria-label="Go back"

@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import z from "node_modules/zod/dist/types/v3";
+import z from "zod";
 import { postTransactionByEmail } from "~/utils/transactions/post-transaction-by-email";
 
 export const postTransactionByEmailServer = createServerFn({ method: "POST" })

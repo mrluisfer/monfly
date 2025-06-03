@@ -107,7 +107,7 @@ export function Auth<T extends z.ZodType<any, any, any>>({
 					</Button>
 					{afterSubmit ? afterSubmit : null}
 					<div className="flex justify-center">
-						<div className="text-xs mt-4 flex items-center gap-2">
+						<div className="text-xs mt-4 flex items-center gap-4">
 							<span className="text-center text-muted-foreground">
 								{actionText === actions.login
 									? "Don't have an account?"

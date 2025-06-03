@@ -1,4 +1,4 @@
-import { BarChart, CreditCard, Home, Wallet } from "lucide-react";
+import { BarChart, CreditCard, Home, List, Wallet } from "lucide-react";
 import type { ReactNode } from "react";
 
 export type SidebarItemType = {
@@ -12,4 +12,5 @@ export const sidebarRoutes: SidebarItemType[] = [
 	{ title: "Transactions", icon: <CreditCard />, url: "/transactions" },
 	{ title: "Budgets", icon: <Wallet />, url: "/budget" },
 	{ title: "Reports", icon: <BarChart />, url: "/reports" },
+	{ title: "Categories", icon: <List />, url: "/categories" },
 ];

@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Plus } from "lucide-react";
 import IncomeChart from "~/components/income-chart";
 import TotalBalance from "~/components/total-balance";
 import TransactionsList from "~/components/transactions/list";
-import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
@@ -22,7 +20,9 @@ function RouteComponent() {
 		enabled: !!userEmail,
 	});
 
-	console.log({ data, isPending, error });
+	if (error) {
+		return <div>Error: {error?.message}</div>;
+	}
 
 	return (
 		<main>
@@ -38,19 +38,14 @@ function RouteComponent() {
 					</h1>
 					<span className="opacity-50">This is your overview dashboard</span>
 				</div>
-				<div>
-					<Button>
-						<Plus />
-						Income
-					</Button>
-				</div>
+				{/* <div></div> */}
 			</header>
 			<section className="flex flex-col gap-4">
-				<div className="grid grid-cols-3 gap-6 w-full">
+				<div className="grid grid-cols-3 gap-4 w-full">
 					<TotalBalance />
 					<IncomeChart />
 				</div>
-				<div className="grid grid-cols-6 gap-6 w-full">
+				<div className="grid grid-cols-5 gap-4 w-full">
 					<div className="col-span-3">
 						<TransactionsList />
 					</div>

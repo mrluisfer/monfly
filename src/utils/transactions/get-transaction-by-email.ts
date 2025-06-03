@@ -4,7 +4,6 @@ import { prismaClient } from "../prisma";
 
 export const getTransactionByEmail = async (email: string) => {
 	try {
-		console.log("email", email);
 		const transactions = await prismaClient.transaction.findMany({
 			where: { userEmail: email },
 			include: {

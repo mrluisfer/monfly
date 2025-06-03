@@ -79,7 +79,7 @@ const TotalBalance = () => {
 						Current Balance <DollarSign className="w-4 h-4 opacity-50" />
 					</div>
 					{isEditing ? (
-						<form onSubmit={handleSubmit} className="flex items-center gap-2">
+						<form onSubmit={handleSubmit} className="flex items-center gap-4">
 							<Input
 								value={totalBalance.toString()}
 								onChange={handleInputChange}
@@ -91,7 +91,7 @@ const TotalBalance = () => {
 							</Button>
 						</form>
 					) : (
-						<p className="text-2xl font-bold flex items-center justify-between gap-2">
+						<p className="text-2xl font-bold flex items-center justify-between gap-4">
 							{formatCurrency(totalBalance ?? 0, "MXN")}
 							<Button
 								variant="outline"

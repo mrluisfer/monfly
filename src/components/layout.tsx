@@ -6,13 +6,11 @@ import { SidebarProvider } from "./ui/sidebar";
 const Layout = ({ children }: { children: ReactNode }) => {
 	return (
 		<SidebarProvider>
-			<div className="grid grid-cols-[auto_1fr] h-screen w-full overflow-hidden">
-				<Sidebar />
-				<section className="p-4 flex flex-col gap-4 h-full overflow-y-auto scrollbar-custom">
-					<Header />
-					{children}
-				</section>
-			</div>
+			<Sidebar />
+			<main className="p-4 flex flex-col gap-4 h-full w-full overflow-y-auto scrollbar-custom">
+				<Header />
+				{children}
+			</main>
 		</SidebarProvider>
 	);
 };

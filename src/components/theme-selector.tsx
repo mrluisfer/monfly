@@ -25,7 +25,7 @@ export function ThemeSelector() {
 	const { activeTheme, setActiveTheme } = useThemeConfig();
 
 	return (
-		<div className="flex items-center gap-2 select-none">
+		<div className="flex items-center gap-4 select-none">
 			<Label htmlFor="theme-selector" className="sr-only">
 				Theme
 			</Label>

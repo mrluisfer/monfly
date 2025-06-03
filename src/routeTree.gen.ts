@@ -18,6 +18,7 @@ import { Route as AuthedImport } from './routes/_authed'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthedTransactionsIndexImport } from './routes/_authed/transactions.index'
 import { Route as AuthedHomeIndexImport } from './routes/_authed/home.index'
+import { Route as AuthedCategoriesIndexImport } from './routes/_authed/categories.index'
 
 // Create/Update Routes
 
@@ -62,6 +63,12 @@ const AuthedHomeIndexRoute = AuthedHomeIndexImport.update({
   getParentRoute: () => AuthedRoute,
 } as any)
 
+const AuthedCategoriesIndexRoute = AuthedCategoriesIndexImport.update({
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -101,6 +108,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
+    '/_authed/categories/': {
+      id: '/_authed/categories/'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof AuthedCategoriesIndexImport
+      parentRoute: typeof AuthedImport
+    }
     '/_authed/home/': {
       id: '/_authed/home/'
       path: '/home'
@@ -121,11 +135,13 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthedRouteChildren {
+  AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute
   AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
   AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedCategoriesIndexRoute: AuthedCategoriesIndexRoute,
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
   AuthedTransactionsIndexRoute: AuthedTransactionsIndexRoute,
 }
@@ -139,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/categories': typeof AuthedCategoriesIndexRoute
   '/home': typeof AuthedHomeIndexRoute
   '/transactions': typeof AuthedTransactionsIndexRoute
 }
@@ -149,6 +166,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/categories': typeof AuthedCategoriesIndexRoute
   '/home': typeof AuthedHomeIndexRoute
   '/transactions': typeof AuthedTransactionsIndexRoute
 }
@@ -160,6 +178,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/_authed/categories/': typeof AuthedCategoriesIndexRoute
   '/_authed/home/': typeof AuthedHomeIndexRoute
   '/_authed/transactions/': typeof AuthedTransactionsIndexRoute
 }
@@ -172,10 +191,19 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/categories'
     | '/home'
     | '/transactions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/login' | '/logout' | '/signup' | '/home' | '/transactions'
+  to:
+    | '/'
+    | ''
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/categories'
+    | '/home'
+    | '/transactions'
   id:
     | '__root__'
     | '/'
@@ -183,6 +211,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/_authed/categories/'
     | '/_authed/home/'
     | '/_authed/transactions/'
   fileRoutesById: FileRoutesById
@@ -227,6 +256,7 @@ export const routeTree = rootRoute
     "/_authed": {
       "filePath": "_authed.tsx",
       "children": [
+        "/_authed/categories/",
         "/_authed/home/",
         "/_authed/transactions/"
       ]
@@ -239,6 +269,10 @@ export const routeTree = rootRoute
     },
     "/signup": {
       "filePath": "signup.tsx"
+    },
+    "/_authed/categories/": {
+      "filePath": "_authed/categories.index.tsx",
+      "parent": "/_authed"
     },
     "/_authed/home/": {
       "filePath": "_authed/home.index.tsx",

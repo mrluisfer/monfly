@@ -60,6 +60,7 @@ export function TransactionForm<FormValues extends FieldValues>({
 								<Input
 									id={transactionFormNames.amount}
 									type="number"
+									placeholder="0.00"
 									{...field}
 								/>
 							</FormControl>
@@ -102,7 +103,11 @@ export function TransactionForm<FormValues extends FieldValues>({
 								Category
 							</FormLabel>
 							<FormControl>
-								<Input id={transactionFormNames.category} {...field} />
+								<Input
+									id={transactionFormNames.category}
+									placeholder="Select a category"
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -117,7 +122,11 @@ export function TransactionForm<FormValues extends FieldValues>({
 								Description
 							</FormLabel>
 							<FormControl>
-								<Input id={transactionFormNames.description} {...field} />
+								<Input
+									id={transactionFormNames.description}
+									placeholder="Add a description for your transaction..."
+									{...field}
+								/>
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -142,7 +151,9 @@ export function TransactionForm<FormValues extends FieldValues>({
 											{field.value ? (
 												format(field.value as Date, "PPP")
 											) : (
-												<span>Pick a date</span>
+												<span className="text-muted-foreground">
+													Pick a date
+												</span>
 											)}
 											<CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
 										</Button>
