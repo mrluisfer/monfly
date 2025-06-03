@@ -3,11 +3,11 @@ import type { User } from "@prisma/client";
 import { useSession } from "@tanstack/react-start/server";
 
 type SessionUser = {
-	email: User["email"];
+  email: User["email"];
 };
 
 export function useAppSession() {
-	return useSession<SessionUser>({
-		password: process.env.SESSION_PASSWORD || "default_password",
-	});
+  return useSession<SessionUser>({
+    password: process.env.SESSION_PASSWORD || "default_password",
+  });
 }

@@ -7,27 +7,27 @@ import ToggleDarkMode from "../toggle-dark-mode";
 import { Button } from "../ui/button";
 
 const GlobalHeader = () => {
-	const location = useLocation();
-	const isHome = location.pathname === "/";
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
-	return (
-		<header className="flex justify-between items-center">
-			<div>
-				{!isHome && (
-					<Button variant="link" asChild>
-						<Link to="/">
-							<ArrowLeft />
-							Go to home
-						</Link>
-					</Button>
-				)}
-			</div>
-			<div className="flex items-center gap-4">
-				<ThemeSelector />
-				<ToggleDarkMode />
-			</div>
-		</header>
-	);
+  return (
+    <header className="flex justify-between items-center">
+      <div>
+        {!isHome && (
+          <Button variant="link" asChild>
+            <Link to="/">
+              <ArrowLeft />
+              Go to home
+            </Link>
+          </Button>
+        )}
+      </div>
+      <div className="flex items-center gap-4">
+        <ThemeSelector />
+        <ToggleDarkMode />
+      </div>
+    </header>
+  );
 };
 
 export default GlobalHeader;

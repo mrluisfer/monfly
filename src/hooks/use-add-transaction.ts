@@ -13,52 +13,54 @@ import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 type FormValues = z.infer<typeof TransactionFormSchema>;
 
 export const useAddTransaction = () => {
-	const queryClient = useQueryClient();
-	const form = useForm<FormValues>({
-		resolver: zodResolver(TransactionFormSchema),
-		defaultValues: {
-			[transactionFormNames.type]: "income",
-			[transactionFormNames.date]: new Date(),
-			[transactionFormNames.category]: "",
-			[transactionFormNames.amount]: "",
-			[transactionFormNames.description]: "",
-		},
-	});
+  const queryClient = useQueryClient();
+  const form = useForm<FormValues>({
+    resolver: zodResolver(TransactionFormSchema),
+    defaultValues: {
+      [transactionFormNames.type]: "income",
+      [transactionFormNames.date]: new Date(),
+      [transactionFormNames.category]: "",
+      [transactionFormNames.amount]: "",
+      [transactionFormNames.description]: "",
+    },
+  });
 
-	const postTransactionByEmail = useMutation({
-		fn: postTransactionByEmailServer,
-		onSuccess: () => {
-			toast.success("Transaction created successfully");
-			form.reset();
-			queryClient.invalidateQueries({ queryKey: ["transactions", "categories"] });
-		},
-	});
+  const postTransactionByEmail = useMutation({
+    fn: postTransactionByEmailServer,
+    onSuccess: () => {
+      toast.success("Transaction created successfully");
+      form.reset();
+      queryClient.invalidateQueries({
+        queryKey: ["transactions", "categories"],
+      });
+    },
+  });
 
-	const onSubmit = async (data: FormValues) => {
-		try {
-			const { data: userEmail } = await getUserSession();
-			if (!userEmail) throw new Error("User email not found");
-			const transformedData: Prisma.TransactionCreateInput = {
-				amount: Number.parseFloat(data.amount),
-				type: data.type,
-				category: data.category,
-				description: data.description || null,
-				date: data.date || new Date(),
-				user: { connect: { email: userEmail } },
-			};
-			await postTransactionByEmail.mutate({
-				data: {
-					email: userEmail,
-					transaction: {
-						...transformedData,
-						date: new Date(transformedData.date),
-					},
-				},
-			});
-		} catch (error) {
-			toast.error("Failed to create transaction");
-		}
-	};
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const { data: userEmail } = await getUserSession();
+      if (!userEmail) throw new Error("User email not found");
+      const transformedData: Prisma.TransactionCreateInput = {
+        amount: Number.parseFloat(data.amount),
+        type: data.type,
+        category: data.category,
+        description: data.description || null,
+        date: data.date || new Date(),
+        user: { connect: { email: userEmail } },
+      };
+      await postTransactionByEmail.mutate({
+        data: {
+          email: userEmail,
+          transaction: {
+            ...transformedData,
+            date: new Date(transformedData.date),
+          },
+        },
+      });
+    } catch (error) {
+      toast.error("Failed to create transaction");
+    }
+  };
 
-	return { form, onSubmit, mutation: postTransactionByEmail };
+  return { form, onSubmit, mutation: postTransactionByEmail };
 };

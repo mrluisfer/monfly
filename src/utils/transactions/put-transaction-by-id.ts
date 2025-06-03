@@ -3,36 +3,36 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { prismaClient } from "../prisma";
 
 export const putTransactionById = async (data: {
-	id: string;
-	data: {
-		amount: number;
-		type: string;
-		category: string;
-		description: string;
-		date: Date;
-	};
+  id: string;
+  data: {
+    amount: number;
+    type: string;
+    category: string;
+    description: string;
+    date: Date;
+  };
 }) => {
-	try {
-		const { id, data: transactionData } = data;
-		const updatedTransaction = await prismaClient.transaction.update({
-			where: { id },
-			data: transactionData,
-		});
+  try {
+    const { id, data: transactionData } = data;
+    const updatedTransaction = await prismaClient.transaction.update({
+      where: { id },
+      data: transactionData,
+    });
 
-		return {
-			success: true,
-			message: "Transaction updated successfully",
-			data: updatedTransaction,
-			error: false,
-			statusCode: 200,
-		} as ApiResponse<Transaction>;
-	} catch (error) {
-		return {
-			error: true,
-			message: "Transaction not found or error updating transaction",
-			data: null,
-			success: false,
-			statusCode: 500,
-		} as ApiResponse<Transaction | null>;
-	}
+    return {
+      success: true,
+      message: "Transaction updated successfully",
+      data: updatedTransaction,
+      error: false,
+      statusCode: 200,
+    } as ApiResponse<Transaction>;
+  } catch (error) {
+    return {
+      error: true,
+      message: "Transaction not found or error updating transaction",
+      data: null,
+      success: false,
+      statusCode: 500,
+    } as ApiResponse<Transaction | null>;
+  }
 };

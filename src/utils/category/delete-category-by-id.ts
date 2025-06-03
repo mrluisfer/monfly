@@ -5,10 +5,10 @@ import { prismaClient } from "../prisma";
 export const deleteCategoryById = async (id: string) => {
   try {
     const deletedCategory = await prismaClient.category.delete({
-    where: {
-      id,
-    },
-  });
+      where: {
+        id,
+      },
+    });
 
     return {
       data: deletedCategory,
@@ -17,7 +17,7 @@ export const deleteCategoryById = async (id: string) => {
       success: true,
       error: false,
       statusCode: 200,
-    } as ApiResponse<Category>
+    } as ApiResponse<Category>;
   } catch (error) {
     return {
       data: null,
@@ -26,6 +26,6 @@ export const deleteCategoryById = async (id: string) => {
       success: false,
       error: true,
       statusCode: 500,
-    } as ApiResponse<null>
+    } as ApiResponse<null>;
   }
 };

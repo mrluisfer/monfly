@@ -1,4 +1,3 @@
-
 # 💰 Personal Finance Tracker
 
 ## ⚙️ Prisma Workflow
@@ -118,4 +117,3 @@ Hey! 👋 I’m **Luis Alvarez** ([@mrLuisFer](https://github.com/mrLuisFer))
 </div>
 
 > _This project is for personal and educational use only. Not intended for commercial purposes._
-

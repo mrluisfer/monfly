@@ -7,9 +7,9 @@ import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transacti
 // });
 
 export const transactionByEmailQueryOptions = (email: string) =>
-	queryOptions({
-		queryKey: ["getTransactionByEmailServer", email] as const,
-		queryFn: async ({ queryKey: [_, email] }) => {
-			return getTransactionByEmailServer({ data: { email } });
-		},
-	});
+  queryOptions({
+    queryKey: ["getTransactionByEmailServer", email] as const,
+    queryFn: async ({ queryKey: [_, email] }) => {
+      return getTransactionByEmailServer({ data: { email } });
+    },
+  });

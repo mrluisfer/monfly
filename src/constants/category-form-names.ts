@@ -1,4 +1,4 @@
 export const categoryFormNames = {
-	name: "name",
-	icon: "icon",
+  name: "name",
+  icon: "icon",
 };
