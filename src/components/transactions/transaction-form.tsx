@@ -1,10 +1,13 @@
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, CheckIcon, ChevronDownIcon } from "lucide-react";
+import { useState } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { transactionFormNames } from "~/constants/transaction-form-names";
+import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { cn } from "~/lib/utils";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import {
 	Form,
 	FormControl,
@@ -41,6 +44,9 @@ export function TransactionForm<FormValues extends FieldValues>({
 	showDateDescription = false,
 	isLoading = false,
 }: TransactionFormProps<FormValues>) {
+	const [categoryOpen, setCategoryOpen] = useState(false);
+	const { data: categories, isPending, error } = useGetCategoriesByEmail();
+
 	return (
 		<Form {...form}>
 			<form
@@ -94,24 +100,73 @@ export function TransactionForm<FormValues extends FieldValues>({
 						</FormItem>
 					)}
 				/>
+		
 				<FormField
 					control={form.control}
 					name={transactionFormNames.category as Path<FormValues>}
-					render={({ field }) => (
-						<FormItem>
-							<FormLabel htmlFor={transactionFormNames.category}>
-								Category
-							</FormLabel>
-							<FormControl>
-								<Input
-									id={transactionFormNames.category}
-									placeholder="Select a category"
-									{...field}
-								/>
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
+					render={({ field }) => {
+						const value = field.value as string | undefined;
+						const selectedCategory = categories?.find((cat) => cat.name === value);
+
+						return (
+							<FormItem>
+								<FormLabel htmlFor={transactionFormNames.category}>
+									Category
+								</FormLabel>
+								<FormControl>
+									<Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
+										<PopoverTrigger asChild>
+											<Button
+												variant="outline"
+												role="combobox"
+												aria-expanded={categoryOpen}
+												className={cn(
+													"w-full justify-between px-3 font-normal",
+													!value && "text-muted-foreground",
+												)}
+											>
+												{selectedCategory
+													? selectedCategory.name
+													: "Select category"}
+												<ChevronDownIcon
+													size={16}
+													className="ml-2 text-muted-foreground/80"
+													aria-hidden="true"
+												/>
+											</Button>
+										</PopoverTrigger>
+										<PopoverContent className="w-full p-0" align="start">
+											<Command>
+												<CommandInput placeholder="Search category..." />
+												<CommandList>
+													<CommandEmpty>No category found.</CommandEmpty>
+													<CommandGroup>
+														{categories?.map((category) => (
+															<CommandItem
+																key={category.name}
+																value={category.name}
+																onSelect={(currentValue: string) => {
+																	field.onChange(currentValue);
+																	setCategoryOpen(false);
+																}}
+																className="capitalize"
+															>
+																{category.name}
+																{value === category.name && (
+																	<CheckIcon size={16} className="ml-auto" />
+																)}
+															</CommandItem>
+														))}
+													</CommandGroup>
+												</CommandList>
+											</Command>
+										</PopoverContent>
+									</Popover>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						);
+					}}
 				/>
 				<FormField
 					control={form.control}
@@ -138,7 +193,9 @@ export function TransactionForm<FormValues extends FieldValues>({
 					render={({ field }) => (
 						<FormItem className="flex flex-col">
 							<FormLabel htmlFor={transactionFormNames.date}>Date</FormLabel>
-							<Popover>
+							{isPending && <div>Loading...</div>}
+							{error && <div>Error: {error?.message}</div>}
+							{categories && <Popover>
 								<PopoverTrigger asChild>
 									<FormControl>
 										<Button
@@ -163,12 +220,6 @@ export function TransactionForm<FormValues extends FieldValues>({
 									<Calendar
 										mode="single"
 										selected={field.value as Date}
-										// onSelect={(day) => {
-										// 	if (day) {
-										// 		const dateParsed = new Date(day);
-										// 		field.onChange(dateParsed);
-										// 	}
-										// }}
 										onSelect={field.onChange}
 										disabled={(date: Date) =>
 											date > new Date() || date < new Date("1900-01-01")
@@ -176,7 +227,7 @@ export function TransactionForm<FormValues extends FieldValues>({
 										initialFocus
 									/>
 								</PopoverContent>
-							</Popover>
+							</Popover>}
 							{showDateDescription && (
 								<FormDescription>
 									{description || "Pick a date"}

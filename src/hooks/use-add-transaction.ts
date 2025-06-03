@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Prisma } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
@@ -12,6 +13,7 @@ import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 type FormValues = z.infer<typeof TransactionFormSchema>;
 
 export const useAddTransaction = () => {
+	const queryClient = useQueryClient();
 	const form = useForm<FormValues>({
 		resolver: zodResolver(TransactionFormSchema),
 		defaultValues: {
@@ -28,6 +30,7 @@ export const useAddTransaction = () => {
 		onSuccess: () => {
 			toast.success("Transaction created successfully");
 			form.reset();
+			queryClient.invalidateQueries({ queryKey: ["transactions", "categories"] });
 		},
 	});
 
