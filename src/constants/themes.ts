@@ -31,6 +31,10 @@ export const DEFAULT_THEMES = [
     name: "Violet",
     value: "violet",
   },
+  {
+    name: "Deep Dark",
+    value: "deep-dark",
+  },
 ];
 
 export const SCALED_THEMES = [
