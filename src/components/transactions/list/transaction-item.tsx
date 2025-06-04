@@ -1,15 +1,13 @@
-import { notionists } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
 import clsx from "clsx";
 import { format, formatDistance, formatDistanceToNow, subDays } from "date-fns";
-import { ReactNode, useMemo, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { ReactNode, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import UserAvatar from "~/components/user-avatar";
 import { transactionTypes } from "~/constants/transaction-types";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
@@ -23,14 +21,6 @@ export default function TransactionItem({
 }) {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
 
-  const avatar = useMemo(() => {
-    return createAvatar(notionists, {
-      seed: transaction.user.name ?? "",
-      backgroundColor: ["#b6e3f4", "#c0aede", "#d1d4f9", "#ffd5dc", "#ffdfbf"],
-      radius: 100,
-    }).toDataUri();
-  }, [transaction.user.name]);
-
   const textBase = "text-base font-medium";
   const textMuted = "text-sm opacity-50";
 
@@ -40,16 +30,11 @@ export default function TransactionItem({
         <TooltipTrigger className="w-full">
           <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
             <div className="flex items-center gap-4 hover:bg-muted px-2 rounded-md transition-colors">
-              <Avatar className="w-10 h-10">
-                <AvatarImage
-                  src={avatar}
-                  alt={`Avatar of ${transaction.user.name}`}
-                  className="bg-neutral-500/30 aspect-square shrink-0 rounded-full"
-                />
-                <AvatarFallback>
-                  {transaction.user.name?.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                alt={transaction.user.name ?? ""}
+                name={transaction.user.name ?? ""}
+                size={10}
+              />
               <div className="flex justify-between items-center w-full">
                 <div className="text-left">
                   <p className={clsx(textBase, "capitalize")}>
@@ -89,7 +74,7 @@ export default function TransactionItem({
             </div>
           </Dialog>
         </TooltipTrigger>
-        <TooltipContent className="py-3" align="center" side="left">
+        <TooltipContent className="py-3" align="center" side="bottom">
           <ul className="grid gap-3 text-xs">
             <TransactionTooltipContentItem
               title="Transaction ID"

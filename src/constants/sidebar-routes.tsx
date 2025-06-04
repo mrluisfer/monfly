@@ -8,7 +8,7 @@ export type SidebarItemType = {
 };
 
 export const sidebarRoutes: SidebarItemType[] = [
-  { title: "Overview", icon: <Home />, url: "/home" },
+  { title: "Home", icon: <Home />, url: "/home" },
   { title: "Transactions", icon: <CreditCard />, url: "/transactions" },
   { title: "Budgets", icon: <Wallet />, url: "/budget" },
   { title: "Reports", icon: <BarChart />, url: "/reports" },

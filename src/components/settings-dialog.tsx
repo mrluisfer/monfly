@@ -12,14 +12,22 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 
-export const SettingsDialog = () => {
+export const SettingsDialog = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => {
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button variant="outline">
-          <Settings />
-          <span className="hidden md:block">Settings</span>
-        </Button>
+      <DialogTrigger asChild>
+        {children ? (
+          children
+        ) : (
+          <Button variant="outline">
+            <Settings />
+            <span className="hidden md:block">Settings</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

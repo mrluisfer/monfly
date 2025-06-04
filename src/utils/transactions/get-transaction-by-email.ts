@@ -1,5 +1,5 @@
-import type { Transaction } from "@prisma/client";
 import type { ApiResponse } from "~/types/ApiResponse";
+import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { prismaClient } from "../prisma";
 
 export const getTransactionByEmail = async (email: string) => {
@@ -17,13 +17,13 @@ export const getTransactionByEmail = async (email: string) => {
       data: transactions,
       success: true,
       statusCode: 200,
-    } as ApiResponse<Transaction[]>;
+    } as ApiResponse<TransactionWithUser[]>;
   } catch (error) {
     return {
       error: true,
       message: "Error fetching transactions",
       data: null,
       statusCode: 500,
-    } as ApiResponse<Transaction[] | null>;
+    } as ApiResponse<TransactionWithUser[] | null>;
   }
 };

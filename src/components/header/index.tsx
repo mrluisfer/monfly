@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { HomeIcon } from "lucide-react";
+import { PyramidIcon } from "lucide-react";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { SettingsDialog } from "../settings-dialog";
 import {
@@ -31,7 +31,7 @@ function HeaderNavigation() {
   const foundRouteTitle = sidebarRoutes.find(
     (route) => route.url === location.pathname,
   )?.title;
-  const isOverviewRoute = location.pathname === "/home";
+  const isHomeRoute = location.pathname === "/home";
 
   return (
     <Breadcrumb>
@@ -39,7 +39,7 @@ function HeaderNavigation() {
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
             <Link to="/">
-              <HomeIcon size={16} aria-hidden="true" />
+              <PyramidIcon size={16} aria-hidden="true" />
               <span className="sr-only">Home</span>
             </Link>
           </BreadcrumbLink>
@@ -47,12 +47,10 @@ function HeaderNavigation() {
         <BreadcrumbSeparator />
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/home">
-              {isOverviewRoute ? foundRouteTitle : "Overview"}
-            </Link>
+            <Link to="/home">{isHomeRoute ? foundRouteTitle : "Home"}</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
-        {!isOverviewRoute && (
+        {!isHomeRoute && (
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

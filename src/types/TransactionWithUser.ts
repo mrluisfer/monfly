@@ -6,6 +6,7 @@ export type TransactionWithUser = {
     id: string;
     password: string;
     totalBalance: number;
+    updatedAt: Date;
   };
   type: string;
   amount: number;
@@ -15,6 +16,7 @@ export type TransactionWithUser = {
   category: string;
   description: string | null;
   date: Date;
+  updatedAt: Date;
 };
 
 export type TransactionsWithUser = TransactionWithUser[];

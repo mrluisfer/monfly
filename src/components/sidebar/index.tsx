@@ -1,24 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { ChevronUp, LogOut, Settings, User2 } from "lucide-react";
-import {
-  type SidebarItemType,
-  sidebarRoutes,
-} from "~/constants/sidebar-routes";
+import { BadgeHelp, BrainCircuit, LogOut, Settings, User2 } from "lucide-react";
+import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { logoutFn } from "~/utils/auth/logoutfn";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+import { SettingsDialog } from "../settings-dialog";
 import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -27,11 +20,7 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { Skeleton } from "../ui/skeleton";
-
-const sidebarFooterItems: SidebarItemType[] = [
-  { title: "Help", icon: "❓", url: "/help" },
-  { title: "Settings", icon: <Settings />, url: "/settings" },
-];
+import UserAvatar from "../user-avatar";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -58,10 +47,26 @@ const Sidebar = () => {
   return (
     <UiSidebar collapsible="icon">
       <SidebarHeader>
-        {open && <h1 className="text-2xl font-bold">Finance</h1>}
+        <SidebarMenu>
+          <SidebarMenuItem>
+            {open && (
+              <Link
+                to="/home"
+                href="/home"
+                className="flex items-center gap-2 text-2xl font-bold w-fit"
+              >
+                <BrainCircuit />
+                Finance
+              </Link>
+            )}
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>
+            <span className="text-sm font-medium">Main menu</span>
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarRoutes.map((item) => (
@@ -80,40 +85,62 @@ const Sidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup />
+        <SidebarGroup>
+          <SidebarGroupLabel>
+            <span className="text-sm font-medium">User menu</span>
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link to="/" href="/help">
+                    <BadgeHelp />
+                    <span>Help</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SettingsDialog>
+                  <SidebarMenuButton>
+                    <Settings />
+                    <span>Settings</span>
+                  </SidebarMenuButton>
+                </SettingsDialog>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={handleLogOut}
+                  className="capitalize"
+                >
+                  <LogOut />
+                  <span>Sign out</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="capitalize">
-                  <User2 />{" "}
-                  {isPending ? (
-                    <Skeleton className="w-18 h-4" />
-                  ) : (
-                    data?.data?.name
-                  )}
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className="w-(--radix-popper-anchor-width)"
-              >
-                {sidebarFooterItems.map((item) => (
-                  <DropdownMenuItem key={item.title} asChild>
-                    <Link to={item.url} href={item.url}>
-                      {item.icon} {item.title}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuItem onClick={handleLogOut}>
-                  <LogOut />
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <SidebarMenuButton
+              className="capitalize"
+              size={open ? "lg" : "default"}
+            >
+              {isPending ? (
+                <>
+                  <User2 /> <Skeleton className="w-18 h-4" />
+                </>
+              ) : (
+                <>
+                  <UserAvatar
+                    alt={data?.data?.name ?? ""}
+                    name={data?.data?.name ?? ""}
+                  />
+                  <span>{data?.data?.name}</span>
+                </>
+              )}
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
