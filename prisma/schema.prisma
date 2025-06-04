@@ -18,8 +18,9 @@ model User {
   recurringBills  RecurringBill[]
   categories      Category[]
   createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt @default(now())
   totalBalance    Float            @default(0)
-  MonthlySummary MonthlySummary[]
+  MonthlySummary  MonthlySummary[]
 }
 
 model Transaction {
@@ -32,6 +33,7 @@ model Transaction {
   description String?
   date        DateTime
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt @default(now())
 }
 
 model Budget {
@@ -55,6 +57,7 @@ model Pot {
   currentAmount Float    @default(0)
   category      String?
   createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt @default(now())
 }
 
 model RecurringBill {
@@ -67,6 +70,7 @@ model RecurringBill {
   nextDueDate  DateTime
   category     String
   createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt @default(now())
 }
 
 model Category {
@@ -76,6 +80,7 @@ model Category {
   user      User     @relation(fields: [userEmail], references: [email])
   userEmail String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 }
 
 model MonthlySummary {

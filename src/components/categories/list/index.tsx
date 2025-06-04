@@ -37,6 +37,8 @@ export const CategoriesList = () => {
     },
   });
 
+  const shouldRenderDeleteButton = data?.data?.length && data?.data?.length > 0;
+
   return (
     <Card title="Categories" subtitle="List of your categories">
       {isPending && <div>Loading...</div>}
@@ -79,13 +81,15 @@ export const CategoriesList = () => {
             )}
             <FormMessage />
           </FormItem>
-          <Button
-            type="submit"
-            variant="destructive"
-            disabled={selectedCategories.length === 0}
-          >
-            Delete selected categories
-          </Button>
+          {shouldRenderDeleteButton ? (
+            <Button
+              type="submit"
+              variant="destructive"
+              disabled={selectedCategories.length === 0}
+            >
+              Delete selected categories
+            </Button>
+          ) : null}
         </form>
       </Form>
     </Card>
