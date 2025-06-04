@@ -43,6 +43,9 @@ const EditTransaction = ({
       queryClient.invalidateQueries({
         queryKey: ["transactions", transaction.userEmail],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["categories"],
+      });
     },
   });
 

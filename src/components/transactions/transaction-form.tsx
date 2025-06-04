@@ -5,6 +5,7 @@ import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { transactionFormNames } from "~/constants/transaction-form-names";
 import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { cn } from "~/lib/utils";
+import { validLimitNumber } from "~/utils/valid-limit-number";
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
@@ -75,6 +76,9 @@ export function TransactionForm<FormValues extends FieldValues>({
                   type="number"
                   placeholder="0.00"
                   {...field}
+                  onChange={(e) =>
+                    field.onChange(validLimitNumber(e.target.value))
+                  }
                 />
               </FormControl>
               <FormMessage />
@@ -123,54 +127,56 @@ export function TransactionForm<FormValues extends FieldValues>({
                   Category
                 </FormLabel>
                 <FormControl>
-                  <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={categoryOpen}
-                        className={cn(
-                          "w-full justify-between px-3 font-normal",
-                          !value && "text-muted-foreground",
-                        )}
-                      >
-                        {selectedCategory
-                          ? selectedCategory.name
-                          : "Select category"}
-                        <ChevronDownIcon
-                          size={16}
-                          className="ml-2 text-muted-foreground/80"
-                          aria-hidden="true"
-                        />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-full p-0" align="start">
-                      <Command>
-                        <CommandInput placeholder="Search category..." />
-                        <CommandList>
-                          <CommandEmpty>No category found.</CommandEmpty>
-                          <CommandGroup>
-                            {categories?.map((category) => (
-                              <CommandItem
-                                key={category.name}
-                                value={category.name}
-                                onSelect={(currentValue: string) => {
-                                  field.onChange(currentValue);
-                                  setCategoryOpen(false);
-                                }}
-                                className="capitalize"
-                              >
-                                {category.name}
-                                {value === category.name && (
-                                  <CheckIcon size={16} className="ml-auto" />
-                                )}
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </PopoverContent>
-                  </Popover>
+                  <div className="*:not-first:mt-2 w-full">
+                    <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={categoryOpen}
+                          className={cn(
+                            "w-full justify-between px-3 font-normal capitalize",
+                            !value && "text-muted-foreground",
+                          )}
+                        >
+                          {selectedCategory
+                            ? selectedCategory.name
+                            : "Select category"}
+                          <ChevronDownIcon
+                            size={16}
+                            className="ml-2 text-muted-foreground/80"
+                            aria-hidden="true"
+                          />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="p-0" align="center">
+                        <Command>
+                          <CommandInput placeholder="Search category..." />
+                          <CommandList>
+                            <CommandEmpty>No category found.</CommandEmpty>
+                            <CommandGroup>
+                              {categories?.map((category) => (
+                                <CommandItem
+                                  key={category.name}
+                                  value={category.name}
+                                  onSelect={(currentValue: string) => {
+                                    field.onChange(currentValue);
+                                    setCategoryOpen(false);
+                                  }}
+                                  className="capitalize"
+                                >
+                                  {category.name}
+                                  {value === category.name && (
+                                    <CheckIcon size={16} className="ml-auto" />
+                                  )}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -248,11 +254,7 @@ export function TransactionForm<FormValues extends FieldValues>({
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="w-full cursor-pointer font-black uppercase"
-          disabled={isLoading}
-        >
+        <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Saving..." : buttonText}
         </Button>
       </form>

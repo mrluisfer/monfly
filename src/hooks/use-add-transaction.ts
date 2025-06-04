@@ -9,11 +9,14 @@ import { useMutation } from "~/hooks/use-mutation";
 import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email.server";
 import { getUserSession } from "~/utils/user/get-user-session";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
+import { useRouteUser } from "./use-route-user";
 
 type FormValues = z.infer<typeof TransactionFormSchema>;
 
 export const useAddTransaction = () => {
   const queryClient = useQueryClient();
+  const userEmail = useRouteUser();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(TransactionFormSchema),
     defaultValues: {
@@ -31,7 +34,10 @@ export const useAddTransaction = () => {
       toast.success("Transaction created successfully");
       form.reset();
       queryClient.invalidateQueries({
-        queryKey: ["transactions", "categories"],
+        queryKey: ["transactions", userEmail],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["categories", userEmail],
       });
     },
   });
