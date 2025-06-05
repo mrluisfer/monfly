@@ -25,7 +25,7 @@ function RouteComponent() {
   }
 
   return (
-    <main>
+    <section>
       <header className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-medium">
@@ -51,6 +51,6 @@ function RouteComponent() {
           </div>
         </div>
       </section>
-    </main>
+    </section>
   );
 }
