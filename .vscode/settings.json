@@ -43,7 +43,14 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["dicebear", "logoutfn", "notionists", "Sonner"],
+  "cSpell.words": [
+    "dicebear",
+    "ianvs",
+    "logoutfn",
+    "notionists",
+    "pgsql",
+    "Sonner"
+  ],
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
   "formattingToggle.affects": ["editor.formatOnSave"]

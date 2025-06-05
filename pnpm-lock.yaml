@@ -137,6 +137,9 @@ importers:
       "@eslint/js":
         specifier: ^9.28.0
         version: 9.28.0
+      "@ianvs/prettier-plugin-sort-imports":
+        specifier: ^4.4.2
+        version: 4.4.2(prettier@3.5.3)
       "@tailwindcss/postcss":
         specifier: ^4.1.8
         version: 4.1.8
@@ -1755,6 +1758,18 @@ packages:
         integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==,
       }
     engines: { node: ">=18.18" }
+
+  "@ianvs/prettier-plugin-sort-imports@4.4.2":
+    resolution:
+      {
+        integrity: sha512-KkVFy3TLh0OFzimbZglMmORi+vL/i2OFhEs5M07R9w0IwWAGpsNNyE4CY/2u0YoMF5bawKC2+8/fUH60nnNtjw==,
+      }
+    peerDependencies:
+      "@vue/compiler-sfc": 2.7.x || 3.x
+      prettier: 2 || 3 || ^4.0.0-0
+    peerDependenciesMeta:
+      "@vue/compiler-sfc":
+        optional: true
 
   "@ioredis/commands@1.2.0":
     resolution:
@@ -11856,6 +11871,17 @@ snapshots:
   "@humanwhocodes/retry@0.3.1": {}
 
   "@humanwhocodes/retry@0.4.3": {}
+
+  "@ianvs/prettier-plugin-sort-imports@4.4.2(prettier@3.5.3)":
+    dependencies:
+      "@babel/generator": 7.27.1
+      "@babel/parser": 7.27.2
+      "@babel/traverse": 7.27.1
+      "@babel/types": 7.27.1
+      prettier: 3.5.3
+      semver: 7.7.2
+    transitivePeerDependencies:
+      - supports-color
 
   "@ioredis/commands@1.2.0": {}
 
