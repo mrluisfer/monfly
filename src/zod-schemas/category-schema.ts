@@ -1,5 +1,5 @@
-import z from "zod";
 import { categoryFormNames } from "~/constants/category-form-names";
+import z from "zod";
 
 export const CategoryFormSchema = z.object({
   [categoryFormNames.name]: z.string().min(1, {

@@ -3,7 +3,7 @@ type SupportedCurrency = "USD" | "MXN" | "EUR";
 export function formatCurrency(
   value: number,
   currency: SupportedCurrency = "USD",
-  locale?: string,
+  locale?: string
 ): string {
   const resolvedLocale = locale ?? getLocaleFromCurrency(currency);
   return new Intl.NumberFormat(resolvedLocale, {

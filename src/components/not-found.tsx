@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { AlertTriangle } from "lucide-react";
-import type { ReactNode } from "react";
+
 import { Button } from "./ui/button";
 
 export function NotFound({ children }: { children?: ReactNode }) {

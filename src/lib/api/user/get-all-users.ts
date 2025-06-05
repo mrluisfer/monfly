@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import z from "zod";
 import { getAllUsers } from "~/utils/user/get-all-users";
+import z from "zod";
 
 export const getAllUsersServer = createServerFn({ method: "GET" })
   .validator(() => z.object({}))

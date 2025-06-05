@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import z from "zod";
 import { postCategoryByEmail } from "~/utils/category/post-category-by-email";
+import z from "zod";
 
 export const postCategoryByEmailServer = createServerFn({ method: "POST" })
   .validator(
@@ -10,7 +10,7 @@ export const postCategoryByEmailServer = createServerFn({ method: "POST" })
         name: z.string(),
         icon: z.string(),
       }),
-    }),
+    })
   )
   .handler(async ({ data: { email, category } }) => {
     return await postCategoryByEmail(category, email);

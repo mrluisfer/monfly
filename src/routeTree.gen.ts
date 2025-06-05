@@ -11,14 +11,14 @@
 // Import Routes
 
 import { Route as rootRoute } from "./routes/__root";
-import { Route as SignupImport } from "./routes/signup";
-import { Route as LogoutImport } from "./routes/logout";
-import { Route as LoginImport } from "./routes/login";
 import { Route as AuthedImport } from "./routes/_authed";
-import { Route as IndexImport } from "./routes/index";
-import { Route as AuthedTransactionsIndexImport } from "./routes/_authed/transactions.index";
-import { Route as AuthedHomeIndexImport } from "./routes/_authed/home.index";
 import { Route as AuthedCategoriesIndexImport } from "./routes/_authed/categories.index";
+import { Route as AuthedHomeIndexImport } from "./routes/_authed/home.index";
+import { Route as AuthedTransactionsIndexImport } from "./routes/_authed/transactions.index";
+import { Route as IndexImport } from "./routes/index";
+import { Route as LoginImport } from "./routes/login";
+import { Route as LogoutImport } from "./routes/logout";
+import { Route as SignupImport } from "./routes/signup";
 
 // Create/Update Routes
 

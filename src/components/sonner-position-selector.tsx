@@ -1,7 +1,8 @@
-import { toast } from "sonner";
 import { sonnerPositions } from "~/constants/sonner-positions";
 import { useSonnerPosition } from "~/hooks/use-sonner-position";
 import type { SonnerPosition } from "~/types/SonnerPosition";
+import { toast } from "sonner";
+
 import {
   Select,
   SelectContent,

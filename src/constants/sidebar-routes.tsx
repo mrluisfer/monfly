@@ -1,5 +1,5 @@
-import { BarChart, CreditCard, Home, List, Wallet } from "lucide-react";
 import type { ReactNode } from "react";
+import { BarChart, CreditCard, Home, List, Wallet } from "lucide-react";
 
 export type SidebarItemType = {
   title: string;

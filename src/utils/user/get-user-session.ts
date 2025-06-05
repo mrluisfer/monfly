@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
+
 import { useAppSession } from "../auth/session";
 
 export const getUserSession = createServerFn({ method: "GET" }).handler(
@@ -34,5 +35,5 @@ export const getUserSession = createServerFn({ method: "GET" }).handler(
         statusCode: 500,
       } as ApiResponse<string | null>;
     }
-  },
+  }
 );

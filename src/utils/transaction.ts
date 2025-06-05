@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+
 import { prismaClient as prisma } from "./prisma";
 
 export const createTransaction = async (data: {
@@ -18,7 +19,7 @@ export const getTransactionsByUser = async (userEmail: string) => {
 
 export const updateTransaction = async (
   id: string,
-  data: Partial<Omit<Prisma.TransactionUpdateInput, "userEmail">>,
+  data: Partial<Omit<Prisma.TransactionUpdateInput, "userEmail">>
 ) => {
   return prisma.transaction.update({
     where: { id },

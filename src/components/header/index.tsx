@@ -1,6 +1,7 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { PyramidIcon } from "lucide-react";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
+import { PyramidIcon } from "lucide-react";
+
 import { SettingsDialog } from "../settings-dialog";
 import {
   Breadcrumb,
@@ -29,7 +30,7 @@ function HeaderNavigation() {
   const location = useLocation();
 
   const foundRouteTitle = sidebarRoutes.find(
-    (route) => route.url === location.pathname,
+    (route) => route.url === location.pathname
   )?.title;
   const isHomeRoute = location.pathname === "/home";
 

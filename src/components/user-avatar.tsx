@@ -1,6 +1,7 @@
+import { useMemo } from "react";
 import { notionists } from "@dicebear/collection";
 import { createAvatar } from "@dicebear/core";
-import { useMemo } from "react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const UserAvatar = ({

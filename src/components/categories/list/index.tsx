@@ -1,6 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import Card from "~/components/card";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -12,6 +10,9 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { useCategoriesList } from "~/hooks/use-categories-list";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import CategoryItem from "./category-item";
 
 const CategoryFormSchema = z.object({

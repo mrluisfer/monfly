@@ -1,11 +1,12 @@
-import { format } from "date-fns";
-import { CalendarIcon, CheckIcon, ChevronDownIcon } from "lucide-react";
 import { useState } from "react";
-import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import { transactionFormNames } from "~/constants/transaction-form-names";
 import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { cn } from "~/lib/utils";
 import { validLimitNumber } from "~/utils/valid-limit-number";
+import { format } from "date-fns";
+import { CalendarIcon, CheckIcon, ChevronDownIcon } from "lucide-react";
+import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
+
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import {
@@ -118,7 +119,7 @@ export function TransactionForm<FormValues extends FieldValues>({
           render={({ field }) => {
             const value = field.value as string | undefined;
             const selectedCategory = categories?.find(
-              (cat) => cat.name === value,
+              (cat) => cat.name === value
             );
 
             return (
@@ -136,7 +137,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                           aria-expanded={categoryOpen}
                           className={cn(
                             "w-full justify-between px-3 font-normal capitalize",
-                            !value && "text-muted-foreground",
+                            !value && "text-muted-foreground"
                           )}
                         >
                           {selectedCategory
@@ -218,7 +219,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                         variant={"outline"}
                         className={cn(
                           "pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground",
+                          !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value ? (

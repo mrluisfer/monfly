@@ -1,5 +1,6 @@
 import { Category } from "@prisma/client";
 import { ApiResponse } from "~/types/ApiResponse";
+
 import { prismaClient } from "../prisma";
 
 export const deleteCategoryById = async (id: string) => {

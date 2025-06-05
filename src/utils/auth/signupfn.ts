@@ -1,6 +1,7 @@
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
+
 import { hashPassword, prismaClient } from "../prisma";
 import { useAppSession } from "./session";
 
@@ -11,7 +12,7 @@ export const signupFn = createServerFn({ method: "POST" })
       password: string;
       redirectUrl?: string;
       name: string;
-    }) => d,
+    }) => d
   )
   .handler(async ({ data }) => {
     try {

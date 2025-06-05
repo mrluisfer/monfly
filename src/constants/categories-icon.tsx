@@ -72,7 +72,7 @@ export const getCategoryIconsWithSize = (width: number, height: number) =>
 
 export function getCategoryIconByName(
   name: string,
-  props?: React.ComponentProps<LucideIcon>,
+  props?: React.ComponentProps<LucideIcon>
 ) {
   const def = CATEGORY_ICONS.find((c) => c.name === name);
   return def ? <def.Icon {...props} /> : null;

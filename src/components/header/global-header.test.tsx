@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+
 import GlobalHeader from "./global-header";
 
 // Mock sub components
@@ -48,7 +49,7 @@ describe("GlobalHeader", () => {
     expect(screen.getByText(/Go to home/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /Go to home/i })).toHaveAttribute(
       "href",
-      "/",
+      "/"
     );
   });
 });

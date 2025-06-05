@@ -1,13 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import type { z } from "zod";
 import { transactionFormNames } from "~/constants/transaction-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { putTransactionByIdServer } from "~/lib/api/transaction/put-transaction-by-id.server";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+
 import { TransactionForm } from "./transaction-form";
 
 const EditTransaction = ({
@@ -50,7 +51,7 @@ const EditTransaction = ({
   });
 
   const onSubmitEditedTransaction = async (
-    data: z.infer<typeof TransactionFormSchema>,
+    data: z.infer<typeof TransactionFormSchema>
   ) => {
     try {
       await putTransactionByIdMutation.mutate({

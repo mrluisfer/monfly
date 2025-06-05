@@ -2,7 +2,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { prismaClient } from "~/utils/prisma";
 
 export const deleteCategoriesById = async (
-  ids: string[],
+  ids: string[]
 ): Promise<ApiResponse<{ count: number }>> => {
   try {
     const deletedCategories = await prismaClient.category.deleteMany({

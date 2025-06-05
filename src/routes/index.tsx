@@ -1,9 +1,8 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-
-export const Route = createFileRoute("/")({
-  component: Home,
-});
-
+import type { ReactNode } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import Card from "~/components/card";
+import GlobalHeader from "~/components/header/global-header";
+import { Button } from "~/components/ui/button";
 import {
   BarChart2,
   Percent,
@@ -11,10 +10,10 @@ import {
   Star,
   TrendingUp,
 } from "lucide-react";
-import type { ReactNode } from "react";
-import Card from "~/components/card";
-import GlobalHeader from "~/components/header/global-header";
-import { Button } from "~/components/ui/button";
+
+export const Route = createFileRoute("/")({
+  component: Home,
+});
 
 const partners: { name: string; image: string | ReactNode }[] = [
   {

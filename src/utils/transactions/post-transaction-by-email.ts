@@ -1,10 +1,11 @@
 import type { Transaction } from "@prisma/client";
 import type { ApiResponse } from "~/types/ApiResponse";
+
 import { prismaClient } from "../prisma";
 
 export const postTransactionByEmail = async (
   email: string,
-  data: Transaction,
+  data: Transaction
 ) => {
   try {
     const transaction = await prismaClient.transaction.create({

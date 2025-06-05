@@ -6,7 +6,7 @@ export const useSonnerPosition = () => {
 
   if (!context) {
     throw new Error(
-      "useSonnerPosition must be used within a SonnerPositionProvider",
+      "useSonnerPosition must be used within a SonnerPositionProvider"
     );
   }
 

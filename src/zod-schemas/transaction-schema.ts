@@ -1,5 +1,5 @@
-import { z } from "zod";
 import { transactionFormNames } from "~/constants/transaction-form-names";
+import { z } from "zod";
 
 export const TransactionFormSchema = z.object({
   [transactionFormNames.amount]: z

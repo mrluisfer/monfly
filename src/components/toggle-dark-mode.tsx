@@ -1,5 +1,6 @@
-import { MoonIcon, SunIcon } from "lucide-react";
 import { useDarkMode } from "~/hooks/use-dark-mode";
+import { MoonIcon, SunIcon } from "lucide-react";
+
 import { Toggle } from "./ui/toggle";
 
 export default function ToggleDarkMode() {

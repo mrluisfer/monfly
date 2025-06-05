@@ -1,5 +1,6 @@
 import type { User } from "@prisma/client";
 import type { ApiResponse } from "~/types/ApiResponse";
+
 import { prismaClient } from "../prisma";
 
 export const getAllUsers = async () => {

@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+
 import { DEFAULT_THEMES, SCALED_THEMES } from "../constants/themes";
 import { useThemeConfig } from "../hooks/use-theme-config";
 import { ThemeSelector } from "./theme-selector";
@@ -77,7 +78,7 @@ describe("ThemeSelector", () => {
     expect(
       screen.getByText("Theme", {
         selector: ".text-muted-foreground.block.sm\\:hidden",
-      }),
+      })
     ).toBeInTheDocument();
 
     // The desktop label should be hidden

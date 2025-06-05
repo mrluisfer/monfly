@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import z from "zod";
 import { postTransactionByEmail } from "~/utils/transactions/post-transaction-by-email";
+import z from "zod";
 
 export const postTransactionByEmailServer = createServerFn({ method: "POST" })
   .validator(
@@ -13,7 +13,7 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
         category: z.string(),
         description: z.string().nullable().optional(),
       }),
-    }),
+    })
   )
   .handler(async ({ data: { email, transaction } }) => {
     const fullTransaction = {

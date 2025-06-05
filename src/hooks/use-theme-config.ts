@@ -5,7 +5,7 @@ export function useThemeConfig() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
     throw new Error(
-      "useThemeConfig must be used within an ActiveThemeProvider",
+      "useThemeConfig must be used within an ActiveThemeProvider"
     );
   }
   return context;

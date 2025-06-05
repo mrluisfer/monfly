@@ -52,7 +52,7 @@ export const DarkModeProvider = ({
 
     const stored = localStorage.getItem("theme") as DarkMode | null;
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
+      "(prefers-color-scheme: dark)"
     ).matches;
     const initial = stored ?? (prefersDark ? "dark" : "light");
     setTheme(initial);

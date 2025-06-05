@@ -1,4 +1,5 @@
 import { renderHook } from "@testing-library/react";
+
 import { ThemeContext } from "../context/theme-provider";
 import { useThemeConfig } from "./use-theme-config";
 
@@ -23,7 +24,7 @@ describe("useThemeConfig", () => {
 
   it("should throw error when used outside ActiveThemeProvider", () => {
     expect(() => renderHook(() => useThemeConfig())).toThrow(
-      "useThemeConfig must be used within an ActiveThemeProvider",
+      "useThemeConfig must be used within an ActiveThemeProvider"
     );
   });
 

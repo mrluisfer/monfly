@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 import { getTransactionByEmail } from "~/utils/transactions/get-transaction-by-email";
+import { z } from "zod";
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
   .validator(z.object({ email: z.string() }))

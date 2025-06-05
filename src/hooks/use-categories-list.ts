@@ -1,10 +1,10 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { toast } from "sonner";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { deleteCategoriesByIdServer } from "~/lib/api/category/delete-categories-by-id.server";
 import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email.server";
+import { toast } from "sonner";
 
 export const useCategoriesList = () => {
   const userEmail = useRouteUser();
@@ -32,7 +32,7 @@ export const useCategoriesList = () => {
 
   const handleCheckboxChange = (categoryId: string, checked: boolean) => {
     setSelectedCategories((prev) =>
-      checked ? [...prev, categoryId] : prev.filter((id) => id !== categoryId),
+      checked ? [...prev, categoryId] : prev.filter((id) => id !== categoryId)
     );
   };
 

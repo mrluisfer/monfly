@@ -1,4 +1,3 @@
-import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
@@ -9,6 +8,8 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { useAddTransaction } from "~/hooks/use-add-transaction";
+import { PlusIcon } from "lucide-react";
+
 import { TransactionForm } from "../transaction-form";
 
 const AddTransactionButton = () => {

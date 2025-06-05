@@ -1,12 +1,12 @@
+import type * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
+  createRootRoute,
   HeadContent,
   Outlet,
   Scripts,
-  createRootRoute,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import type * as React from "react";
 import { DefaultCatchBoundary } from "~/components/default-catch-boundary.js";
 import { NotFound } from "~/components/not-found.js";
 import { Toaster } from "~/components/ui/sonner";

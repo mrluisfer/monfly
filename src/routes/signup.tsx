@@ -1,16 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, BadgeCheck } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
-import { z } from "zod";
 import { Auth } from "~/components/auth";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/use-mutation";
 import { signupFn } from "~/utils/auth/signupfn";
 import { getUserSession } from "~/utils/user/get-user-session";
+import { ArrowLeft, BadgeCheck } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { z } from "zod";
 
 const FormSchema = z.object({
   email: z.string().email(),

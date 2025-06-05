@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
 import { getCategoryByEmail } from "~/utils/category/get-category-by-email";
+import { z } from "zod";
 
 export const getCategoryByEmailServer = createServerFn({
   method: "GET",

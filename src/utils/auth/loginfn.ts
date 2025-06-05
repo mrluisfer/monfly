@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
-import bcrypt from "bcrypt";
 import type { ApiResponse } from "~/types/ApiResponse";
+import bcrypt from "bcrypt";
+
 import { prismaClient } from "../prisma";
 import { useAppSession } from "./session";
 
@@ -30,7 +31,7 @@ export const loginFn = createServerFn({ method: "POST" })
       // Check if the password is correct
       const isPasswordCorrect = await bcrypt.compare(
         data.password,
-        user.password,
+        user.password
       );
 
       if (!isPasswordCorrect) {

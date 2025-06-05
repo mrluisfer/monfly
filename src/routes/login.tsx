@@ -1,16 +1,17 @@
+import { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { BadgeCheck } from "lucide-react";
-import { useMemo } from "react";
-import { useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
-import { z } from "zod";
 import { Auth } from "~/components/auth";
 import GlobalHeader from "~/components/header/global-header";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { loginFn } from "~/utils/auth/loginfn";
 import { getUserSession } from "~/utils/user/get-user-session";
+import { BadgeCheck } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { FcGoogle } from "react-icons/fc";
+import { z } from "zod";
+
 import { useMutation } from "../hooks/use-mutation";
 
 export const Route = createFileRoute("/login")({

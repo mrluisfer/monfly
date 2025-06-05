@@ -1,5 +1,6 @@
 import type { MonthlySummary } from "@prisma/client";
 import type { ApiResponse } from "~/types/ApiResponse";
+
 import { prismaClient } from "../prisma";
 
 export const postMonthlySummaryByEmail = async (data: { email: string }) => {

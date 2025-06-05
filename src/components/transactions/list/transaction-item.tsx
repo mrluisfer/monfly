@@ -1,5 +1,3 @@
-import clsx from "clsx";
-import { format, formatDistance, formatDistanceToNow, subDays } from "date-fns";
 import { ReactNode, useState } from "react";
 import {
   Tooltip,
@@ -11,6 +9,9 @@ import UserAvatar from "~/components/user-avatar";
 import { transactionTypes } from "~/constants/transaction-types";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
+import clsx from "clsx";
+import { format, formatDistance, formatDistanceToNow, subDays } from "date-fns";
+
 import { Dialog } from "../../ui/dialog";
 import TransactionItemActions from "./transaction-item-actions";
 
@@ -49,7 +50,7 @@ export default function TransactionItem({
                         textBase,
                         transaction.type === transactionTypes.INCOME
                           ? "text-green-500 dark:text-green-400"
-                          : "text-red-500 dark:text-red-400",
+                          : "text-red-500 dark:text-red-400"
                       )}
                     >
                       {transaction.type === transactionTypes.INCOME ? "+" : "-"}
@@ -61,7 +62,7 @@ export default function TransactionItem({
                         new Date(),
                         {
                           addSuffix: true,
-                        },
+                        }
                       )}
                     </span>
                   </div>
@@ -100,7 +101,7 @@ export default function TransactionItem({
                 <>
                   {format(
                     transaction.createdAt,
-                    "EEEE, MMMM d, yyyy · hh:mm aaaa",
+                    "EEEE, MMMM d, yyyy · hh:mm aaaa"
                   )}
                   <br />
                   <span className="text-xs text-muted-foreground">
@@ -140,7 +141,7 @@ function TransactionTooltipContentItem({
       <span
         className={clsx(
           "font-medium break-all text-wrap capitalize text-xs text-left w-full whitespace-pre-wrap opacity-80",
-          id === "email" && "text-wrap lowercase",
+          id === "email" && "text-wrap lowercase"
         )}
       >
         {value}

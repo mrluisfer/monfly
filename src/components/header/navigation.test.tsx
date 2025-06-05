@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+
 import Navigation from "./navigation";
 
 // Mock constants
@@ -44,11 +45,11 @@ describe("Navigation", () => {
     expect(screen.getByText("Home").closest("a")).toHaveAttribute("href", "/");
     expect(screen.getByText("Dashboard").closest("a")).toHaveAttribute(
       "href",
-      "/dashboard",
+      "/dashboard"
     );
     expect(screen.getByText("Reports").closest("a")).toHaveAttribute(
       "href",
-      "/reports",
+      "/reports"
     );
   });
 

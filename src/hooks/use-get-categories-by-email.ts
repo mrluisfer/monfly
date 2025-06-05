@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email.server";
+
 import { useRouteUser } from "./use-route-user";
 
 export const useGetCategoriesByEmail = () => {

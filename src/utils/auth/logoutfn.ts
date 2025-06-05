@@ -1,6 +1,7 @@
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
+
 import { useAppSession } from "./session";
 
 export const logoutFn = createServerFn({ method: "POST" })

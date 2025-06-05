@@ -1,5 +1,4 @@
 import type { Category } from "@prisma/client";
-import { Ellipsis } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -7,6 +6,8 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { getCategoryIconByName } from "~/constants/categories-icon";
+import { Ellipsis } from "lucide-react";
+
 import CategoryItemActions from "./category-item-actions";
 
 const CategoryItem = ({ category }: { category: Category }) => {

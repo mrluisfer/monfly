@@ -1,4 +1,4 @@
-import { type ReactNode, createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, type ReactNode } from "react";
 import { useDarkMode } from "~/hooks/use-dark-mode";
 
 const THEME_STORAGE_KEY = "active_theme";
@@ -21,7 +21,7 @@ type ThemeContextType = {
 };
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(
-  undefined,
+  undefined
 );
 
 export function ActiveThemeProvider({
@@ -47,8 +47,8 @@ export function ActiveThemeProvider({
 
       document.documentElement.classList.remove(
         ...Array.from(document.documentElement.classList).filter((c) =>
-          c.startsWith("theme-"),
-        ),
+          c.startsWith("theme-")
+        )
       );
       document.documentElement.classList.add(`theme-${activeTheme}`);
 

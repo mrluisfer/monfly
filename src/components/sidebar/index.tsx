@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { BadgeHelp, BrainCircuit, LogOut, Settings, User2 } from "lucide-react";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { logoutFn } from "~/utils/auth/logoutfn";
+import { BadgeHelp, BrainCircuit, LogOut, Settings, User2 } from "lucide-react";
+
 import { SettingsDialog } from "../settings-dialog";
 import {
   SidebarContent,
