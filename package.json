@@ -3,9 +3,12 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "dev": "vinxi dev",
-    "build": "vinxi build --preset vercel",
+    "build": "prisma generate && vinxi build --preset vercel",
     "start": "vinxi start",
     "prisma-generate": "prisma generate",
     "prisma-studio": "prisma studio",
@@ -16,7 +19,8 @@
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@dicebear/collection": "~9.2.2",
