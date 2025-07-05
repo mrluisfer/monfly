@@ -4,6 +4,7 @@ import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { deleteCategoriesByIdServer } from "~/lib/api/category/delete-categories-by-id.server";
 import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email.server";
+import { queryDictionary } from "~/queries/dictionary";
 import { toast } from "sonner";
 
 export const useCategoriesList = () => {
@@ -12,21 +13,23 @@ export const useCategoriesList = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const { data, isPending, error } = useQuery({
-    queryKey: ["categories", userEmail],
+    queryKey: [queryDictionary.categories, userEmail],
     queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
   });
 
   const deleteCategoriesByIdMutation = useMutation({
     fn: deleteCategoriesByIdServer,
-    onSuccess: (ctx) => {
+    onSuccess: async (ctx) => {
       if (ctx.data?.error) {
         toast.error(ctx.data.message);
         return;
       }
       toast.success(ctx.data.message);
       setSelectedCategories([]);
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.categories],
+      });
     },
   });
 

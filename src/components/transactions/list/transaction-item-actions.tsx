@@ -1,4 +1,3 @@
-import { Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "~/components/ui/button";
 import {
@@ -18,6 +17,8 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useMutation } from "~/hooks/use-mutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
+import { queryDictionary } from "~/queries/dictionary";
+import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { Edit, Ellipsis, Trash } from "lucide-react";
 import { toast } from "sonner";
 
@@ -27,17 +28,20 @@ const TransactionItemActions = ({
   transaction,
   setIsOpenDialog,
 }: {
-  transaction: Transaction;
+  transaction: TransactionWithUser;
   setIsOpenDialog: (isOpen: boolean) => void;
 }) => {
   const queryClient = useQueryClient();
 
   const deleteTransactionByIdMutation = useMutation({
     fn: deleteTransactionByIdServer,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Transaction deleted successfully");
-      queryClient.invalidateQueries({
-        queryKey: ["transactions", transaction.userEmail],
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.transactions, transaction.userEmail],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.user, transaction.userEmail],
       });
     },
   });

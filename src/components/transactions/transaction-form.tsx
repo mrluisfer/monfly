@@ -35,6 +35,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Textarea } from "../ui/textarea";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -193,9 +194,11 @@ export function TransactionForm<FormValues extends FieldValues>({
                 Description
               </FormLabel>
               <FormControl>
-                <Input
-                  id={transactionFormNames.description}
+                <Textarea
                   placeholder="Add a description for your transaction..."
+                  id={transactionFormNames.description}
+                  className="resize-none"
+                  rows={3}
                   {...field}
                 />
               </FormControl>

@@ -6,6 +6,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useMutation } from "~/hooks/use-mutation";
 import { deleteCategoryByIdServer } from "~/lib/api/category/delete-category-by-id.server";
+import { queryDictionary } from "~/queries/dictionary";
 import { Pencil, Trash } from "lucide-react";
 import { toast } from "sonner";
 
@@ -14,9 +15,11 @@ const CategoryItemActions = ({ category }: { category: Category }) => {
 
   const deleteCategoryByIdMutation = useMutation({
     fn: deleteCategoryByIdServer,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Category deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.categories],
+      });
     },
   });
 

@@ -5,6 +5,7 @@ import { categoryFormNames } from "~/constants/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email.server";
+import { queryDictionary } from "~/queries/dictionary";
 import { CategoryFormSchema } from "~/zod-schemas/category-schema";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -47,9 +48,11 @@ const AddCategory = () => {
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("Category created successfully");
-      queryClient.invalidateQueries({ queryKey: ["categories"] });
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.categories],
+      });
       form.reset();
     },
   });

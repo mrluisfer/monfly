@@ -7,6 +7,7 @@ import {
 } from "~/components/ui/tooltip";
 import UserAvatar from "~/components/user-avatar";
 import { transactionTypes } from "~/constants/transaction-types";
+import { useTransactionHoverContext } from "~/hooks/use-transaction-hover-context";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
 import clsx from "clsx";
@@ -21,20 +22,20 @@ export default function TransactionItem({
   transaction: TransactionWithUser;
 }) {
   const [isOpenDialog, setIsOpenDialog] = useState(false);
+  const { disableHover } = useTransactionHoverContext();
 
   const textBase = "text-base font-medium";
   const textMuted = "text-sm opacity-50";
 
   return (
     <TooltipProvider delayDuration={0}>
-      <Tooltip>
-        <TooltipTrigger className="w-full">
+      <Tooltip defaultOpen={false}>
+        <TooltipTrigger className="w-full" disabled={disableHover}>
           <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
-            <div className="flex items-center gap-4 hover:bg-muted px-2 rounded-md transition-colors">
+            <div className="flex items-center gap-4 hover:bg-muted rounded-md px-2 transition-colors">
               <UserAvatar
                 alt={transaction.user.name ?? ""}
                 name={transaction.user.name ?? ""}
-                size={10}
               />
               <div className="flex justify-between items-center w-full">
                 <div className="text-left">
@@ -44,7 +45,7 @@ export default function TransactionItem({
                   <span className={textMuted}>{transaction.user.email}</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div>
+                  <div className="flex flex-col items-end gap-1">
                     <p
                       className={clsx(
                         textBase,
@@ -75,52 +76,59 @@ export default function TransactionItem({
             </div>
           </Dialog>
         </TooltipTrigger>
-        <TooltipContent className="py-3" align="center" side="bottom">
-          <ul className="grid gap-3 text-xs">
-            <TransactionTooltipContentItem
-              title="Transaction ID"
-              value={transaction.id}
-            />
-            <TransactionTooltipContentItem
-              title="Type"
-              value={transaction.type}
-            />
-            <TransactionTooltipContentItem
-              title="Category"
-              value={transaction.category}
-            />
-            {transaction.description && (
+        {disableHover ? (
+          <TooltipContent
+            className="py-3"
+            align="center"
+            side="right"
+            aria-disabled={disableHover}
+          >
+            <ul className="grid gap-3 text-xs">
               <TransactionTooltipContentItem
-                title="Description"
-                value={transaction.description}
+                title="Transaction ID"
+                value={transaction.id}
               />
-            )}
-            <TransactionTooltipContentItem
-              title="Registered at"
-              value={
-                <>
-                  {format(
-                    transaction.createdAt,
-                    "EEEE, MMMM d, yyyy · hh:mm aaaa"
-                  )}
-                  <br />
-                  <span className="text-xs text-muted-foreground">
-                    (
-                    {formatDistanceToNow(transaction.createdAt, {
-                      addSuffix: true,
-                    })}
-                    )
-                  </span>
-                </>
-              }
-            />
-            <TransactionTooltipContentItem
-              title="Recorded by"
-              value={transaction.user.email}
-              id="email"
-            />
-          </ul>
-        </TooltipContent>
+              <TransactionTooltipContentItem
+                title="Type"
+                value={transaction.type}
+              />
+              <TransactionTooltipContentItem
+                title="Category"
+                value={transaction.category}
+              />
+              {transaction.description && (
+                <TransactionTooltipContentItem
+                  title="Description"
+                  value={transaction.description}
+                />
+              )}
+              <TransactionTooltipContentItem
+                title="Transaction made"
+                value={
+                  <>
+                    {format(
+                      transaction.date,
+                      "EEEE, MMMM d, yyyy · hh:mm aaaa"
+                    )}
+                    <br />
+                    <span className="text-xs text-muted-foreground">
+                      (
+                      {formatDistanceToNow(transaction.date, {
+                        addSuffix: true,
+                      })}
+                      )
+                    </span>
+                  </>
+                }
+              />
+              <TransactionTooltipContentItem
+                title="Recorded by"
+                value={transaction.user.email}
+                id="email"
+              />
+            </ul>
+          </TooltipContent>
+        ) : null}
       </Tooltip>
     </TooltipProvider>
   );

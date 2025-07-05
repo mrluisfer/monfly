@@ -64,7 +64,7 @@ export default function Home() {
               <span className="text-sm text-muted-foreground">
                 Already have an account?
               </span>
-              <Button asChild size="sm" variant="outline">
+              <Button asChild size="sm" variant="outline" className="w-[120px]">
                 <Link to="/login">Login</Link>
               </Button>
             </div>
@@ -106,7 +106,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Card className="max-w-4xl mx-auto px-4 flex flex-col gap-4">
+      <Card className="max-w-4xl mx-auto px-4 flex flex-col gap-4 hover:translate-y-[-15px] transition-transform hover:shadow-lg">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h3 className="font-semibold text-xl">
@@ -146,23 +146,7 @@ export default function Home() {
           </div>
         </div>
       </Card>
-      <footer className="w-full mt-10 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-8 absolute bottom-0 left-0 right-0">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-primary text-lg">Monfly</span>
-            <span className="text-sm text-zinc-500">
-              © {new Date().getFullYear()}
-            </span>
-          </div>
-          <p className="text-xs text-zinc-500 text-center md:text-right max-w-xl">
-            This project is for personal use and educational purposes only.
-            Monfly is not a commercial product or financial service, and is not
-            intended for public release. No responsibility is accepted for any
-            misuse or reliance on this platform. All product names, logos, and
-            brands are property of their respective owners.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
@@ -184,5 +168,27 @@ function FeatureCard({
       </h3>
       <p className="text-muted-foreground text-sm">{description}</p>
     </Card>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="w-full mt-10 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 py-8 fixed bottom-0 left-0 right-0">
+      <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-primary text-lg">Monfly</span>
+          <span className="text-sm text-zinc-500">
+            © {new Date().getFullYear()}
+          </span>
+        </div>
+        <p className="text-xs text-zinc-500 text-center md:text-right max-w-xl">
+          This project is for personal use and educational purposes only. Monfly
+          is not a commercial product or financial service, and is not intended
+          for public release. No responsibility is accepted for any misuse or
+          reliance on this platform. All product names, logos, and brands are
+          property of their respective owners.
+        </p>
+      </div>
+    </footer>
   );
 }

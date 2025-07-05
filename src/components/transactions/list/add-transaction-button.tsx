@@ -14,6 +14,7 @@ import { TransactionForm } from "../transaction-form";
 
 const AddTransactionButton = () => {
   const [open, setOpen] = useState(false);
+  const onCloseDialog = () => setOpen(false);
   const { form, onSubmit } = useAddTransaction();
 
   return (
@@ -39,7 +40,10 @@ const AddTransactionButton = () => {
         </DialogHeader>
         <TransactionForm
           form={form}
-          onSubmit={onSubmit}
+          onSubmit={(data) => {
+            onSubmit(data);
+            onCloseDialog();
+          }}
           buttonText="Save"
           description="Add a new transaction"
         />

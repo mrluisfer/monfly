@@ -10,219 +10,241 @@
 
 // Import Routes
 
-import { Route as rootRoute } from "./routes/__root";
-import { Route as AuthedImport } from "./routes/_authed";
-import { Route as AuthedCategoriesIndexImport } from "./routes/_authed/categories.index";
-import { Route as AuthedHomeIndexImport } from "./routes/_authed/home.index";
-import { Route as AuthedTransactionsIndexImport } from "./routes/_authed/transactions.index";
-import { Route as IndexImport } from "./routes/index";
-import { Route as LoginImport } from "./routes/login";
-import { Route as LogoutImport } from "./routes/logout";
-import { Route as SignupImport } from "./routes/signup";
+import { Route as rootRoute } from './routes/__root'
+import { Route as SignupImport } from './routes/signup'
+import { Route as LogoutImport } from './routes/logout'
+import { Route as LoginImport } from './routes/login'
+import { Route as AuthedImport } from './routes/_authed'
+import { Route as IndexImport } from './routes/index'
+import { Route as AuthedTransactionsIndexImport } from './routes/_authed/transactions.index'
+import { Route as AuthedReportsIndexImport } from './routes/_authed/reports.index'
+import { Route as AuthedHomeIndexImport } from './routes/_authed/home.index'
+import { Route as AuthedCategoriesIndexImport } from './routes/_authed/categories.index'
 
 // Create/Update Routes
 
 const SignupRoute = SignupImport.update({
-  id: "/signup",
-  path: "/signup",
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const LogoutRoute = LogoutImport.update({
-  id: "/logout",
-  path: "/logout",
+  id: '/logout',
+  path: '/logout',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const LoginRoute = LoginImport.update({
-  id: "/login",
-  path: "/login",
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AuthedRoute = AuthedImport.update({
-  id: "/_authed",
+  id: '/_authed',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const IndexRoute = IndexImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
-} as any);
+} as any)
 
 const AuthedTransactionsIndexRoute = AuthedTransactionsIndexImport.update({
-  id: "/transactions/",
-  path: "/transactions/",
+  id: '/transactions/',
+  path: '/transactions/',
   getParentRoute: () => AuthedRoute,
-} as any);
+} as any)
+
+const AuthedReportsIndexRoute = AuthedReportsIndexImport.update({
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => AuthedRoute,
+} as any)
 
 const AuthedHomeIndexRoute = AuthedHomeIndexImport.update({
-  id: "/home/",
-  path: "/home/",
+  id: '/home/',
+  path: '/home/',
   getParentRoute: () => AuthedRoute,
-} as any);
+} as any)
 
 const AuthedCategoriesIndexRoute = AuthedCategoriesIndexImport.update({
-  id: "/categories/",
-  path: "/categories/",
+  id: '/categories/',
+  path: '/categories/',
   getParentRoute: () => AuthedRoute,
-} as any);
+} as any)
 
 // Populate the FileRoutesByPath interface
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/_authed": {
-      id: "/_authed";
-      path: "";
-      fullPath: "";
-      preLoaderRoute: typeof AuthedImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/login": {
-      id: "/login";
-      path: "/login";
-      fullPath: "/login";
-      preLoaderRoute: typeof LoginImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/logout": {
-      id: "/logout";
-      path: "/logout";
-      fullPath: "/logout";
-      preLoaderRoute: typeof LogoutImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/signup": {
-      id: "/signup";
-      path: "/signup";
-      fullPath: "/signup";
-      preLoaderRoute: typeof SignupImport;
-      parentRoute: typeof rootRoute;
-    };
-    "/_authed/categories/": {
-      id: "/_authed/categories/";
-      path: "/categories";
-      fullPath: "/categories";
-      preLoaderRoute: typeof AuthedCategoriesIndexImport;
-      parentRoute: typeof AuthedImport;
-    };
-    "/_authed/home/": {
-      id: "/_authed/home/";
-      path: "/home";
-      fullPath: "/home";
-      preLoaderRoute: typeof AuthedHomeIndexImport;
-      parentRoute: typeof AuthedImport;
-    };
-    "/_authed/transactions/": {
-      id: "/_authed/transactions/";
-      path: "/transactions";
-      fullPath: "/transactions";
-      preLoaderRoute: typeof AuthedTransactionsIndexImport;
-      parentRoute: typeof AuthedImport;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthedImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authed/categories/': {
+      id: '/_authed/categories/'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof AuthedCategoriesIndexImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/home/': {
+      id: '/_authed/home/'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthedHomeIndexImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/reports/': {
+      id: '/_authed/reports/'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthedReportsIndexImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/transactions/': {
+      id: '/_authed/transactions/'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof AuthedTransactionsIndexImport
+      parentRoute: typeof AuthedImport
+    }
   }
 }
 
 // Create and export the route tree
 
 interface AuthedRouteChildren {
-  AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute;
-  AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute;
-  AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute;
+  AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute
+  AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
+  AuthedReportsIndexRoute: typeof AuthedReportsIndexRoute
+  AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedCategoriesIndexRoute: AuthedCategoriesIndexRoute,
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
+  AuthedReportsIndexRoute: AuthedReportsIndexRoute,
   AuthedTransactionsIndexRoute: AuthedTransactionsIndexRoute,
-};
+}
 
 const AuthedRouteWithChildren =
-  AuthedRoute._addFileChildren(AuthedRouteChildren);
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "": typeof AuthedRouteWithChildren;
-  "/login": typeof LoginRoute;
-  "/logout": typeof LogoutRoute;
-  "/signup": typeof SignupRoute;
-  "/categories": typeof AuthedCategoriesIndexRoute;
-  "/home": typeof AuthedHomeIndexRoute;
-  "/transactions": typeof AuthedTransactionsIndexRoute;
+  '/': typeof IndexRoute
+  '': typeof AuthedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
+  '/signup': typeof SignupRoute
+  '/categories': typeof AuthedCategoriesIndexRoute
+  '/home': typeof AuthedHomeIndexRoute
+  '/reports': typeof AuthedReportsIndexRoute
+  '/transactions': typeof AuthedTransactionsIndexRoute
 }
 
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "": typeof AuthedRouteWithChildren;
-  "/login": typeof LoginRoute;
-  "/logout": typeof LogoutRoute;
-  "/signup": typeof SignupRoute;
-  "/categories": typeof AuthedCategoriesIndexRoute;
-  "/home": typeof AuthedHomeIndexRoute;
-  "/transactions": typeof AuthedTransactionsIndexRoute;
+  '/': typeof IndexRoute
+  '': typeof AuthedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
+  '/signup': typeof SignupRoute
+  '/categories': typeof AuthedCategoriesIndexRoute
+  '/home': typeof AuthedHomeIndexRoute
+  '/reports': typeof AuthedReportsIndexRoute
+  '/transactions': typeof AuthedTransactionsIndexRoute
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute;
-  "/": typeof IndexRoute;
-  "/_authed": typeof AuthedRouteWithChildren;
-  "/login": typeof LoginRoute;
-  "/logout": typeof LogoutRoute;
-  "/signup": typeof SignupRoute;
-  "/_authed/categories/": typeof AuthedCategoriesIndexRoute;
-  "/_authed/home/": typeof AuthedHomeIndexRoute;
-  "/_authed/transactions/": typeof AuthedTransactionsIndexRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/_authed': typeof AuthedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
+  '/signup': typeof SignupRoute
+  '/_authed/categories/': typeof AuthedCategoriesIndexRoute
+  '/_authed/home/': typeof AuthedHomeIndexRoute
+  '/_authed/reports/': typeof AuthedReportsIndexRoute
+  '/_authed/transactions/': typeof AuthedTransactionsIndexRoute
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/"
-    | ""
-    | "/login"
-    | "/logout"
-    | "/signup"
-    | "/categories"
-    | "/home"
-    | "/transactions";
-  fileRoutesByTo: FileRoutesByTo;
+    | '/'
+    | ''
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/categories'
+    | '/home'
+    | '/reports'
+    | '/transactions'
+  fileRoutesByTo: FileRoutesByTo
   to:
-    | "/"
-    | ""
-    | "/login"
-    | "/logout"
-    | "/signup"
-    | "/categories"
-    | "/home"
-    | "/transactions";
+    | '/'
+    | ''
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/categories'
+    | '/home'
+    | '/reports'
+    | '/transactions'
   id:
-    | "__root__"
-    | "/"
-    | "/_authed"
-    | "/login"
-    | "/logout"
-    | "/signup"
-    | "/_authed/categories/"
-    | "/_authed/home/"
-    | "/_authed/transactions/";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/_authed'
+    | '/login'
+    | '/logout'
+    | '/signup'
+    | '/_authed/categories/'
+    | '/_authed/home/'
+    | '/_authed/reports/'
+    | '/_authed/transactions/'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  AuthedRoute: typeof AuthedRouteWithChildren;
-  LoginRoute: typeof LoginRoute;
-  LogoutRoute: typeof LogoutRoute;
-  SignupRoute: typeof SignupRoute;
+  IndexRoute: typeof IndexRoute
+  AuthedRoute: typeof AuthedRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  LogoutRoute: typeof LogoutRoute
+  SignupRoute: typeof SignupRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -231,11 +253,11 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   SignupRoute: SignupRoute,
-};
+}
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -258,6 +280,7 @@ export const routeTree = rootRoute
       "children": [
         "/_authed/categories/",
         "/_authed/home/",
+        "/_authed/reports/",
         "/_authed/transactions/"
       ]
     },
@@ -276,6 +299,10 @@ export const routeTree = rootRoute
     },
     "/_authed/home/": {
       "filePath": "_authed/home.index.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/reports/": {
+      "filePath": "_authed/reports.index.tsx",
       "parent": "/_authed"
     },
     "/_authed/transactions/": {

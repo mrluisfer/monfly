@@ -15,6 +15,28 @@ export const postTransactionByEmail = async (
       },
     });
 
+    if (!transaction) {
+      return {
+        error: true,
+        message: "Transaction creation failed",
+        data: null,
+        success: false,
+        statusCode: 500,
+      } as ApiResponse<string | null>;
+    }
+
+    await prismaClient.user.update({
+      data: {
+        updatedAt: new Date(),
+        totalBalance: {
+          increment: data.type === "income" ? data.amount : -data.amount,
+        },
+      },
+      where: {
+        email: email,
+      },
+    });
+
     return {
       error: false,
       message: "Transaction created successfully",

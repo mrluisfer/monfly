@@ -22,6 +22,8 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
       id: crypto.randomUUID(),
       userEmail: email,
       createdAt: new Date(),
+      updatedAt: new Date(),
+      cardId: null,
     };
     return await postTransactionByEmail(email, fullTransaction);
   });

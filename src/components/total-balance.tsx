@@ -4,6 +4,7 @@ import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance.server";
+import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
 import { Check, DollarSign, Edit2 } from "lucide-react";
 import { toast } from "sonner";
@@ -20,7 +21,7 @@ const TotalBalance = () => {
   const userEmail = useRouteUser();
 
   const { error, isPending, data } = useQuery({
-    queryKey: ["user", userEmail],
+    queryKey: [queryDictionary.user, userEmail],
     queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
   });
@@ -42,8 +43,8 @@ const TotalBalance = () => {
       setIsEditing(false);
       if (ctx.data?.data?.totalBalance !== undefined) {
         setTotalBalance(ctx.data.data.totalBalance);
-        queryClient.invalidateQueries({
-          queryKey: ["user", userEmail],
+        await queryClient.invalidateQueries({
+          queryKey: [queryDictionary.user, userEmail],
         });
       }
     },
@@ -93,7 +94,10 @@ const TotalBalance = () => {
             </form>
           ) : (
             <p className="text-2xl font-bold flex items-center justify-between gap-4">
-              {formatCurrency(totalBalance ?? 0, "MXN")}
+              <span>
+                {formatCurrency(totalBalance ?? 0, "MXN")}{" "}
+                <span className="text-muted text-sm">MXN</span>
+              </span>
               <Button
                 variant="outline"
                 size="icon"

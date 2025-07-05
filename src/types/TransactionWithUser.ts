@@ -17,6 +17,7 @@ export type TransactionWithUser = {
   description: string | null;
   date: Date;
   updatedAt: Date;
+  cardId: string | null;
 };
 
 export type TransactionsWithUser = TransactionWithUser[];

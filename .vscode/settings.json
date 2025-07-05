@@ -54,5 +54,6 @@
   ],
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
-  "formattingToggle.affects": ["editor.formatOnSave"]
+  "formattingToggle.affects": ["editor.formatOnSave"],
+  "tailwindCSS.experimental.configFile": "../src/styles/app.css"
 }

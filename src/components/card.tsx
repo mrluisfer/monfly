@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import clsx from "clsx";
 
 import {
@@ -16,12 +16,14 @@ const Card = ({
   title,
   subtitle,
   Footer,
+  cardContentProps,
 }: {
   children: ReactNode;
   className?: string;
   title?: string | ReactNode;
   subtitle?: string | ReactNode;
   Footer?: ReactNode;
+  cardContentProps?: ComponentProps<"div">;
 }) => {
   return (
     <CardUI className={clsx("h-fit", className)}>
@@ -33,7 +35,7 @@ const Card = ({
           </CardTitle>
         </CardHeader>
       )}
-      <CardContent>{children}</CardContent>
+      <CardContent {...cardContentProps}>{children}</CardContent>
       {Footer && <CardFooter>{Footer}</CardFooter>}
     </CardUI>
   );

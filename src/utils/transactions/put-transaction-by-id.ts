@@ -20,6 +20,19 @@ export const putTransactionById = async (data: {
       data: transactionData,
     });
 
+    await prismaClient.user.update({
+      where: { email: updatedTransaction.userEmail },
+      data: {
+        updatedAt: new Date(),
+        totalBalance: {
+          increment:
+            updatedTransaction.type === "income"
+              ? updatedTransaction.amount
+              : -updatedTransaction.amount,
+        },
+      },
+    });
+
     return {
       success: true,
       message: "Transaction updated successfully",

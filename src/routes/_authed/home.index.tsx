@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import IncomeChart from "~/components/income-chart";
+import Charts from "~/components/charts";
 import TotalBalance from "~/components/total-balance";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { queryDictionary } from "~/queries/dictionary";
 
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
@@ -15,7 +16,7 @@ function RouteComponent() {
   const userEmail = useRouteUser();
 
   const { data, isPending, error } = useQuery({
-    queryKey: ["user", userEmail],
+    queryKey: [queryDictionary.user, userEmail],
     queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
   });
@@ -38,15 +39,14 @@ function RouteComponent() {
           </h1>
           <span className="opacity-50">This is your overview dashboard</span>
         </div>
-        {/* <div></div> */}
       </header>
       <section className="flex flex-col gap-4">
         <div className="grid grid-cols-3 gap-4 w-full">
-          <TotalBalance />
-          <IncomeChart />
-        </div>
-        <div className="grid grid-cols-5 gap-4 w-full">
-          <div className="col-span-3">
+          <div className="space-y-4">
+            <TotalBalance />
+            <Charts />
+          </div>
+          <div className="col-span-2">
             <TransactionsList />
           </div>
         </div>

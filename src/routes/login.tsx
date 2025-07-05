@@ -71,10 +71,10 @@ function Login() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-12 md:py-0">
-        <div className="pt-2">
-          <GlobalHeader />
-        </div>
         <div className="max-w-md mx-auto w-full">
+          <div className="pb-6">
+            <GlobalHeader />
+          </div>
           <h1 className="font-extrabold text-2xl mb-2 tracking-tight">
             Monfly
           </h1>

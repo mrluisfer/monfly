@@ -5,9 +5,21 @@ import { ThemeSelector } from "../theme-selector";
 import ToggleDarkMode from "../toggle-dark-mode";
 import { Button } from "../ui/button";
 
+const themeSelectorHiddenRoutes = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+];
+
 const GlobalHeader = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const isThemeSelectorHidden = !themeSelectorHiddenRoutes.includes(
+    location.pathname
+  );
+
+  console.log(location.pathname, isThemeSelectorHidden);
 
   return (
     <header className="flex justify-between items-center">
@@ -22,7 +34,7 @@ const GlobalHeader = () => {
         )}
       </div>
       <div className="flex items-center gap-4">
-        <ThemeSelector />
+        {isThemeSelectorHidden ? <ThemeSelector /> : null}
         <ToggleDarkMode />
       </div>
     </header>
