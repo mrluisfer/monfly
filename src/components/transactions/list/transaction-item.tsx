@@ -25,7 +25,7 @@ export default function TransactionItem({
   const { disableHover } = useTransactionHoverContext();
 
   const textBase = "text-base font-medium";
-  const textMuted = "text-sm opacity-50";
+  const textMuted = "text-sm opacity-50 text-muted-foreground";
 
   return (
     <TooltipProvider delayDuration={0}>
@@ -39,10 +39,12 @@ export default function TransactionItem({
               />
               <div className="flex justify-between items-center w-full">
                 <div className="text-left">
-                  <p className={clsx(textBase, "capitalize")}>
-                    {transaction.user.name}
+                  <p className={clsx(textBase, "font-semibold truncate")}>
+                    {transaction.description}
                   </p>
-                  <span className={textMuted}>{transaction.user.email}</span>
+                  <span className={textMuted}>
+                    {transaction.user.name} - {transaction.user.email}
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col items-end gap-1">

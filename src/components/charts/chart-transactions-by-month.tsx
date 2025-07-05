@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getTransactionsCountByMonthServer } from "~/lib/api/chart/get-transaction-count-by-month.server";
 import { TrendingUp } from "lucide-react";
@@ -37,6 +38,9 @@ export default function ChartTransactionsByMonth() {
 
   const chartData = data?.data ?? [];
 
+  const shownChart = !isLoading && !error && chartData.length;
+  const shownPlaceholder = !isLoading && !error && chartData.length === 0;
+
   return (
     <Card>
       <CardHeader>
@@ -52,7 +56,7 @@ export default function ChartTransactionsByMonth() {
             Error loading data
           </div>
         )}
-        {!isLoading && !error && chartData.length > 0 && (
+        {shownChart ? (
           <ChartContainer
             config={{
               count: {
@@ -89,12 +93,12 @@ export default function ChartTransactionsByMonth() {
               </BarChart>
             </ResponsiveContainer>
           </ChartContainer>
-        )}
-        {!isLoading && !error && chartData.length === 0 && (
-          <div className="py-12 text-center text-muted-foreground">
+        ) : null}
+        {shownPlaceholder ? (
+          <DataNotFoundPlaceholder>
             No transaction data found for the user
-          </div>
-        )}
+          </DataNotFoundPlaceholder>
+        ) : null}
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-center gap-2 text-sm">

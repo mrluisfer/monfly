@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import {
   TransactionType,
   transactionTypes,
@@ -59,6 +60,9 @@ export default function ChartByCategoryRadar({
     },
   } satisfies ChartConfig;
 
+  const shownChart = !isLoading && !error && chartData.length;
+  const shownPlaceholder = !isLoading && !error && chartData.length === 0;
+
   return (
     <Card>
       <CardHeader className="items-center">
@@ -76,7 +80,7 @@ export default function ChartByCategoryRadar({
             Error loading data
           </div>
         )}
-        {!isLoading && !error && chartData.length > 0 && (
+        {shownChart ? (
           <ChartContainer
             config={chartConfig}
             className="mx-auto aspect-square max-h-[300px]"
@@ -103,12 +107,12 @@ export default function ChartByCategoryRadar({
               </RadarChart>
             </ResponsiveContainer>
           </ChartContainer>
-        )}
-        {!isLoading && !error && chartData.length === 0 && (
-          <div className="py-12 text-center text-muted-foreground">
+        ) : null}
+        {shownPlaceholder ? (
+          <DataNotFoundPlaceholder>
             No {chartLabel.toLowerCase()} data for categories
-          </div>
-        )}
+          </DataNotFoundPlaceholder>
+        ) : null}
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">

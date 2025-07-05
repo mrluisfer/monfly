@@ -46,10 +46,13 @@ export const signupFn = createServerFn({ method: "POST" })
           email: found.email,
         });
 
-        // Redirect to the prev page stored in the "redirect" search param
-        throw redirect({
-          href: data.redirectUrl || "/home",
-        });
+        return {
+          error: false,
+          message: "User already exists",
+          data: found.email,
+          success: true,
+          statusCode: 200,
+        } as ApiResponse<string | null>;
       }
 
       // Create the user
@@ -61,15 +64,20 @@ export const signupFn = createServerFn({ method: "POST" })
         },
       });
 
-      // Store the user's email in the session
-      await session.update({
-        email: user.email,
-      });
+      if (user) {
+        // Store the user's email in the session
+        await session.update({
+          email: user.email,
+        });
 
-      // Redirect to the prev page stored in the "redirect" search param
-      throw redirect({
-        href: data.redirectUrl || "/home",
-      });
+        return {
+          error: false,
+          message: "User created successfully",
+          data: user.email,
+          success: true,
+          statusCode: 201,
+        } as ApiResponse<string | null>;
+      }
     } catch (error) {
       return {
         error: true,

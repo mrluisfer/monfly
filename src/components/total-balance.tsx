@@ -96,7 +96,7 @@ const TotalBalance = () => {
             <p className="text-2xl font-bold flex items-center justify-between gap-4">
               <span>
                 {formatCurrency(totalBalance ?? 0, "MXN")}{" "}
-                <span className="text-muted text-sm">MXN</span>
+                <span className="text-muted-foreground text-sm">MXN</span>
               </span>
               <Button
                 variant="outline"

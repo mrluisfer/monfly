@@ -1,11 +1,22 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/transaction-form-names";
 import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
+import { useMutation } from "~/hooks/use-mutation";
+import { useRouteUser } from "~/hooks/use-route-user";
+import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email.server";
 import { cn } from "~/lib/utils";
+import { queryDictionary } from "~/queries/dictionary";
 import { validLimitNumber } from "~/utils/valid-limit-number";
 import { format } from "date-fns";
-import { CalendarIcon, CheckIcon, ChevronDownIcon } from "lucide-react";
+import {
+  CalendarIcon,
+  CheckIcon,
+  ChevronDownIcon,
+  PlusIcon,
+} from "lucide-react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
@@ -16,6 +27,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
+  CommandSeparator,
 } from "../ui/command";
 import {
   Form,
@@ -56,6 +68,19 @@ export function TransactionForm<FormValues extends FieldValues>({
 }: TransactionFormProps<FormValues>) {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const { data: categories, isPending, error } = useGetCategoriesByEmail();
+  const userEmail = useRouteUser();
+
+  const queryClient = useQueryClient();
+
+  const postCategoryByEmail = useMutation({
+    fn: postCategoryByEmailServer,
+    onSuccess: async () => {
+      toast.success("Category created successfully");
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.categories],
+      });
+    },
+  });
 
   return (
     <Form {...form}>
@@ -118,10 +143,17 @@ export function TransactionForm<FormValues extends FieldValues>({
           control={form.control}
           name={transactionFormNames.category as Path<FormValues>}
           render={({ field }) => {
+            const [inputValue, setInputValue] = useState("");
             const value = field.value as string | undefined;
             const selectedCategory = categories?.find(
               (cat) => cat.name === value
             );
+
+            const showAddNew =
+              inputValue.length > 1 &&
+              !categories?.some(
+                (cat) => cat.name.toLowerCase() === inputValue.toLowerCase()
+              );
 
             return (
               <FormItem>
@@ -143,7 +175,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                         >
                           {selectedCategory
                             ? selectedCategory.name
-                            : "Select category"}
+                            : inputValue || "Select a category"}
                           <ChevronDownIcon
                             size={16}
                             className="ml-2 text-muted-foreground/80"
@@ -153,7 +185,11 @@ export function TransactionForm<FormValues extends FieldValues>({
                       </PopoverTrigger>
                       <PopoverContent className="p-0" align="center">
                         <Command>
-                          <CommandInput placeholder="Search category..." />
+                          <CommandInput
+                            placeholder="Search category..."
+                            value={inputValue}
+                            onValueChange={setInputValue}
+                          />
                           <CommandList>
                             <CommandEmpty>No category found.</CommandEmpty>
                             <CommandGroup>
@@ -174,6 +210,35 @@ export function TransactionForm<FormValues extends FieldValues>({
                                 </CommandItem>
                               ))}
                             </CommandGroup>
+                            {showAddNew && (
+                              <>
+                                <CommandSeparator />
+                                <CommandGroup heading="Add new category">
+                                  <CommandItem
+                                    onSelect={async () => {
+                                      field.onChange(inputValue);
+                                      setCategoryOpen(false);
+                                      await postCategoryByEmail.mutate({
+                                        data: {
+                                          email: userEmail,
+                                          category: {
+                                            name: inputValue,
+                                            icon: "other",
+                                          },
+                                        },
+                                      });
+                                    }}
+                                    value={inputValue}
+                                  >
+                                    <PlusIcon size={16} className="mr-1" />
+                                    Add new:{" "}
+                                    <span className="ml-1 font-semibold">
+                                      {inputValue}
+                                    </span>
+                                  </CommandItem>
+                                </CommandGroup>
+                              </>
+                            )}
                           </CommandList>
                         </Command>
                       </PopoverContent>
@@ -185,6 +250,7 @@ export function TransactionForm<FormValues extends FieldValues>({
             );
           }}
         />
+
         <FormField
           control={form.control}
           name={transactionFormNames.description as Path<FormValues>}

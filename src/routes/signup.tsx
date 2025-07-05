@@ -1,10 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Auth } from "~/components/auth";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/use-mutation";
+import { ApiResponse } from "~/types/ApiResponse";
 import { signupFn } from "~/utils/auth/signupfn";
 import { getUserSession } from "~/utils/user/get-user-session";
 import { ArrowLeft, BadgeCheck } from "lucide-react";
@@ -32,12 +38,14 @@ export const Route = createFileRoute("/signup")({
 });
 
 function SignupComp() {
+  const navigate = useNavigate();
+
   const signupMutation = useMutation({
     fn: useServerFn(signupFn),
   });
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    signupMutation.mutate({
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    const signupMutationData = await signupMutation.mutate({
       data: {
         email: data.email,
         password: data.password,
@@ -45,6 +53,11 @@ function SignupComp() {
         redirectUrl: "/home",
       },
     });
+    if (signupMutationData?.success) {
+      await navigate({
+        to: "/home",
+      });
+    }
   };
 
   const form = useForm({
@@ -113,9 +126,10 @@ function SignupComp() {
             status={signupMutation.status}
             onSubmit={onSubmit}
             afterSubmit={
-              signupMutation.data?.error ? (
+              signupMutation?.error ? (
                 <div className="text-red-400">
-                  {signupMutation.data.message}
+                  {signupMutation.data?.message ||
+                    "An error occurred. Please try again."}
                 </div>
               ) : null
             }

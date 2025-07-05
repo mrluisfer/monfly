@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart.server";
 import {
@@ -27,13 +28,21 @@ export default function IncomeExpenseChart() {
 
   const chartData = data?.data ?? [];
 
+  const shownChart = !isLoading && !error && chartData.length;
+  const shownPlaceholder = !isLoading && !error && chartData.length === 0;
+
   return (
     <Card title="Income & Expenses" subtitle="Per month">
       {isLoading && <div className="py-12 text-center">Loading chart...</div>}
       {error && (
         <div className="py-12 text-center text-red-500">Error loading data</div>
       )}
-      {!isLoading && !error && (
+      {shownPlaceholder ? (
+        <DataNotFoundPlaceholder>
+          No transaction data found for the user
+        </DataNotFoundPlaceholder>
+      ) : null}
+      {shownChart ? (
         <ResponsiveContainer width="100%" height={320}>
           <AreaChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -59,7 +68,7 @@ export default function IncomeExpenseChart() {
             />
           </AreaChart>
         </ResponsiveContainer>
-      )}
+      ) : null}
     </Card>
   );
 }

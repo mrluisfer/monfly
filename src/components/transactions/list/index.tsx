@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { Label } from "~/components/ui/label";
 import {
   Pagination,
@@ -80,7 +81,11 @@ export default function TransactionsList() {
               ))}
             </div>
           ) : (
-            !isPending && <div>No transactions found.</div>
+            !isPending && (
+              <DataNotFoundPlaceholder>
+                No transactions found.
+              </DataNotFoundPlaceholder>
+            )
           )}
           <Pagination>
             <PaginationContent>
