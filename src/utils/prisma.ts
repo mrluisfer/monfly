@@ -1,22 +1,25 @@
-import { PrismaClient } from "@prisma/client";
+import pkg from "@prisma/client";
+import type { PrismaClient as PrismaClientType } from "@prisma/client";
 import bcrypt from "bcrypt";
 
+const { PrismaClient } = pkg;
+
 declare global {
-  var prisma: PrismaClient | undefined;
+  // eslint-disable-next-line no-var
+  var prisma: PrismaClientType | undefined;
 }
 
-export const prismaClient = global.prisma || new PrismaClient();
+export const prismaClient = globalThis.prisma || new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
-  global.prisma = prismaClient;
+  globalThis.prisma = prismaClient;
 }
 
 const saltRounds = 12;
 
 export async function hashPassword(password: string): Promise<string> {
   try {
-    const hash = await bcrypt.hash(password, saltRounds);
-    return hash;
+    return await bcrypt.hash(password, saltRounds);
   } catch (error) {
     console.error("Error hashing password:", error);
     throw new Error("Failed to hash password");
