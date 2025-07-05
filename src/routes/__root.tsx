@@ -20,17 +20,59 @@ import { seo } from "~/utils/seo.js";
 
 export const Route = createRootRoute({
   head: () => ({
+    title:
+      "Finance Dashboard | Track your Expenses & Income | TanStack + shadcn",
     meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#18181b" },
+      { name: "color-scheme", content: "light dark" },
       {
-        charSet: "utf-8",
+        name: "description",
+        content:
+          "The ultimate personal finance dashboard. Track your expenses, income, cards, and financial reports, all in one place. Built with TanStack Start, shadcn/ui, and React.",
       },
       {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
+        name: "keywords",
+        content:
+          "finance, dashboard, expenses, income, cards, reports, React, TanStack, shadcn, money, budgeting, personal, app",
       },
+      { name: "author", content: "Luis Alvarez (mrLuisFer)" },
+      {
+        name: "robots",
+        content:
+          "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+      },
+      // Open Graph (Facebook, LinkedIn, etc.)
+      {
+        property: "og:title",
+        content: "Finance Dashboard | TanStack + shadcn",
+      },
+      {
+        property: "og:description",
+        content:
+          "Track your money, expenses and income visually with beautiful charts and financial reports. Try it now!",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://tusitio.com/" },
+      { property: "og:image", content: "/og-image.png" },
+      // Twitter Card
+      { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "Finance Dashboard | TanStack + shadcn",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Track your money, expenses and income visually with beautiful charts and financial reports. Try it now!",
+      },
+      { name: "twitter:image", content: "/og-image.png" },
+      // Canonical
+      { rel: "canonical", href: "https://tusitio.com/" },
       ...seo({
         title:
-          "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
+          "Finance Dashboard | Type-Safe, Client-First, Full-Stack React Framework",
         description:
           "TanStack Start is a type-safe, client-first, full-stack React framework. ",
       }),
@@ -54,8 +96,9 @@ export const Route = createRootRoute({
         sizes: "16x16",
         href: "/favicon-16x16.png",
       },
-      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
       { rel: "icon", href: "/favicon.ico" },
+      { rel: "mask-icon", href: "/safari-pinned-tab.svg", color: "#5bbad5" }, // optional
+      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
     ],
   }),
   errorComponent: (props) => {
@@ -91,7 +134,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <head>
+      <head title="Finance Dashboard | Track your Expenses & Income | TanStack + shadcn">
         <HeadContent />
       </head>
       <body>
