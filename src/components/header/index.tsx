@@ -1,4 +1,8 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import { BalanceStatusBadge } from "~/components/header/badges/balance-status-badge";
+import { OnlineStatusBadge } from "~/components/header/badges/online-status-badge";
+import { SpendingAlertBadge } from "~/components/header/badges/spending-alert-badge";
+import { TimezoneBadge } from "~/components/header/badges/timezone-badge";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { PyramidIcon } from "lucide-react";
 
@@ -20,6 +24,10 @@ const Header = () => {
         <HeaderNavigation />
       </div>
       <div className="flex items-center gap-4">
+        <SpendingAlertBadge />
+        <BalanceStatusBadge />
+        <OnlineStatusBadge />
+        <TimezoneBadge />
         <SettingsDialog />
       </div>
     </header>

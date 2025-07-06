@@ -59,7 +59,12 @@ export function Auth<T extends z.ZodType<any, any, any>>({
               <FormItem>
                 <FormLabel htmlFor="email">Email</FormLabel>
                 <FormControl>
-                  <Input id="email" className="px-2 py-1" {...field} />
+                  <Input
+                    id="email"
+                    className="px-2 py-1"
+                    type="email"
+                    {...field}
+                  />
                 </FormControl>
                 <FormDescription>
                   This is your email address. We will send you a confirmation
