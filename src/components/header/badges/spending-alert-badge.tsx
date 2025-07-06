@@ -48,6 +48,7 @@ export function SpendingAlertBadge() {
     }, 0) ?? 0;
 
   const percent = (spent / limit) * 100;
+  if (percent < 80) return null;
 
   return (
     <Badge variant="destructive" className="gap-1.5 animate-pulse">
