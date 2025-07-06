@@ -77,6 +77,9 @@ const Sidebar = () => {
                     tooltip={item.title}
                     asChild
                     isActive={currentPath === item.url}
+                    disabled={item?.disabled}
+                    className="capitalize"
+                    title={item.disabled ? "Coming soon" : item.title}
                   >
                     <Link to={item.url} href={item.url}>
                       {item.icon} {item.title}
@@ -94,8 +97,8 @@ const Sidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link to="/" href="/help">
+                <SidebarMenuButton asChild disabled>
+                  <Link to="/help" href="/help" title="Coming soon">
                     <BadgeHelp />
                     <span>Help</span>
                   </Link>

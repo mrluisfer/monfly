@@ -5,12 +5,13 @@ export type SidebarItemType = {
   title: string;
   icon: string | ReactNode;
   url?: string;
+  disabled?: boolean;
 };
 
 export const sidebarRoutes: SidebarItemType[] = [
   { title: "Home", icon: <Home />, url: "/home" },
   { title: "Transactions", icon: <CreditCard />, url: "/transactions" },
-  { title: "Budgets", icon: <Wallet />, url: "/budget" },
+  { title: "Budgets", icon: <Wallet />, url: "/budget", disabled: true },
   { title: "Reports", icon: <BarChart />, url: "/reports" },
   { title: "Categories", icon: <List />, url: "/categories" },
 ];
