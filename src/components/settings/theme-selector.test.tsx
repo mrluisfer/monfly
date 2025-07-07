@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 
-import { DEFAULT_THEMES, SCALED_THEMES } from "../constants/themes";
-import { useThemeConfig } from "../hooks/use-theme-config";
+import { DEFAULT_THEMES, SCALED_THEMES } from "../../constants/themes";
+import { useThemeConfig } from "../../hooks/use-theme-config";
 import { ThemeSelector } from "./theme-selector";
 
 // Mock the useThemeConfig hook

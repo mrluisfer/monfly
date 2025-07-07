@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "@tanstack/react-router";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { Label } from "~/components/ui/label";
 import {
@@ -12,6 +13,7 @@ import {
   PaginationPrevious,
 } from "~/components/ui/pagination";
 import { Switch } from "~/components/ui/switch";
+import { SidebarRouteUrl } from "~/constants/sidebar-routes";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { useTransactionHoverContext } from "~/hooks/use-transaction-hover-context";
@@ -27,6 +29,8 @@ const PAGE_SIZE = 6;
 export default function TransactionsList() {
   const userEmail = useRouteUser();
   const [page, setPage] = useState<number>(1);
+  const location = useLocation().pathname;
+  const isOnTransactionsPage = location.includes(SidebarRouteUrl.TRANSACTIONS);
 
   const { data, isPending, error } = useQuery({
     queryKey: [queryDictionary.transactions, userEmail, page],
@@ -59,7 +63,7 @@ export default function TransactionsList() {
             <p>Transactions</p>
             <div className="flex items-center gap-6">
               <DisableHoverInfo />
-              <AddTransactionButton />
+              {isOnTransactionsPage ? null : <AddTransactionButton />}
             </div>
           </div>
         }

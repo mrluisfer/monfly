@@ -48,9 +48,9 @@ export const CategoriesList = () => {
       <Form {...form}>
         <form
           className="space-y-4"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            handleDeleteCategories();
+            await handleDeleteCategories();
           }}
         >
           <FormItem>

@@ -6,7 +6,7 @@ import { TimezoneBadge } from "~/components/header/badges/timezone-badge";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { PyramidIcon } from "lucide-react";
 
-import { SettingsDialog } from "../settings-dialog";
+import { SettingsDialog } from "../settings/settings-dialog";
 import {
   Breadcrumb,
   BreadcrumbItem,

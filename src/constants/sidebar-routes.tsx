@@ -8,10 +8,27 @@ export type SidebarItemType = {
   disabled?: boolean;
 };
 
+export enum SidebarRouteUrl {
+  HOME = "/home",
+  TRANSACTIONS = "/transactions",
+  BUDGET = "/budget",
+  REPORTS = "/reports",
+  CATEGORIES = "/categories",
+}
+
 export const sidebarRoutes: SidebarItemType[] = [
-  { title: "Home", icon: <Home />, url: "/home" },
-  { title: "Transactions", icon: <CreditCard />, url: "/transactions" },
-  { title: "Budgets", icon: <Wallet />, url: "/budget", disabled: true },
-  { title: "Reports", icon: <BarChart />, url: "/reports" },
-  { title: "Categories", icon: <List />, url: "/categories" },
+  { title: "Home", icon: <Home />, url: SidebarRouteUrl.HOME },
+  {
+    title: "Transactions",
+    icon: <CreditCard />,
+    url: SidebarRouteUrl.TRANSACTIONS,
+  },
+  {
+    title: "Budgets",
+    icon: <Wallet />,
+    url: SidebarRouteUrl.BUDGET,
+    disabled: true,
+  },
+  { title: "Reports", icon: <BarChart />, url: SidebarRouteUrl.REPORTS },
+  { title: "Categories", icon: <List />, url: SidebarRouteUrl.CATEGORIES },
 ];

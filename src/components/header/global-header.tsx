@@ -1,8 +1,8 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
-import { ThemeSelector } from "../theme-selector";
-import ToggleDarkMode from "../toggle-dark-mode";
+import { ThemeSelector } from "../settings/theme-selector";
+import ToggleDarkMode from "../settings/toggle-dark-mode";
 import { Button } from "../ui/button";
 
 const themeSelectorHiddenRoutes = [

@@ -7,7 +7,7 @@ import { queryDictionary } from "~/queries/dictionary";
 import { logoutFn } from "~/utils/auth/logoutfn";
 import { BadgeHelp, BrainCircuit, LogOut, Settings, User2 } from "lucide-react";
 
-import { SettingsDialog } from "../settings-dialog";
+import { SettingsDialog } from "../settings/settings-dialog";
 import {
   SidebarContent,
   SidebarFooter,

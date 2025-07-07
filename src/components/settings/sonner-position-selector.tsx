@@ -11,7 +11,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 
 export const SonnerPositionSelector = () => {
   const { position, setPosition } = useSonnerPosition();

@@ -8,7 +8,7 @@ import {
 } from "~/constants/transaction-types";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getChartTypeByCategoryServer } from "~/lib/api/chart/get-chart-type-by-category.server";
-import { TrendingUp } from "lucide-react";
+import { getTrendingMonthlyServer } from "~/lib/api/chart/get-trending-monthly.server";
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -32,6 +32,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
+import { TrendingStatus } from "./trending-status";
+
 type ChartByCategoryRadarProps = {
   type: TransactionType; // "income" | "expense"
 };
@@ -45,6 +47,20 @@ export default function ChartByCategoryRadar({
     queryFn: () => getChartTypeByCategoryServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
   });
+
+  const { data: trendingMonthlyData } = useQuery({
+    queryKey: ["trending-monthly", userEmail, type],
+    queryFn: () =>
+      getTrendingMonthlyServer({
+        data: {
+          email: userEmail,
+          type,
+        },
+      }),
+    enabled: !!userEmail,
+  });
+
+  console.log("Trending Monthly Data:", trendingMonthlyData);
 
   // [{ category: string, income: number, expense: number }]
   const chartData = data?.data ?? [];
@@ -81,10 +97,7 @@ export default function ChartByCategoryRadar({
           </div>
         )}
         {shownChart ? (
-          <ChartContainer
-            config={chartConfig}
-            className="mx-auto aspect-square max-h-[300px]"
-          >
+          <ChartContainer config={chartConfig} className="">
             <ResponsiveContainer width="100%" height={300}>
               <RadarChart
                 data={chartData}
@@ -116,10 +129,7 @@ export default function ChartByCategoryRadar({
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground flex items-center gap-2 leading-none">
-          This year
+          <TrendingStatus type={type} data={trendingMonthlyData} />
         </div>
       </CardFooter>
     </Card>

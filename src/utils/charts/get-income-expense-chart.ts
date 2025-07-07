@@ -1,14 +1,16 @@
 import { ApiResponse } from "~/types/ApiResponse";
+import { format } from "date-fns";
 
 import { prismaClient } from "../prisma";
 
 const now = new Date();
-const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+const monthsToShow = 6;
+const sixMonthsAgo = new Date(
+  now.getFullYear(),
+  now.getMonth() - monthsToShow + 1,
+  1
+);
 
-/**
- * @returns
- * [{ month: "January", year: 2024, income: 400, expense: 200 },{ month: "February", year: 2024, income: 320, expense: 250 },...]
- */
 export const getIncomeExpenseData = async ({ email }: { email: string }) => {
   try {
     const transactions = await prismaClient.transaction.findMany({
@@ -26,8 +28,16 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
       expense: number;
     };
 
-    const summaryMap = new Map<string, ChartRow>();
+    const months: { month: string; year: number }[] = [];
+    for (let i = monthsToShow - 1; i >= 0; i--) {
+      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      months.push({
+        month: date.toLocaleString("default", { month: "long" }),
+        year: date.getFullYear(),
+      });
+    }
 
+    const summaryMap = new Map<string, ChartRow>();
     transactions.forEach((t) => {
       const date = new Date(t.date);
       const month = date.toLocaleString("default", { month: "long" });
@@ -40,12 +50,10 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
       if (t.type === "expense") summaryMap.get(key)!.expense += t.amount;
     });
 
-    const chartData = Array.from(summaryMap.values()).sort(
-      (a, b) =>
-        a.year - b.year ||
-        new Date(`${a.month} 1, ${a.year}`).getMonth() -
-          new Date(`${b.month} 1, ${b.year}`).getMonth()
-    );
+    const chartData: ChartRow[] = months.map(({ month, year }) => {
+      const key = `${year}-${month}`;
+      return summaryMap.get(key) ?? { month, year, income: 0, expense: 0 };
+    });
 
     return {
       data: chartData,
