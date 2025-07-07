@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import Header from "../header";
+import { Header } from ".";
 
 // Mocks
 jest.mock("@tanstack/react-router", () => {

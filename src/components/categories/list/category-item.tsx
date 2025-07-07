@@ -24,7 +24,7 @@ const CategoryItem = ({ category }: { category: Category }) => {
         className="flex items-center justify-between py-1 w-full group"
       >
         <div className="flex items-center gap-4">
-          <div className="text-muted-foreground">
+          <div className="text-primary">
             {getCategoryIconByName(category.icon, {
               width: 16,
               height: 16,

@@ -1,6 +1,6 @@
 import type { ReactNode } from "@tanstack/react-router";
 
-import Header from "./header";
+import { Header } from "./header";
 import Sidebar from "./sidebar";
 import { SidebarProvider } from "./ui/sidebar";
 

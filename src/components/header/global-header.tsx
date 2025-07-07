@@ -19,8 +19,6 @@ const GlobalHeader = () => {
     location.pathname
   );
 
-  console.log(location.pathname, isThemeSelectorHidden);
-
   return (
     <header className="flex justify-between items-center">
       <div>

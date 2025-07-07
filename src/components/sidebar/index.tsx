@@ -46,6 +46,10 @@ const Sidebar = () => {
     });
   };
 
+  if (error) {
+    return <div>Error: {error?.message}</div>;
+  }
+
   return (
     <UiSidebar collapsible="icon">
       <SidebarHeader>
@@ -82,7 +86,8 @@ const Sidebar = () => {
                     title={item.disabled ? "Coming soon" : item.title}
                   >
                     <Link to={item.url} href={item.url}>
-                      {item.icon} {item.title}
+                      <item.icon className="text-secondary-foreground" />{" "}
+                      {item.title}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -98,8 +103,8 @@ const Sidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild disabled>
-                  <Link to="/help" href="/help" title="Coming soon">
-                    <BadgeHelp />
+                  <Link to="/" href="/help" title="Coming soon">
+                    <BadgeHelp className="text-secondary-foreground" />
                     <span>Help</span>
                   </Link>
                 </SidebarMenuButton>
@@ -107,7 +112,7 @@ const Sidebar = () => {
               <SidebarMenuItem>
                 <SettingsDialog>
                   <SidebarMenuButton>
-                    <Settings />
+                    <Settings className="text-secondary-foreground" />
                     <span>Settings</span>
                   </SidebarMenuButton>
                 </SettingsDialog>
@@ -117,7 +122,7 @@ const Sidebar = () => {
                   onClick={handleLogOut}
                   className="capitalize"
                 >
-                  <LogOut />
+                  <LogOut className="text-secondary-foreground" />
                   <span>Sign out</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -131,20 +136,27 @@ const Sidebar = () => {
             <SidebarMenuButton
               className="capitalize"
               size={open ? "lg" : "default"}
+              asChild
             >
-              {isPending ? (
-                <>
-                  <User2 /> <Skeleton className="w-18 h-4" />
-                </>
-              ) : (
-                <>
-                  <UserAvatar
-                    alt={data?.data?.name ?? ""}
-                    name={data?.data?.name ?? ""}
-                  />
-                  <span>{data?.data?.name}</span>
-                </>
-              )}
+              <Link
+                to="/user/$userId"
+                href="/user/$userId"
+                params={{ userId: data?.data?.id! }}
+              >
+                {isPending ? (
+                  <>
+                    <User2 /> <Skeleton className="w-18 h-4" />
+                  </>
+                ) : (
+                  <>
+                    <UserAvatar
+                      alt={data?.data?.name ?? ""}
+                      name={data?.data?.name ?? ""}
+                    />
+                    <span>{data?.data?.name}</span>
+                  </>
+                )}
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

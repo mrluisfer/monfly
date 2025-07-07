@@ -1,27 +1,22 @@
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
 
-import Card from "./card";
-import { Button } from "./ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
+import Card from "../card";
+import { Button } from "../ui/button";
+import { Form, FormField } from "../ui/form";
+import ComplexPasswordInput from "./complex-password-input";
+import EmailInput from "./email-input";
+import { SimplePasswordInput } from "./simple-password-input";
+import UsernameInput from "./username-input";
 
-const actions = {
-  login: "Login",
-  signup: "Sign Up",
-};
+export enum authActions {
+  login = "Login",
+  signup = "Sign Up",
+}
 
-type ActionText = (typeof actions)[keyof typeof actions];
+type ActionText = (typeof authActions)[keyof typeof authActions];
 
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
 type AuthProps<T extends z.ZodType<any, any, any>> = {
@@ -55,51 +50,26 @@ export function Auth<T extends z.ZodType<any, any, any>>({
           <FormField
             control={form.control}
             name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <FormControl>
-                  <Input
-                    id="email"
-                    className="px-2 py-1"
-                    type="email"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  This is your email address. We will send you a confirmation
-                  email.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) => <EmailInput field={field} />}
           />
+
           <FormField
             control={form.control}
             name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <FormControl>
-                  <Input type="password" className="px-2 py-1" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={({ field }) =>
+              actionText === authActions.signup ? (
+                <ComplexPasswordInput field={field} />
+              ) : (
+                <SimplePasswordInput field={field} />
+              )
+            }
           />
-          {actionText === actions.signup && (
+
+          {actionText === authActions.signup && (
             <FormField
               control={form.control}
               name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="name">Username</FormLabel>
-                  <FormControl>
-                    <Input className="px-2 py-1" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => <UsernameInput field={field} />}
             />
           )}
           <Button
@@ -115,16 +85,16 @@ export function Auth<T extends z.ZodType<any, any, any>>({
           <div className="flex justify-center">
             <div className="text-xs mt-4 flex items-center gap-4">
               <span className="text-center text-muted-foreground">
-                {actionText === actions.login
+                {actionText === authActions.login
                   ? "Don't have an account?"
                   : "Already have an account?"}
               </span>
-              <Button asChild variant="ghost">
+              <Button asChild variant="outline" size="sm">
                 <Link
-                  to={actionText === actions.login ? "/signup" : "/login"}
+                  to={actionText === authActions.login ? "/signup" : "/login"}
                   type="button"
                 >
-                  {actionText === actions.login ? "Sign up" : "Login"}
+                  {actionText === authActions.login ? "Sign up" : "Login"}
                 </Link>
               </Button>
             </div>

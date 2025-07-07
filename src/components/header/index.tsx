@@ -3,7 +3,6 @@ import { BalanceStatusBadge } from "~/components/header/badges/balance-status-ba
 import { OnlineStatusBadge } from "~/components/header/badges/online-status-badge";
 import { SpendingAlertBadge } from "~/components/header/badges/spending-alert-badge";
 import { TimezoneBadge } from "~/components/header/badges/timezone-badge";
-import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { PyramidIcon } from "lucide-react";
 
 import { SettingsDialog } from "../settings/settings-dialog";
@@ -16,7 +15,7 @@ import {
 } from "../ui/breadcrumb";
 import { SidebarTrigger } from "../ui/sidebar";
 
-const Header = () => {
+export const Header = () => {
   return (
     <header className="flex justify-between items-center">
       <div className="flex items-center gap-4">
@@ -34,12 +33,25 @@ const Header = () => {
   );
 };
 
+const breadcrumbList = [
+  { title: "Home", url: "/" },
+  { title: "Home", url: "/home" },
+  { title: "Transactions", url: "/transactions" },
+  { title: "Categories", url: "/categories" },
+  { title: "Budgets", url: "/budgets" },
+  { title: "Reports", url: "/reports" },
+  { title: "User", url: "/user/$userId" },
+];
+
 function HeaderNavigation() {
   const location = useLocation();
 
-  const foundRouteTitle = sidebarRoutes.find(
-    (route) => route.url === location.pathname
-  )?.title;
+  const foundRouteTitle = breadcrumbList.find((route) => {
+    const currentPathname = location.pathname.split("/")[1];
+    const routePathname = route.url.split("/")[1];
+    return currentPathname === routePathname || route.url === location.pathname;
+  })?.title;
+
   const isHomeRoute = location.pathname === "/home";
 
   return (
@@ -47,7 +59,7 @@ function HeaderNavigation() {
       <BreadcrumbList className="bg-background rounded-md border px-3 py-2 shadow-xs">
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/">
+            <Link to="/" className="text-primary">
               <PyramidIcon size={16} aria-hidden="true" />
               <span className="sr-only">Home</span>
             </Link>
@@ -73,5 +85,3 @@ function HeaderNavigation() {
     </Breadcrumb>
   );
 }
-
-export default Header;

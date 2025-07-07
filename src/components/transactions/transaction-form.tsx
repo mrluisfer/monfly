@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { getCategoryIconByName } from "~/constants/categories-icon";
 import { transactionFormNames } from "~/constants/transaction-form-names";
 import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { useMutation } from "~/hooks/use-mutation";
@@ -203,6 +204,9 @@ export function TransactionForm<FormValues extends FieldValues>({
                                   }}
                                   className="capitalize"
                                 >
+                                  {getCategoryIconByName(category.icon, {
+                                    size: 10,
+                                  })}
                                   {category.name}
                                   {value === category.name && (
                                     <CheckIcon size={16} className="ml-auto" />

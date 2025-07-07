@@ -25,7 +25,7 @@ export const SettingsDialog = ({
           children
         ) : (
           <Button variant="outline">
-            <Settings />
+            <Settings className="text-primary" />
             <span className="hidden md:block">Settings</span>
           </Button>
         )}

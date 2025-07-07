@@ -20,7 +20,11 @@ export const TimezoneBadge = () => {
       variant="secondary"
       className="flex items-center gap-1 text-secondary-foreground"
     >
-      <ZapIcon className="-ms-0.5 opacity-60" size={12} aria-hidden="true" />
+      <ZapIcon
+        className="-ms-0.5 opacity-60 text-primary"
+        size={12}
+        aria-hidden="true"
+      />
       <span className="ml-1">{formatted}</span>
     </Badge>
   );

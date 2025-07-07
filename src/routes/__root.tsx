@@ -54,7 +54,7 @@ export const Route = createRootRoute({
           "Track your money, expenses and income visually with beautiful charts and financial reports. Try it now!",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://tusitio.com/" },
+      { property: "og:url", content: "https://monfly.vercel.app/" },
       { property: "og:image", content: "/og-image.png" },
       // Twitter Card
       { name: "twitter:card", content: "summary_large_image" },
@@ -69,7 +69,7 @@ export const Route = createRootRoute({
       },
       { name: "twitter:image", content: "/og-image.png" },
       // Canonical
-      { rel: "canonical", href: "https://tusitio.com/" },
+      { rel: "canonical", href: "https://monfly.vercel.app/" },
       ...seo({
         title:
           "Finance Dashboard | Type-Safe, Client-First, Full-Stack React Framework",
@@ -82,21 +82,21 @@ export const Route = createRootRoute({
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
-        href: "/apple-touch-icon.png",
+        href: "/codium.svg",
       },
       {
         rel: "icon",
         type: "image/png",
         sizes: "32x32",
-        href: "/favicon-32x32.png",
+        href: "/codium.svg",
       },
       {
         rel: "icon",
         type: "image/png",
         sizes: "16x16",
-        href: "/favicon-16x16.png",
+        href: "/codium.svg",
       },
-      { rel: "icon", href: "/favicon.ico" },
+      { rel: "icon", href: "/codium.svg" },
       { rel: "mask-icon", href: "/safari-pinned-tab.svg", color: "#5bbad5" }, // optional
       { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
     ],

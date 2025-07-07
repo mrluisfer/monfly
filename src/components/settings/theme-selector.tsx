@@ -15,13 +15,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const MONO_THEMES = [
-  {
-    name: "Mono",
-    value: "mono-scaled",
-  },
-];
-
 export function ThemeSelector() {
   const { activeTheme, setActiveTheme } = useThemeConfig();
 

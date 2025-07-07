@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { Auth } from "~/components/auth";
+import { Auth, authActions } from "~/components/auth";
 import GlobalHeader from "~/components/header/global-header";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -96,7 +96,7 @@ function Login() {
           </div>
           <Auth
             form={form}
-            actionText="Login"
+            actionText={authActions.login}
             status={loginMutation.status}
             onSubmit={onSubmit}
             afterSubmit={
@@ -131,7 +131,7 @@ function Login() {
             <br />
             your one-stop personal finance platform."
           </p>
-          <Badge variant="outline">
+          <Badge variant="default">
             <BadgeCheck />
             For personal and educational use only.
           </Badge>

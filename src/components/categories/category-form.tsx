@@ -61,7 +61,11 @@ export function CategoryForm({
             <FormItem>
               <FormLabel htmlFor={categoryFormNames.name}>Name</FormLabel>
               <FormControl>
-                <Input id={categoryFormNames.name} {...field} />
+                <Input
+                  id={categoryFormNames.name}
+                  placeholder="Some category..."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

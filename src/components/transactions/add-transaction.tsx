@@ -7,8 +7,7 @@ const AddTransaction = () => {
   const { form, onSubmit } = useAddTransaction();
 
   return (
-    <Card className="">
-      <h2>Transactions</h2>
+    <Card title="Add Transaction" subtitle="Create a new transaction">
       <TransactionForm
         form={form}
         onSubmit={onSubmit}

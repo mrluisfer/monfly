@@ -6,11 +6,10 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Auth } from "~/components/auth";
+import { Auth, authActions } from "~/components/auth";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/use-mutation";
-import { ApiResponse } from "~/types/ApiResponse";
 import { signupFn } from "~/utils/auth/signupfn";
 import { getUserSession } from "~/utils/user/get-user-session";
 import { ArrowLeft, BadgeCheck } from "lucide-react";
@@ -91,7 +90,7 @@ function SignupComp() {
             <br />
             Secure. Simple. Free.
           </p>
-          <Badge variant="outline">
+          <Badge variant="default">
             <BadgeCheck />
             Personal use only
           </Badge>
@@ -122,7 +121,7 @@ function SignupComp() {
           <Auth
             withCard={false}
             form={form}
-            actionText="Sign Up"
+            actionText={authActions.signup}
             status={signupMutation.status}
             onSubmit={onSubmit}
             afterSubmit={

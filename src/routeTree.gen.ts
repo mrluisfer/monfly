@@ -20,6 +20,7 @@ import { Route as AuthedTransactionsIndexImport } from './routes/_authed/transac
 import { Route as AuthedReportsIndexImport } from './routes/_authed/reports.index'
 import { Route as AuthedHomeIndexImport } from './routes/_authed/home.index'
 import { Route as AuthedCategoriesIndexImport } from './routes/_authed/categories.index'
+import { Route as AuthedUserUserIdImport } from './routes/_authed/user.$userId'
 
 // Create/Update Routes
 
@@ -76,6 +77,12 @@ const AuthedCategoriesIndexRoute = AuthedCategoriesIndexImport.update({
   getParentRoute: () => AuthedRoute,
 } as any)
 
+const AuthedUserUserIdRoute = AuthedUserUserIdImport.update({
+  id: '/user/$userId',
+  path: '/user/$userId',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -115,6 +122,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
+    '/_authed/user/$userId': {
+      id: '/_authed/user/$userId'
+      path: '/user/$userId'
+      fullPath: '/user/$userId'
+      preLoaderRoute: typeof AuthedUserUserIdImport
+      parentRoute: typeof AuthedImport
+    }
     '/_authed/categories/': {
       id: '/_authed/categories/'
       path: '/categories'
@@ -149,6 +163,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthedRouteChildren {
+  AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute
   AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute
   AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
   AuthedReportsIndexRoute: typeof AuthedReportsIndexRoute
@@ -156,6 +171,7 @@ interface AuthedRouteChildren {
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedUserUserIdRoute: AuthedUserUserIdRoute,
   AuthedCategoriesIndexRoute: AuthedCategoriesIndexRoute,
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
   AuthedReportsIndexRoute: AuthedReportsIndexRoute,
@@ -171,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/user/$userId': typeof AuthedUserUserIdRoute
   '/categories': typeof AuthedCategoriesIndexRoute
   '/home': typeof AuthedHomeIndexRoute
   '/reports': typeof AuthedReportsIndexRoute
@@ -183,6 +200,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/user/$userId': typeof AuthedUserUserIdRoute
   '/categories': typeof AuthedCategoriesIndexRoute
   '/home': typeof AuthedHomeIndexRoute
   '/reports': typeof AuthedReportsIndexRoute
@@ -196,6 +214,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/_authed/user/$userId': typeof AuthedUserUserIdRoute
   '/_authed/categories/': typeof AuthedCategoriesIndexRoute
   '/_authed/home/': typeof AuthedHomeIndexRoute
   '/_authed/reports/': typeof AuthedReportsIndexRoute
@@ -210,6 +229,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/user/$userId'
     | '/categories'
     | '/home'
     | '/reports'
@@ -221,6 +241,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/user/$userId'
     | '/categories'
     | '/home'
     | '/reports'
@@ -232,6 +253,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/_authed/user/$userId'
     | '/_authed/categories/'
     | '/_authed/home/'
     | '/_authed/reports/'
@@ -278,6 +300,7 @@ export const routeTree = rootRoute
     "/_authed": {
       "filePath": "_authed.tsx",
       "children": [
+        "/_authed/user/$userId",
         "/_authed/categories/",
         "/_authed/home/",
         "/_authed/reports/",
@@ -292,6 +315,10 @@ export const routeTree = rootRoute
     },
     "/signup": {
       "filePath": "signup.tsx"
+    },
+    "/_authed/user/$userId": {
+      "filePath": "_authed/user.$userId.tsx",
+      "parent": "/_authed"
     },
     "/_authed/categories/": {
       "filePath": "_authed/categories.index.tsx",

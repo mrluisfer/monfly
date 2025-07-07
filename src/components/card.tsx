@@ -29,7 +29,7 @@ const Card = ({
     <CardUI className={clsx("h-fit", className)}>
       {title && (
         <CardHeader>
-          <CardTitle>
+          <CardTitle className="text-primary">
             {title}
             <CardDescription>{subtitle}</CardDescription>
           </CardTitle>

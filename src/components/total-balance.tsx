@@ -6,7 +6,7 @@ import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
-import { Check, DollarSign, Edit2 } from "lucide-react";
+import { Check, DollarSign, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
 
 import Card from "./card";
@@ -16,7 +16,7 @@ import { Skeleton } from "./ui/skeleton";
 
 const TotalBalance = () => {
   const [isEditing, setIsEditing] = useState(false);
-  const [totalBalance, setTotalBalance] = useState<number>(0);
+  const [totalBalance, setTotalBalance] = useState<string>("0");
   const queryClient = useQueryClient();
   const userEmail = useRouteUser();
 
@@ -28,7 +28,7 @@ const TotalBalance = () => {
 
   useEffect(() => {
     if (data?.data?.totalBalance !== undefined) {
-      setTotalBalance(data.data.totalBalance);
+      setTotalBalance(data.data.totalBalance.toString());
     }
   }, [data]);
 
@@ -42,7 +42,7 @@ const TotalBalance = () => {
       toast.success(ctx.data.message);
       setIsEditing(false);
       if (ctx.data?.data?.totalBalance !== undefined) {
-        setTotalBalance(ctx.data.data.totalBalance);
+        setTotalBalance(ctx.data.data.totalBalance.toString());
         await queryClient.invalidateQueries({
           queryKey: [queryDictionary.user, userEmail],
         });
@@ -53,17 +53,22 @@ const TotalBalance = () => {
   const handleEditClick = () => setIsEditing(true);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value);
-    if (val >= 0 || e.target.value === "") {
+    const val = e.target.value;
+    if (/^\d*\.?\d*$/.test(val) || val === "") {
       setTotalBalance(val);
     }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const parsed = Number(totalBalance);
+    if (isNaN(parsed) || parsed < 0) {
+      toast.error("Please enter a valid positive number");
+      return;
+    }
     putUserTotalBalanceMutation.mutate({
       data: {
-        totalBalance: Number(totalBalance),
+        totalBalance: parsed,
         email: userEmail,
       },
     });
@@ -78,25 +83,35 @@ const TotalBalance = () => {
       ) : (
         <>
           <div className="flex items-center justify-between">
-            Current Balance <DollarSign className="w-4 h-4 opacity-50" />
+            Current Balance{" "}
+            <DollarSign className="w-4 h-4 opacity-50 text-primary" />
           </div>
           {isEditing ? (
             <form onSubmit={handleSubmit} className="flex items-center gap-4">
               <Input
-                value={totalBalance.toString()}
+                value={totalBalance}
                 onChange={handleInputChange}
                 type="number"
+                step="any"
                 min={0}
+                inputMode="decimal"
+                pattern="^\d*\.?\d*$"
+                autoFocus
               />
-              <Button variant="outline" size="icon" type="submit">
-                <Check size={12} />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="icon" type="submit">
+                  <Check size={12} />
+                </Button>
+                <Button onClick={() => setIsEditing(false)}>
+                  <X size={12} />
+                </Button>
+              </div>
             </form>
           ) : (
             <p className="text-2xl font-bold flex items-center justify-between gap-4">
               <span>
-                {formatCurrency(totalBalance ?? 0, "MXN")}{" "}
-                <span className="text-muted-foreground text-sm">MXN</span>
+                {formatCurrency(Number(totalBalance) || 0, "MXN")}{" "}
+                <span className="text-primary text-sm">MXN</span>
               </span>
               <Button
                 variant="outline"

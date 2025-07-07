@@ -18,20 +18,13 @@ import {
 } from "recharts";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
+import Card from "../card";
 import { TrendingStatus } from "./trending-status";
 
 type ChartByCategoryRadarProps = {
@@ -80,58 +73,48 @@ export default function ChartByCategoryRadar({
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
   return (
-    <Card>
-      <CardHeader className="items-center">
-        <CardTitle>{chartLabel} by Category (Radar)</CardTitle>
-        <CardDescription>
-          {isIncome
-            ? "Visualize your income distribution across categories."
-            : "Visualize your expense distribution across categories."}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="pb-0">
-        {isLoading && <div className="py-12 text-center">Loading chart...</div>}
-        {error && (
-          <div className="py-12 text-center text-red-500">
-            Error loading data
+    <Card
+      title={`${chartLabel} by Category (Radar)`}
+      subtitle={`Visualize your ${chartLabel.toLowerCase()} distribution across categories`}
+      Footer={
+        <div className="flex-col gap-2 text-sm">
+          <div className="flex items-center gap-2 leading-none font-medium">
+            <TrendingStatus type={type} data={trendingMonthlyData} />
           </div>
-        )}
-        {shownChart ? (
-          <ChartContainer config={chartConfig} className="">
-            <ResponsiveContainer width="100%" height={300}>
-              <RadarChart
-                data={chartData}
-                margin={{ top: 32, right: 32, bottom: 32, left: 32 }}
-              >
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent />}
-                />
-                <PolarGrid />
-                <PolarAngleAxis dataKey="category" />
-                <Radar
-                  dataKey={type} // <- "income" o "expense"
-                  fill={color}
-                  fillOpacity={0.6}
-                  stroke="var(--primary)"
-                  dot={{ r: 4, fillOpacity: 1 }}
-                  name={chartLabel}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </ChartContainer>
-        ) : null}
-        {shownPlaceholder ? (
-          <DataNotFoundPlaceholder>
-            No {chartLabel.toLowerCase()} data for categories
-          </DataNotFoundPlaceholder>
-        ) : null}
-      </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          <TrendingStatus type={type} data={trendingMonthlyData} />
         </div>
-      </CardFooter>
+      }
+    >
+      {isLoading && <div className="py-12 text-center">Loading chart...</div>}
+      {error && (
+        <div className="py-12 text-center text-red-500">Error loading data</div>
+      )}
+      {shownChart ? (
+        <ChartContainer config={chartConfig} className="">
+          <ResponsiveContainer width="100%" height={300}>
+            <RadarChart
+              data={chartData}
+              margin={{ top: 32, right: 32, bottom: 32, left: 32 }}
+            >
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <PolarGrid />
+              <PolarAngleAxis dataKey="category" />
+              <Radar
+                dataKey={type} // <- "income" o "expense"
+                fill={color}
+                fillOpacity={0.6}
+                stroke="var(--primary)"
+                dot={{ r: 4, fillOpacity: 1 }}
+                name={chartLabel}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
+        </ChartContainer>
+      ) : null}
+      {shownPlaceholder ? (
+        <DataNotFoundPlaceholder>
+          No {chartLabel.toLowerCase()} data for categories
+        </DataNotFoundPlaceholder>
+      ) : null}
     </Card>
   );
 }

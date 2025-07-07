@@ -40,11 +40,20 @@ export default function TransactionItem({
               <div className="flex justify-between items-center w-full">
                 <div className="text-left">
                   <p className={clsx(textBase, "font-semibold truncate")}>
-                    {transaction.description}
+                    {transaction.description ? (
+                      transaction.description
+                    ) : (
+                      <span>
+                        <span className="text-sm opacity-30">Category:</span>{" "}
+                        {transaction.category}
+                      </span>
+                    )}
                   </p>
-                  <span className={textMuted}>
-                    {transaction.user.name} - {transaction.user.email}
-                  </span>
+                  {transaction.description ? (
+                    <span className={textMuted}>
+                      {transaction.user.name} - {transaction.user.email}
+                    </span>
+                  ) : null}
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col items-end gap-1">
@@ -113,7 +122,7 @@ export default function TransactionItem({
                       "EEEE, MMMM d, yyyy · hh:mm aaaa"
                     )}
                     <br />
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs">
                       (
                       {formatDistanceToNow(transaction.date, {
                         addSuffix: true,
@@ -147,7 +156,7 @@ function TransactionTooltipContentItem({
 }) {
   return (
     <li className="grid gap-0.5">
-      <span className="text-muted-foreground text-xs opacity-70">{title}</span>
+      <span className="text-xs opacity-70">{title}</span>
       <span
         className={clsx(
           "font-medium break-all text-wrap capitalize text-xs text-left w-full whitespace-pre-wrap opacity-80",
