@@ -5,8 +5,9 @@ import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { logoutFn } from "~/utils/auth/logoutfn";
-import { BadgeHelp, BrainCircuit, LogOut, Settings, User2 } from "lucide-react";
+import { BadgeHelp, LogOut, Settings, User2 } from "lucide-react";
 
+import Logo from "../../assets/logo.svg";
 import { SettingsDialog } from "../settings/settings-dialog";
 import {
   SidebarContent,
@@ -55,16 +56,19 @@ const Sidebar = () => {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            {open && (
-              <Link
-                to="/home"
-                href="/home"
-                className="flex items-center gap-2 text-2xl font-bold w-fit"
-              >
-                <BrainCircuit />
-                Finance
-              </Link>
-            )}
+            <Link
+              to="/home"
+              href="/home"
+              className="flex items-center gap-2 text-2xl font-bold w-fit"
+            >
+              <img
+                src={Logo}
+                alt="Monfly Logo"
+                className="h-8 w-8"
+                title="Monfly"
+              />
+              {open && <span className="sidebar-title-text">Monfly</span>}
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
