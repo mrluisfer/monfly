@@ -29,42 +29,55 @@ Monfly enables users to:
 
 This document provides a high-level overview of the Monfly architecture, technology stack, features, and project structure.
 
-### ✨ Key Features
-
-Category Capabilities
-Transaction Management Create, edit, categorize, and track transactions
-Category System Custom categories for expenses and income
-Dashboard Analytics Real-time balance, spending trends, and visual insights
-Visual Reporting Interactive charts (bar, radar, monthly analysis, etc.)
-User Management Secure authentication, profile management
-Notifications Alerts for spending, budgets, and system notifications
-
 ### 🛠️ Technology Stack
 
-• Frameworks:
-• TanStack Start (@tanstack/start)
-• TanStack Router (@tanstack/react-router)
-• React 19 + TypeScript 5
-• State & Forms:
-• TanStack Query (@tanstack/react-query)
-• React Hook Form
-• Zod
-• Database & Backend:
-• Prisma ORM
-• bcrypt (auth)
-• PostgreSQL or SQLite
-• UI & Styling:
-• Tailwind CSS 4
-• Radix UI
-• Lucide React (icons)
-• next-themes (theming)
-• Visualization & Dates:
-• Recharts (analytics)
-• React Day Picker
-• Dev & Build Tools:
-• Vinxi (build system)
-• Jest & React Testing Library
-• ESLint & Prettier
+Frameworks:
+
+- TanStack Start (@tanstack/start)
+
+- TanStack Router (@tanstack/react-router)
+
+- React 19 + TypeScript 5
+
+- State & Forms:
+
+- TanStack Query (@tanstack/react-query)
+
+- React Hook Form
+
+- Zod
+
+Database & Backend:
+
+- Prisma ORM
+
+- bcrypt (auth)
+
+- PostgreSQL or SQLite
+
+UI & Styling:
+
+- Tailwind CSS 4
+
+- Radix UI
+
+- Lucide React (icons)
+
+- next-themes (theming)
+
+- Visualization & Dates:
+
+- Recharts (analytics)
+
+- React Day Picker
+
+- Dev & Build Tools:
+
+- Vinxi (build system)
+
+- Jest & React Testing Library
+
+- ESLint & Prettier
 
 ### 📐 System Architecture
 
@@ -157,14 +170,6 @@ pnpm build # Production build
 │   ├── 📃 formatCurrency.ts
 │   ├── 🧪 formatCurrency.test.ts
 ```
-
-## 📚 More Docs
-
-• CONTRIBUTING.md — Guidelines for contributions
-• System Architecture
-• Database Schema
-• Frontend Architecture
-• Authentication System
 
 ## 📝 License
 
