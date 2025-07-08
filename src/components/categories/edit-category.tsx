@@ -1,6 +1,6 @@
 import { Category } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { categoryFormNames } from "~/constants/category-form-names";
+import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id.server";
 import { queryDictionary } from "~/queries/dictionary";

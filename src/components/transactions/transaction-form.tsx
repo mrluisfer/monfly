@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCategoryIconByName } from "~/constants/categories-icon";
-import { transactionFormNames } from "~/constants/transaction-form-names";
+import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";

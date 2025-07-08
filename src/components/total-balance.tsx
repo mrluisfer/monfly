@@ -6,6 +6,7 @@ import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
+import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 import { Check, DollarSign, Edit2, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,7 +29,7 @@ const TotalBalance = () => {
 
   useEffect(() => {
     if (data?.data?.totalBalance !== undefined) {
-      setTotalBalance(data.data.totalBalance.toString());
+      setTotalBalance(formatToTwoDecimals(data.data.totalBalance).stringValue);
     }
   }, [data]);
 

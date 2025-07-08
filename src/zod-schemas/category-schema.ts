@@ -1,4 +1,4 @@
-import { categoryFormNames } from "~/constants/category-form-names";
+import { categoryFormNames } from "~/constants/forms/category-form-names";
 import z from "zod";
 
 export const CategoryFormSchema = z.object({

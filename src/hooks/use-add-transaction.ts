@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Prisma } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { transactionFormNames } from "~/constants/transaction-form-names";
+import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email.server";
 import { queryDictionary } from "~/queries/dictionary";
