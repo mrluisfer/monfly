@@ -2,8 +2,6 @@
 
 Monfly is a modern, full-stack personal finance dashboard that helps you track transactions, categorize expenses, set budgets, and visualize your money—all in one place.
 
-⸻
-
 ## 🚀 Overview
 
 Monfly provides an integrated solution for personal financial management. You can track and categorize your financial activity, set alerts, analyze spending with beautiful dashboards, and manage your profile with secure authentication.
@@ -19,8 +17,6 @@ package.json
 pnpm-lock.yaml
 src/components/ui/popover.tsx
 ```
-
-⸻
 
 ### 🎯 Purpose and Scope
 
@@ -70,8 +66,6 @@ Notifications Alerts for spending, budgets, and system notifications
 • Jest & React Testing Library
 • ESLint & Prettier
 
-⸻
-
 ### 📐 System Architecture
 
 ![System Architecture](./public/system-arch.png)
@@ -114,8 +108,6 @@ MonthlySummary Aggregated financial data Calculated from User’s transactions
 • Protected routes and APIs
 • Type-safe validation with Zod
 
-⸻
-
 ### 🖥️ User Interface & Analytics
 
 • Component-driven UI (Radix + Tailwind)
@@ -126,23 +118,6 @@ MonthlySummary Aggregated financial data Calculated from User’s transactions
 • Category breakdown (bar, radar, pie)
 • Monthly/yearly trend analysis
 
-⸻
-
-### 🔄 Data Flow
-
-flowchart LR
-DB((Prisma Database))
-API([API Route])
-Cache[Query Cache]
-UI[React Components]
-Form[React Hook Form]
-
-DB --> API
-API --> Cache
-Cache --> UI
-UI --> Form
-Form --> API
-
 ## Edit models
 
 ```bash
@@ -152,12 +127,14 @@ pnpm prisma studio # GUI
 ```
 
 API & Server Functions
-• File-based APIs: routes/api/_.ts → /api/_
+• File-based APIs: `routes/api/_.ts → /api/_`
 
 Build & Deploy
 
+```bash
 pnpm dev # Start dev server
 pnpm build # Production build
+```
 
 ## 🧪 Testing & Quality
 
@@ -181,8 +158,6 @@ pnpm build # Production build
 │   ├── 🧪 formatCurrency.test.ts
 ```
 
-⸻
-
 ## 📚 More Docs
 
 • CONTRIBUTING.md — Guidelines for contributions
@@ -190,8 +165,6 @@ pnpm build # Production build
 • Database Schema
 • Frontend Architecture
 • Authentication System
-
-⸻
 
 ## 📝 License
 
