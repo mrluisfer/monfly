@@ -20,8 +20,7 @@ import { seo } from "~/utils/seo.js";
 
 export const Route = createRootRoute({
   head: () => ({
-    title:
-      "Finance Dashboard | Track your Expenses & Income | TanStack + shadcn",
+    title: "Monfly | Track your Expenses & Income | TanStack + shadcn",
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -46,7 +45,7 @@ export const Route = createRootRoute({
       // Open Graph (Facebook, LinkedIn, etc.)
       {
         property: "og:title",
-        content: "Finance Dashboard | TanStack + shadcn",
+        content: "Monfly | TanStack + shadcn",
       },
       {
         property: "og:description",
@@ -60,7 +59,7 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
-        content: "Finance Dashboard | TanStack + shadcn",
+        content: "Monfly | TanStack + shadcn",
       },
       {
         name: "twitter:description",
@@ -71,8 +70,7 @@ export const Route = createRootRoute({
       // Canonical
       { rel: "canonical", href: "https://monfly.vercel.app/" },
       ...seo({
-        title:
-          "Finance Dashboard | Type-Safe, Client-First, Full-Stack React Framework",
+        title: "Monfly | Type-Safe, Client-First, Full-Stack React Framework",
         description:
           "TanStack Start is a type-safe, client-first, full-stack React framework. ",
       }),
@@ -134,7 +132,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
   return (
     <html lang="en">
-      <head title="Finance Dashboard | Track your Expenses & Income | TanStack + shadcn">
+      <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
         <HeadContent />
       </head>
       <body>
