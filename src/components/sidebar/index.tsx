@@ -17,13 +17,13 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   Sidebar as UiSidebar,
   useSidebar,
 } from "../ui/sidebar";
 import { Skeleton } from "../ui/skeleton";
 import UserAvatar from "../user-avatar";
+import { SidebarItem } from "./sidebar-item";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -59,7 +59,7 @@ const Sidebar = () => {
             <Link
               to="/home"
               href="/home"
-              className="flex items-center gap-2 text-2xl font-bold w-fit"
+              className="flex items-center gap-2 text-2xl font-bold w-fit pt-2"
             >
               <img
                 src={Logo}
@@ -80,21 +80,15 @@ const Sidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarRoutes.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    tooltip={item.title}
-                    asChild
-                    isActive={currentPath === item.url}
-                    disabled={item?.disabled}
-                    className="capitalize"
-                    title={item.disabled ? "Coming soon" : item.title}
-                  >
-                    <Link to={item.url} href={item.url}>
-                      <item.icon className="text-secondary-foreground" />{" "}
-                      {item.title}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarItem
+                  title={item.title}
+                  disabled={item?.disabled}
+                  url={item.url}
+                  key={item.title}
+                >
+                  <item.icon className="text-secondary-foreground" />{" "}
+                  {item.title}
+                </SidebarItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
@@ -105,64 +99,51 @@ const Sidebar = () => {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild disabled>
-                  <Link to="/" href="/help" title="Coming soon">
-                    <BadgeHelp className="text-secondary-foreground" />
-                    <span>Help</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SettingsDialog>
-                  <SidebarMenuButton>
-                    <Settings className="text-secondary-foreground" />
-                    <span>Settings</span>
-                  </SidebarMenuButton>
-                </SettingsDialog>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={handleLogOut}
-                  className="capitalize"
-                >
-                  <LogOut className="text-secondary-foreground" />
-                  <span>Sign out</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <SidebarItem url="/help" title="Help" disabled>
+                <BadgeHelp className="text-secondary-foreground" />
+                <span>Help</span>
+              </SidebarItem>
+
+              <SettingsDialog>
+                <SidebarItem title="Settings">
+                  <Settings className="text-secondary-foreground" />
+                  <span>Settings</span>
+                </SidebarItem>
+              </SettingsDialog>
+
+              <SidebarItem title="Sign out" onClick={handleLogOut}>
+                <LogOut className="text-secondary-foreground" />
+                <span>Sign out</span>
+              </SidebarItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              className="capitalize"
-              size={open ? "lg" : "default"}
-              asChild
-            >
-              <Link
-                to="/user/$userId"
-                href="/user/$userId"
-                params={{ userId: data?.data?.id! }}
-              >
-                {isPending ? (
-                  <>
-                    <User2 /> <Skeleton className="w-18 h-4" />
-                  </>
+          <SidebarItem
+            title="Profile"
+            url={`/user/${data?.data?.id}`}
+            disabled={!data?.data?.id}
+          >
+            {isPending ? (
+              <>
+                <User2 /> <Skeleton className="w-18 h-4" />
+              </>
+            ) : (
+              <>
+                {open ? (
+                  <UserAvatar
+                    alt={data?.data?.name ?? ""}
+                    name={data?.data?.name ?? ""}
+                  />
                 ) : (
-                  <>
-                    <UserAvatar
-                      alt={data?.data?.name ?? ""}
-                      name={data?.data?.name ?? ""}
-                    />
-                    <span>{data?.data?.name}</span>
-                  </>
+                  <User2 className="text-secondary-foreground" />
                 )}
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+                <span>{data?.data?.name}</span>
+              </>
+            )}
+          </SidebarItem>
         </SidebarMenu>
       </SidebarFooter>
     </UiSidebar>

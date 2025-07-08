@@ -13,7 +13,7 @@ export type SidebarItemType = {
   icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
-  url?: string;
+  url: string;
   disabled?: boolean;
 };
 
