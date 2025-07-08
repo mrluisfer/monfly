@@ -79,7 +79,6 @@ function RouteComponent() {
     );
 
   function onSubmit(values: z.infer<typeof userFormSchema>) {
-    // Actualización de usuario aquí
     console.log(values);
   }
 
@@ -91,7 +90,6 @@ function RouteComponent() {
         subtitle={null}
         cardContentProps={{ className: "p-0" }}
       >
-        {/* Header visual atractivo */}
         <div className="bg-primary/90 p-6 flex flex-col md:flex-row gap-4 items-center">
           <div>
             {data?.data?.name ? (
@@ -115,12 +113,10 @@ function RouteComponent() {
             </p>
           </div>
         </div>
-        {/* Formulario en dos columnas */}
         <div className="p-8 bg-card">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Primera columna */}
                 <div className="flex flex-col gap-6">
                   <FormField
                     control={form.control}
@@ -162,7 +158,7 @@ function RouteComponent() {
                     )}
                   />
                 </div>
-                {/* Segunda columna */}
+
                 <div className="flex flex-col gap-6">
                   <FormField
                     control={form.control}
