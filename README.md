@@ -1,67 +1,172 @@
-# 💰 Personal Finance Tracker
+# 🦋 Monfly
 
-## ⚙️ Prisma Workflow
+Monfly is a modern, full-stack personal finance dashboard that helps you track transactions, categorize expenses, set budgets, and visualize your money—all in one place.
 
-1. **Edit the `schema.prisma` file**
+⸻
 
-2. **Create and apply a migration**
+## 🚀 Overview
 
-   ```bash
-   pnpm prisma migrate dev --name add-pots
-   ```
+Monfly provides an integrated solution for personal financial management. You can track and categorize your financial activity, set alerts, analyze spending with beautiful dashboards, and manage your profile with secure authentication.
 
-3. **Ensure updated types**
+### 📂 Relevant Files
 
-   ```bash
-   pnpm prisma generate
-   ```
+```text
+.gitignore
+.prettierignore
+README.md
+app.config.ts
+package.json
+pnpm-lock.yaml
+src/components/ui/popover.tsx
+```
 
-4. **Open Prisma Studio**
+⸻
 
-   ```bash
-   pnpm prisma studio
-   ```
+### 🎯 Purpose and Scope
 
----
+Monfly enables users to:
+• Manage income and expense transactions
+• Categorize and analyze spending patterns
+• Set budgets and receive notifications
+• Securely manage user profiles and authentication
+• Visualize financial data with interactive charts
 
-## 📡 API Routes with TanStack Start
+This document provides a high-level overview of the Monfly architecture, technology stack, features, and project structure.
 
-### 📁 File Route Conventions
+### ✨ Key Features
 
-**API routes in TanStack Start** follow the same file-based routing conventions as `TanStack Router`.
-Any file in your `routes` directory that is **prefixed with `api`** (this is configurable) will be treated as an **API route handler**.
+Category Capabilities
+Transaction Management Create, edit, categorize, and track transactions
+Category System Custom categories for expenses and income
+Dashboard Analytics Real-time balance, spending trends, and visual insights
+Visual Reporting Interactive charts (bar, radar, monthly analysis, etc.)
+User Management Secure authentication, profile management
+Notifications Alerts for spending, budgets, and system notifications
 
----
+### 🛠️ Technology Stack
 
-### 📌 File-to-Route Mapping Examples
+• Frameworks:
+• TanStack Start (@tanstack/start)
+• TanStack Router (@tanstack/react-router)
+• React 19 + TypeScript 5
+• State & Forms:
+• TanStack Query (@tanstack/react-query)
+• React Hook Form
+• Zod
+• Database & Backend:
+• Prisma ORM
+• bcrypt (auth)
+• PostgreSQL or SQLite
+• UI & Styling:
+• Tailwind CSS 4
+• Radix UI
+• Lucide React (icons)
+• next-themes (theming)
+• Visualization & Dates:
+• Recharts (analytics)
+• React Day Picker
+• Dev & Build Tools:
+• Vinxi (build system)
+• Jest & React Testing Library
+• ESLint & Prettier
 
-| File Path                       | Generated Route Path   |
-| ------------------------------- | ---------------------- |
-| `routes/api.users.ts`           | `/api/users`           |
-| `routes/api/users.ts`           | `/api/users`           |
-| `routes/api/users.index.ts`     | `/api/users`           |
-| `routes/api/users/$id.ts`       | `/api/users/$id`       |
-| `routes/api/users/$id/posts.ts` | `/api/users/$id/posts` |
-| `routes/api.users.$id.posts.ts` | `/api/users/$id/posts` |
-| `routes/api/file/$.ts`          | `/api/file/$`          |
+⸻
 
----
+### 📐 System Architecture
 
-### 🧠 Note
+![System Architecture](./public/system-arch.png)
 
-Files prefixed with `api` act as **handlers for the respective API route path**.
+### 🏛️ Code & File Structure
 
-> For example:
-> `routes/api/users/$id.ts` will handle requests like `GET /api/users/123`, `POST`, etc., depending on the exported HTTP method handlers.
+```text
+src/
+├─ components/ # Reusable UI components
+├─ hooks/ # Custom hooks
+├─ lib/ # Core utilities & API
+├─ queries/ # Query keys, helpers
+├─ routes/ # File-based routing (pages, APIs)
+├─ utils/ # Utility functions
+├─ prisma/ # Schema, migrations, seeds
+│ ├─ schema.prisma
+│ ├─ migrations/
+│ └─ seed.js
+├─ app.config.ts # TanStack config
+├─ tailwind.config.js # Styling config
+└─ tsconfig.json # TypeScript config
+```
 
-### 🧪 Test Organization Guideline
+![Files Structure](./public/files.png)
 
-We recommend placing your test files next to the files they test.
-This makes it easier to maintain, refactor, and find tests related to specific components, hooks, or utilities.
+### 🏦 Core Entities
 
-Structure Example
+Entity Purpose Relationships
+User Account, authentication Owns all financial data
+Transaction Single income/expense Belongs to User & Category
+Category Classifies expense/income Created by User, linked to transactions
+Budget Set limits & financial goals Linked to User, Category
+Card Payment method tracking Linked to User & Transactions
+MonthlySummary Aggregated financial data Calculated from User’s transactions
 
-```css
+### 🔐 Authentication & Security
+
+• Passwords hashed with bcrypt
+• Server-side sessions using TanStack Start
+• Protected routes and APIs
+• Type-safe validation with Zod
+
+⸻
+
+### 🖥️ User Interface & Analytics
+
+• Component-driven UI (Radix + Tailwind)
+• Dark/light mode (next-themes)
+• Accessible forms (React Hook Form + Zod)
+• Charts (Recharts):
+• Income/expense over time
+• Category breakdown (bar, radar, pie)
+• Monthly/yearly trend analysis
+
+⸻
+
+### 🔄 Data Flow
+
+flowchart LR
+DB((Prisma Database))
+API([API Route])
+Cache[Query Cache]
+UI[React Components]
+Form[React Hook Form]
+
+DB --> API
+API --> Cache
+Cache --> UI
+UI --> Form
+Form --> API
+
+## Edit models
+
+```bash
+pnpm prisma migrate dev --name some-name # Migration
+pnpm prisma generate # Generate types
+pnpm prisma studio # GUI
+```
+
+API & Server Functions
+• File-based APIs: routes/api/_.ts → /api/_
+
+Build & Deploy
+
+pnpm dev # Start dev server
+pnpm build # Production build
+
+## 🧪 Testing & Quality
+
+• Jest & React Testing Library: Components and integration tests
+• ESLint: Linting with TypeScript, React, Tailwind, a11y
+• Prettier: Formatting with import sorting
+• Strict TypeScript: Compile-time error prevention
+
+```bash
 📁 src/
 ├── 📁 components/
 │   ├── 📃 Button.tsx
@@ -76,44 +181,22 @@ Structure Example
 │   ├── 🧪 formatCurrency.test.ts
 ```
 
-Unit/component tests: Place the test file with the same name, next to the source file, using .test.ts or .test.tsx extension.
+⸻
 
-Integration/E2E tests: (Optional) Place in a dedicated tests/ folder if needed.
+## 📚 More Docs
 
-Why this pattern?
-Easier to maintain and refactor (move the file, move the test).
+• CONTRIBUTING.md — Guidelines for contributions
+• System Architecture
+• Database Schema
+• Frontend Architecture
+• Authentication System
 
-Modern tooling (VSCode, Jest, Vitest) supports this layout natively.
+⸻
 
-Used by popular projects like TanStack Query and React Testing Library.
+## 📝 License
 
-#### References
+MIT
 
-- [React Testing Library - FAQ](https://testing-library.com/docs/intro/#structure)
+⸻
 
-- [TanStack Query Source](https://tanstack.com/query/latest/docs/framework/react/guides/testing)
-
-- [Kent C. Dodds – Where should I put my tests?](https://kentcdodds.com/blog/where-should-i-put-my-tests)
-
-## About me
-
-Hey! 👋 I’m **Luis Alvarez** ([@mrLuisFer](https://github.com/mrLuisFer))
-
-- 👨‍💻 Full Stack Developer passionate about building beautiful and scalable digital products.
-- 📝 I share tech ideas and articles on [dev.to/mrluisfer](https://dev.to/mrluisfer)
-- 🌐 Explore more about me on [bento.me/mrluisfer](https://bento.me/mrluisfer)
-- 📦 Check out my open source projects on [GitHub](https://github.com/mrLuisFer)
-
-<div align="center">
-  <a href="https://github.com/mrLuisFer" target="_blank" rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/GitHub-mrLuisFer-black?style=flat-square&logo=github" alt="GitHub" />
-  </a>
-  <a href="https://dev.to/mrluisfer" target="_blank" rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/Dev.to-@mrluisfer-black?style=flat-square&logo=dev.to" alt="Dev.to" />
-  </a>
-  <a href="https://bento.me/mrluisfer" target="_blank" rel="noopener noreferrer">
-    <img src="https://img.shields.io/badge/Bento.me-mrluisfer-fuchsia?style=flat-square" alt="Bento" />
-  </a>
-</div>
-
-> _This project is for personal and educational use only. Not intended for commercial purposes._
+Feel free to open issues, suggest features, or contribute to Monfly!
