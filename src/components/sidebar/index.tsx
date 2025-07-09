@@ -4,7 +4,6 @@ import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { queryDictionary } from "~/queries/dictionary";
-import { logoutFn } from "~/utils/auth/logoutfn";
 import { BadgeHelp, LogOut, Settings, User2 } from "lucide-react";
 
 import Logo from "../../assets/logo.svg";
@@ -24,6 +23,7 @@ import {
 import { Skeleton } from "../ui/skeleton";
 import UserAvatar from "../user-avatar";
 import { SidebarItem } from "./sidebar-item";
+import { SignOutDialog } from "./sign-out-dialog";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -37,15 +37,6 @@ const Sidebar = () => {
     queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
   });
-
-  const handleLogOut = async () => {
-    await logoutFn({
-      data: { destination: "/login", manualRedirect: true },
-    });
-    await navigate({
-      to: "/login",
-    });
-  };
 
   if (error) {
     return <div>Error: {error?.message}</div>;
@@ -111,10 +102,12 @@ const Sidebar = () => {
                 </SidebarItem>
               </SettingsDialog>
 
-              <SidebarItem title="Sign out" onClick={handleLogOut}>
-                <LogOut className="text-secondary-foreground" />
-                <span>Sign out</span>
-              </SidebarItem>
+              <SignOutDialog>
+                <SidebarItem title="Sign out">
+                  <LogOut className="text-secondary-foreground" />
+                  <span>Sign out</span>
+                </SidebarItem>
+              </SignOutDialog>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
