@@ -219,7 +219,19 @@ function RouteComponent() {
                   />
                 </div>
               </div>
-              <div className="flex justify-end pt-8">
+              <div className="flex justify-between pt-8">
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="destructive" disabled type="button">
+                      Delete Account
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      This feature is not available yet. Stay tuned for updates!
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
                 <Tooltip>
                   <TooltipTrigger>
                     <Button type="submit" className="px-8 py-2" disabled>
