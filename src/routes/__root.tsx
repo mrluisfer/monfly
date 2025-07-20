@@ -11,12 +11,15 @@ import { DefaultCatchBoundary } from "~/components/default-catch-boundary.js";
 import { NotFound } from "~/components/not-found.js";
 import { Toaster } from "~/components/ui/sonner";
 import { DarkModeProvider } from "~/context/dark-mode-provider";
+import { FontDisplayProvider } from "~/context/font-display-provider";
 import { SonnerPositionProvider } from "~/context/sonner-position-provider";
 import { ActiveThemeProvider } from "~/context/theme-provider";
+import { useFontDisplay } from "~/hooks/use-font-display";
 import { useSonnerPosition } from "~/hooks/use-sonner-position";
 import appCss from "~/styles/app.css?url";
-// import appCss from "~/styles/output.css?url";
 import { seo } from "~/utils/seo.js";
+// import appCss from "~/styles/output.css?url";
+import clsx from "clsx";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -115,13 +118,15 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <DarkModeProvider key="theme-provider">
-        <ActiveThemeProvider key="theme-provider" initialTheme="default">
-          <SonnerPositionProvider initialPosition="bottom-right">
-            <RootDocument>
-              <Outlet />
-            </RootDocument>
-          </SonnerPositionProvider>
-        </ActiveThemeProvider>
+        <FontDisplayProvider key="font-display-provider">
+          <ActiveThemeProvider key="theme-provider" initialTheme="default">
+            <SonnerPositionProvider initialPosition="bottom-right">
+              <RootDocument>
+                <Outlet />
+              </RootDocument>
+            </SonnerPositionProvider>
+          </ActiveThemeProvider>
+        </FontDisplayProvider>
       </DarkModeProvider>
     </QueryClientProvider>
   );
@@ -129,13 +134,14 @@ function RootComponent() {
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { position } = useSonnerPosition();
+  const { fontDisplay } = useFontDisplay();
 
   return (
     <html lang="en">
       <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
         <HeadContent />
       </head>
-      <body>
+      <body className={clsx(fontDisplay)}>
         {children}
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />

@@ -1,8 +1,4 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { BalanceStatusBadge } from "~/components/header/badges/balance-status-badge";
-import { OnlineStatusBadge } from "~/components/header/badges/online-status-badge";
-import { SpendingAlertBadge } from "~/components/header/badges/spending-alert-badge";
-import { TimezoneBadge } from "~/components/header/badges/timezone-badge";
 import { PyramidIcon } from "lucide-react";
 
 import { SettingsDialog } from "../settings/settings-dialog";
@@ -14,6 +10,10 @@ import {
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
 import { SidebarTrigger } from "../ui/sidebar";
+import { BalanceStatusBadge } from "./badges/balance-status-badge";
+import { OnlineStatusBadge } from "./badges/online-status-badge";
+import { SpendingAlertBadge } from "./badges/spending-alert-badge";
+import { TimezoneBadge } from "./badges/timezone-badge";
 
 export const Header = () => {
   return (

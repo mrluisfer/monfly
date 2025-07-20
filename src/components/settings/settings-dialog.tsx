@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import FontDisplaySelect from "./font-display-select";
 import { SonnerPositionSelector } from "./sonner-position-selector";
 import { ThemeSelector } from "./theme-selector";
 import ToggleDarkMode from "./toggle-dark-mode";
@@ -24,7 +25,7 @@ export const SettingsDialog = ({
         {children ? (
           children
         ) : (
-          <Button variant="outline">
+          <Button variant="outline" className="rounded-full">
             <Settings className="text-primary" />
             <span className="hidden md:block">Settings</span>
           </Button>
@@ -44,6 +45,9 @@ export const SettingsDialog = ({
           </SettingsItem>
           <SettingsItem label="Dark Mode:">
             <ToggleDarkMode />
+          </SettingsItem>
+          <SettingsItem label="Font Display:">
+            <FontDisplaySelect />
           </SettingsItem>
         </div>
       </DialogContent>

@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
 /* @tailwind base; */
 /* @tailwind components; */
 /* @tailwind utilities; */
 @import "tailwindcss";
 @import "tw-animate-css";
-@config "../../tailwind.config.js";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -43,6 +44,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-open-sans: "Open Sans", sans-serif;
 }
 
 @layer base {
