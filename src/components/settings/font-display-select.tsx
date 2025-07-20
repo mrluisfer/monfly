@@ -32,15 +32,55 @@ const Square = ({
   </span>
 );
 
-const fontSelectClassName = [
-  "bg-indigo-400/20 text-indigo-500",
-  "bg-purple-400/20 text-purple-500",
-  "bg-rose-400/20 text-rose-500",
+// Paletas de clases para colores bonitos y contrastantes (puedes agregar más)
+const bgColors = [
+  "bg-indigo-400/20",
+  "bg-purple-400/20",
+  "bg-rose-400/20",
+  "bg-green-400/20",
+  "bg-emerald-400/20",
+  "bg-yellow-300/20",
+  "bg-blue-400/20",
+  "bg-pink-400/20",
+  "bg-orange-400/20",
+  "bg-cyan-400/20",
 ];
+
+const textColors = [
+  "text-indigo-500",
+  "text-purple-500",
+  "text-rose-500",
+  "text-green-500",
+  "text-emerald-500",
+  "text-yellow-500",
+  "text-blue-500",
+  "text-pink-500",
+  "text-orange-500",
+  "text-cyan-500",
+];
+
+export function generateFontSelectClassNames(n: number): string[] {
+  const combos: string[] = [];
+  const used: Set<number> = new Set();
+
+  for (let i = 0; i < n; i++) {
+    let index: number;
+    do {
+      index = Math.floor(Math.random() * bgColors.length);
+    } while (used.has(index) && used.size < bgColors.length);
+
+    used.add(index);
+
+    combos.push(`${bgColors[index]} ${textColors[index]}`);
+  }
+
+  return combos;
+}
 
 export default function FontDisplaySelect() {
   const id = useId();
   const { fontDisplay, onChangeFontDisplay } = useFontDisplay();
+  const fontSelectClassName = generateFontSelectClassNames(8);
 
   return (
     <div className="*:not-first:mt-2">
