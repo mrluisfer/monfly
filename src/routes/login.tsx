@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Auth, authActions } from "~/components/auth";
-import GlobalHeader from "~/components/header/global-header";
+import { GoToHomeButton } from "~/components/header/go-to-home-button";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { loginFn } from "~/utils/auth/loginfn";
@@ -69,12 +69,10 @@ function Login() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
+    <div className="min-h-screen flex flex-col md:flex-row relative">
+      <GoToHomeButton position="right" />
       <div className="w-full md:w-1/2 flex flex-col justify-center px-8 py-12 md:py-0">
         <div className="max-w-md mx-auto w-full">
-          <div className="pb-6">
-            <GlobalHeader />
-          </div>
           <h1 className="font-extrabold text-2xl mb-2 tracking-tight">
             Monfly
           </h1>

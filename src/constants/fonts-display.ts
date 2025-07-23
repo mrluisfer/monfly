@@ -7,6 +7,8 @@
 // --font-merriweather: "Merriweather", serif;
 // --font-lora: "Lora", serif;
 // --font-roboto: "Roboto", sans-serif;
+// --font-geist: "Geist", sans-serif;
+// --font-pacifico: "Pacifico", cursive;
 
 export enum FontsName {
   OpenSans = "Open Sans",
@@ -17,6 +19,8 @@ export enum FontsName {
   Merriweather = "Merriweather",
   Lora = "Lora",
   Roboto = "Roboto",
+  Geist = "Geist",
+  Pacifico = "Pacifico",
 }
 
 export enum FontValues {
@@ -28,6 +32,8 @@ export enum FontValues {
   Merriweather = "font-merriweather",
   Lora = "font-lora",
   Roboto = "font-roboto",
+  Geist = "font-geist",
+  Pacifico = "font-pacifico",
 }
 
 export const fontsDisplay = [
@@ -39,4 +45,6 @@ export const fontsDisplay = [
   { label: FontsName.Merriweather, value: FontValues.Merriweather },
   { label: FontsName.Lora, value: FontValues.Lora },
   { label: FontsName.Roboto, value: FontValues.Roboto },
+  { label: FontsName.Geist, value: FontValues.Geist },
+  { label: FontsName.Pacifico, value: FontValues.Pacifico },
 ];

@@ -1,18 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createFileRoute,
-  Link,
-  redirect,
-  useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Auth, authActions } from "~/components/auth";
+import { GoToHomeButton } from "~/components/header/go-to-home-button";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/use-mutation";
 import { signupFn } from "~/utils/auth/signupfn";
 import { getUserSession } from "~/utils/user/get-user-session";
-import { ArrowLeft, BadgeCheck } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { z } from "zod";
@@ -72,14 +68,7 @@ function SignupComp() {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-[#b6e2ff] via-[#f4d2fb] to-[#e5e7fa] dark:from-[#10162b] dark:via-[#33284c] dark:to-[#19233d]">
       <div className="hidden md:flex md:w-1/2 items-center justify-center relative">
-        <div className="absolute top-4 left-4 z-10">
-          <Button variant="link" asChild>
-            <Link to="/">
-              <ArrowLeft className="text-white" />
-              Go to home
-            </Link>
-          </Button>
-        </div>
+        <GoToHomeButton />
         <div className="absolute inset-0 bg-gradient-to-br from-[#81a5ff] via-[#eebdff] to-[#b8e6fa] dark:from-[#1a223a] dark:via-[#362a42] dark:to-[#24304e] opacity-80 z-0" />
         <div className="relative z-10 text-white flex flex-col items-center px-10">
           <h2 className="text-4xl font-extrabold mb-4 drop-shadow-lg">
