@@ -1,30 +1,8 @@
-import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 
-import { ShinyButton } from "../magicui/shiny-button";
-import { Typography } from "../typography";
-import { Button } from "../ui/button";
-
-const partners: { name: string; image: string | ReactNode }[] = [
-  {
-    name: "Visa",
-    image: "https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png",
-  },
-  {
-    name: "Stripe",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png",
-  },
-  {
-    name: "Paypal",
-    image: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg",
-  },
-  {
-    name: "Apple Pay",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg",
-  },
-];
+import { Typography } from "../../typography";
+import { Button } from "../../ui/button";
+import { Partners } from "./partners";
 
 export function LandingHero() {
   return (
@@ -55,11 +33,8 @@ export function LandingHero() {
               <Button
                 size="lg"
                 className="mt-4 font-semibold max-w-[350px] mx-auto"
-                asChild
               >
-                <ShinyButton>
-                  <span className="text-white">Start Your Journey</span>
-                </ShinyButton>
+                Start Your Journey
               </Button>
             </Link>
             <Button
@@ -75,30 +50,19 @@ export function LandingHero() {
             <span className="text-xs text-muted-foreground">
               Our Trusted Partners:
             </span>
-            <div className="flex gap-5 items-center justify-center">
-              {partners.map((partner) => (
-                <img
-                  key={partner.name}
-                  src={partner.image as string}
-                  alt={partner.name}
-                  className="h-6 transition opacity-60 hover:opacity-100 object-contain"
-                />
-              ))}
-            </div>
+            <Partners />
           </div>
           <div className="flex items-center justify-center mt-16">
-            <Typography asChild variant="foreground">
-              <blockquote className="italic text-sm max-w-sm flex-1 border bg-gray-50 pt-2 rounded-[1rem] px-4 py-2">
-                <Typography variant="muted">“</Typography>
-                <span className="text-primary">Monfly</span> makes tracking my
-                spending effortless. I feel confident knowing my data is secure.
-                <Typography variant="muted">”</Typography>
-                <br />
-                <span className="not-italic font-bold text-foreground text-sm">
-                  – Jane Doe
-                </span>
-              </blockquote>
-            </Typography>
+            <blockquote className="italic text-sm max-w-sm flex-1 border bg-gray-50 dark:bg-zinc-800 pt-2 rounded-[1rem] px-4 py-2">
+              <Typography variant="muted">“</Typography>
+              <span className="text-primary">Monfly</span> makes tracking my
+              spending effortless. I feel confident knowing my data is secure.
+              <Typography variant="muted">”</Typography>
+              <br />
+              <span className="not-italic font-semibold text-primary text-xs">
+                – Jane Doe
+              </span>
+            </blockquote>
           </div>
         </div>
       </div>
