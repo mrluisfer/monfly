@@ -1,59 +1,96 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
+import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email.server";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { queryDictionary } from "~/queries/dictionary";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ChartSpline } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 
-const PAGE_SIZE = 1000;
-
 export function SpendingAlertBadge() {
-  const limit = 1000;
   const userEmail = useRouteUser();
 
-  const { data, isPending, error } = useQuery({
-    queryKey: [queryDictionary.transactions, userEmail, 1],
+  const {
+    data: spent = 0,
+    isPending: isSpentLoading,
+    error: spentError,
+  } = useQuery({
+    queryKey: [queryDictionary.transactions, userEmail],
     queryFn: () =>
-      getTransactionByEmailServer({
-        data: {
-          email: userEmail,
-          page: 1,
-          pageSize: PAGE_SIZE,
-        },
-      }),
+      getTotalExpensesByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
   });
 
-  if (isPending) {
+  const {
+    data: userData,
+    isPending: isUserLoading,
+    error: userError,
+  } = useQuery({
+    queryKey: [queryDictionary.user, userEmail],
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    enabled: !!userEmail,
+  });
+
+  if (isSpentLoading || isUserLoading) {
     return (
-      <Badge variant="outline" className="gap-1.5">
+      <Badge variant="outline" className="gap-1.5" aria-live="polite">
         <span className="animate-pulse">Loading...</span>
       </Badge>
     );
   }
 
-  if (error) {
+  if (spentError || userError) {
     return (
       <Badge variant="destructive" className="gap-1.5">
-        Error fetching transactions
+        Error fetching budget
       </Badge>
     );
   }
 
-  const spent =
-    data?.data?.reduce((acc, tx) => {
-      if (tx.type === "expense") return acc + tx.amount;
-      return acc;
-    }, 0) ?? 0;
+  const balance = Number(userData?.data?.totalBalance) ?? 0;
 
-  const percent = (spent / limit) * 100;
-  if (percent < 80) return null;
+  if (!balance || isNaN(balance)) {
+    return (
+      <Badge variant="secondary" className="gap-1.5">
+        <ChartSpline className="text-muted-foreground" />
+        Balance not set
+      </Badge>
+    );
+  }
+
+  if (balance <= 0) {
+    return (
+      <Badge variant="destructive" className="gap-1.5">
+        <AlertTriangle size={14} className="text-amber-500" />
+        Your balance is zero or negative
+      </Badge>
+    );
+  }
+
+  const percent = Math.min((Number(spent) / balance) * 100, 9999);
+
+  if (percent < 80) {
+    return (
+      <Badge variant="secondary" className="gap-1.5">
+        <ChartSpline className="text-green-500" />
+        Budget is safe ({percent.toFixed(0)}%)
+      </Badge>
+    );
+  }
+
+  if (percent < 100) {
+    return (
+      <Badge variant="destructive" className="gap-1.5 animate-pulse">
+        <AlertTriangle size={14} className="text-amber-500" />
+        Budget Almost Spent ({percent.toFixed(0)}%)
+      </Badge>
+    );
+  }
 
   return (
     <Badge variant="destructive" className="gap-1.5 animate-pulse">
       <AlertTriangle size={14} className="text-amber-500" />
-      {percent >= 100 ? "Limit Exceeded!" : "Budget Almost Spent"}
+      Limit Exceeded! ({percent.toFixed(0)}%)
     </Badge>
   );
 }

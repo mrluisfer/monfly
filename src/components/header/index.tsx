@@ -13,6 +13,7 @@ import { SidebarTrigger } from "../ui/sidebar";
 import { BalanceStatusBadge } from "./badges/balance-status-badge";
 import { OnlineStatusBadge } from "./badges/online-status-badge";
 import { SpendingAlertBadge } from "./badges/spending-alert-badge";
+import { SystemStatusBadge } from "./badges/system-status";
 import { TimezoneBadge } from "./badges/timezone-badge";
 
 export const Header = () => {
@@ -27,6 +28,7 @@ export const Header = () => {
         <BalanceStatusBadge />
         <OnlineStatusBadge />
         <TimezoneBadge />
+        <SystemStatusBadge />
         <SettingsDialog />
       </div>
     </header>

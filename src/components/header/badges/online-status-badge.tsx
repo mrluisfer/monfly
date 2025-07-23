@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { cn } from "~/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
 
@@ -28,12 +29,13 @@ export function OnlineStatusBadge() {
   return (
     <Badge variant="secondary" className="gap-1.5 select-none">
       <span
-        className={`size-1.5 rounded-full ${
+        className={cn(
+          "size-1.5 rounded-full",
           isOnline ? "bg-emerald-500" : "bg-zinc-400"
-        }`}
+        )}
         aria-hidden="true"
       ></span>
-      {isOnline ? "Online" : "Offline"}
+      User {isOnline ? "Online" : "Offline"}
     </Badge>
   );
 }
