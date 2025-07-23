@@ -1,12 +1,54 @@
 import { useId } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "~/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "~/components/ui/form";
 import { AtSignIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+const formSchema = z.object({
+  email: z
+    .string()
+    .email("Invalid email address")
+    .max(80, "Email must be 80 characters or less"),
+});
+
+function getEmailUsername(email: string) {
+  return email.trim().toLowerCase().split("@")[0];
+}
+
 export function StayConnect() {
   const id = useId();
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const handleSubmit = (data: z.infer<typeof formSchema>) => {
+    try {
+      const emailUsername = getEmailUsername(data.email);
+      toast.success("Subscribed successfully!", {
+        description: `Thank you ${emailUsername} for subscribing to our newsletter!`,
+      });
+      form.reset();
+    } catch (error) {
+      toast.error("Failed to subscribe. Please try again.");
+    }
+  };
+
   return (
     <div className="*:not-first:mt-2 flex items-start justify-between">
       <Label htmlFor={id} className="flex flex-col items-start gap-2 text-lg">
@@ -16,20 +58,38 @@ export function StayConnect() {
           exclusive offers.
         </span>
       </Label>
-      <form className="flex items-center gap-2">
-        <div className="relative">
-          <Input
-            id={id}
-            className="peer ps-9 bg-white w-[300px]"
-            placeholder="Email"
-            type="email"
+      <Form {...form}>
+        <form
+          className="flex items-start gap-2"
+          onSubmit={form.handleSubmit(handleSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      id={id}
+                      className="peer ps-9 bg-white w-[300px]"
+                      placeholder="Email"
+                      type="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+                    <AtSignIcon size={16} aria-hidden="true" />
+                  </div>
+                  <FormDescription />
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-          <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
-            <AtSignIcon size={16} aria-hidden="true" />
-          </div>
-        </div>
-        <Button>Subscribe</Button>
-      </form>
+          <Button type="submit">Subscribe</Button>
+        </form>
+      </Form>
     </div>
   );
 }
