@@ -51,17 +51,17 @@ export function LandingHero() {
             </p>
           </div>
           <div className="flex flex-col gap-4 items-center">
-            <Button
-              size="lg"
-              className="mt-4 font-semibold max-w-[350px] mx-auto"
-              asChild
-            >
-              <ShinyButton>
-                <Link to="/signup" className="text-white">
-                  Start Your Journey
-                </Link>
-              </ShinyButton>
-            </Button>
+            <Link to="/signup" className="text-white">
+              <Button
+                size="lg"
+                className="mt-4 font-semibold max-w-[350px] mx-auto"
+                asChild
+              >
+                <ShinyButton>
+                  <span className="text-white">Start Your Journey</span>
+                </ShinyButton>
+              </Button>
+            </Link>
             <Button
               asChild
               size="sm"
