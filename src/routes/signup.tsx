@@ -2,15 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Auth, authActions } from "~/components/auth";
+import { ExternalLogin } from "~/components/auth/external-login";
 import { GoToHomeButton } from "~/components/header/go-to-home-button";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/use-mutation";
 import { signupFn } from "~/utils/auth/signupfn";
 import { getUserSession } from "~/utils/user/get-user-session";
 import { BadgeCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
 import { z } from "zod";
 
 const FormSchema = z.object({
@@ -93,15 +92,7 @@ function SignupComp() {
           <p className="mb-6 text-sm text-zinc-500 dark:text-zinc-400 text-center">
             Join Monfly and make your money keep flying 🚀
           </p>
-          <Button
-            variant="outline"
-            type="button"
-            className="w-full mb-4 text-base font-semibold flex items-center justify-center"
-            size="lg"
-          >
-            <FcGoogle className="text-xl" />
-            Sign up with Google
-          </Button>
+          <ExternalLogin />
           <div className="flex items-center gap-3 my-3 w-full">
             <div className="flex-1 h-px bg-zinc-200" />
             <span className="text-xs text-zinc-400">or</span>

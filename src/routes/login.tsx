@@ -2,14 +2,13 @@ import { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Auth, authActions } from "~/components/auth";
+import { ExternalLogin } from "~/components/auth/external-login";
 import { GoToHomeButton } from "~/components/header/go-to-home-button";
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
 import { loginFn } from "~/utils/auth/loginfn";
 import { getUserSession } from "~/utils/user/get-user-session";
 import { BadgeCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { FcGoogle } from "react-icons/fc";
 import { z } from "zod";
 
 import { useMutation } from "../hooks/use-mutation";
@@ -83,10 +82,7 @@ function Login() {
           <p className="mb-8 text-base text-muted-foreground">
             Log in to manage your finances
           </p>
-          <Button variant="outline" type="button" className="w-full" size="lg">
-            <FcGoogle />
-            Log in with Google
-          </Button>
+          <ExternalLogin />
           <div className="flex items-center gap-3 my-4">
             <div className="flex-1 h-px bg-zinc-200" />
             <span className="text-xs text-zinc-400">or</span>
