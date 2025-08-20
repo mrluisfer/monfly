@@ -18,12 +18,12 @@ import { TimezoneBadge } from "./badges/timezone-badge";
 
 export const Header = () => {
   return (
-    <header className="flex justify-between items-center">
+    <header className="flex justify-between items-start xl:items-center">
       <div className="flex items-center gap-4">
         <SidebarTrigger />
         <HeaderNavigation />
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex justify-end items-center gap-4 max-w-lg xl:max-w-2xl flex-wrap">
         <SpendingAlertBadge />
         <BalanceStatusBadge />
         <OnlineStatusBadge />

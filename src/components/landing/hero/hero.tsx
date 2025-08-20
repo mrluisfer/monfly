@@ -6,7 +6,7 @@ import { Partners } from "./partners";
 
 export function LandingHero() {
   return (
-    <section className="bg-[url(/root-chart.svg)] bg-top bg-no-repeat bg-cover mt-16">
+    <section className="mt-16 bg-hero">
       <div className="max-w-3xl mx-auto pb-12 flex flex-col md:flex-row gap-10 items-center justify-between">
         <div className="flex-1 space-y-6">
           <div className="flex items-center justify-center">

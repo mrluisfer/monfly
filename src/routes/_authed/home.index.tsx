@@ -27,7 +27,7 @@ function RouteComponent() {
   }
 
   return (
-    <section>
+    <div>
       <header className="mb-6 flex justify-between items-center">
         <PageTitle description="This is your overview dashboard">
           Welcome back
@@ -39,16 +39,17 @@ function RouteComponent() {
         </PageTitle>
       </header>
       <section className="flex flex-col gap-4">
-        <div className="grid grid-cols-3 gap-4 w-full">
-          <div className="space-y-4">
+        <div className="grid w-full grid-cols-1 gap-4 xl:grid-cols-3">
+          <div className="order-2 space-y-4 xl:order-1 items-start justify-between w-full grid grid-cols-2 gap-4">
             <TotalBalance />
             <Charts />
           </div>
-          <div className="col-span-2">
+
+          <div className="order-1 md:order-2 md:col-span-2 xl:col-span-2">
             <TransactionsList />
           </div>
         </div>
       </section>
-    </section>
+    </div>
   );
 }

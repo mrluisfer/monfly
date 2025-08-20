@@ -68,7 +68,7 @@ export default function TransactionsList() {
           </div>
         }
         subtitle={`You made ${total} transactions`}
-        className="h-full"
+        className="h-[600px]"
         cardContentProps={{
           className: "h-full",
         }}

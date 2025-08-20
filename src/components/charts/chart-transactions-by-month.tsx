@@ -21,7 +21,11 @@ import {
 
 import Card from "../card";
 
-export default function ChartTransactionsByMonth() {
+export default function ChartTransactionsByMonth({
+  small = false,
+}: {
+  small?: boolean;
+}) {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
     queryKey: ["transactions-by-month", userEmail],
@@ -40,11 +44,13 @@ export default function ChartTransactionsByMonth() {
       title="Transactions by Month"
       subtitle="See how many transactions you do each month"
       Footer={
-        <div className="flex w-full items-center gap-2 text-sm">
-          <span className="flex items-center gap-1 font-medium">
-            Trending up by 12% this year <TrendingUp className="h-4 w-4" />
-          </span>
-        </div>
+        small ? (
+          <div className="flex w-full items-center gap-2 text-sm">
+            <span className="flex items-center gap-1 font-medium">
+              Trending up by 12% this year <TrendingUp className="h-4 w-4" />
+            </span>
+          </div>
+        ) : null
       }
     >
       {isLoading && <div className="py-12 text-center">Loading chart...</div>}

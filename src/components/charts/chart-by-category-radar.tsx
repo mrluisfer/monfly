@@ -29,10 +29,12 @@ import { TrendingStatus } from "./trending-status";
 
 type ChartByCategoryRadarProps = {
   type: TransactionType; // "income" | "expense"
+  small?: boolean;
 };
 
 export default function ChartByCategoryRadar({
   type,
+  small = false,
 }: ChartByCategoryRadarProps) {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
@@ -75,13 +77,19 @@ export default function ChartByCategoryRadar({
   return (
     <Card
       title={`${chartLabel} by Category (Radar)`}
-      subtitle={`Visualize your ${chartLabel.toLowerCase()} distribution across categories`}
+      subtitle={
+        small
+          ? `Visualize your ${chartLabel.toLowerCase()} distribution across categories`
+          : null
+      }
       Footer={
-        <div className="flex-col gap-2 text-sm">
-          <div className="flex items-center gap-2 leading-none font-medium">
-            <TrendingStatus type={type} data={trendingMonthlyData} />
+        small ? (
+          <div className="flex-col gap-2 text-sm">
+            <div className="flex items-center gap-2 leading-none font-medium">
+              <TrendingStatus type={type} data={trendingMonthlyData} />
+            </div>
           </div>
-        </div>
+        ) : null
       }
     >
       {isLoading && <div className="py-12 text-center">Loading chart...</div>}

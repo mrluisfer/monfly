@@ -1440,3 +1440,24 @@ button,
 [role="button"] {
   @apply cursor-pointer;
 }
+
+.bg-hero {
+  position: relative;
+  z-index: 0;
+}
+
+.bg-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/root-chart.svg");
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+  opacity: 1;
+}
+
+html.dark .bg-hero::before {
+  opacity: 0.2;
+}
