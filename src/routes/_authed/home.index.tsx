@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import TotalBalance from "~/components/balance/TotalBalance";
 import Charts from "~/components/charts";
 import { PageTitle } from "~/components/page-title";
-import TotalBalance from "~/components/total-balance";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/use-route-user";
@@ -40,7 +40,7 @@ function RouteComponent() {
       </header>
       <section className="flex flex-col gap-4">
         <div className="grid w-full grid-cols-1 gap-4 xl:grid-cols-3">
-          <div className="order-2 space-y-4 xl:order-1 items-start justify-between w-full grid grid-cols-2 gap-4">
+          <div className="order-2 space-y-4 xl:order-1 items-start justify-between w-full gap-4">
             <TotalBalance />
             <Charts />
           </div>
