@@ -3,13 +3,23 @@ import { getTransactionsByEmail } from "~/utils/transactions/get-transactions-by
 import { z } from "zod";
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
-  .validator(
+  .inputValidator(
     z.object({
-      email: z.string(),
-      page: z.number().optional(),
-      pageSize: z.number().optional(),
+      email: z
+        .string()
+        .email("Invalid email format")
+        .min(1, "Email is required"),
     })
   )
   .handler(async ({ data }) => {
-    return await getTransactionsByEmail(data);
+    console.log("Server function called with data:", data);
+
+    try {
+      const result = await getTransactionsByEmail(data);
+      console.log("Server function result:", result);
+      return result;
+    } catch (error) {
+      console.error("Server function error:", error);
+      throw error;
+    }
   });

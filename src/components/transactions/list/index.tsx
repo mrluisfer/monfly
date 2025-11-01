@@ -1,161 +1,185 @@
-import { useMemo, useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation } from "@tanstack/react-router";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
-import { Label } from "~/components/ui/label";
+import { BalanceStatusBadge } from "~/components/header/badges/balance-status-badge";
 import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "~/components/ui/pagination";
-import { Switch } from "~/components/ui/switch";
-import { SidebarRouteUrl } from "~/constants/sidebar-routes";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { useTransactionHoverContext } from "~/hooks/use-transaction-hover-context";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
 import { queryDictionary } from "~/queries/dictionary";
 
-import Card from "../../card";
 import AddTransactionButton from "./add-transaction-button";
-import TransactionItem from "./transaction-item";
-
-const PAGE_SIZE = 6;
+import { DataTableDemo } from "./TransactionsTable";
 
 export default function TransactionsList() {
   const userEmail = useRouteUser();
-  const [page, setPage] = useState<number>(1);
-  const location = useLocation().pathname;
-  const isOnTransactionsPage = location.includes(SidebarRouteUrl.TRANSACTIONS);
 
-  const { data, isPending, error } = useQuery({
-    queryKey: [queryDictionary.transactions, userEmail, page],
-    queryFn: () =>
-      getTransactionByEmailServer({
+  // Debug the userEmail
+  React.useEffect(() => {
+    console.log("Current userEmail:", userEmail, "Type:", typeof userEmail);
+  }, [userEmail]);
+
+  const { data, isPending, error, refetch, isError } = useQuery({
+    queryKey: [queryDictionary.transactions, userEmail || "no-user"],
+    queryFn: async () => {
+      if (!userEmail) {
+        throw new Error("User email is required");
+      }
+
+      console.log("Fetching transactions for user:", userEmail);
+
+      const result = await getTransactionByEmailServer({
         data: {
           email: userEmail,
-          page,
-          pageSize: PAGE_SIZE,
         },
-      }),
-    enabled: !!userEmail,
+      });
+
+      console.log("Transaction query result:", result);
+
+      if (result.error) {
+        throw new Error(result.message);
+      }
+
+      return result;
+    },
+    enabled:
+      !!userEmail &&
+      userEmail !== "no-user" &&
+      typeof userEmail === "string" &&
+      userEmail.length > 0,
+    staleTime: 30000, // 30 seconds
+    gcTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+    retry: (failureCount, error) => {
+      console.error(`Query failed (attempt ${failureCount + 1}):`, error);
+      return failureCount < 3;
+    },
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   // Safe defaults if data is undefined
   const transactions = data?.data ?? [];
   const total = data?.total ?? 0;
-  const totalPages = data?.totalPages ?? 1;
 
-  const pagesArray = useMemo(
-    () => Array.from({ length: totalPages }, (_, i) => i + 1),
-    [totalPages]
-  );
+  // Debug logging
+  React.useEffect(() => {
+    console.log("TransactionsList render:", {
+      userEmail,
+      isPending,
+      error: error?.message,
+      dataExists: !!data,
+      rawData: data,
+      transactionsArray: transactions,
+      transactionsCount: transactions.length,
+      total,
+      queryEnabled: !!userEmail && userEmail !== "no-user",
+    });
+  }, [
+    userEmail,
+    isPending,
+    error,
+    data,
+    transactions,
+    transactions.length,
+    total,
+  ]);
 
   return (
     <TransactionHoverProvider>
-      <Card
-        title={
+      <Card className="min-h-[500px]">
+        <CardHeader>
           <div className="flex items-center gap-2 justify-between">
-            <p>Transactions</p>
+            <CardTitle>Transactions</CardTitle>
             <div className="flex items-center gap-6">
-              <DisableHoverInfo />
-              {isOnTransactionsPage ? null : <AddTransactionButton />}
+              <BalanceStatusBadge />
+              <button
+                onClick={() => refetch()}
+                disabled={isPending}
+                className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-md transition-colors disabled:opacity-50"
+                title="Refresh transactions"
+              >
+                {isPending ? "Loading..." : "Refresh"}
+              </button>
+              <button
+                onClick={async () => {
+                  console.log("Manual test - userEmail:", userEmail);
+                  if (userEmail) {
+                    try {
+                      const result = await getTransactionByEmailServer({
+                        data: { email: userEmail },
+                      });
+                      console.log("Manual test result:", result);
+                    } catch (err) {
+                      console.error("Manual test error:", err);
+                    }
+                  }
+                }}
+                className="px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 rounded-md transition-colors"
+                title="Test query manually"
+              >
+                Test
+              </button>
+              <AddTransactionButton />
             </div>
           </div>
-        }
-        subtitle={`You made ${total} transactions`}
-        className="h-[600px]"
-        cardContentProps={{
-          className: "h-full",
-        }}
-      >
-        <div className="flex flex-col h-full justify-between">
-          {isPending && <div>Loading...</div>}
-          {error && <div>Error: {error.message}</div>}
-          {transactions.length > 0 ? (
-            <div className="flex flex-col gap-4">
-              {transactions.map((transaction) => (
-                <div key={transaction.id}>
-                  <TransactionItem transaction={transaction} />
+          <CardDescription>You made {total} transactions</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col h-full justify-between">
+            {!userEmail && (
+              <div className="flex items-center justify-center p-8">
+                <div className="text-sm text-gray-500">
+                  Loading user information...
                 </div>
-              ))}
-            </div>
-          ) : (
-            !isPending && (
-              <DataNotFoundPlaceholder>
-                No transactions found.
-              </DataNotFoundPlaceholder>
-            )
-          )}
-          <Pagination>
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (page > 1) setPage(page - 1);
-                  }}
-                  aria-disabled={page === 1}
-                  tabIndex={page === 1 ? -1 : 0}
-                />
-              </PaginationItem>
-              {pagesArray.map((pageNum) => (
-                <PaginationItem key={pageNum}>
-                  <PaginationLink
-                    isActive={pageNum === page}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setPage(pageNum);
-                    }}
-                    href="#"
-                  >
-                    {pageNum}
-                  </PaginationLink>
-                </PaginationItem>
-              ))}
-              {totalPages > 5 && (
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-              )}
-              <PaginationItem>
-                <PaginationNext
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (page < totalPages) setPage(page + 1);
-                  }}
-                  aria-disabled={page === totalPages}
-                  tabIndex={page === totalPages ? -1 : 0}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
-        </div>
+              </div>
+            )}
+            {userEmail && isPending && (
+              <div className="flex items-center justify-center p-8">
+                <div className="text-sm text-gray-500">
+                  Loading transactions...
+                </div>
+              </div>
+            )}
+            {userEmail && error && (
+              <div className="flex flex-col items-center justify-center p-8 space-y-4">
+                <div className="text-red-600 text-center">
+                  <p className="font-medium">Failed to load transactions</p>
+                  <p className="text-sm mt-1">{error.message}</p>
+                </div>
+                <button
+                  onClick={() => refetch()}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Retry
+                </button>
+              </div>
+            )}
+            {userEmail && !isPending && !error && (
+              <>
+                {Array.isArray(transactions) && transactions.length > 0 ? (
+                  <DataTableDemo data={transactions} />
+                ) : (
+                  <div className="space-y-4">
+                    <DataNotFoundPlaceholder>
+                      No transactions found. Try adding your first transaction!
+                    </DataNotFoundPlaceholder>
+                    <div className="text-xs text-gray-500 text-center">
+                      Debug Info: User: {userEmail}, Data:{" "}
+                      {JSON.stringify(data, null, 2)}
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </CardContent>
       </Card>
     </TransactionHoverProvider>
-  );
-}
-
-const id = "disable-hover";
-function DisableHoverInfo() {
-  const { disableHover, setDisableHover } = useTransactionHoverContext();
-
-  return (
-    <div className="flex items-center space-x-2">
-      <Switch
-        id={id}
-        checked={disableHover}
-        onCheckedChange={(checked) => {
-          setDisableHover(checked);
-          localStorage.setItem(id, String(checked));
-        }}
-      />
-      <Label htmlFor={id}>Transaction Details</Label>
-    </div>
   );
 }
