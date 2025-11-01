@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import type { Category } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";

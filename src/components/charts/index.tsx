@@ -6,7 +6,7 @@ import ChartByCategoryRadar from "./chart-by-category-radar";
 
 const Charts = ({ className }: { className?: string }) => {
   return (
-    <div className={clsx("", className)}>
+    <div className={clsx("max-w-md", className)}>
       <div className="md:hidden xl:block">
         <IncomeExpenseChart />
       </div>

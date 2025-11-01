@@ -61,7 +61,7 @@
 
 @layer base {
   :root {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -130,7 +130,7 @@
   }
 
   [data-theme="red"] {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -199,7 +199,7 @@
   }
 
   [data-theme="rose"] {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -268,7 +268,7 @@
   }
 
   [data-theme="orange"] {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -337,7 +337,7 @@
   }
 
   [data-theme="green"] {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -406,7 +406,7 @@
   }
 
   [data-theme="blue"] {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -475,7 +475,7 @@
   }
 
   [data-theme="yellow"] {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -544,7 +544,7 @@
   }
 
   [data-theme="violet"] {
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
     --card: oklch(1 0 0);
@@ -648,7 +648,7 @@
     --font-sans: var(--font-poppins, sans-serif);
     --font-serif: var(--font-playfair-display, serif);
     --font-mono: var(--font-space-mono, monospace);
-    --radius: 1rem;
+    --radius: 0.65rem;
     --shadow-2xs: 0px 3px 0px 0px hsl(330 70% 30% / 0.09);
     --shadow-xs: 0px 3px 0px 0px hsl(330 70% 30% / 0.09);
     --shadow-sm:
@@ -758,7 +758,7 @@
     --font-sans: Quicksand, sans-serif;
     --font-serif: Playfair Display, serif;
     --font-mono: Space Mono, monospace;
-    --radius: 1rem;
+    --radius: 0.65rem;
     --shadow-2xs: 0px 3px 0px 0px hsl(300 80% 50% / 0.09);
     --shadow-xs: 0px 3px 0px 0px hsl(300 80% 50% / 0.09);
     --shadow-sm:
@@ -815,7 +815,7 @@
     --font-sans: Inter, sans-serif;
     --font-serif: var(--font-lora), serif;
     --font-mono: JetBrains Mono, monospace;
-    --radius: 1rem;
+    --radius: 0.65rem;
     --shadow-2xs: 0px 4px 10px 0px hsl(240 30% 25% / 0.06);
     --shadow-xs: 0px 4px 10px 0px hsl(240 30% 25% / 0.06);
     --shadow-sm:
@@ -925,7 +925,7 @@
     --font-sans: Inter, sans-serif;
     --font-serif: var(--font-lora), serif;
     --font-mono: JetBrains Mono, monospace;
-    --radius: 1rem;
+    --radius: 0.65rem;
     --shadow-2xs: 0px 4px 10px 0px hsl(240 30% 25% / 0.06);
     --shadow-xs: 0px 4px 10px 0px hsl(240 30% 25% / 0.06);
     --shadow-sm:
@@ -982,7 +982,7 @@
     --font-sans: Architects Daughter, sans-serif;
     --font-serif: "Times New Roman", Times, serif;
     --font-mono: "Courier New", Courier, monospace;
-    --radius: 1rem;
+    --radius: 0.65rem;
     --shadow-2xs: 1px 4px 5px 0px hsl(0 0% 0% / 0.01);
     --shadow-xs: 1px 4px 5px 0px hsl(0 0% 0% / 0.01);
     --shadow-sm:
@@ -1101,7 +1101,7 @@
     --font-sans: Architects Daughter, sans-serif;
     --font-serif: var(--font-lora), serif;
     --font-mono: "Fira Code", "Courier New", monospace;
-    --radius: 1rem;
+    --radius: 0.65rem;
     --shadow-2xs: 1px 4px 5px 0px hsl(0 0% 0% / 0.01);
     --shadow-xs: 1px 4px 5px 0px hsl(0 0% 0% / 0.01);
     --shadow-sm:
@@ -1318,7 +1318,7 @@
       --radius-xl: calc(var(--radius) + 4px);
     }
 
-    --radius: 1rem;
+    --radius: 0.65rem;
     --background: oklch(1 0 0); /* --color-white */
     --foreground: oklch(0.141 0.005 285.823); /* --color-zinc-950 */
     --card: oklch(1 0 0); /* --color-white */
@@ -1438,7 +1438,7 @@ html {
 
 button,
 [role="button"] {
-  @apply cursor-pointer;
+  @apply cursor-pointer active:scale-95 transition-transform;
 }
 
 .bg-hero {
