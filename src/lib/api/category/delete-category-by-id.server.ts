@@ -3,7 +3,7 @@ import { deleteCategoryById } from "~/utils/category/delete-category-by-id";
 import z from "zod";
 
 export const deleteCategoryByIdServer = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       id: z.string(),
     })

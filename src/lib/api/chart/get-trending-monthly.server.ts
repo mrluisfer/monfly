@@ -5,7 +5,7 @@ import { z } from "zod";
 export const getTrendingMonthlyServer = createServerFn({
   method: "GET",
 })
-  .validator(
+  .inputValidator(
     z.object({ email: z.string(), type: z.enum(["income", "expense"]) })
   )
   .handler(async ({ data }) => {

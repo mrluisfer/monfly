@@ -9,7 +9,7 @@ const TransactionTypesEnum = z.enum([
 ]);
 
 export const getChartTypeByCategoryServer = createServerFn({ method: "GET" })
-  .validator(
+  .inputValidator(
     z.object({
       email: z.string(),
     })

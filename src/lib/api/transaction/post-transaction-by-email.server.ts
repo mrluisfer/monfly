@@ -3,7 +3,7 @@ import { postTransactionByEmail } from "~/utils/transactions/post-transaction-by
 import z from "zod";
 
 export const postTransactionByEmailServer = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       email: z.string(),
       transaction: z.object({

@@ -5,7 +5,7 @@ import { z } from "zod";
 export const getCategoryByEmailServer = createServerFn({
   method: "GET",
 })
-  .validator(z.object({ email: z.string() }))
+  .inputValidator(z.object({ email: z.string() }))
   .handler(async ({ data }) => {
     return await getCategoryByEmail(data.email);
   });
