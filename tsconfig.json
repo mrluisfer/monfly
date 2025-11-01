@@ -9,9 +9,11 @@
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "strictNullChecks": true,
     "skipLibCheck": true,
     "target": "ES2022",
     "allowJs": true,
+    "verbatimModuleSyntax": false,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
@@ -19,6 +21,6 @@
       "@/*": ["./src/*"]
     },
     "noEmit": true,
-    "types": ["@testing-library/jest-dom"]
+    "types": []
   }
 }
