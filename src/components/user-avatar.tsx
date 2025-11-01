@@ -1,6 +1,4 @@
-import { useMemo } from "react";
-import { notionists } from "@dicebear/collection";
-import { createAvatar } from "@dicebear/core";
+import { cn } from "~/lib/utils";
 
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
@@ -13,21 +11,16 @@ const UserAvatar = ({
   name: string;
   size?: number;
 }) => {
-  const avatar = useMemo(() => {
-    return createAvatar(notionists, {
-      seed: name ?? "",
-      backgroundColor: ["#b6e3f4", "#c0aede", "#d1d4f9", "#ffd5dc", "#ffdfbf"],
-      radius: 100,
-    }).toDataUri();
-  }, [name]);
-
   return (
     <>
       <Avatar className={`w-${size} h-${size}`}>
         <AvatarImage
-          src={avatar}
+          src={""}
           alt={alt}
-          className="bg-secondary aspect-square shrink-0 rounded-full"
+          className={cn(
+            "bg-secondary aspect-square shrink-0 rounded-full",
+            `w-${size} h-${size}`
+          )}
         />
         <AvatarFallback>{name?.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>

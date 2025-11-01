@@ -1,6 +1,11 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
-import { PyramidIcon } from "lucide-react";
+import { useRouteUser } from "~/hooks/use-route-user";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { queryDictionary } from "~/queries/dictionary";
+import { PyramidIcon, User2 } from "lucide-react";
 
+import Logo from "../../assets/logo.svg";
 import { SettingsDialog } from "../settings/settings-dialog";
 import {
   Breadcrumb,
@@ -9,27 +14,70 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
-import { SidebarTrigger } from "../ui/sidebar";
-import { BalanceStatusBadge } from "./badges/balance-status-badge";
+import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
+import UserAvatar from "../user-avatar";
 import { OnlineStatusBadge } from "./badges/online-status-badge";
 import { SpendingAlertBadge } from "./badges/spending-alert-badge";
 import { SystemStatusBadge } from "./badges/system-status";
 import { TimezoneBadge } from "./badges/timezone-badge";
 
 export const Header = () => {
+  const userEmail = useRouteUser();
+
+  const { data, isPending, error } = useQuery({
+    queryKey: [queryDictionary.user, userEmail],
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    enabled: !!userEmail,
+  });
+
   return (
-    <header className="flex justify-between items-start xl:items-center">
+    <header className="flex justify-between items-center">
       <div className="flex items-center gap-4">
-        <SidebarTrigger />
+        <Link
+          to="/home"
+          href="/home"
+          className="flex items-center gap-2 text-2xl font-bold w-fit me-4"
+        >
+          <img
+            src={Logo}
+            alt="Monfly Logo"
+            className="h-8 w-8"
+            title="Monfly"
+          />
+          <span className="sidebar-title-text hidden 3xl:block">Monfly</span>
+        </Link>
         <HeaderNavigation />
       </div>
-      <div className="flex justify-end items-center gap-4 max-w-lg xl:max-w-2xl flex-wrap">
+      <div className="flex justify-end items-center gap-4 flex-wrap">
         <SpendingAlertBadge />
-        <BalanceStatusBadge />
         <OnlineStatusBadge />
         <TimezoneBadge />
         <SystemStatusBadge />
+      </div>
+      <div className="flex items-center gap-4">
         <SettingsDialog />
+        <Link
+          title="Profile"
+          to={`/user/$userId`}
+          params={{ userId: data?.data?.id ?? "" }}
+          disabled={!data?.data?.id}
+          className="flex items-center gap-1"
+        >
+          {isPending ? (
+            <>
+              <User2 /> <Skeleton className="w-18 h-4" />
+            </>
+          ) : (
+            <Button variant="outline" size={"icon"} className="rounded-full">
+              <UserAvatar
+                alt={data?.data?.name ?? ""}
+                name={data?.data?.name ?? ""}
+              />
+              <span className="sr-only">{data?.data?.name}</span>
+            </Button>
+          )}
+        </Link>
       </div>
     </header>
   );
