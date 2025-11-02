@@ -2,6 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
+import { Badge } from "~/components/ui/badge";
+import { Separator } from "~/components/ui/separator";
 import {
   TransactionType,
   transactionTypes,
@@ -82,6 +84,23 @@ export default function ChartByCategoryRadar({
   const shownChart = !isLoading && !error && chartData.length;
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
+  // Calculate interesting statistics from the data
+  const calculateStats = () => {
+    if (!chartData.length) return null;
+
+    const values = chartData.map((item) => item[type] || 0);
+    const total = values.reduce((sum, val) => sum + val, 0);
+    const max = Math.max(...values);
+    const maxCategory =
+      chartData.find((item) => item[type] === max)?.category || "";
+    const avg = total / values.length;
+    const categoriesCount = chartData.length;
+
+    return { total, max, maxCategory, avg, categoriesCount };
+  };
+
+  const stats = calculateStats();
+
   return (
     <Card
       title={`${chartLabel} by Category (Radar)`}
@@ -91,10 +110,71 @@ export default function ChartByCategoryRadar({
           : null
       }
       Footer={
-        small ? (
-          <div className="flex-col gap-2 text-sm">
+        stats ? (
+          <div className="space-y-3 text-sm w-full">
             <div className="flex items-center gap-2 leading-none font-medium">
               <TrendingStatus type={type} data={trendingMonthlyData} />
+            </div>
+
+            <Separator />
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <div className="text-xs text-muted-foreground">
+                  Top Category
+                </div>
+                <Badge variant="secondary" className="text-xs font-medium">
+                  {stats.maxCategory}
+                </Badge>
+              </div>
+              <div className="space-y-1">
+                <div className="text-xs text-muted-foreground">Categories</div>
+                <div className="font-semibold text-sm">
+                  {stats.categoriesCount}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <div className="text-xs text-muted-foreground">
+                  Total {chartLabel}
+                </div>
+                <div className="font-semibold text-sm">
+                  ${stats.total.toLocaleString()}
+                </div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-xs text-muted-foreground">Average</div>
+                <div className="font-semibold text-sm">
+                  ${Math.round(stats.avg).toLocaleString()}
+                </div>
+              </div>
+            </div>
+
+            <div className="pt-1">
+              <div className="text-xs text-muted-foreground mb-2">
+                Distribution
+              </div>
+              <div className="flex gap-1">
+                {chartData.map((item, index) => {
+                  const percentage =
+                    stats.total > 0
+                      ? ((item[type] || 0) / stats.total) * 100
+                      : 0;
+                  return (
+                    <div
+                      key={index}
+                      className="h-2 bg-primary rounded-sm flex-1"
+                      style={{
+                        opacity: Math.max(0.2, percentage / 100),
+                        minWidth: "2px",
+                      }}
+                      title={`${item.category}: ${percentage.toFixed(1)}%`}
+                    />
+                  );
+                })}
+              </div>
             </div>
           </div>
         ) : null
@@ -105,11 +185,11 @@ export default function ChartByCategoryRadar({
         <div className="py-12 text-center text-red-500">Error loading data</div>
       )}
       {shownChart ? (
-        <ChartContainer config={chartConfig} className="">
-          <ResponsiveContainer width="100%" height={300}>
+        <ChartContainer config={chartConfig} className="h-full">
+          <ResponsiveContainer width="100%" height="100%" minHeight={250}>
             <RadarChart
               data={chartData}
-              margin={{ top: 32, right: 32, bottom: 32, left: 32 }}
+              margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
             >
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <PolarGrid />
@@ -119,7 +199,8 @@ export default function ChartByCategoryRadar({
                 fill={color}
                 fillOpacity={0.6}
                 stroke="var(--primary)"
-                dot={{ r: 4, fillOpacity: 1 }}
+                dot={{ r: 5, fillOpacity: 1 }}
+                strokeWidth={2}
                 name={chartLabel}
               />
             </RadarChart>
