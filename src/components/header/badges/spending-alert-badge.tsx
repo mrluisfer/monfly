@@ -238,7 +238,7 @@ export function SpendingAlertBadge({
             variant={config.variant}
             className={cn(
               "inline-flex items-center gap-2 px-3 py-1.5 select-none transition-all hover:scale-105",
-              shouldAnimate && "animate-pulse",
+              shouldAnimate && "",
               className
             )}
             aria-live="polite"
