@@ -66,11 +66,6 @@ export function TrendingStatus({
       ? "less than"
       : "the same as";
 
-  const tooltipContent = `
-    Current month: ${formatCurrency(safeThisMonth, "USD")}
-    Previous month: ${formatCurrency(safeLastMonth, "USD")}
-    Change: ${safePercentChange >= 0 ? "+" : ""}${safePercentChange.toFixed(1)}%
-  `;
 
   return (
     <TooltipProvider delayDuration={300}>
