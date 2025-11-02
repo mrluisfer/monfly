@@ -10,7 +10,7 @@ export function getRouter() {
     routeTree,
     defaultPreload: "intent",
     defaultErrorComponent: DefaultCatchBoundary,
-    //defaultNotFoundComponent: NotFound, // puedes pasar el componente directo
+    //defaultNotFoundComponent: NotFound, // you can pass the component directly
     scrollRestoration: true,
   });
 
