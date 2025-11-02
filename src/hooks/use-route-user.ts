@@ -5,21 +5,23 @@ export const useRouteUser = (): string => {
     from: "/_authed",
   });
 
-  console.log("Auth route context:", authedRouteContext);
+  console.log("🔍 useRouteUser - authedRouteContext:", authedRouteContext);
 
   if (!authedRouteContext) {
-    console.error("Auth Route context not found");
-    throw new Error("Auth Route context not found");
+    console.warn("❌ Auth Route context not found - may still be loading");
+    return ""; // Return empty string instead of throwing
   }
 
   const userEmail =
     authedRouteContext.user || (authedRouteContext as any)?.email;
-  console.log("Extracted user email:", userEmail);
+
+  console.log("📧 useRouteUser - extracted userEmail:", userEmail);
 
   if (!userEmail || typeof userEmail !== "string") {
-    console.error("Invalid user email from context:", userEmail);
-    throw new Error("User email not found in route context");
+    console.warn("⚠️ Invalid user email from context:", userEmail);
+    return ""; // Return empty string instead of throwing
   }
 
+  console.log("✅ useRouteUser - returning valid email:", userEmail);
   return userEmail;
 };

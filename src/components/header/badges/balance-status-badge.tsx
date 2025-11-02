@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -10,6 +11,7 @@ import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
+import type { ApiResponse } from "~/types/ApiResponse";
 import {
   AlertCircle,
   Loader2,
@@ -78,12 +80,15 @@ export function BalanceStatusBadge({
 }: BalanceStatusBadgeProps) {
   const userEmail = useRouteUser();
 
-  const { error, isPending, data } = useQuery({
+  const { error, isPending, data } = useQuery<ApiResponse<User | null>>({
     queryKey: [queryDictionary.user, userEmail],
     queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
-    enabled: !!userEmail,
-    staleTime: 30000, // 30 seconds
-    refetchOnWindowFocus: true,
+    enabled: Boolean(userEmail), // Only run query if userEmail exists
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
+    gcTime: 1000 * 60 * 10, // 10 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
+    refetchOnWindowFocus: false, // Disable to prevent excess requests
   });
 
   // Determine status based on query state and balance
@@ -91,7 +96,12 @@ export function BalanceStatusBadge({
     if (error) return "error";
     if (isPending) return "loading";
 
-    const balance = data?.data?.totalBalance;
+    // Handle API error response
+    if (data?.error || !data?.data) return "error";
+
+    const user = data.data;
+    const balance = user?.totalBalance;
+
     if (balance === undefined || balance === null) return "error";
 
     if (balance > 0) return "surplus";

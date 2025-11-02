@@ -1,7 +1,7 @@
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { BalanceStatusBadge } from "~/components/header/badges/balance-status-badge";
+import { Button } from "~/components/ui/button";
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import {
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
+import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
 
 import AddTransactionButton from "./add-transaction-button";
@@ -20,67 +21,33 @@ import { DataTableDemo } from "./TransactionsTable";
 export default function TransactionsList() {
   const userEmail = useRouteUser();
 
-  // Debug the userEmail
-  React.useEffect(() => {
-    console.log("Current userEmail:", userEmail, "Type:", typeof userEmail);
-  }, [userEmail]);
-
   const { data, isPending, error, refetch, isError } = useQuery({
-    queryKey: [queryDictionary.transactions, userEmail || "no-user"],
-    queryFn: async () => {
-      if (!userEmail) {
-        throw new Error("User email is required");
-      }
-
-      console.log("Fetching transactions for user:", userEmail);
-
-      const result = await getTransactionByEmailServer({
-        data: {
-          email: userEmail,
-        },
-      });
-
-      console.log("Transaction query result:", result);
-
-      if (result.error) {
-        throw new Error(result.message);
-      }
-
-      return result;
-    },
-    enabled:
-      !!userEmail &&
-      userEmail !== "no-user" &&
-      typeof userEmail === "string" &&
-      userEmail.length > 0,
+    queryKey: [queryDictionary.transactions, userEmail],
+    queryFn: createSafeQuery(
+      () =>
+        getTransactionByEmailServer({
+          data: { email: userEmail },
+        }),
+      8000 // 8 second timeout
+    ),
+    enabled: !!userEmail,
+    staleTime: 1000 * 60 * 2, // 2 minutes cache
+    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
   });
 
-  // Safe defaults if data is undefined
   const transactions = data?.data ?? [];
   const total = data?.total ?? 0;
 
-  // Debug logging
-  React.useEffect(() => {
-    console.log("TransactionsList render:", {
-      userEmail,
-      isPending,
-      error: error?.message,
-      dataExists: !!data,
-      rawData: data,
-      transactionsArray: transactions,
-      transactionsCount: transactions.length,
-      total,
-      queryEnabled: !!userEmail && userEmail !== "no-user",
-    });
-  }, [
+  console.log("TransactionsList query state:", {
     userEmail,
+    enabled: !!userEmail,
     isPending,
-    error,
-    data,
-    transactions,
-    transactions.length,
-    total,
-  ]);
+    isError,
+    hasData: !!data,
+    error: error?.message,
+  });
 
   return (
     <TransactionHoverProvider>
@@ -89,34 +56,36 @@ export default function TransactionsList() {
           <div className="flex items-center gap-2 justify-between">
             <CardTitle>Transactions</CardTitle>
             <div className="flex items-center gap-6">
-              <BalanceStatusBadge />
-              <button
+              <Button
                 onClick={() => refetch()}
-                disabled={isPending}
-                className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 dark:bg-gray-500 dark:hover:bg-gray-600 rounded-md transition-colors disabled:opacity-50"
+                disabled={isPending || transactions.length === 0}
                 title="Refresh transactions"
+                variant={"ghost"}
               >
                 {isPending ? "Loading..." : "Refresh"}
-              </button>
-              <button
-                onClick={async () => {
-                  console.log("Manual test - userEmail:", userEmail);
-                  if (userEmail) {
-                    try {
-                      const result = await getTransactionByEmailServer({
-                        data: { email: userEmail },
-                      });
-                      console.log("Manual test result:", result);
-                    } catch (err) {
-                      console.error("Manual test error:", err);
+              </Button>
+              {process.env.NODE_ENV !== "production" ? (
+                <Button
+                  onClick={async () => {
+                    console.log("Manual test - userEmail:", userEmail);
+                    if (userEmail) {
+                      try {
+                        const result = await getTransactionByEmailServer({
+                          data: { email: userEmail },
+                        });
+                        console.log("Manual test result:", result);
+                      } catch (err) {
+                        console.error("Manual test error:", err);
+                      }
                     }
-                  }
-                }}
-                className="px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 dark:bg-blue-400 dark:hover:bg-blue-500 rounded-md transition-colors"
-                title="Test query manually"
-              >
-                Test
-              </button>
+                  }}
+                  className="px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 dark:bg-blue-400 dark:hover:bg-blue-500 rounded-md transition-colors"
+                  title="Test query manually"
+                >
+                  Test
+                </Button>
+              ) : null}
+              <BalanceStatusBadge />
               <AddTransactionButton />
             </div>
           </div>

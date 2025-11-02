@@ -17,7 +17,12 @@ export const FontDisplayProvider = ({ children }: { children: ReactNode }) => {
   const [fontDisplay, setFontDisplayState] = useState<string>(() => {
     // Check localStorage for saved value
     if (typeof window !== "undefined") {
-      return localStorage.getItem(LOCAL_STORAGE_KEY) || FontValues.OpenSans;
+      try {
+        return localStorage.getItem(LOCAL_STORAGE_KEY) || FontValues.OpenSans;
+      } catch (error) {
+        console.warn("Failed to read from localStorage:", error);
+        return FontValues.OpenSans;
+      }
     }
     return FontValues.OpenSans;
   });
@@ -25,7 +30,11 @@ export const FontDisplayProvider = ({ children }: { children: ReactNode }) => {
   // Sync with localStorage whenever value changes
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem(LOCAL_STORAGE_KEY, fontDisplay);
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, fontDisplay);
+      } catch (error) {
+        console.warn("Failed to write to localStorage:", error);
+      }
     }
   }, [fontDisplay]);
 

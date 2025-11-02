@@ -41,8 +41,10 @@ export function useChart({
     queryKey: [...queryKey, userEmail],
     queryFn,
     enabled: enabled && !!userEmail,
-    staleTime,
-    refetchOnWindowFocus,
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
+    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
   });
 
   // Process and sanitize data

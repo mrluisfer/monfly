@@ -28,6 +28,10 @@ export default function ChartTransactionsByMonth({
     queryFn: () =>
       getTransactionsCountByMonthServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
+    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
   });
 
   // Process and validate chart data

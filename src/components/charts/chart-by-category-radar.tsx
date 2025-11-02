@@ -41,6 +41,10 @@ export default function ChartByCategoryRadar({
     queryKey: ["income-expense-by-category", userEmail],
     queryFn: () => getChartTypeByCategoryServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
+    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
   });
 
   const { data: trendingMonthlyData } = useQuery({
@@ -53,6 +57,10 @@ export default function ChartByCategoryRadar({
         },
       }),
     enabled: !!userEmail,
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
+    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
   });
 
   console.log("Trending Monthly Data:", trendingMonthlyData);

@@ -383,7 +383,7 @@ export function TransactionForm<FormValues extends FieldValues>({
         <div className="pt-4">
           <Button
             type="submit"
-            className="w-full h-12 text-base font-medium bg-blue-600 hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+            className="w-full text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
             disabled={isLoading}
           >
             {isLoading ? (

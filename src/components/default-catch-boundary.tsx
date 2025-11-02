@@ -16,7 +16,13 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
     select: (state) => state.id === rootRouteId,
   });
 
-  console.error(error);
+  // Log error but prevent stream issues
+  console.error("Route error:", error);
+
+  // Check if it's a stream-related error
+  const isStreamError =
+    error?.message?.includes("Controller is already closed") ||
+    (error as any)?.code === "ERR_INVALID_STATE";
 
   return (
     <div className="min-w-0 flex-1 p-4 flex flex-col items-center justify-center gap-4">
@@ -24,13 +30,18 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
       <div className="flex gap-4 items-center flex-wrap">
         <Button
           onClick={() => {
-            router.invalidate();
+            // For stream errors, do a hard refresh instead of router invalidate
+            if (isStreamError) {
+              window.location.reload();
+            } else {
+              router.invalidate();
+            }
           }}
           className={
             "px-2 py-1 bg-gray-600 dark:bg-gray-700 rounded text-white uppercase font-extrabold"
           }
         >
-          Try Again
+          {isStreamError ? "Reload Page" : "Try Again"}
         </Button>
         {isRoot ? (
           <Link

@@ -1,11 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
-import { useRouteUser } from "~/hooks/use-route-user";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
-import { queryDictionary } from "~/queries/dictionary";
-import { PyramidIcon, User2 } from "lucide-react";
+import { PyramidIcon } from "lucide-react";
 
 import Logo from "../../assets/logo.svg";
+import UserDropdown from "../home/user-dropdown";
 import { SettingsDialog } from "../settings/settings-dialog";
 import {
   Breadcrumb,
@@ -14,25 +11,14 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
-import { Button } from "../ui/button";
-import { Skeleton } from "../ui/skeleton";
-import UserAvatar from "../user-avatar";
 import { OnlineStatusBadge } from "./badges/online-status-badge";
 import { SpendingAlertBadge } from "./badges/spending-alert-badge";
 import { SystemStatusBadge } from "./badges/system-status";
 import { TimezoneBadge } from "./badges/timezone-badge";
 
 export const Header = () => {
-  const userEmail = useRouteUser();
-
-  const { data, isPending, error } = useQuery({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
-    enabled: !!userEmail,
-  });
-
   return (
-    <header className="flex justify-between items-center">
+    <header className="flex justify-between items-center gap-6">
       <div className="flex items-center gap-4">
         <Link
           to="/home"
@@ -57,27 +43,7 @@ export const Header = () => {
       </div>
       <div className="flex items-center gap-4">
         <SettingsDialog />
-        <Link
-          title="Profile"
-          to={`/user/$userId`}
-          params={{ userId: data?.data?.id ?? "" }}
-          disabled={!data?.data?.id}
-          className="flex items-center gap-1"
-        >
-          {isPending ? (
-            <>
-              <User2 /> <Skeleton className="w-18 h-4" />
-            </>
-          ) : (
-            <Button variant="outline" size={"icon"} className="rounded-full">
-              <UserAvatar
-                alt={data?.data?.name ?? ""}
-                name={data?.data?.name ?? ""}
-              />
-              <span className="sr-only">{data?.data?.name}</span>
-            </Button>
-          )}
-        </Link>
+        <UserDropdown />
       </div>
     </header>
   );
