@@ -53,7 +53,6 @@ export default function UserDropdown() {
   // Get user data safely
   const user = data?.data;
   const userName = user?.name ?? "User";
-  const displayEmail = user?.email ?? "";
 
   // Handle loading state
   if (isPending) {
