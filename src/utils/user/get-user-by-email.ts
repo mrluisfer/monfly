@@ -1,13 +1,16 @@
 import type { User } from "@prisma/client";
 import type { ApiResponse } from "~/types/ApiResponse";
+import { withDatabaseTimeout } from "~/utils/timeout";
 
 import { prismaClient } from "../prisma";
 
 export const getUserByEmail = async (email: string) => {
   try {
-    const user = await prismaClient.user.findUnique({
-      where: { email },
-    });
+    const user = await withDatabaseTimeout(() =>
+      prismaClient.user.findUnique({
+        where: { email },
+      })
+    );
 
     if (!user) {
       return {

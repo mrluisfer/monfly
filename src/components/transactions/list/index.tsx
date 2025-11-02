@@ -53,14 +53,6 @@ export default function TransactionsList() {
       userEmail !== "no-user" &&
       typeof userEmail === "string" &&
       userEmail.length > 0,
-    staleTime: 30000, // 30 seconds
-    gcTime: 5 * 60 * 1000, // 5 minutes
-    refetchOnWindowFocus: false,
-    retry: (failureCount, error) => {
-      console.error(`Query failed (attempt ${failureCount + 1}):`, error);
-      return failureCount < 3;
-    },
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   // Safe defaults if data is undefined
@@ -101,7 +93,7 @@ export default function TransactionsList() {
               <button
                 onClick={() => refetch()}
                 disabled={isPending}
-                className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-md transition-colors disabled:opacity-50"
+                className="px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 dark:bg-gray-500 dark:hover:bg-gray-600 rounded-md transition-colors disabled:opacity-50"
                 title="Refresh transactions"
               >
                 {isPending ? "Loading..." : "Refresh"}
@@ -120,7 +112,7 @@ export default function TransactionsList() {
                     }
                   }
                 }}
-                className="px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 rounded-md transition-colors"
+                className="px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 dark:bg-blue-400 dark:hover:bg-blue-500 rounded-md transition-colors"
                 title="Test query manually"
               >
                 Test

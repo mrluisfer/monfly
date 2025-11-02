@@ -1,5 +1,7 @@
 import type { ApiResponse } from "~/types/ApiResponse";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
+import { gracefulDatabaseOperation } from "~/utils/database-health";
+import { withDatabaseTimeout } from "~/utils/timeout";
 
 import { prismaClient } from "../prisma";
 
@@ -22,22 +24,30 @@ export const getTransactionsByEmail = async ({
     }
 
     // First, let's check if the user exists
-    const user = await prismaClient.user.findUnique({
-      where: { email: email },
-    });
+    const user = await gracefulDatabaseOperation(() =>
+      withDatabaseTimeout(() =>
+        prismaClient.user.findUnique({
+          where: { email: email },
+        })
+      )
+    );
 
     console.log(`User lookup for ${email}:`, user ? "Found" : "Not found");
 
-    const [transactions, total] = await Promise.all([
-      prismaClient.transaction.findMany({
-        where: { userEmail: email },
-        include: { user: true },
-        orderBy: { createdAt: "desc" },
-      }),
-      prismaClient.transaction.count({
-        where: { userEmail: email },
-      }),
-    ]);
+    const [transactions, total] = await gracefulDatabaseOperation(() =>
+      withDatabaseTimeout(() =>
+        Promise.all([
+          prismaClient.transaction.findMany({
+            where: { userEmail: email },
+            include: { user: true },
+            orderBy: { createdAt: "desc" },
+          }),
+          prismaClient.transaction.count({
+            where: { userEmail: email },
+          }),
+        ])
+      )
+    );
 
     console.log(`Found ${transactions.length} transactions for ${email}`);
     console.log("Sample transaction:", transactions[0] || "None");
