@@ -15,6 +15,15 @@ export function BalanceEditorActions({
   return (
     <>
       <Button
+        onClick={onCancel}
+        variant="secondary"
+        size="icon"
+        disabled={isSubmitting}
+        aria-label="Cancel editing"
+      >
+        <X size={12} />
+      </Button>
+      <Button
         variant="default"
         size="icon"
         type="button"
@@ -27,15 +36,6 @@ export function BalanceEditorActions({
         ) : (
           <Check size={12} />
         )}
-      </Button>
-      <Button
-        onClick={onCancel}
-        variant="secondary"
-        size="icon"
-        disabled={isSubmitting}
-        aria-label="Cancel editing"
-      >
-        <X size={12} />
       </Button>
     </>
   );

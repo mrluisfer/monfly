@@ -12,7 +12,6 @@ import {
 import FontDisplaySelect from "./font-display-select";
 import { SonnerPositionSelector } from "./sonner-position-selector";
 import { ThemeSelector } from "./theme-selector";
-import ToggleDarkMode from "./toggle-dark-mode";
 
 export const SettingsDialog = ({
   children,
@@ -42,9 +41,6 @@ export const SettingsDialog = ({
           </SettingsItem>
           <SettingsItem label="Theme:">
             <ThemeSelector />
-          </SettingsItem>
-          <SettingsItem label="Dark Mode:">
-            <ToggleDarkMode />
           </SettingsItem>
           <SettingsItem label="Font Display:">
             <FontDisplaySelect />

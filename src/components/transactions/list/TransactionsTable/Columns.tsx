@@ -1,34 +1,6 @@
-"use client";
-
-import * as React from "react";
+import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { useMutation } from "~/hooks/use-mutation";
-import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
-import { queryDictionary } from "~/queries/dictionary";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
-import {
-  ArrowUpDown,
-  BanknoteArrowDownIcon,
-  BanknoteArrowUpIcon,
-  ChevronDown,
-  Edit,
-  MoreHorizontal,
-  Trash,
-} from "lucide-react";
-import { toast } from "sonner";
-
+import { ColumnDef } from "@tanstack/react-table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,38 +10,41 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+} from "~/components/ui/alert-dialog";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "~/components/ui/dialog";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from "~/components/ui/dropdown-menu";
+import { useMutation } from "~/hooks/use-mutation";
+import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
+import { queryDictionary } from "~/queries/dictionary";
+import { TransactionWithUser } from "~/types/TransactionWithUser";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+  ArrowUpDownIcon,
+  BanknoteArrowDownIcon,
+  BanknoteArrowUpIcon,
+  EditIcon,
+  MoreHorizontalIcon,
+  TrashIcon,
+} from "lucide-react";
+import { toast } from "sonner";
 
-import EditTransaction from "../edit-transaction";
+import EditTransaction from "../../edit-transaction";
 
-export const columns: ColumnDef<TransactionWithUser>[] = [
+export const Columns: ColumnDef<TransactionWithUser>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -101,7 +76,7 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Type
-          <ArrowUpDown />
+          <ArrowUpDownIcon />
         </Button>
       );
     },
@@ -137,7 +112,7 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Description
-          <ArrowUpDown />
+          <ArrowUpDownIcon />
         </Button>
       );
     },
@@ -158,7 +133,7 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Category
-          <ArrowUpDown />
+          <ArrowUpDownIcon />
         </Button>
       );
     },
@@ -179,7 +154,7 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Date
-          <ArrowUpDown />
+          <ArrowUpDownIcon />
         </Button>
       );
     },
@@ -198,7 +173,7 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
           className="h-auto p-0"
         >
           Amount
-          <ArrowUpDown />
+          <ArrowUpDownIcon />
         </Button>
       </div>
     ),
@@ -279,7 +254,7 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
+                <MoreHorizontalIcon />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -291,14 +266,14 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
-                <Edit className="mr-2 h-4 w-4" />
+                <EditIcon className="mr-2 h-4 w-4" />
                 Edit transaction
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive"
                 onClick={() => setIsDeleteDialogOpen(true)}
               >
-                <Trash className="mr-2 h-4 w-4" />
+                <TrashIcon className="mr-2 h-4 w-4" />
                 Delete transaction
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -353,214 +328,3 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
     },
   },
 ];
-
-interface DataTableDemoProps {
-  data: TransactionWithUser[];
-}
-
-export function DataTableDemo({ data }: DataTableDemoProps) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [globalFilter, setGlobalFilter] = React.useState("");
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: (row, columnId, value) => {
-      const search = value.toLowerCase();
-
-      // Search across multiple fields
-      const searchableFields = [
-        (row.getValue("description") as string) || "",
-        (row.getValue("category") as string) || "",
-        (row.getValue("type") as string) || "",
-        (row.getValue("amount") as number)?.toString() || "",
-      ];
-
-      return searchableFields.some((field) =>
-        field.toLowerCase().includes(search)
-      );
-    },
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-      globalFilter,
-    },
-  });
-
-  return (
-    <div className="w-full">
-      <div className="flex items-center py-4 gap-4">
-        <Input
-          placeholder="Search transactions..."
-          value={globalFilter ?? ""}
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
-        />
-        <div className="flex items-center gap-2">
-          <Button
-            variant={
-              table.getColumn("type")?.getFilterValue() === "income"
-                ? "default"
-                : "outline"
-            }
-            size="sm"
-            onClick={() => {
-              const column = table.getColumn("type");
-              const currentFilter = column?.getFilterValue();
-              column?.setFilterValue(
-                currentFilter === "income" ? "" : "income"
-              );
-            }}
-          >
-            Income
-          </Button>
-          <Button
-            variant={
-              table.getColumn("type")?.getFilterValue() === "expense"
-                ? "destructive"
-                : "outline"
-            }
-            size="sm"
-            onClick={() => {
-              const column = table.getColumn("type");
-              const currentFilter = column?.getFilterValue();
-              column?.setFilterValue(
-                currentFilter === "expense" ? "" : "expense"
-              );
-            }}
-          >
-            Expense
-          </Button>
-          {(globalFilter || table.getState().columnFilters.length > 0) && (
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setGlobalFilter("");
-                table.resetColumnFilters();
-              }}
-            >
-              Clear
-            </Button>
-          )}
-        </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <div className="overflow-hidden rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-}

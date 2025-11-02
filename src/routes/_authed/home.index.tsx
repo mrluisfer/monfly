@@ -4,6 +4,7 @@ import TotalBalance from "~/components/balance/TotalBalance";
 import ChartByCategoryRadar from "~/components/charts/chart-by-category-radar";
 import ChartTransactionsByMonth from "~/components/charts/chart-transactions-by-month";
 import IncomeExpenseChart from "~/components/charts/income-expense-chart";
+import { ManagementTabs } from "~/components/home/management-tabs";
 import { PageTitle } from "~/components/page-title";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -83,8 +84,9 @@ function RouteComponent() {
             </div>
           </div>
 
-          <div className="order-1 md:order-2 md:col-span-2 xl:col-span-2">
+          <div className="order-1 md:order-2 md:col-span-2 xl:col-span-2 space-y-6">
             <TransactionsList />
+            <ManagementTabs />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">

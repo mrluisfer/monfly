@@ -9,11 +9,13 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
+import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
+import { RefreshCcwIcon } from "lucide-react";
 
 import AddTransactionButton from "./add-transaction-button";
 import { DataTableDemo } from "./TransactionsTable";
@@ -60,31 +62,22 @@ export default function TransactionsList() {
                 onClick={() => refetch()}
                 disabled={isPending || transactions.length === 0}
                 title="Refresh transactions"
-                variant={"ghost"}
+                variant={"outline"}
               >
-                {isPending ? "Loading..." : "Refresh"}
+                {isPending ? (
+                  <>
+                    <Spinner />
+                    Loading...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCcwIcon
+                      className={isPending ? "animate-spin" : ""}
+                    />
+                    Refresh
+                  </>
+                )}
               </Button>
-              {process.env.NODE_ENV !== "production" ? (
-                <Button
-                  onClick={async () => {
-                    console.log("Manual test - userEmail:", userEmail);
-                    if (userEmail) {
-                      try {
-                        const result = await getTransactionByEmailServer({
-                          data: { email: userEmail },
-                        });
-                        console.log("Manual test result:", result);
-                      } catch (err) {
-                        console.error("Manual test error:", err);
-                      }
-                    }
-                  }}
-                  className="px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 dark:bg-blue-400 dark:hover:bg-blue-500 rounded-md transition-colors"
-                  title="Test query manually"
-                >
-                  Test
-                </Button>
-              ) : null}
               <BalanceStatusBadge />
               <AddTransactionButton />
             </div>
