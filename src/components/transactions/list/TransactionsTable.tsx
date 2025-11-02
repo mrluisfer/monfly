@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -13,17 +14,40 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
+import { useMutation } from "~/hooks/use-mutation";
+import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
+import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import {
   ArrowUpDown,
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
   ChevronDown,
+  Edit,
   MoreHorizontal,
+  Trash,
 } from "lucide-react";
+import { toast } from "sonner";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -42,6 +66,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import EditTransaction from "../edit-transaction";
 
 export const columns: ColumnDef<TransactionWithUser>[] = [
   {
@@ -207,27 +233,122 @@ export const columns: ColumnDef<TransactionWithUser>[] = [
     enableHiding: false,
     cell: ({ row }) => {
       const transaction = row.original;
+      const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+      const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+      const queryClient = useQueryClient();
+
+      const deleteTransactionByIdMutation = useMutation({
+        fn: deleteTransactionByIdServer,
+        onSuccess: async () => {
+          toast.success("Transaction deleted successfully");
+          await queryClient.invalidateQueries({
+            queryKey: [queryDictionary.transactions, transaction.userEmail],
+          });
+          await queryClient.invalidateQueries({
+            queryKey: [queryDictionary.user, transaction.userEmail],
+          });
+          setIsDeleteDialogOpen(false);
+        },
+      });
+
+      // Handle delete mutation errors
+      React.useEffect(() => {
+        if (
+          deleteTransactionByIdMutation.status === "error" &&
+          deleteTransactionByIdMutation.error
+        ) {
+          toast.error("Failed to delete transaction");
+          setIsDeleteDialogOpen(false);
+        }
+      }, [
+        deleteTransactionByIdMutation.status,
+        deleteTransactionByIdMutation.error,
+      ]);
+
+      const handleDelete = () => {
+        deleteTransactionByIdMutation.mutate({
+          data: {
+            id: transaction.id,
+          },
+        });
+      };
 
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(transaction.id)}
-            >
-              Copy transaction ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit transaction</DropdownMenuItem>
-            <DropdownMenuItem>Delete transaction</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(transaction.id)}
+              >
+                Copy transaction ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                <Edit className="mr-2 h-4 w-4" />
+                Edit transaction
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <Trash className="mr-2 h-4 w-4" />
+                Delete transaction
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Edit Dialog */}
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Transaction</DialogTitle>
+                <DialogDescription>
+                  Edit the transaction details
+                </DialogDescription>
+              </DialogHeader>
+              <EditTransaction
+                transaction={transaction}
+                onClose={() => setIsEditDialogOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
+
+          {/* Delete Confirmation Dialog */}
+          <AlertDialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  transaction "{transaction.description}" with amount $
+                  {Math.abs(transaction.amount).toFixed(2)}.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  disabled={deleteTransactionByIdMutation.status === "pending"}
+                >
+                  {deleteTransactionByIdMutation.status === "pending"
+                    ? "Deleting..."
+                    : "Delete"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
       );
     },
   },
