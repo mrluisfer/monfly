@@ -3,6 +3,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { Badge } from "~/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import {
   TransactionType,
@@ -26,17 +34,14 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-import Card from "../card";
 import { TrendingStatus } from "./trending-status";
 
 type ChartByCategoryRadarProps = {
   type: TransactionType; // "income" | "expense"
-  small?: boolean;
 };
 
 export default function ChartByCategoryRadar({
   type,
-  small = false,
 }: ChartByCategoryRadarProps) {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
@@ -102,15 +107,57 @@ export default function ChartByCategoryRadar({
   const stats = calculateStats();
 
   return (
-    <Card
-      title={`${chartLabel} by Category (Radar)`}
-      subtitle={
-        small
-          ? `Visualize your ${chartLabel.toLowerCase()} distribution across categories`
-          : null
-      }
-      Footer={
-        stats ? (
+    <Card>
+      <CardHeader>
+        <CardTitle>{`${chartLabel} by Category (Radar)`}</CardTitle>
+        <CardDescription>
+          Visualize your {chartLabel.toLowerCase()} distribution across
+          categories
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent>
+        {isLoading && <div className="py-12 text-center">Loading chart...</div>}
+        {error && (
+          <div className="py-12 text-center text-red-500">
+            Error loading data
+          </div>
+        )}
+        {shownChart && (
+          <ChartContainer config={chartConfig} className="h-full">
+            <ResponsiveContainer width="100%" height="100%" minHeight={250}>
+              <RadarChart
+                data={chartData}
+                margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+              >
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent />}
+                />
+                <PolarGrid />
+                <PolarAngleAxis dataKey="category" />
+                <Radar
+                  dataKey={type} // <- "income" o "expense"
+                  fill={color}
+                  fillOpacity={0.6}
+                  stroke="var(--primary)"
+                  dot={{ r: 5, fillOpacity: 1 }}
+                  strokeWidth={2}
+                  name={chartLabel}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        )}
+        {shownPlaceholder && (
+          <DataNotFoundPlaceholder>
+            No {chartLabel.toLowerCase()} data for categories
+          </DataNotFoundPlaceholder>
+        )}
+      </CardContent>
+
+      {stats && (
+        <CardFooter>
           <div className="space-y-3 text-sm w-full">
             <div className="flex items-center gap-2 leading-none font-medium">
               <TrendingStatus type={type} data={trendingMonthlyData} />
@@ -177,41 +224,8 @@ export default function ChartByCategoryRadar({
               </div>
             </div>
           </div>
-        ) : null
-      }
-    >
-      {isLoading && <div className="py-12 text-center">Loading chart...</div>}
-      {error && (
-        <div className="py-12 text-center text-red-500">Error loading data</div>
+        </CardFooter>
       )}
-      {shownChart ? (
-        <ChartContainer config={chartConfig} className="h-full">
-          <ResponsiveContainer width="100%" height="100%" minHeight={250}>
-            <RadarChart
-              data={chartData}
-              margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-            >
-              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-              <PolarGrid />
-              <PolarAngleAxis dataKey="category" />
-              <Radar
-                dataKey={type} // <- "income" o "expense"
-                fill={color}
-                fillOpacity={0.6}
-                stroke="var(--primary)"
-                dot={{ r: 5, fillOpacity: 1 }}
-                strokeWidth={2}
-                name={chartLabel}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-      ) : null}
-      {shownPlaceholder ? (
-        <DataNotFoundPlaceholder>
-          No {chartLabel.toLowerCase()} data for categories
-        </DataNotFoundPlaceholder>
-      ) : null}
     </Card>
   );
 }

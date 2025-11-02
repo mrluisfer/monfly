@@ -1,8 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
+import { Badge } from "~/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import { Separator } from "~/components/ui/separator";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getTransactionsCountByMonthServer } from "~/lib/api/chart/get-transaction-count-by-month.server";
-import { Activity, Calendar, TrendingUp } from "lucide-react";
+import {
+  Activity,
+  ArrowUp,
+  BarChart3,
+  Calendar,
+  Target,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -14,14 +32,9 @@ import {
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
-import Card from "../card";
 import { ChartError, ChartLoading } from "./chart-loading";
 
-export default function ChartTransactionsByMonth({
-  small = false,
-}: {
-  small?: boolean;
-}) {
+export default function ChartTransactionsByMonth() {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
     queryKey: ["transactions-by-month", userEmail],
@@ -49,6 +62,15 @@ export default function ChartTransactionsByMonth({
   );
   const averagePerMonth =
     chartData.length > 0 ? Math.round(totalTransactions / chartData.length) : 0;
+
+  // Calculate additional statistics
+  const maxCount = Math.max(...chartData.map((item: any) => item.count));
+  const minCount = Math.min(...chartData.map((item: any) => item.count));
+  const maxMonth =
+    chartData.find((item: any) => item.count === maxCount)?.month || "";
+  const minMonth =
+    chartData.find((item: any) => item.count === minCount)?.month || "";
+
   // Calculate trend (simple comparison of last 2 months if available)
   const trendPercentage =
     chartData.length >= 2
@@ -57,6 +79,9 @@ export default function ChartTransactionsByMonth({
           chartData[chartData.length - 2]?.count) *
         100
       : 0;
+
+  const isPositiveTrend = trendPercentage >= 0;
+  const monthsWithData = chartData.length;
 
   const shownChart = !isLoading && !error && chartData.length > 0;
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
@@ -88,102 +113,196 @@ export default function ChartTransactionsByMonth({
   };
 
   return (
-    <Card
-      title="Monthly Activity"
-      subtitle={
-        totalTransactions > 0
-          ? `${totalTransactions} transactions • ${averagePerMonth}/month avg`
-          : "Track your transaction activity over time"
-      }
-      Footer={
-        small && chartData.length >= 2 ? (
-          <div className="flex w-full items-center gap-2 text-sm">
-            <span className="flex items-center gap-1 font-medium text-muted-foreground">
-              <TrendingUp
-                className={`h-4 w-4 ${trendPercentage >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}
-              />
-              {trendPercentage >= 0 ? "+" : ""}
-              {trendPercentage.toFixed(1)}% vs last month
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          Monthly Activity
+        </CardTitle>
+        <CardDescription>
+          {totalTransactions > 0
+            ? `${totalTransactions} transactions • ${averagePerMonth}/month avg`
+            : "Track your transaction activity over time"}
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent>
+        {isLoading && (
+          <ChartLoading message="Loading transaction activity..." />
+        )}
+
+        {error && (
+          <ChartError
+            title="Failed to load transaction data"
+            message={error.message}
+            onRetry={() => window.location.reload()}
+          />
+        )}
+
+        {shownChart && (
+          <ChartContainer
+            config={{
+              count: {
+                label: "Transactions",
+                color: "hsl(221, 83%, 53%)", // Blue
+              },
+            }}
+            className="w-full h-[280px] sm:h-80"
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={chartData}
+                margin={{
+                  top: 20,
+                  right: 10,
+                  left: 10,
+                  bottom: 20,
+                }}
+              >
+                <ChartTooltip content={<CustomTooltip />} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  className="stroke-border/30"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  className="text-xs fill-muted-foreground"
+                  tick={{ fontSize: 12 }}
+                  tickFormatter={(value) => {
+                    return value;
+                  }}
+                />
+                <YAxis
+                  allowDecimals={false}
+                  tickLine={false}
+                  axisLine={false}
+                  className="text-xs fill-muted-foreground"
+                  tick={{ fontSize: 10 }}
+                  width={40}
+                />
+                <Bar
+                  dataKey="count"
+                  fill="hsl(221, 83%, 53%)"
+                  name="Transactions"
+                  radius={[4, 4, 0, 0]}
+                  animationDuration={800}
+                  animationEasing="ease-out"
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        )}
+
+        {shownPlaceholder && (
+          <DataNotFoundPlaceholder>
+            No transaction data found.
+            <br />
+            <span className="text-xs text-muted-foreground mt-2 block">
+              <Calendar className="w-4 h-4 inline mr-1" />
+              Start making transactions to see your monthly activity.
             </span>
+          </DataNotFoundPlaceholder>
+        )}
+      </CardContent>
+
+      {chartData.length > 0 && (
+        <CardFooter>
+          <div className="space-y-3 text-sm w-full">
+            {/* Trend Information */}
+            {chartData.length >= 2 && (
+              <div className="flex items-center gap-2">
+                {isPositiveTrend ? (
+                  <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
+                ) : (
+                  <TrendingDown className="w-4 h-4 text-red-600 dark:text-red-400" />
+                )}
+                <span className="font-medium">
+                  {isPositiveTrend ? "+" : ""}
+                  {trendPercentage.toFixed(1)}% vs last month
+                </span>
+                <Badge
+                  variant={isPositiveTrend ? "default" : "destructive"}
+                  className="text-xs"
+                >
+                  {isPositiveTrend ? "Growing" : "Declining"}
+                </Badge>
+              </div>
+            )}
+
+            <Separator />
+
+            {/* Statistics Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <ArrowUp className="w-4 h-4 text-green-600 dark:text-green-400" />
+                  <div>
+                    <div className="text-xs text-muted-foreground">
+                      Peak Month
+                    </div>
+                    <div className="font-semibold">{maxMonth}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {maxCount} transactions
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Target className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <div>
+                    <div className="text-xs text-muted-foreground">
+                      Data Period
+                    </div>
+                    <div className="font-semibold">{monthsWithData} months</div>
+                    <div className="text-xs text-muted-foreground">
+                      Average: {averagePerMonth}/month
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Activity Distribution Bar */}
+            <div className="space-y-2">
+              <div className="text-xs text-muted-foreground">
+                Monthly Distribution
+              </div>
+              <div className="flex gap-1 h-2">
+                {chartData.map((item: any, index: number) => {
+                  const percentage =
+                    totalTransactions > 0
+                      ? (item.count / totalTransactions) * 100
+                      : 0;
+                  return (
+                    <div
+                      key={index}
+                      className="bg-blue-600 dark:bg-blue-400 rounded-sm flex-1 transition-opacity hover:opacity-80"
+                      style={{
+                        opacity: Math.max(0.3, percentage / 100),
+                        minWidth: "4px",
+                      }}
+                      title={`${item.month}: ${item.count} transactions (${percentage.toFixed(1)}%)`}
+                    />
+                  );
+                })}
+              </div>
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>
+                  {minMonth} ({minCount})
+                </span>
+                <span>
+                  {maxMonth} ({maxCount})
+                </span>
+              </div>
+            </div>
           </div>
-        ) : null
-      }
-    >
-      {isLoading && <ChartLoading message="Loading transaction activity..." />}
-
-      {error && (
-        <ChartError
-          title="Failed to load transaction data"
-          message={error.message}
-          onRetry={() => window.location.reload()}
-        />
-      )}
-
-      {shownChart && (
-        <ChartContainer
-          config={{
-            count: {
-              label: "Transactions",
-              color: "hsl(221, 83%, 53%)", // Blue
-            },
-          }}
-          className="w-full h-[280px] sm:h-80"
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={chartData}
-              margin={{
-                top: 20,
-                right: small ? 10 : 20,
-                left: small ? 10 : 20,
-                bottom: 20,
-              }}
-            >
-              <ChartTooltip content={<CustomTooltip />} />
-              <CartesianGrid
-                strokeDasharray="3 3"
-                className="stroke-border/30"
-                vertical={false}
-              />
-              <XAxis
-                dataKey="month"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                className="text-xs fill-muted-foreground"
-                tick={{ fontSize: small ? 10 : 12 }}
-                tickFormatter={(value) => (small ? value.slice(0, 3) : value)}
-              />
-              <YAxis
-                allowDecimals={false}
-                tickLine={false}
-                axisLine={false}
-                className="text-xs fill-muted-foreground"
-                tick={{ fontSize: 10 }}
-                width={small ? 30 : 40}
-              />
-              <Bar
-                dataKey="count"
-                fill="hsl(221, 83%, 53%)"
-                name="Transactions"
-                radius={[4, 4, 0, 0]}
-                animationDuration={800}
-                animationEasing="ease-out"
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-      )}
-
-      {shownPlaceholder && (
-        <DataNotFoundPlaceholder>
-          No transaction data found.
-          <br />
-          <span className="text-xs text-muted-foreground mt-2 block">
-            <Calendar className="w-4 h-4 inline mr-1" />
-            Start making transactions to see your monthly activity.
-          </span>
-        </DataNotFoundPlaceholder>
+        </CardFooter>
       )}
     </Card>
   );
