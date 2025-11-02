@@ -49,11 +49,6 @@ export default function ChartTransactionsByMonth({
   );
   const averagePerMonth =
     chartData.length > 0 ? Math.round(totalTransactions / chartData.length) : 0;
-  const maxTransactions = Math.max(
-    ...chartData.map((item: any) => item.count),
-    0
-  );
-
   // Calculate trend (simple comparison of last 2 months if available)
   const trendPercentage =
     chartData.length >= 2
