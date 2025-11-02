@@ -55,8 +55,6 @@ export default function IncomeExpenseChart() {
     0
   );
   const netTotal = totalIncome - totalExpenses;
-  const averageExpenses =
-    chartData.length > 0 ? totalExpenses / chartData.length : 0;
 
   const shownChart = !isLoading && !error && chartData.length > 0;
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
