@@ -1,18 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import TotalBalance from "~/components/balance/TotalBalance";
-import ChartByCategoryRadar from "~/components/charts/chart-by-category-radar";
 import ChartTransactionsByMonth from "~/components/charts/chart-transactions-by-month";
 import IncomeExpenseChart from "~/components/charts/income-expense-chart";
+import { ChartTabs } from "~/components/home/chart-tabs";
 import { ManagementTabs } from "~/components/home/management-tabs";
 import { PageTitle } from "~/components/page-title";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
-import { transactionTypes } from "~/constants/transaction-types";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
@@ -69,32 +69,126 @@ function RouteComponent() {
 
   return (
     <div>
-      <header className="mb-6 flex justify-between items-center">
+      <motion.header
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mb-6 flex justify-between items-center"
+      >
         <PageTitle description="This is your overview dashboard">
           Welcome back
           <span className="capitalize">, {data?.data?.name || "User"}!</span>
         </PageTitle>
-      </header>
-      <section className="flex flex-col gap-4">
-        <div className="grid w-full grid-cols-1 gap-4 xl:grid-cols-3">
-          <div className="order-2 space-y-4 xl:order-1 items-start justify-between w-full gap-4">
-            <TotalBalance />
-            <div className="w-full">
-              <IncomeExpenseChart />
+      </motion.header>
+
+      <AnimatePresence mode="wait">
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col gap-4"
+        >
+          <div className="grid w-full grid-cols-1 gap-4 xl:grid-cols-3">
+            <div className="order-2 space-y-4 xl:order-1 items-start justify-between w-full gap-4">
+              {/* TotalBalance - Primary Component */}
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0,
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 20,
+                }}
+                className="ring-2 ring-primary/15 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-primary"
+              >
+                <TotalBalance />
+              </motion.div>
+
+              <div className="w-full space-y-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: 0.16,
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 20,
+                  }}
+                  className="ring-1 ring-border/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                >
+                  <IncomeExpenseChart />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: 0.24,
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 20,
+                  }}
+                  className="ring-1 ring-border/20 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                >
+                  <ChartTabs />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: 0.32,
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 20,
+                  }}
+                  className="ring-1 ring-blue-500/10 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                >
+                  <ChartTransactionsByMonth />
+                </motion.div>
+              </div>
+            </div>
+
+            <div className="order-1 md:order-2 md:col-span-2 xl:col-span-2 space-y-6">
+              {/* TransactionsList - Primary Focus Component */}
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.08,
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 20,
+                }}
+                className="ring-2 ring-primary/20 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary"
+              >
+                <TransactionsList />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.4,
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 20,
+                }}
+                className="ring-1 ring-border/40 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                <ManagementTabs />
+              </motion.div>
             </div>
           </div>
-
-          <div className="order-1 md:order-2 md:col-span-2 xl:col-span-2 space-y-6">
-            <TransactionsList />
-            <ManagementTabs />
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
-          <ChartByCategoryRadar type={transactionTypes.EXPENSE} />
-          <ChartByCategoryRadar type={transactionTypes.INCOME} />
-          <ChartTransactionsByMonth />
-        </div>
-      </section>
+        </motion.section>
+      </AnimatePresence>
     </div>
   );
 }
