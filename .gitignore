@@ -1,11 +1,11 @@
 node_modules
 
-# Lock files - Package managers
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-shrinkwrap.yaml
-bun.lockb
+# # Lock files - Package managers
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+# shrinkwrap.yaml
+# bun.lockb
 
 !.env
 .DS_Store
