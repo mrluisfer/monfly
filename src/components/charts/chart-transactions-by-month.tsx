@@ -13,7 +13,7 @@ import { queryDictionary } from "~/queries/dictionary";
 import {
   Activity,
   ArrowUpIcon,
-  BarChart3,
+  BarChart3Icon,
   Calendar,
   TargetIcon,
   TrendingDownIcon,
@@ -99,7 +99,7 @@ export default function ChartTransactionsByMonth() {
         <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg">
           <p className="font-semibold text-foreground">{label}</p>
           <div className="flex items-center gap-2 mt-1">
-            <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            <Activity className="size-5 text-primary" />
             <span className="text-sm text-muted-foreground">Transactions:</span>
             <span className="font-bold text-foreground">{value}</span>
           </div>
@@ -115,8 +115,8 @@ export default function ChartTransactionsByMonth() {
   return (
     <Card className="max-w-5xl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+        <CardTitle className="flex items-center gap-2 text-xl">
+          <BarChart3Icon className="size-5 text-primary" />
           Monthly Activity
         </CardTitle>
         <CardDescription>
@@ -187,7 +187,7 @@ export default function ChartTransactionsByMonth() {
                   />
                   <Bar
                     dataKey="count"
-                    fill="hsl(221, 83%, 53%)"
+                    fill="var(--primary)"
                     name="Transactions"
                     radius={[4, 4, 0, 0]}
                     animationDuration={800}
@@ -225,7 +225,7 @@ export default function ChartTransactionsByMonth() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <ArrowUpIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                    <ArrowUpIcon className="size-5 text-green-600 dark:text-green-400" />
                     <div>
                       <div className="text-xs text-muted-foreground">
                         Peak Month
@@ -240,7 +240,7 @@ export default function ChartTransactionsByMonth() {
 
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <TargetIcon className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                    <TargetIcon className="size-5 text-primary" />
                     <div>
                       <div className="text-xs text-muted-foreground">
                         Data Period
@@ -270,7 +270,7 @@ export default function ChartTransactionsByMonth() {
                     return (
                       <div
                         key={index}
-                        className="bg-blue-600 dark:bg-blue-400 rounded-sm flex-1 transition-opacity hover:opacity-80"
+                        className="bg-primary rounded-sm flex-1 transition-opacity hover:opacity-80"
                         style={{
                           opacity: Math.max(0.3, percentage / 100),
                           minWidth: "4px",
