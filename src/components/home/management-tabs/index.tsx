@@ -113,7 +113,10 @@ export const ManagementTabs = ({
           )}
           {ManagementTab.CATEGORIES}
         </TabsTrigger>
-        <TabsTrigger value={ManagementTab.PARTNERS} className="capitalize">
+        <TabsTrigger
+          value={ManagementTab.PARTNERS}
+          className="capitalize gap-2"
+        >
           <HandshakeIcon className="dark:text-orange-300 text-orange-500" />
           {ManagementTab.PARTNERS}
         </TabsTrigger>
