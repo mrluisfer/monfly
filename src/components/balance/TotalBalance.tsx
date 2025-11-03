@@ -114,7 +114,7 @@ const TotalBalance = () => {
   }
 
   return (
-    <Card className="max-w-md lg:max-w-none">
+    <Card className="max-w-md lg:max-w-none border-t-4 border-t-primary">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>Current Balance</CardTitle>

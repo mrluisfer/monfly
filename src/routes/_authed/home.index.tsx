@@ -101,7 +101,7 @@ function RouteComponent() {
                   stiffness: 120,
                   damping: 20,
                 }}
-                className="ring-2 ring-primary/15 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-t-4 border-primary"
+                className="overflow-hidden transition-all duration-300"
               >
                 <TotalBalance />
               </motion.div>
@@ -117,7 +117,7 @@ function RouteComponent() {
                     stiffness: 120,
                     damping: 20,
                   }}
-                  className="ring-1 ring-border/30 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="overflow-hidden"
                 >
                   <IncomeExpenseChart />
                 </motion.div>
@@ -132,24 +132,9 @@ function RouteComponent() {
                     stiffness: 120,
                     damping: 20,
                   }}
-                  className="ring-1 ring-border/20 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="overflow-hidden"
                 >
                   <ChartTabs />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.32,
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 20,
-                  }}
-                  className="ring-1 ring-blue-500/10 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
-                >
-                  <ChartTransactionsByMonth />
                 </motion.div>
               </div>
             </div>
@@ -166,7 +151,7 @@ function RouteComponent() {
                   stiffness: 120,
                   damping: 20,
                 }}
-                className="ring-2 ring-primary/20 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-primary"
+                className="overflow-hidden transition-all duration-300"
               >
                 <TransactionsList />
               </motion.div>
@@ -181,11 +166,27 @@ function RouteComponent() {
                   stiffness: 120,
                   damping: 20,
                 }}
-                className="ring-1 ring-border/40 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
+                className="overflow-hidden"
               >
                 <ManagementTabs />
               </motion.div>
             </div>
+          </div>
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{
+                duration: 0.5,
+                delay: 0.32,
+                type: "spring",
+                stiffness: 120,
+                damping: 20,
+              }}
+              className="overflow-hidden"
+            >
+              <ChartTransactionsByMonth />
+            </motion.div>
           </div>
         </motion.section>
       </AnimatePresence>

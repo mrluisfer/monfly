@@ -53,7 +53,7 @@ export default function TransactionsList() {
 
   return (
     <TransactionHoverProvider>
-      <Card className="min-h-[500px]">
+      <Card className="min-h-[500px] border-l-4 border-l-primary">
         <CardHeader>
           <div className="flex items-center gap-2 justify-between">
             <CardTitle>Transactions</CardTitle>
