@@ -31,9 +31,11 @@ export const useCategoriesList = () => {
       }
       toast.success(ctx.data.message);
       setSelectedCategories([]);
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.categories],
-      });
+      // Import the function at the top and use it
+      const { invalidateCategoryQueries } = await import(
+        "~/utils/query-invalidation"
+      );
+      await invalidateCategoryQueries(queryClient, userEmail);
     },
   });
 

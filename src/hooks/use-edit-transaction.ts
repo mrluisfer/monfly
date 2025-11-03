@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { putTransactionByIdServer } from "~/lib/api/transaction/put-transaction-by-id.server";
-import { queryDictionary } from "~/queries/dictionary";
+import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -37,15 +37,9 @@ export const useEditTransaction = (
       }
       toast.success(ctx.data.message);
       onCloseDialog();
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.transactions, transaction.userEmail],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.user, transaction.userEmail],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.categories, transaction.userEmail],
-      });
+
+      // Invalidate all queries that depend on transaction data
+      await invalidateTransactionQueries(queryClient, transaction.userEmail);
     },
   });
 

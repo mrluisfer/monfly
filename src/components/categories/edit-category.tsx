@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id.server";
-import { queryDictionary } from "~/queries/dictionary";
 import { toast } from "sonner";
 
 import { CategoryForm } from "./category-form";
@@ -21,9 +20,15 @@ export function EditCategory({
     fn: putCategoryByIdServer,
     onSuccess: async () => {
       toast.success("Category updated successfully");
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.categories],
-      });
+      // Need to get userEmail first
+      const { getUserSession } = await import("~/utils/user/get-user-session");
+      const { data: userEmail } = await getUserSession();
+      if (userEmail) {
+        const { invalidateCategoryQueries } = await import(
+          "~/utils/query-invalidation"
+        );
+        await invalidateCategoryQueries(queryClient, userEmail);
+      }
       onCloseDialog?.();
     },
   });

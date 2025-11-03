@@ -19,6 +19,7 @@ import {
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getChartTypeByCategoryServer } from "~/lib/api/chart/get-chart-type-by-category.server";
 import { getTrendingMonthlyServer } from "~/lib/api/chart/get-trending-monthly.server";
+import { queryDictionary } from "~/queries/dictionary";
 import {
   PolarAngleAxis,
   PolarGrid,
@@ -45,7 +46,7 @@ export default function ChartByCategoryRadar({
 }: ChartByCategoryRadarProps) {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["income-expense-by-category", userEmail],
+    queryKey: [queryDictionary.incomeExpenseByCategory, userEmail],
     queryFn: () => getChartTypeByCategoryServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3, // 3 minutes cache
@@ -55,7 +56,7 @@ export default function ChartByCategoryRadar({
   });
 
   const { data: trendingMonthlyData } = useQuery({
-    queryKey: ["trending-monthly", userEmail, type],
+    queryKey: [queryDictionary.trendingMonthly, userEmail, type],
     queryFn: () =>
       getTrendingMonthlyServer({
         data: {

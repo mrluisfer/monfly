@@ -54,9 +54,10 @@ const TotalBalance = () => {
       setIsEditing(false);
       if (ctx.data?.data?.totalBalance !== undefined) {
         setTotalBalance(ctx.data.data.totalBalance.toString());
-        await queryClient.invalidateQueries({
-          queryKey: [queryDictionary.user, userEmail],
-        });
+        const { invalidateUserQueries } = await import(
+          "~/utils/query-invalidation"
+        );
+        await invalidateUserQueries(queryClient, userEmail);
       }
     },
   });

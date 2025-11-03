@@ -3,7 +3,6 @@ import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email.server";
-import { queryDictionary } from "~/queries/dictionary";
 import { toast } from "sonner";
 
 import Card from "../card";
@@ -17,9 +16,10 @@ export default function AddCategory() {
     fn: postCategoryByEmailServer,
     onSuccess: async () => {
       toast.success("Category created successfully");
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.categories],
-      });
+      const { invalidateCategoryQueries } = await import(
+        "~/utils/query-invalidation"
+      );
+      await invalidateCategoryQueries(queryClient, userEmail);
     },
   });
 

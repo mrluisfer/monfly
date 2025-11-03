@@ -7,7 +7,7 @@ import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email.server";
 import { cn } from "~/lib/utils";
-import { queryDictionary } from "~/queries/dictionary";
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 import { validLimitNumber } from "~/utils/valid-limit-number";
 import { format } from "date-fns";
 import {
@@ -83,9 +83,8 @@ export function TransactionForm<FormValues extends FieldValues>({
     fn: postCategoryByEmailServer,
     onSuccess: async () => {
       toast.success("Category created successfully");
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.categories],
-      });
+      // Invalidate all queries that depend on category data
+      await invalidateCategoryQueries(queryClient, userEmail);
     },
   });
 
