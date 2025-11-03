@@ -1,7 +1,3 @@
-Absolutely! Here’s a tailored **CONTRIBUTING.md** for your project, in English, following your stack and best open-source practices:
-
----
-
 # Contributing
 
 Thank you for your interest in contributing! We welcome your help to make this financial management system more robust and useful.
@@ -10,7 +6,7 @@ Please review this guide before submitting your first pull request. Check existi
 
 ## Repository Structure
 
-```
+```bash
 📁 Root Directory
 ├── 📁 src/
 │   ├── 📁 components/
@@ -101,7 +97,7 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
 Example:
 
-```
+```bash
 feat(category): add category deletion endpoint
 fix(transaction): fix form reset issue after submit
 ```
