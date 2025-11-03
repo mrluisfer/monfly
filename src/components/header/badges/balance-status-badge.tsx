@@ -198,7 +198,7 @@ export function BalanceStatusBadge({
                   <span
                     className={cn(
                       "font-mono font-semibold",
-                      balance > 0 && "text-emerald-500",
+                      balance > 0 && "text-black",
                       balance < 0 && "text-rose-500"
                     )}
                   >

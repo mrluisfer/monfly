@@ -43,7 +43,7 @@ const statusConfig = {
     color: "bg-emerald-500",
     variant: "secondary" as const,
     icon: CheckCircle2,
-    iconColor: "text-emerald-500",
+    iconColor: "dark:text-white text-black",
     description: "Your spending is well within budget.",
   },
   moderate: {
@@ -332,7 +332,7 @@ export function SpendingAlertBadge({
                     <span
                       className={cn(
                         "font-mono font-semibold",
-                        remaining > 0 ? "text-emerald-500" : "text-rose-500"
+                        remaining > 0 ? "dark:text-black" : "text-rose-500"
                       )}
                     >
                       {formatCurrency(remaining)}
@@ -343,7 +343,7 @@ export function SpendingAlertBadge({
                     <span
                       className={cn(
                         "font-mono font-semibold",
-                        percent < 50 && "text-emerald-500",
+                        percent < 50 && "dark:text-black",
                         percent >= 50 && percent < 80 && "text-blue-500",
                         percent >= 80 && percent < 100 && "text-amber-500",
                         percent >= 100 && "text-rose-500"
