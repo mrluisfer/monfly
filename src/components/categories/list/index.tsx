@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -19,7 +20,15 @@ import {
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { useCategoriesList } from "~/hooks/use-categories-list";
-import { FolderOpen, Loader2, Trash2 } from "lucide-react";
+import {
+  FolderOpen,
+  ListCheckIcon,
+  Loader2,
+  Minus,
+  MinusIcon,
+  Trash2,
+  XIcon,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,6 +41,8 @@ const CategoryFormSchema = z.object({
 type CategoryFormValues = z.infer<typeof CategoryFormSchema>;
 
 export const CategoriesList = () => {
+  const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
+
   const {
     data,
     isPending,
@@ -39,6 +50,14 @@ export const CategoriesList = () => {
     selectedCategories,
     handleCheckboxChange,
     handleDeleteCategories,
+    handleSelectAll,
+    handleDeselectAll,
+    handleToggleSelectAll,
+    totalCategories,
+    selectedCount,
+    isAllSelected,
+    isPartiallySelected,
+    hasAnySelected,
   } = useCategoriesList();
 
   const form = useForm<CategoryFormValues>({
@@ -48,9 +67,19 @@ export const CategoriesList = () => {
     },
   });
 
+  // Handle indeterminate state for "select all" checkbox
+  useEffect(() => {
+    if (selectAllCheckboxRef.current) {
+      // For Radix checkbox, we need to find the actual input element
+      const inputElement = selectAllCheckboxRef.current.querySelector("input");
+      if (inputElement) {
+        inputElement.indeterminate = isPartiallySelected;
+      }
+    }
+  }, [isPartiallySelected]);
+
   const shouldRenderDeleteButton = data?.data?.length && data?.data?.length > 0;
   const categoriesCount = data?.data?.length || 0;
-  const selectedCount = selectedCategories.length;
 
   return (
     <div className="w-full max-w-4xl xl:max-w-5xl m-0">
@@ -137,6 +166,92 @@ export const CategoriesList = () => {
                   <FormDescription className="text-sm">
                     Select categories to manage or delete them in bulk
                   </FormDescription>
+
+                  {totalCategories > 0 && (
+                    <div className="flex items-center justify-between gap-2 sm:gap-3 p-3 border rounded-lg bg-muted/30 mt-4">
+                      <div className="flex items-center gap-2 sm:gap-3 flex-1">
+                        <div className="relative">
+                          <Checkbox
+                            id="select-all"
+                            ref={selectAllCheckboxRef}
+                            checked={isAllSelected || isPartiallySelected}
+                            onCheckedChange={handleToggleSelectAll}
+                            className="shrink-0"
+                          />
+                          {isPartiallySelected && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <Minus className="h-3 w-3 text-primary-foreground" />
+                            </div>
+                          )}
+                        </div>
+                        <FormLabel
+                          htmlFor="select-all"
+                          className="cursor-pointer flex-1 text-sm font-medium transition-colors"
+                        >
+                          {isAllSelected
+                            ? "All categories selected - Click to deselect all"
+                            : isPartiallySelected
+                              ? `${selectedCount} of ${totalCategories} categories selected`
+                              : `Select all ${totalCategories} categories`}
+                        </FormLabel>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        {hasAnySelected && (
+                          <Badge
+                            variant="secondary"
+                            className={`text-xs transition-colors ${
+                              isAllSelected
+                                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                            }`}
+                          >
+                            {selectedCount}/{totalCategories}
+                          </Badge>
+                        )}
+                        {isAllSelected && (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={handleDeselectAll}
+                            className="h-6 px-2 text-xs hover:bg-destructive/10 hover:border-destructive/20 text-destructive transition-colors"
+                            title="Deselect all categories"
+                          >
+                            <XIcon />
+                            Unselect All
+                          </Button>
+                        )}
+
+                        {isPartiallySelected && (
+                          <div className="flex gap-1 animate-in fade-in-0 slide-in-from-right-1 duration-200">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={handleSelectAll}
+                              className="h-6 px-2 text-xs hover:bg-primary/10 hover:border-primary/20 transition-colors"
+                              title="Select all categories"
+                            >
+                              <ListCheckIcon />
+                              All
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              onClick={handleDeselectAll}
+                              className="h-6 px-2 text-xs hover:bg-destructive/10 hover:border-destructive/20 text-destructive transition-colors"
+                              title="Deselect all categories"
+                            >
+                              <MinusIcon />
+                              None
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="mt-4">
                     <ScrollArea className="h-[300px] sm:h-[400px] w-full rounded-md border bg-background/50 dark:bg-background/20">

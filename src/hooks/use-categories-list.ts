@@ -45,6 +45,24 @@ export const useCategoriesList = () => {
     );
   };
 
+  const handleSelectAll = () => {
+    if (!data?.data) return;
+    const allCategoryIds = data.data.map((category) => category.id);
+    setSelectedCategories(allCategoryIds);
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedCategories([]);
+  };
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelected) {
+      handleDeselectAll();
+    } else {
+      handleSelectAll();
+    }
+  };
+
   const handleDeleteCategories = async () => {
     if (selectedCategories.length === 0) return;
     try {
@@ -56,6 +74,25 @@ export const useCategoriesList = () => {
     }
   };
 
+  // Computed values for selection state
+  const totalCategories = data?.data?.length || 0;
+  const selectedCount = selectedCategories.length;
+  const isAllSelected =
+    totalCategories > 0 && selectedCount === totalCategories;
+  const isPartiallySelected =
+    selectedCount > 0 && selectedCount < totalCategories;
+  const hasAnySelected = selectedCount > 0;
+  const selectionPercentage =
+    totalCategories > 0 ? (selectedCount / totalCategories) * 100 : 0;
+
+  // Helper functions for specific operations
+  const isSelected = (categoryId: string) =>
+    selectedCategories.includes(categoryId);
+  const getSelectedCategories = () =>
+    data?.data?.filter((cat) => selectedCategories.includes(cat.id)) || [];
+  const getUnselectedCategories = () =>
+    data?.data?.filter((cat) => !selectedCategories.includes(cat.id)) || [];
+
   return {
     data,
     isPending,
@@ -63,5 +100,19 @@ export const useCategoriesList = () => {
     selectedCategories,
     handleCheckboxChange,
     handleDeleteCategories,
+    handleSelectAll,
+    handleDeselectAll,
+    handleToggleSelectAll,
+    // Selection state helpers
+    totalCategories,
+    selectedCount,
+    isAllSelected,
+    isPartiallySelected,
+    hasAnySelected,
+    selectionPercentage,
+    // Additional helper functions
+    isSelected,
+    getSelectedCategories,
+    getUnselectedCategories,
   };
 };
