@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
@@ -117,10 +111,26 @@ const TotalBalance = () => {
   return (
     <Card className="max-w-md lg:max-w-none border-t-4 border-t-primary">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl">
-          <DollarSign className="size-5 text-primary" />
-          Current Balance
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2 text-xl">
+            <DollarSign className="size-5 text-primary" />
+            Current Balance
+          </CardTitle>
+
+          {isEditing ? (
+            <div className="animate-in slide-in-from-bottom-2 duration-300 ease-out">
+              <div className="flex items-center gap-2 justify-end flex-1">
+                <BalanceEditorActions
+                  onSave={handleSaveEdit}
+                  onCancel={handleCancelEdit}
+                  isSubmitting={
+                    putUserTotalBalanceMutation.status === "pending"
+                  }
+                />
+              </div>
+            </div>
+          ) : null}
+        </div>
       </CardHeader>
 
       <CardContent className="group">
@@ -143,23 +153,6 @@ const TotalBalance = () => {
           )}
         </div>
       </CardContent>
-
-      {isEditing && (
-        <CardFooter
-          className="
-          animate-in slide-in-from-bottom-2 duration-300 ease-out
-          border-t border-border/50
-        "
-        >
-          <div className="flex items-center gap-2 justify-end flex-1">
-            <BalanceEditorActions
-              onSave={handleSaveEdit}
-              onCancel={handleCancelEdit}
-              isSubmitting={putUserTotalBalanceMutation.status === "pending"}
-            />
-          </div>
-        </CardFooter>
-      )}
     </Card>
   );
 };
