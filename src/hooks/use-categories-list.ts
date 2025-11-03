@@ -55,6 +55,17 @@ export const useCategoriesList = () => {
     setSelectedCategories([]);
   };
 
+  // Computed values for selection state
+  const totalCategories = data?.data?.length || 0;
+  const selectedCount = selectedCategories.length;
+  const isAllSelected =
+    totalCategories > 0 && selectedCount === totalCategories;
+  const isPartiallySelected =
+    selectedCount > 0 && selectedCount < totalCategories;
+  const hasAnySelected = selectedCount > 0;
+  const selectionPercentage =
+    totalCategories > 0 ? (selectedCount / totalCategories) * 100 : 0;
+
   const handleToggleSelectAll = () => {
     if (isAllSelected) {
       handleDeselectAll();
@@ -73,17 +84,6 @@ export const useCategoriesList = () => {
       toast.error("Error deleting categories");
     }
   };
-
-  // Computed values for selection state
-  const totalCategories = data?.data?.length || 0;
-  const selectedCount = selectedCategories.length;
-  const isAllSelected =
-    totalCategories > 0 && selectedCount === totalCategories;
-  const isPartiallySelected =
-    selectedCount > 0 && selectedCount < totalCategories;
-  const hasAnySelected = selectedCount > 0;
-  const selectionPercentage =
-    totalCategories > 0 ? (selectedCount / totalCategories) * 100 : 0;
 
   // Helper functions for specific operations
   const isSelected = (categoryId: string) =>
