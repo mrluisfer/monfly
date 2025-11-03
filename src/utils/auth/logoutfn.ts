@@ -5,7 +5,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { useAppSession } from "./session";
 
 export const logoutFn = createServerFn({ method: "POST" })
-  .validator((d: { destination?: string; manualRedirect?: boolean }) => d)
+  .inputValidator((d: { destination?: string; manualRedirect?: boolean }) => d)
   .handler(async ({ data: { destination = "/", manualRedirect = false } }) => {
     try {
       const session = await useAppSession();

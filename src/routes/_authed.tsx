@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_authed")({
     const { data: userEmail } = await getUserSession();
     if (!userEmail) {
       // This means the user is not authenticated
-      return redirect({
+      throw redirect({
         to: "/login",
       });
     }

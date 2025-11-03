@@ -12,7 +12,6 @@ import {
 import FontDisplaySelect from "./font-display-select";
 import { SonnerPositionSelector } from "./sonner-position-selector";
 import { ThemeSelector } from "./theme-selector";
-import ToggleDarkMode from "./toggle-dark-mode";
 
 export const SettingsDialog = ({
   children,
@@ -25,7 +24,7 @@ export const SettingsDialog = ({
         {children ? (
           children
         ) : (
-          <Button variant="outline" className="rounded-full">
+          <Button variant="outline">
             <Settings className="text-primary" />
             <span className="hidden md:block">Settings</span>
           </Button>
@@ -42,9 +41,6 @@ export const SettingsDialog = ({
           </SettingsItem>
           <SettingsItem label="Theme:">
             <ThemeSelector />
-          </SettingsItem>
-          <SettingsItem label="Dark Mode:">
-            <ToggleDarkMode />
           </SettingsItem>
           <SettingsItem label="Font Display:">
             <FontDisplaySelect />

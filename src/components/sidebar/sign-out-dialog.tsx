@@ -15,10 +15,23 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 
-export const SignOutDialog = ({ children }: { children: ReactNode }) => {
+interface SignOutDialogProps {
+  children?: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export const SignOutDialog = ({
+  children,
+  open,
+  onOpenChange,
+}: SignOutDialogProps) => {
   const navigate = useNavigate();
 
   const handleLogOut = async () => {
+    if (onOpenChange) {
+      onOpenChange(false); // Close dialog first if controlled
+    }
     await logoutFn({
       data: { destination: "/login", manualRedirect: true },
     });
@@ -27,9 +40,23 @@ export const SignOutDialog = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const handleCancel = () => {
+    if (onOpenChange) {
+      onOpenChange(false); // Only close if controlled
+    }
+  };
+
+  // If open/onOpenChange are provided, use controlled mode
+  // Otherwise, use uncontrolled mode for backward compatibility
+  const isControlled = open !== undefined || onOpenChange !== undefined;
+
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+    <AlertDialog
+      open={isControlled ? open : undefined}
+      onOpenChange={isControlled ? onOpenChange : undefined}
+    >
+      {/* Only render trigger if children are provided */}
+      {children && <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>}
       <AlertDialogContent>
         <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
           <div
@@ -47,7 +74,7 @@ export const SignOutDialog = ({ children }: { children: ReactNode }) => {
           </AlertDialogHeader>
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={handleLogOut}>Confirm</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

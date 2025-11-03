@@ -6,7 +6,7 @@ import { hashPassword, prismaClient } from "../prisma";
 import { useAppSession } from "./session";
 
 export const signupFn = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     (d: {
       email: string;
       password: string;

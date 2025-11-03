@@ -3,7 +3,7 @@ import { getIncomeExpenseData } from "~/utils/charts/get-income-expense-chart";
 import { z } from "zod";
 
 export const getIncomeExpenseDataServer = createServerFn({ method: "GET" })
-  .validator(
+  .inputValidator(
     z.object({
       email: z.string(),
     })

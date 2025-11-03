@@ -4,7 +4,7 @@ import { z } from "zod";
 import { putTransactionById as putTransactionByIdUtils } from "../../../utils/transactions/put-transaction-by-id";
 
 export const putTransactionByIdServer = createServerFn({ method: "POST" })
-  .validator(
+  .inputValidator(
     z.object({
       id: z.string(),
       data: z.object({

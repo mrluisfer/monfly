@@ -1,12 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { BadgeHelp, LogOut, Settings, User2 } from "lucide-react";
 
-import Logo from "../../assets/logo.svg";
 import { SettingsDialog } from "../settings/settings-dialog";
 import {
   SidebarContent,
@@ -36,6 +35,10 @@ const Sidebar = () => {
     queryKey: [queryDictionary.user, userEmail],
     queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
+    gcTime: 1000 * 60 * 10, // 10 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
   });
 
   if (error) {
@@ -46,21 +49,7 @@ const Sidebar = () => {
     <UiSidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <Link
-              to="/home"
-              href="/home"
-              className="flex items-center gap-2 text-2xl font-bold w-fit pt-2"
-            >
-              <img
-                src={Logo}
-                alt="Monfly Logo"
-                className="h-8 w-8"
-                title="Monfly"
-              />
-              {open && <span className="sidebar-title-text">Monfly</span>}
-            </Link>
-          </SidebarMenuItem>
+          <SidebarMenuItem></SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>

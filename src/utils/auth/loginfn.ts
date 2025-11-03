@@ -6,7 +6,7 @@ import { prismaClient } from "../prisma";
 import { useAppSession } from "./session";
 
 export const loginFn = createServerFn({ method: "POST" })
-  .validator((d: { email: string; password: string }) => d)
+  .inputValidator((d: { email: string; password: string }) => d)
   .handler(async ({ data }) => {
     try {
       // Find the user
@@ -59,6 +59,7 @@ export const loginFn = createServerFn({ method: "POST" })
         statusCode: 200,
       } as ApiResponse<string>;
     } catch (error) {
+      console.log({ error });
       return {
         error: true,
         message: "Error logging in",

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Category } from "@prisma/client";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -10,7 +11,8 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { getCategoryIconByName } from "~/constants/categories-icon";
-import { Pencil } from "lucide-react";
+import { cn } from "~/lib/utils";
+import { Pencil, Tag } from "lucide-react";
 
 import { EditCategory } from "../edit-category";
 
@@ -19,34 +21,68 @@ const CategoryItem = ({ category }: { category: Category }) => {
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-      <div
-        key={category.id}
-        className="flex items-center justify-between py-1 w-full group"
-      >
-        <div className="flex items-center gap-4">
-          <div className="text-primary">
-            {getCategoryIconByName(category.icon, {
-              width: 16,
-              height: 16,
-            })}
+      <div className="flex items-center justify-between w-full min-w-0 group">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+          <div className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-primary/10 flex items-center justify-center">
+            <div className="text-primary">
+              {getCategoryIconByName(category.icon, {
+                width: 16,
+                height: 16,
+              })}
+            </div>
           </div>
-          <span className="capitalize">{category.name}</span>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
+              <span className="font-medium text-sm sm:text-base capitalize truncate">
+                {category.name}
+              </span>
+              <Badge variant="outline" className="text-xs w-fit hidden sm:flex">
+                <Tag className="w-3 h-3 mr-1" />
+                Category
+              </Badge>
+            </div>
+            <p className="text-xs text-muted-foreground truncate sm:hidden">
+              ID: {category.id.slice(0, 8)}...
+            </p>
+          </div>
         </div>
-        <div className="group-hover:opacity-100 opacity-0 transition-opacity duration-200">
-          <DialogTrigger asChild>
-            <Button variant="outline" size="icon" className="p-1">
-              <Pencil />
-            </Button>
-          </DialogTrigger>
+
+        <div className="shrink-0 ml-2">
+          <div className="group-hover:opacity-100 opacity-60 transition-all duration-200">
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={cn(
+                  "h-8 w-8 p-0 rounded-md",
+                  "hover:bg-primary/10 hover:text-primary",
+                  "focus:bg-primary/10 focus:text-primary"
+                )}
+              >
+                <Pencil className="h-4 w-4" />
+                <span className="sr-only">Edit {category.name}</span>
+              </Button>
+            </DialogTrigger>
+          </div>
         </div>
       </div>
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit Category</DialogTitle>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader className="space-y-3">
+          <DialogTitle className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center">
+              <div className="text-primary">
+                {getCategoryIconByName(category.icon, {
+                  width: 16,
+                  height: 16,
+                })}
+              </div>
+            </div>
+            Edit Category
+          </DialogTitle>
           <DialogDescription>
-            Update the details of your category below. Make sure to save your
-            changes.
+            Update the details of your <strong>{category.name}</strong> category
+            below. Changes will be saved automatically.
           </DialogDescription>
         </DialogHeader>
         <EditCategory

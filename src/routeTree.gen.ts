@@ -8,182 +8,70 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthedRouteImport } from './routes/_authed'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthedTransactionsIndexRouteImport } from './routes/_authed/transactions.index'
+import { Route as AuthedReportsIndexRouteImport } from './routes/_authed/reports.index'
+import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home.index'
+import { Route as AuthedCategoriesIndexRouteImport } from './routes/_authed/categories.index'
+import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as SignupImport } from './routes/signup'
-import { Route as LogoutImport } from './routes/logout'
-import { Route as LoginImport } from './routes/login'
-import { Route as AuthedImport } from './routes/_authed'
-import { Route as IndexImport } from './routes/index'
-import { Route as AuthedTransactionsIndexImport } from './routes/_authed/transactions.index'
-import { Route as AuthedReportsIndexImport } from './routes/_authed/reports.index'
-import { Route as AuthedHomeIndexImport } from './routes/_authed/home.index'
-import { Route as AuthedCategoriesIndexImport } from './routes/_authed/categories.index'
-import { Route as AuthedUserUserIdImport } from './routes/_authed/user.$userId'
-
-// Create/Update Routes
-
-const SignupRoute = SignupImport.update({
+const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LogoutRoute = LogoutImport.update({
+const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
   path: '/logout',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const LoginRoute = LoginImport.update({
+const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthedRoute = AuthedImport.update({
+const AuthedRoute = AuthedRouteImport.update({
   id: '/_authed',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthedTransactionsIndexRoute = AuthedTransactionsIndexImport.update({
+const AuthedTransactionsIndexRoute = AuthedTransactionsIndexRouteImport.update({
   id: '/transactions/',
   path: '/transactions/',
   getParentRoute: () => AuthedRoute,
 } as any)
-
-const AuthedReportsIndexRoute = AuthedReportsIndexImport.update({
+const AuthedReportsIndexRoute = AuthedReportsIndexRouteImport.update({
   id: '/reports/',
   path: '/reports/',
   getParentRoute: () => AuthedRoute,
 } as any)
-
-const AuthedHomeIndexRoute = AuthedHomeIndexImport.update({
+const AuthedHomeIndexRoute = AuthedHomeIndexRouteImport.update({
   id: '/home/',
   path: '/home/',
   getParentRoute: () => AuthedRoute,
 } as any)
-
-const AuthedCategoriesIndexRoute = AuthedCategoriesIndexImport.update({
+const AuthedCategoriesIndexRoute = AuthedCategoriesIndexRouteImport.update({
   id: '/categories/',
   path: '/categories/',
   getParentRoute: () => AuthedRoute,
 } as any)
-
-const AuthedUserUserIdRoute = AuthedUserUserIdImport.update({
+const AuthedUserUserIdRoute = AuthedUserUserIdRouteImport.update({
   id: '/user/$userId',
   path: '/user/$userId',
   getParentRoute: () => AuthedRoute,
 } as any)
 
-// Populate the FileRoutesByPath interface
-
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_authed': {
-      id: '/_authed'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthedImport
-      parentRoute: typeof rootRoute
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginImport
-      parentRoute: typeof rootRoute
-    }
-    '/logout': {
-      id: '/logout'
-      path: '/logout'
-      fullPath: '/logout'
-      preLoaderRoute: typeof LogoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupImport
-      parentRoute: typeof rootRoute
-    }
-    '/_authed/user/$userId': {
-      id: '/_authed/user/$userId'
-      path: '/user/$userId'
-      fullPath: '/user/$userId'
-      preLoaderRoute: typeof AuthedUserUserIdImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/categories/': {
-      id: '/_authed/categories/'
-      path: '/categories'
-      fullPath: '/categories'
-      preLoaderRoute: typeof AuthedCategoriesIndexImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/home/': {
-      id: '/_authed/home/'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof AuthedHomeIndexImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/reports/': {
-      id: '/_authed/reports/'
-      path: '/reports'
-      fullPath: '/reports'
-      preLoaderRoute: typeof AuthedReportsIndexImport
-      parentRoute: typeof AuthedImport
-    }
-    '/_authed/transactions/': {
-      id: '/_authed/transactions/'
-      path: '/transactions'
-      fullPath: '/transactions'
-      preLoaderRoute: typeof AuthedTransactionsIndexImport
-      parentRoute: typeof AuthedImport
-    }
-  }
-}
-
-// Create and export the route tree
-
-interface AuthedRouteChildren {
-  AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute
-  AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute
-  AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
-  AuthedReportsIndexRoute: typeof AuthedReportsIndexRoute
-  AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute
-}
-
-const AuthedRouteChildren: AuthedRouteChildren = {
-  AuthedUserUserIdRoute: AuthedUserUserIdRoute,
-  AuthedCategoriesIndexRoute: AuthedCategoriesIndexRoute,
-  AuthedHomeIndexRoute: AuthedHomeIndexRoute,
-  AuthedReportsIndexRoute: AuthedReportsIndexRoute,
-  AuthedTransactionsIndexRoute: AuthedTransactionsIndexRoute,
-}
-
-const AuthedRouteWithChildren =
-  AuthedRoute._addFileChildren(AuthedRouteChildren)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
@@ -193,10 +81,8 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthedReportsIndexRoute
   '/transactions': typeof AuthedTransactionsIndexRoute
 }
-
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
@@ -206,9 +92,8 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthedReportsIndexRoute
   '/transactions': typeof AuthedTransactionsIndexRoute
 }
-
 export interface FileRoutesById {
-  __root__: typeof rootRoute
+  __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
@@ -220,12 +105,10 @@ export interface FileRoutesById {
   '/_authed/reports/': typeof AuthedReportsIndexRoute
   '/_authed/transactions/': typeof AuthedTransactionsIndexRoute
 }
-
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | ''
     | '/login'
     | '/logout'
     | '/signup'
@@ -237,7 +120,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | ''
     | '/login'
     | '/logout'
     | '/signup'
@@ -260,7 +142,6 @@ export interface FileRouteTypes {
     | '/_authed/transactions/'
   fileRoutesById: FileRoutesById
 }
-
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthedRoute: typeof AuthedRouteWithChildren
@@ -269,6 +150,100 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
 }
 
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed/transactions/': {
+      id: '/_authed/transactions/'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof AuthedTransactionsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/reports/': {
+      id: '/_authed/reports/'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthedReportsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/home/': {
+      id: '/_authed/home/'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthedHomeIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/categories/': {
+      id: '/_authed/categories/'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof AuthedCategoriesIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/user/$userId': {
+      id: '/_authed/user/$userId'
+      path: '/user/$userId'
+      fullPath: '/user/$userId'
+      preLoaderRoute: typeof AuthedUserUserIdRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+  }
+}
+
+interface AuthedRouteChildren {
+  AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute
+  AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute
+  AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
+  AuthedReportsIndexRoute: typeof AuthedReportsIndexRoute
+  AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute
+}
+
+const AuthedRouteChildren: AuthedRouteChildren = {
+  AuthedUserUserIdRoute: AuthedUserUserIdRoute,
+  AuthedCategoriesIndexRoute: AuthedCategoriesIndexRoute,
+  AuthedHomeIndexRoute: AuthedHomeIndexRoute,
+  AuthedReportsIndexRoute: AuthedReportsIndexRoute,
+  AuthedTransactionsIndexRoute: AuthedTransactionsIndexRoute,
+}
+
+const AuthedRouteWithChildren =
+  AuthedRoute._addFileChildren(AuthedRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthedRoute: AuthedRouteWithChildren,
@@ -276,66 +251,15 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   SignupRoute: SignupRoute,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_authed",
-        "/login",
-        "/logout",
-        "/signup"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_authed": {
-      "filePath": "_authed.tsx",
-      "children": [
-        "/_authed/user/$userId",
-        "/_authed/categories/",
-        "/_authed/home/",
-        "/_authed/reports/",
-        "/_authed/transactions/"
-      ]
-    },
-    "/login": {
-      "filePath": "login.tsx"
-    },
-    "/logout": {
-      "filePath": "logout.tsx"
-    },
-    "/signup": {
-      "filePath": "signup.tsx"
-    },
-    "/_authed/user/$userId": {
-      "filePath": "_authed/user.$userId.tsx",
-      "parent": "/_authed"
-    },
-    "/_authed/categories/": {
-      "filePath": "_authed/categories.index.tsx",
-      "parent": "/_authed"
-    },
-    "/_authed/home/": {
-      "filePath": "_authed/home.index.tsx",
-      "parent": "/_authed"
-    },
-    "/_authed/reports/": {
-      "filePath": "_authed/reports.index.tsx",
-      "parent": "/_authed"
-    },
-    "/_authed/transactions/": {
-      "filePath": "_authed/transactions.index.tsx",
-      "parent": "/_authed"
-    }
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
   }
 }
-ROUTE_MANIFEST_END */

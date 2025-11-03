@@ -21,17 +21,17 @@ const AddTransactionButton = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          className="group rounded-full"
+          className="group"
           variant="outline"
-          size="icon"
           aria-expanded={open}
           aria-label={open ? "Close menu" : "Open menu"}
         >
           <PlusIcon
-            className="transition-transform duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)] group-aria-expanded:rotate-[135deg]"
+            className="transition-transform duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)] group-aria-expanded:rotate-135 text-primary"
             size={16}
             aria-hidden="true"
           />
+          New Transaction
         </Button>
       </DialogTrigger>
       <DialogContent>

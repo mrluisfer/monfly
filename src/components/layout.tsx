@@ -1,18 +1,13 @@
-import type { ReactNode } from "@tanstack/react-router";
+import { ReactNode } from "react";
 
 import { Header } from "./header";
-import Sidebar from "./sidebar";
-import { SidebarProvider } from "./ui/sidebar";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
-    <SidebarProvider>
-      <Sidebar />
-      <main className="p-4 flex flex-col gap-4 h-full w-full overflow-y-auto scrollbar-custom">
-        <Header />
-        {children}
-      </main>
-    </SidebarProvider>
+    <main className="p-4 lg:p-8 flex flex-col gap-4 h-full w-full overflow-y-auto scrollbar-custom">
+      <Header />
+      {children}
+    </main>
   );
 };
 

@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import type * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
@@ -113,7 +114,38 @@ export const Route = createRootRoute({
   component: RootComponent,
 });
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      networkMode: "online", // Only run queries when online
+      retry: (failureCount, error) => {
+        // Reduce retry attempts to prevent stream issues
+        if (failureCount >= 1) return false;
+
+        // Don't retry on 4xx errors
+        if (
+          error &&
+          "status" in error &&
+          typeof error.status === "number" &&
+          error.status >= 400 &&
+          error.status < 500
+        ) {
+          return false;
+        }
+        return failureCount < 1;
+      },
+      retryDelay: () => 1000, // Fixed 1 second delay
+    },
+    mutations: {
+      retry: 0, // No retries for mutations to prevent conflicts
+      networkMode: "online",
+    },
+  },
+});
 function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -121,9 +153,9 @@ function RootComponent() {
         <FontDisplayProvider key="font-display-provider">
           <ActiveThemeProvider key="theme-provider" initialTheme="default">
             <SonnerPositionProvider initialPosition="bottom-right">
-              <RootDocument>
+              <RootDocumentWithProviders>
                 <Outlet />
-              </RootDocument>
+              </RootDocumentWithProviders>
             </SonnerPositionProvider>
           </ActiveThemeProvider>
         </FontDisplayProvider>
@@ -132,7 +164,29 @@ function RootComponent() {
   );
 }
 
+// Component that can be used outside providers (for error boundaries)
 function RootDocument({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <TanStackRouterDevtools position="bottom-right" />
+        <Scripts />
+        <Toaster position="bottom-right" closeButton richColors key="sonner" />
+      </body>
+    </html>
+  );
+}
+
+// Component that uses providers (for normal app flow)
+function RootDocumentWithProviders({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { position } = useSonnerPosition();
   const { fontDisplay } = useFontDisplay();
 

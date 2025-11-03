@@ -17,8 +17,8 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useMutation } from "~/hooks/use-mutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
-import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
+import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { Edit, Ellipsis, Trash } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,12 +37,9 @@ const TransactionItemActions = ({
     fn: deleteTransactionByIdServer,
     onSuccess: async () => {
       toast.success("Transaction deleted successfully");
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.transactions, transaction.userEmail],
-      });
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.user, transaction.userEmail],
-      });
+
+      // Invalidate all queries that depend on transaction data
+      await invalidateTransactionQueries(queryClient, transaction.userEmail);
     },
   });
 

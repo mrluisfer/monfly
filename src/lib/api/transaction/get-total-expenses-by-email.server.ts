@@ -3,7 +3,7 @@ import { getTotalExpensesByEmail } from "~/utils/transactions/get-total-expenses
 import z from "zod";
 
 export const getTotalExpensesByEmailServer = createServerFn({ method: "GET" })
-  .validator(
+  .inputValidator(
     z.object({
       email: z.string(),
     })

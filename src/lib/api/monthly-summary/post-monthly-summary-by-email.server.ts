@@ -5,7 +5,7 @@ import { postMonthlySummaryByEmail as postMonthlySummaryByEmailUtils } from "../
 export const postMonthlySummaryByEmailServer = createServerFn({
   method: "POST",
 })
-  .validator((d: { email: string }) => d)
+  .inputValidator((d: { email: string }) => d)
   .handler(async ({ data }) => {
     return await postMonthlySummaryByEmailUtils(data);
   });

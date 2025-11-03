@@ -1,0 +1,330 @@
+import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { ColumnDef } from "@tanstack/react-table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { useMutation } from "~/hooks/use-mutation";
+import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
+import { queryDictionary } from "~/queries/dictionary";
+import { TransactionWithUser } from "~/types/TransactionWithUser";
+import {
+  ArrowUpDownIcon,
+  BanknoteArrowDownIcon,
+  BanknoteArrowUpIcon,
+  EditIcon,
+  MoreHorizontalIcon,
+  TrashIcon,
+} from "lucide-react";
+import { toast } from "sonner";
+
+import EditTransaction from "../../edit-transaction";
+
+export const Columns: ColumnDef<TransactionWithUser>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "type",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Type
+          <ArrowUpDownIcon />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const type = row.getValue("type") as string;
+      return (
+        <div
+          className={`inline-flex justify-center items-center ms-4 px-2 py-1 rounded-full text-xs font-medium ${
+            type === "income"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
+          }`}
+        >
+          {type === "income" ? (
+            <BanknoteArrowUpIcon />
+          ) : (
+            <BanknoteArrowDownIcon />
+          )}
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      const cellValue = row.getValue(id) as string;
+      return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
+    },
+  },
+  {
+    accessorKey: "description",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Description
+          <ArrowUpDownIcon />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div>{row.getValue("description") || "No description"}</div>
+    ),
+    filterFn: (row, id, value) => {
+      const cellValue = row.getValue(id) as string;
+      return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
+    },
+  },
+  {
+    accessorKey: "category",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Category
+          <ArrowUpDownIcon />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("category")}</div>
+    ),
+    filterFn: (row, id, value) => {
+      const cellValue = row.getValue(id) as string;
+      return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
+    },
+  },
+  {
+    accessorKey: "date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <ArrowUpDownIcon />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const date = row.getValue("date") as Date;
+      return <div>{new Date(date).toLocaleDateString()}</div>;
+    },
+  },
+  {
+    accessorKey: "amount",
+    header: ({ column }) => (
+      <div className="text-right">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0"
+        >
+          Amount
+          <ArrowUpDownIcon />
+        </Button>
+      </div>
+    ),
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amount"));
+      const type = row.getValue("type") as string;
+
+      // Format the amount as a dollar amount
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(amount);
+
+      return (
+        <div
+          className={`text-right font-medium ${
+            type === "income" ? "text-green-400" : "text-red-400"
+          }`}
+        >
+          {type === "expense" ? "-" : "+"}
+          {formatted}
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      const amount = row.getValue(id) as number;
+      return amount.toString().includes(value);
+    },
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const transaction = row.original;
+      const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+      const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+      const queryClient = useQueryClient();
+
+      const deleteTransactionByIdMutation = useMutation({
+        fn: deleteTransactionByIdServer,
+        onSuccess: async () => {
+          toast.success("Transaction deleted successfully");
+          await queryClient.invalidateQueries({
+            queryKey: [queryDictionary.transactions, transaction.userEmail],
+          });
+          await queryClient.invalidateQueries({
+            queryKey: [queryDictionary.user, transaction.userEmail],
+          });
+          setIsDeleteDialogOpen(false);
+        },
+      });
+
+      // Handle delete mutation errors
+      React.useEffect(() => {
+        if (
+          deleteTransactionByIdMutation.status === "error" &&
+          deleteTransactionByIdMutation.error
+        ) {
+          toast.error("Failed to delete transaction");
+          setIsDeleteDialogOpen(false);
+        }
+      }, [
+        deleteTransactionByIdMutation.status,
+        deleteTransactionByIdMutation.error,
+      ]);
+
+      const handleDelete = () => {
+        deleteTransactionByIdMutation.mutate({
+          data: {
+            id: transaction.id,
+          },
+        });
+      };
+
+      return (
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontalIcon />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(transaction.id)}
+              >
+                Copy transaction ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                <EditIcon className="mr-2 h-4 w-4" />
+                Edit transaction
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive"
+                onClick={() => setIsDeleteDialogOpen(true)}
+              >
+                <TrashIcon className="mr-2 h-4 w-4" />
+                Delete transaction
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Edit Dialog */}
+          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit Transaction</DialogTitle>
+                <DialogDescription>
+                  Edit the transaction details
+                </DialogDescription>
+              </DialogHeader>
+              <EditTransaction
+                transaction={transaction}
+                onClose={() => setIsEditDialogOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
+
+          {/* Delete Confirmation Dialog */}
+          <AlertDialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  transaction "{transaction.description}" with amount $
+                  {Math.abs(transaction.amount).toFixed(2)}.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  disabled={deleteTransactionByIdMutation.status === "pending"}
+                >
+                  {deleteTransactionByIdMutation.status === "pending"
+                    ? "Deleting..."
+                    : "Delete"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
+      );
+    },
+  },
+];

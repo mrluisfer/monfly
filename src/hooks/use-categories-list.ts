@@ -16,6 +16,10 @@ export const useCategoriesList = () => {
     queryKey: [queryDictionary.categories, userEmail],
     queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
+    gcTime: 1000 * 60 * 10, // 10 minutes garbage collection
+    retry: 1,
+    retryDelay: 1000,
   });
 
   const deleteCategoriesByIdMutation = useMutation({
@@ -27,9 +31,11 @@ export const useCategoriesList = () => {
       }
       toast.success(ctx.data.message);
       setSelectedCategories([]);
-      await queryClient.invalidateQueries({
-        queryKey: [queryDictionary.categories],
-      });
+      // Import the function at the top and use it
+      const { invalidateCategoryQueries } = await import(
+        "~/utils/query-invalidation"
+      );
+      await invalidateCategoryQueries(queryClient, userEmail);
     },
   });
 
