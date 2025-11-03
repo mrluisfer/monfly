@@ -117,7 +117,13 @@ export const ManagementTabs = ({
           value={ManagementTab.PARTNERS}
           className="capitalize gap-2"
         >
-          <HandshakeIcon className="dark:text-orange-300 text-orange-500" />
+          <HandshakeIcon
+            className={
+              isTabActive(currentTab, ManagementTab.PARTNERS)
+                ? "text-orange-500 dark:text-orange-300 transition-colors duration-200"
+                : "text-muted-foreground transition-colors duration-200"
+            }
+          />
           {ManagementTab.PARTNERS}
         </TabsTrigger>
       </TabsList>
