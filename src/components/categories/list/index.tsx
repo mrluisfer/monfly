@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,27 +19,12 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
-import {
-  Form,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { useCategoriesList } from "~/hooks/use-categories-list";
 import { CheckCheck, FolderOpen, Loader2, Minus, Trash2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import CategoryItem from "./category-item";
-
-const CategoryFormSchema = z.object({
-  categories: z.array(z.string()),
-});
-
-type CategoryFormValues = z.infer<typeof CategoryFormSchema>;
 
 export const CategoriesList = () => {
   const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
@@ -63,13 +47,6 @@ export const CategoriesList = () => {
     isPartiallySelected,
     hasAnySelected,
   } = useCategoriesList();
-
-  const form = useForm<CategoryFormValues>({
-    resolver: zodResolver(CategoryFormSchema),
-    defaultValues: {
-      categories: [],
-    },
-  });
 
   // Handle indeterminate state for "select all" checkbox
   useEffect(() => {
@@ -183,128 +160,117 @@ export const CategoriesList = () => {
           )}
 
           {!isPending && !error && data?.data && categoriesCount > 0 && (
-            <Form {...form}>
-              <form
-                className="space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleDeleteClick();
-                }}
-              >
-                <FormItem>
-                  <FormLabel className="text-base font-medium">
-                    Available Categories
-                  </FormLabel>
-                  <FormDescription className="text-sm">
-                    Select categories to manage or delete them in bulk
-                  </FormDescription>
+            <div className="space-y-4">
+              <div>
+                <div className="text-base font-medium mb-2">
+                  Available Categories
+                </div>
+                <div className="text-sm text-muted-foreground mb-4">
+                  Select categories to manage or delete them in bulk
+                </div>
 
-                  {totalCategories > 0 && (
-                    <div className="flex items-center justify-between gap-2 sm:gap-3 p-3 border rounded-lg bg-muted/30 mt-4">
-                      <div className="flex items-center gap-2 sm:gap-3 flex-1">
-                        <div className="relative">
-                          <Checkbox
-                            id="select-all"
-                            ref={selectAllCheckboxRef}
-                            checked={isAllSelected || isPartiallySelected}
-                            onCheckedChange={handleToggleSelectAll}
-                            className="shrink-0"
-                          />
-                          {isPartiallySelected && (
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                              <Minus className="h-3 w-3 text-primary-foreground" />
-                            </div>
+                {totalCategories > 0 && (
+                  <div className="flex items-center justify-between gap-2 sm:gap-3 p-3 border rounded-lg bg-muted/30 mt-4">
+                    <div className="flex items-center gap-2 sm:gap-3 flex-1">
+                      <div className="relative">
+                        <Checkbox
+                          id="select-all"
+                          ref={selectAllCheckboxRef}
+                          checked={isAllSelected || isPartiallySelected}
+                          onCheckedChange={handleToggleSelectAll}
+                          className="shrink-0"
+                        />
+                        {isPartiallySelected && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <Minus className="h-3 w-3 text-primary-foreground" />
+                          </div>
+                        )}
+                      </div>
+                      <label
+                        htmlFor="select-all"
+                        className="cursor-pointer flex-1 text-sm font-medium transition-colors"
+                      >
+                        {isAllSelected
+                          ? "All categories selected - Click to deselect all"
+                          : isPartiallySelected
+                            ? `${selectedCount} of ${totalCategories} categories selected`
+                            : `Select all ${totalCategories} categories`}
+                      </label>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      {hasAnySelected && (
+                        <Badge
+                          variant="secondary"
+                          className={`text-xs transition-colors ${
+                            isAllSelected
+                              ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                              : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                          }`}
+                        >
+                          {selectedCount}/{totalCategories}
+                        </Badge>
+                      )}
+
+                      {isPartiallySelected && (
+                        <div className="flex gap-1 animate-in fade-in-0 slide-in-from-right-1 duration-200">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={handleSelectAll}
+                            className="h-6 px-2 text-xs hover:bg-primary/10 hover:border-primary/20 transition-colors"
+                            title="Select all categories"
+                          >
+                            <CheckCheck className="h-3 w-3 mr-1" />
+                            All
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={handleDeselectAll}
+                            className="h-6 px-2 text-xs hover:bg-destructive/10 hover:border-destructive/20 text-destructive transition-colors"
+                            title="Deselect all categories"
+                          >
+                            <Minus className="h-3 w-3 mr-1" />
+                            None
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-4">
+                  <ScrollArea className="h-[300px] sm:h-[400px] w-full rounded-md border bg-background/50 dark:bg-background/20">
+                    <div className="space-y-1 p-2 sm:p-4">
+                      {data.data.map((category, index) => (
+                        <div key={category.id}>
+                          <div className="flex items-center gap-2 sm:gap-3 space-y-0 rounded-lg border border-transparent p-2 sm:p-3 hover:bg-accent/50 hover:border-border transition-all duration-200 group">
+                            <Checkbox
+                              id={category.id}
+                              checked={selectedCategories.includes(category.id)}
+                              onCheckedChange={(checked) =>
+                                handleCheckboxChange(category.id, !!checked)
+                              }
+                              className="shrink-0"
+                            />
+                            <label
+                              htmlFor={category.id}
+                              className="cursor-pointer flex-1 min-w-0"
+                            >
+                              <CategoryItem category={category} />
+                            </label>
+                          </div>
+                          {index < data.data.length - 1 && (
+                            <Separator className="my-1 opacity-50" />
                           )}
                         </div>
-                        <FormLabel
-                          htmlFor="select-all"
-                          className="cursor-pointer flex-1 text-sm font-medium transition-colors"
-                        >
-                          {isAllSelected
-                            ? "All categories selected - Click to deselect all"
-                            : isPartiallySelected
-                              ? `${selectedCount} of ${totalCategories} categories selected`
-                              : `Select all ${totalCategories} categories`}
-                        </FormLabel>
-                      </div>
-
-                      <div className="flex items-center gap-1">
-                        {hasAnySelected && (
-                          <Badge
-                            variant="secondary"
-                            className={`text-xs transition-colors ${
-                              isAllSelected
-                                ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                : "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                            }`}
-                          >
-                            {selectedCount}/{totalCategories}
-                          </Badge>
-                        )}
-
-                        {isPartiallySelected && (
-                          <div className="flex gap-1 animate-in fade-in-0 slide-in-from-right-1 duration-200">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={handleSelectAll}
-                              className="h-6 px-2 text-xs hover:bg-primary/10 hover:border-primary/20 transition-colors"
-                              title="Select all categories"
-                            >
-                              <CheckCheck className="h-3 w-3 mr-1" />
-                              All
-                            </Button>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={handleDeselectAll}
-                              className="h-6 px-2 text-xs hover:bg-destructive/10 hover:border-destructive/20 text-destructive transition-colors"
-                              title="Deselect all categories"
-                            >
-                              <Minus className="h-3 w-3 mr-1" />
-                              None
-                            </Button>
-                          </div>
-                        )}
-                      </div>
+                      ))}
                     </div>
-                  )}
-
-                  <div className="mt-4">
-                    <ScrollArea className="h-[300px] sm:h-[400px] w-full rounded-md border bg-background/50 dark:bg-background/20">
-                      <div className="space-y-1 p-2 sm:p-4">
-                        {data.data.map((category, index) => (
-                          <div key={category.id}>
-                            <FormItem className="flex items-center gap-2 sm:gap-3 space-y-0 rounded-lg border border-transparent p-2 sm:p-3 hover:bg-accent/50 hover:border-border transition-all duration-200 group">
-                              <Checkbox
-                                id={category.id}
-                                checked={selectedCategories.includes(
-                                  category.id
-                                )}
-                                onCheckedChange={(checked) =>
-                                  handleCheckboxChange(category.id, !!checked)
-                                }
-                                className="shrink-0"
-                              />
-                              <FormLabel
-                                htmlFor={category.id}
-                                className="cursor-pointer flex-1 min-w-0"
-                              >
-                                <CategoryItem category={category} />
-                              </FormLabel>
-                            </FormItem>
-                            {index < data.data.length - 1 && (
-                              <Separator className="my-1 opacity-50" />
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </ScrollArea>
-                  </div>
-                  <FormMessage />
-                </FormItem>
+                  </ScrollArea>
+                </div>
 
                 {shouldRenderDeleteButton && (
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 pt-4 border-t">
@@ -314,9 +280,10 @@ export const CategoriesList = () => {
                         : "No categories selected"}
                     </p>
                     <Button
-                      type="submit"
+                      type="button"
                       variant="destructive"
                       disabled={selectedCategories.length === 0}
+                      onClick={handleDeleteClick}
                       className="flex items-center gap-2 w-full sm:w-auto"
                       size="sm"
                     >
@@ -334,8 +301,8 @@ export const CategoriesList = () => {
                     </Button>
                   </div>
                 )}
-              </form>
-            </Form>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>
