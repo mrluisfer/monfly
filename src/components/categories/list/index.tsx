@@ -58,8 +58,8 @@ export const CategoriesList = () => {
         <CardHeader className="pb-4">
           <div className="flex flex-col space-y-1.5 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
             <div className="space-y-1">
-              <CardTitle className="flex items-center gap-2 text-xl font-semibold">
-                <FolderOpen className="h-5 w-5 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-xl">
+                <FolderOpen className="size-5 text-primary" />
                 Categories
                 {categoriesCount > 0 && (
                   <Badge variant="secondary" className="ml-2">

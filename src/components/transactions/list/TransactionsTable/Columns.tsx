@@ -252,9 +252,20 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         <>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button
+                variant="ghost"
+                className="
+                  h-8 w-8 p-0
+                  transition-all duration-200 ease-out
+                  hover:scale-110 hover:bg-primary/10 hover:shadow-sm
+                  active:scale-95
+                  focus-visible:scale-110 focus-visible:bg-primary/10
+                  data-[state=open]:scale-110 data-[state=open]:bg-primary/10
+                  dark:hover:bg-primary/5
+                "
+              >
                 <span className="sr-only">Open menu</span>
-                <MoreHorizontalIcon />
+                <MoreHorizontalIcon className="transition-transform duration-200 hover:rotate-90" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -265,15 +276,27 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
                 Copy transaction ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
-                <EditIcon className="mr-2 h-4 w-4" />
+              <DropdownMenuItem
+                onClick={() => setIsEditDialogOpen(true)}
+                className="
+                  transition-all duration-200 ease-out
+                  hover:bg-primary/10 focus:bg-primary/10
+                  cursor-pointer group
+                "
+              >
+                <EditIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
                 Edit transaction
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="text-destructive focus:text-destructive"
+                className="
+                  text-destructive focus:text-destructive
+                  transition-all duration-200 ease-out
+                  hover:bg-destructive/10 focus:bg-destructive/10
+                  cursor-pointer group
+                "
                 onClick={() => setIsDeleteDialogOpen(true)}
               >
-                <TrashIcon className="mr-2 h-4 w-4" />
+                <TrashIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
                 Delete transaction
               </DropdownMenuItem>
             </DropdownMenuContent>

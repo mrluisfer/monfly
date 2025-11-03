@@ -117,29 +117,40 @@ const TotalBalance = () => {
   return (
     <Card className="max-w-md lg:max-w-none border-t-4 border-t-primary">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Current Balance</CardTitle>
-          <DollarSign className="w-4 h-4 text-primary" />
-        </div>
+        <CardTitle className="flex items-center gap-2 text-xl">
+          <DollarSign className="size-5 text-primary" />
+          Current Balance
+        </CardTitle>
       </CardHeader>
 
       <CardContent className="group">
-        {isEditing ? (
-          <BalanceEditor
-            value={totalBalance}
-            onChange={handleInputChange}
-            isSubmitting={putUserTotalBalanceMutation.status === "pending"}
-          />
-        ) : (
-          <BalanceDisplay
-            balance={Number(totalBalance) || 0}
-            onEdit={handleEditClick}
-          />
-        )}
+        <div className="min-h-10 flex items-center">
+          {isEditing ? (
+            <div className="w-full animate-in fade-in-0 slide-in-from-right-2 duration-300 ease-out">
+              <BalanceEditor
+                value={totalBalance}
+                onChange={handleInputChange}
+                isSubmitting={putUserTotalBalanceMutation.status === "pending"}
+              />
+            </div>
+          ) : (
+            <div className="w-full animate-in fade-in-0 slide-in-from-left-2 duration-300 ease-out">
+              <BalanceDisplay
+                balance={Number(totalBalance) || 0}
+                onEdit={handleEditClick}
+              />
+            </div>
+          )}
+        </div>
       </CardContent>
 
       {isEditing && (
-        <CardFooter>
+        <CardFooter
+          className="
+          animate-in slide-in-from-bottom-2 duration-300 ease-out
+          border-t border-border/50
+        "
+        >
           <div className="flex items-center gap-2 justify-end flex-1">
             <BalanceEditorActions
               onSave={handleSaveEdit}

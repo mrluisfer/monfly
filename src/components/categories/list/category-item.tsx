@@ -48,18 +48,29 @@ const CategoryItem = ({ category }: { category: Category }) => {
         </div>
 
         <div className="shrink-0 ml-2">
-          <div className="group-hover:opacity-100 opacity-60 transition-all duration-200">
+          <div
+            className="
+            group-hover:opacity-100 group-hover:scale-105
+            opacity-0 scale-95
+            transition-all duration-300 ease-out
+            sm:opacity-60 sm:scale-100
+            focus-within:opacity-100 focus-within:scale-105
+          "
+          >
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
                 className={cn(
                   "h-8 w-8 p-0 rounded-md",
-                  "hover:bg-primary/10 hover:text-primary",
-                  "focus:bg-primary/10 focus:text-primary"
+                  "hover:bg-primary/10 hover:text-primary hover:scale-110 hover:shadow-sm",
+                  "focus:bg-primary/10 focus:text-primary focus:scale-110",
+                  "active:scale-95",
+                  "transition-all duration-200 ease-out",
+                  "dark:hover:bg-primary/5 dark:hover:shadow-primary/10"
                 )}
               >
-                <Pencil className="h-4 w-4" />
+                <Pencil className="h-4 w-4 transition-transform duration-200 hover:rotate-12" />
                 <span className="sr-only">Edit {category.name}</span>
               </Button>
             </DialogTrigger>

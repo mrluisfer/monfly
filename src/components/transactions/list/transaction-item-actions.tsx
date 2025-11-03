@@ -47,21 +47,49 @@ const TransactionItemActions = ({
     <div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
-            <Ellipsis />
+          <Button
+            variant="outline"
+            size="sm"
+            className="
+              transition-all duration-200 ease-out
+              hover:scale-105 hover:shadow-sm hover:border-primary/20
+              active:scale-95
+              focus-visible:scale-105
+              data-[state=open]:scale-105 data-[state=open]:shadow-sm
+              dark:hover:shadow-primary/10
+            "
+          >
+            <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="space-y-2">
+        <DropdownMenuContent
+          className="
+          space-y-2
+          animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200
+        "
+        >
           <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DialogTrigger asChild>
-            <DropdownMenuItem variant="default">
-              <Edit />
+            <DropdownMenuItem
+              variant="default"
+              className="
+                transition-all duration-200 ease-out
+                hover:bg-primary/10 focus:bg-primary/10
+                cursor-pointer group
+              "
+            >
+              <Edit className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
               Edit transaction
             </DropdownMenuItem>
           </DialogTrigger>
           <DropdownMenuItem
             variant="destructive"
+            className="
+              transition-all duration-200 ease-out
+              hover:bg-destructive/10 focus:bg-destructive/10
+              cursor-pointer group
+            "
             onClick={() =>
               deleteTransactionByIdMutation.mutate({
                 data: {
@@ -70,7 +98,7 @@ const TransactionItemActions = ({
               })
             }
           >
-            <Trash />
+            <Trash className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
             Delete transaction
           </DropdownMenuItem>
         </DropdownMenuContent>

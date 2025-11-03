@@ -15,7 +15,7 @@ import { useRouteUser } from "~/hooks/use-route-user";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
-import { RefreshCcwIcon } from "lucide-react";
+import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
 import AddTransactionButton from "./add-transaction-button";
 import { DataTableDemo } from "./TransactionsTable";
@@ -56,7 +56,10 @@ export default function TransactionsList() {
       <Card className="min-h-[500px] border-l-4 border-l-primary">
         <CardHeader>
           <div className="flex items-center gap-2 justify-between">
-            <CardTitle>Transactions</CardTitle>
+            <CardTitle className="text-xl flex items-center gap-2">
+              <WalletIcon className="size-5 text-primary" />
+              Transactions
+            </CardTitle>
             <div className="flex items-center gap-6">
               <Button
                 onClick={() => refetch()}
