@@ -1,5 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "~/components/ui/alert-dialog";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
@@ -20,15 +30,7 @@ import {
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { useCategoriesList } from "~/hooks/use-categories-list";
-import {
-  FolderOpen,
-  ListCheckIcon,
-  Loader2,
-  Minus,
-  MinusIcon,
-  Trash2,
-  XIcon,
-} from "lucide-react";
+import { CheckCheck, FolderOpen, Loader2, Minus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -42,6 +44,8 @@ type CategoryFormValues = z.infer<typeof CategoryFormSchema>;
 
 export const CategoriesList = () => {
   const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const {
     data,
@@ -77,6 +81,34 @@ export const CategoriesList = () => {
       }
     }
   }, [isPartiallySelected]);
+
+  // Handle delete confirmation
+  const handleDeleteClick = () => {
+    if (selectedCategories.length === 0) return;
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (selectedCategories.length === 0) return;
+
+    setIsDeleting(true);
+    try {
+      await handleDeleteCategories();
+      // Only close dialog if deletion was successful
+      // The hook handles success/error toasts
+      setIsDeleteDialogOpen(false);
+    } catch (error) {
+      // Keep dialog open on error so user can try again
+      // Error toast is handled in the hook
+      console.error("Error deleting categories:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteDialogOpen(false);
+  };
 
   const shouldRenderDeleteButton = data?.data?.length && data?.data?.length > 0;
   const categoriesCount = data?.data?.length || 0;
@@ -154,9 +186,9 @@ export const CategoriesList = () => {
             <Form {...form}>
               <form
                 className="space-y-4"
-                onSubmit={async (e) => {
+                onSubmit={(e) => {
                   e.preventDefault();
-                  await handleDeleteCategories();
+                  handleDeleteClick();
                 }}
               >
                 <FormItem>
@@ -209,19 +241,6 @@ export const CategoriesList = () => {
                             {selectedCount}/{totalCategories}
                           </Badge>
                         )}
-                        {isAllSelected && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={handleDeselectAll}
-                            className="h-6 px-2 text-xs hover:bg-destructive/10 hover:border-destructive/20 text-destructive transition-colors"
-                            title="Deselect all categories"
-                          >
-                            <XIcon />
-                            Unselect All
-                          </Button>
-                        )}
 
                         {isPartiallySelected && (
                           <div className="flex gap-1 animate-in fade-in-0 slide-in-from-right-1 duration-200">
@@ -233,7 +252,7 @@ export const CategoriesList = () => {
                               className="h-6 px-2 text-xs hover:bg-primary/10 hover:border-primary/20 transition-colors"
                               title="Select all categories"
                             >
-                              <ListCheckIcon />
+                              <CheckCheck className="h-3 w-3 mr-1" />
                               All
                             </Button>
                             <Button
@@ -244,7 +263,7 @@ export const CategoriesList = () => {
                               className="h-6 px-2 text-xs hover:bg-destructive/10 hover:border-destructive/20 text-destructive transition-colors"
                               title="Deselect all categories"
                             >
-                              <MinusIcon />
+                              <Minus className="h-3 w-3 mr-1" />
                               None
                             </Button>
                           </div>
@@ -320,6 +339,89 @@ export const CategoriesList = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Delete confirmation dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Trash2 className="h-5 w-5 text-destructive" />
+              Delete Selected Categories
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2">
+              <p>
+                Are you sure you want to delete{" "}
+                <span className="font-semibold text-foreground">
+                  {selectedCount}{" "}
+                  {selectedCount === 1 ? "category" : "categories"}
+                </span>
+                ? This action cannot be undone.
+              </p>
+              {selectedCount > 0 && (
+                <div className="mt-3 p-3 bg-destructive/5 border border-destructive/20 rounded-md">
+                  <p className="text-sm font-medium text-destructive mb-2 flex items-center gap-1">
+                    <Trash2 className="h-3 w-3" />
+                    Categories to be deleted:
+                  </p>
+                  <div className="max-h-32 overflow-y-auto">
+                    <div className="flex flex-wrap gap-1">
+                      {data?.data
+                        ?.filter((cat) => selectedCategories.includes(cat.id))
+                        ?.slice(0, 8)
+                        ?.map((cat) => (
+                          <Badge
+                            key={cat.id}
+                            variant="destructive"
+                            className="text-xs bg-destructive/10 text-destructive border-destructive/20"
+                          >
+                            {cat.name}
+                          </Badge>
+                        ))}
+                      {selectedCount > 8 && (
+                        <Badge
+                          variant="destructive"
+                          className="text-xs bg-destructive/10 text-destructive border-destructive/20"
+                        >
+                          +{selectedCount - 8} more...
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={handleCancelDelete}
+              disabled={isDeleting}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete {selectedCount}{" "}
+                  {selectedCount === 1 ? "Category" : "Categories"}
+                </>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
