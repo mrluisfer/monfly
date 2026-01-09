@@ -4,12 +4,6 @@ import tsConfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
   server: {
     preset: "vercel",
-    esbuild: {
-      options: {
-        target: "esnext",
-      },
-    },
-    externals: ["@prisma/client", "prisma"],
   },
   tsr: {
     appDirectory: "src",
@@ -20,5 +14,8 @@ export default defineConfig({
         projects: ["./tsconfig.json"],
       }),
     ],
+    ssr: {
+      external: ["@prisma/client", "prisma"],
+    },
   },
 });
