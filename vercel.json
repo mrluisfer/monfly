@@ -1,8 +1,6 @@
 {
-  "rewrites": [
-    {
-      "source": "/:path((?!.*\\..*).*)",
-      "destination": "/index.html"
-    }
-  ]
+  "buildCommand": "pnpm run build",
+  "outputDirectory": ".vercel/output",
+  "framework": null,
+  "installCommand": "pnpm install"
 }
