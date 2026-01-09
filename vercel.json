@@ -1,5 +1,5 @@
 {
   "framework": null,
-  "buildCommand": "pnpm prisma generate && NITRO_PRESET=vercel pnpm run build",
+  "buildCommand": "pnpm prisma generate && pnpm run build",
   "installCommand": "pnpm install"
 }

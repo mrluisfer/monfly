@@ -5,13 +5,20 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
+const preset = process.env.NITRO_PRESET || "vercel";
+
 export default defineConfig({
   optimizeDeps: {
     exclude: ["@prisma/client", "prisma"],
   },
+  resolve: {
+    alias: {
+      lodash: "lodash-es",
+    },
+  },
   ssr: {
     external: ["@prisma/client", "prisma"],
-    // Fuerza resolución de entradas "node" en vez de "browser"
+    noExternal: ["lodash", "lodash-es", "recharts"],
     target: "node",
   },
   server: {
@@ -20,8 +27,7 @@ export default defineConfig({
   plugins: [
     tsConfigPaths(),
     tanstackStart(),
-    nitro(),
-    // react's vite plugin must come after start's vite plugin
+    nitro({ preset }),
     viteReact(),
   ],
   nitro: {},
