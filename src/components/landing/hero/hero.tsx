@@ -53,7 +53,7 @@ export function LandingHero() {
             <Partners />
           </div>
           <div className="flex items-center justify-center mt-16">
-            <blockquote className="italic text-sm max-w-sm flex-1 border bg-gray-50 dark:bg-zinc-800 pt-2 rounded-[1rem] px-4 py-2">
+            <blockquote className="italic text-sm max-w-sm flex-1 border bg-gray-50 dark:bg-zinc-800 pt-2 rounded-2xl px-4 py-2">
               <Typography variant="muted">“</Typography>
               <span className="text-primary">Monfly</span> makes tracking my
               spending effortless. I feel confident knowing my data is secure.
