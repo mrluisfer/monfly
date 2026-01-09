@@ -24,11 +24,6 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  plugins: [
-    tsConfigPaths(),
-    tanstackStart(),
-    nitro({ preset }),
-    viteReact(),
-  ],
+  plugins: [tsConfigPaths(), tanstackStart(), nitro({ preset }), viteReact()],
   nitro: {},
 });
