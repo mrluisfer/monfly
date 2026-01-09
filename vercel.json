@@ -1,6 +1,5 @@
 {
   "framework": null,
   "buildCommand": "pnpm prisma generate && pnpm run build",
-  "installCommand": "pnpm install",
-  "outputDirectory": ".output"
+  "installCommand": "pnpm install"
 }

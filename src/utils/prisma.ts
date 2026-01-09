@@ -1,15 +1,21 @@
-import pkg from "@prisma/client";
-import type { PrismaClient as PrismaClientType } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
-
-const { PrismaClient } = pkg;
 
 declare global {
   // eslint-disable-next-line no-var
-  var prisma: PrismaClientType | undefined;
+  var prisma: PrismaClient | undefined;
 }
 
-export const prismaClient = globalThis.prisma || new PrismaClient();
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log:
+      process.env.NODE_ENV === "development"
+        ? ["query", "error", "warn"]
+        : ["error"],
+  });
+};
+
+export const prismaClient = globalThis.prisma ?? prismaClientSingleton();
 
 if (process.env.NODE_ENV !== "production") {
   globalThis.prisma = prismaClient;
