@@ -11,7 +11,7 @@ export const Route = createFileRoute("/")({
 
 export default function Home() {
   return (
-    <div className="h-screen bg-gradient-to-b from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-950">
+    <div className="h-screen bg-linear-to-b from-zinc-50 to-white dark:from-zinc-900 dark:to-zinc-950">
       <GlobalHeader />
       <LandingHero />
       <UserStatsSection />

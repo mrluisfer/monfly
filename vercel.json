@@ -1,4 +1,10 @@
 {
-  "buildCommand": "pnpm run build",
-  "installCommand": "pnpm install"
+  "framework": null,
+  "buildCommand": "pnpm prisma generate && pnpm run build",
+  "installCommand": "pnpm install",
+  "functions": {
+    "**/*.func/*": {
+      "runtime": "nodejs20.x"
+    }
+  }
 }

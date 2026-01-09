@@ -110,7 +110,7 @@ function Login() {
           />
         </div>
       </div>
-      <div className="hidden md:flex md:w-1/2 items-center justify-center bg-gradient-to-br from-[#a3bfff] via-[#f8c0f4] to-[#e5e7fa] dark:from-[#1a223a] dark:via-[#362a42] dark:to-[#24304e]">
+      <div className="hidden md:flex md:w-1/2 items-center justify-center bg-linear-to-br from-[#a3bfff] via-[#f8c0f4] to-[#e5e7fa] dark:from-[#1a223a] dark:via-[#362a42] dark:to-[#24304e]">
         <div className="bg-white/30 backdrop-blur-md rounded-2xl p-12 text-center max-w-md shadow-lg dark:bg-black/30">
           <div className="flex items-center justify-center mb-6">
             <span className="font-medium text-lg text-black dark:text-white">
