@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { AnimatePresence, motion } from "framer-motion";
 import TotalBalance from "~/components/balance/TotalBalance";
 import ChartTransactionsByMonth from "~/components/charts/chart-transactions-by-month";
 import IncomeExpenseChart from "~/components/charts/income-expense-chart";
 import { ChartTabs } from "~/components/home/chart-tabs";
+import { DashboardMetrics } from "~/components/home/dashboard-metrics";
 import { ManagementTabs } from "~/components/home/management-tabs";
 import { PageTitle } from "~/components/page-title";
 import TransactionsList from "~/components/transactions/list";
@@ -12,7 +14,6 @@ import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
-import { AnimatePresence, motion } from "framer-motion";
 
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
@@ -68,12 +69,12 @@ function RouteComponent() {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mb-6 flex justify-between items-center"
+        className="flex justify-between items-center"
       >
         <PageTitle description="This is your overview dashboard">
           Welcome back
@@ -86,104 +87,70 @@ function RouteComponent() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-6"
         >
-          <div className="grid w-full grid-cols-1 gap-4 xl:grid-cols-3">
-            <div className="order-2 space-y-4 xl:order-1 items-start justify-between w-full gap-4">
-              {/* TotalBalance - Primary Component */}
+          {/* Main Content Grid */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            {/* Left Column: Balance & Transactions (Primary Focus) */}
+            <div className="xl:col-span-2 space-y-6 order-1">
               <motion.div
                 initial={{ opacity: 0, y: 20, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 20,
-                }}
-                className="overflow-hidden transition-all duration-300"
+                transition={{ duration: 0.5, delay: 0 }}
               >
                 <TotalBalance />
               </motion.div>
 
-              <div className="w-full space-y-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.16,
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 20,
-                  }}
-                  className="overflow-hidden"
-                >
-                  <IncomeExpenseChart />
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: 0.24,
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 20,
-                  }}
-                  className="overflow-hidden"
-                >
-                  <ChartTabs />
-                </motion.div>
-              </div>
-            </div>
-
-            <div className="order-1 md:order-2 md:col-span-2 xl:col-span-2 space-y-6">
-              {/* TransactionsList - Primary Focus Component */}
               <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.08,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 20,
-                }}
-                className="overflow-hidden transition-all duration-300"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="overflow-hidden"
               >
                 <TransactionsList />
               </motion.div>
+            </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.4,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 20,
-                }}
-                className="overflow-hidden"
+            {/* Right Column: Metrics & Charts (Secondary) */}
+            <div className="space-y-6 order-2">
+               <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
               >
-                <ManagementTabs />
+                <DashboardMetrics />
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: 0.5,
-                  delay: 0.32,
-                  type: "spring",
-                  stiffness: 120,
-                  damping: 20,
-                }}
-                className="overflow-hidden"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <IncomeExpenseChart />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
               >
                 <ChartTransactionsByMonth />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
+                <ChartTabs />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                <ManagementTabs />
               </motion.div>
             </div>
           </div>

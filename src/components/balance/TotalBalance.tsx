@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { DollarSign } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useMutation } from "~/hooks/use-mutation";
@@ -8,8 +10,6 @@ import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
-import { DollarSign } from "lucide-react";
-import { toast } from "sonner";
 
 import { BalanceDisplay } from "./BalanceDisplay";
 import { BalanceEditor } from "./BalanceEditor";
@@ -109,7 +109,7 @@ const TotalBalance = () => {
   }
 
   return (
-    <Card className="max-w-md lg:max-w-none border-t-4 border-t-primary">
+    <Card className="max-w-md lg:max-w-none border-t-4 border-t-primary shadow-md hover:shadow-lg transition-shadow duration-300">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-xl">

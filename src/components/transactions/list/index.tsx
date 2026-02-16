@@ -1,23 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
+import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { BalanceStatusBadge } from "~/components/header/badges/balance-status-badge";
 import { Button } from "~/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "~/components/ui/card";
 import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
+import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
-import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
 import AddTransactionButton from "./add-transaction-button";
+import { TransactionCardList } from "./transaction-card-list";
 import { DataTableDemo } from "./TransactionsTable";
 
 export default function TransactionsList() {
@@ -60,29 +62,35 @@ export default function TransactionsList() {
               <WalletIcon className="size-5 text-primary" />
               Transactions
             </CardTitle>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 md:gap-6">
               <Button
                 onClick={() => refetch()}
                 disabled={isPending || transactions.length === 0}
                 title="Refresh transactions"
                 variant={"outline"}
+                size="sm"
+                className="h-9 px-2.5 md:h-10 md:px-4"
               >
                 {isPending ? (
                   <>
-                    <Spinner />
-                    Loading...
+                    <Spinner className="mr-2 h-4 w-4" />
+                    <span className="hidden md:inline">Loading...</span>
                   </>
                 ) : (
                   <>
                     <RefreshCcwIcon
-                      className={isPending ? "animate-spin" : ""}
+                      className={cn("h-4 w-4", isPending ? "animate-spin" : "")}
                     />
-                    Refresh
+                    <span className="hidden md:inline ml-2">Refresh</span>
                   </>
                 )}
               </Button>
-              <BalanceStatusBadge />
-              <AddTransactionButton />
+              <div className="hidden md:block">
+                <BalanceStatusBadge />
+              </div>
+              <div className="hidden md:block">
+                <AddTransactionButton />
+              </div>
             </div>
           </div>
           <CardDescription>You made {total} transactions</CardDescription>
@@ -120,7 +128,14 @@ export default function TransactionsList() {
             {userEmail && !isPending && !error && (
               <>
                 {Array.isArray(transactions) && transactions.length > 0 ? (
-                  <DataTableDemo data={transactions} />
+                  <>
+                    <div className="hidden md:block">
+                      <DataTableDemo data={transactions} />
+                    </div>
+                    <div className="md:hidden">
+                      <TransactionCardList data={transactions} />
+                    </div>
+                  </>
                 ) : (
                   <div className="space-y-4">
                     <DataNotFoundPlaceholder>

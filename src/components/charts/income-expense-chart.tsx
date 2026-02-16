@@ -1,21 +1,21 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { DollarSign } from "lucide-react";
+import {
+    Area,
+    AreaChart,
+    CartesianGrid,
+    Legend,
+    ResponsiveContainer,
+    XAxis,
+    YAxis,
+} from "recharts";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
-import { DollarSign, TrendingDown, TrendingUp } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
@@ -147,49 +147,7 @@ export default function IncomeExpenseChart() {
 
       {shownChart && (
         <div className="space-y-4">
-          {/* Summary Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 p-3 sm:p-4 bg-muted/50 rounded-lg">
-            <div className="text-center">
-              <div
-                className="flex items-center justify-center gap-1 mb-1"
-                style={{ color: "hsl(134, 61%, 41%)" }}
-              >
-                <TrendingUp className="w-4 h-4" />
-                <span className="text-xs font-medium">Total Income</span>
-              </div>
-              <p className="font-bold text-sm sm:text-base">
-                {formatCurrency(totalIncome, "USD")}
-              </p>
-            </div>
-            <div className="text-center">
-              <div
-                className="flex items-center justify-center gap-1 mb-1"
-                style={{ color: "hsl(0, 65%, 51%)" }}
-              >
-                <TrendingDown className="w-4 h-4" />
-                <span className="text-xs font-medium">Total Expenses</span>
-              </div>
-              <p className="font-bold text-sm sm:text-base">
-                {formatCurrency(totalExpenses, "USD")}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center gap-1 text-muted-foreground mb-1">
-                <DollarSign className="w-4 h-4" />
-                <span className="text-xs font-medium">Net</span>
-              </div>
-              <p
-                className="font-bold text-sm sm:text-base"
-                style={{
-                  color:
-                    netTotal >= 0 ? "hsl(134, 61%, 41%)" : "hsl(0, 65%, 51%)",
-                }}
-              >
-                {netTotal >= 0 ? "+" : ""}
-                {formatCurrency(netTotal, "USD")}
-              </p>
-            </div>
-          </div>
+
 
           {/* Chart */}
           <ChartContainer

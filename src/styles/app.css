@@ -57,6 +57,24 @@
   --font-space-mono: "Space Mono", monospace;
   --font-geist: "Geist", sans-serif;
   --font-pacifico: "Pacifico", cursive;
+  --font-geist: "Geist", sans-serif;
+  --font-pacifico: "Pacifico", cursive;
+}
+
+@layer utilities {
+  /* Custom Scrollbar */
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40 transition-colors;
+  }
 }
 
 @layer base {
