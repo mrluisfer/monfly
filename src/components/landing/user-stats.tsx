@@ -8,7 +8,7 @@ import { Separator } from "../ui/separator";
 
 export function UserStatsSection() {
   return (
-    <section className="pt-20 bg-gradient-to-b from-white to-background dark:from-zinc-900 dark:to-zinc-950">
+    <section className="pt-20 bg-background dark:bg-zinc-950">
       <h3 className="font-bold text-2xl md:text-3xl mb-2 text-center">
         <Typography variant="muted">
           Empowering{" "}
@@ -21,7 +21,7 @@ export function UserStatsSection() {
       </h3>
 
       <div className="flex items-center justify-center mt-8">
-        <div className="border rounded-[1rem] p-8 items-center flex gap-6 md:gap-10 h-[100px]">
+        <div className="border rounded-2xl p-8 items-center flex gap-6 md:gap-10 h-[100px]">
           <UserStatItem label="Avg. Rating">
             4.9
             <Star className="w-5 h-5 text-primary" />
@@ -43,7 +43,7 @@ export function UserStatsSection() {
         </div>
       </div>
 
-      <div className="relative flex items-center justify-center mt-10">
+      <div className="relative flex items-center justify-center mt-10 lg:max-w-4xl lg:mx-auto">
         <Safari url="monfly.vercel.app" imageSrc={demoImg} />
       </div>
     </section>

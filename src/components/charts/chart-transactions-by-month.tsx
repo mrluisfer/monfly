@@ -19,14 +19,7 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
 } from "lucide-react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
@@ -113,9 +106,9 @@ export default function ChartTransactionsByMonth() {
   };
 
   return (
-    <Card className="max-w-5xl">
+    <Card className="w-full max-w-5xl">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl">
+        <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
           <BarChart3Icon className="size-5 text-primary" />
           Monthly Activity
         </CardTitle>
@@ -140,7 +133,7 @@ export default function ChartTransactionsByMonth() {
         )}
 
         {shownChart && (
-          <div className="flex gap-6">
+          <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
             <ChartContainer
               config={{
                 count: {
@@ -148,59 +141,59 @@ export default function ChartTransactionsByMonth() {
                   color: "hsl(221, 83%, 53%)", // Blue
                 },
               }}
-              className="w-full h-[280px] sm:h-80"
+              className="min-w-0 w-full h-[240px] sm:h-[280px] md:h-80"
             >
-              <ResponsiveContainer width="500px" height="100%">
-                <BarChart
-                  data={chartData}
-                  margin={{
-                    top: 20,
-                    right: 10,
-                    left: 10,
-                    bottom: 20,
+              <BarChart
+                data={chartData}
+                margin={{
+                  top: 20,
+                  right: 10,
+                  left: 10,
+                  bottom: 20,
+                }}
+              >
+                <ChartTooltip content={<CustomTooltip />} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  className="stroke-border/30"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  className="text-xs fill-muted-foreground"
+                  tick={{ fontSize: 12 }}
+                  minTickGap={14}
+                  interval="preserveStartEnd"
+                  tickFormatter={(value) => {
+                    return value;
                   }}
-                >
-                  <ChartTooltip content={<CustomTooltip />} />
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    className="stroke-border/30"
-                    vertical={false}
-                  />
-                  <XAxis
-                    dataKey="month"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={8}
-                    className="text-xs fill-muted-foreground"
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={(value) => {
-                      return value;
-                    }}
-                  />
-                  <YAxis
-                    allowDecimals={false}
-                    tickLine={false}
-                    axisLine={false}
-                    className="text-xs fill-muted-foreground"
-                    tick={{ fontSize: 10 }}
-                    width={40}
-                  />
-                  <Bar
-                    dataKey="count"
-                    fill="var(--primary)"
-                    name="Transactions"
-                    radius={[4, 4, 0, 0]}
-                    animationDuration={800}
-                    animationEasing="ease-out"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+                />
+                <YAxis
+                  allowDecimals={false}
+                  tickLine={false}
+                  axisLine={false}
+                  className="text-xs fill-muted-foreground"
+                  tick={{ fontSize: 10 }}
+                  width={36}
+                />
+                <Bar
+                  dataKey="count"
+                  fill="var(--primary)"
+                  name="Transactions"
+                  radius={[4, 4, 0, 0]}
+                  animationDuration={800}
+                  animationEasing="ease-out"
+                />
+              </BarChart>
             </ChartContainer>
-            <div className="space-y-3 text-sm w-full">
+            <div className="min-w-0 w-full space-y-3 text-sm">
               {/* Trend Information */}
               {chartData.length >= 2 && (
                 <>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {isPositiveTrend ? (
                       <TrendingUpIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
                     ) : (
@@ -222,7 +215,7 @@ export default function ChartTransactionsByMonth() {
               )}
 
               {/* Statistics Grid */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
                     <ArrowUpIcon className="size-5 text-green-600 dark:text-green-400" />
@@ -280,11 +273,11 @@ export default function ChartTransactionsByMonth() {
                     );
                   })}
                 </div>
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>
+                <div className="flex justify-between gap-2 text-xs text-muted-foreground">
+                  <span className="truncate">
                     {minMonth} ({minCount})
                   </span>
-                  <span>
+                  <span className="truncate text-right">
                     {maxMonth} ({maxCount})
                   </span>
                 </div>

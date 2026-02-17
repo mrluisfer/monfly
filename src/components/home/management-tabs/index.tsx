@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { FolderIcon, FolderOpenIcon, HandshakeIcon } from "lucide-react";
+import { FolderIcon, FolderOpenIcon } from "lucide-react";
 
 import { TabsCategories } from "./categories";
 
 export enum ManagementTab {
   CATEGORIES = "categories",
-  PARTNERS = "partners",
 }
 
 interface ManagementTabsProps {
@@ -113,25 +112,9 @@ export const ManagementTabs = ({
           )}
           {ManagementTab.CATEGORIES}
         </TabsTrigger>
-        <TabsTrigger
-          value={ManagementTab.PARTNERS}
-          className="capitalize gap-2"
-        >
-          <HandshakeIcon
-            className={
-              isTabActive(currentTab, ManagementTab.PARTNERS)
-                ? "text-orange-500 dark:text-orange-300 transition-colors duration-200"
-                : "text-muted-foreground transition-colors duration-200"
-            }
-          />
-          {ManagementTab.PARTNERS}
-        </TabsTrigger>
       </TabsList>
       <TabsContent value={ManagementTab.CATEGORIES}>
         <TabsCategories />
-      </TabsContent>
-      <TabsContent value={ManagementTab.PARTNERS}>
-        Change your password here.
       </TabsContent>
     </Tabs>
   );

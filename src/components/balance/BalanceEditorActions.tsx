@@ -20,6 +20,7 @@ export function BalanceEditorActions({
         size="icon"
         disabled={isSubmitting}
         className="
+          h-9 w-9 border border-border/80 text-foreground sm:h-10 sm:w-10
           transition-all duration-200 ease-out
           hover:scale-105 hover:bg-secondary/80
           active:scale-95
@@ -30,7 +31,7 @@ export function BalanceEditorActions({
         aria-label="Cancel editing"
       >
         <X
-          size={12}
+          size={14}
           className="transition-transform duration-200 hover:rotate-90"
         />
       </Button>
@@ -41,6 +42,7 @@ export function BalanceEditorActions({
         onClick={onSave}
         disabled={isSubmitting}
         className="
+          h-9 w-9 sm:h-10 sm:w-10
           transition-all duration-200 ease-out
           hover:scale-105 hover:shadow-md
           active:scale-95
@@ -51,10 +53,10 @@ export function BalanceEditorActions({
         aria-label="Save balance"
       >
         {isSubmitting ? (
-          <Loader2 size={12} className="animate-spin" />
+          <Loader2 size={14} className="animate-spin" />
         ) : (
           <Check
-            size={12}
+            size={14}
             className="transition-transform duration-200 hover:scale-110"
           />
         )}

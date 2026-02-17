@@ -92,7 +92,7 @@ export function TransactionForm<FormValues extends FieldValues>({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 p-1"
+        className="space-y-5 p-1 sm:space-y-6"
         autoComplete="off"
       >
         <FormField
@@ -113,7 +113,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                     id={transactionFormNames.amount}
                     type="number"
                     placeholder="0.00"
-                    className="pl-8 text-lg font-medium h-12"
+                    className="h-11 pl-8 text-base font-medium sm:h-12 sm:text-lg"
                     {...field}
                     onChange={(e) =>
                       field.onChange(validLimitNumber(e.target.value))
@@ -145,7 +145,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                     field.onChange(value as "income" | "expense")
                   }
                 >
-                  <SelectTrigger className="w-full h-12">
+                  <SelectTrigger className="h-11 w-full sm:h-12">
                     <SelectValue placeholder="Select transaction type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -203,7 +203,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                           role="combobox"
                           aria-expanded={categoryOpen}
                           className={cn(
-                            "w-full justify-between px-3 h-12 font-normal capitalize",
+                            "h-11 w-full justify-between px-3 text-sm font-normal capitalize sm:h-12",
                             !value && "text-muted-foreground"
                           )}
                         >
@@ -224,14 +224,17 @@ export function TransactionForm<FormValues extends FieldValues>({
                           />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="p-0" align="start">
+                      <PopoverContent
+                        className="w-[var(--radix-popover-trigger-width)] p-0"
+                        align="start"
+                      >
                         <Command>
                           <CommandInput
                             placeholder="Search category..."
                             value={inputValue}
                             onValueChange={setInputValue}
                           />
-                          <CommandList>
+                          <CommandList className="max-h-[230px] sm:max-h-[300px]">
                             <CommandEmpty>No category found.</CommandEmpty>
                             <CommandGroup>
                               {categories?.map((category) => (
@@ -312,7 +315,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                   <Textarea
                     placeholder="Add a description for your transaction..."
                     id={transactionFormNames.description}
-                    className="resize-none pl-10 pt-4 min-h-[100px]"
+                    className="min-h-[96px] resize-none pl-10 pt-4 text-sm sm:min-h-[110px] sm:text-base"
                     rows={3}
                     {...field}
                   />
@@ -344,7 +347,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-full h-12 pl-3 text-left font-normal justify-start",
+                          "h-11 w-full justify-start pl-3 text-left text-sm font-normal sm:h-12 sm:text-base",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -357,7 +360,10 @@ export function TransactionForm<FormValues extends FieldValues>({
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
+                  <PopoverContent
+                    className="w-auto max-w-[calc(100vw-2rem)] p-0"
+                    align="start"
+                  >
                     <Calendar
                       mode="single"
                       selected={field.value as Date}
@@ -382,7 +388,7 @@ export function TransactionForm<FormValues extends FieldValues>({
         <div className="pt-4">
           <Button
             type="submit"
-            className="w-full text-base font-medium shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+            className="h-11 w-full text-base font-medium shadow-lg transition-all duration-200 hover:shadow-xl sm:h-12 sm:hover:scale-[1.02]"
             disabled={isLoading}
           >
             {isLoading ? (

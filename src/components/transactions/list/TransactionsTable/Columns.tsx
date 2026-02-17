@@ -44,6 +44,11 @@ import { toast } from "sonner";
 
 import EditTransaction from "../../edit-transaction";
 
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
+
 export const Columns: ColumnDef<TransactionWithUser>[] = [
   {
     id: "select",
@@ -81,16 +86,18 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       );
     },
     cell: ({ row }) => {
-      const type = row.getValue("type") as string;
+      const type = String(row.getValue("type") || "").toLowerCase();
+      const isIncome = type === "income";
+
       return (
         <div
-          className={`inline-flex justify-center items-center ms-4 px-2 py-1 rounded-full text-xs font-medium ${
-            type === "income"
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
+          className={`inline-flex items-center justify-center rounded-full px-2 py-1 text-xs font-medium ${
+            isIncome
+              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+              : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
           }`}
         >
-          {type === "income" ? (
+          {isIncome ? (
             <BanknoteArrowUpIcon />
           ) : (
             <BanknoteArrowDownIcon />
@@ -116,9 +123,14 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div>{row.getValue("description") || "No description"}</div>
-    ),
+    cell: ({ row }) => {
+      const description = row.getValue("description") as string;
+      return (
+        <div className="max-w-[280px] whitespace-normal break-words leading-5">
+          {description || "No description"}
+        </div>
+      );
+    },
     filterFn: (row, id, value) => {
       const cellValue = row.getValue(id) as string;
       return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
@@ -137,9 +149,12 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("category")}</div>
-    ),
+    cell: ({ row }) => {
+      const category = row.getValue("category") as string;
+      return (
+        <div className="max-w-[160px] truncate capitalize">{category}</div>
+      );
+    },
     filterFn: (row, id, value) => {
       const cellValue = row.getValue(id) as string;
       return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
@@ -160,7 +175,11 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
     },
     cell: ({ row }) => {
       const date = row.getValue("date") as Date;
-      return <div>{new Date(date).toLocaleDateString()}</div>;
+      return (
+        <div className="text-muted-foreground text-sm">
+          {new Date(date).toLocaleDateString()}
+        </div>
+      );
     },
   },
   {
@@ -179,21 +198,21 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
     ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
-      const type = row.getValue("type") as string;
+      const type = String(row.getValue("type") || "").toLowerCase();
+      const isIncome = type === "income";
 
       // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+      const formatted = currencyFormatter.format(amount);
 
       return (
         <div
           className={`text-right font-medium ${
-            type === "income" ? "text-green-400" : "text-red-400"
+            isIncome
+              ? "text-green-600 dark:text-green-400"
+              : "text-red-600 dark:text-red-400"
           }`}
         >
-          {type === "expense" ? "-" : "+"}
+          {isIncome ? "+" : "-"}
           {formatted}
         </div>
       );

@@ -27,6 +27,7 @@ import {
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-transactions-by-id.server";
+import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import {
@@ -71,7 +72,6 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
 
   const userEmail = useRouteUser();
   const queryClient = useQueryClient();
@@ -88,8 +88,9 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: (row, columnId, value) => {
-      const search = value.toLowerCase();
+    globalFilterFn: (row, _columnId, value) => {
+      const search = String(value).toLowerCase().trim();
+      if (!search) return true;
 
       // Search across multiple fields
       const searchableFields = [
@@ -122,7 +123,6 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       await queryClient.invalidateQueries({
         queryKey: [queryDictionary.user, userEmail],
       });
-      setIsDeleteDialogOpen(false);
       table.resetRowSelection();
     },
   }); // Handle delete multiple transactions error
@@ -132,7 +132,6 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       deleteTransactionsByIdMutation.error
     ) {
       toast.error("Failed to delete transactions");
-      setIsDeleteDialogOpen(false);
     }
   }, [
     deleteTransactionsByIdMutation.status,
@@ -155,69 +154,89 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     });
   };
 
+  const selectedRowsCount = table.getSelectedRowModel().rows.length;
+  const typeFilterValue = String(
+    table.getColumn("type")?.getFilterValue() ?? ""
+  ).toLowerCase();
+  const hasActiveFilters =
+    Boolean(globalFilter) || table.getState().columnFilters.length > 0;
+  const getColumnClassName = (columnId: string) =>
+    cn(
+      columnId === "select" && "w-10 min-w-10",
+      columnId === "type" && "w-14 min-w-14",
+      columnId === "description" && "min-w-[220px]",
+      columnId === "category" && "min-w-[140px]",
+      columnId === "date" && "min-w-[130px]",
+      columnId === "amount" && "min-w-[130px]",
+      columnId === "actions" && "w-14 min-w-14"
+    );
+
   return (
     <div className="w-full">
-      <div className="flex items-center py-4 gap-4">
+      <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
         <Input
           placeholder="Search transactions..."
           value={globalFilter ?? ""}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
+          className="w-full xl:max-w-sm"
         />
-        <div className="flex items-center justify-between gap-2 flex-1">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
-              variant={
-                table.getColumn("type")?.getFilterValue() === "income"
-                  ? "default"
-                  : "outline"
-              }
+              size="sm"
+              variant={typeFilterValue === "income" ? "default" : "outline"}
               onClick={() => {
                 const column = table.getColumn("type");
                 const currentFilter = column?.getFilterValue();
                 column?.setFilterValue(
-                  currentFilter === "income" ? "" : "income"
+                  String(currentFilter).toLowerCase() === "income"
+                    ? ""
+                    : "income"
                 );
               }}
+              aria-label="Filter income transactions"
             >
-              <BanknoteArrowUpIcon />
+              <BanknoteArrowUpIcon className="size-4" />
+              <span className="hidden sm:inline">Income</span>
             </Button>
             <Button
-              variant={
-                table.getColumn("type")?.getFilterValue() === "expense"
-                  ? "destructive"
-                  : "outline"
-              }
+              size="sm"
+              variant={typeFilterValue === "expense" ? "destructive" : "outline"}
               onClick={() => {
                 const column = table.getColumn("type");
                 const currentFilter = column?.getFilterValue();
                 column?.setFilterValue(
-                  currentFilter === "expense" ? "" : "expense"
+                  String(currentFilter).toLowerCase() === "expense"
+                    ? ""
+                    : "expense"
                 );
               }}
+              aria-label="Filter expense transactions"
             >
-              <BanknoteArrowDownIcon />
+              <BanknoteArrowDownIcon className="size-4" />
+              <span className="hidden sm:inline">Expense</span>
             </Button>
-            {(globalFilter || table.getState().columnFilters.length > 0) && (
+            {hasActiveFilters && (
               <Button
+                size="sm"
                 variant="secondary"
                 onClick={() => {
                   setGlobalFilter("");
                   table.resetColumnFilters();
                 }}
               >
-                <XIcon />
-                Clear
+                <XIcon className="size-4" />
+                <span className="hidden sm:inline">Clear</span>
               </Button>
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
             {/* Delete button */}
-            {table.getSelectedRowModel().rows.length > 0 && (
+            {selectedRowsCount > 0 && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button className="ml-auto" variant="destructive">
+                  <Button size="sm" variant="destructive">
                     <TrashIcon
                       className="-ms-1 opacity-60"
                       size={16}
@@ -225,7 +244,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
                     />
                     Delete
                     <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
-                      {table.getSelectedRowModel().rows.length}
+                      {selectedRowsCount}
                     </span>
                   </Button>
                 </AlertDialogTrigger>
@@ -243,12 +262,8 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete {table.getSelectedRowModel().rows.length}{" "}
-                        selected{" "}
-                        {table.getSelectedRowModel().rows.length === 1
-                          ? "row"
-                          : "rows"}
-                        .
+                        delete {selectedRowsCount} selected{" "}
+                        {selectedRowsCount === 1 ? "row" : "rows"}.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                   </div>
@@ -274,8 +289,8 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns <ChevronDown />
+                <Button size="sm" variant="outline">
+                  Columns <ChevronDown className="size-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -301,14 +316,17 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
           </div>
         </div>
       </div>
-      <div className="overflow-hidden rounded-md border">
-        <Table>
+      <div className="rounded-md border">
+        <Table className="min-w-[760px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className={getColumnClassName(header.column.id)}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -329,7 +347,10 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={getColumnClassName(cell.column.id)}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -341,7 +362,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={Columns.length}
+                  colSpan={table.getVisibleLeafColumns().length}
                   className="h-24 text-center"
                 >
                   No results.
@@ -351,12 +372,16 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
+      <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-muted-foreground text-sm">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="space-x-2">
+        <div className="flex items-center justify-end gap-2">
+          <span className="text-muted-foreground text-xs">
+            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            {Math.max(1, table.getPageCount())}
+          </span>
           <Button
             variant="outline"
             size="sm"

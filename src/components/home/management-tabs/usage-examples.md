@@ -60,13 +60,13 @@ export function HomePage() {
   );
 
   const handleSomeAction = () => {
-    // Programmatically switch to partners tab
-    switchToTab(ManagementTab.PARTNERS);
+    // Programmatically switch to categories tab
+    switchToTab(ManagementTab.CATEGORIES);
   };
 
   return (
     <div>
-      <button onClick={handleSomeAction}>Go to Partners Tab</button>
+      <button onClick={handleSomeAction}>Go to Categories Tab</button>
 
       <div>
         Current tab is Categories:{" "}
@@ -90,7 +90,7 @@ import {
 export function HomePage() {
   return (
     <div>
-      <ManagementTabs defaultTab={ManagementTab.PARTNERS} />
+      <ManagementTabs defaultTab={ManagementTab.CATEGORIES} />
     </div>
   );
 }
@@ -119,6 +119,5 @@ export function HomePage() {
 ```tsx
 export enum ManagementTab {
   CATEGORIES = "categories",
-  PARTNERS = "partners",
 }
 ```

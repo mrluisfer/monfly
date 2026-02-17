@@ -1,7 +1,5 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { DollarSign } from "lucide-react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useMutation } from "~/hooks/use-mutation";
@@ -10,6 +8,8 @@ import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
+import { DollarSign } from "lucide-react";
+import { toast } from "sonner";
 
 import { BalanceDisplay } from "./BalanceDisplay";
 import { BalanceEditor } from "./BalanceEditor";
@@ -87,7 +87,7 @@ const TotalBalance = () => {
 
   if (error) {
     return (
-      <Card className="max-w-md">
+      <Card className="w-full max-w-md">
         <CardContent className="pt-6">
           <p className="text-sm text-destructive">Failed to load balance</p>
         </CardContent>
@@ -97,7 +97,7 @@ const TotalBalance = () => {
 
   if (isPending) {
     return (
-      <Card className="max-w-md">
+      <Card className="w-full max-w-md">
         <CardHeader>
           <Skeleton className="h-6 w-32" />
         </CardHeader>
@@ -109,17 +109,17 @@ const TotalBalance = () => {
   }
 
   return (
-    <Card className="max-w-md lg:max-w-none border-t-4 border-t-primary shadow-md hover:shadow-lg transition-shadow duration-300">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-xl">
+    <Card className="w-full max-w-md shadow-md transition-shadow duration-300 hover:shadow-lg lg:max-w-none">
+      <CardContent className="group space-y-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <DollarSign className="size-5 text-primary" />
             Current Balance
           </CardTitle>
 
           {isEditing ? (
-            <div className="animate-in slide-in-from-bottom-2 duration-300 ease-out">
-              <div className="flex items-center gap-2 justify-end flex-1">
+            <div className="animate-in slide-in-from-bottom-2 duration-300 ease-out sm:ml-auto">
+              <div className="flex items-center justify-end gap-2">
                 <BalanceEditorActions
                   onSave={handleSaveEdit}
                   onCancel={handleCancelEdit}
@@ -131,10 +131,8 @@ const TotalBalance = () => {
             </div>
           ) : null}
         </div>
-      </CardHeader>
 
-      <CardContent className="group">
-        <div className="min-h-10 flex items-center">
+        <div className="flex min-h-10 items-center">
           {isEditing ? (
             <div className="w-full animate-in fade-in-0 slide-in-from-right-2 duration-300 ease-out">
               <BalanceEditor

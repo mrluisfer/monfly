@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { BalanceStatusBadge } from "~/components/header/badges/balance-status-badge";
 import { Button } from "~/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "~/components/ui/card";
 import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
@@ -17,6 +16,7 @@ import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transacti
 import { createSafeQuery } from "~/lib/stream-utils";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
+import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
 import AddTransactionButton from "./add-transaction-button";
 import { TransactionCardList } from "./transaction-card-list";
@@ -57,12 +57,12 @@ export default function TransactionsList() {
     <TransactionHoverProvider>
       <Card className="min-h-[500px] border-l-4 border-l-primary">
         <CardHeader>
-          <div className="flex items-center gap-2 justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <CardTitle className="text-xl flex items-center gap-2">
               <WalletIcon className="size-5 text-primary" />
               Transactions
             </CardTitle>
-            <div className="flex items-center gap-2 md:gap-6">
+            <div className="ml-auto flex items-center gap-2 sm:gap-3 md:gap-6">
               <Button
                 onClick={() => refetch()}
                 disabled={isPending || transactions.length === 0}
@@ -88,7 +88,7 @@ export default function TransactionsList() {
               <div className="hidden md:block">
                 <BalanceStatusBadge />
               </div>
-              <div className="hidden md:block">
+              <div>
                 <AddTransactionButton />
               </div>
             </div>
