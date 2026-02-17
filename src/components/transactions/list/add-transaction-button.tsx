@@ -62,9 +62,9 @@ const AddTransactionButton = () => {
         <SheetTrigger asChild>{trigger}</SheetTrigger>
         <SheetContent
           side="bottom"
-          className="h-[92vh] overflow-y-auto rounded-t-xl px-0"
+          className="h-[92vh] overflow-y-auto rounded-t-xl border-0 px-0"
         >
-          <SheetHeader className="mb-2 border-b text-left">
+          <SheetHeader className="mb-2 text-left">
             <SheetTitle>Add Transaction</SheetTitle>
             <SheetDescription>
               Create a new transaction to track your expenses or income.

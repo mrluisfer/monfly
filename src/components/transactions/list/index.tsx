@@ -55,7 +55,7 @@ export default function TransactionsList() {
 
   return (
     <TransactionHoverProvider>
-      <Card className="min-h-[500px] border-l-4 border-l-primary">
+      <Card className="min-h-[500px]">
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <CardTitle className="text-xl flex items-center gap-2">
