@@ -6,14 +6,14 @@ import { navigationLinks } from "../global-header/navigation-links";
 
 export const FooterNavigation = () => {
   return (
-    <div className="grid grid-cols-[300px_1fr] gap-8 items-start">
+    <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] gap-8 items-start">
       <div className="flex flex-col gap-4">
         <HeaderLogo />
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Monfly. All rights reserved.
         </p>
       </div>
-      <div className="flex gap-8 justify-between w-full text-sm text-muted-foreground">
+      <div className="grid grid-cols-2 sm:flex gap-6 sm:gap-8 justify-between w-full text-sm text-muted-foreground">
         {navigationLinks.map((link) => (
           <div key={link.label} className="flex flex-col gap-2">
             <Button asChild variant="link">

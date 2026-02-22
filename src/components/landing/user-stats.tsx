@@ -8,8 +8,8 @@ import { Separator } from "../ui/separator";
 
 export function UserStatsSection() {
   return (
-    <section className="pt-20 bg-background dark:bg-zinc-950">
-      <h3 className="font-bold text-2xl md:text-3xl mb-2 text-center">
+    <section className="pt-20 px-4 md:px-0 bg-background dark:bg-zinc-950">
+      <h3 className="font-bold text-xl sm:text-2xl md:text-3xl mb-2 text-center">
         <Typography variant="muted">
           Empowering{" "}
           <Typography className="text-primary" variant="foreground">
@@ -20,8 +20,8 @@ export function UserStatsSection() {
         </Typography>
       </h3>
 
-      <div className="flex items-center justify-center mt-8">
-        <div className="border rounded-2xl p-8 items-center flex gap-6 md:gap-10 h-[100px]">
+      <div className="flex items-center justify-center mt-8 px-2">
+        <div className="border rounded-2xl p-4 sm:p-6 md:p-8 items-center flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-10">
           <UserStatItem label="Avg. Rating">
             4.9
             <Star className="w-5 h-5 text-primary" />
@@ -59,7 +59,7 @@ function UserStatItem({
 }) {
   return (
     <div className="flex flex-col items-center group">
-      <span className="text-3xl font-bold flex items-center gap-1 group-hover:text-primary group-hover:scale-105 transition-all">
+      <span className="text-2xl sm:text-3xl font-bold flex items-center gap-1 group-hover:text-primary group-hover:scale-105 transition-all">
         {children}
       </span>
       <p className="text-xs text-muted-foreground mt-1">{label}</p>

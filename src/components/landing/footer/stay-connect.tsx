@@ -50,7 +50,7 @@ export function StayConnect() {
   };
 
   return (
-    <div className="*:not-first:mt-2 flex items-start justify-between">
+    <div className="*:not-first:mt-2 flex flex-col md:flex-row items-start justify-between gap-4">
       <Label htmlFor={id} className="flex flex-col items-start gap-2 text-lg">
         Stay connected
         <span className="text-sm text-muted-foreground">
@@ -72,7 +72,7 @@ export function StayConnect() {
                   <FormControl>
                     <Input
                       id={id}
-                      className="peer ps-9 bg-white w-[300px]"
+                      className="peer ps-9 bg-white w-full sm:w-[300px]"
                       placeholder="Email"
                       type="email"
                       {...field}
