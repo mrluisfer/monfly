@@ -8,11 +8,17 @@ export const ChartTabs = () => {
   return (
     <Tabs defaultValue={transactionTypes.EXPENSE}>
       <TabsList>
-        <TabsTrigger value={transactionTypes.EXPENSE} className="capitalize gap-2">
+        <TabsTrigger
+          value={transactionTypes.EXPENSE}
+          className="capitalize gap-2"
+        >
           <BanknoteArrowDownIcon className="text-destructive" />
           {transactionTypes.EXPENSE}
         </TabsTrigger>
-        <TabsTrigger value={transactionTypes.INCOME} className="capitalize gap-2">
+        <TabsTrigger
+          value={transactionTypes.INCOME}
+          className="capitalize gap-2"
+        >
           <BanknoteArrowUpIcon className="text-primary" />
           {transactionTypes.INCOME}
         </TabsTrigger>

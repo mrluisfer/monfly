@@ -5,8 +5,8 @@ import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email.server";
 import { cn } from "~/lib/utils";
-import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import Card from "../card";

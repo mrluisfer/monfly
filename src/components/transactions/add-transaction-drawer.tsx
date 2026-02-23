@@ -1,16 +1,15 @@
-import { PlusIcon } from "lucide-react";
 import { useState } from "react";
-
 import { Button } from "~/components/ui/button";
 import {
-    Sheet,
-    SheetContent,
-    SheetDescription,
-    SheetHeader,
-    SheetTitle,
-    SheetTrigger,
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
 } from "~/components/ui/sheet";
 import { useAddTransaction } from "~/hooks/use-add-transaction";
+import { PlusIcon } from "lucide-react";
 
 import { TransactionForm } from "./transaction-form";
 
@@ -31,7 +30,10 @@ export function AddTransactionDrawer() {
           <span className="sr-only">Add Transaction</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[90vh] overflow-y-auto rounded-t-xl">
+      <SheetContent
+        side="bottom"
+        className="h-[90vh] overflow-y-auto rounded-t-xl"
+      >
         <SheetHeader className="text-left mb-4">
           <SheetTitle>Add Transaction</SheetTitle>
           <SheetDescription>

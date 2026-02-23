@@ -66,7 +66,6 @@ export function TrendingStatus({
       ? "less than"
       : "the same as";
 
-
   return (
     <TooltipProvider delayDuration={300}>
       <div className="flex flex-col gap-2 mt-2">

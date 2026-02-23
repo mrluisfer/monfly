@@ -23,13 +23,7 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { useCategoriesList } from "~/hooks/use-categories-list";
 import { cn } from "~/lib/utils";
-import {
-  CheckCheck,
-  FolderOpen,
-  Loader2,
-  Minus,
-  Trash2,
-} from "lucide-react";
+import { CheckCheck, FolderOpen, Loader2, Minus, Trash2 } from "lucide-react";
 
 import CategoryItem from "./category-item";
 
@@ -57,8 +51,7 @@ export const CategoriesList = () => {
 
   useEffect(() => {
     if (selectAllCheckboxRef.current) {
-      const inputElement =
-        selectAllCheckboxRef.current.querySelector("input");
+      const inputElement = selectAllCheckboxRef.current.querySelector("input");
       if (inputElement) {
         inputElement.indeterminate = isPartiallySelected;
       }
@@ -87,8 +80,7 @@ export const CategoriesList = () => {
     setIsDeleteDialogOpen(false);
   };
 
-  const shouldRenderDeleteButton =
-    (data?.data?.length ?? 0) > 0;
+  const shouldRenderDeleteButton = (data?.data?.length ?? 0) > 0;
   const categoriesCount = data?.data?.length || 0;
 
   return (
@@ -291,9 +283,7 @@ function CategoriesContent({
         <div className="rounded-full bg-muted/60 p-4 mb-4">
           <FolderOpen className="size-6 text-muted-foreground/60" />
         </div>
-        <p className="text-muted-foreground font-medium">
-          No categories found
-        </p>
+        <p className="text-muted-foreground font-medium">No categories found</p>
         <p className="text-muted-foreground/60 text-sm mt-1">
           Create your first category to get started
         </p>
@@ -508,9 +498,7 @@ function DeleteDialog({
                   <div className="max-h-32 overflow-y-auto">
                     <div className="flex flex-wrap gap-1">
                       {categories
-                        ?.filter((cat) =>
-                          selectedCategories.includes(cat.id)
-                        )
+                        ?.filter((cat) => selectedCategories.includes(cat.id))
                         ?.slice(0, 8)
                         ?.map((cat) => (
                           <Badge

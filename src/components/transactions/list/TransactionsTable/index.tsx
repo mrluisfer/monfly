@@ -201,7 +201,9 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
             </Button>
             <Button
               size="sm"
-              variant={typeFilterValue === "expense" ? "destructive" : "outline"}
+              variant={
+                typeFilterValue === "expense" ? "destructive" : "outline"
+              }
               onClick={() => {
                 const column = table.getColumn("type");
                 const currentFilter = column?.getFilterValue();

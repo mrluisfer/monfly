@@ -97,11 +97,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
               : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
           }`}
         >
-          {isIncome ? (
-            <BanknoteArrowUpIcon />
-          ) : (
-            <BanknoteArrowDownIcon />
-          )}
+          {isIncome ? <BanknoteArrowUpIcon /> : <BanknoteArrowDownIcon />}
         </div>
       );
     },

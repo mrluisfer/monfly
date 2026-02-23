@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { BalanceActions } from "~/components/balance/BalanceActions";
 import TotalBalance from "~/components/balance/TotalBalance";
 import ChartTransactionsByMonth from "~/components/charts/chart-transactions-by-month";
 import IncomeExpenseChart from "~/components/charts/income-expense-chart";
@@ -14,7 +15,6 @@ import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { AnimatePresence, motion } from "framer-motion";
-import {BalanceActions} from "~/components/balance/BalanceActions";
 
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,

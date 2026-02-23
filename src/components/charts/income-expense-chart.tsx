@@ -1,21 +1,21 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { DollarSign } from "lucide-react";
-import {
-    Area,
-    AreaChart,
-    CartesianGrid,
-    Legend,
-    ResponsiveContainer,
-    XAxis,
-    YAxis,
-} from "recharts";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart.server";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
+import { DollarSign } from "lucide-react";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
@@ -147,8 +147,6 @@ export default function IncomeExpenseChart() {
 
       {shownChart && (
         <div className="space-y-4">
-
-
           {/* Chart */}
           <ChartContainer
             config={{
