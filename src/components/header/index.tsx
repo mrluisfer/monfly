@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { MenuIcon } from "lucide-react";
 
@@ -23,6 +23,15 @@ import { HeaderNavigation } from "./HeaderNavigation";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  const mobileNavigationRoutes = sidebarRoutes.filter(
+    (route, index, routes) =>
+      routes.findIndex((item) => item.url === route.url) === index
+  );
+
+  const isActiveRoute = (routeUrl: string) =>
+    location.pathname === routeUrl ||
+    (routeUrl !== "/home" && location.pathname.startsWith(`${routeUrl}/`));
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
@@ -67,63 +76,90 @@ export const Header = () => {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-6">
-              <SheetHeader className="text-left mb-6">
-                <SheetTitle className="flex items-center gap-2">
-                  <img src={Logo} alt="Monfly" className="h-6 w-6" />
-                  Monfly
-                </SheetTitle>
-              </SheetHeader>
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-4">
-                  <h3 className="text-sm font-medium text-muted-foreground">
-                    Navigation
-                  </h3>
-                  <nav className="flex flex-col gap-2">
-                    <Link
-                      to="/home"
-                      className="flex items-center gap-2 p-2 rounded-md hover:bg-muted transition-colors"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <span className="font-medium">Home</span>
-                    </Link>
-                    {sidebarRoutes.map((route) => (
-                      <Link
-                        key={route.url}
-                        to={route.url}
-                        className="flex items-center gap-2 p-2 rounded-md hover:bg-muted transition-colors"
-                        onClick={() => setIsOpen(false)}
-                      >
-                        <route.icon className="h-5 w-5" />
-                        <span className="font-medium">{route.title}</span>
-                      </Link>
-                    ))}
-                  </nav>
-                </div>
+            <SheetContent
+              side="right"
+              className="h-[100dvh] w-[92vw] max-w-[400px] gap-0 overflow-hidden p-0"
+            >
+              <div className="flex h-full min-h-0 flex-col">
+                <SheetHeader className="border-b px-6 py-4 text-left">
+                  <SheetTitle className="flex items-center gap-2 pr-10">
+                    <img src={Logo} alt="Monfly" className="h-6 w-6" />
+                    Monfly
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="scrollbar-custom flex-1 min-h-0 overflow-y-auto px-6 py-5 pb-6">
+                  <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-4">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        Navigation
+                      </h3>
+                      <nav className="flex flex-col gap-2">
+                        {mobileNavigationRoutes.map((route) => {
+                          const isDisabled = Boolean(route.disabled);
+                          const isActive = isActiveRoute(route.url);
+                          const itemClassName = `flex items-center gap-2 rounded-md p-2 transition-colors ${
+                            isDisabled
+                              ? "cursor-not-allowed opacity-50"
+                              : isActive
+                                ? "bg-muted text-foreground"
+                                : "hover:bg-muted"
+                          }`;
 
-                <div className="flex flex-col gap-4">
-                  <h3 className="text-sm font-medium text-muted-foreground">
-                    System Status
-                  </h3>
-                  <div className="flex flex-col gap-3 items-start">
-                    <OnlineStatusBadge />
-                    <SystemStatusBadge />
-                    <TimezoneBadge />
-                    <SpendingAlertBadge />
-                  </div>
-                </div>
+                          if (isDisabled) {
+                            return (
+                              <div
+                                key={route.url}
+                                className={itemClassName}
+                                aria-disabled="true"
+                              >
+                                <route.icon className="h-5 w-5" />
+                                <span className="font-medium">
+                                  {route.title}
+                                </span>
+                              </div>
+                            );
+                          }
 
-                <div className="flex flex-col gap-4">
-                  <h3 className="text-sm font-medium text-muted-foreground">
-                    Preferences
-                  </h3>
-                  <div className="flex items-center justify-between">
-                    <span>Dark Mode</span>
-                    <ToggleDarkMode />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Settings</span>
-                    <SettingsDialog />
+                          return (
+                            <Link
+                              key={route.url}
+                              to={route.url}
+                              className={itemClassName}
+                              onClick={() => setIsOpen(false)}
+                            >
+                              <route.icon className="h-5 w-5" />
+                              <span className="font-medium">{route.title}</span>
+                            </Link>
+                          );
+                        })}
+                      </nav>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        System Status
+                      </h3>
+                      <div className="flex flex-col items-start gap-3">
+                        <OnlineStatusBadge />
+                        <SystemStatusBadge />
+                        <TimezoneBadge />
+                        <SpendingAlertBadge />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        Preferences
+                      </h3>
+                      <div className="flex items-center justify-between">
+                        <span>Dark Mode</span>
+                        <ToggleDarkMode />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Settings</span>
+                        <SettingsDialog />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
