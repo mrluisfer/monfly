@@ -18,13 +18,9 @@ export function GoToHomeButton({
         position === "right" ? "right-4" : "left-4"
       )}
     >
-      <Button variant="default" asChild className="group" size="sm">
+      <Button variant="default" asChild className="group" size="default">
         <Link to={url || "/"}>
-          <ArrowLeft
-            className="-ms-1 opacity-60 transition-transform group-hover:-translate-x-0.5 text-white"
-            size={16}
-            aria-hidden="true"
-          />
+          <ArrowLeft className="-ms-1" size={16} aria-hidden="true" />
           Go to home
         </Link>
       </Button>

@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Auth, authActions } from "~/components/auth";
-import { ExternalLogin } from "~/components/auth/external-login";
 import { GoToHomeButton } from "~/components/header/go-to-home-button";
 import { Badge } from "~/components/ui/badge";
 import { loginFn } from "~/utils/auth/loginfn";
@@ -82,12 +81,12 @@ function Login() {
           <p className="mb-8 text-base text-muted-foreground">
             Log in to manage your finances
           </p>
-          <ExternalLogin />
+          {/* <ExternalLogin />
           <div className="flex items-center gap-3 my-4">
             <div className="flex-1 h-px bg-zinc-200" />
             <span className="text-xs text-zinc-400">or</span>
             <div className="flex-1 h-px bg-zinc-200" />
-          </div>
+          </div> */}
           <Auth
             form={form}
             actionText={authActions.login}

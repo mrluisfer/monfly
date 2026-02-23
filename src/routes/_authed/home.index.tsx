@@ -1,19 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { AnimatePresence, motion } from "framer-motion";
 import TotalBalance from "~/components/balance/TotalBalance";
 import ChartTransactionsByMonth from "~/components/charts/chart-transactions-by-month";
 import IncomeExpenseChart from "~/components/charts/income-expense-chart";
 import { ChartTabs } from "~/components/home/chart-tabs";
 import { DashboardMetrics } from "~/components/home/dashboard-metrics";
 import { ManagementTabs } from "~/components/home/management-tabs";
-import { PageTitle } from "~/components/page-title";
+import { WelcomeMessage } from "~/components/home/welcome-message";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
+import { AnimatePresence, motion } from "framer-motion";
 
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
@@ -70,17 +70,10 @@ function RouteComponent() {
 
   return (
     <div className="space-y-6">
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="flex justify-between items-center"
-      >
-        <PageTitle description="This is your overview dashboard">
-          Welcome back
-          <span className="capitalize">, {data?.data?.name || "User"}!</span>
-        </PageTitle>
-      </motion.header>
+      <WelcomeMessage>
+        Here's a quick overview of your finances. Dive in to explore detailed
+        insights and manage your funds effectively.
+      </WelcomeMessage>
 
       <AnimatePresence mode="wait">
         <motion.section
@@ -113,7 +106,7 @@ function RouteComponent() {
 
             {/* Right Column: Metrics & Charts (Secondary) */}
             <div className="space-y-6 order-2">
-               <motion.div
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
