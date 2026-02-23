@@ -34,8 +34,8 @@ export default function TransactionItem({
           <Dialog open={isOpenDialog} onOpenChange={setIsOpenDialog}>
             <div className="flex items-center gap-4 hover:bg-muted rounded-md px-2 transition-colors">
               <UserAvatar
-                alt={transaction.user.name ?? ""}
-                name={transaction.user.name ?? ""}
+                alt={transaction.user?.name ?? ""}
+                name={transaction.user?.name ?? ""}
               />
               <div className="flex justify-between items-center w-full">
                 <div className="text-left">
@@ -51,7 +51,7 @@ export default function TransactionItem({
                   </p>
                   {transaction.description ? (
                     <span className={textMuted}>
-                      {transaction.user.name} - {transaction.user.email}
+                      {transaction.user?.name} - {transaction.user?.email}
                     </span>
                   ) : null}
                 </div>
@@ -134,7 +134,7 @@ export default function TransactionItem({
               />
               <TransactionTooltipContentItem
                 title="Recorded by"
-                value={transaction.user.email}
+                value={transaction.user?.email ?? transaction.userEmail}
                 id="email"
               />
             </ul>

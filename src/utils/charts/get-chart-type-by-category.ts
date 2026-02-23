@@ -1,34 +1,37 @@
-// lib/api/transaction/get-expense-by-category.server.ts
 import { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "../prisma";
 
 export const getChartTypeByCategory = async ({ email }: { email: string }) => {
   try {
-    const incomeResult = await prismaClient.transaction.groupBy({
-      by: ["category"],
-      where: { userEmail: email, type: "income" },
+    const result = await prismaClient.transaction.groupBy({
+      by: ["category", "type"],
+      where: { userEmail: email },
       _sum: { amount: true },
     });
 
-    const expenseResult = await prismaClient.transaction.groupBy({
-      by: ["category"],
-      where: { userEmail: email, type: "expense" },
-      _sum: { amount: true },
-    });
+    const categoryMap = new Map<
+      string,
+      { category: string; income: number; expense: number }
+    >();
 
-    const categories = new Set([
-      ...incomeResult.map((r) => r.category),
-      ...expenseResult.map((r) => r.category),
-    ]);
+    for (const row of result) {
+      if (!categoryMap.has(row.category)) {
+        categoryMap.set(row.category, {
+          category: row.category,
+          income: 0,
+          expense: 0,
+        });
+      }
+      const entry = categoryMap.get(row.category)!;
+      if (row.type === "income") {
+        entry.income = row._sum.amount ?? 0;
+      } else if (row.type === "expense") {
+        entry.expense = row._sum.amount ?? 0;
+      }
+    }
 
-    const data = Array.from(categories).map((category) => ({
-      category,
-      income:
-        incomeResult.find((r) => r.category === category)?._sum.amount || 0,
-      expense:
-        expenseResult.find((r) => r.category === category)?._sum.amount || 0,
-    }));
+    const data = Array.from(categoryMap.values());
 
     return {
       data,

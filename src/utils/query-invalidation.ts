@@ -14,15 +14,12 @@ export const invalidateTransactionQueries = async (
   userEmail: string
 ): Promise<void> => {
   await Promise.all([
-    // Core transaction and user data
+    // Core transaction and user data (categories excluded — they don't depend on transactions)
     queryClient.invalidateQueries({
       queryKey: [queryDictionary.transactions, userEmail],
     }),
     queryClient.invalidateQueries({
       queryKey: [queryDictionary.user, userEmail],
-    }),
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.categories, userEmail],
     }),
     // Chart data queries - these display transaction statistics and aggregations
     queryClient.invalidateQueries({

@@ -8,33 +8,24 @@ export const postTransactionByEmail = async (
   data: Transaction
 ) => {
   try {
-    const transaction = await prismaClient.transaction.create({
-      data: {
-        ...data,
-        userEmail: email,
-      },
-    });
-
-    if (!transaction) {
-      return {
-        error: true,
-        message: "Transaction creation failed",
-        data: null,
-        success: false,
-        statusCode: 500,
-      } as ApiResponse<string | null>;
-    }
-
-    await prismaClient.user.update({
-      data: {
-        updatedAt: new Date(),
-        totalBalance: {
-          increment: data.type === "income" ? data.amount : -data.amount,
+    const transaction = await prismaClient.$transaction(async (tx) => {
+      const created = await tx.transaction.create({
+        data: {
+          ...data,
+          userEmail: email,
         },
-      },
-      where: {
-        email: email,
-      },
+      });
+
+      await tx.user.update({
+        where: { email },
+        data: {
+          totalBalance: {
+            increment: data.type === "income" ? data.amount : -data.amount,
+          },
+        },
+      });
+
+      return created;
     });
 
     return {

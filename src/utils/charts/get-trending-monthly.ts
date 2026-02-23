@@ -14,42 +14,34 @@ export async function getTrendingMonthly({ email, type }: TrendingQueryParams) {
   const prevMonth = prevMonthDate.getMonth();
   const prevYear = prevMonthDate.getFullYear();
 
+  const startOfPrevMonth = new Date(prevYear, prevMonth, 1);
   const startOfThisMonth = new Date(thisYear, thisMonth, 1);
   const startOfNextMonth = new Date(thisYear, thisMonth + 1, 1);
 
-  const startOfPrevMonth = new Date(prevYear, prevMonth, 1);
-  const startOfThisMonthAgain = startOfThisMonth;
-
-  const thisMonthResult = await prismaClient.transaction.aggregate({
-    where: {
-      userEmail: email,
-      type: type,
-      createdAt: {
-        gte: startOfThisMonth,
-        lt: startOfNextMonth,
-      },
-    },
-    _sum: {
-      amount: true,
-    },
-  });
-
-  const lastMonthResult = await prismaClient.transaction.aggregate({
+  // Single query: fetch all matching transactions for both months
+  const transactions = await prismaClient.transaction.findMany({
     where: {
       userEmail: email,
       type: type,
       createdAt: {
         gte: startOfPrevMonth,
-        lt: startOfThisMonthAgain,
+        lt: startOfNextMonth,
       },
     },
-    _sum: {
-      amount: true,
-    },
+    select: { amount: true, createdAt: true },
   });
 
-  const thisMonthTotal = thisMonthResult._sum.amount ?? 0;
-  const lastMonthTotal = lastMonthResult._sum.amount ?? 0;
+  let thisMonthTotal = 0;
+  let lastMonthTotal = 0;
+
+  for (const t of transactions) {
+    const txDate = new Date(t.createdAt);
+    if (txDate >= startOfThisMonth) {
+      thisMonthTotal += t.amount;
+    } else {
+      lastMonthTotal += t.amount;
+    }
+  }
 
   let percentChange = 0;
   if (lastMonthTotal !== 0) {

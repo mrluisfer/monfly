@@ -1,23 +1,24 @@
 import { ApiResponse } from "~/types/ApiResponse";
-import { format } from "date-fns";
 
 import { prismaClient } from "../prisma";
 
-const now = new Date();
 const monthsToShow = 6;
-const sixMonthsAgo = new Date(
-  now.getFullYear(),
-  now.getMonth() - monthsToShow + 1,
-  1
-);
 
 export const getIncomeExpenseData = async ({ email }: { email: string }) => {
   try {
+    const now = new Date();
+    const sixMonthsAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - monthsToShow + 1,
+      1
+    );
+
     const transactions = await prismaClient.transaction.findMany({
       where: {
         userEmail: email,
         date: { gte: sixMonthsAgo, lte: now },
       },
+      select: { date: true, type: true, amount: true },
       orderBy: { date: "asc" },
     });
 

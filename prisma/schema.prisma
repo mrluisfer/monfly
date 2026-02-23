@@ -37,6 +37,11 @@ model Transaction {
   cardId      String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
+
+  @@index([userEmail])
+  @@index([userEmail, type])
+  @@index([userEmail, date])
+  @@index([userEmail, createdAt])
 }
 
 model Budget {
@@ -84,6 +89,8 @@ model Category {
   userEmail String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([userEmail])
 }
 
 model MonthlySummary {

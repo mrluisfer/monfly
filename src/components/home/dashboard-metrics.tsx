@@ -22,7 +22,10 @@ export function DashboardMetrics({ className }: { className?: string }) {
     queryKey: [queryDictionary.incomeExpenseData, userEmail],
     queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 3, // 3 minutes cache
+    staleTime: 1000 * 60 * 3,
+    gcTime: 1000 * 60 * 5,
+    retry: 1,
+    retryDelay: 1000,
   });
 
   // Process data

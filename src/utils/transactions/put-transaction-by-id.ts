@@ -15,22 +15,39 @@ export const putTransactionById = async (data: {
 }) => {
   try {
     const { id, data: transactionData } = data;
-    const updatedTransaction = await prismaClient.transaction.update({
-      where: { id },
-      data: transactionData,
-    });
 
-    await prismaClient.user.update({
-      where: { email: updatedTransaction.userEmail },
-      data: {
-        updatedAt: new Date(),
-        totalBalance: {
-          increment:
-            updatedTransaction.type === "income"
-              ? updatedTransaction.amount
-              : -updatedTransaction.amount,
-        },
-      },
+    const updatedTransaction = await prismaClient.$transaction(async (tx) => {
+      // Read the old transaction to calculate the correct balance delta
+      const oldTransaction = await tx.transaction.findUniqueOrThrow({
+        where: { id },
+        select: { amount: true, type: true, userEmail: true },
+      });
+
+      const oldImpact =
+        oldTransaction.type === "income"
+          ? oldTransaction.amount
+          : -oldTransaction.amount;
+      const newImpact =
+        transactionData.type === "income"
+          ? transactionData.amount
+          : -transactionData.amount;
+      const balanceDelta = newImpact - oldImpact;
+
+      const updated = await tx.transaction.update({
+        where: { id },
+        data: transactionData,
+      });
+
+      if (balanceDelta !== 0) {
+        await tx.user.update({
+          where: { email: oldTransaction.userEmail },
+          data: {
+            totalBalance: { increment: balanceDelta },
+          },
+        });
+      }
+
+      return updated;
     });
 
     return {

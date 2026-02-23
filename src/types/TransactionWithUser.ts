@@ -1,5 +1,5 @@
 export type TransactionWithUser = {
-  user: {
+  user?: {
     name: string | null;
     email: string;
     createdAt: Date;

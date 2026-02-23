@@ -1,10 +1,9 @@
-import { ApiResponse } from "~/types/ApiResponse";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "../prisma";
 
 export const deleteTransactionsById = async (transactionIds: string[]) => {
   try {
-    // Validate input
     if (!transactionIds || transactionIds.length === 0) {
       return {
         success: false,
@@ -15,17 +14,48 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
       } as ApiResponse<null>;
     }
 
-    // Delete multiple transactions by IDs
-    const deleteResult = await prismaClient.transaction.deleteMany({
-      where: {
-        id: {
-          in: transactionIds,
-        },
-      },
+    const result = await prismaClient.$transaction(async (tx) => {
+      // Read transactions before deleting to calculate balance impact
+      const transactions = await tx.transaction.findMany({
+        where: { id: { in: transactionIds } },
+        select: { id: true, amount: true, type: true, userEmail: true },
+      });
+
+      if (transactions.length === 0) {
+        return { count: 0 };
+      }
+
+      // Calculate balance delta per user
+      const balanceByUser = new Map<string, number>();
+      for (const t of transactions) {
+        const impact = t.type === "income" ? -t.amount : t.amount;
+        balanceByUser.set(
+          t.userEmail,
+          (balanceByUser.get(t.userEmail) ?? 0) + impact
+        );
+      }
+
+      // Delete the transactions
+      const deleteResult = await tx.transaction.deleteMany({
+        where: { id: { in: transactionIds } },
+      });
+
+      // Update balance for each affected user
+      for (const [email, delta] of balanceByUser) {
+        if (delta !== 0) {
+          await tx.user.update({
+            where: { email },
+            data: {
+              totalBalance: { increment: delta },
+            },
+          });
+        }
+      }
+
+      return deleteResult;
     });
 
-    // Check if any transactions were actually deleted
-    if (deleteResult.count === 0) {
+    if (result.count === 0) {
       return {
         success: false,
         message: "No transactions found with the provided IDs",
@@ -36,19 +66,18 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
     }
 
     const message =
-      deleteResult.count === 1
+      result.count === 1
         ? "Transaction deleted successfully"
-        : `${deleteResult.count} transactions deleted successfully`;
+        : `${result.count} transactions deleted successfully`;
 
     return {
       success: true,
       message,
-      data: { count: deleteResult.count, deletedIds: transactionIds },
+      data: { count: result.count, deletedIds: transactionIds },
       error: false,
       statusCode: 200,
     } as ApiResponse<{ count: number; deletedIds: string[] }>;
   } catch (error) {
-    console.error("Error deleting transactions:", error);
     return {
       success: false,
       message: "Error deleting transactions",
