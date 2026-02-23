@@ -31,7 +31,6 @@ export function HomePage() {
   const [activeTab, setActiveTab] = useState<string>(ManagementTab.CATEGORIES);
 
   const handleTabChange = (tab: string) => {
-    console.log("Tab changed to:", tab);
     setActiveTab(tab);
   };
 

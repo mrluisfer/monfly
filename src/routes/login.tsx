@@ -43,8 +43,6 @@ function Login() {
         });
         return;
       }
-
-      console.log("Login error", ctx.data);
     },
   });
 

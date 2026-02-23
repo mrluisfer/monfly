@@ -10,7 +10,6 @@ export async function checkDatabaseConnection(): Promise<{
     await prismaClient.$queryRaw`SELECT 1`;
     const latency = Date.now() - start;
 
-    console.log(`✅ Database connection healthy (${latency}ms)`);
     return { connected: true, latency };
   } catch (error) {
     console.error("❌ Database connection failed:", error);

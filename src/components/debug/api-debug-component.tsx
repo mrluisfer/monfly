@@ -12,7 +12,6 @@ export function ApiDebugComponent() {
   const transactionQuery = useQuery({
     queryKey: [queryDictionary.transactions, userEmail, "debug"],
     queryFn: async () => {
-      console.log("🔄 Starting transaction query for:", userEmail);
       const start = Date.now();
 
       try {
@@ -20,8 +19,6 @@ export function ApiDebugComponent() {
           data: { email: userEmail },
         });
         const duration = Date.now() - start;
-        console.log("✅ Transaction query completed in", duration + "ms");
-        console.log("Transaction result:", result);
         return result;
       } catch (error) {
         const duration = Date.now() - start;
@@ -35,7 +32,6 @@ export function ApiDebugComponent() {
   const userQuery = useQuery({
     queryKey: [queryDictionary.user, userEmail, "debug"],
     queryFn: async () => {
-      console.log("🔄 Starting user query for:", userEmail);
       const start = Date.now();
 
       try {
@@ -43,8 +39,6 @@ export function ApiDebugComponent() {
           data: { email: userEmail },
         });
         const duration = Date.now() - start;
-        console.log("✅ User query completed in", duration + "ms");
-        console.log("User result:", result);
         return result;
       } catch (error) {
         const duration = Date.now() - start;
@@ -58,7 +52,6 @@ export function ApiDebugComponent() {
   const expenseQuery = useQuery({
     queryKey: [queryDictionary.transactions, userEmail, "expenses", "debug"],
     queryFn: async () => {
-      console.log("🔄 Starting expense query for:", userEmail);
       const start = Date.now();
 
       try {
@@ -66,8 +59,6 @@ export function ApiDebugComponent() {
           data: { email: userEmail },
         });
         const duration = Date.now() - start;
-        console.log("✅ Expense query completed in", duration + "ms");
-        console.log("Expense result:", result);
         return result;
       } catch (error) {
         const duration = Date.now() - start;

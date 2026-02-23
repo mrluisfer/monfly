@@ -71,8 +71,6 @@ export default function ChartByCategoryRadar({
     retryDelay: 1000,
   });
 
-  console.log("Trending Monthly Data:", trendingMonthlyData);
-
   // [{ category: string, income: number, expense: number }]
   const chartData = data?.data ?? [];
   const isIncome = type === transactionTypes.INCOME;

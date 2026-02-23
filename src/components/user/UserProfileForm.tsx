@@ -66,7 +66,6 @@ export function UserProfileForm({ userId, user }: UserProfileFormProps) {
 
   const onSubmit = useCallback(
     async (values: FormValues) => {
-      console.log("Submit user", memoUserId, values);
       // TODO: llama a tu server action aquí
     },
     [memoUserId]

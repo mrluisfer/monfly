@@ -15,6 +15,5 @@ export const getChartTypeByCategoryServer = createServerFn({ method: "GET" })
     })
   )
   .handler(async ({ data }) => {
-    console.log("Fetching chart type by category with data:", data);
     return await getChartTypeByCategory(data);
   });

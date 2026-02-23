@@ -59,7 +59,6 @@ export const loginFn = createServerFn({ method: "POST" })
         statusCode: 200,
       } as ApiResponse<string>;
     } catch (error) {
-      console.log({ error });
       return {
         error: true,
         message: "Error logging in",
