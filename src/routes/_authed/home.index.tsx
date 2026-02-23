@@ -14,6 +14,7 @@ import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { AnimatePresence, motion } from "framer-motion";
+import {BalanceActions} from "~/components/balance/BalanceActions";
 
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
@@ -92,6 +93,7 @@ function RouteComponent() {
                 transition={{ duration: 0.5, delay: 0 }}
               >
                 <TotalBalance />
+                <BalanceActions />
               </motion.div>
 
               <motion.div

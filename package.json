@@ -71,6 +71,7 @@
     "react-icons": "^5.5.0",
     "recharts": "^2.15.4",
     "redaxios": "^0.5.1",
+    "sileo": "^0.1.5",
     "sonner": "^2.0.7",
     "tailwind-merge": "^2.6.0",
     "vinxi": "0.5.3",

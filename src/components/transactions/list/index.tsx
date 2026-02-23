@@ -88,9 +88,6 @@ export default function TransactionsList() {
               <div className="hidden md:block">
                 <BalanceStatusBadge />
               </div>
-              <div>
-                <AddTransactionButton />
-              </div>
             </div>
           </div>
           <CardDescription>You made {total} transactions</CardDescription>

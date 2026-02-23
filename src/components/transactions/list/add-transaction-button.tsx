@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {ReactNode, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -26,7 +26,7 @@ import { TransactionForm } from "../transaction-form";
 
 type TransactionFormValues = z.infer<typeof TransactionFormSchema>;
 
-const AddTransactionButton = () => {
+const AddTransactionButton = ({customTrigger = null}: {customTrigger?: ReactNode}) => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const { form, onSubmit, mutation } = useAddTransaction();
@@ -36,7 +36,7 @@ const AddTransactionButton = () => {
     setOpen(false);
   };
 
-  const trigger = (
+  const trigger = customTrigger ?? (
     <Button
       className="group h-9 px-2.5 md:h-10 md:px-4"
       variant="outline"

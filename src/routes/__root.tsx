@@ -21,6 +21,7 @@ import appCss from "~/styles/app.css?url";
 import { seo } from "~/utils/seo.js";
 // import appCss from "~/styles/output.css?url";
 import clsx from "clsx";
+import { Toaster as SileoToaster } from "sileo";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -146,6 +147,7 @@ const queryClient = new QueryClient({
     },
   },
 });
+
 function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -196,6 +198,7 @@ function RootDocumentWithProviders({
         <HeadContent />
       </head>
       <body className={clsx(fontDisplay)}>
+        <SileoToaster position="top-center" />
         {children}
         <TanStackRouterDevtools position="bottom-right" />
         <Scripts />
