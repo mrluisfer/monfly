@@ -25,18 +25,18 @@ import { DataTableDemo } from "./TransactionsTable";
 export default function TransactionsList() {
   const userEmail = useRouteUser();
 
-  const { data, isPending, error, refetch, isError } = useQuery({
+  const { data, isPending, error, refetch } = useQuery({
     queryKey: [queryDictionary.transactions, userEmail],
     queryFn: createSafeQuery(
       () =>
         getTransactionByEmailServer({
           data: { email: userEmail },
         }),
-      8000 // 8 second timeout
+      8000
     ),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 2, // 2 minutes cache
-    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 5,
     retry: 1,
     retryDelay: 1000,
   });
@@ -44,111 +44,216 @@ export default function TransactionsList() {
   const transactions = data?.data ?? [];
   const total = data?.total ?? 0;
 
-  console.log("TransactionsList query state:", {
-    userEmail,
-    enabled: !!userEmail,
-    isPending,
-    isError,
-    hasData: !!data,
-    error: error?.message,
-  });
-
   return (
     <TransactionHoverProvider>
-      <Card className="min-h-[500px]">
-        <CardHeader>
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <CardTitle className="text-xl flex items-center gap-2">
-              <WalletIcon className="size-5 text-primary" />
-              Transactions
-            </CardTitle>
-            <div className="ml-auto flex items-center gap-2 sm:gap-3 md:gap-6">
-              <Button
-                onClick={() => refetch()}
-                disabled={isPending || transactions.length === 0}
-                title="Refresh transactions"
-                variant={"outline"}
-                size="sm"
-                className="h-9 px-2.5 md:h-10 md:px-4"
-              >
-                {isPending ? (
-                  <>
-                    <Spinner className="mr-2 h-4 w-4" />
-                    <span className="hidden md:inline">Loading...</span>
-                  </>
-                ) : (
-                  <>
-                    <RefreshCcwIcon
-                      className={cn("h-4 w-4", isPending ? "animate-spin" : "")}
-                    />
-                    <span className="hidden md:inline ml-2">Refresh</span>
-                  </>
-                )}
-              </Button>
-              <div className="hidden md:block">
+      {/* Desktop: keep Card wrapper */}
+      <div className="hidden md:block">
+        <Card className="min-h-[500px]">
+          <CardHeader>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <CardTitle className="text-xl flex items-center gap-2">
+                <WalletIcon className="size-5 text-primary" />
+                Transactions
+              </CardTitle>
+              <div className="ml-auto flex items-center gap-3 md:gap-6">
+                <Button
+                  onClick={() => refetch()}
+                  disabled={isPending || transactions.length === 0}
+                  title="Refresh transactions"
+                  variant="outline"
+                  size="sm"
+                  className="h-10 px-4"
+                >
+                  {isPending ? (
+                    <>
+                      <Spinner className="mr-2 h-4 w-4" />
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCcwIcon className="h-4 w-4" />
+                      <span className="ml-2">Refresh</span>
+                    </>
+                  )}
+                </Button>
                 <BalanceStatusBadge />
               </div>
             </div>
-          </div>
-          <CardDescription>You made {total} transactions</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col h-full justify-between">
-            {!userEmail && (
-              <div className="flex items-center justify-center p-8">
-                <div className="text-sm text-gray-500">
-                  Loading user information...
-                </div>
-              </div>
-            )}
-            {userEmail && isPending && (
-              <div className="flex items-center justify-center p-8">
-                <div className="text-sm text-gray-500">
-                  Loading transactions...
-                </div>
-              </div>
-            )}
-            {userEmail && error && (
-              <div className="flex flex-col items-center justify-center p-8 space-y-4">
-                <div className="text-red-600 text-center">
-                  <p className="font-medium">Failed to load transactions</p>
-                  <p className="text-sm mt-1">{error.message}</p>
-                </div>
-                <button
-                  onClick={() => refetch()}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
-            {userEmail && !isPending && !error && (
-              <>
-                {Array.isArray(transactions) && transactions.length > 0 ? (
-                  <>
-                    <div className="hidden md:block">
-                      <DataTableDemo data={transactions} />
-                    </div>
-                    <div className="md:hidden">
-                      <TransactionCardList data={transactions} />
-                    </div>
-                  </>
-                ) : (
-                  <div className="space-y-4">
-                    <DataNotFoundPlaceholder>
-                      No transactions found. Try adding your first transaction!
-                    </DataNotFoundPlaceholder>
-                    <div className="text-xs text-gray-500 text-center">
-                      Debug Info: User: {userEmail}, Data:{" "}
-                      {JSON.stringify(data, null, 2)}
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+            <CardDescription>You made {total} transactions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <DesktopContent
+              userEmail={userEmail}
+              isPending={isPending}
+              error={error}
+              transactions={transactions}
+              refetch={refetch}
+              data={data}
+            />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Mobile: no Card, clean edge-to-edge layout */}
+      <div className="md:hidden">
+        <MobileHeader
+          total={total}
+          isPending={isPending}
+          transactionsCount={transactions.length}
+          refetch={refetch}
+        />
+        <MobileContent
+          userEmail={userEmail}
+          isPending={isPending}
+          error={error}
+          transactions={transactions}
+          refetch={refetch}
+        />
+      </div>
     </TransactionHoverProvider>
+  );
+}
+
+function MobileHeader({
+  total,
+  isPending,
+  transactionsCount,
+  refetch,
+}: {
+  total: number;
+  isPending: boolean;
+  transactionsCount: number;
+  refetch: () => void;
+}) {
+  return (
+    <div className="flex items-center justify-between px-1 mb-4">
+      <div>
+        <h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
+          <WalletIcon className="size-4.5 text-primary" />
+          Transactions
+        </h2>
+        <p className="text-xs text-muted-foreground mt-0.5">
+          {total} {total === 1 ? "transaction" : "transactions"}
+        </p>
+      </div>
+      <Button
+        onClick={() => refetch()}
+        disabled={isPending || transactionsCount === 0}
+        variant="ghost"
+        size="icon"
+        className="size-9 rounded-xl"
+      >
+        <RefreshCcwIcon
+          className={cn("size-4", isPending && "animate-spin")}
+        />
+      </Button>
+    </div>
+  );
+}
+
+function MobileContent({
+  userEmail,
+  isPending,
+  error,
+  transactions,
+  refetch,
+}: {
+  userEmail: string;
+  isPending: boolean;
+  error: Error | null;
+  transactions: any[];
+  refetch: () => void;
+}) {
+  if (!userEmail) {
+    return <LoadingState message="Loading user information..." />;
+  }
+
+  if (isPending) {
+    return <LoadingState message="Loading transactions..." />;
+  }
+
+  if (error) {
+    return <ErrorState error={error} onRetry={refetch} />;
+  }
+
+  if (!transactions.length) {
+    return (
+      <DataNotFoundPlaceholder>
+        No transactions found. Try adding your first transaction!
+      </DataNotFoundPlaceholder>
+    );
+  }
+
+  return <TransactionCardList data={transactions} />;
+}
+
+function DesktopContent({
+  userEmail,
+  isPending,
+  error,
+  transactions,
+  refetch,
+  data,
+}: {
+  userEmail: string;
+  isPending: boolean;
+  error: Error | null;
+  transactions: any[];
+  refetch: () => void;
+  data: any;
+}) {
+  if (!userEmail) {
+    return <LoadingState message="Loading user information..." />;
+  }
+
+  if (isPending) {
+    return <LoadingState message="Loading transactions..." />;
+  }
+
+  if (error) {
+    return <ErrorState error={error} onRetry={refetch} />;
+  }
+
+  if (!transactions.length) {
+    return (
+      <DataNotFoundPlaceholder>
+        No transactions found. Try adding your first transaction!
+      </DataNotFoundPlaceholder>
+    );
+  }
+
+  return <DataTableDemo data={transactions} />;
+}
+
+function LoadingState({ message }: { message: string }) {
+  return (
+    <div className="flex items-center justify-center p-8">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Spinner className="size-4" />
+        {message}
+      </div>
+    </div>
+  );
+}
+
+function ErrorState({
+  error,
+  onRetry,
+}: {
+  error: Error;
+  onRetry: () => void;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center p-8 space-y-4">
+      <div className="text-center">
+        <p className="font-medium text-destructive">
+          Failed to load transactions
+        </p>
+        <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+      </div>
+      <Button onClick={onRetry} variant="outline" size="sm">
+        Retry
+      </Button>
+    </div>
   );
 }
