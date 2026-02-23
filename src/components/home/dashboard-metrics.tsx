@@ -1,19 +1,15 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-    DollarSign,
-    TrendingDown,
-    TrendingUp
-} from "lucide-react";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart.server";
+import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
+import { DollarSign, TrendingDown, TrendingUp } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { cn } from "~/lib/utils";
 
 export function DashboardMetrics({ className }: { className?: string }) {
   const userEmail = useRouteUser();
@@ -44,7 +40,9 @@ export function DashboardMetrics({ className }: { className?: string }) {
 
   if (isLoading) {
     return (
-      <div className={cn("grid gap-4 md:grid-cols-3 xl:grid-cols-1", className)}>
+      <div
+        className={cn("grid gap-4 md:grid-cols-3 xl:grid-cols-1", className)}
+      >
         {[1, 2, 3].map((i) => (
           <Card key={i}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -70,7 +68,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
 
   return (
     <div className={cn("grid gap-4 md:grid-cols-3 xl:grid-cols-1", className)}>
-      <Card className="bg-gradient-to-br from-green-50 to-transparent dark:from-green-950/20 dark:to-transparent border-green-200/50 dark:border-green-800/50">
+      <Card className="bg-linear-to-br from-green-50 to-transparent dark:from-green-950/20 dark:to-transparent border-green-200/50 dark:border-green-800/50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Income</CardTitle>
           <div className="p-2 bg-green-100 dark:bg-green-900/40 rounded-full">
@@ -81,12 +79,10 @@ export function DashboardMetrics({ className }: { className?: string }) {
           <div className="text-2xl font-bold text-green-600">
             {formatCurrency(totalIncome, "USD")}
           </div>
-          <p className="text-xs text-muted-foreground">
-            Total recorded income
-          </p>
+          <p className="text-xs text-muted-foreground">Total recorded income</p>
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-br from-red-50 to-transparent dark:from-red-950/20 dark:to-transparent border-red-200/50 dark:border-red-800/50">
+      <Card className="bg-linear-to-br from-red-50 to-transparent dark:from-red-950/20 dark:to-transparent border-red-200/50 dark:border-red-800/50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
           <div className="p-2 bg-red-100 dark:bg-red-900/40 rounded-full">
@@ -102,7 +98,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
           </p>
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-br from-background to-accent/50 border-border/50">
+      <Card className="bg-linear-to-br from-background to-accent/50 border-border/50">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Net Flow</CardTitle>
           <div className="p-2 bg-secondary rounded-full">
@@ -118,9 +114,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
             {netTotal >= 0 ? "+" : ""}
             {formatCurrency(netTotal, "USD")}
           </div>
-          <p className="text-xs text-muted-foreground">
-            Income minus expenses
-          </p>
+          <p className="text-xs text-muted-foreground">Income minus expenses</p>
         </CardContent>
       </Card>
     </div>
