@@ -18,7 +18,6 @@ import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
-import AddTransactionButton from "./add-transaction-button";
 import { TransactionCardList } from "./transaction-card-list";
 import { DataTableDemo } from "./TransactionsTable";
 
@@ -143,9 +142,7 @@ function MobileHeader({
         size="icon"
         className="size-9 rounded-xl"
       >
-        <RefreshCcwIcon
-          className={cn("size-4", isPending && "animate-spin")}
-        />
+        <RefreshCcwIcon className={cn("size-4", isPending && "animate-spin")} />
       </Button>
     </div>
   );
@@ -236,13 +233,7 @@ function LoadingState({ message }: { message: string }) {
   );
 }
 
-function ErrorState({
-  error,
-  onRetry,
-}: {
-  error: Error;
-  onRetry: () => void;
-}) {
+function ErrorState({ error, onRetry }: { error: Error; onRetry: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center p-8 space-y-4">
       <div className="text-center">

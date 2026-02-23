@@ -105,7 +105,7 @@ function TransactionRow({
   groupDelay: number;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const isIncome = transaction.type === "INCOME";
+  const isIncome = transaction.type.toLowerCase() === "income";
   const category =
     typeof transaction.category === "string"
       ? transaction.category
