@@ -47,13 +47,6 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import { Textarea } from "../ui/textarea";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
@@ -92,82 +85,89 @@ export function TransactionForm<FormValues extends FieldValues>({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-5 p-1 sm:space-y-6"
+        className="space-y-4 sm:space-y-5"
         autoComplete="off"
       >
-        <FormField
-          control={form.control}
-          name={transactionFormNames.amount as Path<FormValues>}
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel
-                htmlFor={transactionFormNames.amount}
-                className="flex items-center gap-2 text-sm font-medium text-foreground"
-              >
-                <DollarSignIcon className="h-4 w-4 text-emerald-600" />
-                Amount
-              </FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    id={transactionFormNames.amount}
-                    type="number"
-                    placeholder="0.00"
-                    className="h-11 pl-8 text-base font-medium sm:h-12 sm:text-lg"
-                    {...field}
-                    onChange={(e) =>
-                      field.onChange(validLimitNumber(e.target.value))
-                    }
-                  />
-                  <DollarSignIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name={transactionFormNames.type as Path<FormValues>}
-          render={({ field }) => (
-            <FormItem className="space-y-3">
-              <FormLabel
-                htmlFor={transactionFormNames.type}
-                className="flex items-center gap-2 text-sm font-medium text-foreground"
-              >
-                <SparklesIcon className="h-4 w-4 text-purple-600" />
-                Transaction Type
-              </FormLabel>
-              <FormControl>
-                <Select
-                  value={field.value as string}
-                  onValueChange={(value) =>
-                    field.onChange(value as "income" | "expense")
-                  }
+        {/* Amount + Type row */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-3">
+          <FormField
+            control={form.control}
+            name={transactionFormNames.amount as Path<FormValues>}
+            render={({ field }) => (
+              <FormItem className="space-y-2 flex-1">
+                <FormLabel
+                  htmlFor={transactionFormNames.amount}
+                  className="flex items-center gap-1.5 text-sm font-medium text-foreground"
                 >
-                  <SelectTrigger className="h-11 w-full sm:h-12">
-                    <SelectValue placeholder="Select transaction type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="income">
-                      <div className="flex items-center gap-2">
-                        <TrendingUpIcon className="h-4 w-4 text-emerald-600" />
-                        <span>Income</span>
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="expense">
-                      <div className="flex items-center gap-2">
-                        <TrendingDownIcon className="h-4 w-4 text-red-600" />
-                        <span>Expense</span>
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <DollarSignIcon className="size-3.5 text-emerald-600" />
+                  Amount
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      id={transactionFormNames.amount}
+                      type="number"
+                      placeholder="0.00"
+                      className="h-11 pl-8 text-base font-medium sm:h-12 sm:text-lg"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(validLimitNumber(e.target.value))
+                      }
+                    />
+                    <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={transactionFormNames.type as Path<FormValues>}
+            render={({ field }) => {
+              const currentType = (field.value as string) || "";
+              return (
+                <FormItem className="space-y-2 sm:w-[200px]">
+                  <FormLabel className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+                    <SparklesIcon className="size-3.5 text-purple-600" />
+                    Type
+                  </FormLabel>
+                  <FormControl>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => field.onChange("income")}
+                        className={cn(
+                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 sm:h-12",
+                          currentType === "income"
+                            ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                            : "border-input bg-background text-muted-foreground hover:bg-muted/50"
+                        )}
+                      >
+                        <TrendingUpIcon className="size-4" />
+                        Income
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => field.onChange("expense")}
+                        className={cn(
+                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 sm:h-12",
+                          currentType === "expense"
+                            ? "border-red-500/50 bg-red-500/10 text-red-600 dark:text-red-400"
+                            : "border-input bg-background text-muted-foreground hover:bg-muted/50"
+                        )}
+                      >
+                        <TrendingDownIcon className="size-4" />
+                        Expense
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+        </div>
 
         <FormField
           control={form.control}
@@ -186,12 +186,12 @@ export function TransactionForm<FormValues extends FieldValues>({
               );
 
             return (
-              <FormItem className="space-y-3">
+              <FormItem className="space-y-2">
                 <FormLabel
                   htmlFor={transactionFormNames.category}
-                  className="flex items-center gap-2 text-sm font-medium text-foreground"
+                  className="flex items-center gap-1.5 text-sm font-medium text-foreground"
                 >
-                  <TagIcon className="h-4 w-4 text-blue-600" />
+                  <TagIcon className="size-3.5 text-blue-600" />
                   Category
                 </FormLabel>
                 <FormControl>
@@ -225,7 +225,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent
-                        className="w-[var(--radix-popover-trigger-width)] p-0"
+                        className="w-(--radix-popover-trigger-width) p-0"
                         align="start"
                       >
                         <Command>
@@ -302,24 +302,24 @@ export function TransactionForm<FormValues extends FieldValues>({
           control={form.control}
           name={transactionFormNames.description as Path<FormValues>}
           render={({ field }) => (
-            <FormItem className="space-y-3">
+            <FormItem className="space-y-2">
               <FormLabel
                 htmlFor={transactionFormNames.description}
-                className="flex items-center gap-2 text-sm font-medium text-foreground"
+                className="flex items-center gap-1.5 text-sm font-medium text-foreground"
               >
-                <FileTextIcon className="h-4 w-4 text-orange-600" />
+                <FileTextIcon className="size-3.5 text-orange-600" />
                 Description
               </FormLabel>
               <FormControl>
                 <div className="relative">
                   <Textarea
-                    placeholder="Add a description for your transaction..."
+                    placeholder="Add a description..."
                     id={transactionFormNames.description}
-                    className="min-h-[96px] resize-none pl-10 pt-4 text-sm sm:min-h-[110px] sm:text-base"
-                    rows={3}
+                    className="min-h-20 resize-none pl-10 pt-3.5 text-sm sm:min-h-[110px] sm:pt-4 sm:text-base"
+                    rows={2}
                     {...field}
                   />
-                  <FileTextIcon className="absolute left-3 top-4 h-4 w-4 text-muted-foreground" />
+                  <FileTextIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground sm:top-4" />
                 </div>
               </FormControl>
               <FormMessage />
@@ -330,12 +330,12 @@ export function TransactionForm<FormValues extends FieldValues>({
           control={form.control}
           name={transactionFormNames.date as Path<FormValues>}
           render={({ field }) => (
-            <FormItem className="flex flex-col space-y-3">
+            <FormItem className="flex flex-col space-y-2">
               <FormLabel
                 htmlFor={transactionFormNames.date}
-                className="flex items-center gap-2 text-sm font-medium text-foreground"
+                className="flex items-center gap-1.5 text-sm font-medium text-foreground"
               >
-                <CalendarIcon className="h-4 w-4 text-indigo-600" />
+                <CalendarIcon className="size-3.5 text-indigo-600" />
                 Date
               </FormLabel>
               {isPending && <div>Loading...</div>}
@@ -385,20 +385,20 @@ export function TransactionForm<FormValues extends FieldValues>({
             </FormItem>
           )}
         />
-        <div className="pt-4">
+        <div className="pt-2 sm:pt-4">
           <Button
             type="submit"
-            className="h-11 w-full text-base font-medium shadow-lg transition-all duration-200 hover:shadow-xl sm:h-12 sm:hover:scale-[1.02]"
+            className="h-12 w-full rounded-xl text-base font-medium shadow-lg transition-all duration-200 active:scale-[0.97] hover:shadow-xl sm:hover:scale-[1.02]"
             disabled={isLoading}
           >
             {isLoading ? (
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 Saving...
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <SparklesIcon className="h-4 w-4" />
+                <SparklesIcon className="size-4" />
                 {buttonText}
               </div>
             )}
