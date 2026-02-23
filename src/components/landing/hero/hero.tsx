@@ -7,7 +7,7 @@ import { Partners } from "./partners";
 export function LandingHero() {
   return (
     <section className="mt-16 bg-hero">
-      <div className="max-w-3xl mx-auto pb-12 flex flex-col md:flex-row gap-10 items-center justify-between">
+      <div className="max-w-3xl mx-auto pb-12 px-4 sm:px-6 md:px-0 flex flex-col md:flex-row gap-10 items-center justify-between">
         <div className="flex-1 space-y-6">
           <div className="flex items-center justify-center">
             <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-semibold mb-2 text-center">
@@ -16,7 +16,7 @@ export function LandingHero() {
             </span>
           </div>
           <div className="flex items-center justify-center">
-            <h1 className="text-4xl md:text-5xl xl:text-6xl font-bold tracking-tight text-center">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold tracking-tight text-center">
               Empower Your{" "}
               <span className="text-primary">Personal Financial</span> Journey
             </h1>
@@ -46,7 +46,7 @@ export function LandingHero() {
               <Link to="/login">Already have an account?</Link>
             </Button>
           </div>
-          <div className="flex gap-4 mt-6 items-center justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 mt-6 items-center justify-center">
             <span className="text-xs text-muted-foreground">
               Our Trusted Partners:
             </span>
