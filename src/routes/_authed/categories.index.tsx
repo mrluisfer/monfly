@@ -15,7 +15,15 @@ function RouteComponent() {
           Categories
         </PageTitle>
       </header>
-      <div className="grid grid-cols-5 gap-4">
+
+      {/* Mobile: stacked layout, list first for immediate access */}
+      <div className="flex flex-col gap-5 lg:hidden">
+        <CategoriesList />
+        <AddCategory />
+      </div>
+
+      {/* Desktop: side-by-side grid */}
+      <div className="hidden lg:grid lg:grid-cols-5 gap-4">
         <div className="col-span-2">
           <AddCategory />
         </div>
