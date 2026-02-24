@@ -1494,3 +1494,10 @@ html.dark .bg-hero::before {
   --sidebar-border: hsl(240 3.7% 15.9%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
+
+/* Prevent iOS Safari from zooming on focus for form controls on mobile. */
+@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
+  :where(input, textarea, select) {
+    font-size: 16px !important;
+  }
+}
