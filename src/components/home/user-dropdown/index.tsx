@@ -36,18 +36,13 @@ export default function UserDropdown() {
     retryDelay: 1000,
   });
 
-  const handleSignOutClick = () => {
-    setDropdownOpen(false); // Close dropdown first
-    setTimeout(() => {
-      setSignOutDialogOpen(true); // Then open dialog
-    }, 100); // Small delay to ensure dropdown closes
-  };
-
-  const handleProfileSettingsClick = () => {
-    setDropdownOpen(false); // Close dropdown first
-    setTimeout(() => {
-      setProfileSettingsOpen(true); // Then open dialog
-    }, 100); // Small delay to ensure dropdown closes
+  const openMenuActionDialog = (action: "profile-settings" | "sign-out") => {
+    setDropdownOpen(false);
+    if (action === "profile-settings") {
+      setProfileSettingsOpen(true);
+      return;
+    }
+    setSignOutDialogOpen(true);
   };
 
   // Get user data safely
@@ -87,9 +82,8 @@ export default function UserDropdown() {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuGroup>
             <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault(); // Prevent default dropdown close behavior
-                handleProfileSettingsClick();
+              onSelect={() => {
+                openMenuActionDialog("profile-settings");
               }}
             >
               Profile Settings
@@ -98,9 +92,8 @@ export default function UserDropdown() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem
-              onSelect={(e) => {
-                e.preventDefault(); // Prevent default dropdown close behavior
-                handleSignOutClick();
+              onSelect={() => {
+                openMenuActionDialog("sign-out");
               }}
               className="text-destructive focus:text-destructive"
             >

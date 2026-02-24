@@ -11,6 +11,7 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { DefaultCatchBoundary } from "~/components/default-catch-boundary.js";
 import { NotFound } from "~/components/not-found.js";
 import { Toaster } from "~/components/ui/sonner";
+import { TooltipProvider } from "~/components/ui/tooltip";
 import { DarkModeProvider } from "~/context/dark-mode-provider";
 import { FontDisplayProvider } from "~/context/font-display-provider";
 import { SonnerPositionProvider } from "~/context/sonner-position-provider";
@@ -174,10 +175,17 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
-        <TanStackRouterDevtools position="bottom-right" />
-        <Scripts />
-        <Toaster position="bottom-right" closeButton richColors key="sonner" />
+        <TooltipProvider delayDuration={200}>
+          {children}
+          <TanStackRouterDevtools position="bottom-right" />
+          <Scripts />
+          <Toaster
+            position="bottom-right"
+            closeButton
+            richColors
+            key="sonner"
+          />
+        </TooltipProvider>
       </body>
     </html>
   );
@@ -198,11 +206,13 @@ function RootDocumentWithProviders({
         <HeadContent />
       </head>
       <body className={clsx(fontDisplay)}>
-        <SileoToaster position="top-center" />
-        {children}
-        <TanStackRouterDevtools position="bottom-right" />
-        <Scripts />
-        <Toaster position={position} closeButton richColors key="sonner" />
+        <TooltipProvider delayDuration={200}>
+          <SileoToaster position="top-center" />
+          {children}
+          <TanStackRouterDevtools position="bottom-right" />
+          <Scripts />
+          <Toaster position={position} closeButton richColors key="sonner" />
+        </TooltipProvider>
       </body>
     </html>
   );
