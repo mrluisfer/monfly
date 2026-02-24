@@ -1,7 +1,3 @@
-export type SonnerPosition =
-  | "top-left"
-  | "top-right"
-  | "bottom-left"
-  | "bottom-right"
-  | "top-center"
-  | "bottom-center";
+import type { SileoPosition } from "sileo";
+
+export type SonnerPosition = SileoPosition;

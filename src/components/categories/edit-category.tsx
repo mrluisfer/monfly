@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";
-import { toast } from "sonner";
+import { sileo } from "~/lib/toaster";
 
 import { CategoryForm } from "./category-form";
 
@@ -19,7 +19,7 @@ export function EditCategory({
   const updateCategory = useMutation({
     fn: putCategoryByIdServer,
     onSuccess: async () => {
-      toast.success("Category updated successfully");
+      sileo.success({ title: "Category updated successfully" });
       // Need to get userEmail first
       const { getUserSession } = await import("~/utils/user/get-user-session");
       const { data: userEmail } = await getUserSession();
@@ -37,7 +37,7 @@ export function EditCategory({
     const icon = data[categoryFormNames.icon]?.trim();
 
     if (!name || !icon) {
-      toast.error("Name and icon are required");
+      sileo.error({ title: "Name and icon are required" });
       return;
     }
 
@@ -50,7 +50,7 @@ export function EditCategory({
         },
       });
     } catch (error) {
-      toast.error("Error updating category");
+      sileo.error({ title: "Error updating category" });
     }
   };
 

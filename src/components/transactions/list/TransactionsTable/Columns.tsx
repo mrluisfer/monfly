@@ -30,6 +30,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useMutation } from "~/hooks/use-mutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
+import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import {
@@ -40,7 +41,6 @@ import {
   MoreHorizontalIcon,
   TrashIcon,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import EditTransaction from "../../edit-transaction";
 
@@ -230,7 +230,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       const deleteTransactionByIdMutation = useMutation({
         fn: deleteTransactionByIdServer,
         onSuccess: async () => {
-          toast.success("Transaction deleted successfully");
+          sileo.success({ title: "Transaction deleted successfully" });
           await queryClient.invalidateQueries({
             queryKey: [queryDictionary.transactions, transaction.userEmail],
           });
@@ -247,7 +247,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
           deleteTransactionByIdMutation.status === "error" &&
           deleteTransactionByIdMutation.error
         ) {
-          toast.error("Failed to delete transaction");
+          sileo.error({ title: "Failed to delete transaction" });
           setIsDeleteDialogOpen(false);
         }
       }, [
@@ -286,7 +286,13 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(transaction.id)}
+                onClick={() => {
+                  sileo.promise(navigator.clipboard.writeText(transaction.id), {
+                    loading: { title: "Copying transaction ID..." },
+                    success: { title: "Transaction ID copied" },
+                    error: { title: "Failed to copy transaction ID" },
+                  });
+                }}
               >
                 Copy transaction ID
               </DropdownMenuItem>

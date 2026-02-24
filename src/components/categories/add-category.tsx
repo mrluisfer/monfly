@@ -4,10 +4,10 @@ import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
+import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
-import { toast } from "sonner";
 
 import Card from "../card";
 import { CategoryForm } from "./category-form";
@@ -20,7 +20,7 @@ export default function AddCategory() {
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
     onSuccess: async () => {
-      toast.success("Category created successfully");
+      sileo.success({ title: "Category created successfully" });
       const { invalidateCategoryQueries } = await import(
         "~/utils/query-invalidation"
       );
@@ -40,7 +40,7 @@ export default function AddCategory() {
         },
       });
     } catch (error) {
-      toast.error("Error creating category");
+      sileo.error({ title: "Error creating category" });
     }
   };
 

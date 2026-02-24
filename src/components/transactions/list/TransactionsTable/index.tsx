@@ -27,6 +27,7 @@ import {
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-transactions-by-id";
+import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
@@ -38,7 +39,6 @@ import {
   TrashIcon,
   XIcon,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -116,7 +116,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
   const deleteTransactionsByIdMutation = useMutation({
     fn: deleteTransactionsByIdServer,
     onSuccess: async () => {
-      toast.success("Transactions deleted successfully");
+      sileo.success({ title: "Transactions deleted successfully" });
       await queryClient.invalidateQueries({
         queryKey: [queryDictionary.transactions, userEmail],
       });
@@ -131,7 +131,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       deleteTransactionsByIdMutation.status === "error" &&
       deleteTransactionsByIdMutation.error
     ) {
-      toast.error("Failed to delete transactions");
+      sileo.error({ title: "Failed to delete transactions" });
     }
   }, [
     deleteTransactionsByIdMutation.status,
@@ -143,7 +143,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     const selectedIds = selectedRows.map((row) => row.original.id);
 
     if (selectedIds.length === 0) {
-      toast.error("No transactions selected");
+      sileo.warning({ title: "No transactions selected" });
       return;
     }
 

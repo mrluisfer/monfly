@@ -17,10 +17,10 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useMutation } from "~/hooks/use-mutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
+import { sileo } from "~/lib/toaster";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { Edit, Ellipsis, Trash } from "lucide-react";
-import { toast } from "sonner";
 
 import EditTransaction from "../edit-transaction";
 
@@ -36,7 +36,7 @@ const TransactionItemActions = ({
   const deleteTransactionByIdMutation = useMutation({
     fn: deleteTransactionByIdServer,
     onSuccess: async () => {
-      toast.success("Transaction deleted successfully");
+      sileo.success({ title: "Transaction deleted successfully" });
 
       // Invalidate all queries that depend on transaction data
       await invalidateTransactionQueries(queryClient, transaction.userEmail);

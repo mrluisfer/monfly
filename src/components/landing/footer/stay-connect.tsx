@@ -9,9 +9,9 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
+import { sileo } from "~/lib/toaster";
 import { AtSignIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import { Input } from "@/components/ui/input";
@@ -40,12 +40,13 @@ export function StayConnect() {
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
     try {
       const emailUsername = getEmailUsername(data.email);
-      toast.success("Subscribed successfully!", {
+      sileo.success({
+        title: "Subscribed successfully!",
         description: `Thank you ${emailUsername} for subscribing to our newsletter!`,
       });
       form.reset();
     } catch (error) {
-      toast.error("Failed to subscribe. Please try again.");
+      sileo.error({ title: "Failed to subscribe. Please try again." });
     }
   };
 

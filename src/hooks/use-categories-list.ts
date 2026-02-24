@@ -4,8 +4,8 @@ import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { deleteCategoriesByIdServer } from "~/lib/api/category/delete-categories-by-id";
 import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email";
+import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
-import { toast } from "sonner";
 
 export const useCategoriesList = () => {
   const userEmail = useRouteUser();
@@ -26,10 +26,10 @@ export const useCategoriesList = () => {
     fn: deleteCategoriesByIdServer,
     onSuccess: async (ctx) => {
       if (ctx.data?.error) {
-        toast.error(ctx.data.message);
+        sileo.error({ title: ctx.data.message });
         return;
       }
-      toast.success(ctx.data.message);
+      sileo.success({ title: ctx.data.message });
       setSelectedCategories([]);
       // Import the function at the top and use it
       const { invalidateCategoryQueries } = await import(
@@ -81,7 +81,7 @@ export const useCategoriesList = () => {
         data: { ids: selectedCategories },
       });
     } catch {
-      toast.error("Error deleting categories");
+      sileo.error({ title: "Error deleting categories" });
     }
   };
 

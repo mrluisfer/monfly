@@ -3,11 +3,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email";
+import { sileo } from "~/lib/toaster";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { getUserSession } from "~/utils/user/get-user-session";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import type { z } from "zod";
 
 import { useRouteUser } from "./use-route-user";
@@ -32,7 +32,7 @@ export const useAddTransaction = () => {
   const postTransactionByEmail = useMutation({
     fn: postTransactionByEmailServer,
     onSuccess: async () => {
-      toast.success("Transaction created successfully");
+      sileo.success({ title: "Transaction created successfully" });
       form.reset();
 
       // Invalidate all queries that depend on transaction data
@@ -62,7 +62,7 @@ export const useAddTransaction = () => {
         },
       });
     } catch (error) {
-      toast.error("Failed to create transaction");
+      sileo.error({ title: "Failed to create transaction" });
     }
   };
 

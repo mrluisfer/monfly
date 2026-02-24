@@ -10,12 +10,12 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { DefaultCatchBoundary } from "~/components/default-catch-boundary.js";
 import { NotFound } from "~/components/not-found.js";
-import { Toaster } from "~/components/ui/sonner";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { DarkModeProvider } from "~/context/dark-mode-provider";
 import { FontDisplayProvider } from "~/context/font-display-provider";
 import { SonnerPositionProvider } from "~/context/sonner-position-provider";
 import { ActiveThemeProvider } from "~/context/theme-provider";
+import { useDarkMode } from "~/hooks/use-dark-mode";
 import { useFontDisplay } from "~/hooks/use-font-display";
 import { useSonnerPosition } from "~/hooks/use-sonner-position";
 import appCss from "~/styles/app.css?url";
@@ -179,12 +179,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           {children}
           <TanStackRouterDevtools position="bottom-right" />
           <Scripts />
-          <Toaster
-            position="bottom-right"
-            closeButton
-            richColors
-            key="sonner"
-          />
+          <SileoToaster position="bottom-right" theme="system" />
         </TooltipProvider>
       </body>
     </html>
@@ -199,6 +194,7 @@ function RootDocumentWithProviders({
 }) {
   const { position } = useSonnerPosition();
   const { fontDisplay } = useFontDisplay();
+  const { theme } = useDarkMode();
 
   return (
     <html lang="en">
@@ -207,11 +203,10 @@ function RootDocumentWithProviders({
       </head>
       <body className={clsx(fontDisplay)}>
         <TooltipProvider delayDuration={200}>
-          <SileoToaster position="top-center" />
+          <SileoToaster position={position} theme={theme} />
           {children}
           <TanStackRouterDevtools position="bottom-right" />
           <Scripts />
-          <Toaster position={position} closeButton richColors key="sonner" />
         </TooltipProvider>
       </body>
     </html>

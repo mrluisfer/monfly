@@ -6,9 +6,9 @@ import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance";
+import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
-import { toast } from "sonner";
 
 const TotalBalance = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -36,10 +36,10 @@ const TotalBalance = () => {
     fn: putUserTotalBalanceServer,
     onSuccess: async (ctx) => {
       if (ctx.data?.error) {
-        toast.error(ctx.data.message);
+        sileo.error({ title: ctx.data.message });
         return;
       }
-      toast.success(ctx.data.message);
+      sileo.success({ title: ctx.data.message });
       setIsEditing(false);
       if (ctx.data?.data?.totalBalance !== undefined) {
         setTotalBalance(ctx.data.data.totalBalance.toString());
@@ -62,7 +62,7 @@ const TotalBalance = () => {
   const handleSaveEdit = () => {
     const parsed = Number(totalBalance);
     if (isNaN(parsed) || parsed < 0) {
-      toast.error("Please enter a valid positive number");
+      sileo.error({ title: "Please enter a valid positive number" });
       return;
     }
     putUserTotalBalanceMutation.mutate({

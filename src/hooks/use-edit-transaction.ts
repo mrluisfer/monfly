@@ -4,10 +4,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { putTransactionByIdServer } from "~/lib/api/transaction/put-transaction-by-id";
+import { sileo } from "~/lib/toaster";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import type { z } from "zod";
 
 export const useEditTransaction = (
@@ -32,10 +32,10 @@ export const useEditTransaction = (
     fn: putTransactionByIdServer,
     onSuccess: async (ctx) => {
       if (ctx.data?.error) {
-        toast.error(ctx.data.message);
+        sileo.error({ title: ctx.data.message });
         return;
       }
-      toast.success(ctx.data.message);
+      sileo.success({ title: ctx.data.message });
       onCloseDialog();
 
       // Invalidate all queries that depend on transaction data
@@ -61,7 +61,7 @@ export const useEditTransaction = (
       });
       onCloseDialog();
     } catch (error) {
-      toast.error("Error editing transaction");
+      sileo.error({ title: "Error editing transaction" });
     }
   };
 

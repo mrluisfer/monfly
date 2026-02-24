@@ -1,7 +1,7 @@
 import { sonnerPositions } from "~/constants/sonner-positions";
 import { useSonnerPosition } from "~/hooks/use-sonner-position";
+import { sileo } from "~/lib/toaster";
 import type { SonnerPosition } from "~/types/SonnerPosition";
-import { toast } from "sonner";
 
 import {
   Select,
@@ -18,7 +18,10 @@ export const SonnerPositionSelector = () => {
 
   const handlePositionChange = (value: SonnerPosition) => {
     setPosition(value);
-    toast.info(`Position changed to ${value}`);
+    sileo.info({
+      title: "Notification position updated",
+      description: value,
+    });
   };
 
   return (

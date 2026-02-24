@@ -6,6 +6,7 @@ import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
+import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 import { validLimitNumber } from "~/utils/valid-limit-number";
@@ -23,7 +24,6 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
-import { toast } from "sonner";
 
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
@@ -75,7 +75,7 @@ export function TransactionForm<FormValues extends FieldValues>({
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
     onSuccess: async () => {
-      toast.success("Category created successfully");
+      sileo.success({ title: "Category created successfully" });
       // Invalidate all queries that depend on category data
       await invalidateCategoryQueries(queryClient, userEmail);
     },
