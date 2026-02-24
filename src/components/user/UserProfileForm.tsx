@@ -72,16 +72,26 @@ export function UserProfileForm({ userId, user }: UserProfileFormProps) {
   );
 
   const submitting = form.formState.isSubmitting;
+  const hasChanges = form.formState.isDirty;
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8"
+        className="space-y-6"
         noValidate
       >
+        <section className="space-y-1">
+          <h3 className="text-base font-semibold sm:text-lg">
+            Account Details
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            Update your profile information and security settings.
+          </p>
+        </section>
+
         <UserFormFields form={form} onBalanceBlur={handleBalanceBlur} />
-        <UserFormActions submitting={submitting} />
+        <UserFormActions submitting={submitting} hasChanges={hasChanges} />
       </form>
     </Form>
   );

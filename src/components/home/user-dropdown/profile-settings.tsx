@@ -1,7 +1,14 @@
 import { ReactNode } from "react";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
 import { UserProfileForm } from "~/components/user/UserProfileForm";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
@@ -43,10 +50,24 @@ export default function ProfileSettings({
 
   // Helper function to render dialog with appropriate props
   const renderDialog = (content: ReactNode) => {
+    const dialogBody = (
+      <div className="space-y-4">
+        <DialogHeader>
+          <DialogTitle>Profile Settings</DialogTitle>
+          <DialogDescription>
+            Update your account details and security preferences.
+          </DialogDescription>
+        </DialogHeader>
+        {content}
+      </div>
+    );
+
     if (isControlled) {
       return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-          <DialogContent>{content}</DialogContent>
+          <DialogContent className="max-h-[85dvh] overflow-y-auto sm:max-w-2xl">
+            {dialogBody}
+          </DialogContent>
         </Dialog>
       );
     }
@@ -54,7 +75,9 @@ export default function ProfileSettings({
     return (
       <Dialog>
         <DialogTrigger>{children}</DialogTrigger>
-        <DialogContent>{content}</DialogContent>
+        <DialogContent className="max-h-[85dvh] overflow-y-auto sm:max-w-2xl">
+          {dialogBody}
+        </DialogContent>
       </Dialog>
     );
   };

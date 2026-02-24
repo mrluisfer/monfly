@@ -18,10 +18,10 @@ interface UserProfilePageProps {
 
 export function UserProfilePage({ userId, user }: UserProfilePageProps) {
   return (
-    <div className="min-h-screen bg-background px-4 py-8">
-      <Card className="mx-auto w-full max-w-2xl">
+    <div className="min-h-dvh bg-background px-3 py-4 sm:px-4 sm:py-8">
+      <Card className="mx-auto w-full max-w-3xl gap-4 sm:gap-6">
         <UserProfileHeader user={user} />
-        <CardContent>
+        <CardContent className="px-4 sm:px-6">
           <UserProfileForm userId={userId} user={user} />
         </CardContent>
       </Card>
