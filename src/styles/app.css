@@ -62,6 +62,10 @@
 }
 
 @layer utilities {
+  [data-sileo-viewport] {
+    z-index: 80;
+  }
+
   /* Custom Scrollbar */
   .scrollbar-custom::-webkit-scrollbar {
     width: 6px;

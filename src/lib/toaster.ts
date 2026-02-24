@@ -1,5 +1,7 @@
+import { createElement, useEffect, type ComponentProps } from "react";
 import {
   sileo as baseSileo,
+  Toaster as BaseSileoToaster,
   type SileoOptions,
   type SileoPosition,
 } from "sileo";
@@ -17,20 +19,104 @@ type ToastInput = string | SileoOptions;
 const normalizeOptions = (input: ToastInput): SileoOptions =>
   typeof input === "string" ? { title: input } : input;
 
+let isToasterReady = false;
+const pendingCalls: Array<() => void> = [];
+
+const runWhenReady = <T>(fn: () => T, fallback: T): T => {
+  if (isToasterReady) return fn();
+  pendingCalls.push(() => {
+    fn();
+  });
+  return fallback;
+};
+
+const flushPendingCalls = () => {
+  if (!pendingCalls.length) return;
+  const calls = [...pendingCalls];
+  pendingCalls.length = 0;
+  calls.forEach((call) => call());
+};
+
+const ensureSileoBrowserApis = () => {
+  if (typeof window === "undefined") return;
+
+  if (typeof window.requestAnimationFrame !== "function") {
+    window.requestAnimationFrame = (cb: FrameRequestCallback) =>
+      window.setTimeout(() => cb(Date.now()), 16);
+  }
+
+  if (typeof window.cancelAnimationFrame !== "function") {
+    window.cancelAnimationFrame = (id: number) => {
+      window.clearTimeout(id);
+    };
+  }
+
+  if (typeof window.ResizeObserver === "undefined") {
+    class ResizeObserverFallback {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    }
+
+    window.ResizeObserver =
+      ResizeObserverFallback as unknown as typeof ResizeObserver;
+  }
+};
+
+export function SileoToaster(props: ComponentProps<typeof BaseSileoToaster>) {
+  useEffect(() => {
+    ensureSileoBrowserApis();
+    isToasterReady = true;
+    flushPendingCalls();
+    return () => {
+      isToasterReady = false;
+    };
+  }, []);
+
+  return createElement(BaseSileoToaster, props);
+}
+
 const success = (input: ToastInput) =>
-  baseSileo.success(normalizeOptions(input));
-const error = (input: ToastInput) => baseSileo.error(normalizeOptions(input));
+  runWhenReady(() => baseSileo.success(normalizeOptions(input)), "");
+const error = (input: ToastInput) =>
+  runWhenReady(() => baseSileo.error(normalizeOptions(input)), "");
 const warning = (input: ToastInput) =>
-  baseSileo.warning(normalizeOptions(input));
-const info = (input: ToastInput) => baseSileo.info(normalizeOptions(input));
-const show = (input: ToastInput) => baseSileo.show(normalizeOptions(input));
-const action = (options: SileoOptions) => baseSileo.action(options);
+  runWhenReady(() => baseSileo.warning(normalizeOptions(input)), "");
+const info = (input: ToastInput) =>
+  runWhenReady(() => baseSileo.info(normalizeOptions(input)), "");
+const show = (input: ToastInput) =>
+  runWhenReady(() => baseSileo.show(normalizeOptions(input)), "");
+const action = (options: SileoOptions) =>
+  runWhenReady(() => baseSileo.action(options), "");
 const promise = <T>(
   promiseInput: Promise<T> | (() => Promise<T>),
   options: SileoPromiseOptions<T>
-) => baseSileo.promise(promiseInput, options);
-const dismiss = (id: string) => baseSileo.dismiss(id);
-const clear = (position?: SileoPosition) => baseSileo.clear(position);
+) => {
+  if (isToasterReady) {
+    return baseSileo.promise(promiseInput, options);
+  }
+
+  const promiseValue =
+    typeof promiseInput === "function" ? promiseInput() : promiseInput;
+
+  pendingCalls.push(() => {
+    baseSileo.promise(() => promiseValue, options);
+  });
+
+  return promiseValue;
+};
+const dismiss = (id: string) => {
+  runWhenReady(() => {
+    baseSileo.dismiss(id);
+    return undefined;
+  }, undefined);
+};
+const clear = (position?: SileoPosition) => {
+  runWhenReady(() => {
+    baseSileo.clear(position);
+    return undefined;
+  }, undefined);
+};
 
 // Useful semantic helpers for consistent user feedback across the app.
 const feedback = {
