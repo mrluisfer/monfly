@@ -7,13 +7,13 @@ export const SonnerPositionContext = createContext<{
   position: SonnerPosition;
   setPosition: (position: SonnerPosition) => void;
 }>({
-  position: "bottom-right",
+  position: "top-center",
   setPosition: () => {},
 });
 
 export const SonnerPositionProvider = ({
   children,
-  initialPosition = "bottom-right",
+  initialPosition = "top-center",
 }: {
   children: React.ReactNode;
   initialPosition?: SonnerPosition;
