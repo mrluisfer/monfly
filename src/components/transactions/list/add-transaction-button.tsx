@@ -10,6 +10,7 @@ import {
 } from "~/components/ui/dialog";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -19,7 +20,7 @@ import {
 import { useAddTransaction } from "~/hooks/use-add-transaction";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 import type { z } from "zod";
 
 import { TransactionForm } from "../transaction-form";
@@ -82,6 +83,12 @@ const AddTransactionButton = ({
               description="Add a new transaction"
               isLoading={mutation.status === "pending"}
             />
+            <SheetClose asChild>
+              <Button variant="outline" className="w-full mt-4">
+                <XIcon className="h-5 w-5" />
+                Cancel
+              </Button>
+            </SheetClose>
           </div>
         </SheetContent>
       </Sheet>

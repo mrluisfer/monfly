@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -9,16 +10,16 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { useAddTransaction } from "~/hooks/use-add-transaction";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 
 import { TransactionForm } from "./transaction-form";
 
 export function AddTransactionDrawer() {
   const [open, setOpen] = useState(false);
-  const { form, onSubmit } = useAddTransaction();
+  const { form, onSubmit, mutation } = useAddTransaction();
 
-  const handleSubmit = (values: any) => {
-    onSubmit(values);
+  const handleSubmit = async (values: any) => {
+    await onSubmit(values);
     setOpen(false);
   };
 
@@ -32,20 +33,31 @@ export function AddTransactionDrawer() {
       </SheetTrigger>
       <SheetContent
         side="bottom"
-        className="h-[90vh] overflow-y-auto rounded-t-xl"
+        className="h-[90vh] overflow-y-auto rounded-t-xl border-0 px-0"
       >
-        <SheetHeader className="text-left mb-4">
+        <SheetHeader className="mb-2 text-left">
           <SheetTitle>Add Transaction</SheetTitle>
           <SheetDescription>
             Create a new transaction to track your expenses or income.
           </SheetDescription>
         </SheetHeader>
-        <TransactionForm
-          form={form}
-          onSubmit={handleSubmit}
-          buttonText="Save Transaction"
-          description="Add a new transaction"
-        />
+        <div className="px-4 pb-2">
+          <TransactionForm
+            form={form}
+            onSubmit={handleSubmit}
+            buttonText="Save Transaction"
+            description="Add a new transaction"
+            isLoading={mutation.status === "pending"}
+          />
+        </div>
+        <div className="px-4 pb-2">
+          <SheetClose asChild className="w-full">
+            <Button variant="outline">
+              <XIcon />
+              Cancel
+            </Button>
+          </SheetClose>
+        </div>
       </SheetContent>
     </Sheet>
   );
