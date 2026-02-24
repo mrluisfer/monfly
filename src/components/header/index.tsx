@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
-import { MenuIcon } from "lucide-react";
+import { LogOutIcon, MenuIcon } from "lucide-react";
 
 import Logo from "../../assets/logo.svg";
 import UserDropdown from "../home/user-dropdown";
 import { SettingsDialog } from "../settings/settings-dialog";
 import ToggleDarkMode from "../settings/toggle-dark-mode";
+import { SignOutDialog } from "../sidebar/sign-out-dialog";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -158,6 +159,25 @@ export const Header = () => {
                       <div className="flex items-center justify-between">
                         <span>Settings</span>
                         <SettingsDialog />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-4">
+                      <h3 className="text-sm font-medium text-muted-foreground">
+                        Account
+                      </h3>
+                      <div className="flex items-center justify-between">
+                        <span>Log Out</span>
+                        <SignOutDialog>
+                          <Button
+                            variant="destructive"
+                            size="icon-lg"
+                            className="shrink-0"
+                            aria-label="Log out"
+                          >
+                            <LogOutIcon className="size-4" />
+                          </Button>
+                        </SignOutDialog>
                       </div>
                     </div>
                   </div>

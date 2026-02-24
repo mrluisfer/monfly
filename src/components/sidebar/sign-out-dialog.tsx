@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { logoutFn } from "~/utils/auth/logoutfn";
 import { CircleAlertIcon } from "lucide-react";
@@ -27,20 +27,31 @@ export const SignOutDialog = ({
   onOpenChange,
 }: SignOutDialogProps) => {
   const navigate = useNavigate();
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleLogOut = async () => {
+    if (isSigningOut) return;
+    setIsSigningOut(true);
+
     if (onOpenChange) {
       onOpenChange(false); // Close dialog first if controlled
     }
-    await logoutFn({
-      data: { destination: "/login", manualRedirect: true },
-    });
-    await navigate({
-      to: "/login",
-    });
+
+    try {
+      await logoutFn({
+        data: { destination: "/login", manualRedirect: true },
+      });
+      await navigate({
+        to: "/login",
+      });
+    } finally {
+      setIsSigningOut(false);
+    }
   };
 
   const handleCancel = () => {
+    if (isSigningOut) return;
+
     if (onOpenChange) {
       onOpenChange(false); // Only close if controlled
     }
@@ -73,9 +84,22 @@ export const SignOutDialog = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
         </div>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={handleCancel}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleLogOut}>Confirm</AlertDialogAction>
+        <AlertDialogFooter className="grid grid-cols-2 gap-3 pt-2 sm:flex sm:justify-end">
+          <AlertDialogCancel
+            onClick={handleCancel}
+            disabled={isSigningOut}
+            className="w-full"
+          >
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleLogOut}
+            disabled={isSigningOut}
+            variant="destructive"
+            className="w-full"
+          >
+            {isSigningOut ? "Signing out..." : "Confirm"}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
