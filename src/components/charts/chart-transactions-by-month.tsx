@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getTransactionsCountByMonthServer } from "~/lib/api/chart/get-transaction-count-by-month.server";
+import { getTransactionsCountByMonthServer } from "~/lib/api/chart/get-transaction-count-by-month";
 import { queryDictionary } from "~/queries/dictionary";
 import {
   Activity,

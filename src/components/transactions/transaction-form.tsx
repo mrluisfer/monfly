@@ -5,7 +5,7 @@ import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email.server";
+import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { cn } from "~/lib/utils";
 import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 import { validLimitNumber } from "~/utils/valid-limit-number";

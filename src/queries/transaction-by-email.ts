@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
+import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 
 // export const usersQueryOptions = queryOptions({

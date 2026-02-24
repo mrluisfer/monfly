@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useMutation } from "~/hooks/use-mutation";
-import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
+import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import {

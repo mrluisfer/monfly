@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "~/components/ui/button";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email.server";
-import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email.server";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email";
+import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 
 export function ApiDebugComponent() {

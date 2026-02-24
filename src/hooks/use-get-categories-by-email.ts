@@ -1,6 +1,6 @@
 import type { Category } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email.server";
+import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 
 import { useRouteUser } from "./use-route-user";

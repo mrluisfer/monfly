@@ -1,5 +1,6 @@
 // vite.config.ts
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import tailwindcss from "@tailwindcss/vite";
 import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
@@ -24,6 +25,14 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  plugins: [tsConfigPaths(), tanstackStart(), nitro({ preset }), viteReact()],
+  plugins: [
+    tsConfigPaths({
+      projects: ["./tsconfig.json"],
+    }),
+    tailwindcss(),
+    tanstackStart(),
+    nitro({ preset }),
+    viteReact(),
+  ],
   nitro: {},
 });

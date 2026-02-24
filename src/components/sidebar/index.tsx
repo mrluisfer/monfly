@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import { BadgeHelp, LogOut, Settings, User2 } from "lucide-react";
 

@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useMutation } from "~/hooks/use-mutation";
-import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email.server";
+import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { getUserSession } from "~/utils/user/get-user-session";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";

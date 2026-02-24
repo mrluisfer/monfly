@@ -26,7 +26,7 @@ import {
 } from "~/components/ui/alert-dialog";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-transactions-by-id.server";
+import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-transactions-by-id";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";

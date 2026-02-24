@@ -76,10 +76,10 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
-  '/categories': typeof AuthedCategoriesIndexRoute
-  '/home': typeof AuthedHomeIndexRoute
-  '/reports': typeof AuthedReportsIndexRoute
-  '/transactions': typeof AuthedTransactionsIndexRoute
+  '/categories/': typeof AuthedCategoriesIndexRoute
+  '/home/': typeof AuthedHomeIndexRoute
+  '/reports/': typeof AuthedReportsIndexRoute
+  '/transactions/': typeof AuthedTransactionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -113,10 +113,10 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/user/$userId'
-    | '/categories'
-    | '/home'
-    | '/reports'
-    | '/transactions'
+    | '/categories/'
+    | '/home/'
+    | '/reports/'
+    | '/transactions/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -176,7 +176,7 @@ declare module '@tanstack/react-router' {
     '/_authed': {
       id: '/_authed'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthedRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -190,28 +190,28 @@ declare module '@tanstack/react-router' {
     '/_authed/transactions/': {
       id: '/_authed/transactions/'
       path: '/transactions'
-      fullPath: '/transactions'
+      fullPath: '/transactions/'
       preLoaderRoute: typeof AuthedTransactionsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/reports/': {
       id: '/_authed/reports/'
       path: '/reports'
-      fullPath: '/reports'
+      fullPath: '/reports/'
       preLoaderRoute: typeof AuthedReportsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/home/': {
       id: '/_authed/home/'
       path: '/home'
-      fullPath: '/home'
+      fullPath: '/home/'
       preLoaderRoute: typeof AuthedHomeIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/categories/': {
       id: '/_authed/categories/'
       path: '/categories'
-      fullPath: '/categories'
+      fullPath: '/categories/'
       preLoaderRoute: typeof AuthedCategoriesIndexRouteImport
       parentRoute: typeof AuthedRoute
     }

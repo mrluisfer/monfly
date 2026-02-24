@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { UserProfileForm } from "~/components/user/UserProfileForm";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import type { ApiResponse } from "~/types/ApiResponse";
 

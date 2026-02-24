@@ -14,7 +14,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import UserAvatar from "~/components/user-avatar";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import type { ApiResponse } from "~/types/ApiResponse";
 

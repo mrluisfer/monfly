@@ -7,8 +7,8 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email.server";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import {

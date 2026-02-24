@@ -17,8 +17,8 @@ import {
   transactionTypes,
 } from "~/constants/transaction-types";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getChartTypeByCategoryServer } from "~/lib/api/chart/get-chart-type-by-category.server";
-import { getTrendingMonthlyServer } from "~/lib/api/chart/get-trending-monthly.server";
+import { getChartTypeByCategoryServer } from "~/lib/api/chart/get-chart-type-by-category";
+import { getTrendingMonthlyServer } from "~/lib/api/chart/get-trending-monthly";
 import { queryDictionary } from "~/queries/dictionary";
 import {
   PolarAngleAxis,

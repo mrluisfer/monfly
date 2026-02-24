@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useMutation } from "~/hooks/use-mutation";
-import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id.server";
+import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { Edit, Ellipsis, Trash } from "lucide-react";

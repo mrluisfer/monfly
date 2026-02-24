@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/data-not-found-placeholder";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart.server";
+import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
 import { DollarSign } from "lucide-react";

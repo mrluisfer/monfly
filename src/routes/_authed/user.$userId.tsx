@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { UserProfilePage } from "~/components/user/UserProfilePage";
-import { getUserByIdServer } from "~/lib/api/user/get-user-by-id.server";
+import { getUserByIdServer } from "~/lib/api/user/get-user-by-id";
 import { z } from "zod";
 
 export const Route = createFileRoute("/_authed/user/$userId")({

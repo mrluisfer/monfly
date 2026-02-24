@@ -11,7 +11,7 @@ import { WelcomeMessage } from "~/components/home/welcome-message";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { AnimatePresence, motion } from "framer-motion";

@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email.server";
+import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { cn } from "~/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";

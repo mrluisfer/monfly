@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { deleteCategoriesByIdServer } from "~/lib/api/category/delete-categories-by-id.server";
-import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email.server";
+import { deleteCategoriesByIdServer } from "~/lib/api/category/delete-categories-by-id";
+import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import { toast } from "sonner";
 

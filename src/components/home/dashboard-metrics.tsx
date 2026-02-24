@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useRouteUser } from "~/hooks/use-route-user";
-import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart.server";
+import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";

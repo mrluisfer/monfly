@@ -3,7 +3,7 @@ import { Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useMutation } from "~/hooks/use-mutation";
-import { putTransactionByIdServer } from "~/lib/api/transaction/put-transaction-by-id.server";
+import { putTransactionByIdServer } from "~/lib/api/transaction/put-transaction-by-id";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { useForm } from "react-hook-form";

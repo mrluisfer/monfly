@@ -1,5 +1,5 @@
 import { queryOptions } from "@tanstack/react-query";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email.server";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 
 export const userByEmailQueryOptions = (email: string) =>
