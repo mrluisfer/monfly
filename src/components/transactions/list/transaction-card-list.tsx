@@ -139,9 +139,9 @@ function TransactionRow({
           )}
         >
           {isIncome ? (
-            <ArrowUpRightIcon className="size-[18px]" strokeWidth={2.2} />
+            <ArrowUpRightIcon className="size-4.5" strokeWidth={2.2} />
           ) : (
-            <ArrowDownLeftIcon className="size-[18px]" strokeWidth={2.2} />
+            <ArrowDownLeftIcon className="size-4.5" strokeWidth={2.2} />
           )}
         </div>
 

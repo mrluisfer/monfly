@@ -127,7 +127,7 @@ export function TransactionForm<FormValues extends FieldValues>({
             render={({ field }) => {
               const currentType = (field.value as string) || "";
               return (
-                <FormItem className="space-y-2 sm:w-[200px]">
+                <FormItem className="space-y-2 sm:w-50">
                   <FormLabel className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                     <SparklesIcon className="size-3.5 text-purple-600" />
                     Type
@@ -234,7 +234,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                             value={inputValue}
                             onValueChange={setInputValue}
                           />
-                          <CommandList className="max-h-[230px] sm:max-h-[300px]">
+                          <CommandList className="max-h-57.5 sm:max-h-75">
                             <CommandEmpty>No category found.</CommandEmpty>
                             <CommandGroup>
                               {categories?.map((category) => (
@@ -315,7 +315,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                   <Textarea
                     placeholder="Add a description..."
                     id={transactionFormNames.description}
-                    className="min-h-20 resize-none pl-10 pt-3.5 text-sm sm:min-h-[110px] sm:pt-4 sm:text-base"
+                    className="min-h-20 resize-none pl-10 pt-3.5 text-sm sm:min-h-27.5 sm:pt-4 sm:text-base"
                     rows={2}
                     {...field}
                   />

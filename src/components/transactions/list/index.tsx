@@ -47,7 +47,7 @@ export default function TransactionsList() {
     <TransactionHoverProvider>
       {/* Desktop: keep Card wrapper */}
       <div className="hidden md:block">
-        <Card className="min-h-[500px]">
+        <Card className="min-h-125">
           <CardHeader>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <CardTitle className="text-xl flex items-center gap-2">
