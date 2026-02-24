@@ -153,7 +153,7 @@ export const Header = () => {
                       </h3>
                       <div className="flex items-center justify-between">
                         <span>Dark Mode</span>
-                        <ToggleDarkMode />
+                        <ToggleDarkMode size="icon-lg" />
                       </div>
                       <div className="flex items-center justify-between">
                         <span>Settings</span>
