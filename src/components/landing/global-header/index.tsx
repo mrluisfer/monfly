@@ -1,7 +1,6 @@
 import { DesktopNavMenu } from "./desktop-nav-menu";
 import { HeaderActions } from "./header-actions";
 import { HeaderLogo } from "./header-logo";
-import { MobileMenuPopover } from "./mobile-menu-popover";
 
 export function GlobalHeader() {
   return (
@@ -13,7 +12,6 @@ export function GlobalHeader() {
         <DesktopNavMenu />
         <div className="flex items-center gap-2">
           <HeaderActions />
-          <MobileMenuPopover />
         </div>
       </div>
     </header>
