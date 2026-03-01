@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
+import type { Category } from "@prisma/client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,16 +20,28 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
+import { getCategoryIconLabelByName } from "~/constants/categories-icon";
 import { useCategoriesList } from "~/hooks/use-categories-list";
 import { cn } from "~/lib/utils";
-import { CheckCheck, FolderOpen, Loader2, Minus, Trash2 } from "lucide-react";
+import {
+  CheckCheck,
+  FolderOpen,
+  Loader2,
+  Minus,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
 
 import CategoryItem from "./category-item";
 
+type CategoryRecord = Category;
+
 export const CategoriesList = () => {
-  const selectAllCheckboxRef = useRef<HTMLButtonElement>(null);
+  const [searchValue, setSearchValue] = useState("");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -41,22 +54,82 @@ export const CategoriesList = () => {
     handleDeleteCategories,
     handleSelectAll,
     handleDeselectAll,
-    handleToggleSelectAll,
+    handleSelectCategories,
+    handleDeselectCategories,
     totalCategories,
     selectedCount,
-    isAllSelected,
-    isPartiallySelected,
-    hasAnySelected,
   } = useCategoriesList();
 
-  useEffect(() => {
-    if (selectAllCheckboxRef.current) {
-      const inputElement = selectAllCheckboxRef.current.querySelector("input");
-      if (inputElement) {
-        inputElement.indeterminate = isPartiallySelected;
-      }
+  const allCategories = (data?.data ?? []) as CategoryRecord[];
+  const normalizedQuery = searchValue.trim().toLowerCase();
+  const isFiltering = normalizedQuery.length > 0;
+
+  const filteredCategories = useMemo(() => {
+    if (!isFiltering) return allCategories;
+
+    return allCategories.filter((category) => {
+      const categoryName = category.name?.toLowerCase() ?? "";
+      const iconName = category.icon?.toLowerCase() ?? "";
+      const iconLabel = getCategoryIconLabelByName(category.icon).toLowerCase();
+
+      return (
+        categoryName.includes(normalizedQuery) ||
+        iconName.includes(normalizedQuery) ||
+        iconLabel.includes(normalizedQuery)
+      );
+    });
+  }, [allCategories, isFiltering, normalizedQuery]);
+
+  const filteredCategoryIds = useMemo(
+    () => filteredCategories.map((category) => category.id),
+    [filteredCategories]
+  );
+  const selectedCategoryIdSet = useMemo(
+    () => new Set(selectedCategories),
+    [selectedCategories]
+  );
+  const selectedFilteredCount = useMemo(
+    () =>
+      filteredCategoryIds.reduce(
+        (count, id) => (selectedCategoryIdSet.has(id) ? count + 1 : count),
+        0
+      ),
+    [filteredCategoryIds, selectedCategoryIdSet]
+  );
+
+  const toolbarTotal = isFiltering
+    ? filteredCategories.length
+    : totalCategories;
+  const toolbarSelected = isFiltering ? selectedFilteredCount : selectedCount;
+  const toolbarIsAllSelected =
+    toolbarTotal > 0 && toolbarSelected === toolbarTotal;
+  const toolbarIsPartiallySelected =
+    toolbarSelected > 0 && toolbarSelected < toolbarTotal;
+  const toolbarHasAnySelected = toolbarSelected > 0;
+
+  const selectToolbarScope = () => {
+    if (isFiltering) {
+      handleSelectCategories(filteredCategoryIds);
+      return;
     }
-  }, [isPartiallySelected]);
+    handleSelectAll();
+  };
+
+  const deselectToolbarScope = () => {
+    if (isFiltering) {
+      handleDeselectCategories(filteredCategoryIds);
+      return;
+    }
+    handleDeselectAll();
+  };
+
+  const handleToolbarToggle = () => {
+    if (toolbarIsAllSelected) {
+      deselectToolbarScope();
+      return;
+    }
+    selectToolbarScope();
+  };
 
   const handleDeleteClick = () => {
     if (selectedCategories.length === 0) return;
@@ -69,8 +142,8 @@ export const CategoriesList = () => {
     try {
       await handleDeleteCategories();
       setIsDeleteDialogOpen(false);
-    } catch (error) {
-      console.error("Error deleting categories:", error);
+    } catch (deleteError) {
+      console.error("Error deleting categories:", deleteError);
     } finally {
       setIsDeleting(false);
     }
@@ -80,24 +153,21 @@ export const CategoriesList = () => {
     setIsDeleteDialogOpen(false);
   };
 
-  const shouldRenderDeleteButton = (data?.data?.length ?? 0) > 0;
-  const categoriesCount = data?.data?.length || 0;
+  const categoriesCount = allCategories.length;
+  const shouldRenderDeleteButton = categoriesCount > 0;
 
   return (
     <>
-      {/* ── Desktop: Card wrapper ── */}
       <div className="hidden lg:block w-full max-w-4xl xl:max-w-5xl">
-        <Card className="shadow-sm border backdrop-blur-sm">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
+        <Card className="border shadow-sm backdrop-blur-sm">
+          <CardHeader className="space-y-4 pb-4">
+            <div className="flex items-center justify-between gap-3">
               <div className="space-y-1">
                 <CardTitle className="flex items-center gap-2 text-xl">
                   <FolderOpen className="size-5 text-primary" />
                   Categories
                   {categoriesCount > 0 && (
-                    <Badge variant="secondary" className="ml-2">
-                      {categoriesCount}
-                    </Badge>
+                    <Badge variant="secondary">{categoriesCount}</Badge>
                   )}
                 </CardTitle>
                 <CardDescription>
@@ -105,71 +175,113 @@ export const CategoriesList = () => {
                 </CardDescription>
               </div>
               {selectedCount > 0 && (
-                <Badge variant="outline" className="flex items-center gap-1">
+                <Badge variant="outline" className="shrink-0">
                   {selectedCount} selected
                 </Badge>
               )}
             </div>
+
+            <CategorySearch
+              value={searchValue}
+              onChange={setSearchValue}
+              total={categoriesCount}
+              filtered={filteredCategories.length}
+              isMobile={false}
+            />
           </CardHeader>
-          <CardContent className="space-y-4">
+
+          <CardContent>
             <CategoriesContent
+              categories={filteredCategories}
+              allCategoriesCount={categoriesCount}
               isPending={isPending}
               error={error}
-              categoriesCount={categoriesCount}
-              data={data}
-              totalCategories={totalCategories}
-              selectAllCheckboxRef={selectAllCheckboxRef}
-              isAllSelected={isAllSelected}
-              isPartiallySelected={isPartiallySelected}
-              handleToggleSelectAll={handleToggleSelectAll}
-              selectedCount={selectedCount}
-              hasAnySelected={hasAnySelected}
-              handleSelectAll={handleSelectAll}
-              handleDeselectAll={handleDeselectAll}
+              isFiltering={isFiltering}
+              searchValue={searchValue}
               selectedCategories={selectedCategories}
               handleCheckboxChange={handleCheckboxChange}
+              toolbarTotal={toolbarTotal}
+              toolbarSelected={toolbarSelected}
+              toolbarIsAllSelected={toolbarIsAllSelected}
+              toolbarIsPartiallySelected={toolbarIsPartiallySelected}
+              toolbarHasAnySelected={toolbarHasAnySelected}
+              onToggleToolbarSelection={handleToolbarToggle}
+              onSelectToolbarScope={selectToolbarScope}
+              onDeselectToolbarScope={deselectToolbarScope}
               shouldRenderDeleteButton={shouldRenderDeleteButton}
-              handleDeleteClick={handleDeleteClick}
+              onDeleteClick={handleDeleteClick}
+              checkboxPrefix="desktop"
             />
           </CardContent>
         </Card>
       </div>
 
-      {/* ── Mobile: clean, no Card ── */}
-      <div className="lg:hidden">
-        <MobileHeader
-          categoriesCount={categoriesCount}
-          selectedCount={selectedCount}
-        />
+      <div className="lg:hidden space-y-3">
+        <div className="rounded-2xl border bg-background/80 px-3.5 py-3 shadow-sm">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <h2 className="text-base font-semibold tracking-tight text-foreground flex items-center gap-2">
+                <FolderOpen className="size-4 text-primary" />
+                Categories
+                {categoriesCount > 0 && (
+                  <span className="rounded-md bg-muted px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+                    {categoriesCount}
+                  </span>
+                )}
+              </h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Search, select and edit quickly
+              </p>
+            </div>
+
+            {selectedCount > 0 && (
+              <Badge variant="secondary" className="shrink-0 text-xs">
+                {selectedCount} selected
+              </Badge>
+            )}
+          </div>
+
+          <div className="mt-3">
+            <CategorySearch
+              value={searchValue}
+              onChange={setSearchValue}
+              total={categoriesCount}
+              filtered={filteredCategories.length}
+              isMobile
+            />
+          </div>
+        </div>
+
         <CategoriesContent
+          categories={filteredCategories}
+          allCategoriesCount={categoriesCount}
           isPending={isPending}
           error={error}
-          categoriesCount={categoriesCount}
-          data={data}
-          totalCategories={totalCategories}
-          selectAllCheckboxRef={selectAllCheckboxRef}
-          isAllSelected={isAllSelected}
-          isPartiallySelected={isPartiallySelected}
-          handleToggleSelectAll={handleToggleSelectAll}
-          selectedCount={selectedCount}
-          hasAnySelected={hasAnySelected}
-          handleSelectAll={handleSelectAll}
-          handleDeselectAll={handleDeselectAll}
+          isFiltering={isFiltering}
+          searchValue={searchValue}
           selectedCategories={selectedCategories}
           handleCheckboxChange={handleCheckboxChange}
+          toolbarTotal={toolbarTotal}
+          toolbarSelected={toolbarSelected}
+          toolbarIsAllSelected={toolbarIsAllSelected}
+          toolbarIsPartiallySelected={toolbarIsPartiallySelected}
+          toolbarHasAnySelected={toolbarHasAnySelected}
+          onToggleToolbarSelection={handleToolbarToggle}
+          onSelectToolbarScope={selectToolbarScope}
+          onDeselectToolbarScope={deselectToolbarScope}
           shouldRenderDeleteButton={shouldRenderDeleteButton}
-          handleDeleteClick={handleDeleteClick}
+          onDeleteClick={handleDeleteClick}
+          checkboxPrefix="mobile"
           isMobile
         />
       </div>
 
-      {/* ── Delete confirmation (shared) ── */}
       <DeleteDialog
         isOpen={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
         isDeleting={isDeleting}
         selectedCount={selectedCount}
-        categories={data?.data ?? undefined}
+        categories={allCategories}
         selectedCategories={selectedCategories}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
@@ -178,79 +290,96 @@ export const CategoriesList = () => {
   );
 };
 
-/* ─────────────────────────── Mobile Header ─────────────────────────── */
-
-function MobileHeader({
-  categoriesCount,
-  selectedCount,
+function CategorySearch({
+  value,
+  onChange,
+  total,
+  filtered,
+  isMobile,
 }: {
-  categoriesCount: number;
-  selectedCount: number;
+  value: string;
+  onChange: (value: string) => void;
+  total: number;
+  filtered: number;
+  isMobile: boolean;
 }) {
+  const isFiltering = value.trim().length > 0;
+
   return (
-    <div className="flex items-center justify-between mb-4 px-1">
-      <div>
-        <h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-          <FolderOpen className="size-4.5 text-primary" />
-          Categories
-          {categoriesCount > 0 && (
-            <span className="text-xs font-normal text-muted-foreground bg-muted px-1.5 py-0.5 rounded-md">
-              {categoriesCount}
-            </span>
+    <div className="space-y-1.5">
+      <div className="relative">
+        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="Search category by name or icon..."
+          className={cn(
+            "h-10 rounded-xl border-border/70 bg-background pl-9 pr-9 text-sm",
+            isMobile && "h-11"
           )}
-        </h2>
-        <p className="text-xs text-muted-foreground mt-0.5">
-          Manage your expense categories
-        </p>
+        />
+        {isFiltering && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            aria-label="Clear search"
+          >
+            <X className="size-3.5" />
+          </button>
+        )}
       </div>
-      {selectedCount > 0 && (
-        <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">
-          {selectedCount} selected
-        </span>
-      )}
+
+      <p className="text-[11px] text-muted-foreground">
+        {isFiltering
+          ? `Showing ${filtered} of ${total} categories`
+          : `${total} categories available`}
+      </p>
     </div>
   );
 }
 
-/* ─────────────────────── Categories Content ────────────────────────── */
-
 function CategoriesContent({
+  categories,
+  allCategoriesCount,
   isPending,
   error,
-  categoriesCount,
-  data,
-  totalCategories,
-  selectAllCheckboxRef,
-  isAllSelected,
-  isPartiallySelected,
-  handleToggleSelectAll,
-  selectedCount,
-  hasAnySelected,
-  handleSelectAll,
-  handleDeselectAll,
+  isFiltering,
+  searchValue,
   selectedCategories,
   handleCheckboxChange,
+  toolbarTotal,
+  toolbarSelected,
+  toolbarIsAllSelected,
+  toolbarIsPartiallySelected,
+  toolbarHasAnySelected,
+  onToggleToolbarSelection,
+  onSelectToolbarScope,
+  onDeselectToolbarScope,
   shouldRenderDeleteButton,
-  handleDeleteClick,
+  onDeleteClick,
+  checkboxPrefix,
   isMobile = false,
 }: {
+  categories: CategoryRecord[];
+  allCategoriesCount: number;
   isPending: boolean;
   error: Error | null;
-  categoriesCount: number;
-  data: any;
-  totalCategories: number;
-  selectAllCheckboxRef: React.RefObject<HTMLButtonElement | null>;
-  isAllSelected: boolean;
-  isPartiallySelected: boolean;
-  handleToggleSelectAll: (checked: boolean | "indeterminate") => void;
-  selectedCount: number;
-  hasAnySelected: boolean;
-  handleSelectAll: () => void;
-  handleDeselectAll: () => void;
+  isFiltering: boolean;
+  searchValue: string;
   selectedCategories: string[];
   handleCheckboxChange: (id: string, checked: boolean) => void;
+  toolbarTotal: number;
+  toolbarSelected: number;
+  toolbarIsAllSelected: boolean;
+  toolbarIsPartiallySelected: boolean;
+  toolbarHasAnySelected: boolean;
+  onToggleToolbarSelection: () => void;
+  onSelectToolbarScope: () => void;
+  onDeselectToolbarScope: () => void;
   shouldRenderDeleteButton: boolean;
-  handleDeleteClick: () => void;
+  onDeleteClick: () => void;
+  checkboxPrefix: "desktop" | "mobile";
   isMobile?: boolean;
 }) {
   if (isPending) {
@@ -270,22 +399,35 @@ function CategoriesContent({
         <p className="text-sm font-medium text-destructive">
           Error loading categories
         </p>
-        <p className="text-xs text-muted-foreground mt-1 max-w-md">
-          {error?.message}
+        <p className="mt-1 max-w-md text-xs text-muted-foreground">
+          {error.message}
         </p>
       </div>
     );
   }
 
-  if (categoriesCount === 0) {
+  if (allCategoriesCount === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-14 text-center px-6">
-        <div className="rounded-full bg-muted/60 p-4 mb-4">
+        <div className="mb-4 rounded-full bg-muted/60 p-4">
           <FolderOpen className="size-6 text-muted-foreground/60" />
         </div>
-        <p className="text-muted-foreground font-medium">No categories found</p>
-        <p className="text-muted-foreground/60 text-sm mt-1">
+        <p className="font-medium text-muted-foreground">No categories found</p>
+        <p className="mt-1 text-sm text-muted-foreground/70">
           Create your first category to get started
+        </p>
+      </div>
+    );
+  }
+
+  if (categories.length === 0 && isFiltering) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-muted/20 px-6 py-10 text-center">
+        <Search className="mb-2 size-4 text-muted-foreground" />
+        <p className="text-sm font-medium">No categories match your search</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Try another term instead of{" "}
+          <span className="font-medium text-foreground">"{searchValue}"</span>
         </p>
       </div>
     );
@@ -293,144 +435,141 @@ function CategoriesContent({
 
   return (
     <div className="space-y-3">
-      {/* Select-all toolbar */}
-      {totalCategories > 0 && (
+      {toolbarTotal > 0 && (
         <div
           className={cn(
-            "flex items-center justify-between gap-2 p-2.5 rounded-xl",
-            "bg-muted/40 border border-border/50",
-            isMobile && "mx-0"
+            "rounded-xl border border-border/60 bg-muted/35 p-2.5",
+            isMobile && "px-3 py-2.5"
           )}
         >
-          <div className="flex items-center gap-2.5 flex-1 min-w-0">
-            <div className="relative shrink-0">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex min-w-0 items-center gap-2">
               <Checkbox
-                id={isMobile ? "select-all-mobile" : "select-all"}
-                ref={!isMobile ? selectAllCheckboxRef : undefined}
-                checked={isAllSelected || isPartiallySelected}
-                onCheckedChange={handleToggleSelectAll}
+                id={isMobile ? "select-visible-mobile" : "select-visible"}
+                checked={toolbarIsAllSelected}
+                indeterminate={toolbarIsPartiallySelected}
+                onCheckedChange={onToggleToolbarSelection}
               />
-            </div>
-            <label
-              htmlFor={isMobile ? "select-all-mobile" : "select-all"}
-              className="cursor-pointer text-xs font-medium text-muted-foreground truncate"
-            >
-              {isAllSelected
-                ? "All selected"
-                : isPartiallySelected
-                  ? `${selectedCount} of ${totalCategories}`
-                  : `Select all (${totalCategories})`}
-            </label>
-          </div>
-
-          <div className="flex items-center gap-4 shrink-0">
-            {hasAnySelected && (
-              <Badge
-                variant="secondary"
-                className={cn(
-                  isAllSelected
-                    ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
-                    : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
-                )}
+              <label
+                htmlFor={isMobile ? "select-visible-mobile" : "select-visible"}
+                className="cursor-pointer truncate text-xs font-medium text-muted-foreground"
               >
-                {selectedCount}/{totalCategories}
+                {toolbarIsAllSelected
+                  ? "All visible selected"
+                  : toolbarIsPartiallySelected
+                    ? `${toolbarSelected} of ${toolbarTotal} visible`
+                    : `Select visible (${toolbarTotal})`}
+              </label>
+            </div>
+
+            {toolbarHasAnySelected && (
+              <Badge variant="secondary" className="shrink-0 text-[11px]">
+                {toolbarSelected}/{toolbarTotal}
               </Badge>
             )}
-            {isPartiallySelected && (
-              <div className="flex gap-4">
-                <Button
-                  type="button"
-                  variant="default"
-                  onClick={handleSelectAll}
-                >
-                  <CheckCheck className="size-3 mr-0.5" />
-                  All
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={handleDeselectAll}
-                >
-                  <Minus className="size-3 mr-0.5" />
-                  None
-                </Button>
-              </div>
-            )}
+          </div>
+
+          <div className="mt-2 flex justify-end gap-2">
+            <Button
+              type="button"
+              variant="default"
+              size="lg"
+              onClick={onSelectToolbarScope}
+              disabled={toolbarIsAllSelected}
+              className="h-7 px-2 text-xs"
+            >
+              <CheckCheck className="size-3.5" />
+              All
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={onDeselectToolbarScope}
+              disabled={!toolbarHasAnySelected}
+              className="h-7 px-2 text-xs"
+            >
+              <Minus className="size-3.5" />
+              None
+            </Button>
           </div>
         </div>
       )}
 
-      {/* Category list */}
       <ScrollArea
         className={cn(
-          "w-full rounded-xl",
-          isMobile ? "h-[50vh]" : "h-87.5 border bg-background/50"
+          "w-full rounded-xl border bg-background/60",
+          isMobile ? "h-[52vh]" : "h-[56vh]"
         )}
       >
-        <div className={cn("space-y-0.5", !isMobile && "p-2")}>
-          {data.data.map((category: any, index: number) => (
-            <div key={category.id}>
-              <div
-                className={cn(
-                  "flex items-center gap-2.5 rounded-xl p-2.5",
-                  "transition-colors duration-150",
-                  "hover:bg-accent/50 active:bg-accent/70",
-                  selectedCategories.includes(category.id) &&
-                    "bg-primary/5 hover:bg-primary/8"
-                )}
-              >
-                <Checkbox
-                  id={category.id}
-                  checked={selectedCategories.includes(category.id)}
-                  onCheckedChange={(checked) =>
-                    handleCheckboxChange(category.id, !!checked)
-                  }
-                  className="shrink-0"
-                />
-                <label
-                  htmlFor={category.id}
-                  className="cursor-pointer flex-1 min-w-0"
+        <div className={cn("space-y-0.5", isMobile ? "p-1.5" : "p-2")}>
+          {categories.map((category, index) => {
+            const categoryCheckboxId = `${checkboxPrefix}-category-${category.id}`;
+
+            return (
+              <div key={category.id}>
+                <div
+                  className={cn(
+                    "flex items-center gap-2.5 rounded-xl p-2.5 transition-colors",
+                    "hover:bg-accent/45 active:bg-accent/65",
+                    selectedCategories.includes(category.id) &&
+                      "border border-primary/20 bg-primary/5 hover:bg-primary/10"
+                  )}
                 >
-                  <CategoryItem category={category} />
-                </label>
+                  <Checkbox
+                    id={categoryCheckboxId}
+                    checked={selectedCategories.includes(category.id)}
+                    onCheckedChange={(checked) =>
+                      handleCheckboxChange(category.id, checked)
+                    }
+                    className="shrink-0"
+                  />
+                  <label
+                    htmlFor={categoryCheckboxId}
+                    className="min-w-0 flex-1"
+                  >
+                    <CategoryItem category={category} />
+                  </label>
+                </div>
+                {index < categories.length - 1 && (
+                  <Separator className="my-0.5" />
+                )}
               </div>
-              {index < data.data.length - 1 && !isMobile && (
-                <Separator className="my-0.5 opacity-30" />
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </ScrollArea>
 
-      {/* Delete bar */}
       {shouldRenderDeleteButton && (
         <div
           className={cn(
-            "flex items-center justify-between gap-3 pt-3",
-            !isMobile && "border-t"
+            "flex items-center justify-between gap-3 rounded-xl",
+            isMobile
+              ? "sticky bottom-2 border bg-background/90 p-2.5 shadow-sm backdrop-blur supports-backdrop-filter:bg-background/80"
+              : "border-t pt-3"
           )}
         >
           <p className="text-xs text-muted-foreground">
-            {selectedCount > 0
-              ? `${selectedCount} ${selectedCount === 1 ? "category" : "categories"} selected`
+            {selectedCategories.length > 0
+              ? `${selectedCategories.length} ${selectedCategories.length === 1 ? "category" : "categories"} selected`
               : "No categories selected"}
           </p>
           <Button
             type="button"
             variant="destructive"
             disabled={selectedCategories.length === 0}
-            onClick={handleDeleteClick}
-            size="sm"
-            className="h-8 gap-1.5 text-xs"
+            onClick={onDeleteClick}
+            size={isMobile ? "default" : "sm"}
+            className={cn("gap-1.5", !isMobile && "h-8 text-xs")}
           >
             <Trash2 className="size-3.5" />
             Delete
-            {selectedCount > 0 && (
+            {selectedCategories.length > 0 && (
               <Badge
                 variant="secondary"
-                className="ml-0.5 bg-destructive-foreground text-destructive text-[10px] px-1 py-0"
+                className="ml-0.5 bg-destructive-foreground px-1 py-0 text-[10px] text-destructive"
               >
-                {selectedCount}
+                {selectedCategories.length}
               </Badge>
             )}
           </Button>
@@ -439,8 +578,6 @@ function CategoriesContent({
     </div>
   );
 }
-
-/* ────────────────────────── Delete Dialog ───────────────────────────── */
 
 function DeleteDialog({
   isOpen,
@@ -456,7 +593,7 @@ function DeleteDialog({
   onOpenChange: (open: boolean) => void;
   isDeleting: boolean;
   selectedCount: number;
-  categories: any[] | undefined;
+  categories: CategoryRecord[];
   selectedCategories: string[];
   onConfirm: () => void;
   onCancel: () => void;
@@ -480,21 +617,21 @@ function DeleteDialog({
                 ? This action cannot be undone.
               </p>
               {selectedCount > 0 && (
-                <div className="mt-3 p-3 bg-destructive/5 border border-destructive/20 rounded-md">
-                  <p className="text-sm font-medium text-destructive mb-2 flex items-center gap-1">
+                <div className="mt-3 rounded-md border border-destructive/20 bg-destructive/5 p-3">
+                  <p className="mb-2 flex items-center gap-1 text-sm font-medium text-destructive">
                     <Trash2 className="h-3 w-3" />
                     Categories to be deleted:
                   </p>
                   <div className="max-h-32 overflow-y-auto">
                     <div className="flex flex-wrap gap-1">
                       {categories
-                        ?.filter((cat) => selectedCategories.includes(cat.id))
-                        ?.slice(0, 8)
-                        ?.map((cat) => (
+                        .filter((cat) => selectedCategories.includes(cat.id))
+                        .slice(0, 8)
+                        .map((cat) => (
                           <Badge
                             key={cat.id}
                             variant="destructive"
-                            className="text-xs bg-destructive/10 text-destructive border-destructive/20"
+                            className="border-destructive/20 bg-destructive/10 text-xs text-destructive"
                           >
                             {cat.name}
                           </Badge>
@@ -502,7 +639,7 @@ function DeleteDialog({
                       {selectedCount > 8 && (
                         <Badge
                           variant="destructive"
-                          className="text-xs bg-destructive/10 text-destructive border-destructive/20"
+                          className="border-destructive/20 bg-destructive/10 text-xs text-destructive"
                         >
                           +{selectedCount - 8} more...
                         </Badge>
@@ -525,12 +662,12 @@ function DeleteDialog({
           >
             {isDeleting ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Deleting...
               </>
             ) : (
               <>
-                <Trash2 className="h-4 w-4 mr-2" />
+                <Trash2 className="mr-2 h-4 w-4" />
                 Delete {selectedCount}{" "}
                 {selectedCount === 1 ? "Category" : "Categories"}
               </>

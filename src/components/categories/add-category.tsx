@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { getCanonicalCategoryIconName } from "~/constants/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
@@ -42,7 +43,7 @@ export default function AddCategory() {
           email: userEmail,
           category: {
             name: data[categoryFormNames.name],
-            icon: data[categoryFormNames.icon],
+            icon: getCanonicalCategoryIconName(data[categoryFormNames.icon]),
           },
         },
       });

@@ -1,5 +1,6 @@
 import type { Category } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { getCanonicalCategoryIconName } from "~/constants/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useMutation } from "~/hooks/use-mutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";
@@ -46,7 +47,7 @@ export function EditCategory({
         data: {
           categoryId: category.id,
           name,
-          icon,
+          icon: getCanonicalCategoryIconName(icon),
         },
       });
     } catch (error) {
@@ -58,7 +59,7 @@ export function EditCategory({
     <CategoryForm
       initialValues={{
         [categoryFormNames.name]: category.name,
-        [categoryFormNames.icon]: category.icon,
+        [categoryFormNames.icon]: getCanonicalCategoryIconName(category.icon),
       }}
       submitText="Save changes"
       loading={updateCategory.status === "pending"}

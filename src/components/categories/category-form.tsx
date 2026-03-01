@@ -102,7 +102,7 @@ export function CategoryForm({
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button type="submit" size={"lg"} className="w-full" disabled={loading}>
           {loading ? "Saving..." : submitText}
         </Button>
       </form>

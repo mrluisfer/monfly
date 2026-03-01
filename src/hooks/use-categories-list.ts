@@ -45,10 +45,26 @@ export const useCategoriesList = () => {
     );
   };
 
+  const handleSelectCategories = (categoryIds: string[]) => {
+    if (categoryIds.length === 0) return;
+
+    setSelectedCategories((prev) => {
+      const mergedSelection = new Set(prev);
+      categoryIds.forEach((id) => mergedSelection.add(id));
+      return Array.from(mergedSelection);
+    });
+  };
+
+  const handleDeselectCategories = (categoryIds: string[]) => {
+    if (categoryIds.length === 0) return;
+
+    const idsToRemove = new Set(categoryIds);
+    setSelectedCategories((prev) => prev.filter((id) => !idsToRemove.has(id)));
+  };
+
   const handleSelectAll = () => {
-    if (!data?.data) return;
-    const allCategoryIds = data.data.map((category) => category.id);
-    setSelectedCategories(allCategoryIds);
+    if (!data?.data?.length) return;
+    handleSelectCategories(data.data.map((category) => category.id));
   };
 
   const handleDeselectAll = () => {
@@ -102,6 +118,8 @@ export const useCategoriesList = () => {
     handleDeleteCategories,
     handleSelectAll,
     handleDeselectAll,
+    handleSelectCategories,
+    handleDeselectCategories,
     handleToggleSelectAll,
     // Selection state helpers
     totalCategories,
