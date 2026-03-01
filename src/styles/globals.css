@@ -1497,6 +1497,7 @@ html.dark .bg-hero::before {
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
   background-color: #000000;
+  overscroll-behavior: none;
 }
 
 .dark {
