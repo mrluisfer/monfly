@@ -10,8 +10,8 @@ function RouteComponent() {
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between">
-        <PageTitle description="Simula operaciones sobre tu total balance sin modificar datos reales.">
-          Balance Lab
+        <PageTitle description="Simulate operations using your total balance without changing real data.">
+          Balance Calculator
         </PageTitle>
       </header>
 

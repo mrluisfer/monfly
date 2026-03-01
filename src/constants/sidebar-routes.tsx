@@ -1,6 +1,7 @@
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import {
   BarChart,
+  Calculator,
   CreditCard,
   Home,
   List,
@@ -23,6 +24,7 @@ export enum SidebarRouteUrl {
   BUDGET = "/budget",
   REPORTS = "/reports",
   CATEGORIES = "/categories",
+  CALCULATOR = "/balance-calculator",
 }
 
 export const sidebarRoutes: SidebarItemType[] = [
@@ -40,4 +42,9 @@ export const sidebarRoutes: SidebarItemType[] = [
   },
   { title: "Reports", icon: BarChart, url: SidebarRouteUrl.REPORTS },
   { title: "Categories", icon: List, url: SidebarRouteUrl.CATEGORIES },
+  {
+    title: "Calculator",
+    icon: Calculator,
+    url: SidebarRouteUrl.CALCULATOR,
+  },
 ];

@@ -71,83 +71,83 @@ const BASIC_KEYS: CalculatorKey[] = [
   {
     token: "AC",
     label: "AC",
-    ariaLabel: "Limpiar simulación",
+    ariaLabel: "Clear simulation",
     role: "utility",
   },
   {
     token: "BACKSPACE",
     label: "⌫",
-    ariaLabel: "Borrar último dígito",
+    ariaLabel: "Delete last digit",
     role: "utility",
   },
   {
     token: "TOGGLE_SIGN",
     label: "±",
-    ariaLabel: "Cambiar signo",
+    ariaLabel: "Toggle sign",
     role: "utility",
   },
   {
     token: "PERCENT",
     label: "%",
-    ariaLabel: "Convertir en porcentaje",
+    ariaLabel: "Convert to percent",
     role: "utility",
   },
-  { token: "7", label: "7", ariaLabel: "Número 7", role: "number" },
-  { token: "8", label: "8", ariaLabel: "Número 8", role: "number" },
-  { token: "9", label: "9", ariaLabel: "Número 9", role: "number" },
-  { token: "/", label: "÷", ariaLabel: "Dividir", role: "operator" },
-  { token: "4", label: "4", ariaLabel: "Número 4", role: "number" },
-  { token: "5", label: "5", ariaLabel: "Número 5", role: "number" },
-  { token: "6", label: "6", ariaLabel: "Número 6", role: "number" },
-  { token: "*", label: "×", ariaLabel: "Multiplicar", role: "operator" },
-  { token: "1", label: "1", ariaLabel: "Número 1", role: "number" },
-  { token: "2", label: "2", ariaLabel: "Número 2", role: "number" },
-  { token: "3", label: "3", ariaLabel: "Número 3", role: "number" },
-  { token: "-", label: "−", ariaLabel: "Restar", role: "operator" },
+  { token: "7", label: "7", ariaLabel: "Number 7", role: "number" },
+  { token: "8", label: "8", ariaLabel: "Number 8", role: "number" },
+  { token: "9", label: "9", ariaLabel: "Number 9", role: "number" },
+  { token: "/", label: "÷", ariaLabel: "Divide", role: "operator" },
+  { token: "4", label: "4", ariaLabel: "Number 4", role: "number" },
+  { token: "5", label: "5", ariaLabel: "Number 5", role: "number" },
+  { token: "6", label: "6", ariaLabel: "Number 6", role: "number" },
+  { token: "*", label: "×", ariaLabel: "Multiply", role: "operator" },
+  { token: "1", label: "1", ariaLabel: "Number 1", role: "number" },
+  { token: "2", label: "2", ariaLabel: "Number 2", role: "number" },
+  { token: "3", label: "3", ariaLabel: "Number 3", role: "number" },
+  { token: "-", label: "−", ariaLabel: "Subtract", role: "operator" },
   {
     token: "0",
     label: "0",
-    ariaLabel: "Número 0",
+    ariaLabel: "Number 0",
     role: "number",
     colSpan: 2,
   },
-  { token: ".", label: ".", ariaLabel: "Punto decimal", role: "number" },
-  { token: "+", label: "+", ariaLabel: "Sumar", role: "operator" },
-  { token: "=", label: "=", ariaLabel: "Calcular resultado", role: "equal" },
+  { token: ".", label: ".", ariaLabel: "Decimal point", role: "number" },
+  { token: "+", label: "+", ariaLabel: "Add", role: "operator" },
+  { token: "=", label: "=", ariaLabel: "Calculate result", role: "equal" },
 ];
 
 const SCIENTIFIC_KEYS: CalculatorKey[] = [
   {
     token: "SQUARE",
     label: "x²",
-    ariaLabel: "Elevar al cuadrado",
+    ariaLabel: "Square value",
     role: "science",
   },
   {
     token: "SQRT",
     label: "√x",
-    ariaLabel: "Raíz cuadrada",
+    ariaLabel: "Square root",
     role: "science",
   },
   {
     token: "INVERSE",
     label: "1/x",
-    ariaLabel: "Inverso multiplicativo",
+    ariaLabel: "Multiplicative inverse",
     role: "science",
   },
-  { token: "^", label: "xʸ", ariaLabel: "Potencia", role: "science" },
-  { token: "MC", label: "mc", ariaLabel: "Limpiar memoria", role: "science" },
-  { token: "MR", label: "mr", ariaLabel: "Recuperar memoria", role: "science" },
+  { token: "^", label: "xʸ", ariaLabel: "Power", role: "science" },
+  { token: "MC", label: "mc", ariaLabel: "Clear memory", role: "science" },
+  { token: "MR", label: "mr", ariaLabel: "Recall memory", role: "science" },
   {
     token: "M_PLUS",
     label: "m+",
-    ariaLabel: "Sumar a memoria",
+    ariaLabel: "Add to memory",
     role: "science",
   },
   {
     token: "M_MINUS",
     label: "m-",
-    ariaLabel: "Restar de memoria",
+    ariaLabel: "Subtract from memory",
     role: "science",
   },
 ];
@@ -156,37 +156,37 @@ const SCENARIO_PRESETS: ScenarioPreset[] = [
   {
     id: "rise-five",
     label: "+5%",
-    description: "Escenario de crecimiento conservador",
+    description: "Conservative growth scenario",
     apply: (currentValue) => currentValue * 1.05,
   },
   {
     id: "drop-five",
     label: "-5%",
-    description: "Escenario de ajuste ligero",
+    description: "Light adjustment scenario",
     apply: (currentValue) => currentValue * 0.95,
   },
   {
     id: "rise-fifteen",
     label: "+15%",
-    description: "Escenario de crecimiento acelerado",
+    description: "Accelerated growth scenario",
     apply: (currentValue) => currentValue * 1.15,
   },
   {
     id: "drop-fifteen",
     label: "-15%",
-    description: "Escenario de contracción",
+    description: "Contraction scenario",
     apply: (currentValue) => currentValue * 0.85,
   },
   {
     id: "break-even",
     label: "0",
-    description: "Simular punto de equilibrio",
+    description: "Simulate break-even point",
     apply: () => 0,
   },
   {
     id: "baseline",
-    label: "Base",
-    description: "Volver al saldo inicial",
+    label: "Baseline",
+    description: "Return to initial balance",
     apply: (_, baselineValue) => baselineValue,
   },
 ];
@@ -378,7 +378,7 @@ export function BalanceCalculator() {
 
   const [mode, setMode] = useState<CalculatorMode>("normal");
   const [display, setDisplay] = useState("0");
-  const [expression, setExpression] = useState("Saldo inicial");
+  const [expression, setExpression] = useState("Initial balance");
   const [pendingOperator, setPendingOperator] = useState<BinaryOperator | null>(
     null
   );
@@ -388,7 +388,7 @@ export function BalanceCalculator() {
   const [baselineBalance, setBaselineBalance] = useState(0);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [statusMessage, setStatusMessage] = useState(
-    "Calculadora lista para simular escenarios."
+    "Calculator ready to simulate scenarios."
   );
 
   const initialBalanceRef = useRef(0);
@@ -421,8 +421,8 @@ export function BalanceCalculator() {
 
     setBaselineBalance(normalizedBalance);
     setDisplay(seededDisplay);
-    setExpression("Saldo inicial");
-    setStatusMessage("Simulación iniciada con tu total balance actual.");
+    setExpression("Initial balance");
+    setStatusMessage("Simulation started with your current total balance.");
   }, [data?.data?.totalBalance]);
 
   const pushHistory = useCallback(
@@ -442,7 +442,7 @@ export function BalanceCalculator() {
 
   const setErrorState = useCallback((message: string) => {
     setDisplay("Error");
-    setExpression("Operación inválida");
+    setExpression("Invalid operation");
     setPendingOperator(null);
     setStoredValue(null);
     setWaitingForOperand(true);
@@ -455,14 +455,14 @@ export function BalanceCalculator() {
       const baselineNumber = initialBalanceRef.current;
 
       setDisplay(baselineDisplay);
-      setExpression("Saldo inicial");
+      setExpression("Initial balance");
       setPendingOperator(null);
       setStoredValue(null);
       setWaitingForOperand(false);
-      setStatusMessage("Simulación reiniciada al saldo inicial.");
+      setStatusMessage("Simulation reset to the initial balance.");
 
       if (storeInHistory) {
-        pushHistory("Reinicio a saldo base", baselineDisplay);
+        pushHistory("Reset to baseline", baselineDisplay);
       }
 
       if (baselineBalance !== baselineNumber) {
@@ -492,7 +492,7 @@ export function BalanceCalculator() {
           (!baseDisplay.includes(".") && integerLength >= DISPLAY_MAX_DIGITS) ||
           (baseDisplay.includes(".") && decimalLength >= DISPLAY_MAX_DECIMALS)
         ) {
-          setStatusMessage("Límite de dígitos alcanzado.");
+          setStatusMessage("Digit limit reached.");
           return previousDisplay;
         }
 
@@ -508,7 +508,7 @@ export function BalanceCalculator() {
       });
 
       setWaitingForOperand(false);
-      setStatusMessage(`Número ${digit} agregado.`);
+      setStatusMessage(`Number ${digit} added.`);
     },
     [waitingForOperand]
   );
@@ -517,7 +517,7 @@ export function BalanceCalculator() {
     if (display === "Error" || waitingForOperand) {
       setDisplay("0.");
       setWaitingForOperand(false);
-      setStatusMessage("Punto decimal agregado.");
+      setStatusMessage("Decimal point added.");
       return;
     }
 
@@ -526,7 +526,7 @@ export function BalanceCalculator() {
     }
 
     setDisplay((previousDisplay) => `${previousDisplay}.`);
-    setStatusMessage("Punto decimal agregado.");
+    setStatusMessage("Decimal point added.");
   }, [display, waitingForOperand]);
 
   const handleBackspace = useCallback(() => {
@@ -545,7 +545,7 @@ export function BalanceCalculator() {
       return previousDisplay.slice(0, -1);
     });
 
-    setStatusMessage("Último dígito eliminado.");
+    setStatusMessage("Last digit deleted.");
   }, [display, waitingForOperand]);
 
   const handleToggleSign = useCallback(() => {
@@ -558,7 +558,7 @@ export function BalanceCalculator() {
         ? previousDisplay.slice(1)
         : `-${previousDisplay}`
     );
-    setStatusMessage("Signo invertido.");
+    setStatusMessage("Sign toggled.");
   }, [display]);
 
   const handlePercent = useCallback(() => {
@@ -574,7 +574,7 @@ export function BalanceCalculator() {
     setDisplay(resultDisplay);
     setExpression(statement);
     setWaitingForOperand(true);
-    setStatusMessage("Porcentaje aplicado.");
+    setStatusMessage("Percentage applied.");
     pushHistory(statement, resultDisplay);
   }, [display, pushHistory]);
 
@@ -588,7 +588,7 @@ export function BalanceCalculator() {
       const { result, statement } = computeUnaryResult(currentValue, token);
 
       if (result === null) {
-        setErrorState("Operación científica no válida para el valor actual.");
+        setErrorState("Scientific operation is not valid for current value.");
         return;
       }
 
@@ -597,7 +597,7 @@ export function BalanceCalculator() {
       setDisplay(resultDisplay);
       setExpression(statement);
       setWaitingForOperand(true);
-      setStatusMessage("Operación científica aplicada.");
+      setStatusMessage("Scientific operation applied.");
       pushHistory(statement, resultDisplay);
     },
     [display, pushHistory, setErrorState]
@@ -609,16 +609,16 @@ export function BalanceCalculator() {
 
       if (token === "MC") {
         setMemoryValue(0);
-        setStatusMessage("Memoria limpiada.");
+        setStatusMessage("Memory cleared.");
         return;
       }
 
       if (token === "MR") {
         const memoryDisplay = toDisplayValue(memoryValue);
         setDisplay(memoryDisplay);
-        setExpression("Memoria recuperada");
+        setExpression("Memory recalled");
         setWaitingForOperand(true);
-        setStatusMessage("Valor de memoria recuperado.");
+        setStatusMessage("Memory value recalled.");
         return;
       }
 
@@ -626,14 +626,14 @@ export function BalanceCalculator() {
         setMemoryValue((previousValue) =>
           normalizeNumber(previousValue + currentValue)
         );
-        setStatusMessage("Valor sumado a memoria.");
+        setStatusMessage("Value added to memory.");
         return;
       }
 
       setMemoryValue((previousValue) =>
         normalizeNumber(previousValue - currentValue)
       );
-      setStatusMessage("Valor restado de memoria.");
+      setStatusMessage("Value subtracted from memory.");
     },
     [display, memoryValue]
   );
@@ -653,7 +653,7 @@ export function BalanceCalculator() {
         setExpression(
           `${formatOperationValue(currentValue)} ${OPERATOR_SYMBOL[operator]}`
         );
-        setStatusMessage(`Operador ${OPERATOR_SYMBOL[operator]} listo.`);
+        setStatusMessage(`Operator ${OPERATOR_SYMBOL[operator]} ready.`);
         return;
       }
 
@@ -665,7 +665,7 @@ export function BalanceCalculator() {
         );
 
         if (result === null) {
-          setErrorState("No es posible dividir entre cero.");
+          setErrorState("Cannot divide by zero.");
           return;
         }
 
@@ -679,7 +679,7 @@ export function BalanceCalculator() {
 
       setPendingOperator(operator);
       setWaitingForOperand(true);
-      setStatusMessage(`Operador ${OPERATOR_SYMBOL[operator]} listo.`);
+      setStatusMessage(`Operator ${OPERATOR_SYMBOL[operator]} ready.`);
     },
     [display, pendingOperator, setErrorState, storedValue, waitingForOperand]
   );
@@ -702,7 +702,7 @@ export function BalanceCalculator() {
     );
 
     if (result === null) {
-      setErrorState("No es posible dividir entre cero.");
+      setErrorState("Cannot divide by zero.");
       return;
     }
 
@@ -714,7 +714,7 @@ export function BalanceCalculator() {
     setStoredValue(null);
     setPendingOperator(null);
     setWaitingForOperand(true);
-    setStatusMessage(`Resultado ${formatDisplayValue(resultDisplay)}.`);
+    setStatusMessage(`Result ${formatDisplayValue(resultDisplay)}.`);
     pushHistory(statement, resultDisplay);
   }, [
     display,
@@ -733,7 +733,7 @@ export function BalanceCalculator() {
         preset.apply(sourceValue, initialBalanceRef.current)
       );
       const scenarioDisplay = toDisplayValue(scenarioValue);
-      const statement = `Escenario ${preset.label}`;
+      const statement = `Scenario ${preset.label}`;
 
       setDisplay(scenarioDisplay);
       setExpression(statement);
@@ -895,9 +895,9 @@ export function BalanceCalculator() {
     return (
       <Alert variant="destructive">
         <Info className="size-4" />
-        <AlertTitle>No se encontró la sesión de usuario</AlertTitle>
+        <AlertTitle>User session not found</AlertTitle>
         <AlertDescription>
-          Vuelve a iniciar sesión para usar la calculadora de balance.
+          Sign in again to use the balance calculator.
         </AlertDescription>
       </Alert>
     );
@@ -907,10 +907,10 @@ export function BalanceCalculator() {
     return (
       <Alert variant="destructive">
         <Info className="size-4" />
-        <AlertTitle>No se pudo cargar tu balance</AlertTitle>
+        <AlertTitle>Unable to load your balance</AlertTitle>
         <AlertDescription>
-          La vista no modifica datos reales, pero requiere el balance actual
-          para iniciar la simulación.
+          This view does not change real data, but it needs your current balance
+          to initialize the simulation.
         </AlertDescription>
       </Alert>
     );
@@ -919,7 +919,7 @@ export function BalanceCalculator() {
   if (isPending && !hasInitializedBalanceRef.current) {
     return (
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
-        <Skeleton className="h-[38rem] w-full rounded-2xl" />
+        <Skeleton className="h-152 w-full rounded-2xl" />
         <div className="space-y-4">
           <Skeleton className="h-44 w-full rounded-2xl" />
           <Skeleton className="h-52 w-full rounded-2xl" />
@@ -933,17 +933,17 @@ export function BalanceCalculator() {
     <div className="space-y-4">
       <Alert className="border-primary/25 bg-primary/5">
         <Info className="size-4" />
-        <AlertTitle>Simulación segura</AlertTitle>
+        <AlertTitle>Safe simulation</AlertTitle>
         <AlertDescription>
-          Esta calculadora usa una copia estática del{" "}
-          <strong>Total Balance</strong>. Ningún cálculo modifica tu balance
-          real ni guarda cambios en la base de datos.
+          This calculator uses a static copy of your{" "}
+          <strong>Total Balance</strong>. No calculation updates your real
+          balance or saves data to the database.
         </AlertDescription>
       </Alert>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
-        <Card className="relative overflow-hidden border-border/70 bg-gradient-to-br from-card via-card to-primary/5">
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
+        <Card className="relative overflow-hidden border-border/70 bg-linear-to-br from-card via-card to-primary/5">
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
 
           <CardHeader className="relative space-y-4">
             <div className="flex items-start justify-between gap-3">
@@ -953,7 +953,7 @@ export function BalanceCalculator() {
                   Balance Calculator
                 </CardTitle>
                 <CardDescription>
-                  Mobile-first, con soporte de teclado y modo científico.
+                  Mobile-first, with keyboard support and scientific mode.
                 </CardDescription>
               </div>
               <Button
@@ -961,7 +961,7 @@ export function BalanceCalculator() {
                 size="lg"
                 onClick={() => resetToBaseline(true)}
                 className="shrink-0"
-                aria-label="Reiniciar al saldo inicial"
+                aria-label="Reset to initial balance"
               >
                 <RotateCcw className="size-4" />
                 Reset
@@ -1029,24 +1029,24 @@ export function BalanceCalculator() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <FlaskConical className="size-4" aria-hidden="true" />
-                Escenarios de balance
+                Balance scenarios
               </CardTitle>
               <CardDescription>
-                Ajusta rápidamente la simulación sin afectar datos reales.
+                Adjust simulation quickly without affecting real data.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <dl className="space-y-2 text-sm">
                 <div className="flex items-center justify-between gap-2">
-                  <dt className="text-muted-foreground">Saldo base (real)</dt>
+                  <dt className="text-muted-foreground">Base balance (real)</dt>
                   <dd className="font-medium">{baselineBalanceLabel}</dd>
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <dt className="text-muted-foreground">Saldo simulado</dt>
+                  <dt className="text-muted-foreground">Simulated balance</dt>
                   <dd className="font-medium">{simulatedBalanceLabel}</dd>
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <dt className="text-muted-foreground">Diferencia</dt>
+                  <dt className="text-muted-foreground">Difference</dt>
                   <dd
                     className={cn(
                       "font-semibold",
@@ -1061,7 +1061,7 @@ export function BalanceCalculator() {
                 </div>
                 {deltaPercentageLabel && (
                   <div className="flex items-center justify-between gap-2">
-                    <dt className="text-muted-foreground">Variación</dt>
+                    <dt className="text-muted-foreground">Variation</dt>
                     <dd
                       className={cn(
                         "font-medium",
@@ -1093,7 +1093,7 @@ export function BalanceCalculator() {
 
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Sigma className="size-3.5" aria-hidden="true" />
-                Memoria actual: {formatOperationValue(memoryValue)}
+                Current memory: {formatOperationValue(memoryValue)}
               </div>
             </CardContent>
           </Card>
@@ -1102,16 +1102,16 @@ export function BalanceCalculator() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
                 <History className="size-4" aria-hidden="true" />
-                Historial local
+                Local history
               </CardTitle>
               <CardDescription>
-                Últimas operaciones de esta sesión de simulación.
+                Latest operations from this simulation session.
               </CardDescription>
             </CardHeader>
             <CardContent>
               {history.length === 0 ? (
                 <div className="rounded-xl border border-dashed p-4 text-center text-sm text-muted-foreground">
-                  Aún no hay operaciones registradas.
+                  No operations registered yet.
                 </div>
               ) : (
                 <ol className="scrollbar-custom max-h-64 space-y-2 overflow-y-auto pr-1">
@@ -1136,17 +1136,17 @@ export function BalanceCalculator() {
                 className="mt-3 w-full"
                 onClick={() => setHistory([])}
                 disabled={history.length === 0}
-                aria-label="Limpiar historial local"
+                aria-label="Clear local history"
               >
                 <Delete className="size-4" />
-                Limpiar historial
+                Clear history
               </Button>
             </CardContent>
           </Card>
 
           <Card className="border-border/70">
             <CardHeader>
-              <CardTitle className="text-base">Atajos disponibles</CardTitle>
+              <CardTitle className="text-base">Available shortcuts</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2">
               <Badge variant="outline">0-9</Badge>
