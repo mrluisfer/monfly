@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
-import { format } from "date-fns";
-import { Clock, ZapIcon } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "~/components/ui/tooltip";
+import { cn } from "~/lib/utils";
+import { format } from "date-fns";
+import { Clock, ZapIcon } from "lucide-react";
 
 interface TimezoneBadgeProps {
   variant?: "default" | "secondary" | "outline" | "destructive";
   showIcon?: boolean;
   showTimezone?: boolean;
   animate?: boolean;
+  compact?: boolean;
+  fullWidth?: boolean;
+  isActive?: boolean;
   className?: string;
 }
 
@@ -23,36 +26,55 @@ export const TimezoneBadge = ({
   showIcon = true,
   showTimezone = true,
   animate = true,
+  compact = false,
+  fullWidth = false,
+  isActive = true,
   className = "",
 }: TimezoneBadgeProps) => {
-  const [now, setNow] = useState(new Date());
-  const [mounted, setMounted] = useState(false);
+  const [now, setNow] = useState<Date | null>(null);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
-    setMounted(true);
-    const timer = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+    if (!isActive) return;
 
-  // Prevent hydration mismatch
-  if (!mounted) {
+    setNow(new Date());
+
+    const intervalMs = compact ? 60_000 : 30_000;
+    const timer = window.setInterval(() => setNow(new Date()), intervalMs);
+
+    return () => window.clearInterval(timer);
+  }, [compact, isActive]);
+
+  if (!isActive) {
+    return null;
+  }
+
+  if (!now) {
     return (
       <Badge
         variant={variant}
-        className={`inline-flex items-center gap-2 ${className}`}
+        className={cn(
+          "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5",
+          fullWidth && "w-full justify-between",
+          compact && "px-2.5 py-1",
+          className
+        )}
       >
         {showIcon && (
-          <Clock className="h-3 w-3 opacity-60" aria-hidden="true" />
+          <Clock
+            className="h-3.5 w-3.5 shrink-0 opacity-60"
+            aria-hidden="true"
+          />
         )}
-        <span className="font-mono text-xs">Loading...</span>
+        <span className="truncate font-mono text-xs">Loading...</span>
       </Badge>
     );
   }
 
-  const timeFormatted = format(now, "HH:mm:ss");
+  const timeFormatted = format(now, "HH:mm");
   const dateFormatted = format(now, "MMM dd, yyyy");
   const fullFormatted = format(now, "PPpp");
-  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const shortTimezone = timezone.split("/").pop() ?? timezone;
 
   return (
     <TooltipProvider delay={200}>
@@ -61,30 +83,53 @@ export const TimezoneBadge = ({
           render={
             <Badge
               variant={variant}
-              className={`inline-flex items-center gap-2 px-3 py-1.5 transition-all hover:scale-105 ${className}`}
+              className={cn(
+                "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5 select-none transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
+                fullWidth && "w-full justify-between",
+                compact && "px-2.5 py-1 text-[11px]",
+                className
+              )}
             >
               {showIcon && (
                 <ZapIcon
-                  className={`h-3 w-3 text-primary ${animate ? "animate-pulse" : "opacity-60"}`}
+                  className={cn(
+                    "h-3.5 w-3.5 shrink-0 text-primary",
+                    animate ? "animate-pulse" : "opacity-60"
+                  )}
                   aria-hidden="true"
                 />
               )}
-              <div className="flex flex-col items-start gap-0.5 leading-none">
-                <span className="font-mono text-xs font-semibold tracking-tight">
+
+              <span
+                className={cn(
+                  "inline-flex min-w-0 flex-col items-start leading-none",
+                  compact && "flex-row items-center gap-1.5",
+                  fullWidth && "w-full"
+                )}
+              >
+                <span className="font-mono text-xs font-semibold tracking-tight tabular-nums">
                   {timeFormatted}
                 </span>
-                <span className="text-[10px]">
-                  {dateFormatted}
-                  {showTimezone && (
-                    <span className="ml-1 opacity-70">
-                      · {timezone.split("/").pop()}
-                    </span>
-                  )}
-                </span>
-              </div>
+
+                {!compact && (
+                  <span className="truncate text-[10px]">
+                    {dateFormatted}
+                    {showTimezone && (
+                      <span className="ml-1 opacity-70">. {shortTimezone}</span>
+                    )}
+                  </span>
+                )}
+
+                {compact && showTimezone && (
+                  <span className="truncate text-[10px] opacity-75">
+                    {shortTimezone}
+                  </span>
+                )}
+              </span>
             </Badge>
           }
         />
+
         <TooltipContent side="bottom" className="font-mono text-xs">
           <div className="space-y-1">
             <div className="font-semibold">{fullFormatted}</div>

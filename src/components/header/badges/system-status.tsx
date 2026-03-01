@@ -25,6 +25,9 @@ interface SystemStatusBadgeProps {
   status?: SystemStatus;
   showIcon?: boolean;
   animate?: boolean;
+  compact?: boolean;
+  fullWidth?: boolean;
+  isActive?: boolean;
   variant?: "default" | "secondary" | "outline";
   className?: string;
 }
@@ -71,9 +74,16 @@ export function SystemStatusBadge({
   status = "operational",
   showIcon = true,
   animate = true,
+  compact = false,
+  fullWidth = false,
+  isActive = true,
   variant = "secondary",
   className = "",
 }: SystemStatusBadgeProps) {
+  if (!isActive) {
+    return null;
+  }
+
   const config = statusConfig[status];
   const Icon = config.icon;
 
@@ -85,37 +95,44 @@ export function SystemStatusBadge({
             <Badge
               variant={variant}
               className={cn(
-                "inline-flex items-center gap-2 px-3 py-1.5 uppercase tracking-wide select-none transition-all hover:scale-105",
+                "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5 select-none transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
+                fullWidth && "w-full justify-between",
+                compact && "px-2.5 py-1 text-[11px]",
                 className
               )}
             >
               <span
-                className={cn("relative flex h-2 w-2 rounded-full", config.color)}
+                className={cn(
+                  "relative inline-flex h-2 w-2 rounded-full",
+                  config.color
+                )}
                 aria-hidden="true"
               >
                 {animate && status === "operational" && (
-                  <>
-                    <span
-                      className={cn(
-                        "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                        config.color
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "relative inline-flex h-2 w-2 rounded-full",
-                        config.color
-                      )}
-                    />
-                  </>
+                  <span
+                    className={cn(
+                      "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+                      config.color
+                    )}
+                  />
                 )}
               </span>
 
               {showIcon && (
-                <Icon className="h-3 w-3 opacity-70" aria-hidden="true" />
+                <Icon
+                  className="h-3.5 w-3.5 shrink-0 opacity-75"
+                  aria-hidden="true"
+                />
               )}
 
-              <span className="text-xs font-medium">{config.shortLabel}</span>
+              <span
+                className={cn(
+                  "truncate text-xs font-medium",
+                  fullWidth && "max-w-[80%]"
+                )}
+              >
+                {compact ? config.shortLabel : config.label}
+              </span>
             </Badge>
           }
         />
@@ -124,7 +141,7 @@ export function SystemStatusBadge({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
-              <span className="font-semibold text-xs">{config.label}</span>
+              <span className="text-xs font-semibold">{config.label}</span>
             </div>
             <p className="text-[10px]">{config.description}</p>
           </div>
@@ -133,10 +150,6 @@ export function SystemStatusBadge({
     </TooltipProvider>
   );
 }
-
-// ============================================================
-// Variant: Compact version with just the dot
-// ============================================================
 
 export function SystemStatusBadgeCompact({
   status = "operational",

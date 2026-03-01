@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -24,30 +25,42 @@ interface SpendingAlertBadgeProps {
   showIcon?: boolean;
   showPercentage?: boolean;
   animate?: boolean;
+  compact?: boolean;
+  fullWidth?: boolean;
+  isActive?: boolean;
   className?: string;
 }
 
 type SpendingStatus =
-  | "safe" // < 50%
-  | "moderate" // 50-79%
-  | "warning" // 80-99%
-  | "exceeded" // >= 100%
-  | "zero" // balance <= 0
-  | "notSet" // balance not configured
+  | "safe"
+  | "moderate"
+  | "warning"
+  | "exceeded"
+  | "zero"
+  | "notSet"
   | "loading"
   | "error";
+
+const currencyFormatter = new Intl.NumberFormat("es-MX", {
+  style: "currency",
+  currency: "MXN",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
 const statusConfig = {
   safe: {
     label: "Budget Safe",
+    compactLabel: "Safe",
     color: "bg-emerald-500",
     variant: "secondary" as const,
     icon: CheckCircle2,
-    iconColor: "dark:text-white text-black",
+    iconColor: "text-foreground/80",
     description: "Your spending is well within budget.",
   },
   moderate: {
     label: "Budget Moderate",
+    compactLabel: "Moderate",
     color: "bg-blue-500",
     variant: "secondary" as const,
     icon: TrendingUp,
@@ -56,6 +69,7 @@ const statusConfig = {
   },
   warning: {
     label: "Budget Warning",
+    compactLabel: "Warning",
     color: "bg-amber-500",
     variant: "destructive" as const,
     icon: AlertTriangle,
@@ -64,6 +78,7 @@ const statusConfig = {
   },
   exceeded: {
     label: "Budget Exceeded",
+    compactLabel: "Exceeded",
     color: "bg-rose-500",
     variant: "destructive" as const,
     icon: AlertCircle,
@@ -72,6 +87,7 @@ const statusConfig = {
   },
   zero: {
     label: "Zero Balance",
+    compactLabel: "Zero",
     color: "bg-zinc-500",
     variant: "secondary" as const,
     icon: AlertTriangle,
@@ -80,6 +96,7 @@ const statusConfig = {
   },
   notSet: {
     label: "Balance Not Set",
+    compactLabel: "No Balance",
     color: "bg-muted",
     variant: "outline" as const,
     icon: ChartSpline,
@@ -88,6 +105,7 @@ const statusConfig = {
   },
   loading: {
     label: "Loading",
+    compactLabel: "Loading",
     color: "bg-muted",
     variant: "outline" as const,
     icon: Loader2,
@@ -96,6 +114,7 @@ const statusConfig = {
   },
   error: {
     label: "Error",
+    compactLabel: "Error",
     color: "bg-destructive",
     variant: "destructive" as const,
     icon: AlertCircle,
@@ -104,13 +123,34 @@ const statusConfig = {
   },
 };
 
+const detailStatuses = new Set<SpendingStatus>([
+  "safe",
+  "moderate",
+  "warning",
+  "exceeded",
+]);
+
+const toSafeNumber = (value: unknown) => {
+  if (value === null || value === undefined) return 0;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 0;
+  return parsed;
+};
+
+const formatCurrency = (amount: number) => currencyFormatter.format(amount);
+
 export function SpendingAlertBadge({
   showIcon = true,
   showPercentage = true,
   animate = true,
+  compact = false,
+  fullWidth = false,
+  isActive = true,
   className = "",
 }: SpendingAlertBadgeProps) {
   const userEmail = useRouteUser();
+
+  const isQueryEnabled = Boolean(userEmail && isActive);
 
   const {
     data: spentData,
@@ -120,23 +160,13 @@ export function SpendingAlertBadge({
     queryKey: ["total-expenses", userEmail],
     queryFn: () =>
       getTotalExpensesByEmailServer({ data: { email: userEmail } }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 2, // 2 minutes cache
-    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    enabled: isQueryEnabled,
+    staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 5,
     retry: 1,
     retryDelay: 1000,
+    refetchOnWindowFocus: false,
   });
-
-  // Safely extract and validate spent amount
-  const spent = (() => {
-    if (!spentData) return 0;
-    const value = Number(spentData);
-    if (isNaN(value) || !isFinite(value)) {
-      console.warn("Invalid spent data received:", spentData);
-      return 0;
-    }
-    return Math.max(0, value);
-  })();
 
   const {
     data: userData,
@@ -145,90 +175,79 @@ export function SpendingAlertBadge({
   } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
     queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5, // 5 minutes cache
-    gcTime: 1000 * 60 * 10, // 10 minutes garbage collection
+    enabled: isQueryEnabled,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
     retry: 1,
     retryDelay: 1000,
+    refetchOnWindowFocus: false,
   });
 
-  // Determine status based on query state and spending
-  const getStatus = (): { status: SpendingStatus; percent: number } => {
+  const spent = useMemo(
+    () => Math.max(0, toSafeNumber(spentData)),
+    [spentData]
+  );
+
+  const balance = useMemo(
+    () => Math.max(0, toSafeNumber(userData?.data?.totalBalance)),
+    [userData?.data?.totalBalance]
+  );
+
+  const { status, percent } = useMemo(() => {
     if (isSpentLoading || isUserLoading) {
-      return { status: "loading", percent: 0 };
+      return { status: "loading" as const, percent: 0 };
     }
 
     if (spentError || userError) {
-      return { status: "error", percent: 0 };
+      return { status: "error" as const, percent: 0 };
     }
 
-    const balance = (() => {
-      const rawBalance = userData?.data?.totalBalance;
-      if (rawBalance === null || rawBalance === undefined) return 0;
-      const value = Number(rawBalance);
-      if (isNaN(value) || !isFinite(value)) {
-        console.warn("Invalid balance data received:", rawBalance);
-        return 0;
-      }
-      return value;
-    })();
-
-    if (!balance || balance <= 0) {
-      return { status: balance === 0 ? "notSet" : "zero", percent: 0 };
+    const rawBalance = toSafeNumber(userData?.data?.totalBalance);
+    if (rawBalance <= 0) {
+      return {
+        status: rawBalance === 0 ? ("notSet" as const) : ("zero" as const),
+        percent: 0,
+      };
     }
 
-    const safeSpent = isNaN(spent) || !isFinite(spent) ? 0 : spent;
-    const rawPercent = (safeSpent / balance) * 100;
-    const percent =
-      isNaN(rawPercent) || !isFinite(rawPercent)
-        ? 0
-        : Math.min(rawPercent, 9999);
+    const rawPercent = (spent / rawBalance) * 100;
+    const safePercent = Number.isFinite(rawPercent)
+      ? Math.min(Math.max(rawPercent, 0), 9999)
+      : 0;
 
-    if (percent >= 100) return { status: "exceeded", percent };
-    if (percent >= 80) return { status: "warning", percent };
-    if (percent >= 50) return { status: "moderate", percent };
-    return { status: "safe", percent };
-  };
+    if (safePercent >= 100) {
+      return { status: "exceeded" as const, percent: safePercent };
+    }
+    if (safePercent >= 80) {
+      return { status: "warning" as const, percent: safePercent };
+    }
+    if (safePercent >= 50) {
+      return { status: "moderate" as const, percent: safePercent };
+    }
 
-  const { status, percent } = getStatus();
-  const config = statusConfig[status];
-  const Icon = config.icon;
+    return { status: "safe" as const, percent: safePercent };
+  }, [isSpentLoading, isUserLoading, spentError, userError, spent, userData]);
 
-  // Format currency with NaN protection
-  const formatCurrency = (amount: number) => {
-    const safeAmount = isNaN(amount) || !isFinite(amount) ? 0 : amount;
-    return new Intl.NumberFormat("es-MX", {
-      style: "currency",
-      currency: "MXN",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(safeAmount);
-  };
+  const remaining = useMemo(
+    () => Math.max(0, balance - spent),
+    [balance, spent]
+  );
 
-  const balance = (() => {
-    const rawBalance = userData?.data?.totalBalance;
-    if (rawBalance === null || rawBalance === undefined) return 0;
-    const value = Number(rawBalance);
-    return isNaN(value) || !isFinite(value) ? 0 : value;
-  })();
+  if (!userEmail || !isActive) {
+    return null;
+  }
 
-  const remaining = (() => {
-    const safeSpent = isNaN(spent) || !isFinite(spent) ? 0 : spent;
-    const result = balance - safeSpent;
-    return isNaN(result) || !isFinite(result) ? 0 : Math.max(result, 0);
-  })();
-
-  // Don't render if no user email
-  if (!userEmail) return null;
-
-  // Don't render if we're still loading initial data
   if ((isSpentLoading || isUserLoading) && !spentData && !userData) {
     return null;
   }
 
-  // Determine if badge should animate
-  const shouldAnimate =
+  const config = statusConfig[status];
+  const Icon = config.icon;
+  const shouldAnimateDot =
     animate && (status === "warning" || status === "exceeded");
+  const shouldAnimateIcon = status === "loading";
+  const canShowDetails = detailStatuses.has(status);
+  const percentLabel = `${Math.round(percent)}%`;
 
   return (
     <TooltipProvider delay={200}>
@@ -238,60 +257,56 @@ export function SpendingAlertBadge({
             <Badge
               variant={config.variant}
               className={cn(
-                "inline-flex items-center gap-2 px-3 py-1.5 select-none transition-all hover:scale-105",
-                shouldAnimate && "",
+                "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5 select-none transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
+                fullWidth && "w-full justify-between",
+                compact && "px-2.5 py-1 text-[11px]",
                 className
               )}
               aria-live="polite"
             >
               <span
-                className={cn("relative flex h-2 w-2 rounded-full", config.color)}
+                className={cn(
+                  "relative inline-flex h-2 w-2 rounded-full",
+                  config.color
+                )}
                 aria-hidden="true"
               >
-                {animate && status === "safe" && (
-                  <>
-                    <span
-                      className={cn(
-                        "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                        config.color
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "relative inline-flex h-2 w-2 rounded-full",
-                        config.color
-                      )}
-                    />
-                  </>
+                {shouldAnimateDot && (
+                  <span
+                    className={cn(
+                      "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+                      config.color
+                    )}
+                  />
                 )}
               </span>
 
               {showIcon && (
                 <Icon
                   className={cn(
-                    "h-3.5 w-3.5",
-                    status === "loading" ? "animate-spin" : "",
+                    "h-3.5 w-3.5 shrink-0",
+                    shouldAnimateIcon && "animate-spin",
                     config.iconColor
                   )}
                   aria-hidden="true"
                 />
               )}
 
-              <span className="text-xs font-medium">
-                {config.label}
-                {showPercentage &&
-                  status !== "loading" &&
-                  status !== "error" &&
-                  status !== "notSet" &&
-                  status !== "zero" && (
-                    <span className="ml-1.5 font-mono">
-                      (
-                      {isNaN(percent) || !isFinite(percent)
-                        ? "0"
-                        : percent.toFixed(0)}
-                      %)
-                    </span>
-                  )}
+              <span
+                className={cn(
+                  "inline-flex min-w-0 flex-1 items-center gap-2",
+                  fullWidth && "justify-between"
+                )}
+              >
+                <span className="truncate text-xs font-medium">
+                  {compact ? config.compactLabel : config.label}
+                </span>
+
+                {showPercentage && canShowDetails && (
+                  <span className="shrink-0 font-mono text-[11px] tabular-nums">
+                    {percentLabel}
+                  </span>
+                )}
               </span>
             </Badge>
           }
@@ -301,67 +316,61 @@ export function SpendingAlertBadge({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
-              <span className="font-semibold text-xs">
+              <span className="text-xs font-semibold">
                 Budget Status: {config.label}
               </span>
             </div>
-            <p className="text-[10px] ">{config.description}</p>
+            <p className="text-[10px]">{config.description}</p>
 
-            {status !== "loading" &&
-              status !== "error" &&
-              status !== "notSet" &&
-              status !== "zero" && (
-                <div className="border-t border-border pt-1 mt-1 space-y-1">
-                  <div className="flex items-center justify-between gap-4 text-[10px]">
-                    <span className="">Total budget:</span>
-                    <span className="font-mono font-semibold">
-                      {formatCurrency(balance)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-4 text-[10px]">
-                    <span className="">Spent:</span>
-                    <span
-                      className={cn(
-                        "font-mono font-semibold",
-                        percent >= 80 && "text-rose-500"
-                      )}
-                    >
-                      {formatCurrency(spent)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-4 text-[10px]">
-                    <span className="">Remaining:</span>
-                    <span
-                      className={cn(
-                        "font-mono font-semibold",
-                        remaining > 0 ? "dark:text-black" : "text-rose-500"
-                      )}
-                    >
-                      {formatCurrency(remaining)}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between gap-4 text-[10px] pt-1 border-t border-border">
-                    <span className="">Usage:</span>
-                    <span
-                      className={cn(
-                        "font-mono font-semibold",
-                        percent < 50 && "dark:text-black",
-                        percent >= 50 && percent < 80 && "text-blue-500",
-                        percent >= 80 && percent < 100 && "text-amber-500",
-                        percent >= 100 && "text-rose-500"
-                      )}
-                    >
-                      {isNaN(percent) || !isFinite(percent)
-                        ? "0.0"
-                        : percent.toFixed(1)}
-                      %
-                    </span>
-                  </div>
+            {canShowDetails && (
+              <div className="mt-1 space-y-1 border-t border-border pt-1">
+                <div className="flex items-center justify-between gap-4 text-[10px]">
+                  <span>Total budget:</span>
+                  <span className="font-mono font-semibold">
+                    {formatCurrency(balance)}
+                  </span>
                 </div>
-              )}
+                <div className="flex items-center justify-between gap-4 text-[10px]">
+                  <span>Spent:</span>
+                  <span
+                    className={cn(
+                      "font-mono font-semibold",
+                      percent >= 80 && "text-rose-500"
+                    )}
+                  >
+                    {formatCurrency(spent)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4 text-[10px]">
+                  <span>Remaining:</span>
+                  <span
+                    className={cn(
+                      "font-mono font-semibold",
+                      remaining > 0 ? "text-foreground" : "text-rose-500"
+                    )}
+                  >
+                    {formatCurrency(remaining)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-4 border-t border-border pt-1 text-[10px]">
+                  <span>Usage:</span>
+                  <span
+                    className={cn(
+                      "font-mono font-semibold",
+                      percent < 50 && "text-foreground",
+                      percent >= 50 && percent < 80 && "text-blue-500",
+                      percent >= 80 && percent < 100 && "text-amber-500",
+                      percent >= 100 && "text-rose-500"
+                    )}
+                  >
+                    {percent.toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            )}
 
             {(spentError || userError) && (
-              <p className="text-[10px] text-destructive border-t border-border pt-1 mt-1">
+              <p className="mt-1 border-t border-border pt-1 text-[10px] text-destructive">
                 {spentError instanceof Error
                   ? spentError.message
                   : userError instanceof Error

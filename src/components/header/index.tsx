@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
+import { useIsMobile } from "~/hooks/use-mobile";
 import { LogOutIcon, MenuIcon } from "lucide-react";
 
 import Logo from "../../assets/logo.svg";
@@ -24,7 +25,12 @@ import { HeaderNavigation } from "./HeaderNavigation";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const isMobile = useIsMobile();
   const location = useLocation();
+
+  const isDesktopBadgeActive = !isMobile;
+  const isMobileBadgeActive = isMobile && isOpen;
+
   const mobileNavigationRoutes = sidebarRoutes.filter(
     (route, index, routes) =>
       routes.findIndex((item) => item.url === route.url) === index
@@ -56,11 +62,11 @@ export const Header = () => {
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex justify-end items-center gap-4 flex-wrap">
-          <SpendingAlertBadge />
-          <OnlineStatusBadge />
-          <TimezoneBadge />
-          <SystemStatusBadge />
+        <div className="hidden md:flex justify-end items-center gap-2 lg:gap-3 flex-wrap">
+          <SpendingAlertBadge isActive={isDesktopBadgeActive} />
+          <OnlineStatusBadge isActive={isDesktopBadgeActive} />
+          <TimezoneBadge isActive={isDesktopBadgeActive} />
+          <SystemStatusBadge isActive={isDesktopBadgeActive} />
         </div>
 
         {/* Mobile Menu Trigger */}
@@ -138,11 +144,28 @@ export const Header = () => {
                       <h3 className="text-sm font-medium text-muted-foreground">
                         System Status
                       </h3>
-                      <div className="flex flex-col items-start gap-3">
-                        <OnlineStatusBadge />
-                        <SystemStatusBadge />
-                        <TimezoneBadge />
-                        <SpendingAlertBadge />
+                      <div className="flex w-full flex-col items-stretch gap-2">
+                        <OnlineStatusBadge
+                          compact
+                          fullWidth
+                          isActive={isMobileBadgeActive}
+                        />
+                        <SystemStatusBadge
+                          compact
+                          fullWidth
+                          isActive={isMobileBadgeActive}
+                        />
+                        <TimezoneBadge
+                          compact
+                          fullWidth
+                          isActive={isMobileBadgeActive}
+                        />
+                        <SpendingAlertBadge
+                          compact
+                          fullWidth
+                          showPercentage={false}
+                          isActive={isMobileBadgeActive}
+                        />
                       </div>
                     </div>
 
