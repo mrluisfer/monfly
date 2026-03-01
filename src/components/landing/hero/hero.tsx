@@ -38,13 +38,11 @@ export function LandingHero() {
               </Button>
             </Link>
             <Button
-              asChild
               size="sm"
               variant="ghost"
               className="opacity-40 hover:opacity-100 transition-opacity"
-            >
-              <Link to="/login">Already have an account?</Link>
-            </Button>
+              render={<Link to="/login">Already have an account?</Link>}
+            />
           </div>
           <div className="flex flex-col sm:flex-row gap-4 mt-6 items-center justify-center">
             <span className="text-xs text-muted-foreground">

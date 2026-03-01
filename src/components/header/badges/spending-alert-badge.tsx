@@ -231,69 +231,71 @@ export function SpendingAlertBadge({
     animate && (status === "warning" || status === "exceeded");
 
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={200}>
-        <TooltipTrigger asChild>
-          <Badge
-            variant={config.variant}
-            className={cn(
-              "inline-flex items-center gap-2 px-3 py-1.5 select-none transition-all hover:scale-105",
-              shouldAnimate && "",
-              className
-            )}
-            aria-live="polite"
-          >
-            <span
-              className={cn("relative flex h-2 w-2 rounded-full", config.color)}
-              aria-hidden="true"
-            >
-              {animate && status === "safe" && (
-                <>
-                  <span
-                    className={cn(
-                      "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                      config.color
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      "relative inline-flex h-2 w-2 rounded-full",
-                      config.color
-                    )}
-                  />
-                </>
+    <TooltipProvider delay={200}>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Badge
+              variant={config.variant}
+              className={cn(
+                "inline-flex items-center gap-2 px-3 py-1.5 select-none transition-all hover:scale-105",
+                shouldAnimate && "",
+                className
               )}
-            </span>
-
-            {showIcon && (
-              <Icon
-                className={cn(
-                  "h-3.5 w-3.5",
-                  status === "loading" ? "animate-spin" : "",
-                  config.iconColor
-                )}
+              aria-live="polite"
+            >
+              <span
+                className={cn("relative flex h-2 w-2 rounded-full", config.color)}
                 aria-hidden="true"
-              />
-            )}
-
-            <span className="text-xs font-medium">
-              {config.label}
-              {showPercentage &&
-                status !== "loading" &&
-                status !== "error" &&
-                status !== "notSet" &&
-                status !== "zero" && (
-                  <span className="ml-1.5 font-mono">
-                    (
-                    {isNaN(percent) || !isFinite(percent)
-                      ? "0"
-                      : percent.toFixed(0)}
-                    %)
-                  </span>
+              >
+                {animate && status === "safe" && (
+                  <>
+                    <span
+                      className={cn(
+                        "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+                        config.color
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "relative inline-flex h-2 w-2 rounded-full",
+                        config.color
+                      )}
+                    />
+                  </>
                 )}
-            </span>
-          </Badge>
-        </TooltipTrigger>
+              </span>
+
+              {showIcon && (
+                <Icon
+                  className={cn(
+                    "h-3.5 w-3.5",
+                    status === "loading" ? "animate-spin" : "",
+                    config.iconColor
+                  )}
+                  aria-hidden="true"
+                />
+              )}
+
+              <span className="text-xs font-medium">
+                {config.label}
+                {showPercentage &&
+                  status !== "loading" &&
+                  status !== "error" &&
+                  status !== "notSet" &&
+                  status !== "zero" && (
+                    <span className="ml-1.5 font-mono">
+                      (
+                      {isNaN(percent) || !isFinite(percent)
+                        ? "0"
+                        : percent.toFixed(0)}
+                      %)
+                    </span>
+                  )}
+              </span>
+            </Badge>
+          }
+        />
 
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">

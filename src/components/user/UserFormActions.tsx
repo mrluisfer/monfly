@@ -19,11 +19,17 @@ export function UserFormActions({
     <div className="grid gap-3 border-t pt-4 sm:flex sm:items-end sm:justify-between">
       <div className="order-2 sm:order-1">
         <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="destructive" type="button" className="w-full sm:w-auto">
-              Delete Account
-            </Button>
-          </TooltipTrigger>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="destructive"
+                type="button"
+                className="w-full sm:w-auto"
+              >
+                Delete Account
+              </Button>
+            }
+          />
           <TooltipContent sideOffset={8}>
             This action will permanently delete your account and all associated
             data.

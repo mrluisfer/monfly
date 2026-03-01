@@ -36,11 +36,15 @@ export function NotFound({ children }: { children?: ReactNode }) {
           >
             Previous Page
           </Button>
-          <Button asChild size="lg" variant="default">
-            <Link to="/" aria-label="Go to home page">
-              Go to Home
-            </Link>
-          </Button>
+          <Button
+            size="lg"
+            variant="default"
+            render={
+              <Link to="/" aria-label="Go to home page">
+                Go to Home
+              </Link>
+            }
+          />
         </div>
       </div>
     </main>

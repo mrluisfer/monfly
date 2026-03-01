@@ -17,30 +17,32 @@ import { navigationLinks } from "./navigation-links";
 export function MobileMenuPopover() {
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button className="group size-8 md:hidden" variant="ghost" size="icon">
-          {/* Hamburguesa */}
-          <svg
-            className="pointer-events-none"
-            width={16}
-            height={16}
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M4 12L20 12"
-              className="origin-center -translate-y-[7px] transition-all duration-300 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
-            />
-            <path
-              d="M4 12H20"
-              className="origin-center transition-all duration-300 group-aria-expanded:rotate-45"
-            />
-            <path
-              d="M4 12H20"
-              className="origin-center translate-y-[7px] transition-all duration-300 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
-            />
-          </svg>
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={
+          <Button className="group size-8 md:hidden" variant="ghost" size="icon">
+            {/* Hamburguesa */}
+            <svg
+              className="pointer-events-none"
+              width={16}
+              height={16}
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M4 12L20 12"
+                className="origin-center -translate-y-[7px] transition-all duration-300 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+              />
+              <path
+                d="M4 12H20"
+                className="origin-center transition-all duration-300 group-aria-expanded:rotate-45"
+              />
+              <path
+                d="M4 12H20"
+                className="origin-center translate-y-[7px] transition-all duration-300 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+              />
+            </svg>
+          </Button>
+        }
+      />
       <PopoverContent align="start" className="w-64 p-1 md:hidden">
         <NavigationMenu className="max-w-none *:w-full">
           <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">

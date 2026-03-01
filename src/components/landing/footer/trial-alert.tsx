@@ -11,12 +11,14 @@ export const TrialAlert = () => {
       <span className="text-muted-foreground text-sm sm:text-base text-center">
         Join thousands of users already leveraging our platform to achieve more.
       </span>
-      <Button asChild>
-        <Link to="/signup">
-          Start Your Journey With Monfly
-          <ChevronRight />
-        </Link>
-      </Button>
+      <Button
+        render={
+          <Link to="/signup">
+            Start Your Journey With Monfly
+            <ChevronRight />
+          </Link>
+        }
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactElement, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { logoutFn } from "~/utils/auth/logoutfn";
 import { CircleAlertIcon } from "lucide-react";
@@ -16,7 +16,7 @@ import {
 } from "../ui/alert-dialog";
 
 interface SignOutDialogProps {
-  children?: ReactNode;
+  children?: ReactElement;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }
@@ -67,7 +67,7 @@ export const SignOutDialog = ({
       onOpenChange={isControlled ? onOpenChange : undefined}
     >
       {/* Only render trigger if children are provided */}
-      {children && <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>}
+      {children && <AlertDialogTrigger render={children} />}
       <AlertDialogContent>
         <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
           <div

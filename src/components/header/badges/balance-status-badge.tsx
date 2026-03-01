@@ -128,59 +128,61 @@ export function BalanceStatusBadge({
   if (!userEmail) return null;
 
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={200}>
-        <TooltipTrigger asChild>
-          <Badge
-            variant={config.variant}
-            className={cn(
-              "inline-flex items-center gap-2 px-3 py-2 select-none transition-all hover:scale-105",
-              className
-            )}
-          >
-            <span
-              className={cn("relative flex h-2 w-2 rounded-full", config.color)}
-              aria-hidden="true"
+    <TooltipProvider delay={200}>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Badge
+              variant={config.variant}
+              className={cn(
+                "inline-flex items-center gap-2 px-3 py-2 select-none transition-all hover:scale-105",
+                className
+              )}
             >
-              {animate && status === "surplus" && (
-                <>
-                  <span
-                    className={cn(
-                      "absolute inline-flex h-full w-full rounded-full animate-ping",
-                      config.color
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      "relative inline-flex h-2 w-2 rounded-full",
-                      config.color
-                    )}
-                  />
-                </>
-              )}
-            </span>
-
-            {showIcon && (
-              <Icon
-                className={cn(
-                  "h-3.5 w-3.5",
-                  status === "loading" ? "animate-spin" : "",
-                  config.iconColor
-                )}
+              <span
+                className={cn("relative flex h-2 w-2 rounded-full", config.color)}
                 aria-hidden="true"
-              />
-            )}
+              >
+                {animate && status === "surplus" && (
+                  <>
+                    <span
+                      className={cn(
+                        "absolute inline-flex h-full w-full rounded-full animate-ping",
+                        config.color
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "relative inline-flex h-2 w-2 rounded-full",
+                        config.color
+                      )}
+                    />
+                  </>
+                )}
+              </span>
 
-            <span className="text-xs font-medium">
-              {config.label}
-              {showAmount && status !== "loading" && status !== "error" && (
-                <span className="ml-1.5 font-mono">
-                  {formatBalance(balance)}
-                </span>
+              {showIcon && (
+                <Icon
+                  className={cn(
+                    "h-3.5 w-3.5",
+                    status === "loading" ? "animate-spin" : "",
+                    config.iconColor
+                  )}
+                  aria-hidden="true"
+                />
               )}
-            </span>
-          </Badge>
-        </TooltipTrigger>
+
+              <span className="text-xs font-medium">
+                {config.label}
+                {showAmount && status !== "loading" && status !== "error" && (
+                  <span className="ml-1.5 font-mono">
+                    {formatBalance(balance)}
+                  </span>
+                )}
+              </span>
+            </Badge>
+          }
+        />
 
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">

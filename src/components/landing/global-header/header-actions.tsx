@@ -9,22 +9,25 @@ export function HeaderActions() {
   return (
     <div className="flex items-center gap-2">
       <Button
-        asChild
         variant="secondary"
         size="sm"
         className="hidden sm:inline-flex"
-      >
-        <Link to="/login" className="text-sm">
-          Sign In
-        </Link>
-      </Button>
-      <Button asChild size={isMobile ? "lg" : "default"}>
-        <Link to="/signup" className="text-sm">
-          <span className="hidden sm:inline">Sign Up</span>
-          <span className="sm:hidden">Join</span>
-          <ChevronRight className="size-5" />
-        </Link>
-      </Button>
+        render={
+          <Link to="/login" className="text-sm">
+            Sign In
+          </Link>
+        }
+      />
+      <Button
+        size={isMobile ? "lg" : "default"}
+        render={
+          <Link to="/signup" className="text-sm">
+            <span className="hidden sm:inline">Sign Up</span>
+            <span className="sm:hidden">Join</span>
+            <ChevronRight className="size-5" />
+          </Link>
+        }
+      />
     </div>
   );
 }

@@ -95,7 +95,12 @@ export default function FontDisplaySelect() {
 
   return (
     <div className="*:not-first:mt-2">
-      <Select value={fontDisplay} onValueChange={onChangeFontDisplay}>
+      <Select
+        value={fontDisplay}
+        onValueChange={(value) => {
+          if (value) onChangeFontDisplay(value);
+        }}
+      >
         <SelectTrigger
           id={id}
           className="ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_[data-square]]:shrink-0"

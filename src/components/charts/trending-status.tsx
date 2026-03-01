@@ -67,7 +67,7 @@ export function TrendingStatus({
       : "the same as";
 
   return (
-    <TooltipProvider delayDuration={300}>
+    <TooltipProvider delay={300}>
       <div className="flex flex-col gap-2 mt-2">
         {/* Current Month Display */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
@@ -86,19 +86,21 @@ export function TrendingStatus({
               vs. {formatCurrency(safeLastMonth, "USD")}
             </span>
             <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center gap-1">
-                  {getTrendingIcon(safePercentChange)}
-                  <Badge
-                    variant={badgeVariant}
-                    className={`px-2 py-0.5 text-xs font-semibold border ${badgeColorClasses}`}
-                  >
-                    {isNeutral
-                      ? "0%"
-                      : `${safePercentChange >= 0 ? "+" : ""}${Math.abs(safePercentChange).toFixed(1)}%`}
-                  </Badge>
-                </div>
-              </TooltipTrigger>
+              <TooltipTrigger
+                render={
+                  <div className="flex items-center gap-1">
+                    {getTrendingIcon(safePercentChange)}
+                    <Badge
+                      variant={badgeVariant}
+                      className={`px-2 py-0.5 text-xs font-semibold border ${badgeColorClasses}`}
+                    >
+                      {isNeutral
+                        ? "0%"
+                        : `${safePercentChange >= 0 ? "+" : ""}${Math.abs(safePercentChange).toFixed(1)}%`}
+                    </Badge>
+                  </div>
+                }
+              />
               <TooltipContent side="top" className="max-w-xs">
                 <div className="space-y-1 text-xs">
                   <p>

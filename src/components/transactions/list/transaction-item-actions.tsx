@@ -46,21 +46,23 @@ const TransactionItemActions = ({
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="icon-lg"
-            className="
-              transition-all duration-200 ease-out
-              hover:scale-105 hover:shadow-sm hover:border-primary/20
-              active:scale-95
-              focus-visible:scale-105
-              data-[state=open]:scale-105 data-[state=open]:shadow-sm
-              dark:hover:shadow-primary/10 rounded-full"
-          >
-            <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              variant="outline"
+              size="icon-lg"
+              className="
+                transition-all duration-200 ease-out
+                hover:scale-105 hover:shadow-sm hover:border-primary/20
+                active:scale-95
+                focus-visible:scale-105
+                data-[state=open]:scale-105 data-[state=open]:shadow-sm
+                dark:hover:shadow-primary/10 rounded-full"
+            >
+              <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
+            </Button>
+          }
+        />
         <DropdownMenuContent
           className="
           space-y-2
@@ -69,19 +71,21 @@ const TransactionItemActions = ({
         >
           <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DialogTrigger asChild>
-            <DropdownMenuItem
-              variant="default"
-              className="
-                transition-all duration-200 ease-out
-                hover:bg-primary/10 focus:bg-primary/10
-                cursor-pointer group
-              "
-            >
-              <Edit className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
-              Edit transaction
-            </DropdownMenuItem>
-          </DialogTrigger>
+          <DialogTrigger
+            render={
+              <DropdownMenuItem
+                variant="default"
+                className="
+                  transition-all duration-200 ease-out
+                  hover:bg-primary/10 focus:bg-primary/10
+                  cursor-pointer group
+                "
+              >
+                <Edit className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+                Edit transaction
+              </DropdownMenuItem>
+            }
+          />
           <DropdownMenuItem
             variant="destructive"
             className="

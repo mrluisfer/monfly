@@ -16,20 +16,18 @@ import { ThemeSelector } from "./theme-selector";
 export const SettingsDialog = ({
   children,
 }: {
-  children?: React.ReactNode;
+  children?: React.ReactElement;
 }) => {
+  const trigger = children ?? (
+    <Button variant="outline">
+      <Settings className="text-primary" />
+      <span className="hidden md:block">Settings</span>
+    </Button>
+  );
+
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {children ? (
-          children
-        ) : (
-          <Button variant="outline">
-            <Settings className="text-primary" />
-            <span className="hidden md:block">Settings</span>
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger render={trigger} />
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>

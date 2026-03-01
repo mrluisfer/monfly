@@ -85,45 +85,47 @@ export function OnlineStatusBadge({
   };
 
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={200}>
-        <TooltipTrigger asChild>
-          <Badge
-            variant={variant}
-            className={cn(
-              "inline-flex items-center gap-2 px-3 py-1.5 select-none transition-all hover:scale-105",
-              className
-            )}
-          >
-            <span
-              className={cn("relative flex h-2 w-2 rounded-full", config.color)}
-              aria-hidden="true"
-            >
-              {animate && isOnline && (
-                <>
-                  <span
-                    className={cn(
-                      "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                      config.color
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      "relative inline-flex h-2 w-2 rounded-full",
-                      config.color
-                    )}
-                  />
-                </>
+    <TooltipProvider delay={200}>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Badge
+              variant={variant}
+              className={cn(
+                "inline-flex items-center gap-2 px-3 py-1.5 select-none transition-all hover:scale-105",
+                className
               )}
-            </span>
+            >
+              <span
+                className={cn("relative flex h-2 w-2 rounded-full", config.color)}
+                aria-hidden="true"
+              >
+                {animate && isOnline && (
+                  <>
+                    <span
+                      className={cn(
+                        "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+                        config.color
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "relative inline-flex h-2 w-2 rounded-full",
+                        config.color
+                      )}
+                    />
+                  </>
+                )}
+              </span>
 
-            {showIcon && (
-              <Icon className="h-3 w-3 opacity-70" aria-hidden="true" />
-            )}
+              {showIcon && (
+                <Icon className="h-3 w-3 opacity-70" aria-hidden="true" />
+              )}
 
-            <span className="text-xs font-medium">{config.label}</span>
-          </Badge>
-        </TooltipTrigger>
+              <span className="text-xs font-medium">{config.label}</span>
+            </Badge>
+          }
+        />
 
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">

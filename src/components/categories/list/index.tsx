@@ -469,7 +469,7 @@ function DeleteDialog({
             <Trash2 className="h-5 w-5 text-destructive" />
             Delete Selected Categories
           </AlertDialogTitle>
-          <AlertDialogDescription className="space-y-2" asChild>
+          <AlertDialogDescription className="space-y-2">
             <div>
               <p>
                 Are you sure you want to delete{" "}

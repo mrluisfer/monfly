@@ -147,19 +147,21 @@ function DataTableToolbar({
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           {selectedRowsCount > 0 && (
             <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button size="sm" variant="destructive">
-                  <TrashIcon
-                    className="-ms-1 opacity-60"
-                    size={16}
-                    aria-hidden="true"
-                  />
-                  Delete
-                  <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
-                    {selectedRowsCount}
-                  </span>
-                </Button>
-              </AlertDialogTrigger>
+              <AlertDialogTrigger
+                render={
+                  <Button size="sm" variant="destructive">
+                    <TrashIcon
+                      className="-ms-1 opacity-60"
+                      size={16}
+                      aria-hidden="true"
+                    />
+                    Delete
+                    <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
+                      {selectedRowsCount}
+                    </span>
+                  </Button>
+                }
+              />
               <AlertDialogContent>
                 <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
                   <div
@@ -186,13 +188,11 @@ function DataTableToolbar({
                     disabled={
                       deleteTransactionsByIdMutation.status === "pending"
                     }
-                    asChild
+                    variant="destructive"
                   >
-                    <Button variant={"destructive"}>
-                      {deleteTransactionsByIdMutation.status === "pending"
-                        ? "Deleting..."
-                        : "Delete"}
-                    </Button>
+                    {deleteTransactionsByIdMutation.status === "pending"
+                      ? "Deleting..."
+                      : "Delete"}
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -200,11 +200,13 @@ function DataTableToolbar({
           )}
 
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size="sm" variant="outline">
-                Columns <ChevronDown className="size-4" />
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={
+                <Button size="sm" variant="outline">
+                  Columns <ChevronDown className="size-4" />
+                </Button>
+              }
+            />
             <DropdownMenuContent align="end">
               {table
                 .getAllColumns()

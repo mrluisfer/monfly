@@ -20,27 +20,26 @@ export const SidebarItem = ({
 }: SidebarItemProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const render = url ? (
+    <Link to={url} href={url}>
+      {children}
+    </Link>
+  ) : (
+    <button onClick={onClick} disabled={disabled}>
+      {children}
+    </button>
+  );
 
   return (
     <SidebarMenuItem key={title}>
       <SidebarMenuButton
         tooltip={title}
-        asChild
+        render={render}
         isActive={currentPath === url}
         disabled={disabled}
         className="capitalize"
         title={disabled ? "Coming soon" : title}
-      >
-        {url ? (
-          <Link to={url} href={url}>
-            {children}
-          </Link>
-        ) : (
-          <button onClick={onClick} disabled={disabled}>
-            {children}
-          </button>
-        )}
-      </SidebarMenuButton>
+      />
     </SidebarMenuItem>
   );
 };

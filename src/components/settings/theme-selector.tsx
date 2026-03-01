@@ -23,7 +23,12 @@ export function ThemeSelector() {
       <Label htmlFor="theme-selector" className="sr-only">
         Theme
       </Label>
-      <Select value={activeTheme} onValueChange={setActiveTheme}>
+      <Select
+        value={activeTheme}
+        onValueChange={(theme) => {
+          if (theme) setActiveTheme(theme);
+        }}
+      >
         <SelectTrigger
           id="theme-selector"
           size="sm"

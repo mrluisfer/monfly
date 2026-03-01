@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactElement, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -30,7 +30,7 @@ type TransactionFormValues = z.infer<typeof TransactionFormSchema>;
 const AddTransactionButton = ({
   customTrigger = null,
 }: {
-  customTrigger?: ReactNode;
+  customTrigger?: ReactElement | null;
 }) => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
@@ -64,7 +64,7 @@ const AddTransactionButton = ({
   if (isMobile) {
     return (
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>{trigger}</SheetTrigger>
+        <SheetTrigger render={trigger} />
         <SheetContent
           side="bottom"
           className="h-[92vh] overflow-y-auto rounded-t-xl border-0 px-0"
@@ -83,12 +83,14 @@ const AddTransactionButton = ({
               description="Add a new transaction"
               isLoading={mutation.status === "pending"}
             />
-            <SheetClose asChild>
-              <Button variant="outline" className="w-full mt-4">
-                <XIcon className="h-5 w-5" />
-                Cancel
-              </Button>
-            </SheetClose>
+            <SheetClose
+              render={
+                <Button variant="outline" className="w-full mt-4">
+                  <XIcon className="h-5 w-5" />
+                  Cancel
+                </Button>
+              }
+            />
           </div>
         </SheetContent>
       </Sheet>
@@ -97,7 +99,7 @@ const AddTransactionButton = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger render={trigger} />
       <DialogContent className="max-h-[90vh] overflow-y-auto p-4 sm:p-6">
         <DialogHeader>
           <DialogTitle>Add Transaction</DialogTitle>

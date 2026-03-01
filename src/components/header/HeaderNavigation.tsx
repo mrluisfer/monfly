@@ -34,26 +34,30 @@ export function HeaderNavigation() {
     <Breadcrumb>
       <BreadcrumbList className="bg-background rounded-md border px-3 py-2 shadow-xs">
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/home" className="text-primary">
-              <PyramidIcon size={16} aria-hidden="true" />
-              <span className="sr-only">Home</span>
-            </Link>
-          </BreadcrumbLink>
+          <BreadcrumbLink
+            render={
+              <Link to="/home" className="text-primary">
+                <PyramidIcon size={16} aria-hidden="true" />
+                <span className="sr-only">Home</span>
+              </Link>
+            }
+          />
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link to="/home">{isHomeRoute ? foundRouteTitle : "Home"}</Link>
-          </BreadcrumbLink>
+          <BreadcrumbLink
+            render={
+              <Link to="/home">{isHomeRoute ? foundRouteTitle : "Home"}</Link>
+            }
+          />
         </BreadcrumbItem>
         {!isHomeRoute && (
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={location.pathname}>{foundRouteTitle}</Link>
-              </BreadcrumbLink>
+              <BreadcrumbLink
+                render={<Link to={location.pathname}>{foundRouteTitle}</Link>}
+              />
             </BreadcrumbItem>
           </>
         )}

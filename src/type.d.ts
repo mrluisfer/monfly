@@ -17,3 +17,14 @@ declare module "*.png" {
   const src: string;
   export default src;
 }
+
+declare module "@tanstack/react-start/config" {
+  export function defineConfig<T>(config: T): T;
+}
+
+declare module "@tanstack/react-start/api" {
+  export const defaultAPIFileRouteHandler: unknown;
+  export function createStartAPIHandler(
+    handler: unknown
+  ): (event: unknown) => unknown;
+}

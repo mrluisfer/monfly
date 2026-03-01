@@ -67,12 +67,14 @@ export const Header = () => {
         <div className="flex md:hidden items-center gap-2">
           <UserDropdown />
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="shrink-0">
-                <MenuIcon className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
+            <SheetTrigger
+              render={
+                <Button variant="ghost" size="icon" className="shrink-0">
+                  <MenuIcon className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              }
+            />
             <SheetContent
               side="right"
               className="h-dvh w-[92vw] max-w-100 gap-0 overflow-hidden p-0"

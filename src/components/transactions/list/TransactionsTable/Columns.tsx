@@ -96,23 +96,25 @@ function TransactionActionsCell({
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="
-              h-8 w-8 p-0
-              transition-all duration-200 ease-out
-              hover:scale-110 hover:bg-primary/10 hover:shadow-sm
-              active:scale-95
-              focus-visible:scale-110 focus-visible:bg-primary/10
-              data-[state=open]:scale-110 data-[state=open]:bg-primary/10
-              dark:hover:bg-primary/5
-            "
-          >
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontalIcon className="transition-transform duration-200 hover:rotate-90" />
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button
+              variant="ghost"
+              className="
+                h-8 w-8 p-0
+                transition-all duration-200 ease-out
+                hover:scale-110 hover:bg-primary/10 hover:shadow-sm
+                active:scale-95
+                focus-visible:scale-110 focus-visible:bg-primary/10
+                data-[state=open]:scale-110 data-[state=open]:bg-primary/10
+                dark:hover:bg-primary/5
+              "
+            >
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontalIcon className="transition-transform duration-200 hover:rotate-90" />
+            </Button>
+          }
+        />
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuItem
@@ -204,9 +206,10 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
     id: "select",
     header: ({ table }) => (
       <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+        checked={table.getIsAllPageRowsSelected()}
+        indeterminate={
+          table.getIsSomePageRowsSelected() &&
+          !table.getIsAllPageRowsSelected()
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"

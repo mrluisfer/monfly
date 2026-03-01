@@ -78,45 +78,47 @@ export function SystemStatusBadge({
   const Icon = config.icon;
 
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={200}>
-        <TooltipTrigger asChild>
-          <Badge
-            variant={variant}
-            className={cn(
-              "inline-flex items-center gap-2 px-3 py-1.5 uppercase tracking-wide select-none transition-all hover:scale-105",
-              className
-            )}
-          >
-            <span
-              className={cn("relative flex h-2 w-2 rounded-full", config.color)}
-              aria-hidden="true"
-            >
-              {animate && status === "operational" && (
-                <>
-                  <span
-                    className={cn(
-                      "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                      config.color
-                    )}
-                  />
-                  <span
-                    className={cn(
-                      "relative inline-flex h-2 w-2 rounded-full",
-                      config.color
-                    )}
-                  />
-                </>
+    <TooltipProvider delay={200}>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Badge
+              variant={variant}
+              className={cn(
+                "inline-flex items-center gap-2 px-3 py-1.5 uppercase tracking-wide select-none transition-all hover:scale-105",
+                className
               )}
-            </span>
+            >
+              <span
+                className={cn("relative flex h-2 w-2 rounded-full", config.color)}
+                aria-hidden="true"
+              >
+                {animate && status === "operational" && (
+                  <>
+                    <span
+                      className={cn(
+                        "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+                        config.color
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "relative inline-flex h-2 w-2 rounded-full",
+                        config.color
+                      )}
+                    />
+                  </>
+                )}
+              </span>
 
-            {showIcon && (
-              <Icon className="h-3 w-3 opacity-70" aria-hidden="true" />
-            )}
+              {showIcon && (
+                <Icon className="h-3 w-3 opacity-70" aria-hidden="true" />
+              )}
 
-            <span className="text-xs font-medium">{config.shortLabel}</span>
-          </Badge>
-        </TooltipTrigger>
+              <span className="text-xs font-medium">{config.shortLabel}</span>
+            </Badge>
+          }
+        />
 
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-1">
@@ -143,27 +145,29 @@ export function SystemStatusBadgeCompact({
   const config = statusConfig[status];
 
   return (
-    <TooltipProvider>
-      <Tooltip delayDuration={200}>
-        <TooltipTrigger asChild>
-          <button
-            className={cn(
-              "relative inline-flex h-3 w-3 cursor-pointer rounded-full transition-transform hover:scale-125",
-              config.color,
-              className
-            )}
-            aria-label={config.label}
-          >
-            {status === "operational" && (
-              <span
-                className={cn(
-                  "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                  config.color
-                )}
-              />
-            )}
-          </button>
-        </TooltipTrigger>
+    <TooltipProvider delay={200}>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <button
+              className={cn(
+                "relative inline-flex h-3 w-3 cursor-pointer rounded-full transition-transform hover:scale-125",
+                config.color,
+                className
+              )}
+              aria-label={config.label}
+            >
+              {status === "operational" && (
+                <span
+                  className={cn(
+                    "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+                    config.color
+                  )}
+                />
+              )}
+            </button>
+          }
+        />
 
         <TooltipContent side="bottom" className="text-xs">
           <div className="flex items-center gap-2">

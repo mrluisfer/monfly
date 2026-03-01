@@ -168,72 +168,71 @@ function TransactionRow({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <ContextMenu>
-        <ContextMenuTrigger asChild>
-          <m.div
-            initial={reduceMotion ? false : { opacity: 0, x: -8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{
-              duration: reduceMotion ? 0 : 0.25,
-              delay: reduceMotion
-                ? 0
-                : groupDelay + Math.min(index * 0.04, 0.2),
-              ease: "easeOut",
-            }}
-            className={cn(
-              "group flex items-center gap-3 rounded-2xl px-3 py-3 select-none",
-              "bg-background/60 hover:bg-muted/50",
-              "transition-colors duration-200",
-              "active:scale-[0.98] active:transition-transform active:duration-100"
-            )}
-          >
-            {/* Icon */}
-            <div
+        <ContextMenuTrigger
+          render={
+            <m.div
+              initial={reduceMotion ? false : { opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{
+                duration: reduceMotion ? 0 : 0.25,
+                delay: reduceMotion
+                  ? 0
+                  : groupDelay + Math.min(index * 0.04, 0.2),
+                ease: "easeOut",
+              }}
               className={cn(
-                "flex size-10 shrink-0 items-center justify-center rounded-xl",
-                "transition-shadow duration-200",
-                isIncome
-                  ? "bg-emerald-500/10 text-emerald-500 dark:bg-emerald-500/15"
-                  : "bg-red-500/10 text-red-500 dark:bg-red-500/15"
+                "group flex items-center gap-3 rounded-2xl px-3 py-3 select-none",
+                "bg-background/60 hover:bg-muted/50",
+                "transition-colors duration-200",
+                "active:scale-[0.98] active:transition-transform active:duration-100"
               )}
             >
-              {isIncome ? (
-                <ArrowUpRightIcon className="size-4.5" strokeWidth={2.2} />
-              ) : (
-                <ArrowDownLeftIcon className="size-4.5" strokeWidth={2.2} />
-              )}
-            </div>
-
-            {/* Info */}
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium leading-tight text-foreground">
-                {transaction.description || "No description"}
-              </p>
-              <div className="mt-0.5 flex items-center gap-1.5">
-                <TagIcon className="size-3 text-muted-foreground/40" />
-                <span className="truncate text-xs text-muted-foreground/70 capitalize">
-                  {category}
-                </span>
-              </div>
-            </div>
-
-            {/* Amount + Actions */}
-            <div className="flex items-center gap-1.5 shrink-0">
-              <span
+              <div
                 className={cn(
-                  "text-sm font-semibold tabular-nums",
-                  isIncome ? "text-emerald-500" : "text-red-500"
+                  "flex size-10 shrink-0 items-center justify-center rounded-xl",
+                  "transition-shadow duration-200",
+                  isIncome
+                    ? "bg-emerald-500/10 text-emerald-500 dark:bg-emerald-500/15"
+                    : "bg-red-500/10 text-red-500 dark:bg-red-500/15"
                 )}
               >
-                {isIncome ? "+" : "-"}
-                {currencyFormatter.format(transaction.amount)}
-              </span>
-              <TransactionItemActions
-                transaction={transaction as any}
-                setIsOpenDialog={setIsDialogOpen}
-              />
-            </div>
-          </m.div>
-        </ContextMenuTrigger>
+                {isIncome ? (
+                  <ArrowUpRightIcon className="size-4.5" strokeWidth={2.2} />
+                ) : (
+                  <ArrowDownLeftIcon className="size-4.5" strokeWidth={2.2} />
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium leading-tight text-foreground">
+                  {transaction.description || "No description"}
+                </p>
+                <div className="mt-0.5 flex items-center gap-1.5">
+                  <TagIcon className="size-3 text-muted-foreground/40" />
+                  <span className="truncate text-xs text-muted-foreground/70 capitalize">
+                    {category}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span
+                  className={cn(
+                    "text-sm font-semibold tabular-nums",
+                    isIncome ? "text-emerald-500" : "text-red-500"
+                  )}
+                >
+                  {isIncome ? "+" : "-"}
+                  {currencyFormatter.format(transaction.amount)}
+                </span>
+                <TransactionItemActions
+                  transaction={transaction as any}
+                  setIsOpenDialog={setIsDialogOpen}
+                />
+              </div>
+            </m.div>
+          }
+        />
 
         <ContextMenuContent className="w-56">
           <ContextMenuLabel>Actions for transaction</ContextMenuLabel>

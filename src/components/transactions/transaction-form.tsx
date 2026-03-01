@@ -199,36 +199,38 @@ export function TransactionForm<FormValues extends FieldValues>({
                 <FormControl>
                   <div className="*:not-first:mt-2 w-full">
                     <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          aria-expanded={categoryOpen}
-                          aria-controls={`${categoryComboboxId}-listbox`}
-                          className={cn(
-                            "h-11 w-full justify-between px-3 text-sm font-normal capitalize sm:h-12",
-                            !value && "text-muted-foreground"
-                          )}
-                        >
-                          {selectedCategory ? (
-                            <div className="flex items-center gap-2">
-                              {getCategoryIconByName(selectedCategory.icon, {
-                                size: 16,
-                              })}
-                              <span>{selectedCategory.name}</span>
-                            </div>
-                          ) : (
-                            <span>
-                              {categoryInputValue || "Select a category"}
-                            </span>
-                          )}
-                          <ChevronDownIcon
-                            size={16}
-                            className="ml-2 text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                        </Button>
-                      </PopoverTrigger>
+                      <PopoverTrigger
+                        render={
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={categoryOpen}
+                            aria-controls={`${categoryComboboxId}-listbox`}
+                            className={cn(
+                              "h-11 w-full justify-between px-3 text-sm font-normal capitalize sm:h-12",
+                              !value && "text-muted-foreground"
+                            )}
+                          >
+                            {selectedCategory ? (
+                              <div className="flex items-center gap-2">
+                                {getCategoryIconByName(selectedCategory.icon, {
+                                  size: 16,
+                                })}
+                                <span>{selectedCategory.name}</span>
+                              </div>
+                            ) : (
+                              <span>
+                                {categoryInputValue || "Select a category"}
+                              </span>
+                            )}
+                            <ChevronDownIcon
+                              size={16}
+                              className="ml-2 text-muted-foreground"
+                              aria-hidden="true"
+                            />
+                          </Button>
+                        }
+                      />
                       <PopoverContent
                         className="w-(--radix-popover-trigger-width) p-0"
                         align="start"
@@ -352,24 +354,26 @@ export function TransactionForm<FormValues extends FieldValues>({
               {error && <div>Error: {error?.message}</div>}
               {categories && (
                 <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "h-11 w-full justify-start pl-3 text-left text-sm font-normal sm:h-12 sm:text-base",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value as Date, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
+                  <PopoverTrigger
+                    render={
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "h-11 w-full justify-start pl-3 text-left text-sm font-normal sm:h-12 sm:text-base",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value as Date, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    }
+                  />
                   <PopoverContent
                     className="w-auto max-w-[calc(100vw-2rem)] p-0"
                     align="start"

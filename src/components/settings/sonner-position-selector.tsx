@@ -26,7 +26,12 @@ export const SonnerPositionSelector = () => {
 
   return (
     <div className="flex items-center gap-4">
-      <Select value={position} onValueChange={handlePositionChange}>
+      <Select
+        value={position}
+        onValueChange={(value) => {
+          if (value) handlePositionChange(value);
+        }}
+      >
         <SelectTrigger>
           <SelectValue placeholder="Select a position" />
         </SelectTrigger>

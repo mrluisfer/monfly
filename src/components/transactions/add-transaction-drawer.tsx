@@ -25,12 +25,14 @@ export function AddTransactionDrawer() {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button className="rounded-full h-12 w-12 fixed bottom-20 right-4 shadow-lg z-50 md:hidden">
-          <PlusIcon className="h-6 w-6" />
-          <span className="sr-only">Add Transaction</span>
-        </Button>
-      </SheetTrigger>
+      <SheetTrigger
+        render={
+          <Button className="rounded-full h-12 w-12 fixed bottom-20 right-4 shadow-lg z-50 md:hidden">
+            <PlusIcon className="h-6 w-6" />
+            <span className="sr-only">Add Transaction</span>
+          </Button>
+        }
+      />
       <SheetContent
         side="bottom"
         className="h-[90vh] overflow-y-auto rounded-t-xl border-0 px-0"
@@ -51,12 +53,15 @@ export function AddTransactionDrawer() {
           />
         </div>
         <div className="px-4 pb-2">
-          <SheetClose asChild className="w-full">
-            <Button variant="outline">
-              <XIcon />
-              Cancel
-            </Button>
-          </SheetClose>
+          <SheetClose
+            className="w-full"
+            render={
+              <Button variant="outline" className="w-full">
+                <XIcon />
+                Cancel
+              </Button>
+            }
+          />
         </div>
       </SheetContent>
     </Sheet>

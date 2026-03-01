@@ -72,12 +72,14 @@ export default function UserDropdown() {
   return (
     <>
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size={"icon"} className="rounded-full">
-            <UserAvatar alt={userName} name={userName} />
-            <span className="sr-only">{userName}</span>
-          </Button>
-        </DropdownMenuTrigger>
+        <DropdownMenuTrigger
+          render={
+            <Button variant="outline" size={"icon"} className="rounded-full">
+              <UserAvatar alt={userName} name={userName} />
+              <span className="sr-only">{userName}</span>
+            </Button>
+          }
+        />
         <DropdownMenuContent>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuGroup>

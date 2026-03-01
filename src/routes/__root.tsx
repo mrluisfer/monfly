@@ -175,7 +175,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider delayDuration={200}>
+        <TooltipProvider delay={200}>
           {children}
           <TanStackRouterDevtools position="bottom-right" />
           <Scripts />
@@ -202,7 +202,7 @@ function RootDocumentWithProviders({
         <HeadContent />
       </head>
       <body className={clsx(fontDisplay)}>
-        <TooltipProvider delayDuration={200}>
+        <TooltipProvider delay={200}>
           <SileoToaster position={position} theme={theme} />
           {children}
           <TanStackRouterDevtools position="bottom-right" />

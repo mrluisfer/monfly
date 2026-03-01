@@ -40,11 +40,14 @@ export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
         ))}
       </div>
       <div className="mt-6 flex flex-col items-center gap-4">
-        <Button asChild>
-          <Link to="/signup">
-            Start your journey with our {isAnnual ? "annual" : "monthly"} plan
-          </Link>
-        </Button>
+        <Button
+          render={
+            <Link to="/signup">
+              Start your journey with our {isAnnual ? "annual" : "monthly"}{" "}
+              plan
+            </Link>
+          }
+        />
         <p className="flex items-center justify-center gap-2 text-xs  text-gray-500 hover:text-gray-700 transition">
           <CreditCard />
           No credit card required.

@@ -24,7 +24,7 @@ export const Route = createFileRoute("/signup")({
     const { data: userEmail } = await getUserSession();
     if (userEmail) {
       // This means the user is authenticated
-      return redirect({
+      throw redirect({
         to: "/home",
       });
     }
