@@ -1,8 +1,8 @@
-import { Link, useLocation } from "@tanstack/react-router";
-import { LogOutIcon, MenuIcon } from "lucide-react";
 import { useState } from "react";
+import { Link, useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useIsMobile } from "~/hooks/use-mobile";
+import { LogOutIcon, MenuIcon } from "lucide-react";
 
 import Logo from "../../assets/logo.svg";
 import UserDropdown from "../home/user-dropdown";
@@ -96,7 +96,7 @@ export const Header = () => {
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger
               render={
-                <Button variant="ghost" size="icon" className="shrink-0">
+                <Button variant="ghost" size="icon-lg" className="shrink-0">
                   <MenuIcon className="h-5 w-5" />
                   <span className="sr-only">Toggle menu</span>
                 </Button>

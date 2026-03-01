@@ -62,7 +62,12 @@ export default function UserDropdown() {
   // Handle loading state
   if (isPending) {
     return (
-      <Button variant="outline" size="icon" className="rounded-full" disabled>
+      <Button
+        variant="outline"
+        size="icon-lg"
+        className="rounded-full"
+        disabled
+      >
         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
         <span className="sr-only">Loading user...</span>
       </Button>
@@ -72,7 +77,12 @@ export default function UserDropdown() {
   // Handle error or missing data
   if (error || data?.error || !user) {
     return (
-      <Button variant="outline" size="icon" className="rounded-full" disabled>
+      <Button
+        variant="outline"
+        size="icon-lg"
+        className="rounded-full"
+        disabled
+      >
         <UserAvatar alt="?" name="?" />
         <span className="sr-only">User data unavailable</span>
       </Button>

@@ -14,7 +14,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           <HeaderNavigation />
         </div>
         <div className="flex items-center justify-end gap-4 lg:flex-1">
-          <ToggleDarkMode />
+          <ToggleDarkMode size={"icon-lg"} />
           <SettingsDialog />
         </div>
       </div>

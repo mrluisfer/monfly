@@ -60,7 +60,7 @@ const CategoryItem = ({ category }: { category: Category }) => {
               render={
                 <Button
                   variant="outline"
-                  size="icon"
+                  size="icon-lg"
                   className={cn(
                     "h-8 w-8 p-0 rounded-md",
                     "hover:bg-primary/10 hover:text-primary hover:scale-110 hover:shadow-sm",

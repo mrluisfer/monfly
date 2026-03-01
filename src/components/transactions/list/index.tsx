@@ -242,7 +242,7 @@ function ErrorState({ error, onRetry }: { error: Error; onRetry: () => void }) {
         </p>
         <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
       </div>
-      <Button onClick={onRetry} variant="outline" size="sm">
+      <Button onClick={onRetry} variant="outline" size="lg">
         Retry
       </Button>
     </div>

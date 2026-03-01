@@ -28,7 +28,11 @@ export function WelcomeMessage({ children }: { children: ReactNode }) {
       <AlertDescription>
         {children}
         <div className="flex justify-end flex-1 w-full">
-          <Button variant="default" size="sm" onClick={handleDontShowAgain}>
+          <Button
+            variant="default"
+            size="default"
+            onClick={handleDontShowAgain}
+          >
             <XIcon />
             Don't show again
           </Button>

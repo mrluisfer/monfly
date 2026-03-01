@@ -98,7 +98,7 @@ function DataTableToolbar({
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <Button
-            size="sm"
+            size="lg"
             variant={typeFilterValue === "income" ? "default" : "outline"}
             onClick={() => {
               const column = table.getColumn("type");
@@ -113,7 +113,7 @@ function DataTableToolbar({
             <span className="hidden sm:inline">Income</span>
           </Button>
           <Button
-            size="sm"
+            size="lg"
             variant={typeFilterValue === "expense" ? "destructive" : "outline"}
             onClick={() => {
               const column = table.getColumn("type");
@@ -131,7 +131,7 @@ function DataTableToolbar({
           </Button>
           {hasActiveFilters && (
             <Button
-              size="sm"
+              size="lg"
               variant="secondary"
               onClick={() => {
                 setGlobalFilter("");
@@ -149,7 +149,7 @@ function DataTableToolbar({
             <AlertDialog>
               <AlertDialogTrigger
                 render={
-                  <Button size="sm" variant="destructive">
+                  <Button size="lg" variant="destructive">
                     <TrashIcon
                       className="-ms-1 opacity-60"
                       size={16}
@@ -202,7 +202,7 @@ function DataTableToolbar({
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button size="sm" variant="outline">
+                <Button size="lg" variant="outline">
                   Columns <ChevronDown className="size-4" />
                 </Button>
               }
@@ -315,7 +315,7 @@ function DataTablePagination({
         </span>
         <Button
           variant="outline"
-          size="sm"
+          size="lg"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
@@ -323,7 +323,7 @@ function DataTablePagination({
         </Button>
         <Button
           variant="outline"
-          size="sm"
+          size="lg"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >

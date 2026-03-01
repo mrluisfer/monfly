@@ -19,8 +19,8 @@ export const SettingsDialog = ({
   children?: React.ReactElement;
 }) => {
   const trigger = children ?? (
-    <Button variant="outline">
-      <Settings className="text-primary" />
+    <Button variant="default" size={"lg"}>
+      <Settings />
       <span className="hidden md:block">Settings</span>
     </Button>
   );
