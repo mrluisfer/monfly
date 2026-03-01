@@ -38,7 +38,7 @@ export function SimplePasswordInput({
               onClick={toggleVisibility}
               aria-label={isVisible ? "Hide password" : "Show password"}
               aria-pressed={isVisible}
-              aria-controls="password"
+              aria-controls={id}
             >
               {isVisible ? (
                 <EyeOffIcon size={16} aria-hidden="true" />

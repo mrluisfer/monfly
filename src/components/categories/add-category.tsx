@@ -6,7 +6,13 @@ import { useRouteUser } from "~/hooks/use-route-user";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+  m,
+  useReducedMotion,
+} from "framer-motion";
 import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
 
 import Card from "../card";
@@ -16,6 +22,7 @@ export default function AddCategory() {
   const userEmail = useRouteUser();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
@@ -83,25 +90,34 @@ export default function AddCategory() {
           />
         </button>
 
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="overflow-hidden"
-            >
-              <div className="pt-3 px-1">
-                <CategoryForm
-                  submitText="Create new category"
-                  loading={postCategoryByEmail.status === "pending"}
-                  onSubmit={handleSubmit}
-                />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <LazyMotion features={domAnimation}>
+          <AnimatePresence>
+            {isOpen && (
+              <m.div
+                initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={
+                  shouldReduceMotion
+                    ? { opacity: 0 }
+                    : { height: 0, opacity: 0 }
+                }
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.25,
+                  ease: "easeInOut",
+                }}
+                className="overflow-hidden"
+              >
+                <div className="pt-3 px-1">
+                  <CategoryForm
+                    submitText="Create new category"
+                    loading={postCategoryByEmail.status === "pending"}
+                    onSubmit={handleSubmit}
+                  />
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </LazyMotion>
       </div>
     </>
   );

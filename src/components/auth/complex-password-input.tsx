@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useId, useState } from "react";
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react";
 import { ControllerRenderProps } from "react-hook-form";
 
@@ -34,9 +34,7 @@ export default function ComplexPasswordInput({
 
   const strength = checkStrength(field.value || "");
 
-  const strengthScore = useMemo(() => {
-    return strength.filter((req) => req.met).length;
-  }, [strength]);
+  const strengthScore = strength.filter((req) => req.met).length;
 
   const getStrengthColor = (score: number) => {
     if (score === 0) return "bg-border";
@@ -75,7 +73,7 @@ export default function ComplexPasswordInput({
               onClick={toggleVisibility}
               aria-label={isVisible ? "Hide password" : "Show password"}
               aria-pressed={isVisible}
-              aria-controls="password"
+              aria-controls={id}
             >
               {isVisible ? (
                 <EyeOffIcon size={16} aria-hidden="true" />
@@ -113,8 +111,8 @@ export default function ComplexPasswordInput({
 
       {/* Password requirements list */}
       <ul className="space-y-1.5" aria-label="Password requirements">
-        {strength.map((req, index) => (
-          <li key={index} className="flex items-center gap-2">
+        {strength.map((req) => (
+          <li key={req.text} className="flex items-center gap-2">
             {req.met ? (
               <CheckIcon
                 size={16}

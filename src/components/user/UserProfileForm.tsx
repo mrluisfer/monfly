@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
@@ -25,11 +25,9 @@ interface UserProfileFormProps {
 type FormValues = z.infer<typeof userFormSchema>;
 
 export function UserProfileForm({ userId, user }: UserProfileFormProps) {
-  const memoUserId = useMemo(() => userId, [userId]);
-  const defaultTotalBalance = useMemo(
-    () => formatToTwoDecimals(user?.totalBalance ?? 0).numberValue,
-    [user?.totalBalance]
-  );
+  const defaultTotalBalance = formatToTwoDecimals(
+    user?.totalBalance ?? 0
+  ).numberValue;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(userFormSchema),
@@ -67,8 +65,10 @@ export function UserProfileForm({ userId, user }: UserProfileFormProps) {
   const onSubmit = useCallback(
     async (values: FormValues) => {
       // TODO: llama a tu server action aquí
+      void values;
+      void userId;
     },
-    [memoUserId]
+    [userId]
   );
 
   const submitting = form.formState.isSubmitting;

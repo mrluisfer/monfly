@@ -6,7 +6,7 @@ export const navigationLinks = [
     type: "description",
     items: [
       {
-        href: "#",
+        href: "/#features",
         label: "User Management",
         description: "Coming soon...",
       },
@@ -21,9 +21,13 @@ export const navigationLinks = [
     submenu: true,
     type: "icon",
     items: [
-      { href: "#", label: "Getting Started", icon: "BookOpenIcon" },
-      { href: "#", label: "Tutorials", icon: "LifeBuoyIcon" },
-      { href: "#", label: "About Us", icon: "InfoIcon" },
+      {
+        href: "/#getting-started",
+        label: "Getting Started",
+        icon: "BookOpenIcon",
+      },
+      { href: "/#tutorials", label: "Tutorials", icon: "LifeBuoyIcon" },
+      { href: "/#about", label: "About Us", icon: "InfoIcon" },
     ],
   },
 ];

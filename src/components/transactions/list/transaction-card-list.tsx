@@ -16,7 +16,13 @@ import { cn } from "~/lib/utils";
 import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { format, isToday, isYesterday } from "date-fns";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+  m,
+  useReducedMotion,
+} from "framer-motion";
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
@@ -56,6 +62,8 @@ function groupTransactionsByDate(
 }
 
 export function TransactionCardList({ data }: TransactionCardListProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   if (!data.length) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center px-6">
@@ -73,40 +81,48 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
   const grouped = groupTransactionsByDate(data);
 
   return (
-    <div className="space-y-5 pb-4">
-      <AnimatePresence mode="popLayout">
-        {Object.entries(grouped).map(([dateLabel, transactions], groupIdx) => (
-          <motion.section
-            key={dateLabel}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: groupIdx * 0.05 }}
-          >
-            <div className="flex items-center gap-2 mb-2.5 px-1">
-              <CalendarIcon className="size-3.5 text-muted-foreground/50" />
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
-                {dateLabel}
-              </h3>
-              <div className="flex-1 h-px bg-border/50" />
-              <span className="text-[10px] text-muted-foreground/50 tabular-nums">
-                {transactions.length}
-              </span>
-            </div>
+    <LazyMotion features={domAnimation}>
+      <div className="space-y-5 pb-4">
+        <AnimatePresence mode="popLayout">
+          {Object.entries(grouped).map(
+            ([dateLabel, transactions], groupIdx) => (
+              <m.section
+                key={dateLabel}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.3,
+                  delay: shouldReduceMotion ? 0 : groupIdx * 0.05,
+                }}
+              >
+                <div className="flex items-center gap-2 mb-2.5 px-1">
+                  <CalendarIcon className="size-3.5 text-muted-foreground/50" />
+                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    {dateLabel}
+                  </h3>
+                  <div className="flex-1 h-px bg-border/50" />
+                  <span className="text-[10px] text-muted-foreground/50 tabular-nums">
+                    {transactions.length}
+                  </span>
+                </div>
 
-            <div className="space-y-1.5">
-              {transactions.map((transaction, index) => (
-                <TransactionRow
-                  key={transaction.id}
-                  transaction={transaction}
-                  index={index}
-                  groupDelay={groupIdx * 0.05}
-                />
-              ))}
-            </div>
-          </motion.section>
-        ))}
-      </AnimatePresence>
-    </div>
+                <div className="space-y-1.5">
+                  {transactions.map((transaction, index) => (
+                    <TransactionRow
+                      key={transaction.id}
+                      transaction={transaction}
+                      index={index}
+                      groupDelay={groupIdx * 0.05}
+                      reduceMotion={Boolean(shouldReduceMotion)}
+                    />
+                  ))}
+                </div>
+              </m.section>
+            )
+          )}
+        </AnimatePresence>
+      </div>
+    </LazyMotion>
   );
 }
 
@@ -114,10 +130,12 @@ function TransactionRow({
   transaction,
   index,
   groupDelay,
+  reduceMotion,
 }: {
   transaction: Transaction;
   index: number;
   groupDelay: number;
+  reduceMotion: boolean;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -151,12 +169,14 @@ function TransactionRow({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <ContextMenu>
         <ContextMenuTrigger asChild>
-          <motion.div
-            initial={{ opacity: 0, x: -8 }}
+          <m.div
+            initial={reduceMotion ? false : { opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{
-              duration: 0.25,
-              delay: groupDelay + Math.min(index * 0.04, 0.2),
+              duration: reduceMotion ? 0 : 0.25,
+              delay: reduceMotion
+                ? 0
+                : groupDelay + Math.min(index * 0.04, 0.2),
               ease: "easeOut",
             }}
             className={cn(
@@ -212,7 +232,7 @@ function TransactionRow({
                 setIsOpenDialog={setIsDialogOpen}
               />
             </div>
-          </motion.div>
+          </m.div>
         </ContextMenuTrigger>
 
         <ContextMenuContent className="w-56">

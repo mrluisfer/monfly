@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { Auth, authActions } from "~/components/auth";
@@ -32,7 +31,7 @@ const rawSchema = z.object({
 
 function Login() {
   const navigate = useNavigate();
-  const FormSchema = useMemo(() => rawSchema, []);
+  const FormSchema = rawSchema;
 
   const loginMutation = useMutation({
     fn: loginFn,

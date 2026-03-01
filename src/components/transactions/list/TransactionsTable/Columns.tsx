@@ -49,6 +49,156 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
+function TransactionActionsCell({
+  transaction,
+}: {
+  transaction: TransactionWithUser;
+}) {
+  const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+  const queryClient = useQueryClient();
+
+  const deleteTransactionByIdMutation = useMutation({
+    fn: deleteTransactionByIdServer,
+    onSuccess: async () => {
+      sileo.success({ title: "Transaction deleted successfully" });
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.transactions, transaction.userEmail],
+      });
+      await queryClient.invalidateQueries({
+        queryKey: [queryDictionary.user, transaction.userEmail],
+      });
+      setIsDeleteDialogOpen(false);
+    },
+  });
+
+  React.useEffect(() => {
+    if (
+      deleteTransactionByIdMutation.status === "error" &&
+      deleteTransactionByIdMutation.error
+    ) {
+      sileo.error({ title: "Failed to delete transaction" });
+      setIsDeleteDialogOpen(false);
+    }
+  }, [
+    deleteTransactionByIdMutation.status,
+    deleteTransactionByIdMutation.error,
+  ]);
+
+  const handleDelete = () => {
+    deleteTransactionByIdMutation.mutate({
+      data: {
+        id: transaction.id,
+      },
+    });
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="
+              h-8 w-8 p-0
+              transition-all duration-200 ease-out
+              hover:scale-110 hover:bg-primary/10 hover:shadow-sm
+              active:scale-95
+              focus-visible:scale-110 focus-visible:bg-primary/10
+              data-[state=open]:scale-110 data-[state=open]:bg-primary/10
+              dark:hover:bg-primary/5
+            "
+          >
+            <span className="sr-only">Open menu</span>
+            <MoreHorizontalIcon className="transition-transform duration-200 hover:rotate-90" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() => {
+              sileo.promise(navigator.clipboard.writeText(transaction.id), {
+                loading: { title: "Copying transaction ID..." },
+                success: { title: "Transaction ID copied" },
+                error: { title: "Failed to copy transaction ID" },
+              });
+            }}
+          >
+            Copy transaction ID
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => setIsEditDialogOpen(true)}
+            className="
+              transition-all duration-200 ease-out
+              hover:bg-primary/10 focus:bg-primary/10
+              cursor-pointer group
+            "
+          >
+            <EditIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            Edit transaction
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="
+              text-destructive focus:text-destructive
+              transition-all duration-200 ease-out
+              hover:bg-destructive/10 focus:bg-destructive/10
+              cursor-pointer group
+            "
+            onClick={() => setIsDeleteDialogOpen(true)}
+          >
+            <TrashIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            Delete transaction
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Transaction</DialogTitle>
+            <DialogDescription>Edit the transaction details</DialogDescription>
+          </DialogHeader>
+          <EditTransaction
+            transaction={transaction}
+            onClose={() => setIsEditDialogOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              transaction "{transaction.description}" with amount $
+              {Math.abs(transaction.amount).toFixed(2)}.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              disabled={deleteTransactionByIdMutation.status === "pending"}
+            >
+              {deleteTransactionByIdMutation.status === "pending"
+                ? "Deleting..."
+                : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
+  );
+}
+
 export const Columns: ColumnDef<TransactionWithUser>[] = [
   {
     id: "select",
@@ -221,154 +371,6 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
-      const transaction = row.original;
-      const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
-      const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
-      const queryClient = useQueryClient();
-
-      const deleteTransactionByIdMutation = useMutation({
-        fn: deleteTransactionByIdServer,
-        onSuccess: async () => {
-          sileo.success({ title: "Transaction deleted successfully" });
-          await queryClient.invalidateQueries({
-            queryKey: [queryDictionary.transactions, transaction.userEmail],
-          });
-          await queryClient.invalidateQueries({
-            queryKey: [queryDictionary.user, transaction.userEmail],
-          });
-          setIsDeleteDialogOpen(false);
-        },
-      });
-
-      // Handle delete mutation errors
-      React.useEffect(() => {
-        if (
-          deleteTransactionByIdMutation.status === "error" &&
-          deleteTransactionByIdMutation.error
-        ) {
-          sileo.error({ title: "Failed to delete transaction" });
-          setIsDeleteDialogOpen(false);
-        }
-      }, [
-        deleteTransactionByIdMutation.status,
-        deleteTransactionByIdMutation.error,
-      ]);
-
-      const handleDelete = () => {
-        deleteTransactionByIdMutation.mutate({
-          data: {
-            id: transaction.id,
-          },
-        });
-      };
-
-      return (
-        <>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="
-                  h-8 w-8 p-0
-                  transition-all duration-200 ease-out
-                  hover:scale-110 hover:bg-primary/10 hover:shadow-sm
-                  active:scale-95
-                  focus-visible:scale-110 focus-visible:bg-primary/10
-                  data-[state=open]:scale-110 data-[state=open]:bg-primary/10
-                  dark:hover:bg-primary/5
-                "
-              >
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontalIcon className="transition-transform duration-200 hover:rotate-90" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  sileo.promise(navigator.clipboard.writeText(transaction.id), {
-                    loading: { title: "Copying transaction ID..." },
-                    success: { title: "Transaction ID copied" },
-                    error: { title: "Failed to copy transaction ID" },
-                  });
-                }}
-              >
-                Copy transaction ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => setIsEditDialogOpen(true)}
-                className="
-                  transition-all duration-200 ease-out
-                  hover:bg-primary/10 focus:bg-primary/10
-                  cursor-pointer group
-                "
-              >
-                <EditIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
-                Edit transaction
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="
-                  text-destructive focus:text-destructive
-                  transition-all duration-200 ease-out
-                  hover:bg-destructive/10 focus:bg-destructive/10
-                  cursor-pointer group
-                "
-                onClick={() => setIsDeleteDialogOpen(true)}
-              >
-                <TrashIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
-                Delete transaction
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          {/* Edit Dialog */}
-          <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Edit Transaction</DialogTitle>
-                <DialogDescription>
-                  Edit the transaction details
-                </DialogDescription>
-              </DialogHeader>
-              <EditTransaction
-                transaction={transaction}
-                onClose={() => setIsEditDialogOpen(false)}
-              />
-            </DialogContent>
-          </Dialog>
-
-          {/* Delete Confirmation Dialog */}
-          <AlertDialog
-            open={isDeleteDialogOpen}
-            onOpenChange={setIsDeleteDialogOpen}
-          >
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the
-                  transaction "{transaction.description}" with amount $
-                  {Math.abs(transaction.amount).toFixed(2)}.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={handleDelete}
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  disabled={deleteTransactionByIdMutation.status === "pending"}
-                >
-                  {deleteTransactionByIdMutation.status === "pending"
-                    ? "Deleting..."
-                    : "Delete"}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </>
-      );
-    },
+    cell: ({ row }) => <TransactionActionsCell transaction={row.original} />,
   },
 ];

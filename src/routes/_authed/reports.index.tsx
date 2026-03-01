@@ -1,9 +1,18 @@
+import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import ChartByCategoryRadar from "~/components/charts/chart-by-category-radar";
-import ChartTransactionsByMonth from "~/components/charts/chart-transactions-by-month";
-import IncomeExpenseChart from "~/components/charts/income-expense-chart";
 import { PageTitle } from "~/components/page-title";
+import { Skeleton } from "~/components/ui/skeleton";
 import { transactionTypes } from "~/constants/transaction-types";
+
+const IncomeExpenseChart = lazy(
+  () => import("~/components/charts/income-expense-chart")
+);
+const ChartTransactionsByMonth = lazy(
+  () => import("~/components/charts/chart-transactions-by-month")
+);
+const ChartByCategoryRadar = lazy(
+  () => import("~/components/charts/chart-by-category-radar")
+);
 
 export const Route = createFileRoute("/_authed/reports/")({
   component: RouteComponent,
@@ -18,11 +27,23 @@ export default function RouteComponent() {
         </PageTitle>
       </header>
       <div className="grid grid-cols-1 md:grid-cols-2 grid-row-auto gap-4">
-        <IncomeExpenseChart />
-        <ChartTransactionsByMonth />
-        <ChartByCategoryRadar type={transactionTypes.EXPENSE} />
-        <ChartByCategoryRadar type={transactionTypes.INCOME} />
+        <Suspense fallback={<ChartFallback />}>
+          <IncomeExpenseChart />
+        </Suspense>
+        <Suspense fallback={<ChartFallback />}>
+          <ChartTransactionsByMonth />
+        </Suspense>
+        <Suspense fallback={<ChartFallback />}>
+          <ChartByCategoryRadar type={transactionTypes.EXPENSE} />
+        </Suspense>
+        <Suspense fallback={<ChartFallback />}>
+          <ChartByCategoryRadar type={transactionTypes.INCOME} />
+        </Suspense>
       </div>
     </div>
   );
+}
+
+function ChartFallback() {
+  return <Skeleton className="h-72 w-full" />;
 }

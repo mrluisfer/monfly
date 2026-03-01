@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -22,19 +22,27 @@ export function OnlineStatusBadge({
   variant = "secondary",
   className = "",
 }: OnlineStatusBadgeProps) {
-  const [isOnline, setIsOnline] = useState(
-    typeof window !== "undefined" ? window.navigator.onLine : true
+  const [state, dispatch] = useReducer(
+    (
+      _prev: { isOnline: boolean; lastChanged: Date | null },
+      nextOnline: boolean
+    ) => ({
+      isOnline: nextOnline,
+      lastChanged: new Date(),
+    }),
+    {
+      isOnline: typeof window !== "undefined" ? window.navigator.onLine : true,
+      lastChanged: null,
+    }
   );
-  const [lastChanged, setLastChanged] = useState<Date | null>(null);
+  const { isOnline, lastChanged } = state;
 
   useEffect(() => {
     function handleOnline() {
-      setIsOnline(true);
-      setLastChanged(new Date());
+      dispatch(true);
     }
     function handleOffline() {
-      setIsOnline(false);
-      setLastChanged(new Date());
+      dispatch(false);
     }
 
     window.addEventListener("online", handleOnline);

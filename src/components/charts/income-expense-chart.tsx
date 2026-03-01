@@ -22,6 +22,77 @@ import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import Card from "../card";
 import { ChartError, ChartLoading } from "./chart-loading";
 
+type IncomeExpenseTooltipProps = {
+  active?: boolean;
+  payload?: Array<{ dataKey?: string; value?: number }>;
+  label?: string;
+};
+
+function IncomeExpenseTooltip({
+  active,
+  payload,
+  label,
+}: IncomeExpenseTooltipProps) {
+  if (!active || !payload?.length) {
+    return null;
+  }
+
+  const income = payload.find((p) => p.dataKey === "income")?.value || 0;
+  const expense = payload.find((p) => p.dataKey === "expense")?.value || 0;
+  const net = income - expense;
+
+  return (
+    <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-4 shadow-lg min-w-[200px]">
+      <p className="font-semibold text-foreground mb-2">{label}</p>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: "hsl(134, 61%, 41%)" }}
+            />
+            <span className="text-sm text-muted-foreground">Income:</span>
+          </div>
+          <span
+            className="font-semibold"
+            style={{ color: "hsl(134, 61%, 41%)" }}
+          >
+            {formatCurrency(income, "USD")}
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-3 h-3 rounded-full"
+              style={{ backgroundColor: "hsl(0, 65%, 51%)" }}
+            />
+            <span className="text-sm text-muted-foreground">Expenses:</span>
+          </div>
+          <span className="font-semibold" style={{ color: "hsl(0, 65%, 51%)" }}>
+            {formatCurrency(expense, "USD")}
+          </span>
+        </div>
+        <div className="border-t border-border pt-2">
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm font-medium text-muted-foreground">
+              Net:
+            </span>
+            <span
+              className="font-bold"
+              style={{
+                color: net >= 0 ? "hsl(134, 61%, 41%)" : "hsl(0, 65%, 51%)",
+              }}
+            >
+              {net >= 0 ? "+" : ""}
+              {formatCurrency(net, "USD")}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function IncomeExpenseChart() {
   const userEmail = useRouteUser();
 
@@ -59,72 +130,6 @@ export default function IncomeExpenseChart() {
 
   const shownChart = !isLoading && !error && chartData.length > 0;
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
-
-  // Custom tooltip content
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const income =
-        payload.find((p: any) => p.dataKey === "income")?.value || 0;
-      const expense =
-        payload.find((p: any) => p.dataKey === "expense")?.value || 0;
-      const net = income - expense;
-
-      return (
-        <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-4 shadow-lg min-w-[200px]">
-          <p className="font-semibold text-foreground mb-2">{label}</p>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: "hsl(134, 61%, 41%)" }}
-                />
-                <span className="text-sm text-muted-foreground">Income:</span>
-              </div>
-              <span
-                className="font-semibold"
-                style={{ color: "hsl(134, 61%, 41%)" }}
-              >
-                {formatCurrency(income, "USD")}
-              </span>
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: "hsl(0, 65%, 51%)" }}
-                />
-                <span className="text-sm text-muted-foreground">Expenses:</span>
-              </div>
-              <span
-                className="font-semibold"
-                style={{ color: "hsl(0, 65%, 51%)" }}
-              >
-                {formatCurrency(expense, "USD")}
-              </span>
-            </div>
-            <div className="border-t border-border pt-2">
-              <div className="flex items-center justify-between gap-4">
-                <span className="text-sm font-medium text-muted-foreground">
-                  Net:
-                </span>
-                <span
-                  className="font-bold"
-                  style={{
-                    color: net >= 0 ? "hsl(134, 61%, 41%)" : "hsl(0, 65%, 51%)",
-                  }}
-                >
-                  {net >= 0 ? "+" : ""}
-                  {formatCurrency(net, "USD")}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card
@@ -171,7 +176,7 @@ export default function IncomeExpenseChart() {
                   bottom: 20,
                 }}
               >
-                <ChartTooltip content={<CustomTooltip />} />
+                <ChartTooltip content={<IncomeExpenseTooltip />} />
                 <CartesianGrid
                   strokeDasharray="3 3"
                   className="stroke-border/30"

@@ -203,14 +203,14 @@ export default function ChartByCategoryRadar({
                 Distribution
               </div>
               <div className="flex gap-1">
-                {chartData.map((item, index) => {
+                {chartData.map((item) => {
                   const percentage =
                     stats.total > 0
                       ? ((item[type] || 0) / stats.total) * 100
                       : 0;
                   return (
                     <div
-                      key={index}
+                      key={item.category}
                       className="h-2 bg-primary rounded-sm flex-1"
                       style={{
                         opacity: Math.max(0.2, percentage / 100),

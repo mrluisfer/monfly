@@ -44,16 +44,16 @@ export function MobileMenuPopover() {
       <PopoverContent align="start" className="w-64 p-1 md:hidden">
         <NavigationMenu className="max-w-none *:w-full">
           <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-            {navigationLinks.map((link, index) => (
-              <NavigationMenuItem key={index} className="w-full">
+            {navigationLinks.map((link) => (
+              <NavigationMenuItem key={link.label} className="w-full">
                 {link.submenu ? (
                   <>
                     <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">
                       {link.label}
                     </div>
                     <ul>
-                      {link.items.map((item, itemIndex) => (
-                        <li key={itemIndex}>
+                      {link.items.map((item) => (
+                        <li key={`${item.href}-${item.label}`}>
                           <NavigationMenuLink
                             href={item.href}
                             className="py-1.5"

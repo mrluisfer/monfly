@@ -27,6 +27,44 @@ import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { ChartError, ChartLoading } from "./chart-loading";
 
+type MonthlyActivityTooltipProps = {
+  active?: boolean;
+  payload?: Array<{ value?: number }>;
+  label?: string;
+  totalTransactions: number;
+};
+
+function MonthlyActivityTooltip({
+  active,
+  payload,
+  label,
+  totalTransactions,
+}: MonthlyActivityTooltipProps) {
+  if (!active || !payload?.length) {
+    return null;
+  }
+
+  const value = payload[0]?.value ?? 0;
+  const percentage =
+    totalTransactions > 0
+      ? ((value / totalTransactions) * 100).toFixed(1)
+      : "0";
+
+  return (
+    <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg">
+      <p className="font-semibold text-foreground">{label}</p>
+      <div className="flex items-center gap-2 mt-1">
+        <Activity className="size-5 text-primary" />
+        <span className="text-sm text-muted-foreground">Transactions:</span>
+        <span className="font-bold text-foreground">{value}</span>
+      </div>
+      <p className="text-xs text-muted-foreground mt-1">
+        {percentage}% of total activity
+      </p>
+    </div>
+  );
+}
+
 export default function ChartTransactionsByMonth() {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
@@ -79,32 +117,6 @@ export default function ChartTransactionsByMonth() {
   const shownChart = !isLoading && !error && chartData.length > 0;
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
-  // Custom tooltip content
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const value = payload[0].value;
-      const percentage =
-        totalTransactions > 0
-          ? ((value / totalTransactions) * 100).toFixed(1)
-          : "0";
-
-      return (
-        <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg">
-          <p className="font-semibold text-foreground">{label}</p>
-          <div className="flex items-center gap-2 mt-1">
-            <Activity className="size-5 text-primary" />
-            <span className="text-sm text-muted-foreground">Transactions:</span>
-            <span className="font-bold text-foreground">{value}</span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {percentage}% of total activity
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <Card className="w-full max-w-5xl">
       <CardHeader>
@@ -152,7 +164,13 @@ export default function ChartTransactionsByMonth() {
                   bottom: 20,
                 }}
               >
-                <ChartTooltip content={<CustomTooltip />} />
+                <ChartTooltip
+                  content={
+                    <MonthlyActivityTooltip
+                      totalTransactions={totalTransactions}
+                    />
+                  }
+                />
                 <CartesianGrid
                   strokeDasharray="3 3"
                   className="stroke-border/30"
@@ -255,14 +273,14 @@ export default function ChartTransactionsByMonth() {
                   Monthly Distribution
                 </div>
                 <div className="flex gap-1 h-2">
-                  {chartData.map((item: any, index: number) => {
+                  {chartData.map((item: any) => {
                     const percentage =
                       totalTransactions > 0
                         ? (item.count / totalTransactions) * 100
                         : 0;
                     return (
                       <div
-                        key={index}
+                        key={item.month}
                         className="bg-primary rounded-sm flex-1 transition-opacity hover:opacity-80"
                         style={{
                           opacity: Math.max(0.3, percentage / 100),

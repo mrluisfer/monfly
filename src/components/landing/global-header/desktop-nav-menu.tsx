@@ -16,8 +16,8 @@ export function DesktopNavMenu() {
   return (
     <NavigationMenu viewport={false} className="max-md:hidden">
       <NavigationMenuList className="gap-2">
-        {navigationLinks.map((link, index) => (
-          <NavigationMenuItem key={index}>
+        {navigationLinks.map((link) => (
+          <NavigationMenuItem key={link.label}>
             {link.submenu ? (
               <>
                 <NavigationMenuTrigger className="text-muted-foreground hover:text-primary bg-transparent px-2 py-1.5 font-medium *:[svg]:-me-0.5 *:[svg]:size-3.5">
@@ -29,8 +29,8 @@ export function DesktopNavMenu() {
                       link.type === "description" ? "min-w-64" : "min-w-48"
                     )}
                   >
-                    {link.items.map((item, itemIndex) => (
-                      <li key={itemIndex}>
+                    {link.items.map((item) => (
+                      <li key={`${item.href}-${item.label}`}>
                         <NavigationMenuLink
                           asChild
                           href={item.href}

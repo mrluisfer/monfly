@@ -1,11 +1,12 @@
+import { Link } from "@tanstack/react-router";
 import { TextAnimate } from "~/components/magicui/text-animate";
 
 import Logo from "../../../assets/logo.svg";
 
 export function HeaderLogo() {
   return (
-    <a
-      href="#"
+    <Link
+      to="/"
       className="text-primary hover:text-primary/90 flex items-center gap-2"
     >
       <img src={Logo} alt="Monfly Logo" className="size-8 w-auto" />
@@ -16,6 +17,6 @@ export function HeaderLogo() {
       >
         MONFLY
       </TextAnimate>
-    </a>
+    </Link>
   );
 }

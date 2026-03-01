@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCategoryIconByName } from "~/constants/categories-icon";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
@@ -67,6 +67,8 @@ export function TransactionForm<FormValues extends FieldValues>({
   isLoading = false,
 }: TransactionFormProps<FormValues>) {
   const [categoryOpen, setCategoryOpen] = useState(false);
+  const [categoryInputValue, setCategoryInputValue] = useState("");
+  const categoryComboboxId = useId();
   const { data: categories, isPending, error } = useGetCategoriesByEmail();
   const userEmail = useRouteUser();
 
@@ -173,16 +175,16 @@ export function TransactionForm<FormValues extends FieldValues>({
           control={form.control}
           name={transactionFormNames.category as Path<FormValues>}
           render={({ field }) => {
-            const [inputValue, setInputValue] = useState("");
             const value = field.value as string | undefined;
             const selectedCategory = categories?.find(
               (cat) => cat.name === value
             );
 
             const showAddNew =
-              inputValue.length > 1 &&
+              categoryInputValue.length > 1 &&
               !categories?.some(
-                (cat) => cat.name.toLowerCase() === inputValue.toLowerCase()
+                (cat) =>
+                  cat.name.toLowerCase() === categoryInputValue.toLowerCase()
               );
 
             return (
@@ -202,6 +204,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                           variant="outline"
                           role="combobox"
                           aria-expanded={categoryOpen}
+                          aria-controls={`${categoryComboboxId}-listbox`}
                           className={cn(
                             "h-11 w-full justify-between px-3 text-sm font-normal capitalize sm:h-12",
                             !value && "text-muted-foreground"
@@ -215,7 +218,9 @@ export function TransactionForm<FormValues extends FieldValues>({
                               <span>{selectedCategory.name}</span>
                             </div>
                           ) : (
-                            <span>{inputValue || "Select a category"}</span>
+                            <span>
+                              {categoryInputValue || "Select a category"}
+                            </span>
                           )}
                           <ChevronDownIcon
                             size={16}
@@ -231,10 +236,13 @@ export function TransactionForm<FormValues extends FieldValues>({
                         <Command>
                           <CommandInput
                             placeholder="Search category..."
-                            value={inputValue}
-                            onValueChange={setInputValue}
+                            value={categoryInputValue}
+                            onValueChange={setCategoryInputValue}
                           />
-                          <CommandList className="max-h-57.5 sm:max-h-75">
+                          <CommandList
+                            id={`${categoryComboboxId}-listbox`}
+                            className="max-h-57.5 sm:max-h-75"
+                          >
                             <CommandEmpty>No category found.</CommandEmpty>
                             <CommandGroup>
                               {categories?.map((category) => (
@@ -243,6 +251,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                                   value={category.name}
                                   onSelect={(currentValue: string) => {
                                     field.onChange(currentValue);
+                                    setCategoryInputValue("");
                                     setCategoryOpen(false);
                                   }}
                                   className="capitalize"
@@ -263,25 +272,26 @@ export function TransactionForm<FormValues extends FieldValues>({
                                 <CommandGroup heading="Add new category">
                                   <CommandItem
                                     onSelect={async () => {
-                                      field.onChange(inputValue);
+                                      field.onChange(categoryInputValue);
+                                      setCategoryInputValue("");
                                       setCategoryOpen(false);
                                       await postCategoryByEmail.mutate({
                                         data: {
                                           email: userEmail,
                                           category: {
-                                            name: inputValue,
+                                            name: categoryInputValue,
                                             icon: "other",
                                           },
                                         },
                                       });
                                     }}
-                                    value={inputValue}
+                                    value={categoryInputValue}
                                   >
                                     <PlusIcon
                                       size={16}
                                       className="text-green-600"
                                     />
-                                    <span>Create "{inputValue}"</span>
+                                    <span>Create "{categoryInputValue}"</span>
                                   </CommandItem>
                                 </CommandGroup>
                               </>

@@ -10,7 +10,7 @@
 // --font-geist: "Geist", sans-serif;
 // --font-pacifico: "Pacifico", cursive;
 
-export enum FontsName {
+enum FontsName {
   OpenSans = "Open Sans",
   Poppins = "Poppins",
   Montserrat = "Montserrat",
