@@ -16,12 +16,14 @@ export function BalanceActions() {
         label="Reports"
         onClick={() => navigate({ to: "/reports" })}
         widthClassName={ACTION_ITEM_WIDTH_CLASS}
+        variant={"outline"}
       />
       <ActionButton
         icon={<ListIcon />}
         label="Categories"
         onClick={() => navigate({ to: "/categories" })}
         widthClassName={ACTION_ITEM_WIDTH_CLASS}
+        variant={"outline"}
       />
       <AddTransactionButton
         customTrigger={
