@@ -35,7 +35,7 @@ export const Header = () => {
     (routeUrl !== "/home" && location.pathname.startsWith(`${routeUrl}/`));
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/60">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
           <Link
@@ -50,7 +50,7 @@ export const Header = () => {
             />
             <span className="sidebar-title-text hidden md:block">Monfly</span>
           </Link>
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <HeaderNavigation />
           </div>
         </div>
@@ -61,10 +61,6 @@ export const Header = () => {
           <OnlineStatusBadge />
           <TimezoneBadge />
           <SystemStatusBadge />
-          <div className="flex items-center gap-4 w-px h-6 bg-border mx-2" />
-          <ToggleDarkMode />
-          <SettingsDialog />
-          <UserDropdown />
         </div>
 
         {/* Mobile Menu Trigger */}
@@ -79,7 +75,7 @@ export const Header = () => {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="h-[100dvh] w-[92vw] max-w-[400px] gap-0 overflow-hidden p-0"
+              className="h-dvh w-[92vw] max-w-100 gap-0 overflow-hidden p-0"
             >
               <div className="flex h-full min-h-0 flex-col">
                 <SheetHeader className="border-b px-6 py-4 text-left">

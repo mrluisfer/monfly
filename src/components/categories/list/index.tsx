@@ -310,11 +310,6 @@ function CategoriesContent({
                 checked={isAllSelected || isPartiallySelected}
                 onCheckedChange={handleToggleSelectAll}
               />
-              {isPartiallySelected && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <Minus className="h-3 w-3 text-primary-foreground" />
-                </div>
-              )}
             </div>
             <label
               htmlFor={isMobile ? "select-all-mobile" : "select-all"}
@@ -328,12 +323,11 @@ function CategoriesContent({
             </label>
           </div>
 
-          <div className="flex items-center gap-1.5 shrink-0">
+          <div className="flex items-center gap-4 shrink-0">
             {hasAnySelected && (
               <Badge
                 variant="secondary"
                 className={cn(
-                  "text-[10px] px-1.5 py-0",
                   isAllSelected
                     ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
                     : "bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300"
@@ -343,23 +337,19 @@ function CategoriesContent({
               </Badge>
             )}
             {isPartiallySelected && (
-              <div className="flex gap-1">
+              <div className="flex gap-4">
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="sm"
+                  variant="default"
                   onClick={handleSelectAll}
-                  className="h-6 px-2 text-[10px]"
                 >
                   <CheckCheck className="size-3 mr-0.5" />
                   All
                 </Button>
                 <Button
                   type="button"
-                  variant="ghost"
-                  size="sm"
+                  variant="secondary"
                   onClick={handleDeselectAll}
-                  className="h-6 px-2 text-[10px] text-destructive hover:text-destructive"
                 >
                   <Minus className="size-3 mr-0.5" />
                   None
@@ -374,7 +364,7 @@ function CategoriesContent({
       <ScrollArea
         className={cn(
           "w-full rounded-xl",
-          isMobile ? "h-[50vh]" : "h-[350px] border bg-background/50"
+          isMobile ? "h-[50vh]" : "h-87.5 border bg-background/50"
         )}
       >
         <div className={cn("space-y-0.5", !isMobile && "p-2")}>

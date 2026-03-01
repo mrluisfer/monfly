@@ -1,14 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "~/components/ui/context-menu";
 import { Dialog } from "~/components/ui/dialog";
+import { useMutation } from "~/hooks/use-mutation";
+import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
+import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
+import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { format, isToday, isYesterday } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
   CalendarIcon,
+  EditIcon,
   TagIcon,
+  TrashIcon,
 } from "lucide-react";
 
 import TransactionItemActions from "./transaction-item-actions";
@@ -105,76 +120,130 @@ function TransactionRow({
   groupDelay: number;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const queryClient = useQueryClient();
   const isIncome = transaction.type.toLowerCase() === "income";
   const category =
     typeof transaction.category === "string"
       ? transaction.category
       : (transaction.category as any)?.name || "Uncategorized";
 
+  const deleteTransactionByIdMutation = useMutation({
+    fn: deleteTransactionByIdServer,
+    onSuccess: async () => {
+      sileo.success({ title: "Transaction deleted successfully" });
+      await invalidateTransactionQueries(queryClient, transaction.userEmail);
+    },
+  });
+
+  useEffect(() => {
+    if (
+      deleteTransactionByIdMutation.status === "error" &&
+      deleteTransactionByIdMutation.error
+    ) {
+      sileo.error({ title: "Failed to delete transaction" });
+    }
+  }, [
+    deleteTransactionByIdMutation.status,
+    deleteTransactionByIdMutation.error,
+  ]);
+
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <motion.div
-        initial={{ opacity: 0, x: -8 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{
-          duration: 0.25,
-          delay: groupDelay + Math.min(index * 0.04, 0.2),
-          ease: "easeOut",
-        }}
-        className={cn(
-          "group flex items-center gap-3 rounded-2xl px-3 py-3",
-          "bg-background/60 hover:bg-muted/50",
-          "transition-colors duration-200",
-          "active:scale-[0.98] active:transition-transform active:duration-100"
-        )}
-      >
-        {/* Icon */}
-        <div
-          className={cn(
-            "flex size-10 shrink-0 items-center justify-center rounded-xl",
-            "transition-shadow duration-200",
-            isIncome
-              ? "bg-emerald-500/10 text-emerald-500 dark:bg-emerald-500/15"
-              : "bg-red-500/10 text-red-500 dark:bg-red-500/15"
-          )}
-        >
-          {isIncome ? (
-            <ArrowUpRightIcon className="size-4.5" strokeWidth={2.2} />
-          ) : (
-            <ArrowDownLeftIcon className="size-4.5" strokeWidth={2.2} />
-          )}
-        </div>
-
-        {/* Info */}
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium leading-tight text-foreground">
-            {transaction.description || "No description"}
-          </p>
-          <div className="mt-0.5 flex items-center gap-1.5">
-            <TagIcon className="size-3 text-muted-foreground/40" />
-            <span className="truncate text-xs text-muted-foreground/70 capitalize">
-              {category}
-            </span>
-          </div>
-        </div>
-
-        {/* Amount + Actions */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <span
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
+          <motion.div
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{
+              duration: 0.25,
+              delay: groupDelay + Math.min(index * 0.04, 0.2),
+              ease: "easeOut",
+            }}
             className={cn(
-              "text-sm font-semibold tabular-nums",
-              isIncome ? "text-emerald-500" : "text-red-500"
+              "group flex items-center gap-3 rounded-2xl px-3 py-3",
+              "bg-background/60 hover:bg-muted/50",
+              "transition-colors duration-200",
+              "active:scale-[0.98] active:transition-transform active:duration-100"
             )}
           >
-            {isIncome ? "+" : "-"}
-            {currencyFormatter.format(transaction.amount)}
-          </span>
-          <TransactionItemActions
-            transaction={transaction as any}
-            setIsOpenDialog={setIsDialogOpen}
-          />
-        </div>
-      </motion.div>
+            {/* Icon */}
+            <div
+              className={cn(
+                "flex size-10 shrink-0 items-center justify-center rounded-xl",
+                "transition-shadow duration-200",
+                isIncome
+                  ? "bg-emerald-500/10 text-emerald-500 dark:bg-emerald-500/15"
+                  : "bg-red-500/10 text-red-500 dark:bg-red-500/15"
+              )}
+            >
+              {isIncome ? (
+                <ArrowUpRightIcon className="size-4.5" strokeWidth={2.2} />
+              ) : (
+                <ArrowDownLeftIcon className="size-4.5" strokeWidth={2.2} />
+              )}
+            </div>
+
+            {/* Info */}
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium leading-tight text-foreground">
+                {transaction.description || "No description"}
+              </p>
+              <div className="mt-0.5 flex items-center gap-1.5">
+                <TagIcon className="size-3 text-muted-foreground/40" />
+                <span className="truncate text-xs text-muted-foreground/70 capitalize">
+                  {category}
+                </span>
+              </div>
+            </div>
+
+            {/* Amount + Actions */}
+            <div className="flex items-center gap-1.5 shrink-0">
+              <span
+                className={cn(
+                  "text-sm font-semibold tabular-nums",
+                  isIncome ? "text-emerald-500" : "text-red-500"
+                )}
+              >
+                {isIncome ? "+" : "-"}
+                {currencyFormatter.format(transaction.amount)}
+              </span>
+              <TransactionItemActions
+                transaction={transaction as any}
+                setIsOpenDialog={setIsDialogOpen}
+              />
+            </div>
+          </motion.div>
+        </ContextMenuTrigger>
+
+        <ContextMenuContent className="w-56">
+          <ContextMenuLabel>Actions for transaction</ContextMenuLabel>
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            className="cursor-pointer"
+            onSelect={() => setIsDialogOpen(true)}
+          >
+            <EditIcon className="size-4" />
+            Edit transaction
+          </ContextMenuItem>
+          <ContextMenuItem
+            variant="destructive"
+            className="cursor-pointer"
+            disabled={deleteTransactionByIdMutation.status === "pending"}
+            onSelect={() =>
+              deleteTransactionByIdMutation.mutate({
+                data: {
+                  id: transaction.id,
+                },
+              })
+            }
+          >
+            <TrashIcon className="size-4" />
+            {deleteTransactionByIdMutation.status === "pending"
+              ? "Deleting..."
+              : "Delete transaction"}
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
     </Dialog>
   );
 }

@@ -66,7 +66,7 @@ export default function AddCategory() {
             "flex items-center justify-between w-full",
             "rounded-2xl px-4 py-3.5",
             "bg-primary/5 border border-primary/10",
-            "active:scale-[0.98] transition-all duration-200"
+            "transition-all duration-200"
           )}
         >
           <div className="flex items-center gap-2.5">

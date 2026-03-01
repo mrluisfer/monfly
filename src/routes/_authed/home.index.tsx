@@ -6,7 +6,6 @@ import ChartTransactionsByMonth from "~/components/charts/chart-transactions-by-
 import IncomeExpenseChart from "~/components/charts/income-expense-chart";
 import { ChartTabs } from "~/components/home/chart-tabs";
 import { DashboardMetrics } from "~/components/home/dashboard-metrics";
-import { ManagementTabs } from "~/components/home/management-tabs";
 import { WelcomeMessage } from "~/components/home/welcome-message";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -138,14 +137,6 @@ function RouteComponent() {
                 transition={{ duration: 0.5, delay: 0.5 }}
               >
                 <ChartTabs />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <ManagementTabs />
               </motion.div>
             </div>
           </div>
