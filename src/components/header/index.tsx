@@ -42,7 +42,7 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/60">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 pr-0">
         <div className="flex items-center gap-4">
           <Link
             to="/home"

@@ -18,6 +18,7 @@ import { Route as AuthedTransactionsIndexRouteImport } from './routes/_authed/tr
 import { Route as AuthedReportsIndexRouteImport } from './routes/_authed/reports.index'
 import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home.index'
 import { Route as AuthedCategoriesIndexRouteImport } from './routes/_authed/categories.index'
+import { Route as AuthedBalanceCalculatorIndexRouteImport } from './routes/_authed/balance-calculator.index'
 import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
 
 const SignupRoute = SignupRouteImport.update({
@@ -64,6 +65,12 @@ const AuthedCategoriesIndexRoute = AuthedCategoriesIndexRouteImport.update({
   path: '/categories/',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedBalanceCalculatorIndexRoute =
+  AuthedBalanceCalculatorIndexRouteImport.update({
+    id: '/balance-calculator/',
+    path: '/balance-calculator/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
 const AuthedUserUserIdRoute = AuthedUserUserIdRouteImport.update({
   id: '/user/$userId',
   path: '/user/$userId',
@@ -76,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
+  '/balance-calculator/': typeof AuthedBalanceCalculatorIndexRoute
   '/categories/': typeof AuthedCategoriesIndexRoute
   '/home/': typeof AuthedHomeIndexRoute
   '/reports/': typeof AuthedReportsIndexRoute
@@ -87,6 +95,7 @@ export interface FileRoutesByTo {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
+  '/balance-calculator': typeof AuthedBalanceCalculatorIndexRoute
   '/categories': typeof AuthedCategoriesIndexRoute
   '/home': typeof AuthedHomeIndexRoute
   '/reports': typeof AuthedReportsIndexRoute
@@ -100,6 +109,7 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/_authed/user/$userId': typeof AuthedUserUserIdRoute
+  '/_authed/balance-calculator/': typeof AuthedBalanceCalculatorIndexRoute
   '/_authed/categories/': typeof AuthedCategoriesIndexRoute
   '/_authed/home/': typeof AuthedHomeIndexRoute
   '/_authed/reports/': typeof AuthedReportsIndexRoute
@@ -113,6 +123,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/user/$userId'
+    | '/balance-calculator/'
     | '/categories/'
     | '/home/'
     | '/reports/'
@@ -124,6 +135,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/user/$userId'
+    | '/balance-calculator'
     | '/categories'
     | '/home'
     | '/reports'
@@ -136,6 +148,7 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/_authed/user/$userId'
+    | '/_authed/balance-calculator/'
     | '/_authed/categories/'
     | '/_authed/home/'
     | '/_authed/reports/'
@@ -215,6 +228,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedCategoriesIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/balance-calculator/': {
+      id: '/_authed/balance-calculator/'
+      path: '/balance-calculator'
+      fullPath: '/balance-calculator/'
+      preLoaderRoute: typeof AuthedBalanceCalculatorIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/user/$userId': {
       id: '/_authed/user/$userId'
       path: '/user/$userId'
@@ -227,6 +247,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthedRouteChildren {
   AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute
+  AuthedBalanceCalculatorIndexRoute: typeof AuthedBalanceCalculatorIndexRoute
   AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute
   AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
   AuthedReportsIndexRoute: typeof AuthedReportsIndexRoute
@@ -235,6 +256,7 @@ interface AuthedRouteChildren {
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedUserUserIdRoute: AuthedUserUserIdRoute,
+  AuthedBalanceCalculatorIndexRoute: AuthedBalanceCalculatorIndexRoute,
   AuthedCategoriesIndexRoute: AuthedCategoriesIndexRoute,
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
   AuthedReportsIndexRoute: AuthedReportsIndexRoute,
