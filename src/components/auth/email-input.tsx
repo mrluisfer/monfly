@@ -4,12 +4,7 @@ import { ControllerRenderProps } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 
-import {
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 
 export default function EmailInput({
   field,

@@ -39,8 +39,8 @@ import {
   TrashIcon,
 } from "lucide-react";
 
-import TransactionItemActions from "./transaction-item-actions";
 import EditTransaction from "../edit-transaction";
+import TransactionItemActions from "./transaction-item-actions";
 
 type TransactionCardListProps = {
   data: Transaction[];

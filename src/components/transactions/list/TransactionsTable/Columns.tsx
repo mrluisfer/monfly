@@ -38,8 +38,8 @@ import {
   ArrowUpDownIcon,
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
-  Ellipsis,
   EditIcon,
+  Ellipsis,
   TrashIcon,
 } from "lucide-react";
 
@@ -224,8 +224,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         indeterminate={
-          table.getIsSomePageRowsSelected() &&
-          !table.getIsAllPageRowsSelected()
+          table.getIsSomePageRowsSelected() && !table.getIsAllPageRowsSelected()
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"

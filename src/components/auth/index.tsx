@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import type { UseFormReturn } from "react-hook-form";
 import { cn } from "~/lib/utils";
+import type { UseFormReturn } from "react-hook-form";
 
 import Card from "../card";
 import { Button } from "../ui/button";

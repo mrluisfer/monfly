@@ -140,7 +140,10 @@ export function BalanceStatusBadge({
               )}
             >
               <span
-                className={cn("relative flex h-2 w-2 rounded-full", config.color)}
+                className={cn(
+                  "relative flex h-2 w-2 rounded-full",
+                  config.color
+                )}
                 aria-hidden="true"
               >
                 {animate && status === "surplus" && (

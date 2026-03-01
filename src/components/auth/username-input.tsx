@@ -1,6 +1,6 @@
 "use client";
 
-import { type ChangeEvent, useId } from "react";
+import { useId, type ChangeEvent } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,11 @@ export default function UsernameInput({
 }) {
   const id = useId();
   const maxLength = 25;
-  const { characterCount, handleChange, maxLength: limit } = useCharacterLimit({
+  const {
+    characterCount,
+    handleChange,
+    maxLength: limit,
+  } = useCharacterLimit({
     maxLength,
     value: field.value ?? "",
     onChange: field.onChange,
