@@ -35,7 +35,7 @@ export function HeaderNavigation() {
       <BreadcrumbList className="bg-background rounded-md border px-3 py-2 shadow-xs">
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to="/" className="text-primary">
+            <Link to="/home" className="text-primary">
               <PyramidIcon size={16} aria-hidden="true" />
               <span className="sr-only">Home</span>
             </Link>
