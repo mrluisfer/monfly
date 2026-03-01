@@ -11,16 +11,6 @@ export function BalanceActions() {
 
   return (
     <div className="mt-5 flex items-start justify-center gap-1 sm:gap-5">
-      <AddTransactionButton
-        customTrigger={
-          <ActionButton
-            icon={<PlusIcon />}
-            label="Add"
-            variant="default"
-            widthClassName={ACTION_ITEM_WIDTH_CLASS}
-          />
-        }
-      />
       <ActionButton
         icon={<BarChart3Icon />}
         label="Reports"
@@ -32,6 +22,16 @@ export function BalanceActions() {
         label="Categories"
         onClick={() => navigate({ to: "/categories" })}
         widthClassName={ACTION_ITEM_WIDTH_CLASS}
+      />
+      <AddTransactionButton
+        customTrigger={
+          <ActionButton
+            icon={<PlusIcon />}
+            label="Add"
+            variant="default"
+            widthClassName={ACTION_ITEM_WIDTH_CLASS}
+          />
+        }
       />
     </div>
   );
