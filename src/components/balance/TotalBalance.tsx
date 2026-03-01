@@ -1,19 +1,27 @@
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
-import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance";
-import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
+import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+  m,
+  useReducedMotion,
+} from "framer-motion";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+
+const TOTAL_BALANCE_VISIBILITY_STORAGE_KEY = "monfly-total-balance-hidden";
 
 const TotalBalance = () => {
-  const [isEditing, setIsEditing] = useState(false);
   const [totalBalance, setTotalBalance] = useState<string>("0");
-  const queryClient = useQueryClient();
+  const [isBalanceHidden, setIsBalanceHidden] = useState(true);
+  const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
 
   const { error, isPending, data } = useQuery({
@@ -32,52 +40,28 @@ const TotalBalance = () => {
     }
   }, [data]);
 
-  const putUserTotalBalanceMutation = useMutation({
-    fn: putUserTotalBalanceServer,
-    onSuccess: async (ctx) => {
-      if (ctx.data?.error) {
-        sileo.error({ title: ctx.data.message });
-        return;
-      }
-      sileo.success({ title: ctx.data.message });
-      setIsEditing(false);
-      if (ctx.data?.data?.totalBalance !== undefined) {
-        setTotalBalance(ctx.data.data.totalBalance.toString());
-        const { invalidateUserQueries } = await import(
-          "~/utils/query-invalidation"
-        );
-        await invalidateUserQueries(queryClient, userEmail);
-      }
-    },
-  });
+  useEffect(() => {
+    const storedVisibility = localStorage.getItem(
+      TOTAL_BALANCE_VISIBILITY_STORAGE_KEY
+    );
 
-  const handleEditClick = () => setIsEditing(true);
-
-  const handleInputChange = (value: string) => {
-    if (/^\d*\.?\d*$/.test(value) || value === "") {
-      setTotalBalance(value);
-    }
-  };
-
-  const handleSaveEdit = () => {
-    const parsed = Number(totalBalance);
-    if (isNaN(parsed) || parsed < 0) {
-      sileo.error({ title: "Please enter a valid positive number" });
+    if (storedVisibility === null) {
+      setIsBalanceHidden(false);
       return;
     }
-    putUserTotalBalanceMutation.mutate({
-      data: {
-        totalBalance: parsed,
-        email: userEmail,
-      },
-    });
-  };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    if (data?.data?.totalBalance !== undefined) {
-      setTotalBalance(formatToTwoDecimals(data.data.totalBalance).stringValue);
-    }
+    setIsBalanceHidden(storedVisibility === "true");
+  }, []);
+
+  const toggleBalanceVisibility = () => {
+    setIsBalanceHidden((previousValue) => {
+      const nextValue = !previousValue;
+      localStorage.setItem(
+        TOTAL_BALANCE_VISIBILITY_STORAGE_KEY,
+        String(nextValue)
+      );
+      return nextValue;
+    });
   };
 
   if (error) {
@@ -103,56 +87,105 @@ const TotalBalance = () => {
     );
   }
 
-  // return (
-  //   <Card className="w-full max-w-md shadow-md transition-shadow duration-300 hover:shadow-lg lg:max-w-none">
-  //     <CardContent className="group space-y-3">
-  //       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-
-  //         {isEditing ? (
-  //           <div className="animate-in slide-in-from-bottom-2 duration-300 ease-out sm:ml-auto">
-  //             <div className="flex items-center justify-end gap-2">
-  //               <BalanceActions
-  //                 onSave={handleSaveEdit}
-  //                 onCancel={handleCancelEdit}
-  //                 isSubmitting={
-  //                   putUserTotalBalanceMutation.status === "pending"
-  //                 }
-  //               />
-  //             </div>
-  //           </div>
-  //         ) : null}
-  //       </div>
-
-  //       <div className="flex min-h-10 items-center">
-  //         {isEditing ? (
-  //           <div className="w-full animate-in fade-in-0 slide-in-from-right-2 duration-300 ease-out">
-  //             <BalanceEditor
-  //               value={totalBalance}
-  //               onChange={handleInputChange}
-  //               isSubmitting={putUserTotalBalanceMutation.status === "pending"}
-  //             />
-  //           </div>
-  //         ) : (
-  //           <div className="w-full animate-in fade-in-0 slide-in-from-left-2 duration-300 ease-out">
-  //             <BalanceDisplay
-  //               balance={Number(totalBalance) || 0}
-  //               onEdit={handleEditClick}
-  //             />
-  //           </div>
-  //         )}
-  //       </div>
-  //     </CardContent>
-  //   </Card>
-  // );
-
   return (
     <div>
       <p className="flex items-center justify-center text-sm font-medium text-muted-foreground">
         Total Balance
       </p>
-      <p className="flex justify-center items-center text-5xl font-bold mt-2">
-        ${totalBalance}
-      </p>
+      <LazyMotion features={domAnimation}>
+        <div className="mt-2 flex items-center justify-center gap-2">
+          <div className="flex min-h-14 items-center justify-center">
+            <AnimatePresence mode="wait" initial={false}>
+              {isBalanceHidden ? (
+                <m.span
+                  key="hidden-balance"
+                  initial={
+                    shouldReduceMotion
+                      ? false
+                      : { opacity: 0, y: 8, filter: "blur(4px)" }
+                  }
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={
+                    shouldReduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, y: -8, filter: "blur(4px)" }
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0 : 0.22,
+                    ease: "easeOut",
+                  }}
+                  className="text-5xl font-bold tracking-[0.2em]"
+                  aria-label="Total balance hidden"
+                >
+                  $******
+                </m.span>
+              ) : (
+                <m.span
+                  key="visible-balance"
+                  initial={
+                    shouldReduceMotion
+                      ? false
+                      : { opacity: 0, y: 8, filter: "blur(4px)" }
+                  }
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={
+                    shouldReduceMotion
+                      ? { opacity: 0 }
+                      : { opacity: 0, y: -8, filter: "blur(4px)" }
+                  }
+                  transition={{
+                    duration: shouldReduceMotion ? 0 : 0.22,
+                    ease: "easeOut",
+                  }}
+                  className="text-5xl font-bold"
+                >
+                  ${totalBalance}
+                </m.span>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="icon-lg"
+            onClick={toggleBalanceVisibility}
+            aria-label={
+              isBalanceHidden ? "Show total balance" : "Hide total balance"
+            }
+            aria-pressed={isBalanceHidden}
+            title={isBalanceHidden ? "Show balance" : "Hide balance"}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <m.span
+                key={isBalanceHidden ? "show-icon" : "hide-icon"}
+                initial={
+                  shouldReduceMotion
+                    ? false
+                    : { opacity: 0, scale: 0.75, rotate: -15 }
+                }
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={
+                  shouldReduceMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, scale: 0.75, rotate: 15 }
+                }
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.18,
+                  ease: "easeOut",
+                }}
+                className="flex items-center justify-center"
+              >
+                {isBalanceHidden ? (
+                  <EyeIcon aria-hidden="true" />
+                ) : (
+                  <EyeOffIcon aria-hidden="true" />
+                )}
+              </m.span>
+            </AnimatePresence>
+          </Button>
+        </div>
+      </LazyMotion>
     </div>
   );
 };
