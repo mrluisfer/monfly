@@ -33,10 +33,6 @@ export const SignOutDialog = ({
     if (isSigningOut) return;
     setIsSigningOut(true);
 
-    if (onOpenChange) {
-      onOpenChange(false); // Close dialog first if controlled
-    }
-
     try {
       await logoutFn({
         data: { destination: "/login", manualRedirect: true },
@@ -49,17 +45,9 @@ export const SignOutDialog = ({
     }
   };
 
-  const handleCancel = () => {
-    if (isSigningOut) return;
-
-    if (onOpenChange) {
-      onOpenChange(false); // Only close if controlled
-    }
-  };
-
   // If open/onOpenChange are provided, use controlled mode
   // Otherwise, use uncontrolled mode for backward compatibility
-  const isControlled = open !== undefined || onOpenChange !== undefined;
+  const isControlled = open !== undefined && onOpenChange !== undefined;
 
   return (
     <AlertDialog
@@ -85,11 +73,7 @@ export const SignOutDialog = ({
           </AlertDialogHeader>
         </div>
         <AlertDialogFooter className="grid grid-cols-2 gap-3 pt-2 sm:flex sm:justify-end">
-          <AlertDialogCancel
-            onClick={handleCancel}
-            disabled={isSigningOut}
-            className="w-full"
-          >
+          <AlertDialogCancel disabled={isSigningOut} className="w-full">
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction

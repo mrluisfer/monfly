@@ -96,7 +96,7 @@ export default function UserDropdown() {
           </DropdownMenuGroup>
           <DropdownMenuGroup>
             <DropdownMenuItem
-              onSelect={() => {
+              onClick={() => {
                 openMenuActionDialog("profile-settings");
               }}
             >
@@ -106,7 +106,7 @@ export default function UserDropdown() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem
-              onSelect={() => {
+              onClick={() => {
                 openMenuActionDialog("sign-out");
               }}
               className="text-destructive focus:text-destructive"
