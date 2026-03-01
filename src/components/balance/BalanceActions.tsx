@@ -14,7 +14,7 @@ export function BalanceActions() {
       <AddTransactionButton
         customTrigger={
           <ActionButton
-            icon={<PlusIcon className="size-5" />}
+            icon={<PlusIcon />}
             label="Add"
             variant="default"
             widthClassName={ACTION_ITEM_WIDTH_CLASS}
@@ -22,13 +22,13 @@ export function BalanceActions() {
         }
       />
       <ActionButton
-        icon={<BarChart3Icon className="size-5" />}
+        icon={<BarChart3Icon />}
         label="Reports"
         onClick={() => navigate({ to: "/reports" })}
         widthClassName={ACTION_ITEM_WIDTH_CLASS}
       />
       <ActionButton
-        icon={<ListIcon className="size-5" />}
+        icon={<ListIcon />}
         label="Categories"
         onClick={() => navigate({ to: "/categories" })}
         widthClassName={ACTION_ITEM_WIDTH_CLASS}
