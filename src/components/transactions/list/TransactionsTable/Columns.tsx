@@ -23,6 +23,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -37,8 +38,8 @@ import {
   ArrowUpDownIcon,
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
+  Ellipsis,
   EditIcon,
-  MoreHorizontalIcon,
   TrashIcon,
 } from "lucide-react";
 
@@ -99,25 +100,39 @@ function TransactionActionsCell({
         <DropdownMenuTrigger
           render={
             <Button
-              variant="ghost"
+              variant="outline"
+              size="icon-lg"
               className="
-                h-8 w-8 p-0
                 transition-all duration-200 ease-out
-                hover:scale-110 hover:bg-primary/10 hover:shadow-sm
+                hover:scale-105 hover:shadow-sm hover:border-primary/20
                 active:scale-95
-                focus-visible:scale-110 focus-visible:bg-primary/10
-                data-[state=open]:scale-110 data-[state=open]:bg-primary/10
-                dark:hover:bg-primary/5
+                focus-visible:scale-105
+                data-[state=open]:scale-105 data-[state=open]:shadow-sm
+                dark:hover:shadow-primary/10 rounded-full
               "
             >
               <span className="sr-only">Open menu</span>
-              <MoreHorizontalIcon className="transition-transform duration-200 hover:rotate-90" />
+              <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
             </Button>
           }
         />
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuContent
+          align="end"
+          className="
+            space-y-2
+            animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200
+          "
+        >
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
+          </DropdownMenuGroup>
           <DropdownMenuItem
+            variant="default"
+            className="
+              transition-all duration-200 ease-out
+              hover:bg-primary/10 focus:bg-primary/10
+              cursor-pointer
+            "
             onClick={() => {
               sileo.promise(navigator.clipboard.writeText(transaction.id), {
                 loading: { title: "Copying transaction ID..." },
@@ -130,6 +145,7 @@ function TransactionActionsCell({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
+            variant="default"
             onClick={() => setIsEditDialogOpen(true)}
             className="
               transition-all duration-200 ease-out
@@ -141,8 +157,8 @@ function TransactionActionsCell({
             Edit transaction
           </DropdownMenuItem>
           <DropdownMenuItem
+            variant="destructive"
             className="
-              text-destructive focus:text-destructive
               transition-all duration-200 ease-out
               hover:bg-destructive/10 focus:bg-destructive/10
               cursor-pointer group

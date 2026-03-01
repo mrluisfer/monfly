@@ -1,15 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "~/components/ui/button";
 import {
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/components/ui/dialog";
-import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -21,8 +15,6 @@ import { sileo } from "~/lib/toaster";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { Edit, Ellipsis, Trash } from "lucide-react";
-
-import EditTransaction from "../edit-transaction";
 
 const TransactionItemActions = ({
   transaction,
@@ -69,23 +61,22 @@ const TransactionItemActions = ({
           animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200
         "
         >
-          <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
+          </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DialogTrigger
-            render={
-              <DropdownMenuItem
-                variant="default"
-                className="
-                  transition-all duration-200 ease-out
-                  hover:bg-primary/10 focus:bg-primary/10
-                  cursor-pointer group
-                "
-              >
-                <Edit className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
-                Edit transaction
-              </DropdownMenuItem>
-            }
-          />
+          <DropdownMenuItem
+            variant="default"
+            className="
+              transition-all duration-200 ease-out
+              hover:bg-primary/10 focus:bg-primary/10
+              cursor-pointer group
+            "
+            onClick={() => setIsOpenDialog(true)}
+          >
+            <Edit className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            Edit transaction
+          </DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
             className="
@@ -106,16 +97,6 @@ const TransactionItemActions = ({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit Transaction</DialogTitle>
-          <DialogDescription>Edit the transaction details</DialogDescription>
-        </DialogHeader>
-        <EditTransaction
-          transaction={transaction}
-          onClose={() => setIsOpenDialog(false)}
-        />
-      </DialogContent>
     </div>
   );
 };

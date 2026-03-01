@@ -9,7 +9,13 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import { Dialog } from "~/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "~/components/ui/dialog";
 import { useMutation } from "~/hooks/use-mutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { sileo } from "~/lib/toaster";
@@ -34,6 +40,7 @@ import {
 } from "lucide-react";
 
 import TransactionItemActions from "./transaction-item-actions";
+import EditTransaction from "../edit-transaction";
 
 type TransactionCardListProps = {
   data: Transaction[];
@@ -235,23 +242,36 @@ function TransactionRow({
           }
         />
 
-        <ContextMenuContent className="w-56">
+        <ContextMenuContent
+          className="
+            w-56 space-y-2
+            animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200
+          "
+        >
           <ContextMenuGroup>
             <ContextMenuLabel>Actions for transaction</ContextMenuLabel>
           </ContextMenuGroup>
           <ContextMenuSeparator />
           <ContextMenuItem
-            className="cursor-pointer"
-            onSelect={() => setIsDialogOpen(true)}
+            className="
+              transition-all duration-200 ease-out
+              hover:bg-primary/10 focus:bg-primary/10
+              cursor-pointer group
+            "
+            onClick={() => setIsDialogOpen(true)}
           >
-            <EditIcon className="size-4" />
+            <EditIcon className="size-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
             Edit transaction
           </ContextMenuItem>
           <ContextMenuItem
             variant="destructive"
-            className="cursor-pointer"
+            className="
+              transition-all duration-200 ease-out
+              hover:bg-destructive/10 focus:bg-destructive/10
+              cursor-pointer group
+            "
             disabled={deleteTransactionByIdMutation.status === "pending"}
-            onSelect={() =>
+            onClick={() =>
               deleteTransactionByIdMutation.mutate({
                 data: {
                   id: transaction.id,
@@ -259,13 +279,24 @@ function TransactionRow({
               })
             }
           >
-            <TrashIcon className="size-4" />
+            <TrashIcon className="size-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
             {deleteTransactionByIdMutation.status === "pending"
               ? "Deleting..."
               : "Delete transaction"}
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Transaction</DialogTitle>
+          <DialogDescription>Edit the transaction details</DialogDescription>
+        </DialogHeader>
+        <EditTransaction
+          transaction={transaction}
+          onClose={() => setIsDialogOpen(false)}
+        />
+      </DialogContent>
     </Dialog>
   );
 }
