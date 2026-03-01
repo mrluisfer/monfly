@@ -19,7 +19,7 @@ import { useDarkMode } from "~/hooks/use-dark-mode";
 import { useFontDisplay } from "~/hooks/use-font-display";
 import { useSonnerPosition } from "~/hooks/use-sonner-position";
 import { SileoToaster } from "~/lib/toaster";
-import appCss from "~/styles/app.css?url";
+import appCss from "~/styles/globals.css?url";
 import { seo } from "~/utils/seo.js";
 // import appCss from "~/styles/output.css?url";
 import clsx from "clsx";
