@@ -13,9 +13,9 @@ export function BillingLabel({
     <span
       className={cn(
         active
-          ? "text-gray-900 dark:text-primary opacity-100"
+          ? "text-foreground opacity-100"
           : "text-muted-foreground opacity-60",
-        "transition font-semibold flex items-center gap-2 w-[12rem]",
+        "flex min-w-[6.5rem] items-center gap-2 text-sm font-semibold transition-opacity duration-150 sm:min-w-[7.5rem]",
         className
       )}
     >

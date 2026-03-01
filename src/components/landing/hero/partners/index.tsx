@@ -46,12 +46,15 @@ export const Partners = () => {
   const partners = getPartners(isDark);
 
   return (
-    <div className="flex gap-5 items-center justify-center">
+    <ul
+      className="flex flex-wrap items-center gap-2 sm:gap-3"
+      aria-label="Trusted partners"
+    >
       {partners.map((partner) => (
-        <div
+        <li
           key={partner.name}
-          className="transition opacity-60 hover:opacity-100"
           aria-label={partner.name}
+          className="inline-flex h-9 items-center justify-center rounded-full border border-border/60 bg-background/85 px-3 transition-colors duration-150 ease-out hover:border-primary/30 hover:bg-background"
         >
           {partner.icon ? (
             partner.icon
@@ -59,13 +62,13 @@ export const Partners = () => {
             <img
               src={partner.image!}
               alt={partner.name}
-              className="h-6 object-contain"
+              className="h-4 object-contain"
               loading="lazy"
               draggable={false}
             />
           )}
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };

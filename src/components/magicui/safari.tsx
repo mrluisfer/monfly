@@ -1,4 +1,5 @@
 import { SVGProps } from "react";
+import { cn } from "~/lib/utils";
 
 type SafariMode = "default" | "simple";
 
@@ -15,6 +16,7 @@ export function Safari({
   imageSrc,
   videoSrc,
   url,
+  className,
   width = 1203,
   height = 753,
   mode = "default",
@@ -26,6 +28,7 @@ export function Safari({
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       fill="none"
+      className={cn("h-auto w-full", className)}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >

@@ -8,19 +8,28 @@ import { TrialAlert } from "./trial-alert";
 
 export function Footer() {
   return (
-    <footer className="bg-gradient-to-t from-white via-white to-background pt-8 pb-16 dark:from-zinc-900 dark:to-zinc-950 dark:via-zinc-950">
-      <div className="px-4 sm:px-8 md:px-16 lg:px-28 xl:px-44 flex flex-col gap-10 md:gap-16 w-full">
-        <TrialAlert />
-        <StayConnect />
-        <Separator />
-        <QuickActions />
-        <Separator />
-        <FooterNavigation />
-        <Separator />
-        <div className="flex items-center justify-end">
-          <p className="text-sm text-muted-foreground flex items-center gap-2">
-            Built by people around the world <Globe className="size-5" />
-          </p>
+    <footer
+      id="about"
+      aria-labelledby="footer-title"
+      className="px-4 pb-16 pt-8 sm:px-6 md:pt-10"
+    >
+      <div className="mx-auto w-full max-w-6xl rounded-[2rem] border border-border/70 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(246,248,252,0.8))] p-6 shadow-[0_30px_70px_-50px_rgba(15,23,42,0.8)] backdrop-blur-md dark:bg-[linear-gradient(160deg,rgba(24,24,27,0.93),rgba(12,12,14,0.92))] sm:p-8 md:p-10">
+        <div className="flex flex-col gap-9 md:gap-11">
+          <h2 id="footer-title" className="sr-only">
+            About Monfly and additional navigation
+          </h2>
+          <TrialAlert />
+          <StayConnect />
+          <Separator />
+          <QuickActions />
+          <Separator />
+          <FooterNavigation />
+          <Separator />
+          <div className="flex items-center justify-end">
+            <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.13em] text-muted-foreground">
+              Built by people around the world <Globe className="size-4" />
+            </p>
+          </div>
         </div>
       </div>
     </footer>

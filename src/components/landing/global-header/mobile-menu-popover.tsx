@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { Button } from "~/components/ui/button";
 import {
   NavigationMenu,
@@ -19,8 +20,12 @@ export function MobileMenuPopover() {
     <Popover>
       <PopoverTrigger
         render={
-          <Button className="group size-8 md:hidden" variant="ghost" size="icon">
-            {/* Hamburguesa */}
+          <Button
+            className="group size-8 rounded-full border border-border/70 bg-background/70 md:hidden"
+            variant="ghost"
+            size="icon"
+            aria-label="Open navigation menu"
+          >
             <svg
               className="pointer-events-none"
               width={16}
@@ -29,36 +34,42 @@ export function MobileMenuPopover() {
             >
               <path
                 d="M4 12L20 12"
-                className="origin-center -translate-y-[7px] transition-all duration-300 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
+                className="origin-center -translate-y-[7px] transition-transform duration-150 ease-out group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
               />
               <path
                 d="M4 12H20"
-                className="origin-center transition-all duration-300 group-aria-expanded:rotate-45"
+                className="origin-center transition-transform duration-150 ease-out group-aria-expanded:rotate-45"
               />
               <path
                 d="M4 12H20"
-                className="origin-center translate-y-[7px] transition-all duration-300 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
+                className="origin-center translate-y-[7px] transition-transform duration-150 ease-out group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
               />
             </svg>
           </Button>
         }
       />
-      <PopoverContent align="start" className="w-64 p-1 md:hidden">
-        <NavigationMenu className="max-w-none *:w-full">
-          <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
+      <PopoverContent
+        align="end"
+        className="mt-3 w-[min(19rem,calc(100vw-2rem))] rounded-2xl border border-border/70 bg-background/95 p-2 shadow-xl backdrop-blur-md md:hidden"
+      >
+        <NavigationMenu
+          className="max-w-none *:w-full"
+          aria-label="Mobile navigation"
+        >
+          <NavigationMenuList className="flex-col items-start gap-1">
             {navigationLinks.map((link) => (
               <NavigationMenuItem key={link.label} className="w-full">
                 {link.submenu ? (
                   <>
-                    <div className="text-muted-foreground px-2 py-1.5 text-xs font-medium">
+                    <div className="px-2 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                       {link.label}
                     </div>
-                    <ul>
+                    <ul className="space-y-1">
                       {link.items.map((item) => (
                         <li key={`${item.href}-${item.label}`}>
                           <NavigationMenuLink
-                            href={item.href}
-                            className="py-1.5"
+                            className="rounded-lg px-2.5 py-2 text-sm"
+                            render={<Link to={item.href} />}
                           >
                             {item.label}
                           </NavigationMenuLink>
@@ -67,7 +78,10 @@ export function MobileMenuPopover() {
                     </ul>
                   </>
                 ) : (
-                  <NavigationMenuLink href={link.href} className="py-1.5">
+                  <NavigationMenuLink
+                    className="rounded-lg px-2.5 py-2 text-sm"
+                    render={<Link to={link.href} />}
+                  >
                     {link.label}
                   </NavigationMenuLink>
                 )}

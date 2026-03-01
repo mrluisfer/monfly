@@ -1,22 +1,22 @@
 import { ReactNode } from "react";
-import Card from "~/components/card";
+import { cn } from "~/lib/utils";
 
 type PricingCardProps = {
   title: ReactNode;
   children: ReactNode;
+  className?: string;
 };
 
-export function PricingCard({ title, children }: PricingCardProps) {
+export function PricingCard({ title, children, className }: PricingCardProps) {
   return (
-    <Card
-      title={
-        <h3 className="text-[2.5rem] md:text-[3rem] font-bold flex items-center">
+    <article className={cn("relative h-full w-full", className)}>
+      <div className="pointer-events-none absolute inset-0 rounded-[1.7rem] bg-[linear-gradient(120deg,rgba(20,184,166,0.18),rgba(59,130,246,0.05),transparent)]" />
+      <div className="landing-glass-panel relative flex h-full flex-col rounded-[1.7rem] border border-border/70 p-6 md:p-8">
+        <h3 className="text-4xl font-semibold tracking-tight md:text-5xl">
           {title}
         </h3>
-      }
-      className="bg-gradient-to-b from-primary/20 via-white to-white mt-10 w-full md:w-auto dark:from-primary/20 dark:via-zinc-900 dark:to-zinc-950"
-    >
-      {children}
-    </Card>
+        <div className="mt-6 flex h-full flex-col">{children}</div>
+      </div>
+    </article>
   );
 }

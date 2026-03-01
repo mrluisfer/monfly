@@ -1,10 +1,12 @@
 import { BookOpenIcon, InfoIcon, LifeBuoyIcon } from "lucide-react";
 
+import { HeaderIconName } from "./navigation-links";
+
 export function HeaderMenuIcon({
   icon,
   label,
 }: {
-  icon: string;
+  icon: HeaderIconName;
   label: string;
 }) {
   if (icon === "BookOpenIcon")

@@ -45,41 +45,43 @@ export function StayConnect() {
         description: `Thank you ${emailUsername} for subscribing to our newsletter!`,
       });
       form.reset();
-    } catch (error) {
+    } catch {
       sileo.error({ title: "Failed to subscribe. Please try again." });
     }
   };
 
   return (
-    <div className="*:not-first:mt-2 flex flex-col md:flex-row items-start justify-between gap-4">
-      <Label htmlFor={id} className="flex flex-col items-start gap-2 text-lg">
-        Stay connected
-        <span className="text-sm text-muted-foreground">
-          Subscribe to our newsletter for the latest updates, resources, and
-          exclusive offers.
+    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <Label htmlFor={id} className="space-y-2 text-base md:max-w-md">
+        <span className="text-base font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+          Stay connected
+        </span>
+        <span className="block text-sm text-muted-foreground sm:text-base">
+          Subscribe for product updates, finance playbooks, and launch offers.
         </span>
       </Label>
+
       <Form {...form}>
         <form
-          className="flex items-start gap-2"
+          className="flex w-full flex-col gap-2 sm:max-w-xl sm:flex-row"
           onSubmit={form.handleSubmit(handleSubmit)}
         >
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="w-full">
                 <div className="relative">
                   <FormControl>
                     <Input
                       id={id}
-                      className="peer ps-9 bg-white w-full sm:w-[300px]"
-                      placeholder="Email"
+                      className="peer h-10 rounded-full border-border/70 bg-background/90 ps-9"
+                      placeholder="you@company.com"
                       type="email"
                       {...field}
                     />
                   </FormControl>
-                  <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+                  <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
                     <AtSignIcon size={16} aria-hidden="true" />
                   </div>
                   <FormDescription />
@@ -88,7 +90,9 @@ export function StayConnect() {
               </FormItem>
             )}
           />
-          <Button type="submit">Subscribe</Button>
+          <Button type="submit" className="h-10 rounded-full px-5">
+            Subscribe
+          </Button>
         </form>
       </Form>
     </div>

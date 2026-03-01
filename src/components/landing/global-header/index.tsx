@@ -1,20 +1,20 @@
-// components/layout/global-header.tsx
-
 import { DesktopNavMenu } from "./desktop-nav-menu";
 import { HeaderActions } from "./header-actions";
 import { HeaderLogo } from "./header-logo";
+import { MobileMenuPopover } from "./mobile-menu-popover";
 
 export function GlobalHeader() {
   return (
-    <header className="border-b px-4 md:px-6">
-      <div className="flex h-16 items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-6">
-            <HeaderLogo />
-          </div>
+    <header className="sticky top-3 z-50 px-4 sm:px-6">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 rounded-2xl border border-white/70 bg-white/80 px-3 shadow-[0_14px_40px_-28px_rgba(15,23,42,0.45)] backdrop-blur-md dark:border-white/10 dark:bg-zinc-900/75 dark:shadow-[0_18px_48px_-30px_rgba(8,47,73,0.85)]">
+        <div className="flex items-center">
+          <HeaderLogo />
         </div>
         <DesktopNavMenu />
-        <HeaderActions />
+        <div className="flex items-center gap-2">
+          <HeaderActions />
+          <MobileMenuPopover />
+        </div>
       </div>
     </header>
   );
