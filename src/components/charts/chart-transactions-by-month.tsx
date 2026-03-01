@@ -153,7 +153,7 @@ export default function ChartTransactionsByMonth() {
                   color: "hsl(221, 83%, 53%)", // Blue
                 },
               }}
-              className="min-w-0 w-full h-[240px] sm:h-[280px] md:h-80"
+              className="min-w-0 w-full h-60 sm:h-70 md:h-80"
             >
               <BarChart
                 data={chartData}
