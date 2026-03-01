@@ -15,7 +15,7 @@ export function BalanceActions() {
   const navigate = useNavigate();
 
   return (
-    <div className="mt-5 grid grid-cols-2 items-start gap-3 sm:flex sm:justify-center sm:gap-4">
+    <div className="mt-5 grid grid-cols-2 items-start gap-4 sm:flex sm:justify-center sm:gap-4">
       <ActionButton
         icon={<BarChart3Icon />}
         label="Reports"

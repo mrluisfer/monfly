@@ -31,25 +31,20 @@ export function ActionButton({
 
   return (
     <div
-      className={cn(
-        "group grid cursor-pointer justify-items-center gap-1.5",
-        widthClassName
-      )}
+      className={cn("group grid cursor-pointer justify-items-center gap-1.5")}
     >
       <Button
-        size={"icon-lg"}
-        className="rounded-full"
+        size={"lg"}
         onClick={onClick}
         variant={variant}
         id={id}
         name={label}
         aria-labelledby={labelId}
+        className={widthClassName}
       >
         {icon}
-      </Button>
-      <span id={labelId} className={ACTION_LABEL_CLASS} title={label}>
         {label}
-      </span>
+      </Button>
     </div>
   );
 }
