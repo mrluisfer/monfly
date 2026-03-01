@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import {
   ContextMenu,
   ContextMenuContent,
+  ContextMenuGroup,
   ContextMenuItem,
   ContextMenuLabel,
   ContextMenuSeparator,
@@ -235,7 +236,9 @@ function TransactionRow({
         />
 
         <ContextMenuContent className="w-56">
-          <ContextMenuLabel>Actions for transaction</ContextMenuLabel>
+          <ContextMenuGroup>
+            <ContextMenuLabel>Actions for transaction</ContextMenuLabel>
+          </ContextMenuGroup>
           <ContextMenuSeparator />
           <ContextMenuItem
             className="cursor-pointer"
