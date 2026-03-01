@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -44,12 +45,38 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  render,
+  nativeButton,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  const computedNativeButton =
+    nativeButton ??
+    (React.isValidElement(render)
+      ? (() => {
+          if (typeof render.type === "string") {
+            return render.type === "button";
+          }
+
+          const renderProps = render.props as {
+            href?: string;
+            to?: string;
+          };
+
+          // Links rendered through Base UI button should opt out of native button behavior.
+          if (renderProps.href || renderProps.to) {
+            return false;
+          }
+
+          return true;
+        })()
+      : true);
+
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      nativeButton={computedNativeButton}
+      render={render}
       {...props}
     />
   );

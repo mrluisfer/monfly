@@ -21,7 +21,7 @@ export function GoToHomeButton({
       <Button
         variant="default"
         className="group"
-        size="default"
+        size="lg"
         render={
           <Link to={url || "/"}>
             <ArrowLeft className="-ms-1" size={16} aria-hidden="true" />

@@ -45,6 +45,7 @@ export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
       </div>
       <div className="mt-6 space-y-3 pt-2 md:mt-auto">
         <Button
+          size="lg"
           className="h-10 w-full rounded-full"
           render={
             <Link to="/signup" className="inline-flex items-center gap-2">

@@ -1,32 +1,27 @@
 import { FcGoogle } from "react-icons/fc";
 
 import { Button } from "../ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-export function ExternalLogin() {
+export function ExternalLogin({
+  label = "Continue with Google",
+}: {
+  label?: string;
+}) {
   return (
-    <div className="flex flex-col space-y-4 w-full">
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <div>
-              <Button
-                variant="outline"
-                type="button"
-                className="w-full"
-                size="lg"
-                disabled
-              >
-                <FcGoogle />
-                Log in with Google
-              </Button>
-            </div>
-          }
-        />
-        <TooltipContent>
-          <p className="text-sm">This feature is coming soon!</p>
-        </TooltipContent>
-      </Tooltip>
+    <div className="flex w-full flex-col space-y-2">
+      <Button
+        variant="outline"
+        type="button"
+        className="h-11 w-full"
+        size="lg"
+        disabled
+      >
+        <FcGoogle />
+        {label}
+      </Button>
+      <p className="text-center text-xs text-muted-foreground">
+        This feature is coming soon.
+      </p>
     </div>
   );
 }

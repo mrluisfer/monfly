@@ -1,12 +1,34 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react";
 import { ControllerRenderProps } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
+
+const passwordRequirements = [
+  { regex: /.{8,}/, text: "At least 8 characters" },
+  { regex: /[0-9]/, text: "At least 1 number" },
+  { regex: /[a-z]/, text: "At least 1 lowercase letter" },
+  { regex: /[A-Z]/, text: "At least 1 uppercase letter" },
+];
+
+const getStrengthColor = (score: number) => {
+  if (score === 0) return "bg-border";
+  if (score <= 1) return "bg-red-500";
+  if (score <= 2) return "bg-orange-500";
+  if (score === 3) return "bg-amber-500";
+  return "bg-emerald-500";
+};
+
+const getStrengthText = (score: number) => {
+  if (score === 0) return "Enter a password";
+  if (score <= 2) return "Weak password";
+  if (score === 3) return "Medium password";
+  return "Strong password";
+};
 
 export default function ComplexPasswordInput({
   field,
@@ -18,38 +40,15 @@ export default function ComplexPasswordInput({
 
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
-  const checkStrength = (pass: string) => {
-    const requirements = [
-      { regex: /.{8,}/, text: "At least 8 characters" },
-      { regex: /[0-9]/, text: "At least 1 number" },
-      { regex: /[a-z]/, text: "At least 1 lowercase letter" },
-      { regex: /[A-Z]/, text: "At least 1 uppercase letter" },
-    ];
-
-    return requirements.map((req) => ({
-      met: req.regex.test(pass),
-      text: req.text,
-    }));
-  };
-
-  const strength = checkStrength(field.value || "");
-
+  const strength = useMemo(
+    () =>
+      passwordRequirements.map((req) => ({
+        met: req.regex.test(field.value || ""),
+        text: req.text,
+      })),
+    [field.value]
+  );
   const strengthScore = strength.filter((req) => req.met).length;
-
-  const getStrengthColor = (score: number) => {
-    if (score === 0) return "bg-border";
-    if (score <= 1) return "bg-red-500";
-    if (score <= 2) return "bg-orange-500";
-    if (score === 3) return "bg-amber-500";
-    return "bg-emerald-500";
-  };
-
-  const getStrengthText = (score: number) => {
-    if (score === 0) return "Enter a password";
-    if (score <= 2) return "Weak password";
-    if (score === 3) return "Medium password";
-    return "Strong password";
-  };
 
   return (
     <FormItem>
@@ -61,9 +60,10 @@ export default function ComplexPasswordInput({
           <div className="relative">
             <Input
               id={id}
-              className="pe-9"
+              className="h-11 pe-9"
               placeholder="Enter your password..."
               type={isVisible ? "text" : "password"}
+              autoComplete="new-password"
               aria-describedby={`${id}-description`}
               {...field}
             />

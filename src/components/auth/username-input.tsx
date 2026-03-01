@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { type ChangeEvent, useId } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
@@ -14,26 +14,29 @@ export default function UsernameInput({
 }) {
   const id = useId();
   const maxLength = 25;
-  const { characterCount, maxLength: limit } = useCharacterLimit({
+  const { characterCount, handleChange, maxLength: limit } = useCharacterLimit({
     maxLength,
-    value: field.value,
+    value: field.value ?? "",
     onChange: field.onChange,
   });
 
   return (
     <FormItem>
       <div className="*:not-first:mt-2">
-        <FormLabel htmlFor={id}>Username</FormLabel>
+        <FormLabel htmlFor={id}>Full name</FormLabel>
         <FormControl>
           <div className="relative">
             <Input
               id={id}
-              className="peer pe-14"
+              className="peer h-11 pe-14"
               type="text"
               maxLength={maxLength}
+              autoComplete="name"
               aria-describedby={`${id}-description`}
-              placeholder="Enter your username..."
+              placeholder="Enter your full name..."
               {...field}
+              value={field.value ?? ""}
+              onChange={handleChange}
             />
             <div
               id={`${id}-description`}
@@ -53,22 +56,17 @@ export default function UsernameInput({
 function useCharacterLimit(arg0: {
   maxLength: number;
   value: string;
-  onChange: (...event: any[]) => void;
-}): {
-  value: any;
-  characterCount: any;
-  handleChange: any;
-  maxLength: any;
-} {
+  onChange: (value: string) => void;
+}) {
   const { maxLength, value, onChange } = arg0;
 
   const characterCount = value.length;
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value.length <= maxLength) {
       onChange(event.target.value);
     }
   };
 
-  return { value, characterCount, handleChange, maxLength };
+  return { characterCount, handleChange, maxLength };
 }

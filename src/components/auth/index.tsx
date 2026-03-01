@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import type { UseFormReturn } from "react-hook-form";
-import type { z } from "zod";
+import { cn } from "~/lib/utils";
 
 import Card from "../card";
 import { Button } from "../ui/button";
@@ -18,35 +18,48 @@ export enum authActions {
 
 type ActionText = (typeof authActions)[keyof typeof authActions];
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-type AuthProps<T extends z.ZodType<any, any, any>> = {
-  actionText: ActionText;
-  onSubmit: (data: z.infer<T>) => void;
-  status: "pending" | "idle" | "success" | "error";
-  afterSubmit?: ReactNode;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  form: UseFormReturn<any>;
-  withCard?: boolean;
+type BaseAuthValues = {
+  email: string;
+  password: string;
+  name?: string;
 };
 
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export function Auth<T extends z.ZodType<any, any, any>>({
+type AuthProps<TFormValues extends BaseAuthValues> = {
+  actionText: ActionText;
+  onSubmit: (data: TFormValues) => void | Promise<void>;
+  status: "pending" | "idle" | "success" | "error";
+  afterSubmit?: ReactNode;
+  form: UseFormReturn<TFormValues>;
+  withCard?: boolean;
+  showActionTitle?: boolean;
+  className?: string;
+};
+
+export function Auth<TFormValues extends BaseAuthValues>({
   actionText,
   onSubmit,
   status,
   afterSubmit,
   form,
   withCard = true,
-}: AuthProps<T>) {
-  const Element = withCard ? Card : "div";
+  showActionTitle = true,
+  className,
+}: AuthProps<TFormValues>) {
+  const shouldShowSignupFields = actionText === authActions.signup;
 
-  return (
-    <Element>
-      <h1 className="text-2xl font-bold mb-4 w-full text-center">
-        {actionText}
-      </h1>
+  const formBody = (
+    <>
+      {showActionTitle ? (
+        <h1 className="mb-4 w-full text-center text-2xl font-bold">
+          {actionText}
+        </h1>
+      ) : null}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4"
+          noValidate
+        >
           <FormField
             control={form.control}
             name="email"
@@ -57,7 +70,7 @@ export function Auth<T extends z.ZodType<any, any, any>>({
             control={form.control}
             name="password"
             render={({ field }) =>
-              actionText === authActions.signup ? (
+              shouldShowSignupFields ? (
                 <ComplexPasswordInput field={field} />
               ) : (
                 <SimplePasswordInput field={field} />
@@ -65,7 +78,7 @@ export function Auth<T extends z.ZodType<any, any, any>>({
             }
           />
 
-          {actionText === authActions.signup && (
+          {shouldShowSignupFields && (
             <FormField
               control={form.control}
               name="name"
@@ -74,34 +87,33 @@ export function Auth<T extends z.ZodType<any, any, any>>({
           )}
           <Button
             type="submit"
-            className="w-full font-black uppercase"
+            className="h-11 w-full font-semibold uppercase tracking-[0.08em]"
             disabled={status === "pending"}
             size="lg"
             variant="default"
           >
-            {status === "pending" ? "..." : actionText}
+            {status === "pending" ? "Please wait..." : actionText}
           </Button>
           {afterSubmit ? afterSubmit : null}
-          <div className="flex justify-center">
-            <div className="text-xs mt-4 flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                render={
-                  <Link
-                    to={actionText === authActions.login ? "/signup" : "/login"}
-                    type="button"
-                  >
-                    {actionText === authActions.login
-                      ? "Don't have an account?"
-                      : "Already have an account?"}
-                  </Link>
-                }
-              />
-            </div>
-          </div>
+          <p className="pt-2 text-center text-sm text-muted-foreground">
+            {actionText === authActions.login
+              ? "Don't have an account?"
+              : "Already have an account?"}
+            <Link
+              to={actionText === authActions.login ? "/signup" : "/login"}
+              className="ml-1 font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {actionText === authActions.login ? "Sign up" : "Log in"}
+            </Link>
+          </p>
         </form>
       </Form>
-    </Element>
+    </>
   );
+
+  if (withCard) {
+    return <Card className={cn("h-fit", className)}>{formBody}</Card>;
+  }
+
+  return <div className={className}>{formBody}</div>;
 }

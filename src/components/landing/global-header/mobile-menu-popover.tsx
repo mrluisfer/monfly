@@ -23,7 +23,7 @@ export function MobileMenuPopover() {
           <Button
             className="group size-8 rounded-full border border-border/70 bg-background/70 md:hidden"
             variant="ghost"
-            size="icon"
+            size="lg"
             aria-label="Open navigation menu"
           >
             <svg

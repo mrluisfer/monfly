@@ -16,6 +16,7 @@ export const TrialAlert = () => {
           </span>
         </div>
         <Button
+          size="lg"
           className="h-10 rounded-full px-5"
           render={
             <Link to="/signup" className="inline-flex items-center gap-2">

@@ -90,7 +90,7 @@ export function StayConnect() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="h-10 rounded-full px-5">
+          <Button type="submit" size="lg" className="h-10 rounded-full px-5">
             Subscribe
           </Button>
         </form>

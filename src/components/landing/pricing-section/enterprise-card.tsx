@@ -44,6 +44,7 @@ export function EnterpriseCard() {
       </div>
       <Button
         variant="outline"
+        size="lg"
         className="mt-6 h-10 w-full rounded-full border-border/70 md:mt-auto"
         render={
           <Link to="/signup" className="inline-flex items-center gap-2">

@@ -27,9 +27,10 @@ export function SimplePasswordInput({
           <div className="relative">
             <Input
               id={id}
-              className="pe-9"
+              className="h-11 pe-9"
               placeholder="Enter your password..."
               type={isVisible ? "text" : "password"}
+              autoComplete="current-password"
               {...field}
             />
             <button

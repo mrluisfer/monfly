@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 
 import {
   FormControl,
-  FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
@@ -27,9 +26,12 @@ export default function EmailInput({
           <div className="relative">
             <Input
               id={id}
-              className="peer pe-9"
-              placeholder="jhondoe@gmail.com"
+              className="peer h-11 pe-9"
+              placeholder="you@example.com"
               type="email"
+              autoComplete="email"
+              inputMode="email"
+              spellCheck={false}
               {...field}
             />
             <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 peer-disabled:opacity-50">
@@ -37,9 +39,6 @@ export default function EmailInput({
             </div>
           </div>
         </FormControl>
-        <FormDescription>
-          This is your email address. Be sure to use a valid email.
-        </FormDescription>
         <FormMessage />
       </div>
     </FormItem>

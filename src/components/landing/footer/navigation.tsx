@@ -20,6 +20,7 @@ export const FooterNavigation = () => {
             {link.href ? (
               <Button
                 variant="link"
+                size="lg"
                 className="h-auto justify-start px-0 py-0 text-left font-semibold text-foreground"
                 render={<Link to={link.href}>{link.label}</Link>}
               />
@@ -33,7 +34,7 @@ export const FooterNavigation = () => {
                   <li key={item.label}>
                     <Button
                       variant="link"
-                      size="sm"
+                      size="lg"
                       className="h-auto justify-start px-0 py-0 text-xs"
                       render={<Link to={item.href}>{item.label}</Link>}
                     />
