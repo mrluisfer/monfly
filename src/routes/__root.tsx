@@ -30,8 +30,11 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#18181b" },
+      { name: "theme-color", content: "#000000" },
       { name: "color-scheme", content: "light dark" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black" },
       {
         name: "description",
         content:
@@ -102,7 +105,7 @@ export const Route = createRootRoute({
       },
       { rel: "icon", href: "/codium.svg" },
       { rel: "mask-icon", href: "/safari-pinned-tab.svg", color: "#5bbad5" }, // optional
-      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
+      { rel: "manifest", href: "/site.webmanifest", color: "#000000" },
     ],
   }),
   errorComponent: (props) => {
