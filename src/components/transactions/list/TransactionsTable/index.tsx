@@ -242,7 +242,7 @@ function DataTableContent({
 }) {
   return (
     <div className="rounded-md border">
-      <Table className="min-w-[760px]">
+      <Table className="min-w-190">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
