@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
+import { LogOutIcon, MenuIcon } from "lucide-react";
+import { useState } from "react";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useIsMobile } from "~/hooks/use-mobile";
-import { LogOutIcon, MenuIcon } from "lucide-react";
 
 import Logo from "../../assets/logo.svg";
 import UserDropdown from "../home/user-dropdown";
@@ -66,27 +66,28 @@ export const Header = () => {
           <SpendingAlertBadge
             compact
             isActive={isDesktopBadgeActive}
-            className="max-w-[180px]"
+            className="max-w-45"
           />
           <OnlineStatusBadge
             compact
             variant="outline"
             isActive={isDesktopBadgeActive}
-            className="max-w-[120px]"
+            className="max-w-30"
           />
           <TimezoneBadge
             compact
             variant="outline"
             showTimezone={false}
             isActive={isDesktopBadgeActive}
-            className="max-w-[120px]"
+            className="max-w-30"
           />
           <SystemStatusBadge
             compact
             variant="outline"
             isActive={isDesktopBadgeActive}
-            className="max-w-[150px]"
+            className="max-w-37.5"
           />
+          <UserDropdown />
         </div>
 
         {/* Mobile Menu Trigger */}

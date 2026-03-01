@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { SignOutDialog } from "~/components/sidebar/sign-out-dialog";
@@ -23,8 +23,10 @@ import ProfileSettings from "./profile-settings";
 export default function UserDropdown() {
   const userEmail = useRouteUser();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [signOutDialogOpen, setSignOutDialogOpen] = useState(false);
-  const [profileSettingsOpen, setProfileSettingsOpen] = useState(false);
+  const [activeDialog, setActiveDialog] = useState<
+    "profile-settings" | "sign-out" | null
+  >(null);
+  const pendingActionRef = useRef<"profile-settings" | "sign-out" | null>(null);
 
   const { data, isPending, error } = useQuery<ApiResponse<User | null>>({
     queryKey: [queryDictionary.user, userEmail],
@@ -37,13 +39,21 @@ export default function UserDropdown() {
   });
 
   const openMenuActionDialog = (action: "profile-settings" | "sign-out") => {
+    pendingActionRef.current = action;
     setDropdownOpen(false);
-    if (action === "profile-settings") {
-      setProfileSettingsOpen(true);
-      return;
-    }
-    setSignOutDialogOpen(true);
   };
+
+  useEffect(() => {
+    if (dropdownOpen || !pendingActionRef.current) return;
+
+    // Defer dialog mount until after dropdown teardown to avoid portal race conditions.
+    const timer = window.setTimeout(() => {
+      setActiveDialog(pendingActionRef.current);
+      pendingActionRef.current = null;
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [dropdownOpen]);
 
   // Get user data safely
   const user = data?.data;
@@ -81,7 +91,9 @@ export default function UserDropdown() {
           }
         />
         <DropdownMenuContent>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          </DropdownMenuGroup>
           <DropdownMenuGroup>
             <DropdownMenuItem
               onSelect={() => {
@@ -106,13 +118,17 @@ export default function UserDropdown() {
       </DropdownMenu>
 
       <SignOutDialog
-        open={signOutDialogOpen}
-        onOpenChange={setSignOutDialogOpen}
+        open={activeDialog === "sign-out"}
+        onOpenChange={(open) => {
+          if (!open) setActiveDialog(null);
+        }}
       />
 
       <ProfileSettings
-        open={profileSettingsOpen}
-        onOpenChange={setProfileSettingsOpen}
+        open={activeDialog === "profile-settings"}
+        onOpenChange={(open) => {
+          if (!open) setActiveDialog(null);
+        }}
       />
     </>
   );
