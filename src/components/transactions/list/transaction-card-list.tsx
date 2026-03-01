@@ -180,7 +180,7 @@ function TransactionRow({
               ease: "easeOut",
             }}
             className={cn(
-              "group flex items-center gap-3 rounded-2xl px-3 py-3",
+              "group flex items-center gap-3 rounded-2xl px-3 py-3 select-none",
               "bg-background/60 hover:bg-muted/50",
               "transition-colors duration-200",
               "active:scale-[0.98] active:transition-transform active:duration-100"
