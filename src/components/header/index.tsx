@@ -62,11 +62,31 @@ export const Header = () => {
         </div>
 
         {/* Desktop Actions */}
-        <div className="hidden md:flex justify-end items-center gap-2 lg:gap-3 flex-wrap">
-          <SpendingAlertBadge isActive={isDesktopBadgeActive} />
-          <OnlineStatusBadge isActive={isDesktopBadgeActive} />
-          <TimezoneBadge isActive={isDesktopBadgeActive} />
-          <SystemStatusBadge isActive={isDesktopBadgeActive} />
+        <div className="hidden md:flex items-center justify-end gap-2 lg:gap-2.5 flex-wrap">
+          <SpendingAlertBadge
+            compact
+            isActive={isDesktopBadgeActive}
+            className="max-w-[180px]"
+          />
+          <OnlineStatusBadge
+            compact
+            variant="outline"
+            isActive={isDesktopBadgeActive}
+            className="max-w-[120px]"
+          />
+          <TimezoneBadge
+            compact
+            variant="outline"
+            showTimezone={false}
+            isActive={isDesktopBadgeActive}
+            className="max-w-[120px]"
+          />
+          <SystemStatusBadge
+            compact
+            variant="outline"
+            isActive={isDesktopBadgeActive}
+            className="max-w-[150px]"
+          />
         </div>
 
         {/* Mobile Menu Trigger */}
@@ -144,27 +164,30 @@ export const Header = () => {
                       <h3 className="text-sm font-medium text-muted-foreground">
                         System Status
                       </h3>
-                      <div className="flex w-full flex-col items-stretch gap-2">
+                      <div className="flex w-full flex-col items-stretch gap-2.5">
                         <OnlineStatusBadge
-                          compact
                           fullWidth
+                          variant="outline"
                           isActive={isMobileBadgeActive}
+                          className="h-10 rounded-xl"
                         />
                         <SystemStatusBadge
-                          compact
                           fullWidth
+                          variant="outline"
                           isActive={isMobileBadgeActive}
+                          className="h-10 rounded-xl"
                         />
                         <TimezoneBadge
-                          compact
                           fullWidth
+                          variant="outline"
                           isActive={isMobileBadgeActive}
+                          className="h-10 rounded-xl"
                         />
                         <SpendingAlertBadge
-                          compact
                           fullWidth
-                          showPercentage={false}
+                          showPercentage
                           isActive={isMobileBadgeActive}
+                          className="h-10 rounded-xl"
                         />
                       </div>
                     </div>

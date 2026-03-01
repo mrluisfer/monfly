@@ -22,7 +22,7 @@ interface TimezoneBadgeProps {
 }
 
 export const TimezoneBadge = ({
-  variant = "secondary",
+  variant = "outline",
   showIcon = true,
   showTimezone = true,
   animate = true,
@@ -54,9 +54,10 @@ export const TimezoneBadge = ({
       <Badge
         variant={variant}
         className={cn(
-          "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5",
-          fullWidth && "w-full justify-between",
-          compact && "px-2.5 py-1",
+          "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px]",
+          fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
+          compact && "h-8 px-2.5 py-1",
+          !compact && !fullWidth && "h-9",
           className
         )}
       >
@@ -84,9 +85,10 @@ export const TimezoneBadge = ({
             <Badge
               variant={variant}
               className={cn(
-                "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5 select-none transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
-                fullWidth && "w-full justify-between",
-                compact && "px-2.5 py-1 text-[11px]",
+                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
+                fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
+                compact && "h-8 px-2.5 py-1",
+                !compact && !fullWidth && "h-9",
                 className
               )}
             >
@@ -94,6 +96,7 @@ export const TimezoneBadge = ({
                 <ZapIcon
                   className={cn(
                     "h-3.5 w-3.5 shrink-0 text-primary",
+                    fullWidth && "h-4 w-4",
                     animate ? "animate-pulse" : "opacity-60"
                   )}
                   aria-hidden="true"
@@ -104,7 +107,7 @@ export const TimezoneBadge = ({
                 className={cn(
                   "inline-flex min-w-0 flex-col items-start leading-none",
                   compact && "flex-row items-center gap-1.5",
-                  fullWidth && "w-full"
+                  fullWidth && "flex-1"
                 )}
               >
                 <span className="font-mono text-xs font-semibold tracking-tight tabular-nums">

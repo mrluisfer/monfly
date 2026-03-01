@@ -53,7 +53,7 @@ const statusConfig = {
     label: "Budget Safe",
     compactLabel: "Safe",
     color: "bg-emerald-500",
-    variant: "secondary" as const,
+    variant: "outline" as const,
     icon: CheckCircle2,
     iconColor: "text-foreground/80",
     description: "Your spending is well within budget.",
@@ -62,7 +62,7 @@ const statusConfig = {
     label: "Budget Moderate",
     compactLabel: "Moderate",
     color: "bg-blue-500",
-    variant: "secondary" as const,
+    variant: "outline" as const,
     icon: TrendingUp,
     iconColor: "text-blue-500",
     description: "You're using a moderate amount of your budget.",
@@ -71,7 +71,7 @@ const statusConfig = {
     label: "Budget Warning",
     compactLabel: "Warning",
     color: "bg-amber-500",
-    variant: "destructive" as const,
+    variant: "outline" as const,
     icon: AlertTriangle,
     iconColor: "text-amber-500",
     description: "You're approaching your budget limit!",
@@ -80,7 +80,7 @@ const statusConfig = {
     label: "Budget Exceeded",
     compactLabel: "Exceeded",
     color: "bg-rose-500",
-    variant: "destructive" as const,
+    variant: "outline" as const,
     icon: AlertCircle,
     iconColor: "text-rose-500",
     description: "You have exceeded your budget limit!",
@@ -89,7 +89,7 @@ const statusConfig = {
     label: "Zero Balance",
     compactLabel: "Zero",
     color: "bg-zinc-500",
-    variant: "secondary" as const,
+    variant: "outline" as const,
     icon: AlertTriangle,
     iconColor: "text-zinc-500",
     description: "Your balance is zero or negative.",
@@ -257,9 +257,10 @@ export function SpendingAlertBadge({
             <Badge
               variant={config.variant}
               className={cn(
-                "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5 select-none transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
-                fullWidth && "w-full justify-between",
-                compact && "px-2.5 py-1 text-[11px]",
+                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
+                fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
+                compact && "h-8 px-2.5 py-1",
+                !compact && !fullWidth && "h-9",
                 className
               )}
               aria-live="polite"
@@ -285,6 +286,7 @@ export function SpendingAlertBadge({
                 <Icon
                   className={cn(
                     "h-3.5 w-3.5 shrink-0",
+                    fullWidth && "h-4 w-4",
                     shouldAnimateIcon && "animate-spin",
                     config.iconColor
                   )}
@@ -292,18 +294,13 @@ export function SpendingAlertBadge({
                 />
               )}
 
-              <span
-                className={cn(
-                  "inline-flex min-w-0 flex-1 items-center gap-2",
-                  fullWidth && "justify-between"
-                )}
-              >
+              <span className="inline-flex min-w-0 flex-1 items-center gap-2">
                 <span className="truncate text-xs font-medium">
                   {compact ? config.compactLabel : config.label}
                 </span>
 
                 {showPercentage && canShowDetails && (
-                  <span className="shrink-0 font-mono text-[11px] tabular-nums">
+                  <span className="shrink-0 font-mono text-xs tabular-nums">
                     {percentLabel}
                   </span>
                 )}

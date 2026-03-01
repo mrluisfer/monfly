@@ -77,7 +77,7 @@ export function SystemStatusBadge({
   compact = false,
   fullWidth = false,
   isActive = true,
-  variant = "secondary",
+  variant = "outline",
   className = "",
 }: SystemStatusBadgeProps) {
   if (!isActive) {
@@ -95,9 +95,10 @@ export function SystemStatusBadge({
             <Badge
               variant={variant}
               className={cn(
-                "inline-flex max-w-full min-w-0 items-center gap-2 px-3 py-1.5 select-none transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none motion-reduce:hover:scale-100",
-                fullWidth && "w-full justify-between",
-                compact && "px-2.5 py-1 text-[11px]",
+                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
+                fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
+                compact && "h-8 px-2.5 py-1",
+                !compact && !fullWidth && "h-9",
                 className
               )}
             >
@@ -120,15 +121,18 @@ export function SystemStatusBadge({
 
               {showIcon && (
                 <Icon
-                  className="h-3.5 w-3.5 shrink-0 opacity-75"
+                  className={cn(
+                    "h-3.5 w-3.5 shrink-0 opacity-75",
+                    fullWidth && "h-4 w-4"
+                  )}
                   aria-hidden="true"
                 />
               )}
 
               <span
                 className={cn(
-                  "truncate text-xs font-medium",
-                  fullWidth && "max-w-[80%]"
+                  "min-w-0 truncate text-xs font-medium",
+                  fullWidth && "flex-1"
                 )}
               >
                 {compact ? config.shortLabel : config.label}
