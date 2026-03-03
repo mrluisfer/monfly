@@ -3,6 +3,8 @@ import { useDarkMode } from "~/hooks/use-dark-mode";
 import { cn } from "~/lib/utils";
 import { MoonIcon, SunIcon } from "lucide-react";
 
+import { useAppHaptics } from "@/hooks/use-app-haptics";
+
 import { Toggle } from "../ui/toggle";
 
 type ToggleDarkModeProps = Omit<
@@ -16,6 +18,7 @@ export default function ToggleDarkMode({
   ...props
 }: ToggleDarkModeProps) {
   const { theme, setTheme } = useDarkMode();
+  const { selection } = useAppHaptics();
 
   return (
     <Toggle
@@ -26,7 +29,10 @@ export default function ToggleDarkMode({
         className
       )}
       pressed={theme === "dark"}
-      onPressedChange={(pressed) => setTheme(pressed ? "dark" : "light")}
+      onPressedChange={(pressed) => {
+        setTheme(pressed ? "dark" : "light");
+        selection();
+      }}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       {...props}
     >

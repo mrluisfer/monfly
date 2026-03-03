@@ -17,6 +17,7 @@ import { SonnerPositionProvider } from "~/context/sonner-position-provider";
 import { ActiveThemeProvider } from "~/context/theme-provider";
 import { useDarkMode } from "~/hooks/use-dark-mode";
 import { useFontDisplay } from "~/hooks/use-font-display";
+import { useGlobalHapticFeedback } from "~/hooks/use-global-haptic-feedback";
 import { useSonnerPosition } from "~/hooks/use-sonner-position";
 import { SileoToaster } from "~/lib/toaster";
 import appCss from "~/styles/globals.css?url";
@@ -195,6 +196,7 @@ function RootDocumentWithProviders({
 }: {
   children: React.ReactNode;
 }) {
+  useGlobalHapticFeedback();
   const { position } = useSonnerPosition();
   const { fontDisplay } = useFontDisplay();
   const { theme } = useDarkMode();

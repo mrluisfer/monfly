@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type FocusEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCategoryIconByName } from "~/constants/categories-icon";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
+import { useAppHaptics } from "~/hooks/use-app-haptics";
 import { useGetCategoriesByEmail } from "~/hooks/use-get-categories-by-email";
 import { useMutation } from "~/hooks/use-mutation";
 import { useRouteUser } from "~/hooks/use-route-user";
@@ -76,6 +77,7 @@ export function TransactionForm<FormValues extends FieldValues>({
   const userEmail = useRouteUser();
 
   const queryClient = useQueryClient();
+  const { warning } = useAppHaptics();
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
@@ -160,7 +162,9 @@ export function TransactionForm<FormValues extends FieldValues>({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, () => {
+          void warning();
+        })}
         className="scrollbar-custom [-webkit-overflow-scrolling:touch] max-h-[calc(100dvh-9rem)] space-y-4 overflow-y-auto overscroll-y-contain pb-[calc(env(safe-area-inset-bottom)+1rem)] pr-1 touch-pan-y sm:space-y-5 md:max-h-none md:overflow-visible md:pb-0 md:pr-0"
         autoComplete="off"
         aria-busy={isLoading}

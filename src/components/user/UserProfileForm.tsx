@@ -2,6 +2,7 @@ import { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
+import { useAppHaptics } from "~/hooks/use-app-haptics";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 import { userFormSchema } from "~/zod-schemas/user-schema";
 import { useForm } from "react-hook-form";
@@ -25,6 +26,7 @@ interface UserProfileFormProps {
 type FormValues = z.infer<typeof userFormSchema>;
 
 export function UserProfileForm({ userId, user }: UserProfileFormProps) {
+  const { warning } = useAppHaptics();
   const defaultTotalBalance = formatToTwoDecimals(
     user?.totalBalance ?? 0
   ).numberValue;
@@ -77,7 +79,9 @@ export function UserProfileForm({ userId, user }: UserProfileFormProps) {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, () => {
+          void warning();
+        })}
         className="space-y-6"
         noValidate
       >
