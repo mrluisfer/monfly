@@ -165,7 +165,7 @@ export function TransactionForm<FormValues extends FieldValues>({
         onSubmit={form.handleSubmit(onSubmit, () => {
           void warning();
         })}
-        className="scrollbar-custom [-webkit-overflow-scrolling:touch] max-h-[calc(100dvh-9rem)] space-y-4 overflow-y-auto overscroll-y-contain pb-[calc(env(safe-area-inset-bottom)+1rem)] pr-1 touch-pan-y sm:space-y-5 md:max-h-none md:overflow-visible md:pb-0 md:pr-0"
+        className="space-y-4 pb-[calc(env(safe-area-inset-bottom)+0.25rem)] sm:space-y-5 sm:pb-0"
         autoComplete="off"
         aria-busy={isLoading}
         onFocusCapture={handleMobileInputFocus}
@@ -505,7 +505,7 @@ export function TransactionForm<FormValues extends FieldValues>({
             </FormItem>
           )}
         />
-        <div className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky bottom-0 z-10 -mx-1 border-t px-1 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.25rem)] backdrop-blur md:static md:mx-0 md:border-0 md:bg-transparent md:px-0 md:pt-4 md:pb-0 md:backdrop-blur-none">
+        <div className="pt-2 sm:pt-4">
           <Button
             type="submit"
             className="h-12 w-full rounded-xl text-base font-medium shadow-lg transition-all duration-200 active:scale-[0.97] hover:shadow-xl sm:hover:scale-[1.02]"
