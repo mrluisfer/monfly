@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState, type FocusEvent } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCategoryIconByName } from "~/constants/categories-icon";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
@@ -68,7 +68,10 @@ export function TransactionForm<FormValues extends FieldValues>({
 }: TransactionFormProps<FormValues>) {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [categoryInputValue, setCategoryInputValue] = useState("");
+  const [keyboardInset, setKeyboardInset] = useState(0);
+  const focusScrollTimeoutRef = useRef<number | null>(null);
   const categoryComboboxId = useId();
+  const typeLabelId = useId();
   const { data: categories, isPending, error } = useGetCategoriesByEmail();
   const userEmail = useRouteUser();
 
@@ -83,12 +86,92 @@ export function TransactionForm<FormValues extends FieldValues>({
     },
   });
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const viewport = window.visualViewport;
+    if (!viewport) {
+      return;
+    }
+
+    const updateKeyboardInset = () => {
+      const nextInset = Math.max(
+        0,
+        window.innerHeight - viewport.height - viewport.offsetTop
+      );
+
+      setKeyboardInset((currentInset) =>
+        Math.abs(currentInset - nextInset) > 1 ? nextInset : currentInset
+      );
+    };
+
+    updateKeyboardInset();
+
+    viewport.addEventListener("resize", updateKeyboardInset);
+    viewport.addEventListener("scroll", updateKeyboardInset);
+
+    return () => {
+      viewport.removeEventListener("resize", updateKeyboardInset);
+      viewport.removeEventListener("scroll", updateKeyboardInset);
+    };
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (focusScrollTimeoutRef.current) {
+        window.clearTimeout(focusScrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleMobileInputFocus = (event: FocusEvent<HTMLFormElement>) => {
+    if (typeof window === "undefined" || window.innerWidth >= 768) {
+      return;
+    }
+
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) {
+      return;
+    }
+
+    if (!target.matches("input, textarea, [role='combobox']")) {
+      return;
+    }
+
+    if (focusScrollTimeoutRef.current) {
+      window.clearTimeout(focusScrollTimeoutRef.current);
+    }
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    focusScrollTimeoutRef.current = window.setTimeout(() => {
+      target.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "center",
+        inline: "nearest",
+      });
+    }, 140);
+  };
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 sm:space-y-5"
+        className="scrollbar-custom [-webkit-overflow-scrolling:touch] max-h-[calc(100dvh-9rem)] space-y-4 overflow-y-auto overscroll-y-contain pb-[calc(env(safe-area-inset-bottom)+1rem)] pr-1 touch-pan-y sm:space-y-5 md:max-h-none md:overflow-visible md:pb-0 md:pr-0"
         autoComplete="off"
+        aria-busy={isLoading}
+        onFocusCapture={handleMobileInputFocus}
+        style={
+          keyboardInset > 0
+            ? {
+                paddingBottom: `calc(${keyboardInset}px + env(safe-area-inset-bottom) + 1rem)`,
+              }
+            : undefined
+        }
       >
         {/* Amount + Type row */}
         <div className="flex flex-col gap-4 sm:flex-row sm:gap-3">
@@ -109,6 +192,8 @@ export function TransactionForm<FormValues extends FieldValues>({
                     <Input
                       id={transactionFormNames.amount}
                       type="number"
+                      inputMode="decimal"
+                      step="0.01"
                       placeholder="0.00"
                       className="h-11 pl-8 text-base font-medium sm:h-12 sm:text-lg"
                       {...field}
@@ -130,17 +215,26 @@ export function TransactionForm<FormValues extends FieldValues>({
               const currentType = (field.value as string) || "";
               return (
                 <FormItem className="space-y-2 sm:w-50">
-                  <FormLabel className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+                  <FormLabel
+                    id={typeLabelId}
+                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                  >
                     <SparklesIcon className="size-3.5 text-purple-600" />
                     Type
                   </FormLabel>
                   <FormControl>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div
+                      className="grid grid-cols-2 gap-2"
+                      role="radiogroup"
+                      aria-labelledby={typeLabelId}
+                    >
                       <button
                         type="button"
+                        role="radio"
+                        aria-checked={currentType === "income"}
                         onClick={() => field.onChange("income")}
                         className={cn(
-                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 sm:h-12",
+                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:h-12",
                           currentType === "income"
                             ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                             : "border-input bg-background text-muted-foreground hover:bg-muted/50"
@@ -151,9 +245,11 @@ export function TransactionForm<FormValues extends FieldValues>({
                       </button>
                       <button
                         type="button"
+                        role="radio"
+                        aria-checked={currentType === "expense"}
                         onClick={() => field.onChange("expense")}
                         className={cn(
-                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 sm:h-12",
+                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:h-12",
                           currentType === "expense"
                             ? "border-red-500/50 bg-red-500/10 text-red-600 dark:text-red-400"
                             : "border-input bg-background text-muted-foreground hover:bg-muted/50"
@@ -202,6 +298,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                       <PopoverTrigger
                         render={
                           <Button
+                            id={transactionFormNames.category}
                             variant="outline"
                             role="combobox"
                             aria-expanded={categoryOpen}
@@ -350,14 +447,19 @@ export function TransactionForm<FormValues extends FieldValues>({
                 <CalendarIcon className="size-3.5 text-indigo-600" />
                 Date
               </FormLabel>
-              {isPending && <div>Loading...</div>}
-              {error && <div>Error: {error?.message}</div>}
+              {isPending && (
+                <div role="status" aria-live="polite">
+                  Loading...
+                </div>
+              )}
+              {error && <div role="alert">Error: {error?.message}</div>}
               {categories && (
                 <Popover>
                   <PopoverTrigger
                     render={
                       <FormControl>
                         <Button
+                          id={transactionFormNames.date}
                           variant={"outline"}
                           className={cn(
                             "h-11 w-full justify-start pl-3 text-left text-sm font-normal sm:h-12 sm:text-base",
@@ -399,7 +501,7 @@ export function TransactionForm<FormValues extends FieldValues>({
             </FormItem>
           )}
         />
-        <div className="pt-2 sm:pt-4">
+        <div className="bg-background/95 supports-backdrop-filter:bg-background/80 sticky bottom-0 z-10 -mx-1 border-t px-1 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.25rem)] backdrop-blur md:static md:mx-0 md:border-0 md:bg-transparent md:px-0 md:pt-4 md:pb-0 md:backdrop-blur-none">
           <Button
             type="submit"
             className="h-12 w-full rounded-xl text-base font-medium shadow-lg transition-all duration-200 active:scale-[0.97] hover:shadow-xl sm:hover:scale-[1.02]"
