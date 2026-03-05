@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
-import { useDarkMode } from "~/hooks/use-dark-mode";
+import { useDarkMode } from "~/hooks/useDarkMode";
 
 const THEME_STORAGE_KEY = "active_theme";
 const DEFAULT_THEME = "default";

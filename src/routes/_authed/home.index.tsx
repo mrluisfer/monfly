@@ -3,11 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { BalanceActions } from "~/components/balance/BalanceActions";
 import TotalBalance from "~/components/balance/TotalBalance";
-import { DashboardMetrics } from "~/components/home/dashboard-metrics";
-import { WelcomeMessage } from "~/components/home/welcome-message";
+import { DashboardMetrics } from "~/components/home/DashboardMetrics";
+import { WelcomeMessage } from "~/components/home/WelcomeMessage";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
-import { useRouteUser } from "~/hooks/use-route-user";
+import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { queryDictionary } from "~/queries/dictionary";
@@ -20,13 +20,13 @@ import {
 } from "framer-motion";
 
 const IncomeExpenseChart = lazy(
-  () => import("~/components/charts/income-expense-chart")
+  () => import("~/components/charts/IncomeExpenseChart")
 );
 const ChartTransactionsByMonth = lazy(
-  () => import("~/components/charts/chart-transactions-by-month")
+  () => import("~/components/charts/ChartTransactionsByMonth")
 );
 const ChartTabs = lazy(() =>
-  import("~/components/home/chart-tabs").then((module) => ({
+  import("~/components/home/ChartTabs").then((module) => ({
     default: module.ChartTabs,
   }))
 );

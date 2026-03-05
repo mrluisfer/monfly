@@ -7,10 +7,10 @@ import {
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Auth, authActions } from "~/components/auth";
-import { ExternalLogin } from "~/components/auth/external-login";
+import { ExternalLogin } from "~/components/auth/ExternalLogin";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { useMutation } from "~/hooks/use-mutation";
+import { useMutation } from "~/hooks/useMutation";
 import { signupFn } from "~/utils/auth/signupfn";
 import { getUserSession } from "~/utils/user/get-user-session";
 import {

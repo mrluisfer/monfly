@@ -8,7 +8,7 @@ import {
 import { Auth, authActions } from "~/components/auth";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { useMutation } from "~/hooks/use-mutation";
+import { useMutation } from "~/hooks/useMutation";
 import { loginFn } from "~/utils/auth/loginfn";
 import { getUserSession } from "~/utils/user/get-user-session";
 import {

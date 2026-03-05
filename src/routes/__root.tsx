@@ -8,17 +8,17 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { DefaultCatchBoundary } from "~/components/default-catch-boundary.js";
-import { NotFound } from "~/components/not-found.js";
+import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
+import { NotFound } from "~/components/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { DarkModeProvider } from "~/context/dark-mode-provider";
 import { FontDisplayProvider } from "~/context/font-display-provider";
 import { SonnerPositionProvider } from "~/context/sonner-position-provider";
 import { ActiveThemeProvider } from "~/context/theme-provider";
-import { useDarkMode } from "~/hooks/use-dark-mode";
-import { useFontDisplay } from "~/hooks/use-font-display";
-import { useGlobalHapticFeedback } from "~/hooks/use-global-haptic-feedback";
-import { useSonnerPosition } from "~/hooks/use-sonner-position";
+import { useDarkMode } from "~/hooks/useDarkMode";
+import { useFontDisplay } from "~/hooks/useFontDisplay";
+import { useGlobalHapticFeedback } from "~/hooks/useGlobalHapticFeedback";
+import { useSonnerPosition } from "~/hooks/useSonnerPosition";
 import { SileoToaster } from "~/lib/toaster";
 import appCss from "~/styles/globals.css?url";
 import { seo } from "~/utils/seo.js";

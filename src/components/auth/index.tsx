@@ -1,16 +1,16 @@
 import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { useAppHaptics } from "~/hooks/use-app-haptics";
+import { useAppHaptics } from "~/hooks/useAppHaptics";
 import { cn } from "~/lib/utils";
 import type { UseFormReturn } from "react-hook-form";
 
-import Card from "../card";
+import Card from "../Card";
 import { Button } from "../ui/button";
 import { Form, FormField } from "../ui/form";
-import ComplexPasswordInput from "./complex-password-input";
-import EmailInput from "./email-input";
-import { SimplePasswordInput } from "./simple-password-input";
-import UsernameInput from "./username-input";
+import ComplexPasswordInput from "./ComplexPasswordInput";
+import EmailInput from "./EmailInput";
+import { SimplePasswordInput } from "./SimplePasswordInput";
+import UsernameInput from "./UsernameInput";
 
 export enum authActions {
   login = "Login",

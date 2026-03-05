@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
-import { useRouteUser } from "~/hooks/use-route-user";
+import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import { BadgeHelp, LogOut, Settings, User2 } from "lucide-react";
 
-import { SettingsDialog } from "../settings/settings-dialog";
+import { SettingsDialog } from "../settings/SettingsDialog";
 import {
   SidebarContent,
   SidebarFooter,
@@ -20,9 +20,9 @@ import {
   useSidebar,
 } from "../ui/sidebar";
 import { Skeleton } from "../ui/skeleton";
-import UserAvatar from "../user-avatar";
-import { SidebarItem } from "./sidebar-item";
-import { SignOutDialog } from "./sign-out-dialog";
+import UserAvatar from "../UserAvatar";
+import { SidebarItem } from "./SidebarItem";
+import { SignOutDialog } from "./SignOutDialog";
 
 const Sidebar = () => {
   const location = useLocation();

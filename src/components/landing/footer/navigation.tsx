@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "~/components/ui/button";
 
-import { HeaderLogo } from "../global-header/header-logo";
-import { navigationLinks } from "../global-header/navigation-links";
+import { HeaderLogo } from "../global-header/HeaderLogo";
+import { navigationLinks } from "../global-header/NavigationLinks";
 
 export const FooterNavigation = () => {
   return (

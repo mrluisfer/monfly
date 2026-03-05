@@ -1,10 +1,10 @@
 import { ReactNode } from "react";
-import { useDarkMode } from "~/hooks/use-dark-mode";
+import { useDarkMode } from "~/hooks/useDarkMode";
 
-import { AppleDark } from "./apple-dark";
-import { AppleLight } from "./apple-light";
-import { PayPal } from "./paypal";
-import { StripeLight } from "./stripe-light";
+import { AppleDark } from "./AppleDark";
+import { AppleLight } from "./AppleLight";
+import { PayPal } from "./Paypal";
+import { StripeLight } from "./StripeLight";
 
 type PartnerType =
   | {

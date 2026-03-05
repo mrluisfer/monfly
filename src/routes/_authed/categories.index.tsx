@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import AddCategory from "~/components/categories/add-category";
+import AddCategory from "~/components/categories/AddCategory";
 import { CategoriesList } from "~/components/categories/list";
-import { PageTitle } from "~/components/page-title";
+import { PageTitle } from "~/components/PageTitle";
 
 export const Route = createFileRoute("/_authed/categories/")({
   component: RouteComponent,

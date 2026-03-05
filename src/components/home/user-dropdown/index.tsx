@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { SignOutDialog } from "~/components/sidebar/sign-out-dialog";
+import { SignOutDialog } from "~/components/sidebar/SignOutDialog";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -12,13 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import UserAvatar from "~/components/user-avatar";
-import { useRouteUser } from "~/hooks/use-route-user";
+import UserAvatar from "~/components/UserAvatar";
+import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import type { ApiResponse } from "~/types/ApiResponse";
 
-import ProfileSettings from "./profile-settings";
+import ProfileSettings from "./ProfileSettings";
 
 export default function UserDropdown() {
   const userEmail = useRouteUser();

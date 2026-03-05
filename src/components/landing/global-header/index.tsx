@@ -1,6 +1,6 @@
-import { DesktopNavMenu } from "./desktop-nav-menu";
-import { HeaderActions } from "./header-actions";
-import { HeaderLogo } from "./header-logo";
+import { DesktopNavMenu } from "./DesktopNavMenu";
+import { HeaderActions } from "./HeaderActions";
+import { HeaderLogo } from "./HeaderLogo";
 
 export function GlobalHeader() {
   return (

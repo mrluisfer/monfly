@@ -1,17 +1,17 @@
 import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { PageTitle } from "~/components/page-title";
+import { PageTitle } from "~/components/PageTitle";
 import { Skeleton } from "~/components/ui/skeleton";
 import { transactionTypes } from "~/constants/transaction-types";
 
 const IncomeExpenseChart = lazy(
-  () => import("~/components/charts/income-expense-chart")
+  () => import("~/components/charts/IncomeExpenseChart")
 );
 const ChartTransactionsByMonth = lazy(
-  () => import("~/components/charts/chart-transactions-by-month")
+  () => import("~/components/charts/ChartTransactionsByMonth")
 );
 const ChartByCategoryRadar = lazy(
-  () => import("~/components/charts/chart-by-category-radar")
+  () => import("~/components/charts/ChartByCategoryRadar")
 );
 
 export const Route = createFileRoute("/_authed/reports/")({

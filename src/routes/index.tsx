@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Footer } from "~/components/landing/footer";
 import { GlobalHeader } from "~/components/landing/global-header";
-import { LandingHero } from "~/components/landing/hero/hero";
+import { LandingHero } from "~/components/landing/hero/Hero";
 import { PricingSection } from "~/components/landing/pricing-section";
-import { UserStatsSection } from "~/components/landing/user-stats";
+import { UserStatsSection } from "~/components/landing/UserStats";
 
 export const Route = createFileRoute("/")({
   head: () => ({

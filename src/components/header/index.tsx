@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
-import { useIsMobile } from "~/hooks/use-mobile";
+import { useIsMobile } from "~/hooks/useMobile";
 import { LogOutIcon, MenuIcon } from "lucide-react";
 
 import Logo from "../../assets/logo.svg";
 import UserDropdown from "../home/user-dropdown";
-import { SettingsDialog } from "../settings/settings-dialog";
-import ToggleDarkMode from "../settings/toggle-dark-mode";
-import { SignOutDialog } from "../sidebar/sign-out-dialog";
+import { SettingsDialog } from "../settings/SettingsDialog";
+import ToggleDarkMode from "../settings/ToggleDarkMode";
+import { SignOutDialog } from "../sidebar/SignOutDialog";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -17,10 +17,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "../ui/sheet";
-import { OnlineStatusBadge } from "./badges/online-status-badge";
-import { SpendingAlertBadge } from "./badges/spending-alert-badge";
-import { SystemStatusBadge } from "./badges/system-status";
-import { TimezoneBadge } from "./badges/timezone-badge";
+import { OnlineStatusBadge } from "./badges/OnlineStatusBadge";
+import { SpendingAlertBadge } from "./badges/SpendingAlertBadge";
+import { SystemStatusBadge } from "./badges/SystemStatus";
+import { TimezoneBadge } from "./badges/TimezoneBadge";
 import { HeaderNavigation } from "./HeaderNavigation";
 
 export const Header = () => {

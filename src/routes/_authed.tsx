@@ -1,5 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import Layout from "~/components/layout";
+import Layout from "~/components/Layout";
 import { getUserSession } from "~/utils/user/get-user-session";
 
 export const Route = createFileRoute("/_authed")({

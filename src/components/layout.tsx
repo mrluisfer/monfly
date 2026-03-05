@@ -2,8 +2,8 @@ import { ReactNode } from "react";
 
 import { Header } from "./header";
 import { HeaderNavigation } from "./header/HeaderNavigation";
-import { SettingsDialog } from "./settings/settings-dialog";
-import ToggleDarkMode from "./settings/toggle-dark-mode";
+import { SettingsDialog } from "./settings/SettingsDialog";
+import ToggleDarkMode from "./settings/ToggleDarkMode";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (

@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageTitle } from "~/components/page-title";
-import { AddTransactionDrawer } from "~/components/transactions/add-transaction-drawer";
+import { PageTitle } from "~/components/PageTitle";
+import { AddTransactionDrawer } from "~/components/transactions/AddTransactionDrawer";
 import TransactionsList from "~/components/transactions/list";
-import { useRouteUser } from "~/hooks/use-route-user";
+import { useRouteUser } from "~/hooks/useRouteUser";
 
 export const Route = createFileRoute("/_authed/transactions/")({
   component: RouteComponent,

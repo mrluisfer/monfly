@@ -24,7 +24,7 @@ import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
 import { getCategoryIconLabelByName } from "~/constants/categories-icon";
-import { useCategoriesList } from "~/hooks/use-categories-list";
+import { useCategoriesList } from "~/hooks/useCategoriesList";
 import { cn } from "~/lib/utils";
 import {
   CheckCheck,
@@ -36,7 +36,7 @@ import {
   X,
 } from "lucide-react";
 
-import CategoryItem from "./category-item";
+import CategoryItem from "./CategoryItem";
 
 type CategoryRecord = Category;
 

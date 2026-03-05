@@ -1,10 +1,10 @@
 import { Separator } from "~/components/ui/separator";
 import { Globe } from "lucide-react";
 
-import { FooterNavigation } from "./navigation";
-import { QuickActions } from "./quick-actions";
-import { StayConnect } from "./stay-connect";
-import { TrialAlert } from "./trial-alert";
+import { FooterNavigation } from "./Navigation";
+import { QuickActions } from "./QuickActions";
+import { StayConnect } from "./StayConnect";
+import { TrialAlert } from "./TrialAlert";
 
 export function Footer() {
   return (

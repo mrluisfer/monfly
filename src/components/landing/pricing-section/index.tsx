@@ -25,9 +25,9 @@ import {
 } from "lucide-react";
 
 import { DotPattern } from "../../magicui/dot-pattern";
-import { BillingCard } from "./billing-card";
-import { BillingLabel } from "./billing-label";
-import { EnterpriseCard } from "./enterprise-card";
+import { BillingCard } from "./BillingCard";
+import { BillingLabel } from "./BillingLabel";
+import { EnterpriseCard } from "./EnterpriseCard";
 
 type PlanId = "starter" | "pro" | "enterprise";
 
