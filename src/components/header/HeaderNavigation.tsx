@@ -1,5 +1,4 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { PyramidIcon } from "lucide-react";
 
 import {
   Breadcrumb,
@@ -8,6 +7,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "../ui/breadcrumb";
+import { Logo } from "./Logo";
 
 const breadcrumbList = [
   { title: "Home", url: "/" },
@@ -33,16 +33,9 @@ export function HeaderNavigation() {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList className="bg-background rounded-md border px-3 py-2 shadow-xs">
+      <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink
-            render={
-              <Link to="/home" className="text-primary">
-                <PyramidIcon size={16} aria-hidden="true" />
-                <span className="sr-only">Home</span>
-              </Link>
-            }
-          />
+          <BreadcrumbLink render={<Logo />} />
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
