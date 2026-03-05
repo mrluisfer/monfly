@@ -36,7 +36,7 @@ const TransactionItemActions = ({
   });
 
   return (
-    <div>
+    <div className="hidden md:inline-flex">
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
