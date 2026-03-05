@@ -21,7 +21,7 @@ export function MobileMenuPopover() {
       <PopoverTrigger
         render={
           <Button
-            className="group size-8 rounded-full border border-border/70 bg-background/70 md:hidden"
+            className="group size-9 rounded-full border border-border/70 bg-background/85 lg:hidden"
             variant="ghost"
             size="lg"
             aria-label="Open navigation menu"
@@ -50,7 +50,7 @@ export function MobileMenuPopover() {
       />
       <PopoverContent
         align="end"
-        className="mt-3 w-[min(19rem,calc(100vw-2rem))] rounded-2xl border border-border/70 bg-background/95 p-2 shadow-xl backdrop-blur-md md:hidden"
+        className="mt-3 w-[min(19rem,calc(100vw-1.2rem))] rounded-2xl border border-border/75 bg-background/96 p-2 shadow-[0_30px_48px_-30px_rgba(2,6,23,0.85)] backdrop-blur-md lg:hidden"
       >
         <NavigationMenu
           className="max-w-none *:w-full"
@@ -68,7 +68,7 @@ export function MobileMenuPopover() {
                       {link.items.map((item) => (
                         <li key={`${item.href}-${item.label}`}>
                           <NavigationMenuLink
-                            className="rounded-lg px-2.5 py-2 text-sm"
+                            className="rounded-xl px-2.5 py-2.5 text-sm"
                             render={<Link to={item.href} />}
                           >
                             {item.label}
@@ -79,7 +79,7 @@ export function MobileMenuPopover() {
                   </>
                 ) : (
                   <NavigationMenuLink
-                    className="rounded-lg px-2.5 py-2 text-sm"
+                    className="rounded-xl px-2.5 py-2.5 text-sm"
                     render={<Link to={link.href} />}
                   >
                     {link.label}

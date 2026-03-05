@@ -45,13 +45,13 @@ export const navigationLinks: NavigationLink[] = [
     items: [
       {
         href: "/#features",
-        label: "Cashflow Intelligence",
-        description: "Insights and projections to avoid surprises.",
+        label: "Decision Feed",
+        description: "Alerts and forecasts that prevent money surprises.",
       },
       {
         href: "/#features",
-        label: "Goal Tracking",
-        description: "Stay focused on savings and debt milestones.",
+        label: "Mobile Workflow",
+        description: "Operate your plan quickly with thumb-first actions.",
       },
     ],
   },
@@ -66,10 +66,10 @@ export const navigationLinks: NavigationLink[] = [
     items: [
       {
         href: "/#features",
-        label: "Getting Started",
+        label: "How It Works",
         icon: "BookOpenIcon",
       },
-      { href: "/#pricing", label: "Playbook", icon: "LifeBuoyIcon" },
+      { href: "/#pricing", label: "Plans", icon: "LifeBuoyIcon" },
       { href: "/#about", label: "About Monfly", icon: "InfoIcon" },
     ],
   },

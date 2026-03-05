@@ -108,11 +108,11 @@ function Signup() {
     <div className="landing-shell relative min-h-dvh overflow-x-clip">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-44 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--landing-aurora)_0%,transparent_72%)] opacity-60 blur-2xl"
+        className="pointer-events-none absolute -top-44 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--landing-aurora)_0%,transparent_72%)] opacity-52 blur-2xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-24 top-28 hidden h-80 w-80 rounded-full bg-[radial-gradient(circle,#14b8a6_0%,transparent_74%)] opacity-20 blur-2xl sm:block"
+        className="pointer-events-none absolute -left-24 top-28 hidden h-80 w-80 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_74%)] opacity-20 blur-2xl sm:block"
       />
 
       <main className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-6">
@@ -120,7 +120,7 @@ function Signup() {
           <Button
             variant="ghost"
             size="lg"
-            className="rounded-full"
+            className="rounded-full bg-background/75"
             render={
               <Link to="/" className="inline-flex items-center gap-1.5">
                 <ArrowLeft className="size-4" />
@@ -131,19 +131,19 @@ function Signup() {
           <Button
             variant="outline"
             size="lg"
-            className="rounded-full"
+            className="rounded-full bg-background/75"
             render={<Link to="/login">I already have an account</Link>}
           />
         </header>
 
         <div className="grid flex-1 items-stretch gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
-          <section className="landing-glass-panel order-2 hidden rounded-3xl border border-border/60 p-6 lg:flex lg:flex-col lg:justify-between xl:p-8">
+          <section className="landing-glass-panel order-2 hidden rounded-3xl border border-border/65 p-6 lg:flex lg:flex-col lg:justify-between xl:p-8">
             <div>
-              <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/6 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+              <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
                 <Sparkles className="size-3.5" />
                 Build Your Money System
               </p>
-              <h2 className="mt-5 text-balance text-3xl font-semibold leading-tight xl:text-4xl">
+              <h2 className="mt-5 text-balance font-[family-name:var(--font-syne)] text-3xl font-semibold leading-tight xl:text-4xl">
                 Start with a faster onboarding flow that works on every screen.
               </h2>
               <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
@@ -157,7 +157,7 @@ function Signup() {
                 {signupStats.map((stat) => (
                   <div
                     key={stat.label}
-                    className="rounded-2xl border border-border/60 bg-background/80 p-3"
+                    className="rounded-2xl border border-border/65 bg-background/80 p-3"
                   >
                     <dt className="text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground">
                       {stat.label}
@@ -189,12 +189,12 @@ function Signup() {
           </section>
 
           <section className="order-1 flex items-start sm:items-center">
-            <div className="w-full rounded-3xl border border-border/70 bg-background/90 p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
-              <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/6 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-primary">
+            <div className="landing-glass-panel w-full rounded-3xl border border-border/70 p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
+              <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-primary">
                 <BadgeCheck className="size-3.5" />
                 Create Account
               </p>
-              <h1 className="mt-4 text-balance text-2xl font-bold leading-tight sm:text-3xl">
+              <h1 className="mt-4 text-balance font-[family-name:var(--font-syne)] text-2xl font-bold leading-tight sm:text-3xl">
                 Launch your personal finance workspace
               </h1>
               <p className="mt-2 text-sm text-muted-foreground sm:text-base">
@@ -233,7 +233,7 @@ function Signup() {
             </div>
           </section>
 
-          <section className="order-3 rounded-2xl border border-border/60 bg-background/80 p-4 lg:hidden">
+          <section className="landing-glass-panel order-3 rounded-2xl border border-border/65 p-4 lg:hidden">
             <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-primary">
               What you get
             </h2>

@@ -68,10 +68,10 @@ export function DashboardMetrics({ className }: { className?: string }) {
 
   return (
     <div className={cn("grid gap-4 md:grid-cols-3 xl:grid-cols-1", className)}>
-      <Card className="bg-linear-to-br from-green-50 to-transparent dark:from-green-950/20 dark:to-transparent border-green-200/50 dark:border-green-800/50">
+      <Card className="app-panel border-emerald-300/45 bg-linear-to-br from-emerald-50/85 to-background/25 dark:border-emerald-800/55 dark:from-emerald-950/22">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-          <div className="p-2 bg-green-100 dark:bg-green-900/40 rounded-full">
+          <div className="rounded-full bg-emerald-100 p-2 dark:bg-emerald-900/40">
             <TrendingUp className="h-4 w-4 text-green-600" />
           </div>
         </CardHeader>
@@ -82,10 +82,10 @@ export function DashboardMetrics({ className }: { className?: string }) {
           <p className="text-xs text-muted-foreground">Total recorded income</p>
         </CardContent>
       </Card>
-      <Card className="bg-linear-to-br from-red-50 to-transparent dark:from-red-950/20 dark:to-transparent border-red-200/50 dark:border-red-800/50">
+      <Card className="app-panel border-rose-300/45 bg-linear-to-br from-rose-50/85 to-background/25 dark:border-rose-800/55 dark:from-rose-950/20">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
-          <div className="p-2 bg-red-100 dark:bg-red-900/40 rounded-full">
+          <div className="rounded-full bg-rose-100 p-2 dark:bg-rose-900/40">
             <TrendingDown className="h-4 w-4 text-red-600" />
           </div>
         </CardHeader>
@@ -98,10 +98,10 @@ export function DashboardMetrics({ className }: { className?: string }) {
           </p>
         </CardContent>
       </Card>
-      <Card className="bg-linear-to-br from-background to-accent/50 border-border/50">
+      <Card className="app-panel border-border/75 bg-linear-to-br from-background to-accent/60">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Net Flow</CardTitle>
-          <div className="p-2 bg-secondary rounded-full">
+          <div className="rounded-full bg-secondary p-2">
             <DollarSign className="h-4 w-4 text-primary" />
           </div>
         </CardHeader>

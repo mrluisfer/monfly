@@ -14,26 +14,26 @@ import { navigationLinks } from "./navigation-links";
 
 export function DesktopNavMenu() {
   return (
-    <NavigationMenu className="hidden md:block" aria-label="Primary navigation">
-      <NavigationMenuList className="gap-1">
+    <NavigationMenu className="hidden lg:block" aria-label="Primary navigation">
+      <NavigationMenuList className="gap-1.5">
         {navigationLinks.map((link) => (
           <NavigationMenuItem key={link.label}>
             {link.submenu ? (
               <>
-                <NavigationMenuTrigger className="rounded-full border border-transparent bg-transparent px-3 py-1.5 text-sm font-medium text-foreground/75 transition-colors hover:border-border/70 hover:bg-muted/40 hover:text-foreground *:[svg]:-me-0.5 *:[svg]:size-3.5">
+                <NavigationMenuTrigger className="rounded-full border border-transparent bg-transparent px-3 py-1.5 text-sm font-medium tracking-[0.01em] text-foreground/78 transition-colors hover:border-border/75 hover:bg-background/85 hover:text-foreground *:[svg]:-me-0.5 *:[svg]:size-3.5">
                   {link.label}
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="z-50 rounded-xl border border-border/70 bg-background/95 p-1 shadow-lg backdrop-blur-md">
+                <NavigationMenuContent className="z-50 rounded-2xl border border-border/70 bg-background/97 p-1.5 shadow-[0_24px_38px_-28px_rgba(2,6,23,0.85)] backdrop-blur-md">
                   <ul
                     className={cn(
-                      "grid gap-1",
+                      "grid gap-1.5",
                       link.type === "description" ? "min-w-72" : "min-w-52"
                     )}
                   >
                     {link.items.map((item) => (
                       <li key={`${item.href}-${item.label}`}>
                         <NavigationMenuLink
-                          className="rounded-lg px-3 py-2"
+                          className="rounded-xl px-3 py-2.5"
                           render={<Link to={item.href} />}
                         >
                           {link.type === "icon" && "icon" in item && (
@@ -63,7 +63,7 @@ export function DesktopNavMenu() {
               </>
             ) : (
               <NavigationMenuLink
-                className="rounded-full px-3 py-1.5 text-sm font-medium text-foreground/75 transition-colors hover:bg-muted/40 hover:text-foreground"
+                className="rounded-full px-3 py-1.5 text-sm font-medium tracking-[0.01em] text-foreground/78 transition-colors hover:bg-background/85 hover:text-foreground"
                 render={<Link to={link.href} />}
               >
                 {link.label}

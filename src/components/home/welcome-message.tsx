@@ -22,9 +22,11 @@ export function WelcomeMessage({ children }: { children: ReactNode }) {
   if (!showMsg) return null;
 
   return (
-    <Alert>
-      <HandIcon className="rotate-45 animate-pulse" />
-      <AlertTitle>Welcome back!</AlertTitle>
+    <Alert className="app-panel rounded-2xl border-border/70 p-3">
+      <HandIcon className="rotate-45" />
+      <AlertTitle className="font-[family-name:var(--font-syne)]">
+        Welcome back!
+      </AlertTitle>
       <AlertDescription>
         {children}
         <div className="flex justify-end flex-1 w-full">
@@ -32,6 +34,7 @@ export function WelcomeMessage({ children }: { children: ReactNode }) {
             variant="default"
             size="default"
             onClick={handleDontShowAgain}
+            className="rounded-full"
           >
             <XIcon />
             Don't show again

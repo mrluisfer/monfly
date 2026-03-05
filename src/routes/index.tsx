@@ -38,20 +38,24 @@ export default function Home() {
     <div className="landing-shell relative min-h-screen overflow-x-clip">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-70 focus:rounded-md focus:bg-background focus:px-3 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-70 focus:rounded-full focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
       >
         Skip to main content
       </a>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--landing-aurora)_0%,transparent_70%)] opacity-70 blur-2xl"
+        className="pointer-events-none absolute -top-30 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--landing-aurora)_0%,transparent_72%)] opacity-55 blur-2xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-24 top-104 h-72 w-72 rounded-full bg-[radial-gradient(circle,#22d3ee_0%,transparent_72%)] opacity-25 blur-2xl dark:opacity-15"
+        className="pointer-events-none absolute -right-20 top-90 h-72 w-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-20 blur-2xl dark:opacity-25"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-28 top-130 h-80 w-80 rounded-full bg-[radial-gradient(circle,#fb923c_0%,transparent_72%)] opacity-16 blur-2xl"
       />
       <GlobalHeader />
-      <main id="main-content" className="relative z-10">
+      <main id="main-content" className="relative z-10 pb-10">
         <LandingHero />
         <UserStatsSection />
         <PricingSection />

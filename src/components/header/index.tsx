@@ -41,12 +41,12 @@ export const Header = () => {
     (routeUrl !== "/home" && location.pathname.startsWith(`${routeUrl}/`));
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-md supports-backdrop-filter:bg-background/60">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8 pr-0">
+    <header className="sticky top-2 z-40 w-full">
+      <div className="app-panel flex h-16 items-center justify-between rounded-2xl px-3 sm:px-4 lg:px-5">
         <div className="flex items-center gap-4">
           <Link
             to="/home"
-            className="flex items-center gap-2 text-xl md:text-2xl font-bold w-fit me-2 md:me-4"
+            className="flex w-fit items-center gap-2.5 text-xl font-bold md:me-4 md:text-2xl"
           >
             <img
               src={Logo}
@@ -54,7 +54,9 @@ export const Header = () => {
               className="h-6 w-6 md:h-8 md:w-8"
               title="Monfly"
             />
-            <span className="sidebar-title-text hidden md:block">Monfly</span>
+            <span className="sidebar-title-text hidden font-[family-name:var(--font-syne)] md:block">
+              Monfly
+            </span>
           </Link>
           <div className="hidden lg:block">
             <HeaderNavigation />
@@ -104,7 +106,7 @@ export const Header = () => {
             />
             <SheetContent
               side="right"
-              className="h-dvh w-[92vw] max-w-100 gap-0 overflow-hidden p-0"
+              className="h-dvh w-[92vw] max-w-100 gap-0 overflow-hidden border-border/70 bg-background/95 p-0 backdrop-blur-sm"
             >
               <div className="flex h-full min-h-0 flex-col">
                 <SheetHeader className="border-b px-6 py-4 text-left">

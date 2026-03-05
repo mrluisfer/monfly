@@ -12,10 +12,10 @@ import {
 import { PricingCard } from "./pricing-card";
 
 const pricingFeatures = [
-  { icon: Layers, label: "Unlimited accounts and card types" },
-  { icon: ChartLine, label: "Advanced analytics and insights" },
-  { icon: DollarSign, label: "Automated expense tracking" },
-  { icon: Network, label: "Shared team workspace" },
+  { icon: Layers, label: "Unlimited accounts and card structures" },
+  { icon: ChartLine, label: "Scenario-based analytics and insights" },
+  { icon: DollarSign, label: "Automated tracking with smart categories" },
+  { icon: Network, label: "Shared workspace for collaborative planning" },
 ];
 
 export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
@@ -30,11 +30,11 @@ export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
       <span className="text-sm font-medium text-muted-foreground">
         {billingPeriod}
       </span>
-      <div className="mt-6 flex flex-col gap-3 text-sm">
+      <div className="mt-5 flex flex-col gap-2.5 text-sm">
         {pricingFeatures.map((plan) => (
           <div
             key={plan.label}
-            className="group flex items-center gap-2 rounded-xl border border-border/50 bg-background/70 px-3 py-2 transition-colors duration-150 ease-out hover:border-primary/30"
+            className="group flex items-center gap-2 rounded-xl border border-border/55 bg-background/72 px-3 py-2.5 transition-colors duration-150 ease-out hover:border-primary/35"
           >
             <plan.icon className="size-4 text-primary" />
             <span className="text-muted-foreground group-hover:text-foreground">
@@ -49,7 +49,7 @@ export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
           className="h-10 w-full rounded-full"
           render={
             <Link to="/signup" className="inline-flex items-center gap-2">
-              Start with {isAnnual ? "annual" : "monthly"} billing
+              Start {isAnnual ? "annual" : "monthly"} plan
               <CircleCheckBig className="size-4" />
             </Link>
           }

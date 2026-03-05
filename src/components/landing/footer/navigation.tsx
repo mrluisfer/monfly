@@ -21,7 +21,7 @@ export const FooterNavigation = () => {
               <Button
                 variant="link"
                 size="lg"
-                className="h-auto justify-start px-0 py-0 text-left font-semibold text-foreground"
+                className="h-auto justify-start px-0 py-0 text-left font-semibold text-foreground no-underline hover:text-primary hover:no-underline"
                 render={<Link to={link.href}>{link.label}</Link>}
               />
             ) : (
@@ -35,7 +35,7 @@ export const FooterNavigation = () => {
                     <Button
                       variant="link"
                       size="lg"
-                      className="h-auto justify-start px-0 py-0 text-xs"
+                      className="h-auto justify-start px-0 py-0 text-xs text-muted-foreground no-underline hover:text-foreground hover:no-underline"
                       render={<Link to={item.href}>{item.label}</Link>}
                     />
                   </li>

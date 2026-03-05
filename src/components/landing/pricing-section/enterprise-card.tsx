@@ -12,7 +12,7 @@ import { PricingCard } from "./pricing-card";
 
 const enterpriseFeatures = [
   {
-    label: "Everything in Pro plus advanced governance",
+    label: "Everything in Pro with advanced governance",
     icon: ReplaceAll,
   },
   { label: "Role-based access and security controls", icon: Cog },
@@ -27,13 +27,13 @@ export function EnterpriseCard() {
   return (
     <PricingCard title={<span>$ENT</span>}>
       <span className="text-sm font-medium text-muted-foreground">
-        Custom pricing for high-scale finance teams
+        Custom contracts for high-scale finance organizations
       </span>
-      <div className="mt-6 flex flex-col gap-3 text-sm">
+      <div className="mt-5 flex flex-col gap-2.5 text-sm">
         {enterpriseFeatures.map((feature) => (
           <div
             key={feature.label}
-            className="group flex items-center gap-2 rounded-xl border border-border/50 bg-background/70 px-3 py-2 transition-colors duration-150 ease-out hover:border-primary/30"
+            className="group flex items-center gap-2 rounded-xl border border-border/55 bg-background/72 px-3 py-2.5 transition-colors duration-150 ease-out hover:border-primary/35"
           >
             <feature.icon className="size-4 text-primary" />
             <span className="text-muted-foreground group-hover:text-foreground">
@@ -45,7 +45,7 @@ export function EnterpriseCard() {
       <Button
         variant="outline"
         size="lg"
-        className="mt-6 h-10 w-full rounded-full border-border/70 md:mt-auto"
+        className="mt-6 h-10 w-full rounded-full border-border/75 bg-background/70 md:mt-auto"
         render={
           <Link to="/signup" className="inline-flex items-center gap-2">
             Talk to sales

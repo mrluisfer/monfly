@@ -18,13 +18,15 @@ export const FontDisplayProvider = ({ children }: { children: ReactNode }) => {
     // Check localStorage for saved value
     if (typeof window !== "undefined") {
       try {
-        return localStorage.getItem(LOCAL_STORAGE_KEY) || FontValues.OpenSans;
+        return (
+          localStorage.getItem(LOCAL_STORAGE_KEY) || FontValues.SpaceGrotesk
+        );
       } catch (error) {
         console.warn("Failed to read from localStorage:", error);
-        return FontValues.OpenSans;
+        return FontValues.SpaceGrotesk;
       }
     }
-    return FontValues.OpenSans;
+    return FontValues.SpaceGrotesk;
   });
 
   // Sync with localStorage whenever value changes

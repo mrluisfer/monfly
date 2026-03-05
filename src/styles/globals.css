@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&family=Pacifico&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400..800;1,400..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Sora:wght@300..800&family=Space+Grotesk:wght@300..700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Syne:wght@400..800&display=swap");
 
 /* @tailwind base; */
 /* @tailwind components; */
@@ -58,6 +58,11 @@
   --font-space-mono: "Space Mono", monospace;
   --font-geist: "Geist", sans-serif;
   --font-pacifico: "Pacifico", cursive;
+  --font-archivo: "Archivo", sans-serif;
+  --font-sora: "Sora", sans-serif;
+  --font-space-grotesk: "Space Grotesk", sans-serif;
+  --font-syne: "Syne", sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", monospace;
 }
 
 @layer utilities {
@@ -1428,7 +1433,9 @@
 }
 
 body {
-  @apply bg-background text-foreground;
+  @apply bg-background text-foreground antialiased;
+  font-family: var(--font-archivo), sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 html {
@@ -1496,7 +1503,7 @@ html.dark .bg-hero::before {
   --sidebar-accent-foreground: hsl(240 5.9% 10%);
   --sidebar-border: hsl(220 13% 91%);
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
-  background-color: #000000;
+  background-color: var(--background);
   overscroll-behavior: none;
 }
 
@@ -1520,40 +1527,75 @@ html.dark .bg-hero::before {
 
 @layer components {
   .landing-shell {
-    --landing-bg-top: color-mix(in oklab, var(--background) 78%, #cffafe 22%);
-    --landing-bg-bottom: color-mix(in oklab, var(--background) 94%, #e2e8f0 6%);
-    --landing-aurora: color-mix(in oklab, var(--primary) 45%, #2dd4bf 55%);
+    --landing-bg-top: color-mix(in oklab, var(--background) 86%, #f9f7ec 14%);
+    --landing-bg-bottom: color-mix(
+      in oklab,
+      var(--background) 90%,
+      #e0e7d3 10%
+    );
+    --landing-aurora: color-mix(in oklab, #0d9488 62%, #fb923c 38%);
+    --landing-grid-line: color-mix(
+      in oklab,
+      var(--foreground) 11%,
+      transparent
+    );
+    position: relative;
+    isolation: isolate;
     background:
       radial-gradient(
-        circle at 88% 12%,
-        color-mix(in oklab, var(--landing-aurora) 32%, transparent) 0%,
-        transparent 42%
+        circle at 88% 9%,
+        color-mix(in oklab, var(--landing-aurora) 26%, transparent) 0%,
+        transparent 46%
       ),
-      linear-gradient(
-        to bottom,
-        var(--landing-bg-top),
-        var(--landing-bg-bottom)
-      );
+      radial-gradient(
+        circle at 8% 26%,
+        color-mix(in oklab, #14b8a6 20%, transparent) 0%,
+        transparent 52%
+      ),
+      linear-gradient(165deg, var(--landing-bg-top), var(--landing-bg-bottom));
+  }
+
+  .landing-shell::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.4;
+    background-image:
+      linear-gradient(to right, var(--landing-grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--landing-grid-line) 1px, transparent 1px);
+    background-size: 34px 34px;
+    mask-image: linear-gradient(to bottom, black 20%, transparent 88%);
   }
 
   .dark .landing-shell {
-    --landing-bg-top: color-mix(in oklab, var(--background) 86%, #0f172a 14%);
-    --landing-bg-bottom: color-mix(in oklab, var(--background) 94%, black 6%);
+    --landing-bg-top: color-mix(in oklab, var(--background) 80%, #111827 20%);
+    --landing-bg-bottom: color-mix(
+      in oklab,
+      var(--background) 90%,
+      #020617 10%
+    );
+    --landing-grid-line: color-mix(in oklab, white 9%, transparent);
   }
 
   .landing-glass-panel {
-    background: color-mix(in oklab, var(--background) 82%, white 18%);
-    box-shadow: 0 18px 36px -34px rgb(15 23 42 / 0.56);
+    background: color-mix(in oklab, var(--background) 86%, white 14%);
+    box-shadow:
+      0 20px 35px -30px rgb(15 23 42 / 0.55),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.32);
   }
 
   .dark .landing-glass-panel {
-    background: color-mix(in oklab, var(--background) 86%, white 14%);
-    box-shadow: 0 18px 42px -32px rgb(15 23 42 / 0.88);
+    background: color-mix(in oklab, var(--background) 92%, white 8%);
+    box-shadow:
+      0 22px 42px -32px rgb(2 6 23 / 0.9),
+      inset 0 1px 0 0 rgb(248 250 252 / 0.08);
   }
 
   @media (min-width: 1280px) {
     .landing-glass-panel {
-      backdrop-filter: blur(11px);
+      backdrop-filter: blur(10px) saturate(110%);
     }
   }
 
@@ -1566,12 +1608,68 @@ html.dark .bg-hero::before {
 
   .landing-gradient-text {
     color: transparent;
-    background-image: linear-gradient(110deg, #0f172a, #0ea5e9 55%, #14b8a6);
+    background-image: linear-gradient(110deg, #0f172a, #0f766e 48%, #c2410c);
     -webkit-background-clip: text;
     background-clip: text;
   }
 
   .dark .landing-gradient-text {
-    background-image: linear-gradient(110deg, #e2e8f0, #67e8f9 52%, #5eead4);
+    background-image: linear-gradient(110deg, #f8fafc, #5eead4 45%, #fdba74);
+  }
+
+  .app-shell {
+    position: relative;
+    isolation: isolate;
+    background:
+      radial-gradient(
+        circle at 12% 0%,
+        color-mix(in oklab, #0d9488 16%, transparent) 0%,
+        transparent 42%
+      ),
+      radial-gradient(
+        circle at 92% 6%,
+        color-mix(in oklab, #f97316 12%, transparent) 0%,
+        transparent 36%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--background) 95%, #f5f7ec 5%),
+        color-mix(in oklab, var(--background) 100%, black 0%)
+      );
+  }
+
+  .dark .app-shell {
+    background:
+      radial-gradient(
+        circle at 10% 4%,
+        color-mix(in oklab, #0d9488 14%, transparent) 0%,
+        transparent 40%
+      ),
+      radial-gradient(
+        circle at 91% 0%,
+        color-mix(in oklab, #f97316 11%, transparent) 0%,
+        transparent 35%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in oklab, var(--background) 96%, #0f172a 4%),
+        color-mix(in oklab, var(--background) 100%, black 0%)
+      );
+  }
+
+  .app-panel {
+    border: 1px solid color-mix(in oklab, var(--border) 76%, #0f172a 24%);
+    background: color-mix(in oklab, var(--background) 90%, white 10%);
+    box-shadow:
+      0 18px 42px -34px rgb(15 23 42 / 0.78),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.3);
+  }
+
+  .dark .app-panel {
+    border-color: color-mix(in oklab, var(--border) 84%, #f1f5f9 16%);
+    background: color-mix(in oklab, var(--background) 91%, white 9%);
+    box-shadow:
+      0 24px 44px -36px rgb(2 6 23 / 0.92),
+      inset 0 1px 0 0 rgb(248 250 252 / 0.08);
   }
 }
