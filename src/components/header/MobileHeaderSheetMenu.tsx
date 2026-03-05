@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useIsMobile } from "~/hooks/useMobile";
-import { LogOutIcon, MenuIcon } from "lucide-react";
+import {
+  mobileHeaderSheetOpenAtom,
+  mobileSettingsDialogOpenAtom,
+  onMobileHeaderSheetOpenChangeAtom,
+  onMobileSettingsDialogOpenChangeAtom,
+  openSettingsFromMobileSheetAtom,
+} from "~/state/atoms";
+import { useAtomValue, useSetAtom } from "jotai";
+import { LogOutIcon, MenuIcon, SettingsIcon } from "lucide-react";
 
 import UserDropdown from "../home/user-dropdown";
 import { SettingsDialog } from "../settings/SettingsDialog";
@@ -23,15 +31,28 @@ import { TimezoneBadge } from "./badges/TimezoneBadge";
 import { Logo } from "./Logo";
 
 export function MobileHeaderSheetMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useAtomValue(mobileHeaderSheetOpenAtom);
+  const isSettingsDialogOpen = useAtomValue(mobileSettingsDialogOpenAtom);
+  const onSheetOpenChange = useSetAtom(onMobileHeaderSheetOpenChangeAtom);
+  const onSettingsDialogOpenChange = useSetAtom(
+    onMobileSettingsDialogOpenChangeAtom
+  );
+  const openSettingsFromMobileSheet = useSetAtom(
+    openSettingsFromMobileSheetAtom
+  );
+
   const isMobile = useIsMobile();
   const location = useLocation();
 
   const isMobileBadgeActive = isMobile && isOpen;
 
-  const mobileNavigationRoutes = sidebarRoutes.filter(
-    (route, index, routes) =>
-      routes.findIndex((item) => item.url === route.url) === index
+  const mobileNavigationRoutes = useMemo(
+    () =>
+      sidebarRoutes.filter(
+        (route, index, routes) =>
+          routes.findIndex((item) => item.url === route.url) === index
+      ),
+    []
   );
 
   const isActiveRoute = (routeUrl: string) =>
@@ -41,7 +62,7 @@ export function MobileHeaderSheetMenu() {
   return (
     <div className="flex md:hidden items-center gap-2">
       <UserDropdown />
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Sheet open={isOpen} onOpenChange={onSheetOpenChange}>
         <SheetTrigger
           render={
             <Button variant="ghost" size="icon-lg" className="shrink-0">
@@ -96,7 +117,7 @@ export function MobileHeaderSheetMenu() {
                           key={route.url}
                           to={route.url}
                           className={itemClassName}
-                          onClick={() => setIsOpen(false)}
+                          onClick={() => onSheetOpenChange(false)}
                         >
                           <route.icon className="h-5 w-5" />
                           <span className="font-medium">{route.title}</span>
@@ -148,7 +169,15 @@ export function MobileHeaderSheetMenu() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Settings</span>
-                    <SettingsDialog />
+                    <Button
+                      variant="default"
+                      size="icon-lg"
+                      onClick={openSettingsFromMobileSheet}
+                      className="shrink-0"
+                      aria-label="Open settings"
+                    >
+                      <SettingsIcon className="size-4" />
+                    </Button>
                   </div>
                 </div>
 
@@ -175,6 +204,11 @@ export function MobileHeaderSheetMenu() {
           </div>
         </SheetContent>
       </Sheet>
+      <SettingsDialog
+        open={isSettingsDialogOpen}
+        onOpenChange={onSettingsDialogOpenChange}
+        showTrigger={false}
+      />
     </div>
   );
 }

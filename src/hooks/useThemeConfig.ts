@@ -1,12 +1,22 @@
-import { useContext } from "react";
-import { ThemeContext } from "~/context/theme-provider";
+import { useMemo } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+  activeThemeAtom,
+  isDarkModeAtom,
+  setActiveThemeAtom,
+} from "~/state/atoms";
 
 export function useThemeConfig() {
-  const context = useContext(ThemeContext);
-  if (context === undefined) {
-    throw new Error(
-      "useThemeConfig must be used within an ActiveThemeProvider"
-    );
-  }
-  return context;
+  const activeTheme = useAtomValue(activeThemeAtom);
+  const isDark = useAtomValue(isDarkModeAtom);
+  const setActiveTheme = useSetAtom(setActiveThemeAtom);
+
+  return useMemo(
+    () => ({
+      activeTheme,
+      setActiveTheme: (theme: string) => setActiveTheme(theme),
+      isDark,
+    }),
+    [activeTheme, isDark, setActiveTheme]
+  );
 }

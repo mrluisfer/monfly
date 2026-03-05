@@ -1,14 +1,17 @@
-import { useContext } from "react";
-import { SonnerPositionContext } from "~/context/sonner-position-provider";
+import { useMemo } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import type { SonnerPosition } from "~/types/SonnerPosition";
+import { setSonnerPositionAtom, sonnerPositionAtom } from "~/state/atoms";
 
 export const useSonnerPosition = () => {
-  const context = useContext(SonnerPositionContext);
+  const position = useAtomValue(sonnerPositionAtom);
+  const setPosition = useSetAtom(setSonnerPositionAtom);
 
-  if (!context) {
-    throw new Error(
-      "useSonnerPosition must be used within a SonnerPositionProvider"
-    );
-  }
-
-  return context;
+  return useMemo(
+    () => ({
+      position,
+      setPosition: (nextPosition: SonnerPosition) => setPosition(nextPosition),
+    }),
+    [position, setPosition]
+  );
 };

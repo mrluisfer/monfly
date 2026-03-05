@@ -1,12 +1,19 @@
-import { useContext } from "react";
-import { TransactionHoverContext } from "~/context/transaction-hover-provider";
+import { useMemo } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+  disableTransactionHoverAtom,
+  setDisableTransactionHoverAtom,
+} from "~/state/atoms";
 
 export const useTransactionHoverContext = () => {
-  const context = useContext(TransactionHoverContext);
-  if (!context) {
-    throw new Error(
-      "useTransactionHoverContext must be used within a TransactionHoverProvider"
-    );
-  }
-  return context;
+  const disableHover = useAtomValue(disableTransactionHoverAtom);
+  const setDisableHover = useSetAtom(setDisableTransactionHoverAtom);
+
+  return useMemo(
+    () => ({
+      disableHover,
+      setDisableHover: (value: boolean) => setDisableHover(value),
+    }),
+    [disableHover, setDisableHover]
+  );
 };

@@ -1,11 +1,26 @@
-import { useContext } from "react";
-import { DarkModeContext } from "~/context/dark-mode-provider";
+import { useMemo } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+  darkModeThemeAtom,
+  isDarkModeAtom,
+  setDarkModeThemeAtom,
+  toggleDarkModeThemeAtom,
+  type DarkModeTheme,
+} from "~/state/atoms";
 
 export const useDarkMode = () => {
-  const context = useContext(DarkModeContext);
+  const theme = useAtomValue(darkModeThemeAtom);
+  const isDark = useAtomValue(isDarkModeAtom);
+  const setTheme = useSetAtom(setDarkModeThemeAtom);
+  const toggleDarkMode = useSetAtom(toggleDarkModeThemeAtom);
 
-  if (context === undefined) {
-    throw new Error("useDarkMode must be used within an DarkModeProvider");
-  }
-  return context;
+  return useMemo(
+    () => ({
+      theme,
+      setTheme: (nextTheme: DarkModeTheme) => setTheme(nextTheme),
+      toggleDarkMode: () => toggleDarkMode(),
+      isDark,
+    }),
+    [isDark, setTheme, theme, toggleDarkMode]
+  );
 };

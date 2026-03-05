@@ -11,19 +11,17 @@ import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
-import { DarkModeProvider } from "~/context/dark-mode-provider";
-import { FontDisplayProvider } from "~/context/font-display-provider";
-import { SonnerPositionProvider } from "~/context/sonner-position-provider";
-import { ActiveThemeProvider } from "~/context/theme-provider";
 import { useDarkMode } from "~/hooks/useDarkMode";
 import { useFontDisplay } from "~/hooks/useFontDisplay";
 import { useGlobalHapticFeedback } from "~/hooks/useGlobalHapticFeedback";
 import { useSonnerPosition } from "~/hooks/useSonnerPosition";
 import { SileoToaster } from "~/lib/toaster";
+import { UiStateEffects } from "~/state/effects";
 import appCss from "~/styles/globals.css?url";
 import { seo } from "~/utils/seo.js";
 // import appCss from "~/styles/output.css?url";
 import clsx from "clsx";
+import { Provider as JotaiProvider } from "jotai";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -156,17 +154,12 @@ const queryClient = new QueryClient({
 function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
-      <DarkModeProvider key="theme-provider">
-        <FontDisplayProvider key="font-display-provider">
-          <ActiveThemeProvider key="theme-provider" initialTheme="default">
-            <SonnerPositionProvider initialPosition="bottom-right">
-              <RootDocumentWithProviders>
-                <Outlet />
-              </RootDocumentWithProviders>
-            </SonnerPositionProvider>
-          </ActiveThemeProvider>
-        </FontDisplayProvider>
-      </DarkModeProvider>
+      <JotaiProvider>
+        <UiStateEffects />
+        <RootDocumentWithProviders>
+          <Outlet />
+        </RootDocumentWithProviders>
+      </JotaiProvider>
     </QueryClientProvider>
   );
 }

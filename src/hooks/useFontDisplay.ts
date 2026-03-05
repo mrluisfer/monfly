@@ -1,13 +1,17 @@
-import { useContext } from "react";
-import { FontDisplayContext } from "~/context/font-display-provider";
+import { useMemo } from "react";
+import { useAtomValue, useSetAtom } from "jotai";
+import { fontDisplayAtom, setFontDisplayAtom } from "~/state/atoms";
 
 export const useFontDisplay = () => {
-  const context = useContext(FontDisplayContext);
-  if (!context) {
-    console.error(
-      "FontDisplayContext is undefined. Make sure useFontDisplay is called within a FontDisplayProvider."
-    );
-    throw new Error("useFontDisplay must be used within a FontDisplayProvider");
-  }
-  return context;
+  const fontDisplay = useAtomValue(fontDisplayAtom);
+  const setFontDisplay = useSetAtom(setFontDisplayAtom);
+
+  return useMemo(
+    () => ({
+      fontDisplay,
+      setFontDisplay: (value: string) => setFontDisplay(value),
+      onChangeFontDisplay: (value: string) => setFontDisplay(value),
+    }),
+    [fontDisplay, setFontDisplay]
+  );
 };

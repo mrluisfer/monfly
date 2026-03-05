@@ -1,3 +1,4 @@
+import type { ReactElement, ReactNode } from "react";
 import { Settings } from "lucide-react";
 
 import { Button } from "../ui/button";
@@ -13,11 +14,19 @@ import FontDisplaySelect from "./FontDisplaySelect";
 import { SonnerPositionSelector } from "./SonnerPositionSelector";
 import { ThemeSelector } from "./ThemeSelector";
 
+type SettingsDialogProps = {
+  children?: ReactElement;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  showTrigger?: boolean;
+};
+
 export const SettingsDialog = ({
   children,
-}: {
-  children?: React.ReactElement;
-}) => {
+  open,
+  onOpenChange,
+  showTrigger = true,
+}: SettingsDialogProps) => {
   const trigger = children ?? (
     <Button variant="default" size={"lg"}>
       <Settings />
@@ -26,8 +35,8 @@ export const SettingsDialog = ({
   );
 
   return (
-    <Dialog>
-      <DialogTrigger render={trigger} />
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {showTrigger ? <DialogTrigger render={trigger} /> : null}
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Settings</DialogTitle>
@@ -54,7 +63,7 @@ const SettingsItem = ({
   children,
 }: {
   label: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) => {
   return (
     <div className="flex items-center gap-4 justify-between">
