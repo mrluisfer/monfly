@@ -1,5 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
+import {
+  enforceRateLimit,
+  toSecurityErrorResponse,
+} from "~/utils/security/request-protection";
 import bcrypt from "bcrypt";
 
 import { prismaClient } from "../prisma";
@@ -9,10 +13,19 @@ export const loginFn = createServerFn({ method: "POST" })
   .inputValidator((d: { email: string; password: string }) => d)
   .handler(async ({ data }) => {
     try {
+      const inputEmail = data.email.trim();
+      const normalizedEmail = inputEmail.toLowerCase();
+      enforceRateLimit({
+        scope: "auth:login",
+        limit: 8,
+        windowMs: 60_000,
+        identifier: normalizedEmail,
+      });
+
       // Find the user
       const user = await prismaClient.user.findUnique({
         where: {
-          email: data.email,
+          email: inputEmail,
         },
       });
 
@@ -59,6 +72,11 @@ export const loginFn = createServerFn({ method: "POST" })
         statusCode: 200,
       } as ApiResponse<string>;
     } catch (error) {
+      const securityErrorResponse = toSecurityErrorResponse(error);
+      if (securityErrorResponse) {
+        return securityErrorResponse as ApiResponse<string | null>;
+      }
+
       return {
         error: true,
         message: "Error logging in",

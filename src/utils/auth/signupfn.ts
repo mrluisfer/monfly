@@ -1,6 +1,10 @@
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
+import {
+  enforceRateLimit,
+  toSecurityErrorResponse,
+} from "~/utils/security/request-protection";
 
 import { hashPassword, prismaClient } from "../prisma";
 import { useAppSession } from "./session";
@@ -16,10 +20,19 @@ export const signupFn = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     try {
+      const inputEmail = data.email.trim();
+      const normalizedEmail = inputEmail.toLowerCase();
+      enforceRateLimit({
+        scope: "auth:signup",
+        limit: 4,
+        windowMs: 5 * 60_000,
+        identifier: normalizedEmail,
+      });
+
       // Check if the user already exists
       const found = await prismaClient.user.findUnique({
         where: {
-          email: data.email,
+          email: inputEmail,
         },
       });
 
@@ -58,7 +71,7 @@ export const signupFn = createServerFn({ method: "POST" })
       // Create the user
       const user = await prismaClient.user.create({
         data: {
-          email: data.email,
+          email: inputEmail,
           password,
           name: data.name,
         },
@@ -79,6 +92,11 @@ export const signupFn = createServerFn({ method: "POST" })
         } as ApiResponse<string | null>;
       }
     } catch (error) {
+      const securityErrorResponse = toSecurityErrorResponse(error);
+      if (securityErrorResponse) {
+        return securityErrorResponse as ApiResponse<string | null>;
+      }
+
       return {
         error: true,
         message: "Error signing up",

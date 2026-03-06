@@ -1,4 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
+import type { ApiResponse } from "~/types/ApiResponse";
+import {
+  enforceRateLimit,
+  resolveSessionEmail,
+  toSecurityErrorResponse,
+} from "~/utils/security/request-protection";
 import { postCategoryByEmail } from "~/utils/category/post-category-by-email";
 import z from "zod";
 
@@ -13,5 +19,28 @@ export const postCategoryByEmailServer = createServerFn({ method: "POST" })
     })
   )
   .handler(async ({ data: { email, category } }) => {
-    return await postCategoryByEmail(category, email);
+    try {
+      const sessionEmail = await resolveSessionEmail(email);
+      enforceRateLimit({
+        scope: "category:create",
+        limit: 8,
+        windowMs: 30_000,
+        identifier: sessionEmail,
+      });
+
+      return await postCategoryByEmail(category, sessionEmail);
+    } catch (error) {
+      const securityErrorResponse = toSecurityErrorResponse(error);
+      if (securityErrorResponse) {
+        return securityErrorResponse as ApiResponse<null>;
+      }
+
+      return {
+        success: false,
+        message: "Error posting category",
+        data: null,
+        error: true,
+        statusCode: 500,
+      } as ApiResponse<null>;
+    }
   });
