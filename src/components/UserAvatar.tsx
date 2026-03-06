@@ -1,30 +1,22 @@
-import { cn } from "~/lib/utils";
-
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import BoringAvatar from "boring-avatars";
 
 const UserAvatar = ({
   alt,
   name,
-  size,
+  size = 32,
 }: {
   alt: string;
   name: string;
   size?: number;
 }) => {
   return (
-    <>
-      <Avatar className={`w-${size} h-${size}`}>
-        <AvatarImage
-          src={""}
-          alt={alt}
-          className={cn(
-            "bg-secondary aspect-square shrink-0 rounded-full",
-            `w-${size} h-${size}`
-          )}
-        />
-        <AvatarFallback>{name?.charAt(0).toUpperCase()}</AvatarFallback>
-      </Avatar>
-    </>
+    <BoringAvatar
+      className="rounded-sm"
+      name={name}
+      variant="beam"
+      square
+      size={size}
+    />
   );
 };
 

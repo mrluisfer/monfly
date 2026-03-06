@@ -65,7 +65,7 @@ export function MobileHeaderSheetMenu() {
       <Sheet open={isOpen} onOpenChange={onSheetOpenChange}>
         <SheetTrigger
           render={
-            <Button variant="ghost" size="icon-lg" className="shrink-0">
+            <Button variant="default" size="icon-lg" className="shrink-0">
               <MenuIcon className="h-5 w-5" />
               <span className="sr-only">Toggle menu</span>
             </Button>

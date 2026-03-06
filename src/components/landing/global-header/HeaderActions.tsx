@@ -2,12 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "~/components/ui/button";
 import { ChevronRight } from "lucide-react";
 
-import { MobileMenuPopover } from "./MobileMenuPopover";
-
 export function HeaderActions() {
   return (
     <div className="flex items-center gap-1.5 sm:gap-2">
-      <MobileMenuPopover />
       <Button
         variant="ghost"
         size="lg"

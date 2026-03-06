@@ -2,23 +2,15 @@ import { ReactElement, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "~/components/ui/sheet";
+import { ScrollArea } from "~/components/ui/scroll-area";
 import { useAddTransaction } from "~/hooks/useAddTransaction";
-import { useIsMobile } from "~/hooks/useMobile";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { PlusIcon, XIcon } from "lucide-react";
 import type { z } from "zod";
@@ -32,7 +24,6 @@ const AddTransactionButton = ({
 }: {
   customTrigger?: ReactElement | null;
 }) => {
-  const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const { form, onSubmit, mutation } = useAddTransaction();
 
@@ -61,59 +52,42 @@ const AddTransactionButton = ({
     </Button>
   );
 
-  if (isMobile) {
-    return (
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger render={trigger} />
-        <SheetContent
-          side="bottom"
-          className="h-[92vh] overflow-y-auto rounded-t-xl border-0 px-0"
-        >
-          <SheetHeader className="mb-2 text-left">
-            <SheetTitle>Add Transaction</SheetTitle>
-            <SheetDescription>
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={trigger} />
+      <DialogContent className="w-[calc(100vw-1rem)] max-w-xl p-0 sm:w-full">
+        <div className="flex max-h-[90dvh] flex-col overflow-hidden">
+          <DialogHeader className="border-b px-4 pt-4 pb-3 text-left sm:px-6">
+            <DialogTitle>Add Transaction</DialogTitle>
+            <DialogDescription>
               Create a new transaction to track your expenses or income.
-            </SheetDescription>
-          </SheetHeader>
-          <div className="px-4 pb-6">
-            <TransactionForm
-              form={form}
-              onSubmit={handleSubmit}
-              buttonText="Save Transaction"
-              description="Add a new transaction"
-              isLoading={mutation.status === "pending"}
-            />
-            <SheetClose
+            </DialogDescription>
+          </DialogHeader>
+
+          <ScrollArea className="min-h-0 flex-1 overscroll-contain">
+            <div className="px-4 py-4 sm:px-6">
+              <TransactionForm
+                form={form}
+                onSubmit={handleSubmit}
+                buttonText="Save Transaction"
+                description="Add a new transaction"
+                isLoading={mutation.status === "pending"}
+              />
+            </div>
+          </ScrollArea>
+
+          <div className="border-t px-4 py-3 sm:px-6">
+            <DialogClose
+              className="w-full"
               render={
-                <Button variant="outline" className="w-full mt-4">
+                <Button variant="outline" className="w-full">
                   <XIcon className="h-5 w-5" />
                   Cancel
                 </Button>
               }
             />
           </div>
-        </SheetContent>
-      </Sheet>
-    );
-  }
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={trigger} />
-      <DialogContent className="max-h-[90vh] overflow-y-auto p-4 sm:p-6">
-        <DialogHeader>
-          <DialogTitle>Add Transaction</DialogTitle>
-          <DialogDescription>
-            Create a new transaction to track your expenses or income.
-          </DialogDescription>
-        </DialogHeader>
-        <TransactionForm
-          form={form}
-          onSubmit={handleSubmit}
-          buttonText="Save"
-          description="Add a new transaction"
-          isLoading={mutation.status === "pending"}
-        />
+        </div>
       </DialogContent>
     </Dialog>
   );
