@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { Loader2 } from "lucide-react";
+import { Loader2, LoaderIcon, SaveIcon, TrashIcon } from "lucide-react";
 
 interface UserFormActionsProps {
   submitting: boolean;
@@ -26,6 +26,7 @@ export function UserFormActions({
                 type="button"
                 className="w-full sm:w-auto"
               >
+                <TrashIcon />
                 Delete Account
               </Button>
             }
@@ -46,6 +47,7 @@ export function UserFormActions({
           className="w-full sm:min-w-40 sm:w-auto"
           disabled={submitting || !hasChanges}
         >
+          {submitting ? <LoaderIcon className="animate-spin" /> : <SaveIcon />}
           {submitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
