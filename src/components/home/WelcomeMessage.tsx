@@ -37,7 +37,7 @@ export function WelcomeMessage({ children }: { children: ReactNode }) {
             className="rounded-full"
           >
             <XIcon />
-            Don't show again
+            Hide
           </Button>
         </div>
       </AlertDescription>
