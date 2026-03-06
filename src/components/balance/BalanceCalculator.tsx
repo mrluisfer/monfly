@@ -352,7 +352,7 @@ function getButtonClassName(role: ButtonRole) {
   }
 
   if (role === "equal") {
-    return "h-13 rounded-2xl text-lg font-bold";
+    return "h-13 rounded-2xl text-lg font-bold col-span-4 sm:col-span-1";
   }
 
   return "h-13 rounded-2xl text-lg font-semibold";
