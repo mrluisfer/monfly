@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { sileo } from "~/lib/toaster";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
@@ -27,29 +27,45 @@ const TransactionItemActions = ({
 
   const deleteTransactionByIdMutation = useMutation({
     fn: deleteTransactionByIdServer,
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to delete transaction" });
+        return;
+      }
+
       sileo.success({ title: "Transaction deleted successfully" });
 
       // Invalidate all queries that depend on transaction data
       await invalidateTransactionQueries(queryClient, transaction.userEmail);
     },
+    idempotency: {
+      getKey: (variables) => variables.data.id,
+      onDuplicatePending: {
+        title: "Transaction is already being deleted",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Transaction already deleted",
+      },
+    },
   });
 
   return (
-    <div className="hidden md:inline-flex">
+    <div className="inline-flex">
       <DropdownMenu>
         <DropdownMenuTrigger
           render={
             <Button
               variant="outline"
-              size="icon-lg"
+              size="icon-sm"
+              aria-label="Open transaction actions"
               className="
                 transition-all duration-200 ease-out
                 hover:scale-105 hover:shadow-sm hover:border-primary/20
                 active:scale-95
                 focus-visible:scale-105
                 data-[state=open]:scale-105 data-[state=open]:shadow-sm
-                dark:hover:shadow-primary/10 rounded-full"
+                dark:hover:shadow-primary/10 rounded-full sm:size-9"
             >
               <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
             </Button>

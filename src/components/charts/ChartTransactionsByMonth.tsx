@@ -104,7 +104,7 @@ export default function ChartTransactionsByMonth() {
 
   // Calculate trend (simple comparison of last 2 months if available)
   const trendPercentage =
-    chartData.length >= 2
+    chartData.length >= 2 && chartData[chartData.length - 2]?.count > 0
       ? ((chartData[chartData.length - 1]?.count -
           chartData[chartData.length - 2]?.count) /
           chartData[chartData.length - 2]?.count) *
@@ -118,7 +118,7 @@ export default function ChartTransactionsByMonth() {
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
   return (
-    <Card className="w-full max-w-5xl">
+    <Card className="finance-panel w-full max-w-5xl rounded-[1.85rem] border-0 shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
           <BarChart3Icon className="size-5 text-primary" />
@@ -211,7 +211,7 @@ export default function ChartTransactionsByMonth() {
               {/* Trend Information */}
               {chartData.length >= 2 && (
                 <>
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="finance-chip flex flex-wrap items-center gap-2 rounded-[1.25rem] p-3.5">
                     {isPositiveTrend ? (
                       <TrendingUpIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
                     ) : (
@@ -234,7 +234,7 @@ export default function ChartTransactionsByMonth() {
 
               {/* Statistics Grid */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
+                <div className="finance-chip space-y-2 rounded-[1.25rem] p-3.5">
                   <div className="flex items-center gap-2">
                     <ArrowUpIcon className="size-5 text-green-600 dark:text-green-400" />
                     <div>
@@ -249,7 +249,7 @@ export default function ChartTransactionsByMonth() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="finance-chip space-y-2 rounded-[1.25rem] p-3.5">
                   <div className="flex items-center gap-2">
                     <TargetIcon className="size-5 text-primary" />
                     <div>
@@ -268,7 +268,7 @@ export default function ChartTransactionsByMonth() {
               </div>
 
               {/* Activity Distribution Bar */}
-              <div className="space-y-2">
+              <div className="finance-chip space-y-2 rounded-[1.25rem] p-3.5">
                 <div className="text-xs text-muted-foreground">
                   Monthly Distribution
                 </div>

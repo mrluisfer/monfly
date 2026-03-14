@@ -1,15 +1,49 @@
 "use client";
 
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
-import { DollarSign, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowUpRightIcon, TrendingDown, TrendingUp } from "lucide-react";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+
+type MetricCardProps = {
+  label: string;
+  meta: string;
+  toneClassName: string;
+  value: string;
+  icon: React.ReactNode;
+};
+
+function MetricCard({
+  icon,
+  label,
+  meta,
+  toneClassName,
+  value,
+}: MetricCardProps) {
+  return (
+    <Card className="finance-panel rounded-[1.35rem] border-0 p-0 shadow-none">
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-sm font-medium text-muted-foreground">{label}</p>
+            <p className={cn("mt-2 text-2xl font-semibold tracking-tight", toneClassName)}>
+              {value}
+            </p>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">{meta}</p>
+          </div>
+          <div className="finance-chip rounded-full p-2.5">{icon}</div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 export function DashboardMetrics({ className }: { className?: string }) {
   const userEmail = useRouteUser();
@@ -24,35 +58,44 @@ export function DashboardMetrics({ className }: { className?: string }) {
     retryDelay: 1000,
   });
 
-  // Process data
-  const rawChartData = data?.data ?? [];
-  const totalIncome = rawChartData.reduce(
-    (sum: number, item: any) =>
-      sum + (Number.isFinite(item.income) ? item.income : 0),
-    0
-  );
-  const totalExpenses = rawChartData.reduce(
-    (sum: number, item: any) =>
-      sum + (Number.isFinite(item.expense) ? item.expense : 0),
-    0
-  );
-  const netTotal = totalIncome - totalExpenses;
+  const summary = useMemo(() => {
+    const rawChartData = data?.data ?? [];
+    const totalIncome = rawChartData.reduce(
+      (sum: number, item: any) =>
+        sum + (Number.isFinite(item.income) ? item.income : 0),
+      0
+    );
+    const totalExpenses = rawChartData.reduce(
+      (sum: number, item: any) =>
+        sum + (Number.isFinite(item.expense) ? item.expense : 0),
+      0
+    );
+    const netTotal = totalIncome - totalExpenses;
+    const latestPoint = rawChartData.at(-1);
+    const latestNet =
+      (Number.isFinite(latestPoint?.income) ? latestPoint.income : 0) -
+      (Number.isFinite(latestPoint?.expense) ? latestPoint.expense : 0);
+    const savingsRate =
+      totalIncome > 0 ? Math.round((netTotal / totalIncome) * 100) : 0;
+
+    return {
+      latestLabel: latestPoint?.month ? String(latestPoint.month) : "Latest",
+      latestNet,
+      netTotal,
+      savingsRate,
+      totalExpenses,
+      totalIncome,
+    };
+  }, [data?.data]);
 
   if (isLoading) {
     return (
-      <div
-        className={cn("grid gap-4 md:grid-cols-3 xl:grid-cols-1", className)}
-      >
-        {[1, 2, 3].map((i) => (
-          <Card key={i}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <Skeleton className="h-4 w-24" />
-              <Skeleton className="h-4 w-4" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-8 w-32" />
-            </CardContent>
-          </Card>
+      <div className={cn("grid gap-3 md:grid-cols-3 xl:grid-cols-1", className)}>
+        {[1, 2, 3].map((item) => (
+          <Skeleton
+            key={item}
+            className="h-32 rounded-[1.35rem] border border-border/70"
+          />
         ))}
       </div>
     );
@@ -60,63 +103,39 @@ export function DashboardMetrics({ className }: { className?: string }) {
 
   if (error) {
     return (
-      <div className="p-4 text-center text-red-500 bg-red-50 rounded-lg">
-        Failed to load financial metrics
+      <div className="finance-panel rounded-[1.35rem] p-4 text-sm text-destructive">
+        Failed to load financial metrics.
       </div>
     );
   }
 
   return (
-    <div className={cn("grid gap-4 md:grid-cols-3 xl:grid-cols-1", className)}>
-      <Card className="app-panel border-emerald-300/45 bg-linear-to-br from-emerald-50/85 to-background/25 dark:border-emerald-800/55 dark:from-emerald-950/22">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Income</CardTitle>
-          <div className="rounded-full bg-emerald-100 p-2 dark:bg-emerald-900/40">
-            <TrendingUp className="h-4 w-4 text-green-600" />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-green-600">
-            {formatCurrency(totalIncome, "USD")}
-          </div>
-          <p className="text-xs text-muted-foreground">Total recorded income</p>
-        </CardContent>
-      </Card>
-      <Card className="app-panel border-rose-300/45 bg-linear-to-br from-rose-50/85 to-background/25 dark:border-rose-800/55 dark:from-rose-950/20">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
-          <div className="rounded-full bg-rose-100 p-2 dark:bg-rose-900/40">
-            <TrendingDown className="h-4 w-4 text-red-600" />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-red-600">
-            {formatCurrency(totalExpenses, "USD")}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Total recorded expenses
-          </p>
-        </CardContent>
-      </Card>
-      <Card className="app-panel border-border/75 bg-linear-to-br from-background to-accent/60">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Net Flow</CardTitle>
-          <div className="rounded-full bg-secondary p-2">
-            <DollarSign className="h-4 w-4 text-primary" />
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div
-            className={`text-2xl font-bold ${
-              netTotal >= 0 ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {netTotal >= 0 ? "+" : ""}
-            {formatCurrency(netTotal, "USD")}
-          </div>
-          <p className="text-xs text-muted-foreground">Income minus expenses</p>
-        </CardContent>
-      </Card>
+    <div className={cn("grid gap-3 md:grid-cols-3 xl:grid-cols-1", className)}>
+      <MetricCard
+        label="Income"
+        value={formatCurrency(summary.totalIncome, "USD")}
+        meta="Total recorded inflow"
+        toneClassName="text-emerald-600 dark:text-emerald-400"
+        icon={<TrendingUp className="size-4 text-emerald-600 dark:text-emerald-400" />}
+      />
+      <MetricCard
+        label="Expenses"
+        value={formatCurrency(summary.totalExpenses, "USD")}
+        meta="Total recorded outflow"
+        toneClassName="text-rose-600 dark:text-rose-400"
+        icon={<TrendingDown className="size-4 text-rose-600 dark:text-rose-400" />}
+      />
+      <MetricCard
+        label="Net flow"
+        value={`${summary.netTotal >= 0 ? "+" : ""}${formatCurrency(summary.netTotal, "USD")}`}
+        meta={`${summary.latestLabel}: ${formatCurrency(summary.latestNet, "USD")} • ${summary.savingsRate}% savings rate`}
+        toneClassName={
+          summary.netTotal >= 0
+            ? "text-primary"
+            : "text-amber-700 dark:text-amber-300"
+        }
+        icon={<ArrowUpRightIcon className="size-4 text-primary" />}
+      />
     </div>
   );
 }

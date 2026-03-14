@@ -9,16 +9,18 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  useReactTable,
   VisibilityState,
+  useReactTable,
 } from "@tanstack/react-table";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-transactions-by-id";
 import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
+import { formatCurrency } from "~/utils/format-currency";
+import { format } from "date-fns";
 
 import { Columns } from "./Columns";
 import { DataTableContent } from "./DataTableContent";
@@ -80,7 +82,13 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
 
   const deleteTransactionsByIdMutation = useMutation({
     fn: deleteTransactionsByIdServer,
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to delete transactions" });
+        return;
+      }
+
       sileo.success({ title: "Transactions deleted successfully" });
       await queryClient.invalidateQueries({
         queryKey: [queryDictionary.transactions, userEmail],
@@ -89,6 +97,18 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
         queryKey: [queryDictionary.user, userEmail],
       });
       table.resetRowSelection();
+    },
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify([...variables.data.ids].sort((left, right) =>
+          left.localeCompare(right)
+        )),
+      onDuplicatePending: {
+        title: "Deletion already in progress",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Transactions already deleted",
+      },
     },
   });
 
@@ -126,13 +146,39 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
   ).toLowerCase();
   const hasActiveFilters =
     Boolean(globalFilter) || table.getState().columnFilters.length > 0;
+  const filteredTransactions = table
+    .getFilteredRowModel()
+    .rows.map((row) => row.original);
+  const filteredIncome = filteredTransactions.reduce(
+    (sum, transaction) =>
+      transaction.type.toLowerCase() === "income"
+        ? sum + transaction.amount
+        : sum,
+    0
+  );
+  const filteredExpenses = filteredTransactions.reduce(
+    (sum, transaction) =>
+      transaction.type.toLowerCase() === "expense"
+        ? sum + transaction.amount
+        : sum,
+    0
+  );
+  const filteredNet = filteredIncome - filteredExpenses;
+  const latestTransactionDate = filteredTransactions.length
+    ? filteredTransactions.reduce((latest, transaction) =>
+        new Date(transaction.date).getTime() > new Date(latest.date).getTime()
+          ? transaction
+          : latest
+      ).date
+    : null;
   const getColumnClassName = (columnId: string) =>
     cn(
       columnId === "select" && "w-10 min-w-10",
-      columnId === "type" && "w-14 min-w-14",
-      columnId === "description" && "min-w-[220px]",
-      columnId === "category" && "min-w-[140px]",
-      columnId === "date" && "min-w-[130px]",
+      columnId === "type" && "min-w-[120px]",
+      columnId === "description" && "min-w-[280px]",
+      columnId === "category" && "min-w-[150px]",
+      columnId === "date" && "min-w-[160px]",
+      columnId === "createdAt" && "min-w-[160px]",
       columnId === "amount" && "min-w-[130px]",
       columnId === "actions" && "w-14 min-w-14"
     );
@@ -149,6 +195,62 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
         deleteTransactionsStatus={deleteTransactionsByIdMutation.status}
         onDeleteRows={handleDeleteRows}
       />
+      <div className="mb-4 grid gap-3 lg:grid-cols-4">
+        <div className="finance-chip rounded-[1.1rem] p-3">
+          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+            Results
+          </div>
+          <div className="mt-2 text-lg font-semibold text-foreground">
+            {filteredTransactions.length}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Visible rows in current view
+          </div>
+        </div>
+        <div className="finance-chip rounded-[1.1rem] p-3">
+          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+            Income
+          </div>
+          <div className="mt-2 text-lg font-semibold text-emerald-600 dark:text-emerald-400">
+            {formatCurrency(filteredIncome, "USD")}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Sum of visible income rows
+          </div>
+        </div>
+        <div className="finance-chip rounded-[1.1rem] p-3">
+          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+            Expenses
+          </div>
+          <div className="mt-2 text-lg font-semibold text-rose-600 dark:text-rose-400">
+            {formatCurrency(filteredExpenses, "USD")}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Sum of visible expense rows
+          </div>
+        </div>
+        <div className="finance-chip rounded-[1.1rem] p-3">
+          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+            Net
+          </div>
+          <div
+            className={cn(
+              "mt-2 text-lg font-semibold",
+              filteredNet >= 0
+                ? "text-primary"
+                : "text-amber-700 dark:text-amber-300"
+            )}
+          >
+            {filteredNet >= 0 ? "+" : ""}
+            {formatCurrency(filteredNet, "USD")}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {latestTransactionDate
+              ? `Latest: ${format(new Date(latestTransactionDate), "MMM d, yyyy")}`
+              : "No visible transactions"}
+          </div>
+        </div>
+      </div>
       <DataTableContent table={table} getColumnClassName={getColumnClassName} />
       <DataTablePagination table={table} />
     </div>

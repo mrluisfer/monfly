@@ -2,7 +2,7 @@ import type { Category } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCanonicalCategoryIconName } from "~/constants/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";
 import { sileo } from "~/lib/toaster";
 
@@ -19,7 +19,13 @@ export function EditCategory({
 
   const updateCategory = useMutation({
     fn: putCategoryByIdServer,
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to update category" });
+        return;
+      }
+
       sileo.success({ title: "Category updated successfully" });
       // Need to get userEmail first
       const { getUserSession } = await import("~/utils/user/get-user-session");
@@ -31,6 +37,20 @@ export function EditCategory({
         await invalidateCategoryQueries(queryClient, userEmail);
       }
       onCloseDialog?.();
+    },
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          categoryId: variables.data.categoryId,
+          icon: variables.data.icon,
+          name: variables.data.name.trim().toLowerCase(),
+        }),
+      onDuplicatePending: {
+        title: "Category changes are already being saved",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Category changes already applied",
+      },
     },
   });
   const handleSubmit = async (data: Record<string, string>) => {

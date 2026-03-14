@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putTransactionByIdServer } from "~/lib/api/transaction/put-transaction-by-id";
 import { sileo } from "~/lib/toaster";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
@@ -36,10 +36,28 @@ export const useEditTransaction = (
         return;
       }
       sileo.success({ title: ctx.data.message });
-      onCloseDialog();
 
       // Invalidate all queries that depend on transaction data
       await invalidateTransactionQueries(queryClient, transaction.userEmail);
+    },
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          amount: variables.data.data.amount,
+          category: variables.data.data.category.trim().toLowerCase(),
+          date: variables.data.data.date.toISOString(),
+          description: variables.data.data.description.trim().toLowerCase(),
+          id: variables.data.id,
+          type: variables.data.data.type.toLowerCase(),
+        }),
+      onDuplicatePending: {
+        title: "Changes are already being saved",
+        description: "Please wait for the current update to finish.",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Changes already applied",
+        description: "We skipped the duplicate update to keep data consistent.",
+      },
     },
   });
 
@@ -47,7 +65,7 @@ export const useEditTransaction = (
     data: z.infer<typeof TransactionFormSchema>
   ) => {
     try {
-      await putTransactionByIdMutation.mutate({
+      const result = await putTransactionByIdMutation.mutate({
         data: {
           id: transaction.id,
           data: {
@@ -59,7 +77,10 @@ export const useEditTransaction = (
           },
         },
       });
-      onCloseDialog();
+
+      if (result && !isErrorPayload(result)) {
+        onCloseDialog();
+      }
     } catch (error) {
       sileo.error({ title: "Error editing transaction" });
     }

@@ -39,7 +39,7 @@ function RouteComponent() {
   const userEmail = useRouteUser();
   const shouldReduceMotion = useReducedMotion();
 
-  const { data, isPending, error } = useQuery({
+  const { isPending, error } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
     queryFn: createSafeQuery(() =>
       getUserByEmailServer({ data: { email: userEmail } })
@@ -71,25 +71,27 @@ function RouteComponent() {
   if (isPending) {
     return (
       <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div className="space-y-2">
-            <Skeleton className="h-8 w-48" />
-            <Skeleton className="h-4 w-64" />
+        <Skeleton className="h-32 w-full rounded-[1.75rem]" />
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]">
+          <Skeleton className="h-[26rem] w-full rounded-[2rem]" />
+          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-1">
+            {[1, 2, 3].map((item) => (
+              <Skeleton
+                key={item}
+                className="h-40 w-full rounded-[1.6rem]"
+              />
+            ))}
           </div>
-        </div>
-        <div className="grid gap-4">
-          <Skeleton className="h-32 w-full" />
-          <Skeleton className="h-64 w-full" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       <WelcomeMessage>
-        Here's a quick overview of your finances. Dive in to explore detailed
-        insights and manage your funds effectively.
+        Review balance, cashflow, and recent activity in one place, then jump
+        directly into the transaction or report you need.
       </WelcomeMessage>
 
       <LazyMotion features={domAnimation}>
@@ -103,10 +105,8 @@ function RouteComponent() {
             }}
             className="flex flex-col gap-6"
           >
-            {/* Main Content Grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-              {/* Left Column: Balance & Transactions (Primary Focus) */}
-              <div className="xl:col-span-2 space-y-6 order-1">
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]">
+              <div className="space-y-6 order-1">
                 <m.div
                   initial={
                     shouldReduceMotion
@@ -120,7 +120,6 @@ function RouteComponent() {
                   }}
                 >
                   <TotalBalance />
-                  <BalanceActions />
                 </m.div>
 
                 <m.div
@@ -132,11 +131,10 @@ function RouteComponent() {
                   }}
                   className="overflow-hidden"
                 >
-                  <TransactionsList />
+                  <BalanceActions />
                 </m.div>
               </div>
 
-              {/* Right Column: Metrics & Charts (Secondary) */}
               <div className="space-y-6 order-2">
                 <m.div
                   initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
@@ -148,7 +146,23 @@ function RouteComponent() {
                 >
                   <DashboardMetrics />
                 </m.div>
+              </div>
+            </div>
 
+            <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]">
+              <m.div
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.5,
+                  delay: shouldReduceMotion ? 0 : 0.25,
+                }}
+                className="overflow-hidden"
+              >
+                <TransactionsList />
+              </m.div>
+
+              <div className="space-y-6">
                 <m.div
                   initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}

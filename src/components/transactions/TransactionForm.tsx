@@ -4,7 +4,7 @@ import { getCategoryIconByName } from "~/constants/categories-icon";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useAppHaptics } from "~/hooks/useAppHaptics";
 import { useGetCategoriesByEmail } from "~/hooks/useGetCategoriesByEmail";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { sileo } from "~/lib/toaster";
@@ -59,6 +59,13 @@ type TransactionFormProps<FormValues extends FieldValues> = {
   isLoading?: boolean;
 };
 
+const sectionClassName =
+  "rounded-[1.45rem] border border-border/70 bg-background/70 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)] sm:p-5";
+const inputClassName =
+  "h-12 rounded-[1.05rem] border-border/70 bg-background/65 text-base shadow-none sm:text-base";
+const toggleButtonClassName =
+  "flex h-12 items-center justify-center gap-1.5 rounded-[1.05rem] border text-sm font-medium transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
+
 export function TransactionForm<FormValues extends FieldValues>({
   form,
   onSubmit,
@@ -81,10 +88,31 @@ export function TransactionForm<FormValues extends FieldValues>({
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to create category" });
+        return;
+      }
+
       sileo.success({ title: "Category created successfully" });
       // Invalidate all queries that depend on category data
       await invalidateCategoryQueries(queryClient, userEmail);
+    },
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          email: variables.data.email,
+          icon: variables.data.category.icon,
+          name: variables.data.category.name.trim().toLowerCase(),
+        }),
+      onDuplicatePending: {
+        title: "Category is already being created",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Category already created",
+        description: "We ignored the repeated request to avoid duplicates.",
+      },
     },
   });
 
@@ -178,90 +206,238 @@ export function TransactionForm<FormValues extends FieldValues>({
         }
       >
         {/* Amount + Type row */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:gap-3">
-          <FormField
-            control={form.control}
-            name={transactionFormNames.amount as Path<FormValues>}
-            render={({ field }) => (
-              <FormItem className="space-y-2 flex-1">
-                <FormLabel
-                  htmlFor={transactionFormNames.amount}
-                  className="flex items-center gap-1.5 text-sm font-medium text-foreground"
-                >
-                  <DollarSignIcon className="size-3.5 text-emerald-600" />
-                  Amount
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input
-                      id={transactionFormNames.amount}
-                      type="number"
-                      inputMode="decimal"
-                      step="0.01"
-                      placeholder="0.00"
-                      className="h-11 pl-8 text-base font-medium sm:h-12 sm:text-lg"
-                      {...field}
-                      onChange={(e) =>
-                        field.onChange(validLimitNumber(e.target.value))
-                      }
-                    />
-                    <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name={transactionFormNames.type as Path<FormValues>}
-            render={({ field }) => {
-              const currentType = (field.value as string) || "";
-              return (
-                <FormItem className="space-y-2 sm:w-50">
+        <div className={sectionClassName}>
+          <div className="flex flex-col gap-4 sm:flex-row sm:gap-3">
+            <FormField
+              control={form.control}
+              name={transactionFormNames.amount as Path<FormValues>}
+              render={({ field }) => (
+                <FormItem className="flex-1 space-y-2">
                   <FormLabel
-                    id={typeLabelId}
+                    htmlFor={transactionFormNames.amount}
                     className="flex items-center gap-1.5 text-sm font-medium text-foreground"
                   >
-                    <SparklesIcon className="size-3.5 text-purple-600" />
-                    Type
+                    <DollarSignIcon className="size-3.5 text-emerald-600" />
+                    Amount
                   </FormLabel>
                   <FormControl>
-                    <div
-                      className="grid grid-cols-2 gap-2"
-                      role="radiogroup"
-                      aria-labelledby={typeLabelId}
+                    <div className="relative">
+                      <Input
+                        id={transactionFormNames.amount}
+                        type="number"
+                        inputMode="decimal"
+                        step="0.01"
+                        placeholder="0.00"
+                        className={cn(inputClassName, "pl-10 font-semibold")}
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(validLimitNumber(e.target.value))
+                        }
+                      />
+                      <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={transactionFormNames.type as Path<FormValues>}
+              render={({ field }) => {
+                const currentType = (field.value as string) || "";
+                return (
+                  <FormItem className="space-y-2 sm:w-52">
+                    <FormLabel
+                      id={typeLabelId}
+                      className="flex items-center gap-1.5 text-sm font-medium text-foreground"
                     >
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={currentType === "income"}
-                        onClick={() => field.onChange("income")}
-                        className={cn(
-                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:h-12",
-                          currentType === "income"
-                            ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                            : "border-input bg-background text-muted-foreground hover:bg-muted/50"
-                        )}
+                      <SparklesIcon className="size-3.5 text-purple-600" />
+                      Type
+                    </FormLabel>
+                    <FormControl>
+                      <div
+                        className="grid grid-cols-2 gap-2"
+                        role="radiogroup"
+                        aria-labelledby={typeLabelId}
                       >
-                        <TrendingUpIcon className="size-4" />
-                        Income
-                      </button>
-                      <button
-                        type="button"
-                        role="radio"
-                        aria-checked={currentType === "expense"}
-                        onClick={() => field.onChange("expense")}
-                        className={cn(
-                          "flex h-11 items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 sm:h-12",
-                          currentType === "expense"
-                            ? "border-red-500/50 bg-red-500/10 text-red-600 dark:text-red-400"
-                            : "border-input bg-background text-muted-foreground hover:bg-muted/50"
-                        )}
-                      >
-                        <TrendingDownIcon className="size-4" />
-                        Expense
-                      </button>
+                        <button
+                          type="button"
+                          role="radio"
+                          aria-checked={currentType === "income"}
+                          onClick={() => field.onChange("income")}
+                          className={cn(
+                            toggleButtonClassName,
+                            currentType === "income"
+                              ? "border-emerald-500/40 bg-emerald-500/12 text-emerald-700 dark:text-emerald-300"
+                              : "border-border/70 bg-background/65 text-muted-foreground hover:bg-muted/50"
+                          )}
+                        >
+                          <TrendingUpIcon className="size-4" />
+                          Income
+                        </button>
+                        <button
+                          type="button"
+                          role="radio"
+                          aria-checked={currentType === "expense"}
+                          onClick={() => field.onChange("expense")}
+                          className={cn(
+                            toggleButtonClassName,
+                            currentType === "expense"
+                              ? "border-red-500/40 bg-red-500/12 text-red-700 dark:text-red-300"
+                              : "border-border/70 bg-background/65 text-muted-foreground hover:bg-muted/50"
+                          )}
+                        >
+                          <TrendingDownIcon className="size-4" />
+                          Expense
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
+        </div>
+
+        <div className={sectionClassName}>
+          <FormField
+            control={form.control}
+            name={transactionFormNames.category as Path<FormValues>}
+            render={({ field }) => {
+              const value = field.value as string | undefined;
+              const selectedCategory = categories?.find(
+                (cat) => cat.name === value
+              );
+
+              const showAddNew =
+                categoryInputValue.length > 1 &&
+                !categories?.some(
+                  (cat) =>
+                    cat.name.toLowerCase() === categoryInputValue.toLowerCase()
+                );
+
+              return (
+                <FormItem className="space-y-2">
+                  <FormLabel
+                    htmlFor={transactionFormNames.category}
+                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                  >
+                    <TagIcon className="size-3.5 text-blue-600" />
+                    Category
+                  </FormLabel>
+                  <FormControl>
+                    <div className="*:not-first:mt-2 w-full">
+                      <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
+                        <PopoverTrigger
+                          render={
+                            <Button
+                              id={transactionFormNames.category}
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={categoryOpen}
+                              aria-controls={`${categoryComboboxId}-listbox`}
+                              className={cn(
+                                inputClassName,
+                                "w-full justify-between px-3 text-sm font-normal capitalize",
+                                !value && "text-muted-foreground"
+                              )}
+                            >
+                              {selectedCategory ? (
+                                <div className="flex items-center gap-2">
+                                  {getCategoryIconByName(selectedCategory.icon, {
+                                    size: 16,
+                                  })}
+                                  <span>{selectedCategory.name}</span>
+                                </div>
+                              ) : (
+                                <span>
+                                  {categoryInputValue || "Select a category"}
+                                </span>
+                              )}
+                              <ChevronDownIcon
+                                size={16}
+                                className="ml-2 text-muted-foreground"
+                                aria-hidden="true"
+                              />
+                            </Button>
+                          }
+                        />
+                        <PopoverContent
+                          className="w-(--radix-popover-trigger-width) p-0"
+                          align="start"
+                        >
+                          <Command>
+                            <CommandInput
+                              placeholder="Search category..."
+                              value={categoryInputValue}
+                              onValueChange={setCategoryInputValue}
+                            />
+                            <CommandList
+                              id={`${categoryComboboxId}-listbox`}
+                              className="max-h-57.5 sm:max-h-75"
+                            >
+                              <CommandEmpty>No category found.</CommandEmpty>
+                              <CommandGroup>
+                                {categories?.map((category) => (
+                                  <CommandItem
+                                    key={category.name}
+                                    value={category.name}
+                                    onSelect={(currentValue: string) => {
+                                      field.onChange(currentValue);
+                                      setCategoryInputValue("");
+                                      setCategoryOpen(false);
+                                    }}
+                                    className="capitalize"
+                                  >
+                                    {getCategoryIconByName(category.icon, {
+                                      size: 16,
+                                    })}
+                                    <span>{category.name}</span>
+                                    {value === category.name && (
+                                      <CheckIcon
+                                        size={16}
+                                        className="ml-auto"
+                                      />
+                                    )}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                              {showAddNew && (
+                                <>
+                                  <CommandSeparator />
+                                  <CommandGroup heading="Add new category">
+                                    <CommandItem
+                                      onSelect={async () => {
+                                        field.onChange(categoryInputValue);
+                                        setCategoryInputValue("");
+                                        setCategoryOpen(false);
+                                        await postCategoryByEmail.mutate({
+                                          data: {
+                                            email: userEmail,
+                                            category: {
+                                              name: categoryInputValue,
+                                              icon: "other",
+                                            },
+                                          },
+                                        });
+                                      }}
+                                      value={categoryInputValue}
+                                    >
+                                      <PlusIcon
+                                        size={16}
+                                        className="text-green-600"
+                                      />
+                                      <span>Create "{categoryInputValue}"</span>
+                                    </CommandItem>
+                                  </CommandGroup>
+                                </>
+                              )}
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -271,244 +447,111 @@ export function TransactionForm<FormValues extends FieldValues>({
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name={transactionFormNames.category as Path<FormValues>}
-          render={({ field }) => {
-            const value = field.value as string | undefined;
-            const selectedCategory = categories?.find(
-              (cat) => cat.name === value
-            );
-
-            const showAddNew =
-              categoryInputValue.length > 1 &&
-              !categories?.some(
-                (cat) =>
-                  cat.name.toLowerCase() === categoryInputValue.toLowerCase()
-              );
-
-            return (
+        <div className={sectionClassName}>
+          <FormField
+            control={form.control}
+            name={transactionFormNames.description as Path<FormValues>}
+            render={({ field }) => (
               <FormItem className="space-y-2">
                 <FormLabel
-                  htmlFor={transactionFormNames.category}
+                  htmlFor={transactionFormNames.description}
                   className="flex items-center gap-1.5 text-sm font-medium text-foreground"
                 >
-                  <TagIcon className="size-3.5 text-blue-600" />
-                  Category
+                  <FileTextIcon className="size-3.5 text-orange-600" />
+                  Description
                 </FormLabel>
                 <FormControl>
-                  <div className="*:not-first:mt-2 w-full">
-                    <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
-                      <PopoverTrigger
-                        render={
-                          <Button
-                            id={transactionFormNames.category}
-                            variant="outline"
-                            role="combobox"
-                            aria-expanded={categoryOpen}
-                            aria-controls={`${categoryComboboxId}-listbox`}
-                            className={cn(
-                              "h-11 w-full justify-between px-3 text-sm font-normal capitalize sm:h-12",
-                              !value && "text-muted-foreground"
-                            )}
-                          >
-                            {selectedCategory ? (
-                              <div className="flex items-center gap-2">
-                                {getCategoryIconByName(selectedCategory.icon, {
-                                  size: 16,
-                                })}
-                                <span>{selectedCategory.name}</span>
-                              </div>
-                            ) : (
-                              <span>
-                                {categoryInputValue || "Select a category"}
-                              </span>
-                            )}
-                            <ChevronDownIcon
-                              size={16}
-                              className="ml-2 text-muted-foreground"
-                              aria-hidden="true"
-                            />
-                          </Button>
-                        }
-                      />
-                      <PopoverContent
-                        className="w-(--radix-popover-trigger-width) p-0"
-                        align="start"
-                      >
-                        <Command>
-                          <CommandInput
-                            placeholder="Search category..."
-                            value={categoryInputValue}
-                            onValueChange={setCategoryInputValue}
-                          />
-                          <CommandList
-                            id={`${categoryComboboxId}-listbox`}
-                            className="max-h-57.5 sm:max-h-75"
-                          >
-                            <CommandEmpty>No category found.</CommandEmpty>
-                            <CommandGroup>
-                              {categories?.map((category) => (
-                                <CommandItem
-                                  key={category.name}
-                                  value={category.name}
-                                  onSelect={(currentValue: string) => {
-                                    field.onChange(currentValue);
-                                    setCategoryInputValue("");
-                                    setCategoryOpen(false);
-                                  }}
-                                  className="capitalize"
-                                >
-                                  {getCategoryIconByName(category.icon, {
-                                    size: 16,
-                                  })}
-                                  <span>{category.name}</span>
-                                  {value === category.name && (
-                                    <CheckIcon size={16} className="ml-auto" />
-                                  )}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                            {showAddNew && (
-                              <>
-                                <CommandSeparator />
-                                <CommandGroup heading="Add new category">
-                                  <CommandItem
-                                    onSelect={async () => {
-                                      field.onChange(categoryInputValue);
-                                      setCategoryInputValue("");
-                                      setCategoryOpen(false);
-                                      await postCategoryByEmail.mutate({
-                                        data: {
-                                          email: userEmail,
-                                          category: {
-                                            name: categoryInputValue,
-                                            icon: "other",
-                                          },
-                                        },
-                                      });
-                                    }}
-                                    value={categoryInputValue}
-                                  >
-                                    <PlusIcon
-                                      size={16}
-                                      className="text-green-600"
-                                    />
-                                    <span>Create "{categoryInputValue}"</span>
-                                  </CommandItem>
-                                </CommandGroup>
-                              </>
-                            )}
-                          </CommandList>
-                        </Command>
-                      </PopoverContent>
-                    </Popover>
+                  <div className="relative">
+                    <Textarea
+                      placeholder="Add a description..."
+                      id={transactionFormNames.description}
+                      className="min-h-24 resize-none rounded-[1.05rem] border-border/70 bg-background/65 pl-10 pt-3.5 text-sm shadow-none sm:pt-4 sm:text-base"
+                      rows={2}
+                      {...field}
+                    />
+                    <FileTextIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground sm:top-4" />
                   </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
-            );
-          }}
-        />
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name={transactionFormNames.description as Path<FormValues>}
-          render={({ field }) => (
-            <FormItem className="space-y-2">
-              <FormLabel
-                htmlFor={transactionFormNames.description}
-                className="flex items-center gap-1.5 text-sm font-medium text-foreground"
-              >
-                <FileTextIcon className="size-3.5 text-orange-600" />
-                Description
-              </FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Textarea
-                    placeholder="Add a description..."
-                    id={transactionFormNames.description}
-                    className="min-h-20 resize-none pl-10 pt-3.5 text-sm sm:min-h-27.5 sm:pt-4 sm:text-base"
-                    rows={2}
-                    {...field}
-                  />
-                  <FileTextIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground sm:top-4" />
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name={transactionFormNames.date as Path<FormValues>}
-          render={({ field }) => (
-            <FormItem className="flex flex-col space-y-2">
-              <FormLabel
-                htmlFor={transactionFormNames.date}
-                className="flex items-center gap-1.5 text-sm font-medium text-foreground"
-              >
-                <CalendarIcon className="size-3.5 text-indigo-600" />
-                Date
-              </FormLabel>
-              {isPending && (
-                <div role="status" aria-live="polite">
-                  Loading...
-                </div>
-              )}
-              {error && <div role="alert">Error: {error?.message}</div>}
-              {categories && (
-                <Popover>
-                  <PopoverTrigger
-                    render={
-                      <FormControl>
-                        <Button
-                          id={transactionFormNames.date}
-                          variant={"outline"}
-                          className={cn(
-                            "h-11 w-full justify-start pl-3 text-left text-sm font-normal sm:h-12 sm:text-base",
-                            !field.value && "text-muted-foreground"
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value as Date, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    }
-                  />
-                  <PopoverContent
-                    className="w-auto max-w-[calc(100vw-2rem)] p-0"
-                    align="start"
+          <div className="mt-4">
+            <FormField
+              control={form.control}
+              name={transactionFormNames.date as Path<FormValues>}
+              render={({ field }) => (
+                <FormItem className="flex flex-col space-y-2">
+                  <FormLabel
+                    htmlFor={transactionFormNames.date}
+                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
                   >
-                    <Calendar
-                      mode="single"
-                      selected={field.value as Date}
-                      onSelect={field.onChange}
-                      disabled={(date: Date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+                    <CalendarIcon className="size-3.5 text-indigo-600" />
+                    Date
+                  </FormLabel>
+                  {isPending && (
+                    <div role="status" aria-live="polite">
+                      Loading...
+                    </div>
+                  )}
+                  {error && <div role="alert">Error: {error?.message}</div>}
+                  {categories && (
+                    <Popover>
+                      <PopoverTrigger
+                        render={
+                          <FormControl>
+                            <Button
+                              id={transactionFormNames.date}
+                              variant={"outline"}
+                              className={cn(
+                                inputClassName,
+                                "w-full justify-start pl-3 text-left text-sm font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value as Date, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        }
+                      />
+                      <PopoverContent
+                        className="w-auto max-w-[calc(100vw-2rem)] p-0"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={field.value as Date}
+                          onSelect={field.onChange}
+                          disabled={(date: Date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  )}
+                  {showDateDescription && (
+                    <FormDescription>
+                      {description || "Pick a date"}
+                    </FormDescription>
+                  )}
+                  <FormMessage />
+                </FormItem>
               )}
-              {showDateDescription && (
-                <FormDescription>
-                  {description || "Pick a date"}
-                </FormDescription>
-              )}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="pt-2 sm:pt-4">
+            />
+          </div>
+        </div>
+
+        <div className="pt-1 sm:pt-2">
           <Button
             type="submit"
-            className="h-12 w-full rounded-xl text-base font-medium shadow-lg transition-all duration-200 active:scale-[0.97] hover:shadow-xl sm:hover:scale-[1.02]"
+            className="h-12 w-full rounded-full text-base font-medium shadow-[0_28px_46px_-28px_color-mix(in_oklab,var(--primary)_75%,transparent)] transition-all duration-200 active:scale-[0.97] hover:shadow-xl sm:hover:scale-[1.01]"
             disabled={isLoading}
           >
             {isLoading ? (

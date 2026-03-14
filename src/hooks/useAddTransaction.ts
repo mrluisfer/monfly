@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email";
 import { sileo } from "~/lib/toaster";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
@@ -31,12 +31,37 @@ export const useAddTransaction = () => {
 
   const postTransactionByEmail = useMutation({
     fn: postTransactionByEmailServer,
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to create transaction" });
+        return;
+      }
+
       sileo.success({ title: "Transaction created successfully" });
       form.reset();
 
       // Invalidate all queries that depend on transaction data
       await invalidateTransactionQueries(queryClient, userEmail);
+    },
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          amount: variables.data.transaction.amount,
+          category: variables.data.transaction.category.trim().toLowerCase(),
+          date: variables.data.transaction.date.toISOString(),
+          description:
+            variables.data.transaction.description?.trim().toLowerCase() ?? "",
+          type: variables.data.transaction.type.toLowerCase(),
+        }),
+      onDuplicatePending: {
+        title: "Transaction is already being saved",
+        description: "Please wait while we finish the current request.",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Transaction already saved",
+        description: "We ignored the duplicate submission to avoid duplicates.",
+      },
     },
   });
 

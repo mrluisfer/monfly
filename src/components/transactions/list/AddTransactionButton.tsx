@@ -34,7 +34,7 @@ const AddTransactionButton = ({
 
   const trigger = customTrigger ?? (
     <Button
-      className="group h-9 px-2.5 md:h-10 md:px-4"
+      className="finance-chip group h-10 rounded-full px-3 md:h-11 md:px-4"
       variant="outline"
       size="sm"
       aria-expanded={open}
@@ -55,12 +55,18 @@ const AddTransactionButton = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={trigger} />
-      <DialogContent className="w-[calc(100vw-1rem)] max-w-xl p-0 sm:w-full">
-        <div className="flex max-h-[90dvh] flex-col overflow-hidden">
-          <DialogHeader className="border-b px-4 pt-4 pb-3 text-left sm:px-6">
-            <DialogTitle>Add Transaction</DialogTitle>
-            <DialogDescription>
-              Create a new transaction to track your expenses or income.
+      <DialogContent
+        showCloseButton={false}
+        className="finance-dialog-sheet top-auto bottom-0 w-[calc(100vw-0.75rem)] max-w-xl -translate-y-0 rounded-t-[2rem] rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:rounded-[1.8rem]"
+      >
+        <div className="flex max-h-[92dvh] flex-col overflow-hidden">
+          <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />
+          <DialogHeader className="border-b border-border/60 px-5 pt-4 pb-4 text-left sm:px-6">
+            <DialogTitle className="text-lg font-semibold tracking-tight">
+              Add transaction
+            </DialogTitle>
+            <DialogDescription className="text-sm leading-6">
+              Enter the amount, type, category, and date.
             </DialogDescription>
           </DialogHeader>
 
@@ -76,11 +82,14 @@ const AddTransactionButton = ({
             </div>
           </ScrollArea>
 
-          <div className="border-t px-4 py-3 sm:px-6">
+          <div className="border-t border-border/60 px-4 py-3 sm:px-6">
             <DialogClose
               className="w-full"
               render={
-                <Button variant="outline" className="w-full">
+                <Button
+                  variant="outline"
+                  className="finance-chip h-11 w-full rounded-full"
+                >
                   <XIcon className="h-5 w-5" />
                   Cancel
                 </Button>

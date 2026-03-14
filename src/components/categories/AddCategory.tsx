@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCanonicalCategoryIconName } from "~/constants/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { sileo } from "~/lib/toaster";
@@ -27,12 +27,32 @@ export default function AddCategory() {
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to create category" });
+        return;
+      }
+
       sileo.success({ title: "Category created successfully" });
       const { invalidateCategoryQueries } = await import(
         "~/utils/query-invalidation"
       );
       await invalidateCategoryQueries(queryClient, userEmail);
+    },
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          email: variables.data.email,
+          icon: variables.data.category.icon,
+          name: variables.data.category.name.trim().toLowerCase(),
+        }),
+      onDuplicatePending: {
+        title: "Category is already being created",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Category already created",
+      },
     },
   });
 

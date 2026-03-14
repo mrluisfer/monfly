@@ -106,9 +106,9 @@ export default function ChartByCategoryRadar({
   const stats = calculateStats();
 
   return (
-    <Card>
+    <Card className="finance-panel rounded-[1.85rem] border-0 shadow-none">
       <CardHeader>
-        <CardTitle>{`${chartLabel} by Category (Radar)`}</CardTitle>
+        <CardTitle>{`${chartLabel} by Category`}</CardTitle>
         <CardDescription>
           Visualize your {chartLabel.toLowerCase()} distribution across
           categories
@@ -156,7 +156,7 @@ export default function ChartByCategoryRadar({
       </CardContent>
 
       {stats && (
-        <CardFooter>
+        <CardFooter className="bg-transparent">
           <div className="space-y-3 text-sm w-full">
             <div className="flex items-center gap-2 leading-none font-medium">
               <TrendingStatus type={type} data={trendingMonthlyData} />
@@ -165,7 +165,7 @@ export default function ChartByCategoryRadar({
             <Separator />
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
+              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
                 <div className="text-xs text-muted-foreground">
                   Top Category
                 </div>
@@ -173,7 +173,7 @@ export default function ChartByCategoryRadar({
                   {stats.maxCategory}
                 </Badge>
               </div>
-              <div className="space-y-1">
+              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
                 <div className="text-xs text-muted-foreground">Categories</div>
                 <div className="font-semibold text-sm">
                   {stats.categoriesCount}
@@ -182,7 +182,7 @@ export default function ChartByCategoryRadar({
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1">
+              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
                 <div className="text-xs text-muted-foreground">
                   Total {chartLabel}
                 </div>
@@ -190,7 +190,7 @@ export default function ChartByCategoryRadar({
                   ${stats.total.toLocaleString()}
                 </div>
               </div>
-              <div className="space-y-1">
+              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
                 <div className="text-xs text-muted-foreground">Average</div>
                 <div className="font-semibold text-sm">
                   ${Math.round(stats.avg).toLocaleString()}

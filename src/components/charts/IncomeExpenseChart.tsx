@@ -133,6 +133,7 @@ export default function IncomeExpenseChart() {
 
   return (
     <Card
+      className="finance-panel rounded-[1.85rem] border-0 shadow-none"
       title="Income vs Expenses"
       subtitle={
         totalIncome > 0 || totalExpenses > 0
@@ -151,8 +152,7 @@ export default function IncomeExpenseChart() {
       )}
 
       {shownChart && (
-        <div className="space-y-4">
-          {/* Chart */}
+        <div className="space-y-5">
           <ChartContainer
             config={{
               income: {
@@ -267,6 +267,40 @@ export default function IncomeExpenseChart() {
               </AreaChart>
             </ResponsiveContainer>
           </ChartContainer>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="finance-chip rounded-[1.25rem] p-3.5">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                Income
+              </p>
+              <p className="mt-2 text-base font-semibold text-emerald-600 dark:text-emerald-400">
+                {formatCurrency(totalIncome, "USD")}
+              </p>
+            </div>
+            <div className="finance-chip rounded-[1.25rem] p-3.5">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                Expenses
+              </p>
+              <p className="mt-2 text-base font-semibold text-rose-600 dark:text-rose-400">
+                {formatCurrency(totalExpenses, "USD")}
+              </p>
+            </div>
+            <div className="finance-chip rounded-[1.25rem] p-3.5">
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                Net
+              </p>
+              <p
+                className="mt-2 text-base font-semibold"
+                style={{
+                  color:
+                    netTotal >= 0 ? "hsl(152 76% 40%)" : "hsl(0 72% 51%)",
+                }}
+              >
+                {netTotal >= 0 ? "+" : ""}
+                {formatCurrency(netTotal, "USD")}
+              </p>
+            </div>
+          </div>
         </div>
       )}
 

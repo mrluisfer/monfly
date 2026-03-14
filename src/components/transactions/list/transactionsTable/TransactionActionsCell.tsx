@@ -27,7 +27,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { useMutation } from "~/hooks/useMutation";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
@@ -47,7 +47,14 @@ export function TransactionActionsCell({
 
   const deleteTransactionByIdMutation = useMutation({
     fn: deleteTransactionByIdServer,
-    onSuccess: async () => {
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to delete transaction" });
+        setIsDeleteDialogOpen(false);
+        return;
+      }
+
       sileo.success({ title: "Transaction deleted successfully" });
       await queryClient.invalidateQueries({
         queryKey: [queryDictionary.transactions, transaction.userEmail],
@@ -56,6 +63,15 @@ export function TransactionActionsCell({
         queryKey: [queryDictionary.user, transaction.userEmail],
       });
       setIsDeleteDialogOpen(false);
+    },
+    idempotency: {
+      getKey: (variables) => variables.data.id,
+      onDuplicatePending: {
+        title: "Transaction is already being deleted",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Transaction already deleted",
+      },
     },
   });
 

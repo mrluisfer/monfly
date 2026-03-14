@@ -17,16 +17,16 @@ export function DataTableContent({
   getColumnClassName: (columnId: string) => string;
 }) {
   return (
-    <div className="rounded-md border">
-      <Table className="min-w-190">
-        <TableHeader>
+    <div className="overflow-hidden rounded-[1.5rem] border border-border/70 bg-background/65">
+      <Table className="min-w-190 [&_td]:border-border/40 [&_th]:border-border/60">
+        <TableHeader className="bg-muted/35">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
                     key={header.id}
-                    className={getColumnClassName(header.column.id)}
+                    className={`${getColumnClassName(header.column.id)} h-12`}
                   >
                     {header.isPlaceholder
                       ? null
@@ -46,11 +46,12 @@ export function DataTableContent({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="hover:bg-background/80"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
-                    className={getColumnClassName(cell.column.id)}
+                    className={`${getColumnClassName(cell.column.id)} py-3`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

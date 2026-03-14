@@ -7,17 +7,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 export const ChartTabs = () => {
   return (
     <Tabs defaultValue={transactionTypes.EXPENSE}>
-      <TabsList>
+      <TabsList className="finance-panel grid h-auto w-full grid-cols-2 rounded-[1.4rem] p-1">
         <TabsTrigger
           value={transactionTypes.EXPENSE}
-          className="capitalize gap-2"
+          className="capitalize gap-2 rounded-[1.1rem] py-2.5"
         >
           <BanknoteArrowDownIcon className="text-destructive" />
           {transactionTypes.EXPENSE}
         </TabsTrigger>
         <TabsTrigger
           value={transactionTypes.INCOME}
-          className="capitalize gap-2"
+          className="capitalize gap-2 rounded-[1.1rem] py-2.5"
         >
           <BanknoteArrowUpIcon className="text-primary" />
           {transactionTypes.INCOME}

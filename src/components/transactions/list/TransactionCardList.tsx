@@ -54,7 +54,7 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
 
   return (
     <LazyMotion features={domAnimation}>
-      <div className="space-y-5 pb-4">
+      <div className="space-y-5 pb-1">
         <AnimatePresence mode="popLayout">
           {Object.entries(grouped).map(
             ([dateLabel, transactions], groupIdx) => (
@@ -67,18 +67,20 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
                   delay: shouldReduceMotion ? 0 : groupIdx * 0.05,
                 }}
               >
-                <div className="flex items-center gap-2 mb-2.5 px-1">
-                  <CalendarIcon className="size-3.5 text-muted-foreground/50" />
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
-                    {dateLabel}
-                  </h3>
-                  <div className="flex-1 h-px bg-border/50" />
-                  <span className="text-[10px] text-muted-foreground/50 tabular-nums">
+                <div className="mb-3 flex items-center gap-2 px-1">
+                  <span className="finance-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5">
+                    <CalendarIcon className="size-3.5 text-muted-foreground/70" />
+                    <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                      {dateLabel}
+                    </h3>
+                  </span>
+                  <div className="h-px flex-1 bg-border/50" />
+                  <span className="finance-chip rounded-full px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
                     {transactions.length}
                   </span>
                 </div>
 
-                <div className="space-y-1.5">
+                <div className="space-y-2">
                   {transactions.map((transaction, index) => (
                     <TransactionRow
                       key={transaction.id}

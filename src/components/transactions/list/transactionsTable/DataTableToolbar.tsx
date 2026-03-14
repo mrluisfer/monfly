@@ -56,13 +56,14 @@ export function DataTableToolbar({
         placeholder="Search transactions..."
         value={globalFilter ?? ""}
         onChange={(event) => setGlobalFilter(event.target.value)}
-        className="w-full xl:max-w-sm"
+        className="h-11 rounded-full border-border/70 bg-background/70 px-4 xl:max-w-sm"
       />
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <Button
             size="lg"
             variant={typeFilterValue === "income" ? "default" : "outline"}
+            className="rounded-full"
             onClick={() => {
               const column = table.getColumn("type");
               const currentFilter = column?.getFilterValue();
@@ -78,6 +79,7 @@ export function DataTableToolbar({
           <Button
             size="lg"
             variant={typeFilterValue === "expense" ? "destructive" : "outline"}
+            className="rounded-full"
             onClick={() => {
               const column = table.getColumn("type");
               const currentFilter = column?.getFilterValue();
@@ -96,6 +98,7 @@ export function DataTableToolbar({
             <Button
               size="lg"
               variant="secondary"
+              className="rounded-full"
               onClick={() => {
                 setGlobalFilter("");
                 table.resetColumnFilters();
@@ -112,7 +115,7 @@ export function DataTableToolbar({
             <AlertDialog>
               <AlertDialogTrigger
                 render={
-                  <Button size="lg" variant="destructive">
+                  <Button size="lg" variant="destructive" className="rounded-full">
                     <TrashIcon
                       className="-ms-1 opacity-60"
                       size={16}
@@ -163,7 +166,7 @@ export function DataTableToolbar({
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button size="lg" variant="outline">
+                <Button size="lg" variant="outline" className="rounded-full">
                   Columns <ChevronDown className="size-4" />
                 </Button>
               }

@@ -20,7 +20,7 @@ const EditTransaction = ({
       <TransactionForm
         form={form}
         onSubmit={onSubmitEditedTransaction}
-        buttonText="Save"
+        buttonText="Save changes"
         description="Edit a transaction"
       />
     </div>

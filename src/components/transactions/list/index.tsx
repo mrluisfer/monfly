@@ -51,21 +51,30 @@ export default function TransactionsList() {
   return (
     <TransactionHoverProvider>
       <div className="hidden md:block">
-        <Card className="min-h-125">
-          <CardHeader>
+        <Card className="finance-panel min-h-125 rounded-[1.9rem] border-0 p-0 shadow-none">
+          <CardHeader className="border-b border-border/60 px-5 pt-5 pb-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <CardTitle className="text-xl flex items-center gap-2">
-                <WalletIcon className="size-5 text-primary" />
-                Transactions
-              </CardTitle>
-              <div className="ml-auto flex items-center gap-3 md:gap-6">
+              <div className="space-y-1">
+                <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+                  Activity feed
+                </p>
+                <CardTitle className="text-xl flex items-center gap-2">
+                  <WalletIcon className="size-5 text-primary" />
+                  Transactions
+                </CardTitle>
+              </div>
+              <div className="ml-auto flex items-center gap-3 md:gap-4">
+                <span className="finance-chip rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                  {total} {total === 1 ? "record" : "records"}
+                </span>
+                <BalanceStatusBadge className="rounded-full" />
                 <Button
                   onClick={() => refetch()}
                   disabled={isPending || transactions.length === 0}
                   title="Refresh transactions"
                   variant="outline"
                   size="sm"
-                  className="h-10 px-4"
+                  className="finance-chip h-10 rounded-full px-4"
                 >
                   {isPending ? (
                     <>
@@ -79,12 +88,13 @@ export default function TransactionsList() {
                     </>
                   )}
                 </Button>
-                <BalanceStatusBadge />
               </div>
             </div>
-            <CardDescription>You made {total} transactions</CardDescription>
+            <CardDescription className="pt-2 text-sm leading-6">
+              Search, filter, edit, or add transactions from one place.
+            </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-5 py-5">
             <DesktopContent
               userEmail={userEmail}
               isPending={isPending}
@@ -96,20 +106,22 @@ export default function TransactionsList() {
         </Card>
       </div>
 
-      <div className="md:hidden">
-        <MobileHeader
-          total={total}
-          isPending={isPending}
-          transactionsCount={transactions.length}
-          refetch={refetch}
-        />
-        <MobileContent
-          userEmail={userEmail}
-          isPending={isPending}
-          error={error}
-          transactions={transactions}
-          refetch={refetch}
-        />
+      <div className="space-y-4 md:hidden">
+        <section className="finance-panel rounded-[1.75rem] p-4">
+          <MobileHeader
+            total={total}
+            isPending={isPending}
+            transactionsCount={transactions.length}
+            refetch={refetch}
+          />
+          <MobileContent
+            userEmail={userEmail}
+            isPending={isPending}
+            error={error}
+            transactions={transactions}
+            refetch={refetch}
+          />
+        </section>
       </div>
     </TransactionHoverProvider>
   );

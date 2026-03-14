@@ -37,6 +37,18 @@ export const useCategoriesList = () => {
       );
       await invalidateCategoryQueries(queryClient, userEmail);
     },
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify([...variables.data.ids].sort((left, right) =>
+          left.localeCompare(right)
+        )),
+      onDuplicatePending: {
+        title: "Category deletion already in progress",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Categories already deleted",
+      },
+    },
   });
 
   const handleCheckboxChange = (categoryId: string, checked: boolean) => {
