@@ -15,7 +15,10 @@ import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { PlusIcon, XIcon } from "lucide-react";
 import type { z } from "zod";
 
-import { TransactionForm } from "../TransactionForm";
+import {
+  TransactionForm,
+  transactionFormDialogContentClassName,
+} from "../TransactionForm";
 
 type TransactionFormValues = z.infer<typeof TransactionFormSchema>;
 
@@ -57,7 +60,7 @@ const AddTransactionButton = ({
       <DialogTrigger render={trigger} />
       <DialogContent
         showCloseButton={false}
-        className="finance-dialog-sheet top-auto bottom-0 w-[calc(100vw-0.75rem)] max-w-xl -translate-y-0 rounded-t-[2rem] rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:rounded-[1.8rem]"
+        className={transactionFormDialogContentClassName}
       >
         <div className="flex max-h-[92dvh] flex-col overflow-hidden">
           <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />

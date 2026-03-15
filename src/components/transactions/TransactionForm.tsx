@@ -59,6 +59,9 @@ type TransactionFormProps<FormValues extends FieldValues> = {
   isLoading?: boolean;
 };
 
+export const transactionFormDialogContentClassName =
+  "finance-dialog-sheet top-auto bottom-0 w-[calc(100vw-0.75rem)] !max-w-[calc(100vw-0.75rem)] -translate-y-0 rounded-t-[2rem] rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:w-[calc(100vw-2rem)] sm:!max-w-2xl sm:-translate-y-1/2 sm:rounded-[1.8rem] md:!max-w-3xl lg:!max-w-[58rem] xl:!max-w-[66rem]";
+
 const sectionClassName =
   "rounded-[1.45rem] border border-border/70 bg-background/70 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)] sm:p-5";
 const inputClassName =
@@ -301,250 +304,260 @@ export function TransactionForm<FormValues extends FieldValues>({
           </div>
         </div>
 
-        <div className={sectionClassName}>
-          <FormField
-            control={form.control}
-            name={transactionFormNames.category as Path<FormValues>}
-            render={({ field }) => {
-              const value = field.value as string | undefined;
-              const selectedCategory = categories?.find(
-                (cat) => cat.name === value
-              );
-
-              const showAddNew =
-                categoryInputValue.length > 1 &&
-                !categories?.some(
-                  (cat) =>
-                    cat.name.toLowerCase() === categoryInputValue.toLowerCase()
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
+          <div className={sectionClassName}>
+            <FormField
+              control={form.control}
+              name={transactionFormNames.category as Path<FormValues>}
+              render={({ field }) => {
+                const value = field.value as string | undefined;
+                const selectedCategory = categories?.find(
+                  (cat) => cat.name === value
                 );
 
-              return (
-                <FormItem className="space-y-2">
-                  <FormLabel
-                    htmlFor={transactionFormNames.category}
-                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
-                  >
-                    <TagIcon className="size-3.5 text-blue-600" />
-                    Category
-                  </FormLabel>
-                  <FormControl>
-                    <div className="*:not-first:mt-2 w-full">
-                      <Popover open={categoryOpen} onOpenChange={setCategoryOpen}>
-                        <PopoverTrigger
-                          render={
-                            <Button
-                              id={transactionFormNames.category}
-                              variant="outline"
-                              role="combobox"
-                              aria-expanded={categoryOpen}
-                              aria-controls={`${categoryComboboxId}-listbox`}
-                              className={cn(
-                                inputClassName,
-                                "w-full justify-between px-3 text-sm font-normal capitalize",
-                                !value && "text-muted-foreground"
-                              )}
-                            >
-                              {selectedCategory ? (
-                                <div className="flex items-center gap-2">
-                                  {getCategoryIconByName(selectedCategory.icon, {
-                                    size: 16,
-                                  })}
-                                  <span>{selectedCategory.name}</span>
-                                </div>
-                              ) : (
-                                <span>
-                                  {categoryInputValue || "Select a category"}
-                                </span>
-                              )}
-                              <ChevronDownIcon
-                                size={16}
-                                className="ml-2 text-muted-foreground"
-                                aria-hidden="true"
-                              />
-                            </Button>
-                          }
-                        />
-                        <PopoverContent
-                          className="w-(--radix-popover-trigger-width) p-0"
-                          align="start"
+                const showAddNew =
+                  categoryInputValue.length > 1 &&
+                  !categories?.some(
+                    (cat) =>
+                      cat.name.toLowerCase() === categoryInputValue.toLowerCase()
+                  );
+
+                return (
+                  <FormItem className="space-y-2">
+                    <FormLabel
+                      htmlFor={transactionFormNames.category}
+                      className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                    >
+                      <TagIcon className="size-3.5 text-blue-600" />
+                      Category
+                    </FormLabel>
+                    <FormControl>
+                      <div className="*:not-first:mt-2 w-full">
+                        <Popover
+                          open={categoryOpen}
+                          onOpenChange={setCategoryOpen}
                         >
-                          <Command>
-                            <CommandInput
-                              placeholder="Search category..."
-                              value={categoryInputValue}
-                              onValueChange={setCategoryInputValue}
-                            />
-                            <CommandList
-                              id={`${categoryComboboxId}-listbox`}
-                              className="max-h-57.5 sm:max-h-75"
-                            >
-                              <CommandEmpty>No category found.</CommandEmpty>
-                              <CommandGroup>
-                                {categories?.map((category) => (
-                                  <CommandItem
-                                    key={category.name}
-                                    value={category.name}
-                                    onSelect={(currentValue: string) => {
-                                      field.onChange(currentValue);
-                                      setCategoryInputValue("");
-                                      setCategoryOpen(false);
-                                    }}
-                                    className="capitalize"
-                                  >
-                                    {getCategoryIconByName(category.icon, {
-                                      size: 16,
-                                    })}
-                                    <span>{category.name}</span>
-                                    {value === category.name && (
-                                      <CheckIcon
-                                        size={16}
-                                        className="ml-auto"
-                                      />
+                          <PopoverTrigger
+                            render={
+                              <Button
+                                id={transactionFormNames.category}
+                                variant="outline"
+                                role="combobox"
+                                aria-expanded={categoryOpen}
+                                aria-controls={`${categoryComboboxId}-listbox`}
+                                className={cn(
+                                  inputClassName,
+                                  "w-full justify-between px-3 text-sm font-normal capitalize",
+                                  !value && "text-muted-foreground"
+                                )}
+                              >
+                                {selectedCategory ? (
+                                  <div className="flex items-center gap-2">
+                                    {getCategoryIconByName(
+                                      selectedCategory.icon,
+                                      {
+                                        size: 16,
+                                      }
                                     )}
-                                  </CommandItem>
-                                ))}
-                              </CommandGroup>
-                              {showAddNew && (
-                                <>
-                                  <CommandSeparator />
-                                  <CommandGroup heading="Add new category">
+                                    <span>{selectedCategory.name}</span>
+                                  </div>
+                                ) : (
+                                  <span>
+                                    {categoryInputValue || "Select a category"}
+                                  </span>
+                                )}
+                                <ChevronDownIcon
+                                  size={16}
+                                  className="ml-2 text-muted-foreground"
+                                  aria-hidden="true"
+                                />
+                              </Button>
+                            }
+                          />
+                          <PopoverContent
+                            className="w-(--radix-popover-trigger-width) p-0"
+                            align="start"
+                          >
+                            <Command>
+                              <CommandInput
+                                placeholder="Search category..."
+                                value={categoryInputValue}
+                                onValueChange={setCategoryInputValue}
+                              />
+                              <CommandList
+                                id={`${categoryComboboxId}-listbox`}
+                                className="max-h-57.5 sm:max-h-75"
+                              >
+                                <CommandEmpty>No category found.</CommandEmpty>
+                                <CommandGroup>
+                                  {categories?.map((category) => (
                                     <CommandItem
-                                      onSelect={async () => {
-                                        field.onChange(categoryInputValue);
+                                      key={category.name}
+                                      value={category.name}
+                                      onSelect={(currentValue: string) => {
+                                        field.onChange(currentValue);
                                         setCategoryInputValue("");
                                         setCategoryOpen(false);
-                                        await postCategoryByEmail.mutate({
-                                          data: {
-                                            email: userEmail,
-                                            category: {
-                                              name: categoryInputValue,
-                                              icon: "other",
-                                            },
-                                          },
-                                        });
                                       }}
-                                      value={categoryInputValue}
+                                      className="capitalize"
                                     >
-                                      <PlusIcon
-                                        size={16}
-                                        className="text-green-600"
-                                      />
-                                      <span>Create "{categoryInputValue}"</span>
+                                      {getCategoryIconByName(category.icon, {
+                                        size: 16,
+                                      })}
+                                      <span>{category.name}</span>
+                                      {value === category.name && (
+                                        <CheckIcon
+                                          size={16}
+                                          className="ml-auto"
+                                        />
+                                      )}
                                     </CommandItem>
-                                  </CommandGroup>
-                                </>
-                              )}
-                            </CommandList>
-                          </Command>
-                        </PopoverContent>
-                      </Popover>
+                                  ))}
+                                </CommandGroup>
+                                {showAddNew && (
+                                  <>
+                                    <CommandSeparator />
+                                    <CommandGroup heading="Add new category">
+                                      <CommandItem
+                                        onSelect={async () => {
+                                          field.onChange(categoryInputValue);
+                                          setCategoryInputValue("");
+                                          setCategoryOpen(false);
+                                          await postCategoryByEmail.mutate({
+                                            data: {
+                                              email: userEmail,
+                                              category: {
+                                                name: categoryInputValue,
+                                                icon: "other",
+                                              },
+                                            },
+                                          });
+                                        }}
+                                        value={categoryInputValue}
+                                      >
+                                        <PlusIcon
+                                          size={16}
+                                          className="text-green-600"
+                                        />
+                                        <span>
+                                          Create "{categoryInputValue}"
+                                        </span>
+                                      </CommandItem>
+                                    </CommandGroup>
+                                  </>
+                                )}
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          </div>
+
+          <div className={sectionClassName}>
+            <FormField
+              control={form.control}
+              name={transactionFormNames.description as Path<FormValues>}
+              render={({ field }) => (
+                <FormItem className="space-y-2">
+                  <FormLabel
+                    htmlFor={transactionFormNames.description}
+                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                  >
+                    <FileTextIcon className="size-3.5 text-orange-600" />
+                    Description
+                  </FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Textarea
+                        placeholder="Add a description..."
+                        id={transactionFormNames.description}
+                        className="min-h-24 resize-none rounded-[1.05rem] border-border/70 bg-background/65 pl-10 pt-3.5 text-sm shadow-none sm:pt-4 sm:text-base"
+                        rows={2}
+                        {...field}
+                      />
+                      <FileTextIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground sm:top-4" />
                     </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              );
-            }}
-          />
-        </div>
-
-        <div className={sectionClassName}>
-          <FormField
-            control={form.control}
-            name={transactionFormNames.description as Path<FormValues>}
-            render={({ field }) => (
-              <FormItem className="space-y-2">
-                <FormLabel
-                  htmlFor={transactionFormNames.description}
-                  className="flex items-center gap-1.5 text-sm font-medium text-foreground"
-                >
-                  <FileTextIcon className="size-3.5 text-orange-600" />
-                  Description
-                </FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Textarea
-                      placeholder="Add a description..."
-                      id={transactionFormNames.description}
-                      className="min-h-24 resize-none rounded-[1.05rem] border-border/70 bg-background/65 pl-10 pt-3.5 text-sm shadow-none sm:pt-4 sm:text-base"
-                      rows={2}
-                      {...field}
-                    />
-                    <FileTextIcon className="absolute left-3 top-3.5 size-4 text-muted-foreground sm:top-4" />
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="mt-4">
-            <FormField
-              control={form.control}
-              name={transactionFormNames.date as Path<FormValues>}
-              render={({ field }) => (
-                <FormItem className="flex flex-col space-y-2">
-                  <FormLabel
-                    htmlFor={transactionFormNames.date}
-                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
-                  >
-                    <CalendarIcon className="size-3.5 text-indigo-600" />
-                    Date
-                  </FormLabel>
-                  {isPending && (
-                    <div role="status" aria-live="polite">
-                      Loading...
-                    </div>
-                  )}
-                  {error && <div role="alert">Error: {error?.message}</div>}
-                  {categories && (
-                    <Popover>
-                      <PopoverTrigger
-                        render={
-                          <FormControl>
-                            <Button
-                              id={transactionFormNames.date}
-                              variant={"outline"}
-                              className={cn(
-                                inputClassName,
-                                "w-full justify-start pl-3 text-left text-sm font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value as Date, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        }
-                      />
-                      <PopoverContent
-                        className="w-auto max-w-[calc(100vw-2rem)] p-0"
-                        align="start"
-                      >
-                        <Calendar
-                          mode="single"
-                          selected={field.value as Date}
-                          onSelect={field.onChange}
-                          disabled={(date: Date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  )}
-                  {showDateDescription && (
-                    <FormDescription>
-                      {description || "Pick a date"}
-                    </FormDescription>
-                  )}
-                  <FormMessage />
-                </FormItem>
               )}
             />
+
+            <div className="mt-4">
+              <FormField
+                control={form.control}
+                name={transactionFormNames.date as Path<FormValues>}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col space-y-2">
+                    <FormLabel
+                      htmlFor={transactionFormNames.date}
+                      className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                    >
+                      <CalendarIcon className="size-3.5 text-indigo-600" />
+                      Date
+                    </FormLabel>
+                    {isPending && (
+                      <div role="status" aria-live="polite">
+                        Loading...
+                      </div>
+                    )}
+                    {error && <div role="alert">Error: {error?.message}</div>}
+                    {categories && (
+                      <Popover>
+                        <PopoverTrigger
+                          render={
+                            <FormControl>
+                              <Button
+                                id={transactionFormNames.date}
+                                variant={"outline"}
+                                className={cn(
+                                  inputClassName,
+                                  "w-full justify-start pl-3 text-left text-sm font-normal",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value as Date, "PPP")
+                                ) : (
+                                  <span>Pick a date</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          }
+                        />
+                        <PopoverContent
+                          className="w-auto max-w-[calc(100vw-2rem)] p-0"
+                          align="start"
+                        >
+                          <Calendar
+                            mode="single"
+                            selected={field.value as Date}
+                            onSelect={field.onChange}
+                            disabled={(date: Date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                    {showDateDescription && (
+                      <FormDescription>
+                        {description || "Pick a date"}
+                      </FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
         </div>
 

@@ -39,12 +39,6 @@ export const HideMetrics = ({ className }: { className?: string }) => {
                 </label>
               </div>
             </div>
-
-            <p className="mt-3 max-w-md text-xs leading-5 text-muted-foreground">
-              {hideMetrics
-                ? "The summary rail stays out of the way and the balance area gets more room on larger screens."
-                : "Toggle the desktop summary cards without changing the rest of your dashboard."}
-            </p>
           </div>
 
           <div className="finance-chip flex items-center justify-between gap-3 rounded-full px-3 py-2 sm:justify-center">

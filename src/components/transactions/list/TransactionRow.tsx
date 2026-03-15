@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 
 import EditTransaction from "../EditTransaction";
+import { transactionFormDialogContentClassName } from "../TransactionForm";
 import TransactionItemActions from "./TransactionItemActions";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -220,7 +221,7 @@ export function TransactionRow({
 
       <DialogContent
         showCloseButton={false}
-        className="finance-dialog-sheet top-auto bottom-0 w-[calc(100vw-0.75rem)] max-w-2xl -translate-y-0 rounded-t-[2rem] rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:-translate-y-1/2 sm:rounded-[1.8rem]"
+        className={transactionFormDialogContentClassName}
       >
         <div className="max-h-[92dvh] overflow-hidden">
           <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />
