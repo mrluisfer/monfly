@@ -1,12 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
+import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { formatCurrency } from "~/utils/format-currency";
+import { useAtomValue } from "jotai";
 import { ArrowUpRightIcon, TrendingDown, TrendingUp } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -33,10 +35,17 @@ function MetricCard({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-sm font-medium text-muted-foreground">{label}</p>
-            <p className={cn("mt-2 text-2xl font-semibold tracking-tight", toneClassName)}>
+            <p
+              className={cn(
+                "mt-2 text-2xl font-semibold tracking-tight",
+                toneClassName
+              )}
+            >
               {value}
             </p>
-            <p className="mt-2 text-xs leading-5 text-muted-foreground">{meta}</p>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
+              {meta}
+            </p>
           </div>
           <div className="finance-chip rounded-full p-2.5">{icon}</div>
         </div>
@@ -47,6 +56,7 @@ function MetricCard({
 
 export function DashboardMetrics({ className }: { className?: string }) {
   const userEmail = useRouteUser();
+  const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { data, isLoading, error } = useQuery({
     queryKey: [queryDictionary.incomeExpenseData, userEmail],
@@ -72,9 +82,13 @@ export function DashboardMetrics({ className }: { className?: string }) {
     );
     const netTotal = totalIncome - totalExpenses;
     const latestPoint = rawChartData.at(-1);
-    const latestNet =
-      (Number.isFinite(latestPoint?.income) ? latestPoint.income : 0) -
-      (Number.isFinite(latestPoint?.expense) ? latestPoint.expense : 0);
+    const latestIncome = Number.isFinite(latestPoint?.income)
+      ? Number(latestPoint?.income)
+      : 0;
+    const latestExpense = Number.isFinite(latestPoint?.expense)
+      ? Number(latestPoint?.expense)
+      : 0;
+    const latestNet = latestIncome - latestExpense;
     const savingsRate =
       totalIncome > 0 ? Math.round((netTotal / totalIncome) * 100) : 0;
 
@@ -90,7 +104,9 @@ export function DashboardMetrics({ className }: { className?: string }) {
 
   if (isLoading) {
     return (
-      <div className={cn("grid gap-3 md:grid-cols-3 xl:grid-cols-1", className)}>
+      <div
+        className={cn("grid gap-3 md:grid-cols-3 xl:grid-cols-1", className)}
+      >
         {[1, 2, 3].map((item) => (
           <Skeleton
             key={item}
@@ -109,6 +125,10 @@ export function DashboardMetrics({ className }: { className?: string }) {
     );
   }
 
+  if (hideMetrics) {
+    return null;
+  }
+
   return (
     <div className={cn("grid gap-3 md:grid-cols-3 xl:grid-cols-1", className)}>
       <MetricCard
@@ -116,14 +136,18 @@ export function DashboardMetrics({ className }: { className?: string }) {
         value={formatCurrency(summary.totalIncome, "USD")}
         meta="Total recorded inflow"
         toneClassName="text-emerald-600 dark:text-emerald-400"
-        icon={<TrendingUp className="size-4 text-emerald-600 dark:text-emerald-400" />}
+        icon={
+          <TrendingUp className="size-4 text-emerald-600 dark:text-emerald-400" />
+        }
       />
       <MetricCard
         label="Expenses"
         value={formatCurrency(summary.totalExpenses, "USD")}
         meta="Total recorded outflow"
         toneClassName="text-rose-600 dark:text-rose-400"
-        icon={<TrendingDown className="size-4 text-rose-600 dark:text-rose-400" />}
+        icon={
+          <TrendingDown className="size-4 text-rose-600 dark:text-rose-400" />
+        }
       />
       <MetricCard
         label="Net flow"

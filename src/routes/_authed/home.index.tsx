@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
+import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { BalanceActions } from "~/components/balance/BalanceActions";
 import TotalBalance from "~/components/balance/TotalBalance";
 import { DashboardMetrics } from "~/components/home/DashboardMetrics";
 import { WelcomeMessage } from "~/components/home/WelcomeMessage";
@@ -10,6 +10,7 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
+import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import {
   AnimatePresence,
@@ -18,6 +19,10 @@ import {
   m,
   useReducedMotion,
 } from "framer-motion";
+import { useAtomValue } from "jotai";
+
+import { BalanceActions } from "@/components/balance/BalanceActions";
+import { HideMetrics } from "@/components/home/HideMetrics";
 
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
@@ -38,6 +43,7 @@ export const Route = createFileRoute("/_authed/home/")({
 function RouteComponent() {
   const userEmail = useRouteUser();
   const shouldReduceMotion = useReducedMotion();
+  const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { isPending, error } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
@@ -72,15 +78,26 @@ function RouteComponent() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-32 w-full rounded-[1.75rem]" />
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]">
+        <div
+          className={cn(
+            "grid gap-6",
+            hideMetrics
+              ? "xl:grid-cols-1"
+              : "xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]"
+          )}
+        >
           <Skeleton className="h-[26rem] w-full rounded-[2rem]" />
-          <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-1">
-            {[1, 2, 3].map((item) => (
-              <Skeleton
-                key={item}
-                className="h-40 w-full rounded-[1.6rem]"
-              />
-            ))}
+          <div className={cn(hideMetrics && "xl:flex xl:justify-end")}>
+            <div className="grid w-full gap-4 md:grid-cols-3 xl:grid-cols-1 xl:max-w-md">
+              <Skeleton className="h-28 w-full rounded-[1.6rem]" />
+              {!hideMetrics &&
+                [1, 2, 3].map((item) => (
+                  <Skeleton
+                    key={item}
+                    className="h-40 w-full rounded-[1.6rem]"
+                  />
+                ))}
+            </div>
           </div>
         </div>
       </div>
@@ -105,9 +122,18 @@ function RouteComponent() {
             }}
             className="flex flex-col gap-6"
           >
-            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]">
-              <div className="space-y-6 order-1">
+            <m.div
+              layout
+              className={cn(
+                "grid grid-cols-1 gap-6",
+                hideMetrics
+                  ? "xl:grid-cols-1"
+                  : "xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]"
+              )}
+            >
+              <m.div layout className="space-y-6 order-1">
                 <m.div
+                  layout
                   initial={
                     shouldReduceMotion
                       ? false
@@ -121,33 +147,55 @@ function RouteComponent() {
                 >
                   <TotalBalance />
                 </m.div>
+              </m.div>
 
-                <m.div
-                  initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.5,
-                    delay: shouldReduceMotion ? 0 : 0.2,
-                  }}
-                  className="overflow-hidden"
-                >
-                  <BalanceActions />
-                </m.div>
-              </div>
+              <m.div
+                layout
+                className={cn(
+                  "order-2 space-y-4",
+                  hideMetrics && "xl:ml-auto xl:w-full xl:max-w-md"
+                )}
+              >
+                <AnimatePresence initial={false}>
+                  {!hideMetrics && (
+                    <m.div
+                      key="dashboard-metrics"
+                      layout
+                      initial={
+                        shouldReduceMotion
+                          ? false
+                          : { opacity: 0, y: 14, scale: 0.98 }
+                      }
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={
+                        shouldReduceMotion
+                          ? { opacity: 0 }
+                          : { opacity: 0, y: -12, scale: 0.98 }
+                      }
+                      transition={{
+                        duration: shouldReduceMotion ? 0 : 0.24,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <HideMetrics className="mb-2" />
+                      <DashboardMetrics />
+                    </m.div>
+                  )}
+                </AnimatePresence>
+              </m.div>
+            </m.div>
 
-              <div className="space-y-6 order-2">
-                <m.div
-                  initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.5,
-                    delay: shouldReduceMotion ? 0 : 0.1,
-                  }}
-                >
-                  <DashboardMetrics />
-                </m.div>
-              </div>
-            </div>
+            <m.div
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: shouldReduceMotion ? 0 : 0.5,
+                delay: shouldReduceMotion ? 0 : 0.2,
+              }}
+              className="overflow-hidden"
+            >
+              <BalanceActions />
+            </m.div>
 
             <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]">
               <m.div

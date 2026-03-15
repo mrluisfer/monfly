@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -16,114 +17,43 @@ import {
   m,
   useReducedMotion,
 } from "framer-motion";
+import { useAtomValue } from "jotai";
 import {
-  ActivityIcon,
   ArrowDownRightIcon,
   ArrowUpRightIcon,
   EyeIcon,
   EyeOffIcon,
 } from "lucide-react";
 
+import { HideMetrics } from "../home/HideMetrics";
+import { TotalBalanceAside } from "./TotalBalanceAside";
+
 const TOTAL_BALANCE_VISIBILITY_STORAGE_KEY = "monfly-total-balance-hidden";
 
-type MonthlyPoint = {
+export type MonthlyPoint = {
   expense: number;
   income: number;
   label: string;
   net: number;
 };
 
-function Sparkline({
-  data,
-  tone,
-}: {
-  data: MonthlyPoint[];
-  tone: "positive" | "negative";
-}) {
-  if (data.length < 2) {
-    return (
-      <div className="flex h-48 items-center justify-center rounded-[1.5rem] border border-dashed border-border/70 bg-background/50 px-5 text-center text-sm text-muted-foreground">
-        Add a few transactions to reveal your balance momentum over time.
-      </div>
-    );
-  }
+export type BalanceTone = "positive" | "negative";
 
-  const width = 420;
-  const height = 180;
-  const padding = 12;
-  const values = data.map((point) => point.net);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-
-  const points = data
-    .map((point, index) => {
-      const x =
-        padding + (index * (width - padding * 2)) / Math.max(data.length - 1, 1);
-      const y =
-        height -
-        padding -
-        ((point.net - min) / range) * (height - padding * 2);
-
-      return `${x},${y}`;
-    })
-    .join(" ");
-
-  const lastPoint = points.split(" ").at(-1)?.split(",") ?? ["0", "0"];
-  const strokeColor =
-    tone === "positive" ? "hsl(152 76% 40%)" : "hsl(0 72% 51%)";
-  const fillId = tone === "positive" ? "sparkPositive" : "sparkNegative";
-
-  return (
-    <div className="relative">
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        className="h-48 w-full"
-        aria-hidden="true"
-      >
-        <defs>
-          <linearGradient id={fillId} x1="0" x2="0" y1="0" y2="1">
-            <stop offset="0%" stopColor={strokeColor} stopOpacity="0.22" />
-            <stop offset="100%" stopColor={strokeColor} stopOpacity="0" />
-          </linearGradient>
-        </defs>
-
-        <polygon
-          points={`12,${height - padding} ${points} ${width - padding},${height - padding}`}
-          fill={`url(#${fillId})`}
-          stroke="none"
-        />
-        <polyline
-          points={points}
-          fill="none"
-          stroke={strokeColor}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="4"
-        />
-        <circle
-          cx={lastPoint[0]}
-          cy={lastPoint[1]}
-          r="7"
-          fill={strokeColor}
-          fillOpacity="0.16"
-        />
-        <circle cx={lastPoint[0]} cy={lastPoint[1]} r="4" fill={strokeColor} />
-      </svg>
-
-      <div className="mt-3 flex items-center justify-between text-xs font-medium text-muted-foreground">
-        <span>{data[0]?.label}</span>
-        <span>{data[data.length - 1]?.label}</span>
-      </div>
-    </div>
-  );
-}
+export type TotalBalanceSummary = {
+  latestPoint: MonthlyPoint | null;
+  peakPoint: MonthlyPoint | null;
+  recentPoints: MonthlyPoint[];
+  totalExpenses: number;
+  totalIncome: number;
+  trendDelta: number | null;
+};
 
 const TotalBalance = () => {
   const [totalBalance, setTotalBalance] = useState<string>("0");
   const [isBalanceHidden, setIsBalanceHidden] = useState(true);
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
+  const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { error, isPending, data } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
@@ -177,7 +107,7 @@ const TotalBalance = () => {
 
   const balanceValue = Number(data?.data?.totalBalance ?? 0);
 
-  const summary = useMemo(() => {
+  const summary = useMemo<TotalBalanceSummary>(() => {
     const normalizedData: MonthlyPoint[] =
       incomeExpenseData?.data?.map((item: any) => {
         const income = Number.isFinite(item.income) ? item.income : 0;
@@ -194,7 +124,10 @@ const TotalBalance = () => {
     const recentPoints = normalizedData.slice(-6);
     const latestPoint = recentPoints.at(-1) ?? null;
     const previousPoint = recentPoints.at(-2) ?? null;
-    const totalIncome = recentPoints.reduce((sum, item) => sum + item.income, 0);
+    const totalIncome = recentPoints.reduce(
+      (sum, item) => sum + item.income,
+      0
+    );
     const totalExpenses = recentPoints.reduce(
       (sum, item) => sum + item.expense,
       0
@@ -218,13 +151,15 @@ const TotalBalance = () => {
     };
   }, [incomeExpenseData?.data]);
 
-  const balanceTone = balanceValue >= 0 ? "positive" : "negative";
+  const balanceTone: BalanceTone = balanceValue >= 0 ? "positive" : "negative";
   const balanceToneClass =
     balanceTone === "positive"
       ? "text-emerald-600 dark:text-emerald-400"
       : "text-rose-600 dark:text-rose-400";
   const TrendIcon =
-    (summary.latestPoint?.net ?? 0) >= 0 ? ArrowUpRightIcon : ArrowDownRightIcon;
+    (summary.latestPoint?.net ?? 0) >= 0
+      ? ArrowUpRightIcon
+      : ArrowDownRightIcon;
 
   if (error) {
     return (
@@ -334,7 +269,9 @@ const TotalBalance = () => {
                   size="icon-lg"
                   onClick={toggleBalanceVisibility}
                   aria-label={
-                    isBalanceHidden ? "Show total balance" : "Hide total balance"
+                    isBalanceHidden
+                      ? "Show total balance"
+                      : "Hide total balance"
                   }
                   aria-pressed={isBalanceHidden}
                   title={isBalanceHidden ? "Show balance" : "Hide balance"}
@@ -414,44 +351,13 @@ const TotalBalance = () => {
           </dl>
         </div>
 
-        <aside className="finance-soft-chart rounded-[1.75rem] p-4 sm:p-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">Trend</p>
-              <h2 className="mt-1 text-lg font-semibold tracking-tight text-foreground">
-                Balance over time
-              </h2>
-            </div>
+        <TotalBalanceAside
+          summary={summary}
+          balanceTone={balanceTone}
+          balanceToneClass={balanceToneClass}
+        />
 
-            <span className="text-sm text-muted-foreground">
-              {summary.recentPoints.length} periods
-            </span>
-          </div>
-
-          <div className="mt-5">
-            <Sparkline data={summary.recentPoints} tone={balanceTone} />
-          </div>
-
-          <div className="mt-5">
-            <div className="rounded-[1.15rem] border border-border/70 bg-background/65 p-4">
-              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                <ActivityIcon className="size-4 text-primary" />
-                Change vs previous period
-              </div>
-              <p className={cn("mt-3 text-base font-semibold", balanceToneClass)}>
-                {summary.trendDelta === null
-                  ? "Not enough data"
-                  : formatCurrency(summary.trendDelta, "USD")}
-              </p>
-              {summary.peakPoint && (
-                <p className="mt-2 text-xs text-muted-foreground">
-                  Peak period: {summary.peakPoint.label} (
-                  {formatCurrency(summary.peakPoint.net, "USD")})
-                </p>
-              )}
-            </div>
-          </div>
-        </aside>
+        {hideMetrics ? <HideMetrics className="max-w-lg" /> : null}
       </div>
     </section>
   );
