@@ -1,14 +1,14 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import { format, formatDistanceToNowStrict, isToday, isYesterday } from "date-fns";
 import {
   ArrowUpDownIcon,
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
 } from "lucide-react";
-import { format, formatDistanceToNowStrict, isToday, isYesterday } from "date-fns";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import { TransactionActionsCell } from "./TransactionActionsCell";
 
@@ -151,6 +151,49 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
     },
   },
+    {
+    accessorKey: "amount",
+    header: ({ column }) => (
+      <div className="text-right">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0"
+        >
+          Amount
+          <ArrowUpDownIcon />
+        </Button>
+      </div>
+    ),
+    cell: ({ row }) => {
+      const amount = parseFloat(row.getValue("amount"));
+      const type = String(row.getValue("type") || "").toLowerCase();
+      const isIncome = type === "income";
+      const formatted = currencyFormatter.format(amount);
+
+      return (
+        <div className="space-y-0.5 text-right">
+          <div
+            className={`font-semibold ${
+              isIncome
+                ? "text-green-600 dark:text-green-400"
+                : "text-red-600 dark:text-red-400"
+            }`}
+          >
+            {isIncome ? "+" : "-"}
+            {formatted}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {isIncome ? "Money in" : "Money out"}
+          </div>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      const amount = row.getValue(id) as number;
+      return amount.toString().includes(value);
+    },
+  },
   {
     accessorKey: "date",
     header: ({ column }) => {
@@ -210,49 +253,6 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
           </div>
         </div>
       );
-    },
-  },
-  {
-    accessorKey: "amount",
-    header: ({ column }) => (
-      <div className="text-right">
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0"
-        >
-          Amount
-          <ArrowUpDownIcon />
-        </Button>
-      </div>
-    ),
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const type = String(row.getValue("type") || "").toLowerCase();
-      const isIncome = type === "income";
-      const formatted = currencyFormatter.format(amount);
-
-      return (
-        <div className="space-y-0.5 text-right">
-          <div
-            className={`font-semibold ${
-              isIncome
-                ? "text-green-600 dark:text-green-400"
-                : "text-red-600 dark:text-red-400"
-            }`}
-          >
-            {isIncome ? "+" : "-"}
-            {formatted}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            {isIncome ? "Money in" : "Money out"}
-          </div>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      const amount = row.getValue(id) as number;
-      return amount.toString().includes(value);
     },
   },
   {

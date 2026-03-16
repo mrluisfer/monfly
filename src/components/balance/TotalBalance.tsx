@@ -1,15 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
 import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "~/components/ui/button";
-import { Skeleton } from "~/components/ui/skeleton";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { cn } from "~/lib/utils";
-import { queryDictionary } from "~/queries/dictionary";
-import { formatCurrency } from "~/utils/format-currency";
-import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 import {
   AnimatePresence,
   domAnimation,
@@ -24,9 +14,18 @@ import {
   EyeIcon,
   EyeOffIcon,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
+import { cn } from "~/lib/utils";
+import { queryDictionary } from "~/queries/dictionary";
+import { formatCurrency } from "~/utils/format-currency";
+import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 
 import { HideMetrics } from "../home/HideMetrics";
-import { TotalBalanceAside } from "./TotalBalanceAside";
 
 const TOTAL_BALANCE_VISIBILITY_STORAGE_KEY = "monfly-total-balance-hidden";
 
@@ -351,11 +350,11 @@ const TotalBalance = () => {
           </dl>
         </div>
 
-        <TotalBalanceAside
+        {/* <TotalBalanceAside
           summary={summary}
           balanceTone={balanceTone}
           balanceToneClass={balanceToneClass}
-        />
+        /> */}
 
         {hideMetrics ? <HideMetrics className="max-w-lg" /> : null}
       </div>

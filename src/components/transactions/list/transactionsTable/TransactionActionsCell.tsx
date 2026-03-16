@@ -1,5 +1,6 @@
-import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { EditIcon, Ellipsis, TrashIcon } from "lucide-react";
+import React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,7 +33,6 @@ import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transa
 import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { EditIcon, Ellipsis, TrashIcon } from "lucide-react";
 
 import EditTransaction from "../../EditTransaction";
 
@@ -120,10 +120,7 @@ export function TransactionActionsCell({
         />
         <DropdownMenuContent
           align="end"
-          className="
-            space-y-2
-            animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200
-          "
+          className="space-y-2 animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200 w-[200px] border"
         >
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
