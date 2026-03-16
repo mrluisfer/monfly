@@ -5,6 +5,7 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { Card, CardContent } from "../ui/card";
+import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 
 export const HideMetrics = ({ className }: { className?: string }) => {
@@ -42,12 +43,13 @@ export const HideMetrics = ({ className }: { className?: string }) => {
           </div>
 
           <div className="finance-chip flex items-center justify-between gap-3 rounded-full px-3 py-2 sm:justify-center">
-            <span className="text-xs font-medium text-muted-foreground">
+            <Label htmlFor="hide-metrics" className="text-xs font-medium text-muted-foreground">
               {hideMetrics ? "Show cards" : "Hide cards"}
-            </span>
+            </Label>
             <Switch
               id="hide-metrics"
               size="default"
+              name="hide-metrics"
               checked={hideMetrics}
               onCheckedChange={setHideMetrics}
             />
