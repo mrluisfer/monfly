@@ -106,11 +106,11 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
 
       return (
         <div className="max-w-[340px] space-y-1">
-          <div className="whitespace-normal break-words leading-5 font-medium text-foreground">
+          <div className="whitespace-normal break-words leading-5 font-medium text-foreground capitalize">
             {description || "No description"}
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-            <Badge variant="outline" className="capitalize">
+            <Badge variant="secondary" className="capitalize">
               {transaction.category}
             </Badge>
             <span>
