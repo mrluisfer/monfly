@@ -1,24 +1,13 @@
 import { ReactElement, useState } from "react";
 import { Button } from "~/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "~/components/ui/dialog";
-import { ScrollArea } from "~/components/ui/scroll-area";
+import { Dialog, DialogTrigger } from "~/components/ui/dialog";
 import { useAddTransaction } from "~/hooks/useAddTransaction";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
-import { PlusIcon, XIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import type { z } from "zod";
 
-import {
-  TransactionForm,
-  transactionFormDialogContentClassName,
-} from "../TransactionForm";
+import { TransactionForm } from "../TransactionForm";
+import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
 
 type TransactionFormValues = z.infer<typeof TransactionFormSchema>;
 
@@ -58,49 +47,18 @@ const AddTransactionButton = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={trigger} />
-      <DialogContent
-        showCloseButton={false}
-        className={transactionFormDialogContentClassName}
+      <TransactionFormDialogContent
+        title="Add transaction"
+        description="Enter the amount, type, category, and date."
       >
-        <div className="flex max-h-[92dvh] flex-col overflow-hidden">
-          <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />
-          <DialogHeader className="border-b border-border/60 px-5 pt-4 pb-4 text-left sm:px-6">
-            <DialogTitle className="text-lg font-semibold tracking-tight">
-              Add transaction
-            </DialogTitle>
-            <DialogDescription className="text-sm leading-6">
-              Enter the amount, type, category, and date.
-            </DialogDescription>
-          </DialogHeader>
-
-          <ScrollArea className="min-h-0 flex-1 overscroll-contain">
-            <div className="px-4 py-4 sm:px-6">
-              <TransactionForm
-                form={form}
-                onSubmit={handleSubmit}
-                buttonText="Save Transaction"
-                description="Add a new transaction"
-                isLoading={mutation.status === "pending"}
-              />
-            </div>
-          </ScrollArea>
-
-          <div className="border-t border-border/60 px-4 py-3 sm:px-6">
-            <DialogClose
-              className="w-full"
-              render={
-                <Button
-                  variant="outline"
-                  className="finance-chip h-11 w-full rounded-full"
-                >
-                  <XIcon className="h-5 w-5" />
-                  Cancel
-                </Button>
-              }
-            />
-          </div>
-        </div>
-      </DialogContent>
+        <TransactionForm
+          form={form}
+          onSubmit={handleSubmit}
+          buttonText="Save Transaction"
+          description="Add a new transaction"
+          isLoading={mutation.status === "pending"}
+        />
+      </TransactionFormDialogContent>
     </Dialog>
   );
 };

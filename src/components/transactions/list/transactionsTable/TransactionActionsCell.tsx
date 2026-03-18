@@ -1,6 +1,5 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { EditIcon, Ellipsis, TrashIcon } from "lucide-react";
 import React from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,13 +11,7 @@ import {
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
 import { Button } from "~/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
+import { Dialog } from "~/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,8 +26,10 @@ import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transa
 import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
+import { EditIcon, Ellipsis, TrashIcon } from "lucide-react";
 
 import EditTransaction from "../../EditTransaction";
+import { TransactionFormDialogContent } from "../../TransactionFormDialogContent";
 
 export function TransactionActionsCell({
   transaction,
@@ -50,7 +45,9 @@ export function TransactionActionsCell({
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to delete transaction" });
+        sileo.error({
+          title: response.message ?? "Failed to delete transaction",
+        });
         setIsDeleteDialogOpen(false);
         return;
       }
@@ -171,16 +168,15 @@ export function TransactionActionsCell({
       </DropdownMenu>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Transaction</DialogTitle>
-            <DialogDescription>Edit the transaction details</DialogDescription>
-          </DialogHeader>
+        <TransactionFormDialogContent
+          title="Edit transaction"
+          description="Update the amount, category, type, or date without leaving the current flow."
+        >
           <EditTransaction
             transaction={transaction}
             onClose={() => setIsEditDialogOpen(false)}
           />
-        </DialogContent>
+        </TransactionFormDialogContent>
       </Dialog>
 
       <AlertDialog

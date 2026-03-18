@@ -59,9 +59,6 @@ type TransactionFormProps<FormValues extends FieldValues> = {
   isLoading?: boolean;
 };
 
-export const transactionFormDialogContentClassName =
-  "finance-dialog-sheet top-auto bottom-0 w-[calc(100vw-0.75rem)] !max-w-[calc(100vw-0.75rem)] -translate-y-0 rounded-t-[2rem] rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:w-[calc(100vw-2rem)] sm:!max-w-2xl sm:-translate-y-1/2 sm:rounded-[1.8rem] md:!max-w-3xl lg:!max-w-[58rem] xl:!max-w-[66rem]";
-
 const sectionClassName =
   "rounded-[1.45rem] border border-border/70 bg-background/70 p-4 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35)] sm:p-5";
 const inputClassName =

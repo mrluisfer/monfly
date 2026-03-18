@@ -10,7 +10,7 @@ const EditTransaction = ({
   transaction: Transaction;
   onClose: () => void;
 }) => {
-  const { form, onSubmitEditedTransaction } = useEditTransaction(
+  const { form, onSubmitEditedTransaction, mutation } = useEditTransaction(
     transaction,
     onClose
   );
@@ -22,6 +22,7 @@ const EditTransaction = ({
         onSubmit={onSubmitEditedTransaction}
         buttonText="Save changes"
         description="Edit a transaction"
+        isLoading={mutation.status === "pending"}
       />
     </div>
   );

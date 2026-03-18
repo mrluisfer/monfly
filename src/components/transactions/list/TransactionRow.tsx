@@ -9,13 +9,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "~/components/ui/dialog";
+import { Dialog } from "~/components/ui/dialog";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { sileo } from "~/lib/toaster";
@@ -33,7 +27,7 @@ import {
 } from "lucide-react";
 
 import EditTransaction from "../EditTransaction";
-import { transactionFormDialogContentClassName } from "../TransactionForm";
+import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
 import TransactionItemActions from "./TransactionItemActions";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -65,7 +59,9 @@ export function TransactionRow({
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to delete transaction" });
+        sileo.error({
+          title: response.message ?? "Failed to delete transaction",
+        });
         return;
       }
 
@@ -219,29 +215,15 @@ export function TransactionRow({
         </ContextMenuContent>
       </ContextMenu>
 
-      <DialogContent
-        showCloseButton={false}
-        className={transactionFormDialogContentClassName}
+      <TransactionFormDialogContent
+        title="Edit transaction"
+        description="Update the amount, category, type, or date without leaving the current flow."
       >
-        <div className="max-h-[92dvh] overflow-hidden">
-          <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />
-          <DialogHeader className="border-b border-border/60 px-5 pt-4 pb-4 text-left sm:px-6">
-            <DialogTitle className="text-lg font-semibold tracking-tight">
-              Edit transaction
-            </DialogTitle>
-            <DialogDescription className="leading-6">
-              Update the amount, category, type, or date without leaving the
-              current flow.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="max-h-[calc(92dvh-5.5rem)] overflow-y-auto px-4 py-4 sm:px-6">
-            <EditTransaction
-              transaction={transaction}
-              onClose={() => setIsDialogOpen(false)}
-            />
-          </div>
-        </div>
-      </DialogContent>
+        <EditTransaction
+          transaction={transaction}
+          onClose={() => setIsDialogOpen(false)}
+        />
+      </TransactionFormDialogContent>
     </Dialog>
   );
 }

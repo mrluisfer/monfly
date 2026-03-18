@@ -89,5 +89,6 @@ export const useEditTransaction = (
   return {
     form,
     onSubmitEditedTransaction,
+    mutation: putTransactionByIdMutation,
   };
 };
