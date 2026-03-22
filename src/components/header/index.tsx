@@ -3,7 +3,6 @@ import { useIsMobile } from "~/hooks/useMobile";
 import UserDropdown from "../home/user-dropdown";
 import { SettingsDialog } from "../settings/SettingsDialog";
 import ToggleDarkMode from "../settings/ToggleDarkMode";
-import { OnlineStatusBadge } from "./badges/OnlineStatusBadge";
 import { SpendingAlertBadge } from "./badges/SpendingAlertBadge";
 import { SystemStatusBadge } from "./badges/SystemStatus";
 import { TimezoneBadge } from "./badges/TimezoneBadge";
@@ -35,12 +34,6 @@ export const Header = () => {
             isActive={isDesktopBadgeActive}
             className="max-w-45"
           />
-          <OnlineStatusBadge
-            compact
-            variant="outline"
-            isActive={isDesktopBadgeActive}
-            className="max-w-30"
-          />
           <TimezoneBadge
             compact
             variant="outline"
@@ -55,7 +48,7 @@ export const Header = () => {
             className="max-w-37.5"
           />
 
-          <ToggleDarkMode size={"icon-lg"} />
+          <ToggleDarkMode />
           <SettingsDialog />
           <UserDropdown />
         </div>
