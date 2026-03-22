@@ -23,6 +23,7 @@ type TransactionFormDialogContentProps = {
   cancelLabel?: string;
   className?: string;
   bodyClassName?: string;
+  isLoading?: boolean | undefined;
 };
 
 export function TransactionFormDialogContent({
@@ -33,6 +34,7 @@ export function TransactionFormDialogContent({
   cancelLabel = "Cancel",
   className,
   bodyClassName,
+  isLoading,
 }: TransactionFormDialogContentProps) {
   return (
     <DialogContent
@@ -54,24 +56,25 @@ export function TransactionFormDialogContent({
           <div className={cn("px-4 py-4 sm:px-6", bodyClassName)}>
             {children}
           </div>
-        </ScrollArea>
 
-        {showCancelButton ? (
-          <div className="border-t border-border/60 px-4 py-3 sm:px-6">
-            <DialogClose
-              className="w-full"
-              render={
-                <Button
-                  variant="outline"
-                  className="finance-chip h-11 w-full rounded-full"
-                >
-                  <XIcon className="h-5 w-5" />
-                  {cancelLabel}
-                </Button>
-              }
-            />
-          </div>
-        ) : null}
+          {showCancelButton ? (
+            <div className="border-t border-border/60 px-4 py-3 sm:px-6">
+              <DialogClose
+                className="w-full"
+                render={
+                  <Button
+                    variant="outline"
+                    className="finance-chip h-11 w-full rounded-full"
+                    disabled={isLoading}
+                  >
+                    <XIcon className="h-5 w-5" />
+                    {cancelLabel}
+                  </Button>
+                }
+              />
+            </div>
+          ) : null}
+        </ScrollArea>
       </div>
     </DialogContent>
   );
