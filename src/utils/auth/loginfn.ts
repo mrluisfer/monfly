@@ -25,7 +25,7 @@ export const loginFn = createServerFn({ method: "POST" })
       // Find the user
       const user = await prismaClient.user.findUnique({
         where: {
-          email: inputEmail,
+          email: normalizedEmail,
         },
       });
 
