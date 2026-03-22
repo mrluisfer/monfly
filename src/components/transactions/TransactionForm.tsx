@@ -1,4 +1,22 @@
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type FocusEvent,
+} from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { transactionFormNames } from "~/constants/forms/transaction-form-names";
+import { useAppHaptics } from "~/hooks/useAppHaptics";
+import { useGetCategoriesByEmail } from "~/hooks/useGetCategoriesByEmail";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
+import { sileo } from "~/lib/toaster";
+import { cn } from "~/lib/utils";
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
+import { validLimitNumber } from "~/utils/valid-limit-number";
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -10,25 +28,7 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
 } from "lucide-react";
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type FocusEvent,
-} from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
-import { transactionFormNames } from "~/constants/forms/transaction-form-names";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
-import { useGetCategoriesByEmail } from "~/hooks/useGetCategoriesByEmail";
-import { isErrorPayload, useMutation } from "~/hooks/useMutation";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
-import { sileo } from "~/lib/toaster";
-import { cn } from "~/lib/utils";
-import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-import { validLimitNumber } from "~/utils/valid-limit-number";
 
 import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
@@ -44,10 +44,7 @@ import {
 import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import type { WheelPickerOption } from "../wheel-picker/wheel-picker";
-import {
-  WheelPicker,
-  WheelPickerWrapper,
-} from "../wheel-picker/wheel-picker";
+import { WheelPicker, WheelPickerWrapper } from "../wheel-picker/wheel-picker";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -74,6 +71,7 @@ export function TransactionForm<FormValues extends FieldValues>({
   isLoading = false,
 }: TransactionFormProps<FormValues>) {
   const [categoryInputValue, setCategoryInputValue] = useState("");
+  const [dateOpen, setDateOpen] = useState(false);
   const [keyboardInset, setKeyboardInset] = useState(0);
   const focusScrollTimeoutRef = useRef<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -386,10 +384,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                                 });
                               }}
                             >
-                              <PlusIcon
-                                size={14}
-                                className="text-green-600"
-                              />
+                              <PlusIcon size={14} className="text-green-600" />
                               Create
                             </Button>
                           )}
@@ -452,7 +447,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                     )}
                     {error && <div role="alert">Error: {error?.message}</div>}
                     {categories && (
-                      <Popover>
+                      <Popover open={dateOpen} onOpenChange={setDateOpen}>
                         <PopoverTrigger
                           render={
                             <FormControl>
@@ -482,7 +477,10 @@ export function TransactionForm<FormValues extends FieldValues>({
                           <Calendar
                             mode="single"
                             selected={field.value as Date}
-                            onSelect={field.onChange}
+                            onSelect={(date) => {
+                              field.onChange(date);
+                              if (date) setDateOpen(false);
+                            }}
                             disabled={(date: Date) =>
                               date > new Date() || date < new Date("1900-01-01")
                             }
