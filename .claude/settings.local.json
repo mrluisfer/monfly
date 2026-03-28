@@ -5,5 +5,10 @@
       "Bash(wsl -e bash -c \"cd /home/mrluisfer/workspace/monfly && npx tsc --noEmit --pretty 2>&1 | head -40\")",
       "Bash(wsl -e bash -c \"cd /home/mrluisfer/workspace/monfly && npx tsc --noEmit --pretty 2>&1 | head -50\")"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "shadcn",
+    "magicuidesign-mcp",
+    "playwright"
+  ]
 }
