@@ -22,7 +22,6 @@ import {
 import { useAtomValue } from "jotai";
 
 import { BalanceActions } from "@/components/balance/BalanceActions";
-import { HideMetrics } from "@/components/home/HideMetrics";
 
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
@@ -177,7 +176,6 @@ function RouteComponent() {
                         ease: "easeOut",
                       }}
                     >
-                      <HideMetrics className="mb-2" />
                       <DashboardMetrics />
                     </m.div>
                   )}

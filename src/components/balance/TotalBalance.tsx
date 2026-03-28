@@ -26,7 +26,6 @@ import {
 } from "lucide-react";
 
 import { CopyButton } from "../copy-button/copy-button";
-import { HideMetrics } from "../home/HideMetrics";
 
 const TOTAL_BALANCE_VISIBILITY_STORAGE_KEY = "monfly-total-balance-hidden";
 
@@ -365,8 +364,6 @@ const TotalBalance = () => {
           balanceTone={balanceTone}
           balanceToneClass={balanceToneClass}
         /> */}
-
-        {hideMetrics ? <HideMetrics className="max-w-lg" /> : null}
       </div>
     </section>
   );

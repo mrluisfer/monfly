@@ -15,7 +15,7 @@ export const HideMetrics = ({ className }: { className?: string }) => {
   return (
     <Card
       className={cn(
-        "finance-panel rounded-[1.4rem] border-0 p-0 shadow-none",
+        "finance-panel rounded-[1.4rem] border-0 p-0 shadow-none h-fit",
         className
       )}
     >
@@ -40,7 +40,10 @@ export const HideMetrics = ({ className }: { className?: string }) => {
           </div>
 
           <div className="finance-chip flex items-center justify-between gap-3 rounded-full px-3 py-2 sm:justify-center">
-            <Label htmlFor="hide-metrics" className="text-xs font-medium text-muted-foreground">
+            <Label
+              htmlFor="hide-metrics"
+              className="text-xs font-medium text-muted-foreground"
+            >
               Hide cards
             </Label>
             <Switch
