@@ -28,7 +28,7 @@ export const SettingsDialog = ({
   showTrigger = true,
 }: SettingsDialogProps) => {
   const trigger = children ?? (
-    <Button variant="default" size={"lg"}>
+    <Button variant="outline" size={"lg"}>
       <Settings />
       <span className="hidden md:block">Settings</span>
     </Button>
