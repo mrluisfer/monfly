@@ -65,7 +65,9 @@ export function TransactionRow({
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to delete transaction" });
+        sileo.error({
+          title: response.message ?? "Failed to delete transaction",
+        });
         return;
       }
 

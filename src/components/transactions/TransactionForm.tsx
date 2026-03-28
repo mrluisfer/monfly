@@ -319,7 +319,8 @@ export function TransactionForm<FormValues extends FieldValues>({
                   categoryInputValue.length > 1 &&
                   !categories?.some(
                     (cat) =>
-                      cat.name.toLowerCase() === categoryInputValue.toLowerCase()
+                      cat.name.toLowerCase() ===
+                      categoryInputValue.toLowerCase()
                   );
 
                 return (

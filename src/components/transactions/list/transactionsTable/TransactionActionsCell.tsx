@@ -35,6 +35,7 @@ import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { EditIcon, Ellipsis, TrashIcon } from "lucide-react";
 
 import EditTransaction from "../../EditTransaction";
+import { transactionFormDialogContentClassName } from "../../TransactionForm";
 
 export function TransactionActionsCell({
   transaction,
@@ -50,7 +51,9 @@ export function TransactionActionsCell({
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to delete transaction" });
+        sileo.error({
+          title: response.message ?? "Failed to delete transaction",
+        });
         setIsDeleteDialogOpen(false);
         return;
       }
@@ -174,15 +177,28 @@ export function TransactionActionsCell({
       </DropdownMenu>
 
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Transaction</DialogTitle>
-            <DialogDescription>Edit the transaction details</DialogDescription>
-          </DialogHeader>
-          <EditTransaction
-            transaction={transaction}
-            onClose={() => setIsEditDialogOpen(false)}
-          />
+        <DialogContent
+          showCloseButton={false}
+          className={transactionFormDialogContentClassName}
+        >
+          <div className="max-h-[92dvh] overflow-hidden">
+            <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />
+            <DialogHeader className="border-b border-border/60 px-5 pt-4 pb-4 text-left sm:px-6">
+              <DialogTitle className="text-lg font-semibold tracking-tight">
+                Edit transaction
+              </DialogTitle>
+              <DialogDescription className="leading-6">
+                Update the amount, category, type, or date without leaving the
+                current flow.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="max-h-[calc(92dvh-5.5rem)] overflow-y-auto px-4 py-4 sm:px-6">
+              <EditTransaction
+                transaction={transaction}
+                onClose={() => setIsEditDialogOpen(false)}
+              />
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
 
