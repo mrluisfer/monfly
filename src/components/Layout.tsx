@@ -16,7 +16,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <HeaderNavigation />
           </div>
           <div className="flex items-center justify-end gap-3 lg:flex-1">
-            <ToggleDarkMode size={"icon-lg"} />
+            <ToggleDarkMode />
             <SettingsDialog />
             <MobileHeaderSheetMenu />
           </div>

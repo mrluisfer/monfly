@@ -1,4 +1,3 @@
-import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
 import {
@@ -32,7 +31,7 @@ export const signupFn = createServerFn({ method: "POST" })
       // Check if the user already exists
       const found = await prismaClient.user.findUnique({
         where: {
-          email: inputEmail,
+          email: normalizedEmail,
         },
       });
 
@@ -71,7 +70,7 @@ export const signupFn = createServerFn({ method: "POST" })
       // Create the user
       const user = await prismaClient.user.create({
         data: {
-          email: inputEmail,
+          email: normalizedEmail,
           password,
           name: data.name,
         },

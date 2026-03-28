@@ -25,8 +25,8 @@ import {
   EyeOffIcon,
 } from "lucide-react";
 
+import { CopyButton } from "../copy-button/copy-button";
 import { HideMetrics } from "../home/HideMetrics";
-import { TotalBalanceAside } from "./TotalBalanceAside";
 
 const TOTAL_BALANCE_VISIBILITY_STORAGE_KEY = "monfly-total-balance-hidden";
 
@@ -196,13 +196,22 @@ const TotalBalance = () => {
       <div className="relative grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                Net total
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {summary.latestPoint?.label ?? "No activity yet"}
-              </p>
+            <div className="flex flex-row items-center gap-4">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Net total
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {summary.latestPoint?.label ?? "No activity yet"}
+                </p>
+              </div>
+              <CopyButton
+                text={`$${totalBalance}`}
+                variant={"secondary"}
+                size={"default"}
+              >
+                <span className="hidden md:block">Copy balance</span>
+              </CopyButton>
             </div>
             <span className="text-sm text-muted-foreground">
               {summary.recentPoints.length} recorded periods
@@ -351,11 +360,11 @@ const TotalBalance = () => {
           </dl>
         </div>
 
-        <TotalBalanceAside
+        {/* <TotalBalanceAside
           summary={summary}
           balanceTone={balanceTone}
           balanceToneClass={balanceToneClass}
-        />
+        /> */}
 
         {hideMetrics ? <HideMetrics className="max-w-lg" /> : null}
       </div>

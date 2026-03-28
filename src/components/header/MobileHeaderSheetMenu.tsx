@@ -165,7 +165,7 @@ export function MobileHeaderSheetMenu() {
                   </h3>
                   <div className="flex items-center justify-between">
                     <span>Dark Mode</span>
-                    <ToggleDarkMode size="icon-lg" />
+                    <ToggleDarkMode />
                   </div>
                   <div className="flex items-center justify-between">
                     <span>Settings</span>

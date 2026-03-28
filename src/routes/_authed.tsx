@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import Layout from "~/components/Layout";
 import { getUserSession } from "~/utils/user/get-user-session";
 
@@ -14,13 +15,7 @@ export const Route = createFileRoute("/_authed")({
 
     return { user: userEmail };
   },
-  errorComponent: ({ error }) => {
-    if (error.message === "Not authenticated") {
-      // return <Login />;
-      return <div>Not authenticated</div>;
-    }
-    throw error;
-  },
+  errorComponent: (props) => <DefaultCatchBoundary {...props} />,
   component: () => {
     return (
       <Layout>
