@@ -35,6 +35,26 @@ export const DEFAULT_THEMES = [
     name: "Deep Dark",
     value: "deep-dark",
   },
+  {
+    name: "Zinc",
+    value: "zinc",
+  },
+  {
+    name: "Slate",
+    value: "slate",
+  },
+  {
+    name: "Stone",
+    value: "stone",
+  },
+  {
+    name: "Gray",
+    value: "gray",
+  },
+  {
+    name: "Neutral",
+    value: "neutral",
+  },
 ];
 
 export const SCALED_THEMES = [

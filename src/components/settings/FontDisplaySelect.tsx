@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { fontsDisplay } from "~/constants/fonts-display";
 import { useFontDisplay } from "~/hooks/useFontDisplay";
 
@@ -70,28 +69,13 @@ const textColors = [
   "text-fuchsia-500",
 ];
 
-export function generateFontSelectClassNames(n: number): string[] {
-  const combos: string[] = [];
-  const used: Set<number> = new Set();
-
-  for (let i = 0; i < n; i++) {
-    let index: number;
-    do {
-      index = Math.floor(Math.random() * bgColors.length);
-    } while (used.has(index) && used.size < bgColors.length);
-
-    used.add(index);
-
-    combos.push(`${bgColors[index]} ${textColors[index]}`);
-  }
-
-  return combos;
+function getFontColorClassName(index: number): string {
+  const i = index % bgColors.length;
+  return `${bgColors[i]} ${textColors[i]}`;
 }
 
 export default function FontDisplaySelect() {
-  const id = useId();
   const { fontDisplay, onChangeFontDisplay } = useFontDisplay();
-  const fontSelectClassName = generateFontSelectClassNames(8);
 
   return (
     <div className="*:not-first:mt-2">
@@ -101,22 +85,15 @@ export default function FontDisplaySelect() {
           if (value) onChangeFontDisplay(value);
         }}
       >
-        <SelectTrigger
-          id={id}
-          className="ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_[data-square]]:shrink-0"
-        >
-          <SelectValue placeholder="Select framework" />
+        <SelectTrigger>
+          <SelectValue placeholder="Select font" />
         </SelectTrigger>
-        <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2">
+        <SelectContent>
           <SelectGroup>
-            <SelectLabel className="ps-2">Select Font Display</SelectLabel>
-            {fontsDisplay.map((font, id) => (
-              <SelectItem
-                key={font.value}
-                value={font.value}
-                className="flex items-center gap-2"
-              >
-                <Square className={fontSelectClassName[id]}>
+            <SelectLabel>Select Font Display</SelectLabel>
+            {fontsDisplay.map((font, index) => (
+              <SelectItem key={font.value} value={font.value}>
+                <Square className={getFontColorClassName(index)}>
                   {font.label.charAt(0)}
                 </Square>
                 <span className="truncate">{font.label}</span>

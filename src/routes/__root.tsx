@@ -12,7 +12,7 @@ import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { useDarkMode } from "~/hooks/useDarkMode";
-import { useFontDisplay } from "~/hooks/useFontDisplay";
+
 import { useGlobalHapticFeedback } from "~/hooks/useGlobalHapticFeedback";
 import { useSonnerPosition } from "~/hooks/useSonnerPosition";
 import { SileoToaster } from "~/lib/toaster";
@@ -20,7 +20,7 @@ import { UiStateEffects } from "~/state/effects";
 import appCss from "~/styles/globals.css?url";
 import { seo } from "~/utils/seo.js";
 // import appCss from "~/styles/output.css?url";
-import clsx from "clsx";
+
 import { Provider as JotaiProvider } from "jotai";
 
 export const Route = createRootRoute({
@@ -191,7 +191,6 @@ function RootDocumentWithProviders({
 }) {
   useGlobalHapticFeedback();
   const { position } = useSonnerPosition();
-  const { fontDisplay } = useFontDisplay();
   const { theme } = useDarkMode();
 
   return (
@@ -199,7 +198,7 @@ function RootDocumentWithProviders({
       <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
         <HeadContent />
       </head>
-      <body className={clsx(fontDisplay)}>
+      <body>
         <TooltipProvider delay={200}>
           <SileoToaster position={position} theme={theme} />
           {children}

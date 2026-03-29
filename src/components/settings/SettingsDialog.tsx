@@ -1,18 +1,18 @@
 import type { ReactElement, ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
 import { Settings } from "lucide-react";
 
 import { Button } from "../ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import FontDisplaySelect from "./FontDisplaySelect";
 import { SonnerPositionSelector } from "./SonnerPositionSelector";
-import { ThemeSelector } from "./ThemeSelector";
 
 type SettingsDialogProps = {
   children?: ReactElement;
@@ -39,7 +39,7 @@ export const SettingsDialog = ({
       {showTrigger ? <DialogTrigger render={trigger} /> : null}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
+          <DialogTitle className={"text-primary"}>Settings</DialogTitle>
           <DialogDescription>Change the settings of your app</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4">
@@ -47,10 +47,14 @@ export const SettingsDialog = ({
             <SonnerPositionSelector />
           </SettingsItem>
           <SettingsItem label="Theme:">
-            <ThemeSelector />
-          </SettingsItem>
-          <SettingsItem label="Font Display:">
-            <FontDisplaySelect />
+            <Button
+              render={
+                <DialogClose
+                  onClick={() => onOpenChange?.(false)}
+                  render={<Link to="/user/theme">Change Theme</Link>}
+                />
+              }
+            />
           </SettingsItem>
         </div>
       </DialogContent>

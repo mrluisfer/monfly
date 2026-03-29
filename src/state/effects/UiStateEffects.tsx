@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
-import { activeThemeAtom, darkModeThemeAtom } from "~/state/atoms";
+import { activeThemeAtom, darkModeThemeAtom, fontDisplayAtom } from "~/state/atoms";
 
 function syncThemeClass(theme: "light" | "dark") {
   if (typeof window === "undefined") return;
@@ -10,6 +10,7 @@ function syncThemeClass(theme: "light" | "dark") {
 export function UiStateEffects() {
   const [theme, setTheme] = useAtom(darkModeThemeAtom);
   const activeTheme = useAtomValue(activeThemeAtom);
+  const fontDisplay = useAtomValue(fontDisplayAtom);
 
   useEffect(() => {
     syncThemeClass(theme);
@@ -50,6 +51,18 @@ export function UiStateEffects() {
     return () =>
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
   }, [setTheme]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const body = document.body;
+    for (const cls of Array.from(body.classList)) {
+      if (cls.startsWith("font-")) {
+        body.classList.remove(cls);
+      }
+    }
+    body.classList.add(fontDisplay);
+  }, [fontDisplay]);
 
   return null;
 }

@@ -21,6 +21,7 @@ import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home.index
 import { Route as AuthedCategoriesIndexRouteImport } from './routes/_authed/categories.index'
 import { Route as AuthedBalanceCalculatorIndexRouteImport } from './routes/_authed/balance-calculator.index'
 import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
+import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -82,6 +83,11 @@ const AuthedUserUserIdRoute = AuthedUserUserIdRouteImport.update({
   path: '/user/$userId',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedUserThemeIndexRoute = AuthedUserThemeIndexRouteImport.update({
+  id: '/user/theme/',
+  path: '/user/theme/',
+  getParentRoute: () => AuthedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/home/': typeof AuthedHomeIndexRoute
   '/reports/': typeof AuthedReportsIndexRoute
   '/transactions/': typeof AuthedTransactionsIndexRoute
+  '/user/theme/': typeof AuthedUserThemeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/home': typeof AuthedHomeIndexRoute
   '/reports': typeof AuthedReportsIndexRoute
   '/transactions': typeof AuthedTransactionsIndexRoute
+  '/user/theme': typeof AuthedUserThemeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   '/_authed/home/': typeof AuthedHomeIndexRoute
   '/_authed/reports/': typeof AuthedReportsIndexRoute
   '/_authed/transactions/': typeof AuthedTransactionsIndexRoute
+  '/_authed/user/theme/': typeof AuthedUserThemeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/home/'
     | '/reports/'
     | '/transactions/'
+    | '/user/theme/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/reports'
     | '/transactions'
+    | '/user/theme'
   id:
     | '__root__'
     | '/'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/_authed/home/'
     | '/_authed/reports/'
     | '/_authed/transactions/'
+    | '/_authed/user/theme/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -262,6 +274,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedUserUserIdRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/user/theme/': {
+      id: '/_authed/user/theme/'
+      path: '/user/theme'
+      fullPath: '/user/theme/'
+      preLoaderRoute: typeof AuthedUserThemeIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
   }
 }
 
@@ -272,6 +291,7 @@ interface AuthedRouteChildren {
   AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
   AuthedReportsIndexRoute: typeof AuthedReportsIndexRoute
   AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute
+  AuthedUserThemeIndexRoute: typeof AuthedUserThemeIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
@@ -281,6 +301,7 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
   AuthedReportsIndexRoute: AuthedReportsIndexRoute,
   AuthedTransactionsIndexRoute: AuthedTransactionsIndexRoute,
+  AuthedUserThemeIndexRoute: AuthedUserThemeIndexRoute,
 }
 
 const AuthedRouteWithChildren =
