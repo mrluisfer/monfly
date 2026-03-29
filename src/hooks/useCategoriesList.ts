@@ -5,6 +5,7 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { deleteCategoriesByIdServer } from "~/lib/api/category/delete-categories-by-id";
 import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email";
 import { sileo } from "~/lib/toaster";
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 import { queryDictionary } from "~/queries/dictionary";
 
 export const useCategoriesList = () => {
@@ -31,10 +32,6 @@ export const useCategoriesList = () => {
       }
       sileo.success({ title: ctx.data.message });
       setSelectedCategories([]);
-      // Import the function at the top and use it
-      const { invalidateCategoryQueries } = await import(
-        "~/utils/query-invalidation"
-      );
       await invalidateCategoryQueries(queryClient, userEmail);
     },
     idempotency: {

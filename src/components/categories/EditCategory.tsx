@@ -5,6 +5,8 @@ import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";
 import { sileo } from "~/lib/toaster";
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
+import { getUserSession } from "~/utils/user/get-user-session";
 
 import { CategoryForm } from "./CategoryForm";
 
@@ -27,13 +29,8 @@ export function EditCategory({
       }
 
       sileo.success({ title: "Category updated successfully" });
-      // Need to get userEmail first
-      const { getUserSession } = await import("~/utils/user/get-user-session");
       const { data: userEmail } = await getUserSession();
       if (userEmail) {
-        const { invalidateCategoryQueries } = await import(
-          "~/utils/query-invalidation"
-        );
         await invalidateCategoryQueries(queryClient, userEmail);
       }
       onCloseDialog?.();

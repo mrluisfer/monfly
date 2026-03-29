@@ -16,6 +16,8 @@ import {
 } from "framer-motion";
 import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
 
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
+
 import Card from "../Card";
 import { CategoryForm } from "./CategoryForm";
 
@@ -35,9 +37,6 @@ export default function AddCategory() {
       }
 
       sileo.success({ title: "Category created successfully" });
-      const { invalidateCategoryQueries } = await import(
-        "~/utils/query-invalidation"
-      );
       await invalidateCategoryQueries(queryClient, userEmail);
     },
     idempotency: {
