@@ -4,12 +4,14 @@
       "Bash(xargs:*)",
       "Bash(wsl -e bash -c \"cd /home/mrluisfer/workspace/monfly && npx tsc --noEmit --pretty 2>&1 | head -40\")",
       "Bash(wsl -e bash -c \"cd /home/mrluisfer/workspace/monfly && npx tsc --noEmit --pretty 2>&1 | head -50\")",
-      "WebFetch(domain:ui.shadcn.com)"
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(npm test:*)",
+      "Bash(npm run typecheck:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)"
     ]
   },
-  "enabledMcpjsonServers": [
-    "shadcn",
-    "magicuidesign-mcp",
-    "playwright"
-  ]
+  "enabledMcpjsonServers": ["shadcn", "magicuidesign-mcp", "playwright"]
 }
