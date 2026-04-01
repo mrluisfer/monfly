@@ -4,6 +4,7 @@ import { useThemeConfig } from "~/hooks/useThemeConfig";
 import { CheckIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import Card from "@/components/Card";
 
 export const Route = createFileRoute("/_authed/user/theme/")({
   component: ThemePage,
@@ -257,8 +258,9 @@ function ThemeCard({
 function ThemePage() {
   const { activeTheme, setActiveTheme, isDark } = useThemeConfig();
 
+  //className="min-h-dvh bg-background px-3 py-4 sm:px-4 sm:py-8"
   return (
-    <div className="min-h-dvh bg-background px-3 py-4 sm:px-4 sm:py-8">
+    <Card className="app-panel">
       <div className="mx-auto w-full max-w-3xl space-y-8">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-primary">
@@ -307,6 +309,6 @@ function ThemePage() {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
