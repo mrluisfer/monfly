@@ -6,6 +6,7 @@ import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { sileo } from "~/lib/toaster";
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 import { cn } from "~/lib/utils";
 import {
   AnimatePresence,
@@ -16,9 +17,6 @@ import {
 } from "framer-motion";
 import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
 
-import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-
-import Card from "../Card";
 import { CategoryForm } from "./CategoryForm";
 
 export default function AddCategory() {
@@ -66,79 +64,69 @@ export default function AddCategory() {
           },
         },
       });
-    } catch (error) {
+    } catch {
       sileo.error({ title: "Error creating category" });
     }
   };
 
-  return (
-    <>
-      {/* Desktop: Card as before */}
-      <div className="hidden lg:block">
-        <Card title="Add Category">
-          <CategoryForm
-            submitText="Create new category"
-            loading={postCategoryByEmail.status === "pending"}
-            onSubmit={handleSubmit}
-          />
-        </Card>
-      </div>
+  const isLoading = postCategoryByEmail.status === "pending";
 
-      {/* Mobile: collapsible section */}
-      <div className="lg:hidden">
-        <button
-          type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
-          className={cn(
-            "flex items-center justify-between w-full",
-            "rounded-2xl px-4 py-3.5",
-            "bg-primary/5 border border-primary/10",
-            "transition-all duration-200"
-          )}
-        >
-          <div className="flex items-center gap-2.5">
-            <PlusCircleIcon className="size-5 text-primary" />
+  return (
+    <div className="rounded-4xl border border-border bg-background p-4 sm:p-5">
+      <button
+        type="button"
+        onClick={() => setIsOpen((prev) => !prev)}
+        className="flex w-full items-center justify-between"
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="flex size-9 items-center justify-center rounded-4xl bg-primary/10">
+            <PlusCircleIcon className="size-4.5 text-primary" />
+          </div>
+          <div className="text-left">
             <span className="text-sm font-semibold text-foreground">
               New Category
             </span>
+            <p className="text-xs text-muted-foreground">
+              Add a new expense or income category
+            </p>
           </div>
-          <ChevronDownIcon
-            className={cn(
-              "size-4 text-muted-foreground transition-transform duration-300",
-              isOpen && "rotate-180"
-            )}
-          />
-        </button>
+        </div>
+        <ChevronDownIcon
+          className={cn(
+            "size-4 text-muted-foreground transition-transform duration-300",
+            isOpen && "rotate-180"
+          )}
+        />
+      </button>
 
-        <LazyMotion features={domAnimation}>
-          <AnimatePresence>
-            {isOpen && (
-              <m.div
-                initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={
-                  shouldReduceMotion
-                    ? { opacity: 0 }
-                    : { height: 0, opacity: 0 }
-                }
-                transition={{
-                  duration: shouldReduceMotion ? 0 : 0.25,
-                  ease: "easeInOut",
-                }}
-                className="overflow-hidden"
-              >
-                <div className="pt-3 px-1">
-                  <CategoryForm
-                    submitText="Create new category"
-                    loading={postCategoryByEmail.status === "pending"}
-                    onSubmit={handleSubmit}
-                  />
-                </div>
-              </m.div>
-            )}
-          </AnimatePresence>
-        </LazyMotion>
-      </div>
-    </>
+      <LazyMotion features={domAnimation}>
+        <AnimatePresence>
+          {isOpen && (
+            <m.div
+              initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={
+                shouldReduceMotion
+                  ? { opacity: 0 }
+                  : { height: 0, opacity: 0 }
+              }
+              transition={{
+                duration: shouldReduceMotion ? 0 : 0.25,
+                ease: "easeInOut",
+              }}
+              className="overflow-hidden"
+            >
+              <div className="pt-4">
+                <CategoryForm
+                  submitText="Create category"
+                  loading={isLoading}
+                  onSubmit={handleSubmit}
+                />
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </LazyMotion>
+    </div>
   );
 }

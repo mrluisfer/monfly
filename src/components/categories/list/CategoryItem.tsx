@@ -16,96 +16,115 @@ import { Pencil, Tag } from "lucide-react";
 
 import { EditCategory } from "../EditCategory";
 
-const CategoryItem = ({ category }: { category: Category }) => {
+const CategoryItem = ({
+  category,
+  compact = false,
+}: {
+  category: Category;
+  compact?: boolean;
+}) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  if (compact) {
+    return (
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className="rounded-full"
+              aria-label={`Edit ${category.name}`}
+            >
+              <Pencil className="size-3" />
+            </Button>
+          }
+        />
+
+        <EditDialog
+          category={category}
+          onClose={() => setIsEditDialogOpen(false)}
+        />
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-      <div className="flex items-center justify-between w-full min-w-0 group">
-        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-          <div className="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-md bg-primary/10 flex items-center justify-center">
-            <div className="text-primary">
-              {getCategoryIconByName(category.icon, {
-                width: 16,
-                height: 16,
-              })}
-            </div>
+      <div className="flex w-full min-w-0 items-center justify-between group">
+        <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-4xl bg-primary/10 text-primary">
+            {getCategoryIconByName(category.icon, {
+              className: "size-4",
+            })}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-              <span className="font-medium text-sm sm:text-base capitalize truncate">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+              <span className="truncate text-sm font-medium capitalize sm:text-base">
                 {category.name}
               </span>
-              <Badge variant="outline" className="text-xs w-fit hidden sm:flex">
-                <Tag className="w-3 h-3 mr-1" />
+              <Badge variant="outline" className="hidden w-fit text-xs sm:flex">
+                <Tag className="mr-1 size-3" />
                 Category
               </Badge>
             </div>
-            <p className="text-xs text-muted-foreground truncate sm:hidden">
-              ID: {category.id.slice(0, 8)}...
-            </p>
           </div>
         </div>
 
-        <div className="shrink-0 ml-2">
-          <div
-            className="
-            group-hover:scale-105
-            scale-95
-            transition-all duration-300 ease-out
-            sm:opacity-60 sm:scale-100
-            focus-within:opacity-100 focus-within:scale-105"
-          >
-            <DialogTrigger
-              render={
-                <Button
-                  variant="outline"
-                  size="icon-lg"
-                  className={cn(
-                    "h-8 w-8 p-0 rounded-md",
-                    "hover:bg-primary/10 hover:text-primary hover:scale-110 hover:shadow-sm",
-                    "focus:bg-primary/10 focus:text-primary focus:scale-110",
-                    "active:scale-95",
-                    "transition-all duration-200 ease-out",
-                    "dark:hover:bg-primary/5 dark:hover:shadow-primary/10"
-                  )}
-                >
-                  <Pencil className="transition-transform duration-200 hover:rotate-12" />
-                  <span className="sr-only">Edit {category.name}</span>
-                </Button>
-              }
-            />
-          </div>
+        <div className="ml-2 shrink-0">
+          <DialogTrigger
+            render={
+              <Button
+                variant="outline"
+                size="icon-sm"
+                className={cn(
+                  "rounded-4xl opacity-60 transition-all",
+                  "group-hover:opacity-100",
+                  "hover:bg-primary/10 hover:text-primary"
+                )}
+              >
+                <Pencil className="size-3.5" />
+                <span className="sr-only">Edit {category.name}</span>
+              </Button>
+            }
+          />
         </div>
       </div>
 
-      <DialogContent className="sm:max-w-106.25">
-        <DialogHeader className="space-y-3">
-          <DialogTitle className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center">
-              <div className="text-primary">
-                {getCategoryIconByName(category.icon, {
-                  width: 16,
-                  height: 16,
-                })}
-              </div>
-            </div>
-            Edit Category
-          </DialogTitle>
-          <DialogDescription>
-            Update the details of your <strong>{category.name}</strong> category
-            below. Changes will be saved automatically.
-          </DialogDescription>
-        </DialogHeader>
-        <EditCategory
-          category={category}
-          onCloseDialog={() => {
-            setIsEditDialogOpen(false);
-          }}
-        />
-      </DialogContent>
+      <EditDialog
+        category={category}
+        onClose={() => setIsEditDialogOpen(false)}
+      />
     </Dialog>
   );
 };
+
+function EditDialog({
+  category,
+  onClose,
+}: {
+  category: Category;
+  onClose: () => void;
+}) {
+  return (
+    <DialogContent className="sm:max-w-md">
+      <DialogHeader className="space-y-3">
+        <DialogTitle className="flex items-center gap-2">
+          <div className="flex size-8 items-center justify-center rounded-4xl bg-primary/10 text-primary">
+            {getCategoryIconByName(category.icon, {
+              className: "size-4",
+            })}
+          </div>
+          Edit Category
+        </DialogTitle>
+        <DialogDescription>
+          Update the details of your <strong>{category.name}</strong> category
+          below.
+        </DialogDescription>
+      </DialogHeader>
+      <EditCategory category={category} onCloseDialog={onClose} />
+    </DialogContent>
+  );
+}
 
 export default CategoryItem;

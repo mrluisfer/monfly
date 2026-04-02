@@ -9,25 +9,16 @@ export const Route = createFileRoute("/_authed/categories/")({
 
 function RouteComponent() {
   return (
-    <div>
-      <header className="mb-6 flex justify-between items-center">
-        <PageTitle description="Manage your categories here">
-          Categories
-        </PageTitle>
-      </header>
+    <div className="space-y-6">
+      <PageTitle description="Organize your transactions with custom categories">
+        Categories
+      </PageTitle>
 
-      {/* Mobile: stacked layout, list first for immediate access */}
-      <div className="flex flex-col gap-5 lg:hidden">
-        <CategoriesList />
-        <AddCategory />
-      </div>
-
-      {/* Desktop: side-by-side grid */}
-      <div className="hidden lg:grid lg:grid-cols-5 gap-4">
-        <div className="col-span-2">
+      <div className="grid gap-5 lg:grid-cols-[280px_1fr] xl:grid-cols-[320px_1fr]">
+        <div className="order-2 space-y-4 lg:sticky lg:top-4 lg:order-1 lg:self-start">
           <AddCategory />
         </div>
-        <div className="col-span-3">
+        <div className="order-1 lg:order-2">
           <CategoriesList />
         </div>
       </div>
