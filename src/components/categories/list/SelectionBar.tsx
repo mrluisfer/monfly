@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { Category } from "@prisma/client";
 import { CheckCheckIcon, MinusIcon } from "lucide-react";
 
-import { useCategoriesList } from "@/hooks/useCategoriesList";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,19 +10,23 @@ export const SelectionBar = ({
   filteredCategories,
   isFiltering,
   selectedSet,
+  handleSelectAll,
+  handleDeselectAll,
+  handleSelectCategories,
+  handleDeselectCategories,
+  totalCategories,
+  selectedCount,
 }: {
   filteredCategories: Category[];
   isFiltering: boolean;
   selectedSet: Set<string>;
+  handleSelectAll: () => void;
+  handleDeselectAll: () => void;
+  handleSelectCategories: (ids: string[]) => void;
+  handleDeselectCategories: (ids: string[]) => void;
+  totalCategories: number;
+  selectedCount: number;
 }) => {
-  const {
-    handleSelectAll,
-    handleDeselectAll,
-    handleSelectCategories,
-    handleDeselectCategories,
-    totalCategories,
-    selectedCount,
-  } = useCategoriesList();
 
   const filteredCategoryIds = useMemo(
     () => filteredCategories.map((c) => c.id),

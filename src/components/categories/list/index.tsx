@@ -33,6 +33,11 @@ export const CategoriesList = () => {
     selectedCategories,
     handleCheckboxChange,
     handleDeleteCategories,
+    handleSelectAll,
+    handleDeselectAll,
+    handleSelectCategories,
+    handleDeselectCategories,
+    totalCategories,
     selectedCount,
   } = useCategoriesList();
 
@@ -129,6 +134,13 @@ export const CategoriesList = () => {
         isFiltering={isFiltering}
         filteredCategories={filteredCategories}
         categoriesCount={categoriesCount}
+        selectedSet={selectedSet}
+        handleSelectAll={handleSelectAll}
+        handleDeselectAll={handleDeselectAll}
+        handleSelectCategories={handleSelectCategories}
+        handleDeselectCategories={handleDeselectCategories}
+        totalCategories={totalCategories}
+        selectedCount={selectedCount}
       />
 
       {/* No results */}

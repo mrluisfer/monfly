@@ -15,6 +15,13 @@ export const CategoryToolbar = ({
   isFiltering,
   filteredCategories,
   categoriesCount,
+  selectedSet,
+  handleSelectAll,
+  handleDeselectAll,
+  handleSelectCategories,
+  handleDeselectCategories,
+  totalCategories,
+  selectedCount,
 }: {
   searchValue: string;
   setSearchValue: (value: string) => void;
@@ -23,6 +30,13 @@ export const CategoryToolbar = ({
   isFiltering: boolean;
   filteredCategories: Category[];
   categoriesCount: number;
+  selectedSet: Set<string>;
+  handleSelectAll: () => void;
+  handleDeselectAll: () => void;
+  handleSelectCategories: (ids: string[]) => void;
+  handleDeselectCategories: (ids: string[]) => void;
+  totalCategories: number;
+  selectedCount: number;
 }) => {
   return (
     <Card>
@@ -84,7 +98,13 @@ export const CategoryToolbar = ({
         <SelectionBar
           isFiltering={isFiltering}
           filteredCategories={filteredCategories}
-          selectedSet={new Set(filteredCategories.map((c) => c.id))}
+          selectedSet={selectedSet}
+          handleSelectAll={handleSelectAll}
+          handleDeselectAll={handleDeselectAll}
+          handleSelectCategories={handleSelectCategories}
+          handleDeselectCategories={handleDeselectCategories}
+          totalCategories={totalCategories}
+          selectedCount={selectedCount}
         />
       </CardContent>
     </Card>
