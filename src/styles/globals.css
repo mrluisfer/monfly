@@ -2031,6 +2031,39 @@ html {
     background-image: linear-gradient(110deg, #f8fafc, #5eead4 45%, #fdba74);
   }
 
+  @keyframes landing-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .landing-fade-up {
+    opacity: 0;
+    animation: landing-fade-up 0.5s ease-out forwards;
+  }
+
+  .landing-fade-up-scroll {
+    opacity: 0;
+  }
+
+  .landing-fade-up-scroll.in-view {
+    animation: landing-fade-up 0.45s ease-out forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-fade-up,
+    .landing-fade-up-scroll.in-view {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   .app-shell {
     position: relative;
     isolation: isolate;
