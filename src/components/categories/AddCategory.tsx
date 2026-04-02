@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { getCanonicalCategoryIconName } from "~/constants/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
@@ -7,7 +6,6 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { sileo } from "~/lib/toaster";
 import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-import { cn } from "~/lib/utils";
 import {
   AnimatePresence,
   domAnimation,
@@ -15,14 +13,20 @@ import {
   m,
   useReducedMotion,
 } from "framer-motion";
-import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
+import { PlusCircleIcon } from "lucide-react";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 import { CategoryForm } from "./CategoryForm";
 
 export default function AddCategory() {
   const userEmail = useRouteUser();
   const queryClient = useQueryClient();
-  const [isOpen, setIsOpen] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   const postCategoryByEmail = useMutation({
@@ -40,8 +44,11 @@ export default function AddCategory() {
     idempotency: {
       getKey: (variables) =>
         JSON.stringify({
+          //@ts-ignore
           email: variables.data.email,
+          //@ts-ignore
           icon: variables.data.category.icon,
+          //@ts-ignore
           name: variables.data.category.name.trim().toLowerCase(),
         }),
       onDuplicatePending: {
@@ -72,43 +79,26 @@ export default function AddCategory() {
   const isLoading = postCategoryByEmail.status === "pending";
 
   return (
-    <div className="rounded-4xl border border-border bg-background p-4 sm:p-5">
-      <button
-        type="button"
-        onClick={() => setIsOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between"
-      >
-        <div className="flex items-center gap-2.5">
-          <div className="flex size-9 items-center justify-center rounded-4xl bg-primary/10">
-            <PlusCircleIcon className="size-4.5 text-primary" />
-          </div>
-          <div className="text-left">
-            <span className="text-sm font-semibold text-foreground">
-              New Category
-            </span>
-            <p className="text-xs text-muted-foreground">
-              Add a new expense or income category
-            </p>
-          </div>
+    <Card>
+      <CardHeader className="flex items-center gap-2.5">
+        <div className="flex size-9 items-center justify-center rounded-4xl bg-primary/10">
+          <PlusCircleIcon className="size-4.5 text-primary" />
         </div>
-        <ChevronDownIcon
-          className={cn(
-            "size-4 text-muted-foreground transition-transform duration-300",
-            isOpen && "rotate-180"
-          )}
-        />
-      </button>
-
-      <LazyMotion features={domAnimation}>
-        <AnimatePresence>
-          {isOpen && (
+        <div className="text-left">
+          <CardTitle>New Category</CardTitle>
+          <CardDescription>
+            Add a new expense or income category
+          </CardDescription>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <LazyMotion features={domAnimation}>
+          <AnimatePresence>
             <m.div
               initial={shouldReduceMotion ? false : { height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={
-                shouldReduceMotion
-                  ? { opacity: 0 }
-                  : { height: 0, opacity: 0 }
+                shouldReduceMotion ? { opacity: 0 } : { height: 0, opacity: 0 }
               }
               transition={{
                 duration: shouldReduceMotion ? 0 : 0.25,
@@ -124,9 +114,9 @@ export default function AddCategory() {
                 />
               </div>
             </m.div>
-          )}
-        </AnimatePresence>
-      </LazyMotion>
-    </div>
+          </AnimatePresence>
+        </LazyMotion>
+      </CardContent>
+    </Card>
   );
 }
