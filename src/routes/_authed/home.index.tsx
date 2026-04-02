@@ -21,8 +21,6 @@ import {
 } from "framer-motion";
 import { useAtomValue } from "jotai";
 
-import { BalanceActions } from "@/components/balance/BalanceActions";
-
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
 );
@@ -181,18 +179,6 @@ function RouteComponent() {
                   )}
                 </AnimatePresence>
               </m.div>
-            </m.div>
-
-            <m.div
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: shouldReduceMotion ? 0 : 0.5,
-                delay: shouldReduceMotion ? 0 : 0.2,
-              }}
-              className="overflow-hidden"
-            >
-              <BalanceActions />
             </m.div>
 
             <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]">

@@ -25,6 +25,7 @@ import {
 
 import { CopyButton } from "../copy-button/copy-button";
 import { Badge } from "../ui/badge";
+import { BalanceActions } from "./BalanceActions";
 
 export type MonthlyPoint = {
   expense: number;
@@ -163,8 +164,8 @@ const TotalBalance = () => {
   }
 
   return (
-    <section className="finance-hero rounded-[2rem] p-5 sm:p-6 lg:p-7">
-      <div className="relative grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
+    <section className="finance-hero rounded-4xl p-5 sm:p-6 lg:p-7">
+      <div className="relative grid gap-6">
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-row items-center gap-4">
@@ -177,17 +178,19 @@ const TotalBalance = () => {
                   {summary.latestPoint?.label ?? "No activity yet"}
                 </Badge>
               </div>
+            </div>
+            <div className="flex items-center gap-2 justify-end">
               <CopyButton
                 text={`$${totalBalance}`}
-                variant={"secondary"}
+                variant={"outline"}
                 size={"default"}
               >
                 <span className="hidden md:block">Copy balance</span>
               </CopyButton>
+              <span className="text-sm text-muted-foreground">
+                {summary.recentPoints.length} recorded periods
+              </span>
             </div>
-            <span className="text-sm text-muted-foreground">
-              {summary.recentPoints.length} recorded periods
-            </span>
           </div>
 
           <div className="space-y-3">
@@ -248,7 +251,7 @@ const TotalBalance = () => {
           </div>
 
           <dl className="grid gap-3 sm:grid-cols-3">
-            <div className="finance-chip rounded-[1.2rem] p-4">
+            <div className="finance-chip rounded-4xl p-4">
               <dt className="text-sm font-medium text-muted-foreground">
                 Latest net
               </dt>
@@ -263,7 +266,7 @@ const TotalBalance = () => {
               </p>
             </div>
 
-            <div className="finance-chip rounded-[1.2rem] p-4">
+            <div className="finance-chip rounded-4xl p-4">
               <dt className="text-sm font-medium text-muted-foreground">
                 Income tracked
               </dt>
@@ -275,7 +278,7 @@ const TotalBalance = () => {
               </p>
             </div>
 
-            <div className="finance-chip rounded-[1.2rem] p-4">
+            <div className="finance-chip rounded-4xl p-4">
               <dt className="text-sm font-medium text-muted-foreground">
                 Expenses tracked
               </dt>
@@ -288,13 +291,8 @@ const TotalBalance = () => {
             </div>
           </dl>
         </div>
-
-        {/* <TotalBalanceAside
-          summary={summary}
-          balanceTone={balanceTone}
-          balanceToneClass={balanceToneClass}
-        /> */}
       </div>
+      <BalanceActions />
     </section>
   );
 };

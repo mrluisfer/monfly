@@ -1,6 +1,8 @@
 import { ReactNode, useMemo } from "react";
 import { CalendarDaysIcon } from "lucide-react";
 
+import { Badge } from "../ui/badge";
+
 export function WelcomeMessage({ children }: { children: ReactNode }) {
   const todayLabel = useMemo(
     () =>
@@ -23,10 +25,10 @@ export function WelcomeMessage({ children }: { children: ReactNode }) {
         </p>
       </div>
 
-      <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-        <CalendarDaysIcon className="size-4" />
+      <Badge>
+        <CalendarDaysIcon />
         {todayLabel}
-      </p>
+      </Badge>
     </header>
   );
 }

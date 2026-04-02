@@ -2105,7 +2105,7 @@ html {
   }
 
   .app-panel {
-    @apply border-2 bg-secondary shadow-sm;
+    @apply border-2 bg-card shadow-sm;
   }
 
   .finance-panel {
