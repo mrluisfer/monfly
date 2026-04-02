@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -25,6 +24,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { Kbd } from "../ui/kbd";
 import { Skeleton } from "../ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 
@@ -113,7 +113,12 @@ const BASIC_KEYS: CalculatorKey[] = [
   },
   { token: ".", label: ".", ariaLabel: "Decimal point", role: "number" },
   { token: "+", label: "+", ariaLabel: "Add", role: "operator" },
-  { token: "=", label: "=", ariaLabel: "Calculate result", role: "equal" },
+  {
+    token: "=",
+    label: "=",
+    ariaLabel: "Calculate result",
+    role: "equal",
+  },
 ];
 
 const SCIENTIFIC_KEYS: CalculatorKey[] = [
@@ -352,7 +357,7 @@ function getButtonClassName(role: ButtonRole) {
   }
 
   if (role === "equal") {
-    return "h-13 rounded-2xl text-lg font-bold col-span-4 sm:col-span-1";
+    return "h-13 rounded-2xl text-lg font-bold col-span-4 sm:col-span-3";
   }
 
   return "h-13 rounded-2xl text-lg font-semibold";
@@ -942,7 +947,7 @@ export function BalanceCalculator() {
       </Alert>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
-        <Card className="relative overflow-hidden border-border/70 bg-linear-to-br from-card via-card to-primary/5">
+        <Card className="relative overflow-hidden border-border/70 bg-linear-to-br from-card via-card to-primary/5 h-fit">
           <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
 
           <CardHeader className="relative space-y-4">
@@ -957,7 +962,7 @@ export function BalanceCalculator() {
                 </CardDescription>
               </div>
               <Button
-                variant="outline"
+                variant="secondary"
                 size="lg"
                 onClick={() => resetToBaseline(true)}
                 className="shrink-0"
@@ -1149,13 +1154,13 @@ export function BalanceCalculator() {
               <CardTitle className="text-base">Available shortcuts</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-wrap gap-2">
-              <Badge variant="outline">0-9</Badge>
-              <Badge variant="outline">+ - * /</Badge>
-              <Badge variant="outline">Enter =</Badge>
-              <Badge variant="outline">Backspace</Badge>
-              <Badge variant="outline">Esc (reset)</Badge>
-              <Badge variant="outline">.</Badge>
-              <Badge variant="outline">%</Badge>
+              <Kbd>0-9</Kbd>
+              <Kbd>+ - * /</Kbd>
+              <Kbd>Enter =</Kbd>
+              <Kbd>Backspace</Kbd>
+              <Kbd>Esc (reset)</Kbd>
+              <Kbd>.</Kbd>
+              <Kbd>%</Kbd>
             </CardContent>
           </Card>
         </div>
