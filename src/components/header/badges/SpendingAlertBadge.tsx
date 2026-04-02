@@ -1,12 +1,5 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Badge } from "~/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
@@ -20,6 +13,7 @@ import {
   Loader2,
   TrendingUp,
 } from "lucide-react";
+import { BadgeIcon, HeaderBadge, StatusDot } from "./HeaderBadge";
 
 interface SpendingAlertBadgeProps {
   showIcon?: boolean;
@@ -52,46 +46,46 @@ const statusConfig = {
   safe: {
     label: "Budget Safe",
     compactLabel: "Safe",
-    color: "bg-emerald-500",
+    color: "bg-primary",
     variant: "outline" as const,
     icon: CheckCircle2,
-    iconColor: "text-foreground/80",
+    iconColor: "text-primary",
     description: "Your spending is well within budget.",
   },
   moderate: {
     label: "Budget Moderate",
     compactLabel: "Moderate",
-    color: "bg-blue-500",
+    color: "bg-secondary",
     variant: "outline" as const,
     icon: TrendingUp,
-    iconColor: "text-blue-500",
+    iconColor: "text-secondary-foreground",
     description: "You're using a moderate amount of your budget.",
   },
   warning: {
     label: "Budget Warning",
     compactLabel: "Warning",
-    color: "bg-amber-500",
+    color: "bg-accent",
     variant: "outline" as const,
     icon: AlertTriangle,
-    iconColor: "text-amber-500",
+    iconColor: "text-accent-foreground",
     description: "You're approaching your budget limit!",
   },
   exceeded: {
     label: "Budget Exceeded",
     compactLabel: "Exceeded",
-    color: "bg-rose-500",
+    color: "bg-destructive",
     variant: "outline" as const,
     icon: AlertCircle,
-    iconColor: "text-rose-500",
+    iconColor: "text-destructive",
     description: "You have exceeded your budget limit!",
   },
   zero: {
     label: "Zero Balance",
     compactLabel: "Zero",
-    color: "bg-zinc-500",
+    color: "bg-muted",
     variant: "outline" as const,
     icon: AlertTriangle,
-    iconColor: "text-zinc-500",
+    iconColor: "text-muted-foreground",
     description: "Your balance is zero or negative.",
   },
   notSet: {
@@ -242,142 +236,143 @@ export function SpendingAlertBadge({
   }
 
   const config = statusConfig[status];
-  const Icon = config.icon;
   const shouldAnimateDot =
     animate && (status === "warning" || status === "exceeded");
-  const shouldAnimateIcon = status === "loading";
   const canShowDetails = detailStatuses.has(status);
   const percentLabel = `${Math.round(percent)}%`;
 
   return (
-    <TooltipProvider delay={200}>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <Badge
-              variant={config.variant}
-              className={cn(
-                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
-                fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
-                compact && "h-8 px-2.5 py-1",
-                !compact && !fullWidth && "h-9",
-                className
-              )}
-              aria-live="polite"
-            >
-              <span
-                className={cn(
-                  "relative inline-flex h-2 w-2 rounded-full",
-                  config.color
-                )}
-                aria-hidden="true"
-              >
-                {shouldAnimateDot && (
-                  <span
-                    className={cn(
-                      "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                      config.color
-                    )}
-                  />
-                )}
-              </span>
-
-              {showIcon && (
-                <Icon
-                  className={cn(
-                    "h-3.5 w-3.5 shrink-0",
-                    fullWidth && "h-4 w-4",
-                    shouldAnimateIcon && "animate-spin",
-                    config.iconColor
-                  )}
-                  aria-hidden="true"
-                />
-              )}
-
-              <span className="inline-flex min-w-0 flex-1 items-center gap-2">
-                <span className="truncate text-xs font-medium">
-                  {compact ? config.compactLabel : config.label}
-                </span>
-
-                {showPercentage && canShowDetails && (
-                  <span className="shrink-0 font-mono text-xs tabular-nums">
-                    {percentLabel}
-                  </span>
-                )}
-              </span>
-            </Badge>
-          }
+    <HeaderBadge
+      variant={config.variant}
+      compact={compact}
+      fullWidth={fullWidth}
+      isActive={isActive}
+      className={className}
+      ariaLive="polite"
+      tooltipContent={
+        <SpendingTooltip
+          config={config}
+          canShowDetails={canShowDetails}
+          balance={balance}
+          spent={spent}
+          remaining={remaining}
+          percent={percent}
+          spentError={spentError}
+          userError={userError}
         />
+      }
+    >
+      <StatusDot color={config.color} animate={shouldAnimateDot} />
 
-        <TooltipContent side="bottom" className="max-w-xs">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
-              <span className="text-xs font-semibold">
-                Budget Status: {config.label}
-              </span>
-            </div>
-            <p className="text-[10px]">{config.description}</p>
+      {showIcon && (
+        <BadgeIcon
+          icon={config.icon}
+          className={config.iconColor}
+          fullWidth={fullWidth}
+          animate={status === "loading"}
+        />
+      )}
 
-            {canShowDetails && (
-              <div className="mt-1 space-y-1 border-t border-border pt-1">
-                <div className="flex items-center justify-between gap-4 text-[10px]">
-                  <span>Total budget:</span>
-                  <span className="font-mono font-semibold">
-                    {formatCurrency(balance)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-4 text-[10px]">
-                  <span>Spent:</span>
-                  <span
-                    className={cn(
-                      "font-mono font-semibold",
-                      percent >= 80 && "text-rose-500"
-                    )}
-                  >
-                    {formatCurrency(spent)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-4 text-[10px]">
-                  <span>Remaining:</span>
-                  <span
-                    className={cn(
-                      "font-mono font-semibold",
-                      remaining > 0 ? "text-foreground" : "text-rose-500"
-                    )}
-                  >
-                    {formatCurrency(remaining)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between gap-4 border-t border-border pt-1 text-[10px]">
-                  <span>Usage:</span>
-                  <span
-                    className={cn(
-                      "font-mono font-semibold",
-                      percent < 50 && "text-foreground",
-                      percent >= 50 && percent < 80 && "text-blue-500",
-                      percent >= 80 && percent < 100 && "text-amber-500",
-                      percent >= 100 && "text-rose-500"
-                    )}
-                  >
-                    {percent.toFixed(1)}%
-                  </span>
-                </div>
-              </div>
-            )}
+      <span className="inline-flex min-w-0 flex-1 items-center gap-2">
+        <span className="truncate text-xs font-medium">
+          {compact ? config.compactLabel : config.label}
+        </span>
 
-            {(spentError || userError) && (
-              <p className="mt-1 border-t border-border pt-1 text-[10px] text-destructive">
-                {spentError instanceof Error
-                  ? spentError.message
-                  : userError instanceof Error
-                    ? userError.message
-                    : "Unknown error occurred"}
-              </p>
-            )}
+        {showPercentage && canShowDetails && (
+          <span className="shrink-0 font-mono text-xs tabular-nums">
+            {percentLabel}
+          </span>
+        )}
+      </span>
+    </HeaderBadge>
+  );
+}
+
+function SpendingTooltip({
+  config,
+  canShowDetails,
+  balance,
+  spent,
+  remaining,
+  percent,
+  spentError,
+  userError,
+}: {
+  config: (typeof statusConfig)[keyof typeof statusConfig];
+  canShowDetails: boolean;
+  balance: number;
+  spent: number;
+  remaining: number;
+  percent: number;
+  spentError: Error | null;
+  userError: Error | null;
+}) {
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center gap-2">
+        <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
+        <span className="text-xs font-semibold">
+          Budget Status: {config.label}
+        </span>
+      </div>
+      <p className="text-[10px]">{config.description}</p>
+
+      {canShowDetails && (
+        <div className="mt-1 space-y-1 border-t border-border pt-1">
+          <div className="flex items-center justify-between gap-4 text-[10px]">
+            <span>Total budget:</span>
+            <span className="font-mono font-semibold">
+              {formatCurrency(balance)}
+            </span>
           </div>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+          <div className="flex items-center justify-between gap-4 text-[10px]">
+            <span>Spent:</span>
+            <span
+              className={cn(
+                "font-mono font-semibold",
+                percent >= 80 && "text-destructive"
+              )}
+            >
+              {formatCurrency(spent)}
+            </span>
+          </div>
+          <div className="flex items-center justify-between gap-4 text-[10px]">
+            <span>Remaining:</span>
+            <span
+              className={cn(
+                "font-mono font-semibold",
+                remaining > 0 ? "text-foreground" : "text-destructive"
+              )}
+            >
+              {formatCurrency(remaining)}
+            </span>
+          </div>
+          <div className="flex items-center justify-between gap-4 border-t border-border pt-1 text-[10px]">
+            <span>Usage:</span>
+            <span
+              className={cn(
+                "font-mono font-semibold",
+                percent < 50 && "text-foreground",
+                percent >= 50 && percent < 80 && "text-secondary-foreground",
+                percent >= 80 && percent < 100 && "text-accent-foreground",
+                percent >= 100 && "text-destructive"
+              )}
+            >
+              {percent.toFixed(1)}%
+            </span>
+          </div>
+        </div>
+      )}
+
+      {(spentError || userError) && (
+        <p className="mt-1 border-t border-border pt-1 text-[10px] text-destructive">
+          {spentError instanceof Error
+            ? spentError.message
+            : userError instanceof Error
+              ? userError.message
+              : "Unknown error occurred"}
+        </p>
+      )}
+    </div>
   );
 }

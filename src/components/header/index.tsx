@@ -16,8 +16,8 @@ export const Header = () => {
   const isDesktopBadgeActive = !isMobile;
 
   return (
-    <header className="sticky top-2 z-40 w-full hidden md:block">
-      <div className="app-panel flex min-h-16 items-start lg:items-center justify-between rounded-2xl md:py-3 px-3 sm:px-4 lg:px-5">
+    <header className="z-40 w-full hidden md:block">
+      <div className="app-panel flex min-h-16 items-start lg:items-center justify-between md:py-3 px-3 sm:px-4 lg:px-5 rounded-4xl">
         <div className="flex items-center gap-4">
           <div className="lg:hidden">
             <Logo withTitle={false} />
@@ -33,6 +33,7 @@ export const Header = () => {
             compact
             isActive={isDesktopBadgeActive}
             className="max-w-45"
+            showIcon={false}
           />
           <TimezoneBadge
             compact
@@ -46,6 +47,7 @@ export const Header = () => {
             variant="outline"
             isActive={isDesktopBadgeActive}
             className="max-w-37.5"
+            showIcon={false}
           />
 
           <ToggleDarkMode />
