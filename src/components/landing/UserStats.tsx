@@ -3,7 +3,7 @@ import { Clock3, DollarSign, ShieldCheck, Star } from "lucide-react";
 
 import { useInView } from "@/hooks/useInView";
 
-import demoImg from "../assets/demo.png";
+import demoImg from "../../assets/demo.png";
 import { Safari } from "../magicui/safari";
 
 const trustStats = [
@@ -68,11 +68,7 @@ export function UserStatsSection() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             {trustStats.map((stat) => (
-              <StatCard
-                key={stat.label}
-                label={stat.label}
-                value={stat.value}
-              >
+              <StatCard key={stat.label} label={stat.label} value={stat.value}>
                 {stat.icon}
               </StatCard>
             ))}

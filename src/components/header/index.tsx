@@ -20,7 +20,7 @@ export const Header = () => {
       <div className="app-panel flex min-h-16 items-start lg:items-center justify-between rounded-2xl md:py-3 px-3 sm:px-4 lg:px-5">
         <div className="flex items-center gap-4">
           <div className="lg:hidden">
-            <Logo />
+            <Logo withTitle={false} />
           </div>
           <div className="hidden lg:block">
             <HeaderNavigation />

@@ -35,7 +35,7 @@ export function HeaderNavigation() {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink render={<Logo />} />
+          <BreadcrumbLink render={<Logo withTitle={false} />} />
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
