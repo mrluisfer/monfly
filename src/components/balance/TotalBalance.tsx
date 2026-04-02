@@ -145,7 +145,7 @@ const TotalBalance = () => {
 
   if (isPending) {
     return (
-      <section className="finance-hero rounded-[2rem] p-5 sm:p-6">
+      <section className="finance-hero rounded-4xl p-5 sm:p-6">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
           <div className="space-y-4">
             <Skeleton className="h-6 w-32 rounded-full" />

@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -8,6 +7,7 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
+import type { LucideIcon } from "lucide-react";
 
 export interface HeaderBadgeProps {
   variant?: "default" | "secondary" | "outline" | "destructive";
@@ -44,7 +44,7 @@ export function HeaderBadge({
             <Badge
               variant={variant}
               className={cn(
-                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
+                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-card px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
                 fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
                 compact && "h-8 px-2.5 py-1",
                 !compact && !fullWidth && "h-9",

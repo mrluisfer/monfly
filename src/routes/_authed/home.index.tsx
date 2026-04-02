@@ -207,32 +207,6 @@ function RouteComponent() {
                     <IncomeExpenseChart />
                   </Suspense>
                 </m.div>
-
-                <m.div
-                  initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.5,
-                    delay: shouldReduceMotion ? 0 : 0.4,
-                  }}
-                >
-                  <Suspense fallback={<ChartFallback />}>
-                    <ChartTransactionsByMonth />
-                  </Suspense>
-                </m.div>
-
-                <m.div
-                  initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.5,
-                    delay: shouldReduceMotion ? 0 : 0.5,
-                  }}
-                >
-                  <Suspense fallback={<ChartFallback />}>
-                    <ChartTabs />
-                  </Suspense>
-                </m.div>
               </div>
             </div>
           </m.section>

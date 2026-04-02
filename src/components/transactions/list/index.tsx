@@ -17,6 +17,8 @@ import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
+
 import { DesktopContent } from "./DesktopContent";
 import { MobileContent } from "./MobileContent";
 import { MobileHeader } from "./MobileHeader";
@@ -51,7 +53,7 @@ export default function TransactionsList() {
   return (
     <TransactionHoverProvider>
       <div className="hidden md:block">
-        <Card className="finance-panel min-h-125 rounded-[1.9rem] border-0 p-0 shadow-none">
+        <Card className="finance-panel min-h-125 rounded-4xl border-2 p-0 shadow-none">
           <CardHeader className="border-b border-border/60 px-5 pt-5 pb-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="space-y-1">
@@ -64,17 +66,16 @@ export default function TransactionsList() {
                 </CardTitle>
               </div>
               <div className="ml-auto flex items-center gap-3 md:gap-4">
-                <span className="finance-chip rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground">
+                <Badge variant={"outline"}>
                   {total} {total === 1 ? "record" : "records"}
-                </span>
+                </Badge>
                 <BalanceStatusBadge className="rounded-full" />
                 <Button
                   onClick={() => refetch()}
                   disabled={isPending || transactions.length === 0}
                   title="Refresh transactions"
-                  variant="outline"
-                  size="sm"
-                  className="finance-chip h-10 rounded-full px-4"
+                  variant="default"
+                  size="default"
                 >
                   {isPending ? (
                     <>

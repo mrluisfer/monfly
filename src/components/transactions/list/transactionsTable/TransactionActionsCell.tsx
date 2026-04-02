@@ -26,7 +26,7 @@ import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transa
 import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { EditIcon, Ellipsis, TrashIcon } from "lucide-react";
+import { ClipboardIcon, EditIcon, Ellipsis, TrashIcon } from "lucide-react";
 
 import EditTransaction from "../../EditTransaction";
 import { TransactionFormDialogContent } from "../../TransactionFormDialogContent";
@@ -62,6 +62,7 @@ export function TransactionActionsCell({
       setIsDeleteDialogOpen(false);
     },
     idempotency: {
+      //@ts-ignore
       getKey: (variables) => variables.data.id,
       onDuplicatePending: {
         title: "Transaction is already being deleted",
@@ -137,6 +138,7 @@ export function TransactionActionsCell({
               });
             }}
           >
+            <ClipboardIcon />
             Copy transaction ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -146,10 +148,10 @@ export function TransactionActionsCell({
             className="
               transition-all duration-200 ease-out
               hover:bg-primary/10 focus:bg-primary/10
-              cursor-pointer group
+              cursor-pointer
             "
           >
-            <EditIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            <EditIcon />
             Edit transaction
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -157,11 +159,11 @@ export function TransactionActionsCell({
             className="
               transition-all duration-200 ease-out
               hover:bg-destructive/10 focus:bg-destructive/10
-              cursor-pointer group
+              cursor-pointer
             "
             onClick={() => setIsDeleteDialogOpen(true)}
           >
-            <TrashIcon className="mr-2 h-4 w-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            <TrashIcon />
             Delete transaction
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -12,6 +12,8 @@ export const HideData = () => {
     setIsBalanceHidden((prev) => !prev);
   };
 
+  const label = isBalanceHidden ? "Show information" : "Hide information";
+
   return (
     <Tooltip>
       <TooltipTrigger
@@ -21,11 +23,9 @@ export const HideData = () => {
             variant="outline"
             size="icon-lg"
             onClick={toggleBalanceVisibility}
-            aria-label={
-              isBalanceHidden ? "Show total balance" : "Hide total balance"
-            }
+            aria-label={label}
             aria-pressed={isBalanceHidden}
-            title={isBalanceHidden ? "Show balance" : "Hide balance"}
+            title={label}
             className="finance-chip rounded-full text-foreground"
           />
         }
@@ -36,7 +36,7 @@ export const HideData = () => {
           <EyeOffIcon aria-hidden="true" />
         )}
       </TooltipTrigger>
-      <TooltipContent>Hide information</TooltipContent>
+      <TooltipContent>{label}</TooltipContent>
     </Tooltip>
   );
 };

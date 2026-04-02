@@ -1,14 +1,19 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { format, formatDistanceToNowStrict, isToday, isYesterday } from "date-fns";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { TransactionWithUser } from "~/types/TransactionWithUser";
+import {
+  format,
+  formatDistanceToNowStrict,
+  isToday,
+  isYesterday,
+} from "date-fns";
 import {
   ArrowUpDownIcon,
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
 } from "lucide-react";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import { TransactionActionsCell } from "./TransactionActionsCell";
 
@@ -110,11 +115,9 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
             {description || "No description"}
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-            <Badge variant="secondary" className="capitalize">
-              {transaction.category}
-            </Badge>
             <span>
-              Recorded {formatDistanceToNowStrict(createdAt, { addSuffix: true })}
+              Recorded{" "}
+              {formatDistanceToNowStrict(createdAt, { addSuffix: true })}
             </span>
           </div>
         </div>
@@ -141,7 +144,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
     cell: ({ row }) => {
       const category = row.getValue("category") as string;
       return (
-        <Badge variant="outline" className="max-w-[160px] truncate capitalize">
+        <Badge variant="default" className="max-w-[160px] truncate capitalize">
           {category}
         </Badge>
       );
@@ -151,7 +154,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
     },
   },
-    {
+  {
     accessorKey: "amount",
     header: ({ column }) => (
       <div className="text-right">

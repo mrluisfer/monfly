@@ -1,6 +1,9 @@
 import { Table as TanstackTable } from "@tanstack/react-table";
 import { Button } from "~/components/ui/button";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
 
 export function DataTablePagination({
   table,
@@ -9,29 +12,29 @@ export function DataTablePagination({
 }) {
   return (
     <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="text-muted-foreground text-sm">
+      <Badge variant={"outline"}>
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
+      </Badge>
       <div className="flex items-center justify-end gap-2">
-        <span className="text-muted-foreground text-xs">
+        <Badge>
           Page {table.getState().pagination.pageIndex + 1} of{" "}
           {Math.max(1, table.getPageCount())}
-        </span>
+        </Badge>
         <Button
           variant="outline"
-          size="lg"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
+          <ChevronLeftIcon />
           Previous
         </Button>
         <Button
           variant="outline"
-          size="lg"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
+          <ChevronRightIcon />
           Next
         </Button>
       </div>

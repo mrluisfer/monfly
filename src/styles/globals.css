@@ -1830,6 +1830,13 @@ html {
   }
 }
 
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 button,
 [role="button"] {
   @apply cursor-pointer active:scale-95 transition-transform;
@@ -2109,21 +2116,14 @@ html {
   }
 
   .finance-panel {
-    position: relative;
+    /* position: relative;
     overflow: hidden;
     border: 1px solid color-mix(in oklab, var(--border) 82%, white 18%);
     background: color-mix(in oklab, var(--background) 96%, white 4%);
     box-shadow:
       0 20px 38px -34px rgb(15 23 42 / 0.45),
-      inset 0 1px 0 0 rgb(255 255 255 / 0.28);
-  }
-
-  .dark .finance-panel {
-    border-color: color-mix(in oklab, var(--border) 86%, white 14%);
-    background: color-mix(in oklab, var(--background) 95%, white 5%);
-    box-shadow:
-      0 24px 44px -34px rgb(2 6 23 / 0.9),
-      inset 0 1px 0 0 rgb(248 250 252 / 0.08);
+      inset 0 1px 0 0 rgb(255 255 255 / 0.28); */
+    @apply relative overflow-hidden border-2 shadow-sm bg-card;
   }
 
   .finance-hero {
@@ -2177,9 +2177,6 @@ html {
       color-mix(in oklab, var(--background) 78%, white 22%),
       color-mix(in oklab, var(--background) 96%, #eef2ff 4%)
     );
-    box-shadow:
-      inset 0 1px 0 0 rgb(255 255 255 / 0.48),
-      0 22px 34px -28px rgb(15 23 42 / 0.58);
   }
 
   .finance-soft-chart::before {

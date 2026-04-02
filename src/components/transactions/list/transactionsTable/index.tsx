@@ -9,8 +9,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
-  VisibilityState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -85,7 +85,9 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to delete transactions" });
+        sileo.error({
+          title: response.message ?? "Failed to delete transactions",
+        });
         return;
       }
 
@@ -100,9 +102,12 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     },
     idempotency: {
       getKey: (variables) =>
-        JSON.stringify([...variables.data.ids].sort((left, right) =>
-          left.localeCompare(right)
-        )),
+        JSON.stringify(
+          //@ts-ignore
+          [...variables.data.ids].sort((left, right) =>
+            left.localeCompare(right)
+          )
+        ),
       onDuplicatePending: {
         title: "Deletion already in progress",
       },
@@ -183,6 +188,34 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       columnId === "actions" && "w-14 min-w-14"
     );
 
+  const stats = [
+    {
+      label: "Results",
+      value: String(filteredTransactions.length),
+      description: "Visible rows in current view",
+    },
+    {
+      label: "Income",
+      value: formatCurrency(filteredIncome, "USD"),
+      valueClassName: "text-primary",
+      description: "Sum of visible income rows",
+    },
+    {
+      label: "Expenses",
+      value: formatCurrency(filteredExpenses, "USD"),
+      valueClassName: "text-destructive",
+      description: "Sum of visible expense rows",
+    },
+    {
+      label: "Net",
+      value: `${filteredNet >= 0 ? "+" : ""}${formatCurrency(filteredNet, "USD")}`,
+      valueClassName: filteredNet >= 0 ? "text-primary" : "text-destructive",
+      description: latestTransactionDate
+        ? `Latest: ${format(new Date(latestTransactionDate), "MMM d, yyyy")}`
+        : "No visible transactions",
+    },
+  ] as const;
+
   return (
     <div className="w-full">
       <DataTableToolbar
@@ -196,60 +229,24 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
         onDeleteRows={handleDeleteRows}
       />
       <div className="mb-4 grid gap-3 lg:grid-cols-4">
-        <div className="finance-chip rounded-[1.1rem] p-3">
-          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Results
+        {stats.map((stat) => (
+          <div key={stat.label} className="finance-chip rounded-4xl py-3 px-5">
+            <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+              {stat.label}
+            </div>
+            <div
+              className={cn(
+                "mt-2 text-lg font-semibold text-foreground",
+                "valueClassName" in stat && stat.valueClassName
+              )}
+            >
+              {stat.value}
+            </div>
+            <div className="text-xs text-muted-foreground">
+              {stat.description}
+            </div>
           </div>
-          <div className="mt-2 text-lg font-semibold text-foreground">
-            {filteredTransactions.length}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Visible rows in current view
-          </div>
-        </div>
-        <div className="finance-chip rounded-[1.1rem] p-3">
-          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Income
-          </div>
-          <div className="mt-2 text-lg font-semibold text-emerald-600 dark:text-emerald-400">
-            {formatCurrency(filteredIncome, "USD")}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Sum of visible income rows
-          </div>
-        </div>
-        <div className="finance-chip rounded-[1.1rem] p-3">
-          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Expenses
-          </div>
-          <div className="mt-2 text-lg font-semibold text-rose-600 dark:text-rose-400">
-            {formatCurrency(filteredExpenses, "USD")}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            Sum of visible expense rows
-          </div>
-        </div>
-        <div className="finance-chip rounded-[1.1rem] p-3">
-          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
-            Net
-          </div>
-          <div
-            className={cn(
-              "mt-2 text-lg font-semibold",
-              filteredNet >= 0
-                ? "text-primary"
-                : "text-amber-700 dark:text-amber-300"
-            )}
-          >
-            {filteredNet >= 0 ? "+" : ""}
-            {formatCurrency(filteredNet, "USD")}
-          </div>
-          <div className="text-xs text-muted-foreground">
-            {latestTransactionDate
-              ? `Latest: ${format(new Date(latestTransactionDate), "MMM d, yyyy")}`
-              : "No visible transactions"}
-          </div>
-        </div>
+        ))}
       </div>
       <DataTableContent table={table} getColumnClassName={getColumnClassName} />
       <DataTablePagination table={table} />

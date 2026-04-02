@@ -11,6 +11,8 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
+
 type TransactionsInsightsProps = {
   transactions: TransactionWithUser[];
   className?: string;
@@ -42,6 +44,21 @@ type MonthlyPoint = {
 };
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+const TONE_STYLES: Record<InsightTone, { card: string; dot: string }> = {
+  positive: {
+    card: "border-primary/25 bg-primary/10",
+    dot: "bg-primary",
+  },
+  warning: {
+    card: "border-destructive/25 bg-destructive/10",
+    dot: "bg-destructive",
+  },
+  neutral: {
+    card: "border-border/70 bg-background/65",
+    dot: "bg-muted-foreground",
+  },
+};
 
 function safeText(input: string | null | undefined, maxLength = 56): string {
   if (!input) return "Unlabeled";
@@ -78,29 +95,7 @@ function buildSparklinePoints(values: number[]) {
 
   const lastPoint = points.split(" ").at(-1)?.split(",") ?? ["0", "0"];
 
-  return {
-    height,
-    lastPoint,
-    padding,
-    points,
-    width,
-  };
-}
-
-function getNoteToneClassName(tone: InsightTone) {
-  if (tone === "positive") {
-    return "border-emerald-500/25 bg-emerald-500/10";
-  }
-  if (tone === "warning") {
-    return "border-amber-500/25 bg-amber-500/10";
-  }
-  return "border-border/70 bg-background/65";
-}
-
-function getDotToneClassName(tone: InsightTone) {
-  if (tone === "positive") return "bg-emerald-500";
-  if (tone === "warning") return "bg-amber-500";
-  return "bg-slate-400";
+  return { height, lastPoint, padding, points, width };
 }
 
 export function TransactionsInsights({
@@ -394,7 +389,7 @@ export function TransactionsInsights({
   const monthlyValues = insights.monthlyPoints.map((point) => point.net);
   const sparkline = buildSparklinePoints(monthlyValues);
   const isPositiveLast30 = netLast30 >= 0;
-  const trendColor = isPositiveLast30 ? "hsl(152 76% 40%)" : "hsl(0 72% 51%)";
+  const trendColor = isPositiveLast30 ? "var(--primary)" : "var(--destructive)";
   const latestDateLabel = insights.latestTimestamp
     ? new Date(insights.latestTimestamp).toLocaleDateString("en-US", {
         day: "2-digit",
@@ -403,6 +398,19 @@ export function TransactionsInsights({
       })
     : "No activity";
   const TrendIcon = isPositiveLast30 ? TrendingUpIcon : TrendingDownIcon;
+
+  const last30Stats = [
+    {
+      label: "Income (30d)",
+      value: formatCurrency(insights.incomeLast30, "USD"),
+      valueClassName: "text-primary",
+    },
+    {
+      label: "Expenses (30d)",
+      value: formatCurrency(insights.expenseLast30, "USD"),
+      valueClassName: "text-destructive",
+    },
+  ] as const;
 
   return (
     <section
@@ -418,14 +426,14 @@ export function TransactionsInsights({
             Useful context while you scroll
           </h3>
         </div>
-        <span className="finance-chip inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs text-muted-foreground">
-          <ShieldCheckIcon className="size-3.5 text-emerald-600" />
+        <Badge>
+          <ShieldCheckIcon />
           Local-only analysis, no extra requests
-        </span>
+        </Badge>
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <article className="finance-soft-chart rounded-[1.5rem] p-4 sm:p-5">
+        <article className="finance-soft-chart rounded-4xl p-4 sm:p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
@@ -440,7 +448,7 @@ export function TransactionsInsights({
             </span>
           </div>
 
-          <div className="mt-4 rounded-[1.2rem] border border-border/70 bg-background/55 p-3">
+          <div className="mt-4 rounded-4xl border border-border/70 bg-background/55 p-3">
             {sparkline ? (
               <div>
                 <svg
@@ -496,26 +504,25 @@ export function TransactionsInsights({
           </div>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <div className="finance-chip rounded-[1.1rem] p-3">
-              <div className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-                Income (30d)
+            {last30Stats.map((stat) => (
+              <div key={stat.label} className="finance-chip rounded-4xl p-3">
+                <div className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
+                  {stat.label}
+                </div>
+                <div
+                  className={cn(
+                    "mt-2 text-base font-semibold",
+                    stat.valueClassName
+                  )}
+                >
+                  {stat.value}
+                </div>
               </div>
-              <div className="mt-2 text-base font-semibold text-emerald-600 dark:text-emerald-400">
-                {formatCurrency(insights.incomeLast30, "USD")}
-              </div>
-            </div>
-            <div className="finance-chip rounded-[1.1rem] p-3">
-              <div className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-                Expenses (30d)
-              </div>
-              <div className="mt-2 text-base font-semibold text-rose-600 dark:text-rose-400">
-                {formatCurrency(insights.expenseLast30, "USD")}
-              </div>
-            </div>
+            ))}
           </div>
         </article>
 
-        <article className="finance-chip rounded-[1.5rem] border border-border/70 p-4 sm:p-5">
+        <article className="finance-chip rounded-4xl border border-border/70 p-4 sm:p-5 h-fit">
           <div className="flex items-center gap-2">
             <SparklesIcon className="size-4.5 text-primary" />
             <h4 className="text-base font-semibold tracking-tight text-foreground">
@@ -524,34 +531,31 @@ export function TransactionsInsights({
           </div>
 
           <div className="mt-3 space-y-2.5">
-            {insights.notes.map((note) => (
-              <div
-                key={note.id}
-                className={cn(
-                  "rounded-[1rem] border px-3 py-2.5",
-                  getNoteToneClassName(note.tone)
-                )}
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className={cn(
-                      "size-2 rounded-full",
-                      getDotToneClassName(note.tone)
-                    )}
-                    aria-hidden="true"
-                  />
-                  <p className="text-sm font-medium text-foreground">
-                    {note.title}
+            {insights.notes.map((note) => {
+              const tone = TONE_STYLES[note.tone];
+              return (
+                <div
+                  key={note.id}
+                  className={cn("rounded-4xl border px-3 py-2.5", tone.card)}
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={cn("size-2 rounded-full", tone.dot)}
+                      aria-hidden="true"
+                    />
+                    <p className="text-sm font-medium text-foreground">
+                      {note.title}
+                    </p>
+                  </div>
+                  <p className="mt-1.5 text-sm leading-5 text-muted-foreground">
+                    {note.detail}
                   </p>
                 </div>
-                <p className="mt-1.5 text-sm leading-5 text-muted-foreground">
-                  {note.detail}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="mt-3 rounded-[1rem] border border-border/70 bg-background/60 px-3 py-2.5 text-xs text-muted-foreground">
+          <div className="mt-3 rounded-4xl border border-border/70 bg-background/60 px-3 py-2.5 text-xs text-muted-foreground">
             Last activity on {latestDateLabel}:{" "}
             {safeText(insights.latestDescription, 64)}
           </div>
@@ -559,12 +563,12 @@ export function TransactionsInsights({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <article className="finance-chip rounded-[1.5rem] border border-border/70 p-4 sm:p-5">
+        <article className="finance-chip rounded-4xl border border-border/70 p-4 sm:p-5">
           <div className="flex items-center gap-2">
             <TrendIcon
               className={cn(
                 "size-4.5",
-                isPositiveLast30 ? "text-emerald-600" : "text-rose-600"
+                isPositiveLast30 ? "text-primary" : "text-destructive"
               )}
             />
             <h4 className="text-base font-semibold tracking-tight text-foreground">
@@ -610,9 +614,9 @@ export function TransactionsInsights({
           </div>
         </article>
 
-        <article className="finance-chip rounded-[1.5rem] border border-border/70 p-4 sm:p-5">
+        <article className="finance-chip rounded-4xl border border-border/70 p-4 sm:p-5 h-fit">
           <div className="flex items-center gap-2">
-            <LightbulbIcon className="size-4.5 text-amber-600" />
+            <LightbulbIcon className="size-4.5 text-accent-foreground" />
             <h4 className="text-base font-semibold tracking-tight text-foreground">
               Improvement ideas
             </h4>
@@ -622,7 +626,7 @@ export function TransactionsInsights({
             {insights.ideas.map((idea) => (
               <li
                 key={idea}
-                className="flex items-start gap-2 rounded-[0.95rem] border border-border/70 bg-background/60 px-3 py-2.5 text-sm text-muted-foreground"
+                className="flex items-start gap-2 rounded-4xl border border-border/70 bg-background/60 px-3 py-2.5 text-sm text-muted-foreground"
               >
                 <CircleAlertIcon className="mt-0.5 size-4 shrink-0 text-primary" />
                 <span>{idea}</span>

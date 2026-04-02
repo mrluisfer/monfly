@@ -30,7 +30,7 @@ function MetricCard({
   value,
 }: MetricCardProps) {
   return (
-    <Card className="finance-panel rounded-[1.35rem] border-0 p-0 shadow-none">
+    <Card className="finance-panel rounded-4xl border-0 p-0 shadow-none">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">

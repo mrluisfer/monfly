@@ -97,15 +97,14 @@ export function DataTableToolbar({
           {hasActiveFilters && (
             <Button
               size="lg"
-              variant="secondary"
-              className="rounded-full"
+              variant="ghost"
               onClick={() => {
                 setGlobalFilter("");
                 table.resetColumnFilters();
               }}
             >
               <XIcon className="size-4" />
-              <span className="hidden sm:inline">Clear</span>
+              <span className="hidden sm:inline">Clear filter</span>
             </Button>
           )}
         </div>
@@ -115,16 +114,17 @@ export function DataTableToolbar({
             <AlertDialog>
               <AlertDialogTrigger
                 render={
-                  <Button size="lg" variant="destructive" className="rounded-full">
+                  <Button
+                    size="lg"
+                    variant="destructive"
+                    className="rounded-full"
+                  >
                     <TrashIcon
                       className="-ms-1 opacity-60"
                       size={16}
                       aria-hidden="true"
                     />
-                    Delete
-                    <span className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">
-                      {selectedRowsCount}
-                    </span>
+                    Delete {selectedRowsCount} selected
                   </Button>
                 }
               />
@@ -166,7 +166,7 @@ export function DataTableToolbar({
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
-                <Button size="lg" variant="outline" className="rounded-full">
+                <Button size="lg">
                   Columns <ChevronDown className="size-4" />
                 </Button>
               }
