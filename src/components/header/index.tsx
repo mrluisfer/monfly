@@ -7,6 +7,7 @@ import { SpendingAlertBadge } from "./badges/SpendingAlertBadge";
 import { SystemStatusBadge } from "./badges/SystemStatus";
 import { TimezoneBadge } from "./badges/TimezoneBadge";
 import { HeaderNavigation } from "./HeaderNavigation";
+import { HideData } from "./HideData";
 import { Logo } from "./Logo";
 import { MobileHeaderSheetMenu } from "./MobileHeaderSheetMenu";
 
@@ -50,6 +51,7 @@ export const Header = () => {
             showIcon={false}
           />
 
+          <HideData />
           <ToggleDarkMode />
           <SettingsDialog />
           <UserDropdown />

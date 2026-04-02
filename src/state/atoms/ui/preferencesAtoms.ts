@@ -1,7 +1,8 @@
-import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
+import { TOTAL_BALANCE_VISIBILITY_STORAGE_KEY } from "@/constants/localStorageKeys";
 import { FontValues } from "~/constants/fonts-display";
 import type { SonnerPosition } from "~/types/SonnerPosition";
+import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
 export type DarkModeTheme = "light" | "dark";
 
@@ -25,26 +26,23 @@ export const toggleDarkModeThemeAtom = atom(null, (get, set) => {
   set(darkModeThemeAtom, nextTheme);
 });
 
-export const activeThemeAtom = atomWithStorage<string>("active_theme", "default");
-
-export const setActiveThemeAtom = atom(
-  null,
-  (_get, set, theme: string) => {
-    set(activeThemeAtom, theme);
-  }
+export const activeThemeAtom = atomWithStorage<string>(
+  "active_theme",
+  "default"
 );
+
+export const setActiveThemeAtom = atom(null, (_get, set, theme: string) => {
+  set(activeThemeAtom, theme);
+});
 
 export const fontDisplayAtom = atomWithStorage<string>(
   "fontDisplay",
   FontValues.SpaceGrotesk
 );
 
-export const setFontDisplayAtom = atom(
-  null,
-  (_get, set, value: string) => {
-    set(fontDisplayAtom, value);
-  }
-);
+export const setFontDisplayAtom = atom(null, (_get, set, value: string) => {
+  set(fontDisplayAtom, value);
+});
 
 export const sonnerPositionAtom = atomWithStorage<SonnerPosition>(
   "sonner_position",
@@ -68,4 +66,9 @@ export const setDisableTransactionHoverAtom = atom(
   (_get, set, value: boolean) => {
     set(disableTransactionHoverAtom, value);
   }
+);
+
+export const hideBalanceAtom = atomWithStorage<boolean>(
+  TOTAL_BALANCE_VISIBILITY_STORAGE_KEY,
+  false
 );

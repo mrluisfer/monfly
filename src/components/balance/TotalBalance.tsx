@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { hideMetricsAtom } from "@/state";
+import { hideBalanceAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
-import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
@@ -21,13 +20,11 @@ import { useAtomValue } from "jotai";
 import {
   ArrowDownRightIcon,
   ArrowUpRightIcon,
-  EyeIcon,
-  EyeOffIcon,
+  CalendarIcon,
 } from "lucide-react";
 
 import { CopyButton } from "../copy-button/copy-button";
-
-const TOTAL_BALANCE_VISIBILITY_STORAGE_KEY = "monfly-total-balance-hidden";
+import { Badge } from "../ui/badge";
 
 export type MonthlyPoint = {
   expense: number;
@@ -49,10 +46,9 @@ export type TotalBalanceSummary = {
 
 const TotalBalance = () => {
   const [totalBalance, setTotalBalance] = useState<string>("0");
-  const [isBalanceHidden, setIsBalanceHidden] = useState(true);
+  const isBalanceHidden = useAtomValue(hideBalanceAtom);
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
-  const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { error, isPending, data } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
@@ -79,30 +75,6 @@ const TotalBalance = () => {
       setTotalBalance(formatToTwoDecimals(data.data.totalBalance).stringValue);
     }
   }, [data]);
-
-  useEffect(() => {
-    const storedVisibility = localStorage.getItem(
-      TOTAL_BALANCE_VISIBILITY_STORAGE_KEY
-    );
-
-    if (storedVisibility === null) {
-      setIsBalanceHidden(false);
-      return;
-    }
-
-    setIsBalanceHidden(storedVisibility === "true");
-  }, []);
-
-  const toggleBalanceVisibility = () => {
-    setIsBalanceHidden((previousValue) => {
-      const nextValue = !previousValue;
-      localStorage.setItem(
-        TOTAL_BALANCE_VISIBILITY_STORAGE_KEY,
-        String(nextValue)
-      );
-      return nextValue;
-    });
-  };
 
   const balanceValue = Number(data?.data?.totalBalance ?? 0);
 
@@ -196,13 +168,14 @@ const TotalBalance = () => {
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-row items-center gap-4">
-              <div>
+              <div className="flex items-center gap-2 justify-start">
                 <p className="text-sm font-medium text-muted-foreground">
                   Net total
                 </p>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <Badge>
+                  {summary.latestPoint?.label ? <CalendarIcon /> : null}
                   {summary.latestPoint?.label ?? "No activity yet"}
-                </p>
+                </Badge>
               </div>
               <CopyButton
                 text={`$${totalBalance}`}
@@ -270,49 +243,6 @@ const TotalBalance = () => {
                     )}
                   </AnimatePresence>
                 </div>
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="icon-lg"
-                  onClick={toggleBalanceVisibility}
-                  aria-label={
-                    isBalanceHidden
-                      ? "Show total balance"
-                      : "Hide total balance"
-                  }
-                  aria-pressed={isBalanceHidden}
-                  title={isBalanceHidden ? "Show balance" : "Hide balance"}
-                  className="finance-chip rounded-full"
-                >
-                  <AnimatePresence mode="wait" initial={false}>
-                    <m.span
-                      key={isBalanceHidden ? "show-icon" : "hide-icon"}
-                      initial={
-                        shouldReduceMotion
-                          ? false
-                          : { opacity: 0, scale: 0.75, rotate: -15 }
-                      }
-                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                      exit={
-                        shouldReduceMotion
-                          ? { opacity: 0 }
-                          : { opacity: 0, scale: 0.75, rotate: 15 }
-                      }
-                      transition={{
-                        duration: shouldReduceMotion ? 0 : 0.18,
-                        ease: "easeOut",
-                      }}
-                      className="flex items-center justify-center"
-                    >
-                      {isBalanceHidden ? (
-                        <EyeIcon aria-hidden="true" />
-                      ) : (
-                        <EyeOffIcon aria-hidden="true" />
-                      )}
-                    </m.span>
-                  </AnimatePresence>
-                </Button>
               </div>
             </LazyMotion>
           </div>
