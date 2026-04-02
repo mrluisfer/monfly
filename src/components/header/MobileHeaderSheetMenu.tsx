@@ -60,7 +60,7 @@ export function MobileHeaderSheetMenu() {
     (routeUrl !== "/home" && location.pathname.startsWith(`${routeUrl}/`));
 
   return (
-    <div className="flex md:hidden items-center gap-2">
+    <div className="flex items-center gap-2">
       <UserDropdown />
       <Sheet open={isOpen} onOpenChange={onSheetOpenChange}>
         <SheetTrigger
