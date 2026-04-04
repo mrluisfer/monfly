@@ -9,6 +9,7 @@ import {
   Network,
 } from "lucide-react";
 
+import { planOptions } from ".";
 import { PricingCard } from "./PricingCard";
 
 const pricingFeatures = [
@@ -23,7 +24,7 @@ export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
     ? "Billed annually with one month free"
     : "Billed monthly";
 
-  const price = isAnnual ? "$60/year" : "$5/month";
+  const price = isAnnual ? planOptions[0].annual : planOptions[0].monthly;
 
   return (
     <PricingCard title={price}>

@@ -49,13 +49,13 @@ type ValueTile = {
   icon: ReactNode;
 };
 
-const planOptions: PlanOption[] = [
+export const planOptions: PlanOption[] = [
   {
     id: "starter",
     name: "Starter",
     description: "Perfecto para uso personal y control diario.",
-    monthly: "$5/mo",
-    annual: "$60/year",
+    monthly: "$2.99/mo",
+    annual: "$35.99/year",
     features: [
       "Transacciones y categorías ilimitadas",
       "Alertas básicas de presupuesto",
@@ -196,9 +196,9 @@ export function PricingSection() {
               {valueTiles.map((tile) => (
                 <Card
                   key={tile.title}
-                  className="group landing-glass-panel gap-0 rounded-xl border-border/65 bg-background/75 p-3.5 shadow-none ring-0 transition-colors duration-150 hover:border-primary/35"
+                  className="group gap-0 transition-colors"
                 >
-                  <CardContent className="p-0">
+                  <CardContent>
                     <div className="flex items-center justify-between gap-2">
                       <span className="inline-flex size-7 items-center justify-center rounded-lg border border-border/65 bg-background/80">
                         {tile.icon}
