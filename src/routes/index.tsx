@@ -2,8 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Footer } from "~/components/landing/footer";
 import { GlobalHeader } from "~/components/landing/global-header";
 import { LandingHero } from "~/components/landing/hero/Hero";
-import { PricingSection } from "~/components/landing/pricing-section";
-import { UserStatsSection } from "~/components/landing/UserStats";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -57,8 +55,8 @@ export default function Home() {
       <GlobalHeader />
       <main id="main-content" className="relative z-10 pb-10">
         <LandingHero />
-        <UserStatsSection />
-        <PricingSection />
+        {/* <UserStatsSection /> */}
+        {/* <PricingSection /> */}
       </main>
       <Footer />
     </div>

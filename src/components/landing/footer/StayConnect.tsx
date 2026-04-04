@@ -57,7 +57,7 @@ export function StayConnect() {
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <Label htmlFor={id} className="space-y-2 text-base md:max-w-md">
-        <span className="text-base font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        <span className="text-base font-semibold uppercase tracking-[0.12em] text-muted-foreground hidden xl:inline-block">
           Stay connected
         </span>
         <span className="block text-sm text-muted-foreground sm:text-base">
