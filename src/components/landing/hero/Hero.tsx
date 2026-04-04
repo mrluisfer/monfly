@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 import { Button } from "../../ui/button";
 
@@ -73,9 +74,8 @@ export function LandingHero() {
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
             <Button
               size="lg"
-              className="h-11 rounded-full px-5"
               render={
-                <Link to="/signup" className="inline-flex items-center gap-2">
+                <Link to="/signup">
                   Start For Free
                   <ArrowRight className="size-4" />
                 </Link>
@@ -83,9 +83,8 @@ export function LandingHero() {
             />
             <Button
               size="lg"
-              variant="outline"
-              className="h-11 rounded-full border-border/75 bg-background/65 px-5"
-              render={<Link to="/login">Open existing workspace</Link>}
+              variant="secondary"
+              render={<Link to="/home">Open existing workspace</Link>}
             />
           </div>
 
@@ -115,60 +114,66 @@ export function LandingHero() {
             aria-hidden="true"
             className="pointer-events-none absolute -left-8 top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,#14b8a6_0%,transparent_72%)] opacity-32 blur-2xl"
           />
-          <article className="landing-glass-panel relative rounded-[1.7rem] border border-border/65 p-5 sm:p-6">
-            <div className="mb-5 flex items-center justify-between gap-2">
-              <p className="text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">
-                Live Decision Feed
-              </p>
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-[0.72rem] font-semibold text-emerald-700 dark:text-emerald-300">
-                <ShieldCheck className="size-3.5" />
-                Encrypted
-              </span>
-            </div>
+          <Card>
+            <CardContent>
+              <div className="mb-5 flex items-center justify-between gap-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">
+                  Live Decision Feed
+                </p>
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-[0.72rem] font-semibold text-emerald-700 dark:text-emerald-300">
+                  <ShieldCheck className="size-3.5" />
+                  Encrypted
+                </span>
+              </div>
 
-            <div className="rounded-2xl border border-border/65 bg-background/80 p-4">
-              <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                Available Cash
-              </p>
-              <p className="mt-2 font-[family-name:var(--font-sora)] text-3xl font-semibold text-foreground">
-                $82,490
-              </p>
-              <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-300">
-                +8.2% versus last month
-              </p>
-            </div>
+              <div className="rounded-4xl border border-border/65 bg-background/80 p-4">
+                <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                  Available Cash
+                </p>
+                <p className="mt-2 font-[family-name:var(--font-sora)] text-3xl font-semibold text-foreground">
+                  $82,490
+                </p>
+                <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-300">
+                  +8.2% versus last month
+                </p>
+              </div>
 
-            <ul className="mt-4 space-y-2.5">
-              {decisionFeed.map((item) => (
-                <li
-                  key={item.title}
-                  className="rounded-xl border border-border/60 bg-background/72 px-3 py-2.5"
-                >
-                  <div className="flex items-start gap-2.5">
-                    <item.icon className={`mt-0.5 size-4 ${item.tone}`} />
-                    <div>
-                      <p className="text-sm font-semibold text-foreground">
-                        {item.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {item.description}
-                      </p>
+              <ul className="mt-4 space-y-2.5">
+                {decisionFeed.map((item) => (
+                  <li
+                    key={item.title}
+                    className="rounded-4xl border border-border/60 bg-background/72 px-3 py-2.5"
+                  >
+                    <div className="flex items-start gap-2.5">
+                      <item.icon className={`mt-0.5 size-4 ${item.tone}`} />
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">
+                          {item.title}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {item.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </article>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
 
-          <figure className="landing-glass-panel rounded-2xl border border-border/65 bg-background/84 px-4 py-3 text-sm shadow-sm">
-            <blockquote>
-              "We replaced three dashboards and two spreadsheets with one
-              decision stream."
-            </blockquote>
-            <figcaption className="mt-1 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-primary">
-              Finance Ops, Salt Studio
-            </figcaption>
-          </figure>
+          <Card>
+            <CardContent>
+              <figure>
+                <blockquote className="italic text-foreground leading-relaxed tracking-wide">
+                  "We replaced three dashboards and two spreadsheets with one
+                  decision stream."
+                </blockquote>
+                <figcaption className="mt-1 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                  Finance Ops, Salt Studio
+                </figcaption>
+              </figure>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
