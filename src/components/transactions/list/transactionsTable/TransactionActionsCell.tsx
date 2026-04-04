@@ -124,12 +124,6 @@ export function TransactionActionsCell({
             <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
           </DropdownMenuGroup>
           <DropdownMenuItem
-            variant="default"
-            className="
-              transition-all duration-200 ease-out
-              hover:bg-primary/10 focus:bg-primary/10
-              cursor-pointer
-            "
             onClick={() => {
               sileo.promise(navigator.clipboard.writeText(transaction.id), {
                 loading: { title: "Copying transaction ID..." },
@@ -142,27 +136,11 @@ export function TransactionActionsCell({
             Copy transaction ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant="default"
-            onClick={() => setIsEditDialogOpen(true)}
-            className="
-              transition-all duration-200 ease-out
-              hover:bg-primary/10 focus:bg-primary/10
-              cursor-pointer
-            "
-          >
+          <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
             <EditIcon />
             Edit transaction
           </DropdownMenuItem>
-          <DropdownMenuItem
-            variant="destructive"
-            className="
-              transition-all duration-200 ease-out
-              hover:bg-destructive/10 focus:bg-destructive/10
-              cursor-pointer
-            "
-            onClick={() => setIsDeleteDialogOpen(true)}
-          >
+          <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
             <TrashIcon />
             Delete transaction
           </DropdownMenuItem>
