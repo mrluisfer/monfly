@@ -1,5 +1,4 @@
 import type { ReactElement, ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
 import { Settings } from "lucide-react";
 
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -7,7 +6,6 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Button } from "../ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -50,7 +48,7 @@ export const SettingsDialog = ({
           <SettingsItem label="Notification Position:">
             <SonnerPositionSelector />
           </SettingsItem>
-          <SettingsItem label="Theme:">
+          {/* <SettingsItem label="Theme:">
             <Button
               render={
                 <DialogClose
@@ -59,7 +57,7 @@ export const SettingsDialog = ({
                 />
               }
             />
-          </SettingsItem>
+          </SettingsItem> */}
         </div>
       </DialogContent>
     </Dialog>

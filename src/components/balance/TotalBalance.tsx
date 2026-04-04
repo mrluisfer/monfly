@@ -256,7 +256,9 @@ const TotalBalance = () => {
               <div className="mt-3 flex items-center gap-2">
                 <TrendIcon className={cn("size-4", balanceToneClass)} />
                 <dd className={cn("text-lg font-semibold", balanceToneClass)}>
-                  {formatCurrency(summary.latestPoint?.net ?? 0, "USD")}
+                  {isBalanceHidden
+                    ? "$••••"
+                    : formatCurrency(summary.latestPoint?.net ?? 0, "MXN")}
                 </dd>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -269,7 +271,9 @@ const TotalBalance = () => {
                 Income tracked
               </dt>
               <dd className="mt-3 text-lg font-semibold text-foreground">
-                {formatCurrency(summary.totalIncome, "USD")}
+                {isBalanceHidden
+                  ? "$••••"
+                  : formatCurrency(summary.totalIncome, "MXN")}
               </dd>
               <p className="mt-1 text-xs text-muted-foreground">
                 Recent recorded periods
@@ -281,7 +285,9 @@ const TotalBalance = () => {
                 Expenses tracked
               </dt>
               <dd className="mt-3 text-lg font-semibold text-foreground">
-                {formatCurrency(summary.totalExpenses, "USD")}
+                {isBalanceHidden
+                  ? "$••••"
+                  : formatCurrency(summary.totalExpenses, "MXN")}
               </dd>
               <p className="mt-1 text-xs text-muted-foreground">
                 Recent recorded periods
