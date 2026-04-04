@@ -72,15 +72,12 @@ export const SignOutDialog = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
         </div>
-        <AlertDialogFooter className="grid grid-cols-2 gap-3 pt-2 sm:flex sm:justify-end">
-          <AlertDialogCancel disabled={isSigningOut} className="w-full">
-            Cancel
-          </AlertDialogCancel>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isSigningOut}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleLogOut}
             disabled={isSigningOut}
             variant="destructive"
-            className="w-full"
           >
             {isSigningOut ? "Signing out..." : "Confirm"}
           </AlertDialogAction>
