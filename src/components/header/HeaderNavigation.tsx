@@ -14,9 +14,9 @@ const breadcrumbList = [
   { title: "Home", url: "/home" },
   { title: "Transactions", url: "/transactions" },
   { title: "Categories", url: "/categories" },
-  { title: "Calculator", url: "/balance-calculator" },
-  { title: "Budgets", url: "/budgets" },
-  { title: "Reports", url: "/reports" },
+  { title: "Calculator", url: "/home/balance-calculator" },
+  { title: "Budgets", url: "/home/budgets" },
+  { title: "Reports", url: "/home/reports" },
   { title: "User", url: "/user/$userId" },
 ];
 

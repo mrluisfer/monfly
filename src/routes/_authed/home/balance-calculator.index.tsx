@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { BalanceCalculator } from "~/components/balance/BalanceCalculator";
 import { PageTitle } from "~/components/PageTitle";
 
-export const Route = createFileRoute("/_authed/balance-calculator/")({
+export const Route = createFileRoute("/_authed/home/balance-calculator/")({
   component: RouteComponent,
 });
 

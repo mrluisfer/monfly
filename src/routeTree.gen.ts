@@ -16,13 +16,13 @@ import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ContactIndexRouteImport } from './routes/contact.index'
-import { Route as AuthedTransactionsIndexRouteImport } from './routes/_authed/transactions.index'
-import { Route as AuthedReportsIndexRouteImport } from './routes/_authed/reports.index'
-import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home.index'
-import { Route as AuthedCategoriesIndexRouteImport } from './routes/_authed/categories.index'
-import { Route as AuthedBalanceCalculatorIndexRouteImport } from './routes/_authed/balance-calculator.index'
+import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home/index'
 import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
 import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
+import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authed/home/transactions.index'
+import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
+import { Route as AuthedHomeCategoriesIndexRouteImport } from './routes/_authed/home/categories.index'
+import { Route as AuthedHomeBalanceCalculatorIndexRouteImport } from './routes/_authed/home/balance-calculator.index'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -58,32 +58,11 @@ const ContactIndexRoute = ContactIndexRouteImport.update({
   path: '/contact/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthedTransactionsIndexRoute = AuthedTransactionsIndexRouteImport.update({
-  id: '/transactions/',
-  path: '/transactions/',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedReportsIndexRoute = AuthedReportsIndexRouteImport.update({
-  id: '/reports/',
-  path: '/reports/',
-  getParentRoute: () => AuthedRoute,
-} as any)
 const AuthedHomeIndexRoute = AuthedHomeIndexRouteImport.update({
   id: '/home/',
   path: '/home/',
   getParentRoute: () => AuthedRoute,
 } as any)
-const AuthedCategoriesIndexRoute = AuthedCategoriesIndexRouteImport.update({
-  id: '/categories/',
-  path: '/categories/',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedBalanceCalculatorIndexRoute =
-  AuthedBalanceCalculatorIndexRouteImport.update({
-    id: '/balance-calculator/',
-    path: '/balance-calculator/',
-    getParentRoute: () => AuthedRoute,
-  } as any)
 const AuthedUserUserIdRoute = AuthedUserUserIdRouteImport.update({
   id: '/user/$userId',
   path: '/user/$userId',
@@ -94,6 +73,29 @@ const AuthedUserThemeIndexRoute = AuthedUserThemeIndexRouteImport.update({
   path: '/user/theme/',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedHomeTransactionsIndexRoute =
+  AuthedHomeTransactionsIndexRouteImport.update({
+    id: '/home/transactions/',
+    path: '/home/transactions/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
+const AuthedHomeReportsIndexRoute = AuthedHomeReportsIndexRouteImport.update({
+  id: '/home/reports/',
+  path: '/home/reports/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedHomeCategoriesIndexRoute =
+  AuthedHomeCategoriesIndexRouteImport.update({
+    id: '/home/categories/',
+    path: '/home/categories/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
+const AuthedHomeBalanceCalculatorIndexRoute =
+  AuthedHomeBalanceCalculatorIndexRouteImport.update({
+    id: '/home/balance-calculator/',
+    path: '/home/balance-calculator/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,11 +105,11 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/contact/': typeof ContactIndexRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
-  '/balance-calculator/': typeof AuthedBalanceCalculatorIndexRoute
-  '/categories/': typeof AuthedCategoriesIndexRoute
   '/home/': typeof AuthedHomeIndexRoute
-  '/reports/': typeof AuthedReportsIndexRoute
-  '/transactions/': typeof AuthedTransactionsIndexRoute
+  '/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
+  '/home/categories/': typeof AuthedHomeCategoriesIndexRoute
+  '/home/reports/': typeof AuthedHomeReportsIndexRoute
+  '/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
   '/user/theme/': typeof AuthedUserThemeIndexRoute
 }
 export interface FileRoutesByTo {
@@ -118,11 +120,11 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/contact': typeof ContactIndexRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
-  '/balance-calculator': typeof AuthedBalanceCalculatorIndexRoute
-  '/categories': typeof AuthedCategoriesIndexRoute
   '/home': typeof AuthedHomeIndexRoute
-  '/reports': typeof AuthedReportsIndexRoute
-  '/transactions': typeof AuthedTransactionsIndexRoute
+  '/home/balance-calculator': typeof AuthedHomeBalanceCalculatorIndexRoute
+  '/home/categories': typeof AuthedHomeCategoriesIndexRoute
+  '/home/reports': typeof AuthedHomeReportsIndexRoute
+  '/home/transactions': typeof AuthedHomeTransactionsIndexRoute
   '/user/theme': typeof AuthedUserThemeIndexRoute
 }
 export interface FileRoutesById {
@@ -135,11 +137,11 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/contact/': typeof ContactIndexRoute
   '/_authed/user/$userId': typeof AuthedUserUserIdRoute
-  '/_authed/balance-calculator/': typeof AuthedBalanceCalculatorIndexRoute
-  '/_authed/categories/': typeof AuthedCategoriesIndexRoute
   '/_authed/home/': typeof AuthedHomeIndexRoute
-  '/_authed/reports/': typeof AuthedReportsIndexRoute
-  '/_authed/transactions/': typeof AuthedTransactionsIndexRoute
+  '/_authed/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
+  '/_authed/home/categories/': typeof AuthedHomeCategoriesIndexRoute
+  '/_authed/home/reports/': typeof AuthedHomeReportsIndexRoute
+  '/_authed/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
   '/_authed/user/theme/': typeof AuthedUserThemeIndexRoute
 }
 export interface FileRouteTypes {
@@ -152,11 +154,11 @@ export interface FileRouteTypes {
     | '/signup'
     | '/contact/'
     | '/user/$userId'
-    | '/balance-calculator/'
-    | '/categories/'
     | '/home/'
-    | '/reports/'
-    | '/transactions/'
+    | '/home/balance-calculator/'
+    | '/home/categories/'
+    | '/home/reports/'
+    | '/home/transactions/'
     | '/user/theme/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -167,11 +169,11 @@ export interface FileRouteTypes {
     | '/signup'
     | '/contact'
     | '/user/$userId'
-    | '/balance-calculator'
-    | '/categories'
     | '/home'
-    | '/reports'
-    | '/transactions'
+    | '/home/balance-calculator'
+    | '/home/categories'
+    | '/home/reports'
+    | '/home/transactions'
     | '/user/theme'
   id:
     | '__root__'
@@ -183,11 +185,11 @@ export interface FileRouteTypes {
     | '/signup'
     | '/contact/'
     | '/_authed/user/$userId'
-    | '/_authed/balance-calculator/'
-    | '/_authed/categories/'
     | '/_authed/home/'
-    | '/_authed/reports/'
-    | '/_authed/transactions/'
+    | '/_authed/home/balance-calculator/'
+    | '/_authed/home/categories/'
+    | '/_authed/home/reports/'
+    | '/_authed/home/transactions/'
     | '/_authed/user/theme/'
   fileRoutesById: FileRoutesById
 }
@@ -252,39 +254,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authed/transactions/': {
-      id: '/_authed/transactions/'
-      path: '/transactions'
-      fullPath: '/transactions/'
-      preLoaderRoute: typeof AuthedTransactionsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/reports/': {
-      id: '/_authed/reports/'
-      path: '/reports'
-      fullPath: '/reports/'
-      preLoaderRoute: typeof AuthedReportsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
     '/_authed/home/': {
       id: '/_authed/home/'
       path: '/home'
       fullPath: '/home/'
       preLoaderRoute: typeof AuthedHomeIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/categories/': {
-      id: '/_authed/categories/'
-      path: '/categories'
-      fullPath: '/categories/'
-      preLoaderRoute: typeof AuthedCategoriesIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/balance-calculator/': {
-      id: '/_authed/balance-calculator/'
-      path: '/balance-calculator'
-      fullPath: '/balance-calculator/'
-      preLoaderRoute: typeof AuthedBalanceCalculatorIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/user/$userId': {
@@ -301,26 +275,54 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedUserThemeIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/home/transactions/': {
+      id: '/_authed/home/transactions/'
+      path: '/home/transactions'
+      fullPath: '/home/transactions/'
+      preLoaderRoute: typeof AuthedHomeTransactionsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/home/reports/': {
+      id: '/_authed/home/reports/'
+      path: '/home/reports'
+      fullPath: '/home/reports/'
+      preLoaderRoute: typeof AuthedHomeReportsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/home/categories/': {
+      id: '/_authed/home/categories/'
+      path: '/home/categories'
+      fullPath: '/home/categories/'
+      preLoaderRoute: typeof AuthedHomeCategoriesIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/home/balance-calculator/': {
+      id: '/_authed/home/balance-calculator/'
+      path: '/home/balance-calculator'
+      fullPath: '/home/balance-calculator/'
+      preLoaderRoute: typeof AuthedHomeBalanceCalculatorIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
   }
 }
 
 interface AuthedRouteChildren {
   AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute
-  AuthedBalanceCalculatorIndexRoute: typeof AuthedBalanceCalculatorIndexRoute
-  AuthedCategoriesIndexRoute: typeof AuthedCategoriesIndexRoute
   AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
-  AuthedReportsIndexRoute: typeof AuthedReportsIndexRoute
-  AuthedTransactionsIndexRoute: typeof AuthedTransactionsIndexRoute
+  AuthedHomeBalanceCalculatorIndexRoute: typeof AuthedHomeBalanceCalculatorIndexRoute
+  AuthedHomeCategoriesIndexRoute: typeof AuthedHomeCategoriesIndexRoute
+  AuthedHomeReportsIndexRoute: typeof AuthedHomeReportsIndexRoute
+  AuthedHomeTransactionsIndexRoute: typeof AuthedHomeTransactionsIndexRoute
   AuthedUserThemeIndexRoute: typeof AuthedUserThemeIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedUserUserIdRoute: AuthedUserUserIdRoute,
-  AuthedBalanceCalculatorIndexRoute: AuthedBalanceCalculatorIndexRoute,
-  AuthedCategoriesIndexRoute: AuthedCategoriesIndexRoute,
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
-  AuthedReportsIndexRoute: AuthedReportsIndexRoute,
-  AuthedTransactionsIndexRoute: AuthedTransactionsIndexRoute,
+  AuthedHomeBalanceCalculatorIndexRoute: AuthedHomeBalanceCalculatorIndexRoute,
+  AuthedHomeCategoriesIndexRoute: AuthedHomeCategoriesIndexRoute,
+  AuthedHomeReportsIndexRoute: AuthedHomeReportsIndexRoute,
+  AuthedHomeTransactionsIndexRoute: AuthedHomeTransactionsIndexRoute,
   AuthedUserThemeIndexRoute: AuthedUserThemeIndexRoute,
 }
 

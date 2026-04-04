@@ -17,20 +17,20 @@ export function BalanceActions() {
       <ActionButton
         icon={<BarChart3Icon />}
         label="Reports"
-        onClick={() => navigate({ to: "/reports" })}
+        onClick={() => navigate({ to: "/home/reports" })}
         variant={"outline"}
         description="View detailed reports and insights about your finances, including spending patterns, income sources, and financial trends over time."
       />
       <ActionButton
         icon={<ListIcon />}
         label="Categories"
-        onClick={() => navigate({ to: "/categories" })}
+        onClick={() => navigate({ to: "/home/categories" })}
         variant={"outline"}
       />
       <ActionButton
         icon={<CalculatorIcon />}
         label="Calculator"
-        onClick={() => navigate({ to: "/balance-calculator" })}
+        onClick={() => navigate({ to: "/home/balance-calculator" })}
         variant={"outline"}
       />
       <AddTransactionButton

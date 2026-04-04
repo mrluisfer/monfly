@@ -20,11 +20,11 @@ export type SidebarItemType = {
 
 export enum SidebarRouteUrl {
   HOME = "/home",
-  TRANSACTIONS = "/transactions",
-  BUDGET = "/budget",
-  REPORTS = "/reports",
-  CATEGORIES = "/categories",
-  CALCULATOR = "/balance-calculator",
+  TRANSACTIONS = "/home/transactions",
+  BUDGET = "/home/budget",
+  REPORTS = "/home/reports",
+  CATEGORIES = "/home/categories",
+  CALCULATOR = "/home/balance-calculator",
 }
 
 export const sidebarRoutes: SidebarItemType[] = [

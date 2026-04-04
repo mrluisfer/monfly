@@ -14,7 +14,7 @@ const ChartByCategoryRadar = lazy(
   () => import("~/components/charts/ChartByCategoryRadar")
 );
 
-export const Route = createFileRoute("/_authed/reports/")({
+export const Route = createFileRoute("/_authed/home/reports/")({
   component: RouteComponent,
 });
 

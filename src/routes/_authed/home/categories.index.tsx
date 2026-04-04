@@ -3,7 +3,7 @@ import AddCategory from "~/components/categories/AddCategory";
 import { CategoriesList } from "~/components/categories/list";
 import { PageTitle } from "~/components/PageTitle";
 
-export const Route = createFileRoute("/_authed/categories/")({
+export const Route = createFileRoute("/_authed/home/categories/")({
   component: RouteComponent,
 });
 

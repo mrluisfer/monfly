@@ -4,7 +4,7 @@ import { AddTransactionDrawer } from "~/components/transactions/AddTransactionDr
 import TransactionsList from "~/components/transactions/list";
 import { useRouteUser } from "~/hooks/useRouteUser";
 
-export const Route = createFileRoute("/_authed/transactions/")({
+export const Route = createFileRoute("/_authed/home/transactions/")({
   component: RouteComponent,
 });
 
