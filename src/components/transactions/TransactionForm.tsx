@@ -31,7 +31,6 @@ import {
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
 import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
 import {
   Form,
   FormControl,
@@ -42,9 +41,14 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import type { WheelPickerOption } from "../wheel-picker/wheel-picker";
-import { WheelPicker, WheelPickerWrapper } from "../wheel-picker/wheel-picker";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -71,14 +75,13 @@ export function TransactionForm<FormValues extends FieldValues>({
   isLoading = false,
 }: TransactionFormProps<FormValues>) {
   const [categoryInputValue, setCategoryInputValue] = useState("");
-  const [dateOpen, setDateOpen] = useState(false);
   const [keyboardInset, setKeyboardInset] = useState(0);
   const focusScrollTimeoutRef = useRef<number | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const typeLabelId = useId();
-  const { data: categories, isPending, error } = useGetCategoriesByEmail();
+  const { data: categories } = useGetCategoriesByEmail();
 
-  const categoryOptions: WheelPickerOption[] = useMemo(
+  const categoryOptions = useMemo(
     () =>
       categories?.map((cat) => ({
         label: cat.name,
@@ -340,15 +343,26 @@ export function TransactionForm<FormValues extends FieldValues>({
                     <FormControl>
                       <div className="w-full space-y-3">
                         {categoryOptions.length > 0 ? (
-                          <WheelPickerWrapper className="w-full">
-                            <WheelPicker
-                              options={categoryOptions}
-                              value={value ?? ""}
-                              onValueChange={(val) => {
-                                field.onChange(val);
-                              }}
-                            />
-                          </WheelPickerWrapper>
+                          <Select
+                            value={value ?? ""}
+                            onValueChange={(val) => field.onChange(val)}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                {categoryOptions.map((option) => (
+                                  <SelectItem
+                                    key={option.value}
+                                    value={option.value}
+                                  >
+                                    {option.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                         ) : (
                           <p className="py-4 text-center text-sm text-muted-foreground">
                             No categories found
@@ -363,31 +377,32 @@ export function TransactionForm<FormValues extends FieldValues>({
                             placeholder="New category..."
                             className="h-9 flex-1 rounded-[1.05rem] border-border/70 bg-background/65 text-sm shadow-none"
                           />
-                          {showAddNew && (
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="ghost"
-                              className="h-9 shrink-0 gap-1 text-xs"
-                              onClick={async () => {
-                                const inputVal = categoryInputValue;
-                                field.onChange(inputVal);
-                                setCategoryInputValue("");
-                                await postCategoryByEmail.mutate({
-                                  data: {
-                                    email: userEmail,
-                                    category: {
-                                      name: inputVal,
-                                      icon: "other",
-                                    },
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="default"
+                            onClick={async () => {
+                              const inputVal = categoryInputValue;
+                              field.onChange(inputVal);
+                              setCategoryInputValue("");
+                              await postCategoryByEmail.mutate({
+                                data: {
+                                  email: userEmail,
+                                  category: {
+                                    name: inputVal,
+                                    icon: "other",
                                   },
-                                });
-                              }}
-                            >
-                              <PlusIcon size={14} className="text-green-600" />
-                              Create
-                            </Button>
-                          )}
+                                },
+                              });
+                            }}
+                            disabled={
+                              !showAddNew ||
+                              postCategoryByEmail.status === "pending"
+                            }
+                          >
+                            <PlusIcon size={14} />
+                            Create
+                          </Button>
                         </div>
                       </div>
                     </FormControl>
@@ -440,55 +455,27 @@ export function TransactionForm<FormValues extends FieldValues>({
                       <CalendarIcon className="size-3.5 text-indigo-600" />
                       Date
                     </FormLabel>
-                    {isPending && (
-                      <div role="status" aria-live="polite">
-                        Loading...
-                      </div>
-                    )}
-                    {error && <div role="alert">Error: {error?.message}</div>}
-                    {categories && (
-                      <Popover open={dateOpen} onOpenChange={setDateOpen}>
-                        <PopoverTrigger
-                          render={
-                            <FormControl>
-                              <Button
-                                id={transactionFormNames.date}
-                                variant={"outline"}
-                                className={cn(
-                                  inputClassName,
-                                  "w-full justify-start pl-3 text-left text-sm font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value as Date, "PPP")
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          }
-                        />
-                        <PopoverContent
-                          className="w-auto max-w-[calc(100vw-2rem)] p-0"
-                          align="start"
-                        >
-                          <Calendar
-                            mode="single"
-                            selected={field.value as Date}
-                            onSelect={(date) => {
-                              field.onChange(date);
-                              if (date) setDateOpen(false);
-                            }}
-                            disabled={(date: Date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    )}
+                    <FormControl>
+                      <Input
+                        id={transactionFormNames.date}
+                        type="date"
+                        className={cn(
+                          inputClassName,
+                          "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                        )}
+                        value={
+                          field.value
+                            ? format(field.value as Date, "yyyy-MM-dd")
+                            : ""
+                        }
+                        onChange={(e) => {
+                          const date = e.target.value
+                            ? new Date(e.target.value + "T00:00:00")
+                            : undefined;
+                          field.onChange(date);
+                        }}
+                      />
+                    </FormControl>
                     {showDateDescription && (
                       <FormDescription>
                         {description || "Pick a date"}

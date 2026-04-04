@@ -1,4 +1,4 @@
-export const validLimitNumber = (value: string, limit = 1000000) => {
+export const validLimitNumber = (value: string, limit = 10000000) => {
   if (value === "" || value === ".") {
     return value;
   }

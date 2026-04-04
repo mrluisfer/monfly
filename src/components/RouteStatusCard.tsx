@@ -37,7 +37,7 @@ export function RouteStatusCard({
           <CardTitle className="text-2xl font-semibold tracking-tight md:text-3xl">
             {title}
           </CardTitle>
-          <CardDescription className="max-w-md text-base">
+          <CardDescription className="max-w-md mx-auto text-base">
             {description}
           </CardDescription>
         </CardHeader>
