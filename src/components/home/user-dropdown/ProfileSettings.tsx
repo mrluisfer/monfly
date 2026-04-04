@@ -92,7 +92,7 @@ export default function ProfileSettings({
   if (error) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-red-500">
+        <div className="text-sm text-destructive">
           Error loading profile: {error.message}
         </div>
       </div>
@@ -103,7 +103,7 @@ export default function ProfileSettings({
   if (data?.error || !data?.data) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-red-500">
+        <div className="text-sm text-destructive">
           {data?.message || "User not found"}
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function ProfileSettings({
   if (!user || !user.id || !user.email) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-red-500">
+        <div className="text-sm text-destructive">
           Invalid user data: missing required fields
         </div>
       </div>

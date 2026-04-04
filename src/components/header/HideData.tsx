@@ -26,7 +26,6 @@ export const HideData = () => {
             aria-label={label}
             aria-pressed={isBalanceHidden}
             title={label}
-            className="finance-chip rounded-full text-foreground"
           />
         }
       >

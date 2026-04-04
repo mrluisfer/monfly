@@ -26,7 +26,7 @@ const AddTransactionButton = ({
 
   const trigger = customTrigger ?? (
     <Button
-      className="finance-chip group h-10 rounded-full px-3 md:h-11 md:px-4"
+      className="group h-10 rounded-full px-3 md:h-11 md:px-4"
       variant="outline"
       size="sm"
       aria-expanded={open}

@@ -118,7 +118,7 @@ export default function ChartTransactionsByMonth() {
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
   return (
-    <Card className="finance-panel w-full max-w-5xl rounded-[1.85rem] border-0 shadow-none">
+    <Card className="w-full max-w-5xl rounded-2xl border-0 shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
           <BarChart3Icon className="size-5 text-primary" />
@@ -211,11 +211,11 @@ export default function ChartTransactionsByMonth() {
               {/* Trend Information */}
               {chartData.length >= 2 && (
                 <>
-                  <div className="finance-chip flex flex-wrap items-center gap-2 rounded-[1.25rem] p-3.5">
+                  <div className="bg-muted flex flex-wrap items-center gap-2 rounded-xl p-3.5">
                     {isPositiveTrend ? (
-                      <TrendingUpIcon className="w-4 h-4 text-green-600 dark:text-green-400" />
+                      <TrendingUpIcon className="w-4 h-4 text-primary" />
                     ) : (
-                      <TrendingDownIcon className="w-4 h-4 text-red-600 dark:text-red-400" />
+                      <TrendingDownIcon className="w-4 h-4 text-destructive" />
                     )}
                     <span className="font-medium">
                       {isPositiveTrend ? "+" : ""}
@@ -234,9 +234,9 @@ export default function ChartTransactionsByMonth() {
 
               {/* Statistics Grid */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="finance-chip space-y-2 rounded-[1.25rem] p-3.5">
+                <div className="bg-muted space-y-2 rounded-xl p-3.5">
                   <div className="flex items-center gap-2">
-                    <ArrowUpIcon className="size-5 text-green-600 dark:text-green-400" />
+                    <ArrowUpIcon className="size-5 text-primary" />
                     <div>
                       <div className="text-xs text-muted-foreground">
                         Peak Month
@@ -249,7 +249,7 @@ export default function ChartTransactionsByMonth() {
                   </div>
                 </div>
 
-                <div className="finance-chip space-y-2 rounded-[1.25rem] p-3.5">
+                <div className="bg-muted space-y-2 rounded-xl p-3.5">
                   <div className="flex items-center gap-2">
                     <TargetIcon className="size-5 text-primary" />
                     <div>
@@ -268,7 +268,7 @@ export default function ChartTransactionsByMonth() {
               </div>
 
               {/* Activity Distribution Bar */}
-              <div className="finance-chip space-y-2 rounded-[1.25rem] p-3.5">
+              <div className="bg-muted space-y-2 rounded-xl p-3.5">
                 <div className="text-xs text-muted-foreground">
                   Monthly Distribution
                 </div>

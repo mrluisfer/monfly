@@ -230,7 +230,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       />
       <div className="mb-4 grid gap-3 lg:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="finance-chip rounded-4xl py-3 px-5">
+          <div key={stat.label} className="bg-muted rounded-xl py-3 px-5">
             <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
               {stat.label}
             </div>

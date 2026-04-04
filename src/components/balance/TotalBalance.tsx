@@ -125,9 +125,7 @@ const TotalBalance = () => {
 
   const balanceTone: BalanceTone = balanceValue >= 0 ? "positive" : "negative";
   const balanceToneClass =
-    balanceTone === "positive"
-      ? "text-emerald-600 dark:text-emerald-400"
-      : "text-rose-600 dark:text-rose-400";
+    balanceTone === "positive" ? "text-primary" : "text-destructive";
   const TrendIcon =
     (summary.latestPoint?.net ?? 0) >= 0
       ? ArrowUpRightIcon
@@ -135,7 +133,7 @@ const TotalBalance = () => {
 
   if (error) {
     return (
-      <section className="finance-panel rounded-[1.75rem] p-5">
+      <section className="bg-card rounded-2xl p-5">
         <p className="text-sm font-medium text-destructive">
           Failed to load balance
         </p>
@@ -145,7 +143,7 @@ const TotalBalance = () => {
 
   if (isPending) {
     return (
-      <section className="finance-hero rounded-4xl p-5 sm:p-6">
+      <section className="bg-card rounded-2xl p-5 sm:p-6">
         <div className="grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
           <div className="space-y-4">
             <Skeleton className="h-6 w-32 rounded-full" />
@@ -153,18 +151,18 @@ const TotalBalance = () => {
             <Skeleton className="h-5 w-2/3" />
             <div className="grid gap-3 sm:grid-cols-3">
               {[1, 2, 3].map((item) => (
-                <Skeleton key={item} className="h-24 rounded-[1.35rem]" />
+                <Skeleton key={item} className="h-24 rounded-xl" />
               ))}
             </div>
           </div>
-          <Skeleton className="h-72 rounded-[1.75rem]" />
+          <Skeleton className="h-72 rounded-2xl" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="finance-hero rounded-4xl p-5 sm:p-6 lg:p-7">
+    <section className="bg-card rounded-2xl p-5 sm:p-6 lg:p-7">
       <div className="relative grid gap-6">
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -251,12 +249,12 @@ const TotalBalance = () => {
           </div>
 
           <dl className="grid gap-3 sm:grid-cols-3">
-            <div className="finance-chip rounded-4xl p-4">
+            <div className="bg-muted rounded-xl p-4">
               <dt className="text-sm font-medium text-muted-foreground">
                 Latest net
               </dt>
               <div className="mt-3 flex items-center gap-2">
-                <TrendIcon className={cn("size-4.5", balanceToneClass)} />
+                <TrendIcon className={cn("size-4", balanceToneClass)} />
                 <dd className={cn("text-lg font-semibold", balanceToneClass)}>
                   {formatCurrency(summary.latestPoint?.net ?? 0, "USD")}
                 </dd>
@@ -266,7 +264,7 @@ const TotalBalance = () => {
               </p>
             </div>
 
-            <div className="finance-chip rounded-4xl p-4">
+            <div className="bg-muted rounded-xl p-4">
               <dt className="text-sm font-medium text-muted-foreground">
                 Income tracked
               </dt>
@@ -278,7 +276,7 @@ const TotalBalance = () => {
               </p>
             </div>
 
-            <div className="finance-chip rounded-4xl p-4">
+            <div className="bg-muted rounded-xl p-4">
               <dt className="text-sm font-medium text-muted-foreground">
                 Expenses tracked
               </dt>

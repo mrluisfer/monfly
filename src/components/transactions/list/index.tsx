@@ -53,7 +53,7 @@ export default function TransactionsList() {
   return (
     <TransactionHoverProvider>
       <div className="hidden md:block">
-        <Card className="finance-panel min-h-125 rounded-4xl border-2 p-0 shadow-none">
+        <Card className="min-h-[30rem] rounded-2xl border-2 p-0 shadow-none">
           <CardHeader className="border-b border-border/60 px-5 pt-5 pb-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="space-y-1">
@@ -108,7 +108,7 @@ export default function TransactionsList() {
       </div>
 
       <div className="space-y-4 md:hidden">
-        <section className="finance-panel rounded-[1.75rem] p-4">
+        <section className="bg-card rounded-2xl p-4">
           <MobileHeader
             total={total}
             isPending={isPending}

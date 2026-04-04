@@ -433,7 +433,7 @@ export function TransactionsInsights({
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <article className="finance-soft-chart rounded-4xl p-4 sm:p-5">
+        <article className="bg-card rounded-2xl p-4 sm:p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
@@ -443,12 +443,12 @@ export function TransactionsInsights({
                 {formatCurrency(netLast30, "USD")} in last 30 days
               </h4>
             </div>
-            <span className="finance-chip rounded-full px-2.5 py-1 text-xs text-muted-foreground">
+            <span className="bg-muted rounded-full px-2.5 py-1 text-xs text-muted-foreground">
               Updated from your current transactions
             </span>
           </div>
 
-          <div className="mt-4 rounded-4xl border border-border/70 bg-background/55 p-3">
+          <div className="mt-4 rounded-2xl border border-border/70 bg-background/55 p-3">
             {sparkline ? (
               <div>
                 <svg
@@ -505,7 +505,7 @@ export function TransactionsInsights({
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {last30Stats.map((stat) => (
-              <div key={stat.label} className="finance-chip rounded-4xl p-3">
+              <div key={stat.label} className="bg-muted rounded-xl p-3">
                 <div className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
                   {stat.label}
                 </div>
@@ -522,9 +522,9 @@ export function TransactionsInsights({
           </div>
         </article>
 
-        <article className="finance-chip rounded-4xl border border-border/70 p-4 sm:p-5 h-fit">
+        <article className="bg-muted rounded-2xl border border-border/70 p-4 sm:p-5 h-fit">
           <div className="flex items-center gap-2">
-            <SparklesIcon className="size-4.5 text-primary" />
+            <SparklesIcon className="size-4 text-primary" />
             <h4 className="text-base font-semibold tracking-tight text-foreground">
               Smart notes
             </h4>
@@ -536,7 +536,7 @@ export function TransactionsInsights({
               return (
                 <div
                   key={note.id}
-                  className={cn("rounded-4xl border px-3 py-2.5", tone.card)}
+                  className={cn("rounded-xl border px-3 py-2.5", tone.card)}
                 >
                   <div className="flex items-center gap-2">
                     <span
@@ -555,7 +555,7 @@ export function TransactionsInsights({
             })}
           </div>
 
-          <div className="mt-3 rounded-4xl border border-border/70 bg-background/60 px-3 py-2.5 text-xs text-muted-foreground">
+          <div className="mt-3 rounded-xl border border-border/70 bg-background/60 px-3 py-2.5 text-xs text-muted-foreground">
             Last activity on {latestDateLabel}:{" "}
             {safeText(insights.latestDescription, 64)}
           </div>
@@ -563,11 +563,11 @@ export function TransactionsInsights({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <article className="finance-chip rounded-4xl border border-border/70 p-4 sm:p-5">
+        <article className="bg-muted rounded-2xl border border-border/70 p-4 sm:p-5">
           <div className="flex items-center gap-2">
             <TrendIcon
               className={cn(
-                "size-4.5",
+                "size-4",
                 isPositiveLast30 ? "text-primary" : "text-destructive"
               )}
             />
@@ -614,9 +614,9 @@ export function TransactionsInsights({
           </div>
         </article>
 
-        <article className="finance-chip rounded-4xl border border-border/70 p-4 sm:p-5 h-fit">
+        <article className="bg-muted rounded-2xl border border-border/70 p-4 sm:p-5 h-fit">
           <div className="flex items-center gap-2">
-            <LightbulbIcon className="size-4.5 text-accent-foreground" />
+            <LightbulbIcon className="size-4 text-accent-foreground" />
             <h4 className="text-base font-semibold tracking-tight text-foreground">
               Improvement ideas
             </h4>
@@ -626,7 +626,7 @@ export function TransactionsInsights({
             {insights.ideas.map((idea) => (
               <li
                 key={idea}
-                className="flex items-start gap-2 rounded-4xl border border-border/70 bg-background/60 px-3 py-2.5 text-sm text-muted-foreground"
+                className="flex items-start gap-2 rounded-xl border border-border/70 bg-background/60 px-3 py-2.5 text-sm text-muted-foreground"
               >
                 <CircleAlertIcon className="mt-0.5 size-4 shrink-0 text-primary" />
                 <span>{idea}</span>

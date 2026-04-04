@@ -85,7 +85,7 @@ export default function UserDropdown() {
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger
           render={
-            <button className="shrink-0">
+            <button className="shrink-0 rounded-full">
               <UserAvatar alt={userName} name={userName} />
               <span className="sr-only">{userName}</span>
             </button>

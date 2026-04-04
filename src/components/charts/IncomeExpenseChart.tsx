@@ -47,28 +47,19 @@ function IncomeExpenseTooltip({
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: "hsl(134, 61%, 41%)" }}
-            />
+            <div className="w-3 h-3 rounded-full bg-primary" />
             <span className="text-sm text-muted-foreground">Income:</span>
           </div>
-          <span
-            className="font-semibold"
-            style={{ color: "hsl(134, 61%, 41%)" }}
-          >
+          <span className="font-semibold text-primary">
             {formatCurrency(income, "USD")}
           </span>
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: "hsl(0, 65%, 51%)" }}
-            />
+            <div className="w-3 h-3 rounded-full bg-destructive" />
             <span className="text-sm text-muted-foreground">Expenses:</span>
           </div>
-          <span className="font-semibold" style={{ color: "hsl(0, 65%, 51%)" }}>
+          <span className="font-semibold text-destructive">
             {formatCurrency(expense, "USD")}
           </span>
         </div>
@@ -77,12 +68,7 @@ function IncomeExpenseTooltip({
             <span className="text-sm font-medium text-muted-foreground">
               Net:
             </span>
-            <span
-              className="font-bold"
-              style={{
-                color: net >= 0 ? "hsl(134, 61%, 41%)" : "hsl(0, 65%, 51%)",
-              }}
-            >
+            <span className={`font-bold ${net >= 0 ? "text-primary" : "text-destructive"}`}>
               {net >= 0 ? "+" : ""}
               {formatCurrency(net, "USD")}
             </span>
@@ -133,7 +119,7 @@ export default function IncomeExpenseChart() {
 
   return (
     <Card
-      className="finance-panel rounded-[1.85rem] border-0 shadow-none"
+      className="rounded-2xl border-0 shadow-none"
       title="Income vs Expenses"
       subtitle={
         totalIncome > 0 || totalExpenses > 0
@@ -157,11 +143,11 @@ export default function IncomeExpenseChart() {
             config={{
               income: {
                 label: "Income",
-                color: "hsl(134, 61%, 41%)",
+                color: "var(--primary)",
               },
               expense: {
                 label: "Expenses",
-                color: "hsl(0, 65%, 51%)",
+                color: "var(--destructive)",
               },
             }}
             className="w-full h-64 sm:h-80"
@@ -205,16 +191,8 @@ export default function IncomeExpenseChart() {
                     x2="0"
                     y2="1"
                   >
-                    <stop
-                      offset="5%"
-                      stopColor="hsl(134, 61%, 41%)"
-                      stopOpacity={0.2}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="hsl(134, 61%, 41%)"
-                      stopOpacity={0.01}
-                    />
+                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0.01} />
                   </linearGradient>
                   <linearGradient
                     id="expenseGradient"
@@ -223,22 +201,14 @@ export default function IncomeExpenseChart() {
                     x2="0"
                     y2="1"
                   >
-                    <stop
-                      offset="5%"
-                      stopColor="hsl(0, 65%, 51%)"
-                      stopOpacity={0.2}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="hsl(0, 65%, 51%)"
-                      stopOpacity={0.01}
-                    />
+                    <stop offset="5%" stopColor="var(--destructive)" stopOpacity={0.2} />
+                    <stop offset="95%" stopColor="var(--destructive)" stopOpacity={0.01} />
                   </linearGradient>
                 </defs>
                 <Area
                   type="monotone"
                   dataKey="income"
-                  stroke="hsl(134, 61%, 41%)"
+                  stroke="var(--primary)"
                   fill="url(#incomeGradient)"
                   strokeWidth={2}
                   name="Income"
@@ -248,7 +218,7 @@ export default function IncomeExpenseChart() {
                 <Area
                   type="monotone"
                   dataKey="expense"
-                  stroke="hsl(0, 65%, 51%)"
+                  stroke="var(--destructive)"
                   fill="url(#expenseGradient)"
                   strokeWidth={2}
                   name="Expenses"
@@ -269,33 +239,27 @@ export default function IncomeExpenseChart() {
           </ChartContainer>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="finance-chip rounded-[1.25rem] p-3.5">
+            <div className="bg-muted rounded-xl p-3.5">
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                 Income
               </p>
-              <p className="mt-2 text-base font-semibold text-emerald-600 dark:text-emerald-400">
+              <p className="mt-2 text-base font-semibold text-primary">
                 {formatCurrency(totalIncome, "USD")}
               </p>
             </div>
-            <div className="finance-chip rounded-[1.25rem] p-3.5">
+            <div className="bg-muted rounded-xl p-3.5">
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                 Expenses
               </p>
-              <p className="mt-2 text-base font-semibold text-rose-600 dark:text-rose-400">
+              <p className="mt-2 text-base font-semibold text-destructive">
                 {formatCurrency(totalExpenses, "USD")}
               </p>
             </div>
-            <div className="finance-chip rounded-[1.25rem] p-3.5">
+            <div className="bg-muted rounded-xl p-3.5">
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                 Net
               </p>
-              <p
-                className="mt-2 text-base font-semibold"
-                style={{
-                  color:
-                    netTotal >= 0 ? "hsl(152 76% 40%)" : "hsl(0 72% 51%)",
-                }}
-              >
+              <p className={`mt-2 text-base font-semibold ${netTotal >= 0 ? "text-primary" : "text-destructive"}`}>
                 {netTotal >= 0 ? "+" : ""}
                 {formatCurrency(netTotal, "USD")}
               </p>

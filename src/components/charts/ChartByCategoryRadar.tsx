@@ -106,7 +106,7 @@ export default function ChartByCategoryRadar({
   const stats = calculateStats();
 
   return (
-    <Card className="finance-panel rounded-[1.85rem] border-0 shadow-none">
+    <Card className="rounded-2xl border-0 shadow-none">
       <CardHeader>
         <CardTitle>{`${chartLabel} by Category`}</CardTitle>
         <CardDescription>
@@ -118,7 +118,7 @@ export default function ChartByCategoryRadar({
       <CardContent>
         {isLoading && <div className="py-12 text-center">Loading chart...</div>}
         {error && (
-          <div className="py-12 text-center text-red-500">
+          <div className="py-12 text-center text-destructive">
             Error loading data
           </div>
         )}
@@ -165,7 +165,7 @@ export default function ChartByCategoryRadar({
             <Separator />
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
+              <div className="bg-muted space-y-1 rounded-xl p-3">
                 <div className="text-xs text-muted-foreground">
                   Top Category
                 </div>
@@ -173,7 +173,7 @@ export default function ChartByCategoryRadar({
                   {stats.maxCategory}
                 </Badge>
               </div>
-              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
+              <div className="bg-muted space-y-1 rounded-xl p-3">
                 <div className="text-xs text-muted-foreground">Categories</div>
                 <div className="font-semibold text-sm">
                   {stats.categoriesCount}
@@ -182,7 +182,7 @@ export default function ChartByCategoryRadar({
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
+              <div className="bg-muted space-y-1 rounded-xl p-3">
                 <div className="text-xs text-muted-foreground">
                   Total {chartLabel}
                 </div>
@@ -190,7 +190,7 @@ export default function ChartByCategoryRadar({
                   ${stats.total.toLocaleString()}
                 </div>
               </div>
-              <div className="finance-chip space-y-1 rounded-[1.15rem] p-3">
+              <div className="bg-muted space-y-1 rounded-xl p-3">
                 <div className="text-xs text-muted-foreground">Average</div>
                 <div className="font-semibold text-sm">
                   ${Math.round(stats.avg).toLocaleString()}

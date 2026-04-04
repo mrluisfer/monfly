@@ -21,16 +21,10 @@ import {
 } from "framer-motion";
 import { useAtomValue } from "jotai";
 
+import { Button } from "@/components/ui/button";
+
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
-);
-const ChartTransactionsByMonth = lazy(
-  () => import("~/components/charts/ChartTransactionsByMonth")
-);
-const ChartTabs = lazy(() =>
-  import("~/components/home/ChartTabs").then((module) => ({
-    default: module.ChartTabs,
-  }))
 );
 
 export const Route = createFileRoute("/_authed/home/")({
@@ -51,7 +45,6 @@ function RouteComponent() {
   });
 
   if (error) {
-    console.error("Home page user query error:", error);
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
         <div className="text-lg font-semibold text-destructive">
@@ -60,12 +53,7 @@ function RouteComponent() {
         <div className="text-sm text-muted-foreground">
           {error?.message || "An unexpected error occurred"}
         </div>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-        >
-          Reload Page
-        </button>
+        <Button onClick={() => window.location.reload()}>Reload Page</Button>
       </div>
     );
   }
@@ -74,7 +62,7 @@ function RouteComponent() {
   if (isPending) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-32 w-full rounded-[1.75rem]" />
+        <Skeleton className="h-32 w-full rounded-2xl" />
         <div
           className={cn(
             "grid gap-6",
@@ -83,16 +71,13 @@ function RouteComponent() {
               : "xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]"
           )}
         >
-          <Skeleton className="h-[26rem] w-full rounded-[2rem]" />
+          <Skeleton className="h-[26rem] w-full rounded-2xl" />
           <div className={cn(hideMetrics && "xl:flex xl:justify-end")}>
             <div className="grid w-full gap-4 md:grid-cols-3 xl:grid-cols-1 xl:max-w-md">
-              <Skeleton className="h-28 w-full rounded-[1.6rem]" />
+              <Skeleton className="h-28 w-full rounded-xl" />
               {!hideMetrics &&
                 [1, 2, 3].map((item) => (
-                  <Skeleton
-                    key={item}
-                    className="h-40 w-full rounded-[1.6rem]"
-                  />
+                  <Skeleton key={item} className="h-40 w-full rounded-xl" />
                 ))}
             </div>
           </div>

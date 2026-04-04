@@ -13,7 +13,7 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 
 export const transactionFormDialogContentClassName =
-  "finance-dialog-sheet top-auto bottom-0 w-[calc(100vw-0.75rem)] !max-w-[calc(100vw-0.75rem)] -translate-y-0 rounded-t-[2rem] rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:w-[calc(100vw-2rem)] sm:!max-w-2xl sm:-translate-y-1/2 sm:rounded-[1.8rem] md:!max-w-3xl lg:!max-w-[58rem] xl:!max-w-[66rem]";
+  "top-auto bottom-0 w-[calc(100vw-0.75rem)] !max-w-[calc(100vw-0.75rem)] -translate-y-0 rounded-t-3xl rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:w-[calc(100vw-2rem)] sm:!max-w-2xl sm:-translate-y-1/2 sm:rounded-2xl md:!max-w-3xl lg:!max-w-[58rem] xl:!max-w-[66rem]";
 
 type TransactionFormDialogContentProps = {
   title: string;
@@ -64,7 +64,7 @@ export function TransactionFormDialogContent({
                 render={
                   <Button
                     variant="outline"
-                    className="finance-chip h-11 w-full rounded-full"
+                    className="h-11 w-full rounded-full"
                     disabled={isLoading}
                   >
                     <XIcon className="h-5 w-5" />

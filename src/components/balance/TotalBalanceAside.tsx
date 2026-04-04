@@ -21,7 +21,7 @@ export const TotalBalanceAside = ({
   balanceToneClass,
 }: TotalBalanceAsideProps) => {
   return (
-    <aside className="finance-soft-chart rounded-[1.75rem] p-4 sm:p-5 hidden lg:block">
+    <aside className="bg-card rounded-2xl p-4 sm:p-5 hidden lg:block">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-sm font-medium text-muted-foreground">Trend</p>
@@ -40,7 +40,7 @@ export const TotalBalanceAside = ({
       </div>
 
       <div className="mt-5">
-        <div className="rounded-[1.15rem] border border-border/70 bg-background/65 p-4">
+        <div className="rounded-xl border border-border/70 bg-background/65 p-4">
           <div className="flex items-center gap-2 text-sm font-medium text-foreground">
             <ActivityIcon className="size-4 text-primary" />
             Change vs previous period
@@ -70,7 +70,7 @@ function Sparkline({
 }) {
   if (data.length < 2) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-[1.5rem] border border-dashed border-border/70 bg-background/50 px-5 text-center text-sm text-muted-foreground">
+      <div className="flex h-48 items-center justify-center rounded-2xl border border-dashed border-border/70 bg-background/50 px-5 text-center text-sm text-muted-foreground">
         Add a few transactions to reveal your balance momentum over time.
       </div>
     );
@@ -98,7 +98,7 @@ function Sparkline({
 
   const lastPoint = points.split(" ").at(-1)?.split(",") ?? ["0", "0"];
   const strokeColor =
-    tone === "positive" ? "hsl(152 76% 40%)" : "hsl(0 72% 51%)";
+    tone === "positive" ? "var(--primary)" : "var(--destructive)";
   const fillId = tone === "positive" ? "sparkPositive" : "sparkNegative";
 
   return (

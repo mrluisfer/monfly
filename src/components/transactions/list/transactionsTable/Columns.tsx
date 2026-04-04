@@ -73,8 +73,8 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
           variant="outline"
           className={
             isIncome
-              ? "gap-1.5 border-emerald-500/25 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-              : "gap-1.5 border-rose-500/25 bg-rose-500/10 text-rose-700 dark:text-rose-300"
+              ? "gap-1.5 border-primary/25 bg-primary/10 text-primary"
+              : "gap-1.5 border-destructive/25 bg-destructive/10 text-destructive"
           }
         >
           {isIncome ? (
@@ -178,9 +178,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         <div className="space-y-0.5 text-right">
           <div
             className={`font-semibold ${
-              isIncome
-                ? "text-green-600 dark:text-green-400"
-                : "text-red-600 dark:text-red-400"
+              isIncome ? "text-primary" : "text-destructive"
             }`}
           >
             {isIncome ? "+" : "-"}

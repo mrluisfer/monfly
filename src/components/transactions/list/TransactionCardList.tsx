@@ -68,14 +68,14 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
                 }}
               >
                 <div className="mb-3 flex items-center gap-2 px-1">
-                  <span className="finance-chip inline-flex items-center gap-2 rounded-full px-3 py-1.5">
+                  <span className="bg-muted inline-flex items-center gap-2 rounded-full px-3 py-1.5">
                     <CalendarIcon className="size-3.5 text-muted-foreground/70" />
                     <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
                       {dateLabel}
                     </h3>
                   </span>
                   <div className="h-px flex-1 bg-border/50" />
-                  <span className="finance-chip rounded-full px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
+                  <span className="bg-muted rounded-full px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
                     {transactions.length}
                   </span>
                 </div>

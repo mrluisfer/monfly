@@ -20,7 +20,7 @@ export function MobileHeader({
           Activity feed
         </p>
         <h2 className="text-lg font-semibold tracking-tight text-foreground flex items-center gap-2">
-          <WalletIcon className="size-4.5 text-primary" />
+          <WalletIcon className="size-4 text-primary" />
           Transactions
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -32,7 +32,7 @@ export function MobileHeader({
         disabled={isPending || transactionsCount === 0}
         variant="outline"
         size="icon"
-        className="finance-chip size-10 rounded-full"
+        className="bg-muted size-10 rounded-full"
       >
         <RefreshCcwIcon className={cn("size-4", isPending && "animate-spin")} />
       </Button>

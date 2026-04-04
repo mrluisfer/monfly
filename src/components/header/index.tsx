@@ -19,12 +19,12 @@ export const Header = () => {
   return (
     <header className="z-40 w-full">
       {/* Desktop Header */}
-      <div className="app-panel hidden md:flex min-h-16 items-start lg:items-center justify-between md:py-3 px-3 sm:px-4 lg:px-5 rounded-4xl">
+      <div className="hidden md:flex min-h-16 items-start lg:items-center justify-between md:py-3 px-3 sm:px-0 rounded-4xl">
         <div className="flex items-center gap-4">
           <div className="lg:hidden">
             <Logo withTitle={false} />
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden lg:block bg-card rounded-4xl px-3 py-2">
             <HeaderNavigation />
           </div>
         </div>

@@ -13,10 +13,10 @@ import {
 const getTrendingIcon = (percentChange: number) => {
   if (percentChange > 0)
     return (
-      <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
+      <TrendingUp className="h-4 w-4 text-primary" />
     );
   if (percentChange < 0)
-    return <TrendingDown className="h-4 w-4 text-red-600 dark:text-red-400" />;
+    return <TrendingDown className="h-4 w-4 text-destructive" />;
   return <TrendingUpDown className="h-4 w-4 text-muted-foreground" />;
 };
 
@@ -55,10 +55,10 @@ export function TrendingStatus({
       : "secondary";
 
   const badgeColorClasses = isPositive
-    ? "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800"
+    ? "bg-primary/10 text-primary border-primary/25"
     : isNegative
-      ? "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800"
-      : "bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600";
+      ? "bg-destructive/10 text-destructive border-destructive/25"
+      : "bg-muted text-muted-foreground border-border";
 
   const changeLabel = isPositive
     ? "more than"

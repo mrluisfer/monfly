@@ -107,25 +107,25 @@ export function TransactionRow({
                 ease: "easeOut",
               }}
               className={cn(
-                "finance-chip group flex items-center gap-3 rounded-[1.45rem] px-3.5 py-3.5 select-none",
-                "bg-background/78 hover:bg-background/96",
+                "group flex items-center gap-3 rounded-2xl px-3.5 py-3.5 select-none",
+                "bg-muted/50 hover:bg-muted",
                 "transition-colors duration-200",
                 "active:scale-[0.98] active:transition-transform active:duration-100"
               )}
             >
               <div
                 className={cn(
-                  "flex size-11 shrink-0 items-center justify-center rounded-[1.15rem]",
+                  "flex size-11 shrink-0 items-center justify-center rounded-xl",
                   "transition-shadow duration-200 shadow-[0_18px_28px_-24px_rgba(15,23,42,0.55)]",
                   isIncome
-                    ? "bg-emerald-500/10 text-emerald-500 dark:bg-emerald-500/15"
-                    : "bg-red-500/10 text-red-500 dark:bg-red-500/15"
+                    ? "bg-primary/10 text-primary"
+                    : "bg-destructive/10 text-destructive"
                 )}
               >
                 {isIncome ? (
-                  <ArrowUpRightIcon className="size-4.5" strokeWidth={2.2} />
+                  <ArrowUpRightIcon className="size-4" strokeWidth={2.2} />
                 ) : (
-                  <ArrowDownLeftIcon className="size-4.5" strokeWidth={2.2} />
+                  <ArrowDownLeftIcon className="size-4" strokeWidth={2.2} />
                 )}
               </div>
 
@@ -154,8 +154,8 @@ export function TransactionRow({
                   className={cn(
                     "rounded-full px-3 py-1 text-sm font-semibold tabular-nums",
                     isIncome
-                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                      : "bg-red-500/10 text-red-600 dark:text-red-400"
+                      ? "bg-primary/10 text-primary"
+                      : "bg-destructive/10 text-destructive"
                   )}
                 >
                   {isIncome ? "+" : "-"}

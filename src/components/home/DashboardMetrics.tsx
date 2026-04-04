@@ -30,7 +30,7 @@ function MetricCard({
   value,
 }: MetricCardProps) {
   return (
-    <Card className="finance-panel rounded-4xl border-0 p-0 shadow-none">
+    <Card className="rounded-xl border-0 p-0 shadow-none">
       <CardContent className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
@@ -47,7 +47,7 @@ function MetricCard({
               {meta}
             </p>
           </div>
-          <div className="finance-chip rounded-full p-2.5">{icon}</div>
+          <div className="bg-muted rounded-full p-2.5">{icon}</div>
         </div>
       </CardContent>
     </Card>
@@ -110,7 +110,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
         {[1, 2, 3].map((item) => (
           <Skeleton
             key={item}
-            className="h-32 rounded-[1.35rem] border border-border/70"
+            className="h-32 rounded-xl border border-border/70"
           />
         ))}
       </div>
@@ -119,7 +119,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
 
   if (error) {
     return (
-      <div className="finance-panel rounded-[1.35rem] p-4 text-sm text-destructive">
+      <div className="bg-card rounded-xl p-4 text-sm text-destructive">
         Failed to load financial metrics.
       </div>
     );
@@ -135,29 +135,21 @@ export function DashboardMetrics({ className }: { className?: string }) {
         label="Income"
         value={formatCurrency(summary.totalIncome, "USD")}
         meta="Total recorded inflow"
-        toneClassName="text-emerald-600 dark:text-emerald-400"
-        icon={
-          <TrendingUp className="size-4 text-emerald-600 dark:text-emerald-400" />
-        }
+        toneClassName="text-primary"
+        icon={<TrendingUp className="size-4 text-primary" />}
       />
       <MetricCard
         label="Expenses"
         value={formatCurrency(summary.totalExpenses, "USD")}
         meta="Total recorded outflow"
-        toneClassName="text-rose-600 dark:text-rose-400"
-        icon={
-          <TrendingDown className="size-4 text-rose-600 dark:text-rose-400" />
-        }
+        toneClassName="text-destructive"
+        icon={<TrendingDown className="size-4 text-destructive" />}
       />
       <MetricCard
         label="Net flow"
         value={`${summary.netTotal >= 0 ? "+" : ""}${formatCurrency(summary.netTotal, "USD")}`}
         meta={`${summary.latestLabel}: ${formatCurrency(summary.latestNet, "USD")} • ${summary.savingsRate}% savings rate`}
-        toneClassName={
-          summary.netTotal >= 0
-            ? "text-primary"
-            : "text-amber-700 dark:text-amber-300"
-        }
+        toneClassName={summary.netTotal >= 0 ? "text-primary" : "text-destructive"}
         icon={<ArrowUpRightIcon className="size-4 text-primary" />}
       />
     </div>

@@ -9,15 +9,7 @@ const UserAvatar = ({
   name: string;
   size?: number;
 }) => {
-  return (
-    <BoringAvatar
-      className="rounded-sm"
-      name={name}
-      variant="beam"
-      square
-      size={size}
-    />
-  );
+  return <BoringAvatar name={name} variant="beam" size={size} />;
 };
 
 export default UserAvatar;
