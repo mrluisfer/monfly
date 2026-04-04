@@ -129,9 +129,7 @@ function Signup() {
             }
           />
           <Button
-            variant="outline"
             size="lg"
-            className="rounded-full bg-background/75"
             render={<Link to="/login">I already have an account</Link>}
           />
         </header>

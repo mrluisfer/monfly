@@ -98,8 +98,6 @@ function Login() {
     },
   });
 
-  const shouldSuggestSignup = Boolean(loginMutation.data?.userNotFound);
-
   return (
     <div className="landing-shell relative min-h-dvh overflow-x-clip">
       <div
@@ -124,12 +122,7 @@ function Login() {
               </Link>
             }
           />
-          <Button
-            variant="outline"
-            size="lg"
-            className="rounded-full bg-background/75"
-            render={<Link to="/signup">Create account</Link>}
-          />
+          <Button size="lg" render={<Link to="/signup">Create account</Link>} />
         </header>
 
         <div className="grid flex-1 items-stretch gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
@@ -218,12 +211,6 @@ function Login() {
                         >
                           {loginMutation.data.message}
                         </p>
-                        {shouldSuggestSignup ? (
-                          <p className="text-muted-foreground">
-                            This email is not registered yet. You can create an
-                            account in under a minute.
-                          </p>
-                        ) : null}
                       </div>
                     ) : null
                   }

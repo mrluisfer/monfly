@@ -34,7 +34,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-export default function Home() {
+function Home() {
   return (
     <div className="landing-shell relative min-h-screen overflow-x-clip">
       <a

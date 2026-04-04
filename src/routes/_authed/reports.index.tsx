@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_authed/reports/")({
   component: RouteComponent,
 });
 
-export default function RouteComponent() {
+function RouteComponent() {
   return (
     <div>
       <header className="mb-6 flex justify-between items-center">
