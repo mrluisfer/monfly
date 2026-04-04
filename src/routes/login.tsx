@@ -21,6 +21,8 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Card, CardContent } from "@/components/ui/card";
+
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email address."),
   password: z.string().min(8, "Password must be at least 8 characters."),
@@ -126,56 +128,58 @@ function Login() {
         </header>
 
         <div className="grid flex-1 items-stretch gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
-          <section className="landing-glass-panel order-2 hidden rounded-3xl border border-border/65 p-6 lg:flex lg:flex-col lg:justify-between xl:p-8">
-            <div>
-              <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
-                <Sparkles className="size-3.5" />
-                Smart Money Control
-              </p>
-              <h2 className="mt-5 text-balance font-[family-name:var(--font-syne)] text-3xl font-semibold leading-tight xl:text-4xl">
-                Keep your financial workflow focused and secure.
-              </h2>
-              <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
-                Log in to continue tracking your expenses, income, and budget
-                health with real-time clarity.
-              </p>
-            </div>
+          <Card className="order-2 hidden lg:flex lg:flex-col">
+            <CardContent className="flex flex-1 flex-col justify-between">
+              <div>
+                <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                  <Sparkles className="size-3.5" />
+                  Smart Money Control
+                </p>
+                <h2 className="mt-5 text-balance font-[family-name:var(--font-syne)] text-3xl font-semibold leading-tight xl:text-4xl">
+                  Keep your financial workflow focused and secure.
+                </h2>
+                <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
+                  Log in to continue tracking your expenses, income, and budget
+                  health with real-time clarity.
+                </p>
+              </div>
 
-            <div className="mt-6 space-y-4">
-              <dl className="grid gap-3 sm:grid-cols-3">
-                {loginStats.map((stat) => (
-                  <div
-                    key={stat.label}
-                    className="rounded-2xl border border-border/65 bg-background/80 p-3"
-                  >
-                    <dt className="text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground">
-                      {stat.label}
-                    </dt>
-                    <dd className="mt-1 text-lg font-semibold text-foreground">
-                      {stat.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+              <div className="mt-6 space-y-4">
+                <dl className="grid gap-3 sm:grid-cols-3">
+                  {loginStats.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="rounded-2xl border border-border/65 bg-background/80 p-3"
+                    >
+                      <dt className="text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground">
+                        {stat.label}
+                      </dt>
+                      <dd className="mt-1 text-lg font-semibold text-foreground">
+                        {stat.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
 
-              <ul className="space-y-2">
-                {loginHighlights.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-start gap-2 text-sm text-muted-foreground"
-                  >
-                    <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+                <ul className="space-y-2">
+                  {loginHighlights.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
+                      <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
 
-              <Badge variant="default" className="w-fit">
-                <ShieldCheck className="size-4" />
-                Protected by secure session management
-              </Badge>
-            </div>
-          </section>
+                <Badge variant="default" className="w-fit">
+                  <ShieldCheck className="size-4" />
+                  Protected by secure session management
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
 
           <section className="order-1 flex items-start sm:items-center">
             <div className="landing-glass-panel w-full rounded-3xl border border-border/70 p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
