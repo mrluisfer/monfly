@@ -29,7 +29,7 @@ export const Header = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-2 md:gap-5 lg:gap-5 flex-wrap">
+        <div className="flex items-center justify-end gap-2 md:gap-3 flex-wrap">
           <SpendingAlertBadge
             compact
             isActive={isDesktopBadgeActive}
