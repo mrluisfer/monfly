@@ -1,9 +1,11 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { Card, CardContent } from "~/components/ui/card";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -14,7 +16,6 @@ import {
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
-import { useInView } from "@/hooks/useInView";
 import {
   Check,
   Clock3,
@@ -123,12 +124,12 @@ const viewportOptions: IntersectionObserverInit = {
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(false);
-  const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PlanId>("pro");
-  const { ref, inView } = useInView(viewportOptions);
 
-  const selectedPlanData =
-    planOptions.find((plan) => plan.id === selectedPlan) ?? planOptions[1];
+  const selectedPlanData = useMemo(
+    () => planOptions.find((p) => p.id === selectedPlan) ?? planOptions[1],
+    [selectedPlan]
+  );
 
   return (
     <section
@@ -136,10 +137,7 @@ export function PricingSection() {
       aria-labelledby="pricing-title"
       className="px-4 pb-18 pt-10 sm:px-6 md:pb-24 md:pt-14"
     >
-      <div
-        ref={ref}
-        className={`landing-fade-up-scroll mx-auto max-w-6xl ${inView ? "in-view" : ""}`}
-      >
+      <div className={`landing-fade-up-scroll mx-auto max-w-6xl in-view`}>
         <div className="landing-glass-panel relative overflow-hidden rounded-[2rem] border border-border/70 px-4 py-8 sm:px-8 md:px-10 md:py-11">
           <DotPattern
             className="opacity-35 [mask-image:radial-gradient(650px_circle_at_top,white,transparent)]"
@@ -159,8 +157,8 @@ export function PricingSection() {
                 Pricing designed for speed, clarity, and financial control
               </h2>
               <p className="text-pretty text-muted-foreground md:text-lg">
-                Start lean, upgrade as your planning workflow grows, and keep one
-                coherent money system across devices.
+                Start lean, upgrade as your planning workflow grows, and keep
+                one coherent money system across devices.
               </p>
             </div>
 
@@ -196,42 +194,40 @@ export function PricingSection() {
 
             <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
               {valueTiles.map((tile) => (
-                <article
+                <Card
                   key={tile.title}
-                  className="group landing-glass-panel rounded-xl border border-border/65 bg-background/75 p-3.5 transition-colors duration-150 hover:border-primary/35"
+                  className="group landing-glass-panel gap-0 rounded-xl border-border/65 bg-background/75 p-3.5 shadow-none ring-0 transition-colors duration-150 hover:border-primary/35"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="inline-flex size-7 items-center justify-center rounded-lg border border-border/65 bg-background/80">
-                      {tile.icon}
-                    </span>
-                    <span className="text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                      {tile.meta}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 text-sm font-semibold text-foreground">
-                    {tile.title}
-                  </h3>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {tile.description}
-                  </p>
-                </article>
+                  <CardContent className="p-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="inline-flex size-7 items-center justify-center rounded-lg border border-border/65 bg-background/80">
+                        {tile.icon}
+                      </span>
+                      <span className="text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+                        {tile.meta}
+                      </span>
+                    </div>
+                    <h3 className="mt-3 text-sm font-semibold text-foreground">
+                      {tile.title}
+                    </h3>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {tile.description}
+                    </p>
+                  </CardContent>
+                </Card>
               ))}
             </div>
 
-            <div className="flex flex-col gap-3 rounded-2xl border border-border/70 bg-background/72 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 rounded-4xl border border-border/70 bg-background/72 p-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-sm text-muted-foreground">
                 Not sure which plan fits best? Compare features side by side and
                 choose the one matching your workflow.
               </p>
 
-              <Dialog open={isSelectorOpen} onOpenChange={setIsSelectorOpen}>
+              <Dialog>
                 <DialogTrigger
                   render={
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="h-10 w-full rounded-full border-border/75 bg-background/85 px-4 sm:w-auto"
-                    >
+                    <Button variant="outline" size="lg">
                       Compare plans
                     </Button>
                   }
@@ -250,9 +246,7 @@ export function PricingSection() {
 
                   <RadioGroup
                     value={selectedPlan}
-                    onValueChange={(value) =>
-                      setSelectedPlan(value as PlanId)
-                    }
+                    onValueChange={(value) => setSelectedPlan(value as PlanId)}
                     className="mt-1 gap-2.5"
                   >
                     {planOptions.map((plan) => {
@@ -322,22 +316,28 @@ export function PricingSection() {
                   </RadioGroup>
 
                   <DialogFooter className="-mx-0 -mb-0 mt-2 border-0 bg-transparent p-0 sm:flex-row">
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="h-10 rounded-full"
-                      onClick={() => setIsSelectorOpen(false)}
-                    >
-                      Close
-                    </Button>
-                    <Button
-                      size="lg"
-                      className="h-10 rounded-full"
-                      onClick={() => setIsSelectorOpen(false)}
+                    <DialogClose
                       render={
-                        <Link to="/signup">
-                          Continue with {selectedPlanData.name}
-                        </Link>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className="h-10 rounded-full"
+                        >
+                          Close
+                        </Button>
+                      }
+                    />
+                    <DialogClose
+                      render={
+                        <Button
+                          size="lg"
+                          className="h-10 rounded-full"
+                          render={
+                            <Link to="/signup">
+                              Continue with {selectedPlanData.name}
+                            </Link>
+                          }
+                        />
                       }
                     />
                   </DialogFooter>

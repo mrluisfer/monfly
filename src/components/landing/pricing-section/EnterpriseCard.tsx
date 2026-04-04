@@ -25,7 +25,7 @@ const enterpriseFeatures = [
 
 export function EnterpriseCard() {
   return (
-    <PricingCard title={<span>$ENT</span>}>
+    <PricingCard title={<span>Enterprise</span>}>
       <span className="text-sm font-medium text-muted-foreground">
         Custom contracts for high-scale finance organizations
       </span>
@@ -45,9 +45,9 @@ export function EnterpriseCard() {
       <Button
         variant="outline"
         size="lg"
-        className="mt-6 h-10 w-full rounded-full border-border/75 bg-background/70 md:mt-auto"
+        className="mt-6 md:mt-auto"
         render={
-          <Link to="/signup" className="inline-flex items-center gap-2">
+          <Link to="/contact" className="inline-flex items-center gap-2">
             Talk to sales
             <ArrowUpRight className="size-4" />
           </Link>

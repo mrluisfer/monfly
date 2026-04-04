@@ -1,10 +1,9 @@
 import { ReactNode } from "react";
 import { Clock3, DollarSign, ShieldCheck, Star } from "lucide-react";
 
-import { useInView } from "@/hooks/useInView";
-
 import demoImg from "../../assets/demo.png";
 import { Safari } from "../magicui/safari";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 const trustStats = [
   {
@@ -31,14 +30,13 @@ const trustStats = [
   },
 ];
 
-const viewportOptions: IntersectionObserverInit = {
-  threshold: 0.2,
-};
+const dashboardHighlights = [
+  { label: "Forecast confidence", value: "89%" },
+  { label: "Real-time sync", value: "Every 12s" },
+  { label: "Mobile flow", value: "One-thumb ready" },
+];
 
 export function UserStatsSection() {
-  const { ref: leftRef, inView: leftInView } = useInView(viewportOptions);
-  const { ref: rightRef, inView: rightInView } = useInView(viewportOptions);
-
   return (
     <section
       id="features"
@@ -46,10 +44,7 @@ export function UserStatsSection() {
       className="px-4 py-14 sm:px-6 md:py-18"
     >
       <div className="mx-auto grid max-w-6xl gap-7 xl:grid-cols-[minmax(0,0.45fr)_minmax(0,0.55fr)] xl:items-center">
-        <div
-          ref={leftRef}
-          className={`landing-fade-up-scroll space-y-6 ${leftInView ? "in-view" : ""}`}
-        >
+        <div className="space-y-6">
           <div className="space-y-3">
             <p className="inline-flex rounded-full border border-border/75 bg-background/72 px-3 py-1 text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">
               Why teams switch
@@ -74,22 +69,25 @@ export function UserStatsSection() {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-border/70 bg-background/78 p-4 text-sm text-muted-foreground">
-            "Our monthly planning meeting dropped from 90 minutes to 35 because
-            everyone now shares the same operating picture."
-          </div>
+          <Card>
+            <CardContent>
+              <p>
+                "Our monthly planning meeting dropped from 90 minutes to 35
+                because everyone now shares the same operating picture."
+              </p>
+            </CardContent>
+          </Card>
         </div>
 
         <div
-          ref={rightRef}
-          className={`landing-fade-up-scroll relative mx-auto w-full max-w-5xl ${rightInView ? "in-view" : ""}`}
+          className={`relative mx-auto w-full max-w-5xl`}
           style={{ animationDelay: "0.08s" }}
         >
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-6 top-10 h-48 w-48 rounded-full bg-[radial-gradient(circle,#22c55e_0%,transparent_72%)] opacity-22 blur-2xl"
           />
-          <div className="landing-glass-panel overflow-hidden rounded-[1.8rem] border border-border/70 p-2.5 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.7)]">
+          <div className="relative">
             <Safari
               url="app.monfly.co"
               imageSrc={demoImg}
@@ -99,24 +97,20 @@ export function UserStatsSection() {
             />
           </div>
           <div className="mt-3 grid gap-2.5 sm:grid-cols-3">
-            <div className="landing-glass-panel rounded-xl border border-border/65 px-3 py-2">
-              <p className="text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
-                Forecast confidence
-              </p>
-              <p className="mt-1 text-sm font-semibold">89%</p>
-            </div>
-            <div className="landing-glass-panel rounded-xl border border-border/65 px-3 py-2">
-              <p className="text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
-                Real-time sync
-              </p>
-              <p className="mt-1 text-sm font-semibold">Every 12s</p>
-            </div>
-            <div className="landing-glass-panel rounded-xl border border-border/65 px-3 py-2">
-              <p className="text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
-                Mobile flow
-              </p>
-              <p className="mt-1 text-sm font-semibold">One-thumb ready</p>
-            </div>
+            {dashboardHighlights.map(({ label, value }) => (
+              <Card key={label}>
+                <CardHeader>
+                  <CardTitle>
+                    <p className="uppercase tracking-[0.12em] text-muted-foreground">
+                      {label}
+                    </p>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="font-semibold text-lg">{value}</p>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </div>
@@ -134,12 +128,16 @@ function StatCard({
   children: ReactNode;
 }) {
   return (
-    <article className="landing-glass-panel rounded-2xl border border-border/65 p-4 transition-colors duration-150 ease-out hover:border-primary/35">
-      <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-muted-foreground">
-        {children}
-        {label}
-      </span>
-      <p className="mt-2 text-xl font-semibold text-foreground">{value}</p>
-    </article>
+    <Card>
+      <CardHeader>
+        <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+          {children}
+          <CardTitle>{label}</CardTitle>
+        </span>
+      </CardHeader>
+      <CardContent>
+        <p className="mt-2 text-xl font-semibold text-foreground">{value}</p>
+      </CardContent>
+    </Card>
   );
 }

@@ -15,6 +15,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactIndexRouteImport } from './routes/contact.index'
 import { Route as AuthedTransactionsIndexRouteImport } from './routes/_authed/transactions.index'
 import { Route as AuthedReportsIndexRouteImport } from './routes/_authed/reports.index'
 import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home.index'
@@ -50,6 +51,11 @@ const SplatRoute = SplatRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactIndexRoute = ContactIndexRouteImport.update({
+  id: '/contact/',
+  path: '/contact/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthedTransactionsIndexRoute = AuthedTransactionsIndexRouteImport.update({
@@ -95,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/contact/': typeof ContactIndexRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
   '/balance-calculator/': typeof AuthedBalanceCalculatorIndexRoute
   '/categories/': typeof AuthedCategoriesIndexRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/contact': typeof ContactIndexRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
   '/balance-calculator': typeof AuthedBalanceCalculatorIndexRoute
   '/categories': typeof AuthedCategoriesIndexRoute
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
+  '/contact/': typeof ContactIndexRoute
   '/_authed/user/$userId': typeof AuthedUserUserIdRoute
   '/_authed/balance-calculator/': typeof AuthedBalanceCalculatorIndexRoute
   '/_authed/categories/': typeof AuthedCategoriesIndexRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/contact/'
     | '/user/$userId'
     | '/balance-calculator/'
     | '/categories/'
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/contact'
     | '/user/$userId'
     | '/balance-calculator'
     | '/categories'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/logout'
     | '/signup'
+    | '/contact/'
     | '/_authed/user/$userId'
     | '/_authed/balance-calculator/'
     | '/_authed/categories/'
@@ -186,6 +198,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
   SignupRoute: typeof SignupRoute
+  ContactIndexRoute: typeof ContactIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -230,6 +243,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/': {
+      id: '/contact/'
+      path: '/contact'
+      fullPath: '/contact/'
+      preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authed/transactions/': {
@@ -314,6 +334,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
   SignupRoute: SignupRoute,
+  ContactIndexRoute: ContactIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
