@@ -17,6 +17,7 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import type { ApiResponse } from "~/types/ApiResponse";
+import { LogOutIcon, UserIcon } from "lucide-react";
 
 import ProfileSettings from "./ProfileSettings";
 
@@ -100,6 +101,7 @@ export default function UserDropdown() {
                 openMenuActionDialog("profile-settings");
               }}
             >
+              <UserIcon />
               Profile Settings
             </DropdownMenuItem>
           </DropdownMenuGroup>
@@ -111,6 +113,7 @@ export default function UserDropdown() {
               }}
               className="text-destructive focus:text-destructive"
             >
+              <LogOutIcon />
               Sign Out
             </DropdownMenuItem>
           </DropdownMenuGroup>

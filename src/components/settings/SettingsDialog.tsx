@@ -2,6 +2,8 @@ import type { ReactElement, ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { Settings } from "lucide-react";
 
+import { useIsMobile } from "@/hooks/use-mobile";
+
 import { Button } from "../ui/button";
 import {
   Dialog,
@@ -27,10 +29,12 @@ export const SettingsDialog = ({
   onOpenChange,
   showTrigger = true,
 }: SettingsDialogProps) => {
+  const isMobile = useIsMobile();
+
   const trigger = children ?? (
-    <Button variant="outline" size={"lg"}>
+    <Button variant="outline" size={isMobile ? "icon-lg" : "default"}>
       <Settings />
-      <span className="hidden md:block">Settings</span>
+      <span className="hidden xl:block">Settings</span>
     </Button>
   );
 
