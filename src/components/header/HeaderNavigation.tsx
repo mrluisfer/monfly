@@ -24,7 +24,7 @@ export function HeaderNavigation() {
   const location = useLocation();
 
   const foundRouteTitle = breadcrumbList.find((route) => {
-    const currentPathname = location.pathname.split("/")[1];
+    const currentPathname = location.pathname.split("/")[2];
     const routePathname = route.url.split("/")[1];
     return currentPathname === routePathname || route.url === location.pathname;
   })?.title;
