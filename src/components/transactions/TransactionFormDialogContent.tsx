@@ -61,6 +61,7 @@ export function TransactionFormDialogContent({
             <div className="border-t border-border/60 px-4 py-3 sm:px-6">
               <DialogClose
                 className="w-full"
+                disabled={isLoading}
                 render={
                   <Button
                     variant="outline"
