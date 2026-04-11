@@ -19,6 +19,7 @@ import { SignOutDialog } from "../sidebar/SignOutDialog";
 import { Button } from "../ui/button";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -80,6 +81,7 @@ export function MobileHeaderSheetMenu() {
               <SheetTitle className="flex items-center gap-2 pr-10">
                 <Logo />
               </SheetTitle>
+              <SheetClose />
             </SheetHeader>
             <div className="scrollbar-custom flex-1 min-h-0 overflow-y-auto px-6 py-5 pb-6">
               <div className="flex flex-col gap-6">

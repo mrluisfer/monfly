@@ -199,7 +199,7 @@ select,
     --font-mono:
       ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
-    --radius: 1.625rem;
+    --radius: 0.5rem;
     --shadow-x: 0;
     --shadow-y: 1px;
     --shadow-blur: 3px;
