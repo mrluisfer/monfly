@@ -180,24 +180,11 @@ export function TransactionRow({
             <ContextMenuLabel>Actions for transaction</ContextMenuLabel>
           </ContextMenuGroup>
           <ContextMenuSeparator />
-          <ContextMenuItem
-            className="
-              transition-all duration-200 ease-out
-              hover:bg-primary/10 focus:bg-primary/10
-              cursor-pointer group
-            "
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <EditIcon className="size-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+          <ContextMenuItem onClick={() => setIsDialogOpen(true)}>
+            <EditIcon />
             Edit transaction
           </ContextMenuItem>
           <ContextMenuItem
-            variant="destructive"
-            className="
-              transition-all duration-200 ease-out
-              hover:bg-destructive/10 focus:bg-destructive/10
-              cursor-pointer group
-            "
             disabled={deleteTransactionByIdMutation.status === "pending"}
             onClick={() =>
               deleteTransactionByIdMutation.mutate({
@@ -207,7 +194,7 @@ export function TransactionRow({
               })
             }
           >
-            <TrashIcon className="size-4 transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            <TrashIcon />
             {deleteTransactionByIdMutation.status === "pending"
               ? "Deleting..."
               : "Delete transaction"}

@@ -105,7 +105,7 @@ export function MobileContent({
             Income
           </Button>
           <Button
-            variant={activeFilter === "expense" ? "destructive" : "outline"}
+            variant={activeFilter === "expense" ? "default" : "outline"}
             className="rounded-full"
             onClick={() => setActiveFilter("expense")}
           >
