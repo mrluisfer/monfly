@@ -12,7 +12,6 @@ import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
 import { NotFound } from "~/components/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { useDarkMode } from "~/hooks/useDarkMode";
-
 import { useGlobalHapticFeedback } from "~/hooks/useGlobalHapticFeedback";
 import { useSonnerPosition } from "~/hooks/useSonnerPosition";
 import { SileoToaster } from "~/lib/toaster";
@@ -28,12 +27,32 @@ export const Route = createRootRoute({
     title: "Monfly | Track your Expenses & Income | TanStack + shadcn",
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#000000" },
+      {
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover",
+      },
+      // theme-color adapts to system light/dark mode
+      {
+        name: "theme-color",
+        content: "#ffffff",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        name: "theme-color",
+        content: "#000000",
+        media: "(prefers-color-scheme: dark)",
+      },
       { name: "color-scheme", content: "light dark" },
+      { httpEquiv: "X-UA-Compatible", content: "IE=edge" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "black" },
+      {
+        name: "apple-mobile-web-app-status-bar-style",
+        content: "black-translucent",
+      },
+      { name: "apple-mobile-web-app-title", content: "Monfly" },
+      { name: "msapplication-TileColor", content: "#000000" },
       {
         name: "description",
         content:
@@ -85,10 +104,17 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      // Preconnect to font origins to reduce latency
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
-        href: "/codium.svg",
+        href: "/apple-touch-icon.png",
       },
       {
         rel: "icon",
