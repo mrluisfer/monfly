@@ -3,7 +3,6 @@ import { useIsMobile } from "~/hooks/useMobile";
 import UserDropdown from "../home/user-dropdown";
 import { SettingsDialog } from "../settings/SettingsDialog";
 import ToggleDarkMode from "../settings/ToggleDarkMode";
-import { SpendingAlertBadge } from "./badges/SpendingAlertBadge";
 import { SystemStatusBadge } from "./badges/SystemStatus";
 import { TimezoneBadge } from "./badges/TimezoneBadge";
 import { HeaderNavigation } from "./HeaderNavigation";
@@ -30,19 +29,15 @@ export const Header = () => {
         </div>
 
         <div className="flex items-center justify-end gap-2 md:gap-3 flex-wrap">
-          <SpendingAlertBadge
-            compact
-            isActive={isDesktopBadgeActive}
-            className="max-w-45"
-            showIcon={false}
-          />
-          <TimezoneBadge
-            compact
-            variant="outline"
-            showTimezone={false}
-            isActive={isDesktopBadgeActive}
-            className="max-w-30"
-          />
+          {isMobile ? null : (
+            <TimezoneBadge
+              compact
+              variant="outline"
+              showTimezone={false}
+              isActive={isDesktopBadgeActive}
+              className="max-w-30"
+            />
+          )}
           <SystemStatusBadge
             compact
             variant="outline"

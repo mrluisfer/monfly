@@ -35,7 +35,7 @@ export const HideData = () => {
           <EyeOffIcon aria-hidden="true" />
         )}
       </TooltipTrigger>
-      <TooltipContent>{label}</TooltipContent>
+      <TooltipContent side="bottom">{label}</TooltipContent>
     </Tooltip>
   );
 };

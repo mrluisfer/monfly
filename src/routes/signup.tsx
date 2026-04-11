@@ -130,10 +130,7 @@ function Signup() {
               </Link>
             }
           />
-          <Button
-            size="lg"
-            render={<Link to="/login">I already have an account</Link>}
-          />
+          <Button render={<Link to="/login">Already have an account</Link>} />
         </header>
 
         <div className="grid flex-1 items-stretch gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
