@@ -166,7 +166,7 @@ function RouteComponent() {
               </m.div>
             </m.div>
 
-            <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]">
+            <div className="grid grid-cols-1 gap-6 3xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]">
               <m.div
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
