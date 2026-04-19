@@ -38,7 +38,7 @@ export function TransactionFormDialogContent({
 }: TransactionFormDialogContentProps) {
   return (
     <DialogContent
-      showCloseButton={false}
+      showCloseButton={true}
       className={cn(transactionFormDialogContentClassName, className)}
     >
       <div className="flex max-h-[92dvh] flex-col overflow-hidden">

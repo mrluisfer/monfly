@@ -1,17 +1,15 @@
-import { useId, useMemo } from "react";
+import { useMemo } from "react";
 import { cn } from "~/lib/utils";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
-import {
-  CircleAlertIcon,
-  LightbulbIcon,
-  ShieldCheckIcon,
-  SparklesIcon,
-  TrendingDownIcon,
-  TrendingUpIcon,
-} from "lucide-react";
+import { ShieldCheckIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+
+import { ExpenseConcentrationCard } from "./insights/ExpenseConcentrationCard";
+import { ImprovementIdeasCard } from "./insights/ImprovementIdeasCard";
+import { InsightErrorBoundary } from "./insights/InsightErrorBoundary";
+import { NetMomentumCard } from "./insights/NetMomentumCard";
 
 type TransactionsInsightsProps = {
   transactions: TransactionWithUser[];
@@ -44,21 +42,6 @@ type MonthlyPoint = {
 };
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
-
-const TONE_STYLES: Record<InsightTone, { card: string; dot: string }> = {
-  positive: {
-    card: "border-primary/25 bg-primary/10",
-    dot: "bg-primary",
-  },
-  warning: {
-    card: "border-destructive/25 bg-destructive/10",
-    dot: "bg-destructive",
-  },
-  neutral: {
-    card: "border-border/70 bg-background/65",
-    dot: "bg-muted-foreground",
-  },
-};
 
 function safeText(input: string | null | undefined, maxLength = 56): string {
   if (!input) return "Unlabeled";
@@ -102,8 +85,6 @@ export function TransactionsInsights({
   transactions,
   className,
 }: TransactionsInsightsProps) {
-  const gradientId = useId().replace(/:/g, "");
-
   const insights = useMemo(() => {
     const now = Date.now();
     const last30Start = now - 30 * ONE_DAY_MS;
@@ -389,28 +370,6 @@ export function TransactionsInsights({
   const monthlyValues = insights.monthlyPoints.map((point) => point.net);
   const sparkline = buildSparklinePoints(monthlyValues);
   const isPositiveLast30 = netLast30 >= 0;
-  const trendColor = isPositiveLast30 ? "var(--primary)" : "var(--destructive)";
-  const latestDateLabel = insights.latestTimestamp
-    ? new Date(insights.latestTimestamp).toLocaleDateString("en-US", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
-    : "No activity";
-  const TrendIcon = isPositiveLast30 ? TrendingUpIcon : TrendingDownIcon;
-
-  const last30Stats = [
-    {
-      label: "Income (30d)",
-      value: formatCurrency(insights.incomeLast30, "USD"),
-      valueClassName: "text-primary",
-    },
-    {
-      label: "Expenses (30d)",
-      value: formatCurrency(insights.expenseLast30, "USD"),
-      valueClassName: "text-destructive",
-    },
-  ] as const;
 
   return (
     <section
@@ -432,208 +391,29 @@ export function TransactionsInsights({
         </Badge>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-        <article className="bg-card rounded-2xl p-4 sm:p-5">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p className="text-sm font-medium text-muted-foreground">
-                Net momentum (last 6 months)
-              </p>
-              <h4 className="mt-1 text-lg font-semibold tracking-tight text-foreground">
-                {formatCurrency(netLast30, "USD")} in last 30 days
-              </h4>
-            </div>
-            <span className="bg-muted rounded-full px-2.5 py-1 text-xs text-muted-foreground">
-              Updated from your current transactions
-            </span>
-          </div>
-
-          <div className="mt-4 rounded-2xl border border-border/70 bg-background/55 p-3">
-            {sparkline ? (
-              <div>
-                <svg
-                  viewBox={`0 0 ${sparkline.width} ${sparkline.height}`}
-                  className="h-40 w-full"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
-                      <stop
-                        offset="0%"
-                        stopColor={trendColor}
-                        stopOpacity="0.24"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor={trendColor}
-                        stopOpacity="0"
-                      />
-                    </linearGradient>
-                  </defs>
-                  <polygon
-                    points={`${sparkline.padding},${sparkline.height - sparkline.padding} ${sparkline.points} ${sparkline.width - sparkline.padding},${sparkline.height - sparkline.padding}`}
-                    fill={`url(#${gradientId})`}
-                    stroke="none"
-                  />
-                  <polyline
-                    points={sparkline.points}
-                    fill="none"
-                    stroke={trendColor}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="3.6"
-                  />
-                  <circle
-                    cx={sparkline.lastPoint[0]}
-                    cy={sparkline.lastPoint[1]}
-                    r="5"
-                    fill={trendColor}
-                  />
-                </svg>
-
-                <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{insights.monthlyPoints[0]?.label}</span>
-                  <span>{insights.monthlyPoints.at(-1)?.label}</span>
-                </div>
-              </div>
-            ) : (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                Add more transactions to render momentum insights.
-              </p>
-            )}
-          </div>
-
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            {last30Stats.map((stat) => (
-              <div key={stat.label} className="bg-muted rounded-xl p-3">
-                <div className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-                  {stat.label}
-                </div>
-                <div
-                  className={cn(
-                    "mt-2 text-base font-semibold",
-                    stat.valueClassName
-                  )}
-                >
-                  {stat.value}
-                </div>
-              </div>
-            ))}
-          </div>
-        </article>
-
-        <article className="bg-muted rounded-2xl border border-border/70 p-4 sm:p-5 h-fit">
-          <div className="flex items-center gap-2">
-            <SparklesIcon className="size-4 text-primary" />
-            <h4 className="text-base font-semibold tracking-tight text-foreground">
-              Smart notes
-            </h4>
-          </div>
-
-          <div className="mt-3 space-y-2.5">
-            {insights.notes.map((note) => {
-              const tone = TONE_STYLES[note.tone];
-              return (
-                <div
-                  key={note.id}
-                  className={cn("rounded-xl border px-3 py-2.5", tone.card)}
-                >
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={cn("size-2 rounded-full", tone.dot)}
-                      aria-hidden="true"
-                    />
-                    <p className="text-sm font-medium text-foreground">
-                      {note.title}
-                    </p>
-                  </div>
-                  <p className="mt-1.5 text-sm leading-5 text-muted-foreground">
-                    {note.detail}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-3 rounded-xl border border-border/70 bg-background/60 px-3 py-2.5 text-xs text-muted-foreground">
-            Last activity on {latestDateLabel}:{" "}
-            {safeText(insights.latestDescription, 64)}
-          </div>
-        </article>
-      </div>
+      <InsightErrorBoundary label="Net Momentum">
+        <NetMomentumCard
+          netLast30={netLast30}
+          incomeLast30={insights.incomeLast30}
+          expenseLast30={insights.expenseLast30}
+          monthlyPoints={insights.monthlyPoints}
+          sparkline={sparkline}
+        />
+      </InsightErrorBoundary>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <article className="bg-muted rounded-2xl border border-border/70 p-4 sm:p-5">
-          <div className="flex items-center gap-2">
-            <TrendIcon
-              className={cn(
-                "size-4",
-                isPositiveLast30 ? "text-primary" : "text-destructive"
-              )}
-            />
-            <h4 className="text-base font-semibold tracking-tight text-foreground">
-              Expense concentration
-            </h4>
-          </div>
+        <InsightErrorBoundary label="Expense Concentration">
+          <ExpenseConcentrationCard
+            isPositiveLast30={isPositiveLast30}
+            topCategories={insights.topCategories}
+            totalIncome={insights.totalIncome}
+            totalExpense={insights.totalExpense}
+          />
+        </InsightErrorBoundary>
 
-          <div className="mt-4 space-y-3">
-            {insights.topCategories.length ? (
-              insights.topCategories.map((category) => (
-                <div key={category.category} className="space-y-1.5">
-                  <div className="flex items-center justify-between gap-2 text-sm">
-                    <span className="truncate text-foreground">
-                      {category.category}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {Math.round(category.share * 100)}%
-                    </span>
-                  </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-muted">
-                    <div
-                      className="h-full rounded-full bg-primary/80"
-                      style={{
-                        width: `${Math.max(8, Math.round(category.share * 100))}%`,
-                      }}
-                    />
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {formatCurrency(category.amount, "USD")}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-muted-foreground">
-                No expense categories yet to analyze.
-              </p>
-            )}
-          </div>
-
-          <div className="mt-4 border-t border-border/60 pt-3 text-xs text-muted-foreground">
-            Total tracked: {formatCurrency(insights.totalIncome, "USD")} in •{" "}
-            {formatCurrency(insights.totalExpense, "USD")} out
-          </div>
-        </article>
-
-        <article className="bg-muted rounded-2xl border border-border/70 p-4 sm:p-5 h-fit">
-          <div className="flex items-center gap-2">
-            <LightbulbIcon className="size-4 text-accent-foreground" />
-            <h4 className="text-base font-semibold tracking-tight text-foreground">
-              Improvement ideas
-            </h4>
-          </div>
-
-          <ul className="mt-3 space-y-2.5" aria-label="Improvement ideas list">
-            {insights.ideas.map((idea) => (
-              <li
-                key={idea}
-                className="flex items-start gap-2 rounded-xl border border-border/70 bg-background/60 px-3 py-2.5 text-sm text-muted-foreground"
-              >
-                <CircleAlertIcon className="mt-0.5 size-4 shrink-0 text-primary" />
-                <span>{idea}</span>
-              </li>
-            ))}
-          </ul>
-        </article>
+        <InsightErrorBoundary label="Improvement Ideas">
+          <ImprovementIdeasCard ideas={insights.ideas} />
+        </InsightErrorBoundary>
       </div>
     </section>
   );

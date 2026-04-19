@@ -179,7 +179,7 @@ function RouteComponent() {
                 <TransactionsList />
               </m.div>
 
-              <div className="space-y-6">
+              <div className="space-y-6 xl:hidden block">
                 <m.div
                   initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
