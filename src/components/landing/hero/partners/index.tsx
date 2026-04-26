@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useDarkMode } from "~/hooks/useDarkMode";
+import { useDarkMode } from "~/hooks/ui/useDarkMode";
 
 import { AppleDark } from "./AppleDark";
 import { AppleLight } from "./AppleLight";

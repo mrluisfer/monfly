@@ -8,8 +8,8 @@ import {
 } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
-import { useGetCategoriesByEmail } from "~/hooks/useGetCategoriesByEmail";
+import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";

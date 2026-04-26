@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { enforceRateLimit, resolveSessionEmail } from "~/utils/security/request-protection";
-import { getIncomeExpenseData } from "~/utils/charts/get-income-expense-chart";
+import { enforceRateLimit, resolveSessionEmail } from "~/server/security/request-protection";
+import { getIncomeExpenseData } from "~/server/db/charts/get-income-expense-chart";
 import { z } from "zod";
 
 export const getIncomeExpenseDataServer = createServerFn({ method: "GET" })

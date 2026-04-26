@@ -4,9 +4,9 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
+} from "~/server/security/request-protection";
 
-import { postMonthlySummaryByEmail as postMonthlySummaryByEmailUtils } from "../../../utils/monthly-summary/post-monthly-summary-by-email";
+import { postMonthlySummaryByEmail as postMonthlySummaryByEmailUtils } from "~/server/db/monthly-summary/post-monthly-summary-by-email";
 
 export const postMonthlySummaryByEmailServer = createServerFn({
   method: "POST",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { DataNotFoundPlaceholder } from "~/components/DataNotFoundPlaceholder";
+import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { queryDictionary } from "~/queries/dictionary";
@@ -19,7 +19,7 @@ import {
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
-import Card from "../Card";
+import Card from "../shared/Card";
 import { ChartError, ChartLoading } from "./ChartLoading";
 
 type IncomeExpenseTooltipProps = {
@@ -68,7 +68,9 @@ function IncomeExpenseTooltip({
             <span className="text-sm font-medium text-muted-foreground">
               Net:
             </span>
-            <span className={`font-bold ${net >= 0 ? "text-primary" : "text-destructive"}`}>
+            <span
+              className={`font-bold ${net >= 0 ? "text-primary" : "text-destructive"}`}
+            >
               {net >= 0 ? "+" : ""}
               {formatCurrency(net, "USD")}
             </span>
@@ -191,8 +193,16 @@ export default function IncomeExpenseChart() {
                     x2="0"
                     y2="1"
                   >
-                    <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="var(--primary)" stopOpacity={0.01} />
+                    <stop
+                      offset="5%"
+                      stopColor="var(--primary)"
+                      stopOpacity={0.2}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--primary)"
+                      stopOpacity={0.01}
+                    />
                   </linearGradient>
                   <linearGradient
                     id="expenseGradient"
@@ -201,8 +211,16 @@ export default function IncomeExpenseChart() {
                     x2="0"
                     y2="1"
                   >
-                    <stop offset="5%" stopColor="var(--destructive)" stopOpacity={0.2} />
-                    <stop offset="95%" stopColor="var(--destructive)" stopOpacity={0.01} />
+                    <stop
+                      offset="5%"
+                      stopColor="var(--destructive)"
+                      stopOpacity={0.2}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor="var(--destructive)"
+                      stopOpacity={0.01}
+                    />
                   </linearGradient>
                 </defs>
                 <Area
@@ -259,7 +277,9 @@ export default function IncomeExpenseChart() {
               <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
                 Net
               </p>
-              <p className={`mt-2 text-base font-semibold ${netTotal >= 0 ? "text-primary" : "text-destructive"}`}>
+              <p
+                className={`mt-2 text-base font-semibold ${netTotal >= 0 ? "text-primary" : "text-destructive"}`}
+              >
                 {netTotal >= 0 ? "+" : ""}
                 {formatCurrency(netTotal, "USD")}
               </p>

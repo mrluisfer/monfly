@@ -1,6 +1,6 @@
-import { useAddTransaction } from "~/hooks/useAddTransaction";
+import { useAddTransaction } from "~/hooks/transactions/useAddTransaction";
 
-import Card from "../Card";
+import Card from "../shared/Card";
 import { TransactionForm } from "./TransactionForm";
 
 const AddTransaction = () => {

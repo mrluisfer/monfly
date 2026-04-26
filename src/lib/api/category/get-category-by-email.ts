@@ -4,8 +4,8 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { getCategoryByEmail } from "~/utils/category/get-category-by-email";
+} from "~/server/security/request-protection";
+import { getCategoryByEmail } from "~/server/db/categories/get-category-by-email";
 import { z } from "zod";
 
 export const getCategoryByEmailServer = createServerFn({

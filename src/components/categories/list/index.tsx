@@ -9,7 +9,7 @@ import {
   EmptyTitle,
 } from "~/components/ui/empty";
 import { getCategoryIconLabelByName } from "~/constants/categories-icon";
-import { useCategoriesList } from "~/hooks/useCategoriesList";
+import { useCategoriesList } from "~/hooks/categories/useCategoriesList";
 import { cn } from "~/lib/utils";
 import { FolderOpen, Loader2, Search, X } from "lucide-react";
 

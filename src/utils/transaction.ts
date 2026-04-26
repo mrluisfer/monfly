@@ -1,6 +1,5 @@
 import type { Prisma } from "@prisma/client";
-
-import { prismaClient as prisma } from "./prisma";
+import { prismaClient as prisma } from "~/server/prisma";
 
 export const createTransaction = async (data: {
   userEmail: string;

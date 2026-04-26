@@ -6,7 +6,7 @@ import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";
 import { sileo } from "~/lib/toaster";
 import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-import { getUserSession } from "~/utils/user/get-user-session";
+import { getUserSession } from "~/server/db/users/get-user-session";
 
 import { CategoryForm } from "./CategoryForm";
 

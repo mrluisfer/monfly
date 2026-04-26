@@ -1,14 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
-import { prismaClient } from "~/utils/prisma";
+import { prismaClient } from "~/server/prisma";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
+} from "~/server/security/request-protection";
 import { z } from "zod";
 
-import { putTransactionById as putTransactionByIdUtils } from "../../../utils/transactions/put-transaction-by-id";
+import { putTransactionById as putTransactionByIdUtils } from "~/server/db/transactions/put-transaction-by-id";
 
 export const putTransactionByIdServer = createServerFn({ method: "POST" })
   .inputValidator(

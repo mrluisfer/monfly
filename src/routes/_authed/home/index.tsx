@@ -2,16 +2,6 @@ import { lazy, Suspense } from "react";
 import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import TotalBalance from "~/components/balance/TotalBalance";
-import { DashboardMetrics } from "~/components/home/DashboardMetrics";
-import { WelcomeMessage } from "~/components/home/WelcomeMessage";
-import TransactionsList from "~/components/transactions/list";
-import { Skeleton } from "~/components/ui/skeleton";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { createSafeQuery } from "~/lib/stream-utils";
-import { cn } from "~/lib/utils";
-import { queryDictionary } from "~/queries/dictionary";
 import {
   AnimatePresence,
   domAnimation,
@@ -20,8 +10,21 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { useAtomValue } from "jotai";
+import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import TotalBalance from "~/components/balance/TotalBalance";
+import { DashboardMetrics } from "~/components/home/DashboardMetrics";
+import { PageHeader } from "~/components/layout/PageHeader";
+import { Section } from "~/components/layout/Section";
+import TransactionsList from "~/components/transactions/list";
+import { Button } from "~/components/ui/button";
+import { Skeleton } from "~/components/ui/skeleton";
+import { StatusBadge } from "~/components/ui/status-badge";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
+import { createSafeQuery } from "~/lib/stream-utils";
+import { cn } from "~/lib/utils";
+import { queryDictionary } from "~/queries/dictionary";
 
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
@@ -30,6 +33,14 @@ const IncomeExpenseChart = lazy(
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
 });
+
+function todayLabel() {
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  }).format(new Date());
+}
 
 function RouteComponent() {
   const userEmail = useRouteUser();
@@ -46,63 +57,46 @@ function RouteComponent() {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4">
-        <div className="text-lg font-semibold text-destructive">
+      <div className="flex min-h-[60vh] flex-col items-center justify-center space-y-3 text-center">
+        <div className="text-destructive text-base font-semibold">
           Failed to load user data
         </div>
-        <div className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground max-w-md text-sm">
           {error?.message || "An unexpected error occurred"}
-        </div>
-        <Button onClick={() => window.location.reload()}>Reload Page</Button>
+        </p>
+        <Button onClick={() => window.location.reload()}>Reload page</Button>
       </div>
     );
   }
 
-  // Wait for user data to load before rendering dashboard
   if (isPending) {
-    return (
-      <div className="space-y-6">
-        <Skeleton className="h-32 w-full rounded-2xl" />
-        <div
-          className={cn(
-            "grid gap-6",
-            hideMetrics
-              ? "xl:grid-cols-1"
-              : "xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]"
-          )}
-        >
-          <Skeleton className="h-[26rem] w-full rounded-2xl" />
-          <div className={cn(hideMetrics && "xl:flex xl:justify-end")}>
-            <div className="grid w-full gap-4 md:grid-cols-3 xl:grid-cols-1 xl:max-w-md">
-              <Skeleton className="h-28 w-full rounded-xl" />
-              {!hideMetrics &&
-                [1, 2, 3].map((item) => (
-                  <Skeleton key={item} className="h-40 w-full rounded-xl" />
-                ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton hideMetrics={hideMetrics} />;
   }
 
   return (
-    <div className="space-y-5 sm:space-y-6">
-      <WelcomeMessage>
-        Review balance, cashflow, and recent activity in one place, then jump
-        directly into the transaction or report you need.
-      </WelcomeMessage>
+    <div className="space-y-6 sm:space-y-8">
+      <PageHeader
+        icon={<LayoutDashboardIcon className="size-5" aria-hidden="true" />}
+        title="Overview"
+        description="Track balance, cashflow, and recent activity in one place."
+        actions={
+          <StatusBadge variant="primary" size="md" icon={<CalendarDaysIcon />}>
+            {todayLabel()}
+          </StatusBadge>
+        }
+      />
 
       <LazyMotion features={domAnimation}>
         <AnimatePresence mode="wait">
-          <m.section
+          <m.div
+            key="home-content"
             initial={shouldReduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
-              duration: shouldReduceMotion ? 0 : 0.6,
+              duration: shouldReduceMotion ? 0 : 0.4,
               ease: "easeOut",
             }}
-            className="flex flex-col gap-6"
+            className="space-y-6 sm:space-y-8"
           >
             <m.div
               layout
@@ -110,97 +104,124 @@ function RouteComponent() {
                 "grid grid-cols-1 gap-6",
                 hideMetrics
                   ? "xl:grid-cols-1"
-                  : "xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.85fr)]"
+                  : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]"
               )}
             >
-              <m.div layout className="space-y-6 order-1">
-                <m.div
-                  layout
-                  initial={
-                    shouldReduceMotion
-                      ? false
-                      : { opacity: 0, y: 20, scale: 0.96 }
-                  }
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.5,
-                    delay: 0,
-                  }}
-                >
-                  <TotalBalance />
-                </m.div>
-              </m.div>
-
               <m.div
                 layout
-                className={cn(
-                  "order-2 space-y-4",
-                  hideMetrics && "xl:ml-auto xl:w-full xl:max-w-md"
-                )}
+                initial={
+                  shouldReduceMotion
+                    ? false
+                    : { opacity: 0, y: 16, scale: 0.98 }
+                }
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.45,
+                }}
               >
-                <AnimatePresence initial={false}>
-                  {!hideMetrics && (
-                    <m.div
-                      key="dashboard-metrics"
-                      layout
-                      initial={
-                        shouldReduceMotion
-                          ? false
-                          : { opacity: 0, y: 14, scale: 0.98 }
-                      }
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={
-                        shouldReduceMotion
-                          ? { opacity: 0 }
-                          : { opacity: 0, y: -12, scale: 0.98 }
-                      }
-                      transition={{
-                        duration: shouldReduceMotion ? 0 : 0.24,
-                        ease: "easeOut",
-                      }}
-                    >
-                      <DashboardMetrics />
-                    </m.div>
-                  )}
-                </AnimatePresence>
+                <TotalBalance />
               </m.div>
+
+              <AnimatePresence initial={false}>
+                {!hideMetrics && (
+                  <m.div
+                    key="dashboard-metrics"
+                    layout
+                    initial={
+                      shouldReduceMotion
+                        ? false
+                        : { opacity: 0, y: 12, scale: 0.98 }
+                    }
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={
+                      shouldReduceMotion
+                        ? { opacity: 0 }
+                        : { opacity: 0, y: -10, scale: 0.98 }
+                    }
+                    transition={{
+                      duration: shouldReduceMotion ? 0 : 0.3,
+                      ease: "easeOut",
+                    }}
+                  >
+                    <DashboardMetrics />
+                  </m.div>
+                )}
+              </AnimatePresence>
             </m.div>
 
-            <div className="grid grid-cols-1 gap-6 3xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]">
+            <div
+              className={cn(
+                "grid grid-cols-1 gap-6",
+                "3xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]"
+              )}
+            >
               <m.div
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: shouldReduceMotion ? 0 : 0.5,
-                  delay: shouldReduceMotion ? 0 : 0.25,
+                  duration: shouldReduceMotion ? 0 : 0.4,
+                  delay: shouldReduceMotion ? 0 : 0.15,
                 }}
-                className="overflow-hidden"
               >
-                <TransactionsList />
+                <Section
+                  title="Recent transactions"
+                  description="Your latest activity across accounts."
+                >
+                  <TransactionsList />
+                </Section>
               </m.div>
 
-              <div className="space-y-6 xl:hidden block">
-                <m.div
-                  initial={shouldReduceMotion ? false : { opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: shouldReduceMotion ? 0 : 0.5,
-                    delay: shouldReduceMotion ? 0 : 0.3,
-                  }}
+              <m.div
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.4,
+                  delay: shouldReduceMotion ? 0 : 0.2,
+                }}
+                className="xl:hidden"
+              >
+                <Section
+                  title="Income vs expenses"
+                  description="Monthly comparison of inflow and outflow."
                 >
-                  <Suspense fallback={<ChartFallback />}>
+                  <Suspense fallback={<Skeleton className="h-72 w-full rounded-2xl" />}>
                     <IncomeExpenseChart />
                   </Suspense>
-                </m.div>
-              </div>
+                </Section>
+              </m.div>
             </div>
-          </m.section>
+          </m.div>
         </AnimatePresence>
       </LazyMotion>
     </div>
   );
 }
 
-function ChartFallback() {
-  return <Skeleton className="h-72 w-full" />;
+function DashboardSkeleton({ hideMetrics }: { hideMetrics: boolean }) {
+  return (
+    <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-2">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-4 w-72" />
+      </div>
+      <div
+        className={cn(
+          "grid gap-6",
+          hideMetrics
+            ? "xl:grid-cols-1"
+            : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]"
+        )}
+      >
+        <Skeleton className="h-[26rem] w-full rounded-2xl" />
+        {!hideMetrics && (
+          <div className="grid w-full gap-3 sm:grid-cols-2 xl:grid-cols-1">
+            <Skeleton className="h-32 w-full rounded-2xl" />
+            <Skeleton className="h-32 w-full rounded-2xl" />
+            <Skeleton className="h-32 w-full rounded-2xl" />
+          </div>
+        )}
+      </div>
+      <Skeleton className="h-72 w-full rounded-2xl" />
+    </div>
+  );
 }

@@ -1,0 +1,24 @@
+- generic [ref=e2]:
+  - link "Skip to content" [ref=e3] [cursor=pointer]:
+    - /url: "#main-content"
+  - main [ref=e4]:
+    - generic [ref=e5]:
+      - button "Toggle navigation" [ref=e6]:
+        - img
+        - generic [ref=e7]: Toggle Sidebar
+      - separator [ref=e8]
+      - navigation "breadcrumb" [ref=e9]:
+        - list [ref=e10]:
+          - listitem [ref=e11]:
+            - link "Home" [disabled] [ref=e12]
+      - generic [ref=e13]:
+        - button "Open command palette" [ref=e14]:
+          - img
+        - button "Hide information" [ref=e15]:
+          - img
+        - button "Switch to dark mode" [ref=e16]:
+          - img
+    - main [ref=e17]
+  - generic [ref=e30]:
+    - heading "Command Palette" [level=2] [ref=e31]
+    - paragraph [ref=e32]: Search for a command to run...

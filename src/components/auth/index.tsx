@@ -1,10 +1,10 @@
 import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { cn } from "~/lib/utils";
 import type { UseFormReturn } from "react-hook-form";
 
-import Card from "../Card";
+import Card from "../shared/Card";
 import { Button } from "../ui/button";
 import { Form, FormField } from "../ui/form";
 import ComplexPasswordInput from "./ComplexPasswordInput";

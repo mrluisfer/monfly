@@ -11,8 +11,8 @@ import { ExternalLogin } from "~/components/auth/ExternalLogin";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/useMutation";
-import { signupFn } from "~/utils/auth/signupfn";
-import { getUserSession } from "~/utils/user/get-user-session";
+import { signupFn } from "~/server/auth/signupfn";
+import { getUserSession } from "~/server/db/users/get-user-session";
 import {
   ArrowLeft,
   BadgeCheck,

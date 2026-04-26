@@ -1,14 +1,14 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
-import { prismaClient } from "~/utils/prisma";
+import { prismaClient } from "~/server/prisma";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
+} from "~/server/security/request-protection";
 import { z } from "zod";
 
-import { deleteTransactionsById } from "../../../utils/transactions/delete-transactions-by-id";
+import { deleteTransactionsById } from "~/server/db/transactions/delete-transactions-by-id";
 
 export const deleteTransactionsByIdServer = createServerFn({ method: "POST" })
   .inputValidator(z.object({ ids: z.array(z.string()) }))

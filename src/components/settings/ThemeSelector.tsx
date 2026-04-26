@@ -1,7 +1,7 @@
 "use client";
 
 import { DEFAULT_THEMES, SCALED_THEMES } from "~/constants/themes";
-import { useThemeConfig } from "~/hooks/useThemeConfig";
+import { useThemeConfig } from "~/hooks/ui/useThemeConfig";
 
 import { Label } from "@/components/ui/label";
 import {

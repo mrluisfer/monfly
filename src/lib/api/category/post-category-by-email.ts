@@ -4,8 +4,8 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { postCategoryByEmail } from "~/utils/category/post-category-by-email";
+} from "~/server/security/request-protection";
+import { postCategoryByEmail } from "~/server/db/categories/post-category-by-email";
 import z from "zod";
 
 export const postCategoryByEmailServer = createServerFn({ method: "POST" })

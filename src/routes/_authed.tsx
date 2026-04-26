@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
-import Layout from "~/components/Layout";
-import { getUserSession } from "~/utils/user/get-user-session";
+import { DefaultCatchBoundary } from "~/components/shared/DefaultCatchBoundary";
+import Layout from "~/components/shared/Layout";
+import { getUserSession } from "~/server/db/users/get-user-session";
 
 export const Route = createFileRoute("/_authed")({
   beforeLoad: async () => {

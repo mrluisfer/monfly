@@ -8,12 +8,12 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
-import { NotFound } from "~/components/NotFound";
+import { DefaultCatchBoundary } from "~/components/shared/DefaultCatchBoundary";
+import { NotFound } from "~/components/shared/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
-import { useDarkMode } from "~/hooks/useDarkMode";
-import { useGlobalHapticFeedback } from "~/hooks/useGlobalHapticFeedback";
-import { useSonnerPosition } from "~/hooks/useSonnerPosition";
+import { useGlobalHapticFeedback } from "~/hooks/haptics/useGlobalHapticFeedback";
+import { useDarkMode } from "~/hooks/ui/useDarkMode";
+import { useSonnerPosition } from "~/hooks/ui/useSonnerPosition";
 import { SileoToaster } from "~/lib/toaster";
 import { UiStateEffects } from "~/state/effects";
 import appCss from "~/styles/globals.css?url";

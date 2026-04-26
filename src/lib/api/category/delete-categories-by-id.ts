@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
-import { prismaClient } from "~/utils/prisma";
+import { prismaClient } from "~/server/prisma";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { deleteCategoriesById } from "~/utils/category/delete-categories-by-id";
+} from "~/server/security/request-protection";
+import { deleteCategoriesById } from "~/server/db/categories/delete-categories-by-id";
 import { z } from "zod";
 
 export const deleteCategoriesByIdServer = createServerFn({ method: "POST" })

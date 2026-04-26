@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 import { userFormSchema } from "~/zod-schemas/user-schema";
 import { useForm } from "react-hook-form";

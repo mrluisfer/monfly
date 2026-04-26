@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { DataNotFoundPlaceholder } from "~/components/DataNotFoundPlaceholder";
+import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { TransactionWithUser } from "~/types/TransactionWithUser";

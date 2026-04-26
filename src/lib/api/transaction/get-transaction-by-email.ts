@@ -4,8 +4,8 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { getTransactionsByEmail } from "~/utils/transactions/get-transactions-by-email";
+} from "~/server/security/request-protection";
+import { getTransactionsByEmail } from "~/server/db/transactions/get-transactions-by-email";
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
   .inputValidator((d: { email: string }) => d)

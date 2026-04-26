@@ -1,6 +1,6 @@
 import type { JSX } from "react";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
-import { useDarkMode } from "~/hooks/useDarkMode";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
+import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { cn } from "~/lib/utils";
 import type { DarkModeTheme } from "~/state/atoms/ui/preferencesAtoms";
 import { MoonStarIcon, SunIcon } from "lucide-react";

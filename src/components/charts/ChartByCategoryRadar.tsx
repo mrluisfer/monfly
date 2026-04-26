@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { DataNotFoundPlaceholder } from "~/components/DataNotFoundPlaceholder";
+import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Badge } from "~/components/ui/badge";
 import {
   Card,

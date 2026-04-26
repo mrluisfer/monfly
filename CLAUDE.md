@@ -24,42 +24,63 @@ pnpm prisma studio          # Open Prisma database GUI
 ## Architecture
 
 ### Routing (`src/routes/`)
+
 - **TanStack Router** file-based routing with auto-generated `routeTree.gen.ts` (never edit manually)
 - Public routes: `/`, `/login`, `/signup`, `/logout`
 - Protected routes live under `/_authed/` — the `_authed.tsx` layout checks session via `getUserSession()` and redirects unauthenticated users to `/login`
 
 ### Server Functions (`src/lib/api/`)
+
 - Type-safe RPC using `createServerFn()` from TanStack Start
 - Input validation via Zod schemas (defined in `src/zod-schemas/`)
-- Rate limiting enforced through `resolveSessionEmail()` in `src/utils/security/`
+- Rate limiting enforced through `resolveSessionEmail()` in `src/server/security/`
 - Organized by domain: `user/`, `transaction/`, `category/`, `chart/`, `monthly-summary/`
 
+### Server Layer (`src/server/`)
+
+- **`server/db/<domain>/`** — raw Prisma queries (transactions, categories, users, charts, monthly-summary)
+- **`server/auth/`** — auth server functions: loginFn, logoutFn, signupFn, session
+- **`server/security/`** — request protection: resolveSessionEmail, enforceRateLimit
+- **`server/prisma.ts`** — PrismaClient singleton + bcrypt helpers
+- All server-only code lives here; `src/utils/` contains only pure client-safe utilities
+
 ### Database (`prisma/schema.prisma`)
+
 - **Prisma ORM** with PostgreSQL (prod) and SQLite (dev via `prisma/dev.db`)
 - Core models: User, Transaction, Category, Budget, Pot, RecurringBill, Card, MonthlySummary
-- Prisma client singleton in `src/utils/prisma.ts`
+- Prisma client singleton in `src/server/prisma.ts`
 
-### Auth (`src/utils/auth/`)
+### Auth (`src/server/auth/`)
+
 - Session-based auth using TanStack Start `useSession()` with encrypted cookies
 - Password hashing with bcrypt
 - `SESSION_PASSWORD` env var required (≥32 chars)
 
 ### State Management
+
 - **Jotai** atoms in `src/state/atoms/` for UI state (device type, preferences, menu)
 - **TanStack Query** for server state with centralized query keys in `src/queries/dictionary.ts`
 - Cache invalidation helpers in `src/utils/query-invalidation.ts`
 
 ### UI Components
+
 - **shadcn/ui** primitives in `src/components/ui/` (managed by shadcn CLI, don't edit directly)
+- **Shared components** in `src/components/shared/` — cross-feature reusable components (UserAvatar, Layout, Card, etc.)
 - Feature components organized by domain: `auth/`, `transactions/`, `categories/`, `charts/`, `home/`
 - Styling with Tailwind CSS 4; `cn()` utility in `src/lib/utils.ts`
 
 ### Custom Hooks (`src/hooks/`)
-- `useMutation` — wraps TanStack Query mutations with idempotency (4s dedup window) and haptic feedback
-- `useRouteUser` — gets current user from route context
-- Domain hooks: `useAddTransaction`, `useEditTransaction`, `useCategoriesList`, `useChart`, etc.
+
+- **Core hooks** (root level): `useMutation`, `useRouteUser`, `use-mobile`, `use-copy-to-clipboard`
+- **`hooks/ui/`** — UI/preference hooks: `useDarkMode`, `useFontDisplay`, `useSonnerPosition`, `useThemeConfig`, `useIsMac`, `useInView`, `useMobile`
+- **`hooks/haptics/`** — Haptic feedback: `useAppHaptics`, `useGlobalHapticFeedback`
+- **`hooks/transactions/`** — `useAddTransaction`, `useEditTransaction`, `useTransactionHoverContext`
+- **`hooks/categories/`** — `useCategoriesList`, `useGetCategoriesByEmail`
+- **`hooks/charts/`** — `useChart`
+- Each subdirectory has an `index.ts` barrel export; the root `hooks/index.ts` re-exports everything
 
 ### Forms
+
 - React Hook Form + Zod resolver pattern
 - Schemas in `src/zod-schemas/`, form defaults in `src/constants/forms/`
 
@@ -74,6 +95,7 @@ pnpm prisma studio          # Open Prisma database GUI
 ## Environment Variables
 
 Required in `.env`:
+
 - `DATABASE_URL` — PostgreSQL connection string (or SQLite path for dev)
 - `SESSION_PASSWORD` — Session encryption key (≥32 chars)
 

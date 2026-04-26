@@ -1,5 +1,5 @@
 import { sonnerPositions } from "~/constants/sonner-positions";
-import { useSonnerPosition } from "~/hooks/useSonnerPosition";
+import { useSonnerPosition } from "~/hooks/ui/useSonnerPosition";
 import { sileo } from "~/lib/toaster";
 import type { SonnerPosition } from "~/types/SonnerPosition";
 

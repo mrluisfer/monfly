@@ -4,8 +4,8 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { getUserByEmail } from "~/utils/user/get-user-by-email";
+} from "~/server/security/request-protection";
+import { getUserByEmail } from "~/server/db/users/get-user-by-email";
 
 export const getUserByEmailServer = createServerFn({ method: "GET" })
   .inputValidator((d: { email: string }) => d)

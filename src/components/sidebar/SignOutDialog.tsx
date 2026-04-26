@@ -1,6 +1,6 @@
 import { ReactElement, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { logoutFn } from "~/utils/auth/logoutfn";
+import { logoutFn } from "~/server/auth/logoutfn";
 import { CircleAlertIcon } from "lucide-react";
 
 import {

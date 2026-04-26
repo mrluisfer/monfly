@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import UserAvatar from "~/components/shared/UserAvatar";
 import { SignOutDialog } from "~/components/sidebar/SignOutDialog";
 import { Button } from "~/components/ui/button";
 import {
@@ -12,7 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import UserAvatar from "~/components/UserAvatar";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";

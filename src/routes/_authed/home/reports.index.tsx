@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { PageTitle } from "~/components/PageTitle";
+import { BarChartIcon } from "lucide-react";
+import { PageHeader } from "~/components/layout/PageHeader";
 import { Skeleton } from "~/components/ui/skeleton";
 import { transactionTypes } from "~/constants/transaction-types";
 
@@ -20,13 +21,14 @@ export const Route = createFileRoute("/_authed/home/reports/")({
 
 function RouteComponent() {
   return (
-    <div>
-      <header className="mb-6 flex justify-between items-center">
-        <PageTitle description="This is your reports and analytics dashboard">
-          Reports & Analytics
-        </PageTitle>
-      </header>
-      <div className="grid grid-cols-1 md:grid-cols-2 grid-row-auto gap-4">
+    <div className="space-y-6 sm:space-y-8">
+      <PageHeader
+        icon={<BarChartIcon className="size-5" aria-hidden="true" />}
+        title="Reports & Analytics"
+        description="Visualize your financial trends and category breakdowns."
+      />
+
+      <div className="grid auto-rows-fr grid-cols-1 gap-4 lg:grid-cols-2">
         <Suspense fallback={<ChartFallback />}>
           <IncomeExpenseChart />
         </Suspense>
@@ -45,5 +47,5 @@ function RouteComponent() {
 }
 
 function ChartFallback() {
-  return <Skeleton className="h-72 w-full" />;
+  return <Skeleton className="h-72 w-full rounded-2xl" />;
 }

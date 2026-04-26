@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { transactionTypes } from "~/constants/transaction-types";
-import { enforceRateLimit, resolveSessionEmail } from "~/utils/security/request-protection";
-import { getChartTypeByCategory } from "~/utils/charts/get-chart-type-by-category";
+import { enforceRateLimit, resolveSessionEmail } from "~/server/security/request-protection";
+import { getChartTypeByCategory } from "~/server/db/charts/get-chart-type-by-category";
 import { z } from "zod";
 
 const TransactionTypesEnum = z.enum([

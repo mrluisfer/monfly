@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { logoutFn } from "~/utils/auth/logoutfn";
+import { logoutFn } from "~/server/auth/logoutfn";
 
 export const Route = createFileRoute("/logout")({
   preload: false,

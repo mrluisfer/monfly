@@ -1,4 +1,4 @@
-import { prismaClient } from "./prisma";
+import { prismaClient } from "~/server/prisma";
 
 export async function checkDatabaseConnection(): Promise<{
   connected: boolean;

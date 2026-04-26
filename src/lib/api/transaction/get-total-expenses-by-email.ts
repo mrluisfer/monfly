@@ -2,8 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import {
   enforceRateLimit,
   resolveSessionEmail,
-} from "~/utils/security/request-protection";
-import { getTotalExpensesByEmail } from "~/utils/transactions/get-total-expenses-by-email";
+} from "~/server/security/request-protection";
+import { getTotalExpensesByEmail } from "~/server/db/transactions/get-total-expenses-by-email";
 import z from "zod";
 
 export const getTotalExpensesByEmailServer = createServerFn({ method: "GET" })

@@ -1,7 +1,7 @@
 import { ReactElement, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";
-import { useAddTransaction } from "~/hooks/useAddTransaction";
+import { useAddTransaction } from "~/hooks/transactions/useAddTransaction";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
 import { PlusIcon } from "lucide-react";
 import type { z } from "zod";
