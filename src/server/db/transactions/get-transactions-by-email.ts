@@ -33,6 +33,7 @@ export const getTransactionsByEmail = async ({
           cardId: true,
           createdAt: true,
           updatedAt: true,
+          _count: { select: { loans: true } },
         },
         orderBy: { createdAt: "desc" },
       }),
@@ -41,10 +42,15 @@ export const getTransactionsByEmail = async ({
       }),
     ]);
 
+    const enriched = transactions.map(({ _count, ...rest }) => ({
+      ...rest,
+      loanCount: _count.loans,
+    }));
+
     return {
       error: false,
       message: "Transactions fetched successfully",
-      data: transactions,
+      data: enriched,
       success: true,
       statusCode: 200,
       total,

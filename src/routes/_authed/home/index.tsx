@@ -16,6 +16,7 @@ import TotalBalance from "~/components/balance/TotalBalance";
 import { DashboardMetrics } from "~/components/home/DashboardMetrics";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { Section } from "~/components/layout/Section";
+import { UpcomingReceivablesCard } from "~/components/loans/UpcomingReceivablesCard";
 import TransactionsList from "~/components/transactions/list";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -142,8 +143,10 @@ function RouteComponent() {
                       duration: shouldReduceMotion ? 0 : 0.3,
                       ease: "easeOut",
                     }}
+                    className="space-y-4"
                   >
                     <DashboardMetrics />
+                    <UpcomingReceivablesCard />
                   </m.div>
                 )}
               </AnimatePresence>

@@ -79,6 +79,23 @@ export const invalidateCategoryQueries = async (
 };
 
 /**
+ * Invalidates loan-related queries for a specific user.
+ */
+export const invalidateLoanQueries = async (
+  queryClient: QueryClient,
+  userEmail: string
+): Promise<void> => {
+  await Promise.all([
+    queryClient.invalidateQueries({
+      queryKey: [queryDictionary.loans, userEmail],
+    }),
+    queryClient.invalidateQueries({
+      queryKey: [queryDictionary.loans],
+    }),
+  ]);
+};
+
+/**
  * Invalidates user-related queries, particularly useful after balance updates.
  * This should be called after updating user balance or other user-specific data.
  *

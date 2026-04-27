@@ -18,6 +18,8 @@ export type TransactionWithUser = {
   date: Date;
   updatedAt: Date;
   cardId: string | null;
+  /** Number of Loan rows linked to this transaction (>= 0). */
+  loanCount?: number;
 };
 
 export type TransactionsWithUser = TransactionWithUser[];

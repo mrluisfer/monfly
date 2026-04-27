@@ -22,6 +22,7 @@ import {
   ArrowUpRightIcon,
   CalendarIcon,
   EditIcon,
+  HandCoinsIcon,
   TagIcon,
   TrashIcon,
 } from "lucide-react";
@@ -146,6 +147,18 @@ export function TransactionRow({
                       day: "numeric",
                     })}
                   </span>
+                  {(transaction.loanCount ?? 0) > 0 && (
+                    <>
+                      <span className="h-1 w-1 rounded-full bg-border/80" />
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full border border-warning/30 bg-warning/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-warning-foreground dark:text-warning"
+                        title="This transaction is tracked as a loan"
+                      >
+                        <HandCoinsIcon className="size-3" aria-hidden="true" />
+                        Loan
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
 

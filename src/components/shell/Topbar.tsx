@@ -76,7 +76,7 @@ export function Topbar() {
       />
       <Separator
         orientation="vertical"
-        className="data-[orientation=vertical]:h-4 mr-1"
+        className="data-[orientation=vertical]:h-full mr-1"
       />
 
       <Breadcrumb className="min-w-0 flex-1">

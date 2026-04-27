@@ -1,9 +1,9 @@
 import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { BarChartIcon } from "lucide-react";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { Skeleton } from "~/components/ui/skeleton";
 import { transactionTypes } from "~/constants/transaction-types";
+import { BarChartIcon } from "lucide-react";
 
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
@@ -28,7 +28,7 @@ function RouteComponent() {
         description="Visualize your financial trends and category breakdowns."
       />
 
-      <div className="grid auto-rows-fr grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Suspense fallback={<ChartFallback />}>
           <IncomeExpenseChart />
         </Suspense>

@@ -1,66 +1,134 @@
+import type { Category } from "@prisma/client";
+import { CheckIcon, PencilIcon } from "lucide-react";
+import { useState } from "react";
+
 import { getCategoryIconByName } from "@/constants/categories-icon";
-import { Category } from "@prisma/client";
-
 import { cn } from "@/lib/utils";
-import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-import CategoryItem from "./CategoryItem";
+import { EditCategory } from "../EditCategory";
+
+type CategoryCardProps = {
+  category: Category;
+  isSelected: boolean;
+  onCheckChange: (checked: boolean) => void;
+};
 
 export function CategoryCard({
   category,
   isSelected,
   onCheckChange,
-}: {
-  category: Category;
-  isSelected: boolean;
-  onCheckChange: (checked: boolean) => void;
-}) {
+}: CategoryCardProps) {
+  const [editOpen, setEditOpen] = useState(false);
+
   return (
-    <Card
+    <div
       className={cn(
-        "group relative border border-border/60 hover:border-border hover:shadow-sm",
-        isSelected && "border-primary/40 bg-primary/5 ring-1 ring-primary/20"
+        "group bg-card text-card-foreground border-border/60 relative flex flex-col items-center gap-3 overflow-hidden rounded-2xl border p-4 text-center shadow-xs transition-all",
+        "hover:border-border hover:-translate-y-0.5 hover:shadow-md",
+        isSelected &&
+          "border-primary/50 ring-primary/30 bg-primary/[0.04] ring-2"
       )}
     >
-      <CardContent
+      {/* selection click target — covers the whole card except the buttons */}
+      <button
+        type="button"
+        onClick={() => onCheckChange(!isSelected)}
+        aria-pressed={isSelected}
+        aria-label={`${isSelected ? "Deselect" : "Select"} ${category.name}`}
+        className="absolute inset-0 z-0 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      />
+
+      {/* selection mark (top-left) */}
+      <span
+        aria-hidden="true"
         className={cn(
-          "flex flex-col items-center gap-3 p-4 text-center transition-all"
+          "pointer-events-none absolute left-2.5 top-2.5 z-10 flex size-5 items-center justify-center rounded-full border transition-all",
+          isSelected
+            ? "border-primary bg-primary text-primary-foreground scale-100 opacity-100"
+            : "border-border/80 bg-background scale-90 opacity-0 group-hover:opacity-100 group-hover:scale-100"
         )}
       >
-        {/* Selection checkbox */}
-        <div className="absolute left-3 top-3">
-          <Checkbox
-            checked={isSelected}
-            onCheckedChange={onCheckChange}
-            className="size-4"
-          />
-        </div>
-
-        {/* Icon */}
-        <div
+        <CheckIcon
           className={cn(
-            "flex size-12 items-center justify-center rounded-4xl transition-colors",
-            isSelected
-              ? "bg-primary/15 text-primary"
-              : "bg-muted text-foreground"
+            "size-3 transition-opacity",
+            isSelected ? "opacity-100" : "opacity-0"
           )}
-        >
-          {getCategoryIconByName(category.icon, {
-            className: "size-5",
-          })}
-        </div>
+        />
+      </span>
 
-        {/* Name */}
-        <span className="w-full truncate text-sm font-medium capitalize text-foreground">
-          {category.name}
-        </span>
+      {/* edit button (top-right) */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon-xs"
+              className={cn(
+                "absolute right-2 top-2 z-10 size-7 rounded-full opacity-0 transition-opacity",
+                "group-hover:opacity-100 group-focus-within:opacity-100",
+                "hover:bg-muted"
+              )}
+              aria-label={`Edit ${category.name}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <PencilIcon className="size-3.5" aria-hidden="true" />
+            </Button>
+          }
+        />
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader className="space-y-3">
+            <DialogTitle className="flex items-center gap-2">
+              <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-xl">
+                {getCategoryIconByName(category.icon, { className: "size-4" })}
+              </div>
+              Edit Category
+            </DialogTitle>
+            <DialogDescription>
+              Update the details of your{" "}
+              <strong className="text-foreground capitalize">
+                {category.name}
+              </strong>{" "}
+              category below.
+            </DialogDescription>
+          </DialogHeader>
+          <EditCategory
+            category={category}
+            onCloseDialog={() => setEditOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
 
-        {/* Edit button (appears on hover) */}
-        <div className="absolute right-2 top-2 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
-          <CategoryItem category={category} compact />
-        </div>
-      </CardContent>
-    </Card>
+      {/* icon */}
+      <div
+        aria-hidden="true"
+        className={cn(
+          "relative z-0 mt-2 flex size-14 items-center justify-center rounded-2xl transition-colors",
+          isSelected
+            ? "bg-primary/15 text-primary"
+            : "bg-muted text-foreground group-hover:bg-primary/10 group-hover:text-primary"
+        )}
+      >
+        {getCategoryIconByName(category.icon, { className: "size-6" })}
+      </div>
+
+      {/* name */}
+      <span
+        className={cn(
+          "relative z-0 w-full truncate text-sm font-medium capitalize",
+          isSelected ? "text-foreground" : "text-foreground"
+        )}
+      >
+        {category.name}
+      </span>
+    </div>
   );
 }

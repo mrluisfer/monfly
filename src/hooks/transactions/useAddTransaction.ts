@@ -1,15 +1,20 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
+
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
+import { postLoanByEmailServer } from "~/lib/api/loan/post-loan-by-email";
 import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email";
 import { sileo } from "~/lib/toaster";
 import { getUserSession } from "~/server/db/users/get-user-session";
-import { invalidateTransactionQueries } from "~/utils/query-invalidation";
+import {
+  invalidateLoanQueries,
+  invalidateTransactionQueries,
+} from "~/utils/query-invalidation";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
 
 type FormValues = z.infer<typeof TransactionFormSchema>;
 
@@ -25,6 +30,9 @@ export const useAddTransaction = () => {
       [transactionFormNames.category]: "",
       [transactionFormNames.amount]: "",
       [transactionFormNames.description]: "",
+      [transactionFormNames.markAsLoan]: false,
+      [transactionFormNames.loanDebtor]: "",
+      [transactionFormNames.loanDueAt]: null,
     },
   });
 
@@ -40,9 +48,6 @@ export const useAddTransaction = () => {
       }
 
       sileo.success({ title: "Transaction created successfully" });
-      form.reset();
-
-      // Invalidate all queries that depend on transaction data
       await invalidateTransactionQueries(queryClient, userEmail);
     },
     idempotency: {
@@ -68,26 +73,62 @@ export const useAddTransaction = () => {
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const { data: userEmail } = await getUserSession();
-      if (!userEmail) throw new Error("User email not found");
-      const transformedData = {
-        amount: Number.parseFloat(data.amount),
-        type: data.type,
-        category: data.category,
-        description: data.description || null,
-        date: data.date || new Date(),
-        user: { connect: { email: userEmail } },
-      };
-      await postTransactionByEmail.mutate({
+      const { data: sessionEmail } = await getUserSession();
+      if (!sessionEmail) throw new Error("User email not found");
+
+      const txDate = data.date ? new Date(data.date) : new Date();
+      const amount = Number.parseFloat(data.amount);
+
+      const txResult = await postTransactionByEmail.mutate({
         data: {
-          email: userEmail,
+          email: sessionEmail,
           transaction: {
-            ...transformedData,
-            date: new Date(transformedData.date),
+            amount,
+            type: data.type,
+            category: data.category,
+            description: data.description || null,
+            date: txDate,
           },
         },
       });
-    } catch (error) {
+
+      // If the user opted-in, also create a Loan linked to this transaction.
+      if (data.markAsLoan && txResult && !isErrorPayload(txResult)) {
+        const createdTx = (txResult as { data?: { id?: string } }).data;
+        const debtor = (data.loanDebtor ?? "").trim();
+
+        if (createdTx?.id && debtor) {
+          const loanResult = await postLoanByEmailServer({
+            data: {
+              email: sessionEmail,
+              loan: {
+                debtor,
+                amount,
+                issuedAt: txDate,
+                dueAt: data.loanDueAt ?? null,
+                notes: data.description?.trim() || null,
+                transactionId: createdTx.id,
+              },
+            },
+          });
+
+          if (loanResult && !isErrorPayload(loanResult)) {
+            sileo.success({ title: "Loan registered" });
+            await invalidateLoanQueries(queryClient, sessionEmail);
+          } else {
+            sileo.warning({
+              title: "Transaction saved, but loan could not be created",
+            });
+          }
+        }
+      }
+
+      // Reset only after the whole flow finished so the user sees what they typed
+      // until everything is persisted.
+      if (txResult && !isErrorPayload(txResult)) {
+        form.reset();
+      }
+    } catch {
       sileo.error({ title: "Failed to create transaction" });
     }
   };

@@ -22,6 +22,7 @@ import {
   CalendarIcon,
   DollarSignIcon,
   FileTextIcon,
+  HandCoinsIcon,
   PlusIcon,
   SparklesIcon,
   TagIcon,
@@ -49,6 +50,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Switch } from "../ui/switch";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -489,6 +491,8 @@ export function TransactionForm<FormValues extends FieldValues>({
           </div>
         </div>
 
+        <LoanSection form={form} />
+
         <div className="pt-1 sm:pt-2">
           <Button
             type="submit"
@@ -510,5 +514,107 @@ export function TransactionForm<FormValues extends FieldValues>({
         </div>
       </form>
     </Form>
+  );
+}
+
+function LoanSection<FormValues extends FieldValues>({
+  form,
+}: {
+  form: UseFormReturn<FormValues>;
+}) {
+  const markAsLoan = form.watch(
+    transactionFormNames.markAsLoan as Path<FormValues>
+  );
+  const isOn = Boolean(markAsLoan);
+
+  return (
+    <div className={sectionClassName}>
+      <FormField
+        control={form.control}
+        name={transactionFormNames.markAsLoan as Path<FormValues>}
+        render={({ field }) => (
+          <FormItem className="flex items-center justify-between gap-3 space-y-0">
+            <div className="flex items-center gap-2">
+              <HandCoinsIcon className=" text-primary" />
+              <div>
+                <FormLabel className="text-sm font-medium text-foreground">
+                  Mark as loan
+                </FormLabel>
+                <FormDescription className="text-xs">
+                  Track this as money owed to you (e.g. lent to a friend, SAT
+                  refund).
+                </FormDescription>
+              </div>
+            </div>
+            <FormControl>
+              <Switch
+                checked={Boolean(field.value)}
+                onCheckedChange={(checked) => field.onChange(checked)}
+                aria-label="Mark transaction as loan"
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
+      {isOn && (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name={transactionFormNames.loanDebtor as Path<FormValues>}
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel className="text-sm font-medium text-foreground">
+                  Debtor
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    value={(field.value as string | undefined) ?? ""}
+                    placeholder="e.g. Juan, SAT, Insurance Co."
+                    autoComplete="off"
+                    className={inputClassName}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name={transactionFormNames.loanDueAt as Path<FormValues>}
+            render={({ field }) => (
+              <FormItem className="space-y-2">
+                <FormLabel className="text-sm font-medium text-foreground">
+                  Due date (optional)
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="date"
+                    className={cn(
+                      inputClassName,
+                      "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                    )}
+                    value={
+                      // @ts-ignore
+                      field.value instanceof Date
+                        ? format(field.value, "yyyy-MM-dd")
+                        : ""
+                    }
+                    onChange={(e) => {
+                      const date = e.target.value
+                        ? new Date(e.target.value + "T00:00:00")
+                        : null;
+                      field.onChange(date);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      )}
+    </div>
   );
 }

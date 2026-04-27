@@ -22,6 +22,7 @@ model User {
   totalBalance   Float            @default(0)
   MonthlySummary MonthlySummary[]
   cards          Card[]
+  loans          Loan[]
 }
 
 model Transaction {
@@ -35,6 +36,7 @@ model Transaction {
   date        DateTime
   card        Card?    @relation(fields: [cardId], references: [id])
   cardId      String?
+  loans       Loan[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
 
@@ -117,4 +119,37 @@ model Card {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
   transactions Transaction[]
+}
+
+// Loan = money owed TO the user (debt receivable).
+// Can be linked to a transaction (e.g. cash given to a friend) or
+// stand-alone (e.g. expected SAT refund, insurance claim, etc.).
+model Loan {
+  id            String       @id @default(uuid())
+  user          User         @relation(fields: [userEmail], references: [email])
+  userEmail     String
+  // Who owes us — free text so it can be a person OR an entity (e.g. "SAT").
+  debtor        String
+  amount        Float
+  // Amount already received from the debtor (allows partial payments).
+  amountPaid    Float        @default(0)
+  // "pending" | "partial" | "paid"
+  status        String       @default("pending")
+  // When we lent the money / when the debt was generated.
+  issuedAt      DateTime     @default(now())
+  // Expected repayment date (optional).
+  dueAt         DateTime?
+  // When the debt was fully settled (set when status flips to "paid").
+  paidAt        DateTime?
+  notes         String?
+  // Optional link to the transaction that originated this loan.
+  transaction   Transaction? @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  transactionId String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now()) @updatedAt
+
+  @@index([userEmail])
+  @@index([userEmail, status])
+  @@index([userEmail, dueAt])
+  @@index([transactionId])
 }
