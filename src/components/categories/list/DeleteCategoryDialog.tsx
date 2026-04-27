@@ -38,7 +38,7 @@ export function DeleteCategoryDialog({
     <>
       {/* Delete action bar */}
       {selectedCount > 0 && (
-        <Card className="sticky bottom-3 z-10">
+        <Card className="sticky z-10">
           <CardContent className="flex items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">
               <span className="font-semibold text-foreground">

@@ -1,6 +1,6 @@
+import { useMemo } from "react";
 import type { Category } from "@prisma/client";
 import { CheckCheckIcon, XIcon } from "lucide-react";
-import { useMemo } from "react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -107,8 +107,7 @@ export const SelectionBar = ({
         {!isAllSelected && (
           <Button
             type="button"
-            variant="ghost"
-            size="sm"
+            variant="outline"
             onClick={toggleAll}
             className="h-8 gap-1.5 px-3 text-xs"
           >
@@ -119,8 +118,7 @@ export const SelectionBar = ({
         {hasAny && (
           <Button
             type="button"
-            variant="ghost"
-            size="sm"
+            variant="outline"
             onClick={clearSelection}
             className="h-8 gap-1.5 px-3 text-xs"
           >

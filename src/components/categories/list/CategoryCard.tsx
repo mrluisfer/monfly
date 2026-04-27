@@ -1,8 +1,8 @@
+import { useState } from "react";
+import { getCategoryIconByName } from "@/constants/categories-icon";
 import type { Category } from "@prisma/client";
 import { CheckIcon, PencilIcon } from "lucide-react";
-import { useState } from "react";
 
-import { getCategoryIconByName } from "@/constants/categories-icon";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
