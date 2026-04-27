@@ -1,5 +1,16 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "~/components/ui/alert-dialog";
 import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -51,8 +62,12 @@ function RouteComponent() {
         icon={<HandCoinsIcon className="size-5" aria-hidden="true" />}
       />
 
-      <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
-        <AddLoanCard />
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(320px,360px)_minmax(0,1fr)] xl:grid-cols-[minmax(340px,380px)_minmax(0,1fr)]">
+        {/* Form: full-width on mobile/tablet, sticky aside on lg+ so it stays
+            within reach while scrolling a long list. */}
+        <div className="lg:sticky lg:top-20 lg:self-start">
+          <AddLoanCard />
+        </div>
         <LoansList />
       </div>
     </div>
@@ -283,8 +298,8 @@ function LoansList() {
 
   return (
     <div className="space-y-4">
-      {/* Summary metric cards */}
-      <div className="grid grid-cols-3 gap-3">
+      {/* Summary metrics — single col on phones, 3-col from sm+ */}
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
         <MetricCard
           label="Outstanding"
           value={formatCurrency(totals.outstanding, "USD")}
@@ -305,23 +320,28 @@ function LoansList() {
         />
       </div>
 
-      {/* Status filter tabs */}
+      {/* Status filter tabs — full-width on mobile (4 equal columns), fits content on sm+ */}
       <Tabs
         value={filter}
         onValueChange={(value) => setFilter(value as StatusFilter)}
+        className="w-full"
       >
-        <TabsList>
-          <TabsTrigger value="all">
-            All <CountBadge n={counts.all} />
+        <TabsList className="w-full sm:w-fit">
+          <TabsTrigger value="all" className="flex-1 sm:flex-initial">
+            All
+            <CountBadge n={counts.all} />
           </TabsTrigger>
-          <TabsTrigger value="pending">
-            Pending <CountBadge n={counts.pending} />
+          <TabsTrigger value="pending" className="flex-1 sm:flex-initial">
+            Pending
+            <CountBadge n={counts.pending} />
           </TabsTrigger>
-          <TabsTrigger value="partial">
-            Partial <CountBadge n={counts.partial} />
+          <TabsTrigger value="partial" className="flex-1 sm:flex-initial">
+            Partial
+            <CountBadge n={counts.partial} />
           </TabsTrigger>
-          <TabsTrigger value="paid">
-            Paid <CountBadge n={counts.paid} />
+          <TabsTrigger value="paid" className="flex-1 sm:flex-initial">
+            Paid
+            <CountBadge n={counts.paid} />
           </TabsTrigger>
         </TabsList>
       </Tabs>
@@ -346,11 +366,7 @@ function LoansList() {
               onRecordPayment={(amount) =>
                 update.recordPayment(loan.id, loan.amountPaid + amount)
               }
-              onDelete={() => {
-                if (confirm(`Delete loan from ${loan.debtor}?`)) {
-                  del.remove(loan.id);
-                }
-              }}
+              onDelete={() => del.remove(loan.id)}
             />
           ))}
         </ul>
@@ -393,48 +409,51 @@ function LoanListItem({
     loan.amount > 0 ? Math.round((loan.amountPaid / loan.amount) * 100) : 0;
 
   return (
-    <li className="flex flex-col gap-3 px-4 py-4">
+    <li className="flex flex-col gap-3 px-3 py-3 sm:px-4 sm:py-4">
       {/* Top row: debtor info + remaining */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1 space-y-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-foreground text-sm font-semibold capitalize">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="text-foreground truncate text-sm font-semibold capitalize sm:text-base">
               {loan.debtor}
             </span>
             <StatusBadge status={status} />
           </div>
-          <p className="text-muted-foreground text-xs tabular-nums">
+          <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-xs tabular-nums">
             <span>{formatCurrency(loan.amount, "USD")} total</span>
             {loan.amountPaid > 0 && (
-              <>
-                {" · "}
+              <span className="before:mr-1.5 before:text-muted-foreground/50 before:content-['·']">
                 <span className="text-foreground">
                   {formatCurrency(loan.amountPaid, "USD")}
                 </span>{" "}
                 paid
-              </>
+              </span>
             )}
             {loan.dueAt && (
-              <>
-                {" · due "}
-                {new Date(loan.dueAt).toLocaleDateString()}
-              </>
+              <span className="before:mr-1.5 before:text-muted-foreground/50 before:content-['·']">
+                due {new Date(loan.dueAt).toLocaleDateString()}
+              </span>
             )}
           </p>
           {loan.notes && (
-            <p className="text-muted-foreground flex items-center gap-1 text-xs italic">
-              <FileTextIcon className="size-3 shrink-0" aria-hidden="true" />
-              <span className="truncate">{loan.notes}</span>
+            <p className="text-muted-foreground flex items-start gap-1 text-xs italic">
+              <FileTextIcon
+                className="mt-0.5 size-3 shrink-0"
+                aria-hidden="true"
+              />
+              <span className="line-clamp-2 sm:truncate">{loan.notes}</span>
             </p>
           )}
         </div>
 
         {!isPaid && remaining > 0 && (
           <div className="shrink-0 text-right">
-            <p className="text-foreground text-base font-semibold tabular-nums">
+            <p className="text-foreground text-sm font-semibold tabular-nums sm:text-base">
               {formatCurrency(remaining, "USD")}
             </p>
-            <p className="text-muted-foreground text-xs">remaining</p>
+            <p className="text-muted-foreground text-[10px] sm:text-xs">
+              remaining
+            </p>
           </div>
         )}
       </div>
@@ -447,7 +466,7 @@ function LoanListItem({
           aria-valuenow={progressPct}
           aria-valuemin={0}
           aria-valuemax={100}
-          className="h-1.5 w-full overflow-hidden rounded-full bg-muted"
+          className="bg-muted h-1.5 w-full overflow-hidden rounded-full"
         >
           <div
             className={cn(
@@ -459,37 +478,36 @@ function LoanListItem({
         </div>
       )}
 
-      {/* Action row */}
-      <div className="flex flex-wrap items-center gap-2">
-        {!isPaid && <PartialPaymentControl onSubmit={onRecordPayment} />}
-        <div className="ml-auto flex items-center gap-2">
+      {/* Action row — stacks on mobile, inline on sm+ */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+        {!isPaid && (
+          <div className="w-full sm:w-auto sm:flex-1 sm:max-w-[260px]">
+            <PartialPaymentControl onSubmit={onRecordPayment} />
+          </div>
+        )}
+        <div className="flex items-center gap-2 sm:ml-auto">
           {!isPaid ? (
-            <Button type="button" variant="default" onClick={onMarkPaid}>
+            <Button
+              type="button"
+              variant="default"
+              onClick={onMarkPaid}
+              className="flex-1 sm:flex-initial"
+            >
               <CheckCheck aria-hidden="true" />
               Mark paid
             </Button>
           ) : (
-            <Button type="button" variant="outline" onClick={onMarkPending}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onMarkPending}
+              className="flex-1 sm:flex-initial"
+            >
               <RotateCcwIcon aria-hidden="true" />
               Reopen
             </Button>
           )}
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="destructive"
-                  aria-label={`Delete loan from ${loan.debtor}`}
-                  onClick={onDelete}
-                >
-                  <Trash2Icon aria-hidden="true" />
-                </Button>
-              }
-            />
-            <TooltipContent side="top">Delete loan</TooltipContent>
-          </Tooltip>
+          <DeleteLoanButton debtor={loan.debtor} onConfirm={onDelete} />
         </div>
       </div>
     </li>
@@ -582,14 +600,69 @@ function PartialPaymentControl({
         inputMode="decimal"
         step="0.01"
         min="0"
-        placeholder="$0.00"
-        className="h-9 w-36"
+        placeholder="Add payment"
+        className="h-9 min-w-0 flex-1"
         aria-label="Partial payment amount"
       />
-      <Button type="submit" variant="default">
-        <BanknoteArrowUpIcon />
+      <Button
+        type="submit"
+        variant="default"
+        aria-label="Add partial payment"
+        className="shrink-0"
+      >
+        <BanknoteArrowUpIcon aria-hidden="true" />
       </Button>
     </form>
+  );
+}
+
+function DeleteLoanButton({
+  debtor,
+  onConfirm,
+}: {
+  debtor: string;
+  onConfirm: () => void;
+}) {
+  return (
+    <AlertDialog>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <AlertDialogTrigger
+              render={
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  aria-label={`Delete loan from ${debtor}`}
+                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive shrink-0"
+                >
+                  <Trash2Icon className="size-4" aria-hidden="true" />
+                </Button>
+              }
+            />
+          }
+        />
+        <TooltipContent side="top">Delete loan</TooltipContent>
+      </Tooltip>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete loan?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will remove the loan record from{" "}
+            <strong className="text-foreground capitalize">{debtor}</strong>.
+            The originating transaction (if any) is kept intact. This action
+            cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={onConfirm} variant="destructive">
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

@@ -5,6 +5,7 @@ import {
   CalculatorIcon,
   ListIcon,
   PlusIcon,
+  WalletIcon,
 } from "lucide-react";
 
 import { ActionButton } from "./ActionButton";
@@ -31,6 +32,12 @@ export function BalanceActions() {
         icon={<CalculatorIcon />}
         label="Calculator"
         onClick={() => navigate({ to: "/home/balance-calculator" })}
+        variant={"outline"}
+      />
+      <ActionButton
+        icon={<WalletIcon />}
+        label="Loans"
+        onClick={() => navigate({ to: "/home/loans" })}
         variant={"outline"}
       />
       <AddTransactionButton

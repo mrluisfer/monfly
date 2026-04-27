@@ -1,7 +1,6 @@
+import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-
-import { prismaClient } from "~/server/prisma";
 
 type GetTransactionsParams = {
   email: string;
@@ -9,11 +8,17 @@ type GetTransactionsParams = {
 
 interface TransactionsResponse<T> extends ApiResponse<T> {
   total: number;
+  limit?: number;
+}
+
+interface TransactionsResponse<T> extends ApiResponse<T> {
+  total: number;
 }
 
 export const getTransactionsByEmail = async ({
   email,
-}: GetTransactionsParams) => {
+  limit,
+}: GetTransactionsParams & { limit?: number }) => {
   try {
     if (!email) {
       throw new Error("Email is required");
@@ -22,6 +27,7 @@ export const getTransactionsByEmail = async ({
     const [transactions, total] = await Promise.all([
       prismaClient.transaction.findMany({
         where: { userEmail: email },
+        take: limit,
         select: {
           id: true,
           userEmail: true,

@@ -1,25 +1,28 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { getTransactionsByEmail } from "~/server/db/transactions/get-transactions-by-email";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { getTransactionsByEmail } from "~/server/db/transactions/get-transactions-by-email";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
-  .inputValidator((d: { email: string }) => d)
+  .inputValidator((d: { email: string; limit?: number }) => d)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
         scope: "transaction:list",
-        limit: 120,
+        limit: data.limit ?? 120,
         windowMs: 60_000,
         identifier: sessionEmail,
       });
 
-      const result = await getTransactionsByEmail({ email: sessionEmail });
+      const result = await getTransactionsByEmail({
+        email: sessionEmail,
+        limit: data.limit,
+      });
       return result;
     } catch (error) {
       const securityErrorResponse = toSecurityErrorResponse(error);

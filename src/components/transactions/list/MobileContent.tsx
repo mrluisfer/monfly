@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Link, useLocation } from "@tanstack/react-router";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -26,6 +27,8 @@ export function MobileContent({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<MobileFilter>("all");
+  const pathname = useLocation().pathname;
+  const isTransactionsPage = pathname.includes("/transactions");
 
   const filteredTransactions = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
@@ -115,7 +118,16 @@ export function MobileContent({
       </div>
 
       {filteredTransactions.length ? (
-        <TransactionCardList data={filteredTransactions} />
+        <>
+          <TransactionCardList data={filteredTransactions} />
+          {isTransactionsPage ? null : (
+            <div className="flex justify-center items-center w-full md:justify-start">
+              <Button render={<Link to="/home/transactions" />}>
+                See more transactions
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <DataNotFoundPlaceholder>
           No transactions match the current search or filter.

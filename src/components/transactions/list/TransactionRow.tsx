@@ -116,7 +116,7 @@ export function TransactionRow({
             >
               <div
                 className={cn(
-                  "flex size-11 shrink-0 items-center justify-center rounded-xl",
+                  "flex md:size-11 size-8 shrink-0 items-center justify-center rounded-xl",
                   "transition-shadow duration-200 shadow-[0_18px_28px_-24px_rgba(15,23,42,0.55)]",
                   isIncome
                     ? "bg-primary/10 text-primary"
