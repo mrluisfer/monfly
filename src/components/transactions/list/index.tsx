@@ -39,7 +39,7 @@ export default function TransactionsList() {
     queryFn: createSafeQuery(
       () =>
         getTransactionByEmailServer({
-          data: { email: userEmail, limit: isTransactionsRoute ? 8000 : 30 },
+          data: { email: userEmail, limit: isTransactionsRoute ? 1000 : 30 },
         }),
       8000
     ),

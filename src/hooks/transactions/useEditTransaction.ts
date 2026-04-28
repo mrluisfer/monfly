@@ -4,6 +4,7 @@ import type { Loan, Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { deleteLoanByIdServer } from "~/lib/api/loan/delete-loan-by-id";
 import { getLoanByTransactionIdServer } from "~/lib/api/loan/get-loan-by-transaction-id";
 import { postLoanByEmailServer } from "~/lib/api/loan/post-loan-by-email";
 import { putLoanByIdServer } from "~/lib/api/loan/put-loan-by-id";
@@ -124,9 +125,15 @@ export const useEditTransaction = (
       const txDate = data.date || new Date();
       const debtor = (data.loanDebtor ?? "").trim();
 
-      if (data.markAsLoan && debtor) {
-        const existing = existingLoanRef.current;
+      const existing = existingLoanRef.current;
 
+      // The user unchecked "Mark as loan" on a transaction that already
+      // had a linked loan — remove the link so the toggle is reversible.
+      if (!data.markAsLoan && existing) {
+        await deleteLoanByIdServer({ data: { id: existing.id } });
+        existingLoanRef.current = null;
+        await invalidateLoanQueries(queryClient, transaction.userEmail);
+      } else if (data.markAsLoan && debtor) {
         if (existing) {
           // Update the existing linked loan.
           await putLoanByIdServer({

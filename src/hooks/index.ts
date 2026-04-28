@@ -18,3 +18,6 @@ export * from "./categories";
 
 // Domain: charts
 export * from "./charts";
+
+// Domain: loans
+export * from "./loans";

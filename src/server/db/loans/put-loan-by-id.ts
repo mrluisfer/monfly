@@ -27,7 +27,7 @@ export const putLoanById = async (
 
     // Resolve next amounts and derived status.
     const nextAmount = input.amount ?? existing.amount;
-    const nextAmountPaid = clamp(
+    let nextAmountPaid = clamp(
       input.amountPaid ?? existing.amountPaid,
       0,
       nextAmount
@@ -35,11 +35,19 @@ export const putLoanById = async (
 
     let nextStatus = input.status ?? existing.status;
     // If amountPaid changed and caller did not pass an explicit status,
-    // derive it from the totals so it stays consistent.
+    // derive the status from the totals so it stays consistent.
     if (input.amountPaid !== undefined && input.status === undefined) {
       if (nextAmountPaid <= 0) nextStatus = "pending";
       else if (nextAmountPaid >= nextAmount) nextStatus = "paid";
       else nextStatus = "partial";
+    }
+    // If the caller set status explicitly without an amountPaid, derive
+    // amountPaid from the status so the two fields can't disagree
+    // (e.g. status="paid" but amountPaid < amount).
+    if (input.status !== undefined && input.amountPaid === undefined) {
+      if (input.status === "paid") nextAmountPaid = nextAmount;
+      else if (input.status === "pending") nextAmountPaid = 0;
+      // "partial" leaves the existing amountPaid as-is (clamped above).
     }
 
     const paidAt =

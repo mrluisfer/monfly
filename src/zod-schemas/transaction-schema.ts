@@ -6,8 +6,14 @@ export const TransactionFormSchema = z
   .object({
     [transactionFormNames.amount]: z
       .string()
-      .min(0, { message: "Amount must be a positive number" })
-      .max(1000000, { message: "Amount must be less than 1,000,000" }),
+      .min(1, { message: "Amount is required" })
+      .refine(
+        (v) => Number.isFinite(Number(v)) && Number(v) > 0,
+        { message: "Amount must be a positive number" }
+      )
+      .refine((v) => Number(v) < 1_000_000, {
+        message: "Amount must be less than 1,000,000",
+      }),
     [transactionFormNames.type]: z.enum(["income", "expense"], {
       errorMap: () => ({ message: "Type must be either income or expense" }),
     }),
