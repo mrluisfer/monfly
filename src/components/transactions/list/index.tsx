@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { DesktopContent } from "./DesktopContent";
 import { MobileContent } from "./MobileContent";
 import { MobileHeader } from "./MobileHeader";
+import { TransactionsInsights } from "./TransactionsInsights";
 
 type TransactionsResponse = {
   data?: TransactionWithUser[];
@@ -108,6 +109,9 @@ export default function TransactionsList() {
             />
           </CardContent>
         </Card>
+        <div className="mt-4">
+          <TransactionsInsights transactions={transactions} />
+        </div>
       </div>
 
       <div className="space-y-4 md:hidden">

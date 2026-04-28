@@ -609,6 +609,7 @@ function PartialPaymentControl({
         variant="default"
         aria-label="Add partial payment"
         className="shrink-0"
+        size={"icon"}
       >
         <BanknoteArrowUpIcon aria-hidden="true" />
       </Button>

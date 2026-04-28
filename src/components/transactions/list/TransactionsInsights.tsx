@@ -5,6 +5,7 @@ import { formatCurrency } from "~/utils/format-currency";
 import { ShieldCheckIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 import { ExpenseConcentrationCard } from "./insights/ExpenseConcentrationCard";
 import { ImprovementIdeasCard } from "./insights/ImprovementIdeasCard";
@@ -376,20 +377,19 @@ export function TransactionsInsights({
       className={cn("space-y-4 pt-1", className)}
       aria-label="Additional transaction insights"
     >
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div className="space-y-1">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-            Extra Insights
-          </p>
-          <h3 className="text-base font-semibold tracking-tight text-foreground sm:text-lg">
-            Useful context while you scroll
-          </h3>
-        </div>
-        <Badge>
-          <ShieldCheckIcon />
-          Local-only analysis, no extra requests
-        </Badge>
-      </div>
+      <PageHeader
+        title="Insights & Ideas"
+        description="Actionable insights based on your transaction history. Updated in real-time as you add more data."
+        icon={
+          <ShieldCheckIcon className="size-5 text-primary" aria-hidden="true" />
+        }
+        actions={
+          <Badge variant="default">
+            <ShieldCheckIcon className="mr-1" />
+            Local-only analysis, no extra requests
+          </Badge>
+        }
+      />
 
       <InsightErrorBoundary label="Net Momentum">
         <NetMomentumCard

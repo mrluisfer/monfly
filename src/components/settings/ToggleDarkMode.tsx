@@ -14,7 +14,7 @@ type ToggleDarkModeProps = {
 
 export default function ToggleDarkMode({
   className,
-  size = "icon",
+  size = "icon-lg",
 }: ToggleDarkModeProps) {
   const { theme, setTheme } = useDarkMode();
   const { selection } = useAppHaptics();

@@ -3,7 +3,6 @@ import { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import { ErrorState } from "./ErrorState";
 import { LoadingState } from "./LoadingState";
-import { TransactionsInsights } from "./TransactionsInsights";
 import { DataTableDemo } from "./transactionsTable";
 
 export function DesktopContent({
@@ -42,7 +41,6 @@ export function DesktopContent({
   return (
     <div className="space-y-6">
       <DataTableDemo data={transactions} />
-      <TransactionsInsights transactions={transactions} />
     </div>
   );
 }

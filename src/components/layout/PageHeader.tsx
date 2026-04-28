@@ -33,7 +33,7 @@ export function PageHeader({
           </div>
         )}
         <div className="min-w-0 space-y-1">
-          <h1 className="text-foreground truncate text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h1 className="text-foreground truncate text-xl font-semibold tracking-tight">
             {title}
           </h1>
           {description && (
