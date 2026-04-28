@@ -5,8 +5,8 @@ import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";
 import { sileo } from "~/lib/toaster";
+import { getUserSession } from "~/server/db/users/get-user-session";
 import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-import { getUserSession } from "~/utils/user/get-user-session";
 
 import { CategoryForm } from "./CategoryForm";
 

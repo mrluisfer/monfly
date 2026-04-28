@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "@tanstack/react-router";
 import { BalanceStatusBadge } from "~/components/header/badges/BalanceStatusBadge";
 import { Button } from "~/components/ui/button";
 import {
@@ -30,13 +31,15 @@ type TransactionsResponse = {
 
 export default function TransactionsList() {
   const userEmail = useRouteUser();
+  const pathname = useLocation().pathname;
+  const isTransactionsRoute = pathname.includes("/transactions");
 
   const { data, isPending, error, refetch } = useQuery({
     queryKey: [queryDictionary.transactions, userEmail],
     queryFn: createSafeQuery(
       () =>
         getTransactionByEmailServer({
-          data: { email: userEmail },
+          data: { email: userEmail, limit: isTransactionsRoute ? 1000 : 30 },
         }),
       8000
     ),
@@ -108,7 +111,7 @@ export default function TransactionsList() {
       </div>
 
       <div className="space-y-4 md:hidden">
-        <section className="bg-card rounded-2xl p-4">
+        <section className="bg-card rounded-2xl lg:p-4 pb-4">
           <MobileHeader
             total={total}
             isPending={isPending}

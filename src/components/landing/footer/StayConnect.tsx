@@ -9,7 +9,7 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { sileo } from "~/lib/toaster";
 import { AtSignIcon } from "lucide-react";
 import { useForm } from "react-hook-form";

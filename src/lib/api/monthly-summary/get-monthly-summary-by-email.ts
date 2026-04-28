@@ -4,9 +4,9 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
+} from "~/server/security/request-protection";
 
-import { getMonthlySummaryByEmail as getMonthlySummaryByEmailUtils } from "../../../utils/monthly-summary/get-monthly-summary-by-email";
+import { getMonthlySummaryByEmail as getMonthlySummaryByEmailUtils } from "~/server/db/monthly-summary/get-monthly-summary-by-email";
 
 export const getMonthlySummaryByEmailServer = createServerFn({ method: "GET" })
   .inputValidator((d: { email: string }) => d)

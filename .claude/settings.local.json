@@ -10,8 +10,14 @@
       "Bash(ls:*)",
       "Bash(cat:*)",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(pnpm lint *)",
+      "Bash(npx tsc *)"
     ]
   },
-  "enabledMcpjsonServers": ["shadcn", "magicuidesign-mcp", "playwright"]
+  "enabledMcpjsonServers": [
+    "shadcn",
+    "magicuidesign-mcp",
+    "playwright"
+  ]
 }

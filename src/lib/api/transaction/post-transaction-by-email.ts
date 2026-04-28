@@ -4,8 +4,8 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { postTransactionByEmail } from "~/utils/transactions/post-transaction-by-email";
+} from "~/server/security/request-protection";
+import { postTransactionByEmail } from "~/server/db/transactions/post-transaction-by-email";
 import z from "zod";
 
 export const postTransactionByEmailServer = createServerFn({ method: "POST" })

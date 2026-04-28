@@ -8,8 +8,8 @@ import {
 } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
-import { useGetCategoriesByEmail } from "~/hooks/useGetCategoriesByEmail";
+import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
@@ -22,12 +22,14 @@ import {
   CalendarIcon,
   DollarSignIcon,
   FileTextIcon,
+  HandCoinsIcon,
   PlusIcon,
   SparklesIcon,
   TagIcon,
   TrendingDownIcon,
   TrendingUpIcon,
 } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
 import { Button } from "../ui/button";
@@ -49,6 +51,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Switch } from "../ui/switch";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -60,11 +63,9 @@ type TransactionFormProps<FormValues extends FieldValues> = {
 };
 
 const sectionClassName =
-  "rounded-[1.45rem] border border-border/70 bg-background/70 p-4 shadow-[inset_0_1px_0_0_rgba(255, 255, 255, 0.253)] sm:p-5";
+  "rounded-2xl border border-border/60 bg-background/75 backdrop-blur-sm p-4 shadow-sm sm:p-5";
 const inputClassName =
-  "h-12 rounded-[1.05rem] border-border/70 bg-background/65 text-base shadow-none sm:text-base";
-const toggleButtonClassName =
-  "flex h-12 items-center justify-center gap-1.5 rounded-[1.05rem] border text-sm font-medium transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
+  "h-12 rounded-xl border-border/60 bg-input/40 text-base shadow-none transition-colors sm:text-base";
 
 export function TransactionForm<FormValues extends FieldValues>({
   form,
@@ -220,74 +221,111 @@ export function TransactionForm<FormValues extends FieldValues>({
         }
       >
         {/* Amount + Type row */}
-        <div className={sectionClassName}>
-          <div className="flex flex-col gap-4 sm:flex-row sm:gap-3">
+        <motion.div
+          className={cn(
+            sectionClassName,
+            "transition-colors duration-500",
+            "border-border/60"
+          )}
+          layout
+        >
+          <div className="flex flex-col gap-5">
             <FormField
               control={form.control}
               name={transactionFormNames.amount as Path<FormValues>}
               render={({ field }) => (
-                <FormItem className="flex-1 space-y-2">
-                  <FormLabel
-                    htmlFor={transactionFormNames.amount}
-                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
-                  >
-                    <DollarSignIcon className="size-3.5 text-emerald-600" />
+                <FormItem className="space-y-2">
+                  <FormLabel className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    <DollarSignIcon className="size-3 text-emerald-500" />
                     Amount
                   </FormLabel>
                   <FormControl>
-                    <div className="relative">
+                    <div className="relative flex items-center">
+                      <span className="pointer-events-none absolute left-4 text-xl font-semibold text-muted-foreground/60 select-none">
+                        $
+                      </span>
                       <Input
                         id={transactionFormNames.amount}
                         type="number"
                         inputMode="decimal"
                         step="0.01"
                         placeholder="0.00"
-                        className={cn(inputClassName, "pl-10 font-semibold")}
+                        className={cn(
+                          inputClassName,
+                          "pl-9 text-xl font-bold tracking-tight [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                        )}
                         {...field}
                         onChange={(e) =>
                           field.onChange(validLimitNumber(e.target.value))
                         }
                       />
-                      <DollarSignIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                     </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name={transactionFormNames.type as Path<FormValues>}
               render={({ field }) => {
                 const currentType = (field.value as string) || "";
                 return (
-                  <FormItem className="space-y-2 sm:w-52">
+                  <FormItem className="space-y-2">
                     <FormLabel
                       id={typeLabelId}
-                      className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                      className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
                     >
-                      <SparklesIcon className="size-3.5 text-purple-600" />
+                      <SparklesIcon className="size-3 text-purple-500" />
                       Type
                     </FormLabel>
                     <FormControl>
                       <div
-                        className="grid grid-cols-2 gap-2"
+                        className="relative flex p-1 rounded-xl bg-muted/50"
                         role="radiogroup"
                         aria-labelledby={typeLabelId}
                       >
+                        {/* Sliding indicator */}
+                        {currentType && (
+                          <motion.span
+                            className="pointer-events-none absolute inset-y-1 rounded-lg border"
+                            style={{ width: "calc(50% - 4px)" }}
+                            animate={{
+                              left:
+                                currentType === "income"
+                                  ? "4px"
+                                  : "calc(50% + 0px)",
+                              backgroundColor:
+                                currentType === "income"
+                                  ? "rgba(16,185,129,0.10)"
+                                  : "rgba(239,68,68,0.10)",
+                              borderColor:
+                                currentType === "income"
+                                  ? "rgba(16,185,129,0.30)"
+                                  : "rgba(239,68,68,0.30)",
+                            }}
+                            initial={false}
+                            transition={{
+                              type: "spring",
+                              bounce: 0.15,
+                              duration: 0.4,
+                            }}
+                          />
+                        )}
                         <button
                           type="button"
                           role="radio"
                           aria-checked={currentType === "income"}
                           onClick={() => field.onChange("income")}
                           className={cn(
-                            toggleButtonClassName,
+                            "relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                             currentType === "income"
-                              ? "border-emerald-500/40 bg-emerald-500/12 text-emerald-700 dark:text-emerald-300"
-                              : "border-border/70 bg-background/65 text-muted-foreground hover:bg-muted/50"
+                              ? "text-emerald-700 dark:text-emerald-300"
+                              : "text-muted-foreground hover:text-foreground"
                           )}
                         >
-                          <TrendingUpIcon className="size-4" />
+                          <TrendingUpIcon className="size-4 shrink-0" />
                           Income
                         </button>
                         <button
@@ -296,13 +334,13 @@ export function TransactionForm<FormValues extends FieldValues>({
                           aria-checked={currentType === "expense"}
                           onClick={() => field.onChange("expense")}
                           className={cn(
-                            toggleButtonClassName,
+                            "relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
                             currentType === "expense"
-                              ? "border-red-500/40 bg-red-500/12 text-red-700 dark:text-red-300"
-                              : "border-border/70 bg-background/65 text-muted-foreground hover:bg-muted/50"
+                              ? "text-red-700 dark:text-red-300"
+                              : "text-muted-foreground hover:text-foreground"
                           )}
                         >
-                          <TrendingDownIcon className="size-4" />
+                          <TrendingDownIcon className="size-4 shrink-0" />
                           Expense
                         </button>
                       </div>
@@ -313,7 +351,7 @@ export function TransactionForm<FormValues extends FieldValues>({
               }}
             />
           </div>
-        </div>
+        </motion.div>
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
           <div className={sectionClassName}>
@@ -335,9 +373,9 @@ export function TransactionForm<FormValues extends FieldValues>({
                   <FormItem className="space-y-2">
                     <FormLabel
                       htmlFor={transactionFormNames.category}
-                      className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                      className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
                     >
-                      <TagIcon className="size-3.5 text-blue-600" />
+                      <TagIcon className="size-3 text-blue-500" />
                       Category
                     </FormLabel>
                     <FormControl>
@@ -347,7 +385,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                             value={value ?? ""}
                             onValueChange={(val) => field.onChange(val)}
                           >
-                            <SelectTrigger className="w-full">
+                            <SelectTrigger className="w-full rounded-xl border-border/60 bg-input/40 h-12">
                               <SelectValue placeholder="Select a category" />
                             </SelectTrigger>
                             <SelectContent>
@@ -364,8 +402,8 @@ export function TransactionForm<FormValues extends FieldValues>({
                             </SelectContent>
                           </Select>
                         ) : (
-                          <p className="py-4 text-center text-sm text-muted-foreground">
-                            No categories found
+                          <p className="py-3 text-center text-sm text-muted-foreground">
+                            No categories yet
                           </p>
                         )}
                         <div className="flex items-center gap-2">
@@ -374,13 +412,14 @@ export function TransactionForm<FormValues extends FieldValues>({
                             onChange={(e) =>
                               setCategoryInputValue(e.target.value)
                             }
-                            placeholder="New category..."
-                            className="h-9 flex-1 rounded-[1.05rem] border-border/70 bg-background/65 text-sm shadow-none"
+                            placeholder="New category name..."
+                            className="h-10 flex-1 rounded-xl border-border/60 bg-input/40 text-sm shadow-none"
                           />
                           <Button
                             type="button"
                             size="sm"
                             variant="default"
+                            className="h-10 rounded-xl"
                             onClick={async () => {
                               const inputVal = categoryInputValue;
                               field.onChange(inputVal);
@@ -401,7 +440,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                             }
                           >
                             <PlusIcon size={14} />
-                            Create
+                            Add
                           </Button>
                         </div>
                       </div>
@@ -421,9 +460,9 @@ export function TransactionForm<FormValues extends FieldValues>({
                 <FormItem className="space-y-2">
                   <FormLabel
                     htmlFor={transactionFormNames.description}
-                    className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                    className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
                   >
-                    <FileTextIcon className="size-3.5 text-orange-600" />
+                    <FileTextIcon className="size-3 text-orange-500" />
                     Description
                   </FormLabel>
                   <FormControl>
@@ -431,10 +470,10 @@ export function TransactionForm<FormValues extends FieldValues>({
                       <Input
                         placeholder="Add a description..."
                         id={transactionFormNames.description}
-                        className="rounded-[1.05rem] border-border/70 bg-background/65 pl-10 text-sm shadow-none sm:text-base py-4"
+                        className={cn(inputClassName, "pl-10 text-sm")}
                         {...field}
                       />
-                      <FileTextIcon className="absolute left-3 top-2.5 size-4 text-muted-foreground sm:top-2" />
+                      <FileTextIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/60" />
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -450,31 +489,34 @@ export function TransactionForm<FormValues extends FieldValues>({
                   <FormItem className="flex flex-col space-y-2">
                     <FormLabel
                       htmlFor={transactionFormNames.date}
-                      className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+                      className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
                     >
-                      <CalendarIcon className="size-3.5 text-indigo-600" />
+                      <CalendarIcon className="size-3 text-indigo-500" />
                       Date
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        id={transactionFormNames.date}
-                        type="date"
-                        className={cn(
-                          inputClassName,
-                          "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
-                        )}
-                        value={
-                          field.value
-                            ? format(field.value as Date, "yyyy-MM-dd")
-                            : ""
-                        }
-                        onChange={(e) => {
-                          const date = e.target.value
-                            ? new Date(e.target.value + "T00:00:00")
-                            : undefined;
-                          field.onChange(date);
-                        }}
-                      />
+                      <div className="relative">
+                        <Input
+                          id={transactionFormNames.date}
+                          type="date"
+                          className={cn(
+                            inputClassName,
+                            "w-full cursor-pointer pl-10 [color-scheme:light] dark:[color-scheme:dark]"
+                          )}
+                          value={
+                            field.value
+                              ? format(field.value as Date, "yyyy-MM-dd")
+                              : ""
+                          }
+                          onChange={(e) => {
+                            const date = e.target.value
+                              ? new Date(e.target.value + "T00:00:00")
+                              : undefined;
+                            field.onChange(date);
+                          }}
+                        />
+                        <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/60 pointer-events-none" />
+                      </div>
                     </FormControl>
                     {showDateDescription && (
                       <FormDescription>
@@ -488,6 +530,8 @@ export function TransactionForm<FormValues extends FieldValues>({
             </div>
           </div>
         </div>
+
+        <LoanSection form={form} />
 
         <div className="pt-1 sm:pt-2">
           <Button
@@ -510,5 +554,122 @@ export function TransactionForm<FormValues extends FieldValues>({
         </div>
       </form>
     </Form>
+  );
+}
+
+function LoanSection<FormValues extends FieldValues>({
+  form,
+}: {
+  form: UseFormReturn<FormValues>;
+}) {
+  const markAsLoan = form.watch(
+    transactionFormNames.markAsLoan as Path<FormValues>
+  );
+  const isOn = Boolean(markAsLoan);
+
+  return (
+    <div className={sectionClassName}>
+      <FormField
+        control={form.control}
+        name={transactionFormNames.markAsLoan as Path<FormValues>}
+        render={({ field }) => (
+          <FormItem className="flex items-center justify-between gap-3 space-y-0">
+            <div className="flex items-center gap-3">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                <HandCoinsIcon className="size-4 text-primary" />
+              </div>
+              <div>
+                <FormLabel className="text-sm font-medium text-foreground">
+                  Mark as loan
+                </FormLabel>
+                <FormDescription className="text-xs text-muted-foreground">
+                  Track money owed to you (e.g. lent to a friend).
+                </FormDescription>
+              </div>
+            </div>
+            <FormControl>
+              <Switch
+                checked={Boolean(field.value)}
+                onCheckedChange={(checked) => field.onChange(checked)}
+                aria-label="Mark transaction as loan"
+              />
+            </FormControl>
+          </FormItem>
+        )}
+      />
+
+      <AnimatePresence initial={false}>
+        {isOn && (
+          <motion.div
+            key="loan-fields"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name={transactionFormNames.loanDebtor as Path<FormValues>}
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                      Debtor
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        value={(field.value as string | undefined) ?? ""}
+                        placeholder="e.g. Juan, SAT, Insurance Co."
+                        autoComplete="off"
+                        className={inputClassName}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={transactionFormNames.loanDueAt as Path<FormValues>}
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                      Due date{" "}
+                      <span className="font-normal normal-case tracking-normal text-muted-foreground/50">
+                        (optional)
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="date"
+                        className={cn(
+                          inputClassName,
+                          "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                        )}
+                        value={
+                          // @ts-ignore
+                          field.value instanceof Date
+                            ? format(field.value, "yyyy-MM-dd")
+                            : ""
+                        }
+                        onChange={(e) => {
+                          const date = e.target.value
+                            ? new Date(e.target.value + "T00:00:00")
+                            : null;
+                          field.onChange(date);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }

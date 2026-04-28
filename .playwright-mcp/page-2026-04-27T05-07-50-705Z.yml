@@ -1,0 +1,68 @@
+- main [ref=e3]:
+  - generic [ref=e4]:
+    - link "Back to home" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img
+      - text: Back to home
+    - link "Create account" [ref=e6] [cursor=pointer]:
+      - /url: /signup
+  - generic [ref=e7]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - paragraph [ref=e11]:
+          - img [ref=e12]
+          - text: Smart Money Control
+        - heading "Keep your financial workflow focused and secure." [level=2] [ref=e15]
+        - paragraph [ref=e16]: Log in to continue tracking your expenses, income, and budget health with real-time clarity.
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - generic [ref=e19]:
+            - term [ref=e20]: Secure sessions
+            - definition [ref=e21]: 99.99%
+          - generic [ref=e22]:
+            - term [ref=e23]: Monthly entries
+            - definition [ref=e24]: 120K+
+          - generic [ref=e25]:
+            - term [ref=e26]: Actionable insights
+            - definition [ref=e27]: 24/7
+        - list [ref=e28]:
+          - listitem [ref=e29]:
+            - img [ref=e30]
+            - generic [ref=e32]: Instant overview of spending and saving trends
+          - listitem [ref=e33]:
+            - img [ref=e34]
+            - generic [ref=e36]: Fast navigation between transactions, reports, and goals
+          - listitem [ref=e37]:
+            - img [ref=e38]
+            - generic [ref=e40]: Session protection with modern authentication flow
+        - generic [ref=e41]:
+          - img
+          - text: Protected by secure session management
+    - generic [ref=e43]:
+      - paragraph [ref=e44]:
+        - img [ref=e45]
+        - text: Sign In
+      - heading "Access your Monfly workspace" [level=1] [ref=e48]
+      - paragraph [ref=e49]: Continue where you left off and keep your finances under control.
+      - generic [ref=e52]:
+        - generic [ref=e54]:
+          - generic [ref=e55]: Email
+          - generic [ref=e56]:
+            - textbox "Email" [ref=e57]:
+              - /placeholder: you@example.com
+              - text: test@gmail.com
+            - generic:
+              - img
+        - generic [ref=e59]:
+          - generic [ref=e60]: Password
+          - generic [ref=e61]:
+            - textbox "Password" [ref=e62]:
+              - /placeholder: Enter your password...
+              - text: Test1234!
+            - button "Show password" [ref=e63]:
+              - img [ref=e64]
+        - button "Login" [ref=e67]
+        - paragraph [ref=e68]:
+          - text: Don't have an account?
+          - link "Sign up" [ref=e69] [cursor=pointer]:
+            - /url: /signup

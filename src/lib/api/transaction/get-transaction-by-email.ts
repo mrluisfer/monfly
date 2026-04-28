@@ -1,14 +1,28 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { z } from "zod";
+import { getTransactionsByEmail } from "~/server/db/transactions/get-transactions-by-email";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { getTransactionsByEmail } from "~/utils/transactions/get-transactions-by-email";
+} from "~/server/security/request-protection";
+import type { ApiResponse } from "~/types/ApiResponse";
+
+const MAX_TRANSACTION_LIMIT = 1000;
+const DEFAULT_TRANSACTION_LIMIT = 100;
+
+const GetTransactionsInputSchema = z.object({
+  email: z.string(),
+  limit: z.coerce
+    .number()
+    .int()
+    .positive()
+    .max(MAX_TRANSACTION_LIMIT)
+    .optional(),
+});
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
-  .inputValidator((d: { email: string }) => d)
+  .inputValidator(GetTransactionsInputSchema)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
@@ -19,7 +33,10 @@ export const getTransactionByEmailServer = createServerFn({ method: "GET" })
         identifier: sessionEmail,
       });
 
-      const result = await getTransactionsByEmail({ email: sessionEmail });
+      const result = await getTransactionsByEmail({
+        email: sessionEmail,
+        limit: data.limit ?? DEFAULT_TRANSACTION_LIMIT,
+      });
       return result;
     } catch (error) {
       const securityErrorResponse = toSecurityErrorResponse(error);

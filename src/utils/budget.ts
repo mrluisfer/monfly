@@ -1,4 +1,4 @@
-import { prismaClient as prisma } from "./prisma";
+import { prismaClient as prisma } from "~/server/prisma";
 
 export const createBudget = async (data: {
   userEmail: string;

@@ -78,7 +78,7 @@ export function DataTableToolbar({
           </Button>
           <Button
             size="lg"
-            variant={typeFilterValue === "expense" ? "destructive" : "outline"}
+            variant={typeFilterValue === "expense" ? "default" : "outline"}
             className="rounded-full"
             onClick={() => {
               const column = table.getColumn("type");

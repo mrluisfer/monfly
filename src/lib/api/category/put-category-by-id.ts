@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import type { ApiResponse } from "~/types/ApiResponse";
-import { prismaClient } from "~/utils/prisma";
+import { prismaClient } from "~/server/prisma";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { putCategoryById } from "~/utils/category/put-category-by-id";
+} from "~/server/security/request-protection";
+import { putCategoryById } from "~/server/db/categories/put-category-by-id";
 import z from "zod";
 
 export const putCategoryByIdServer = createServerFn({ method: "POST" })

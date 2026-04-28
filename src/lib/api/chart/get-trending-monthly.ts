@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { enforceRateLimit, resolveSessionEmail } from "~/utils/security/request-protection";
-import { getTrendingMonthly } from "~/utils/charts/get-trending-monthly";
+import { enforceRateLimit, resolveSessionEmail } from "~/server/security/request-protection";
+import { getTrendingMonthly } from "~/server/db/charts/get-trending-monthly";
 import { z } from "zod";
 
 export const getTrendingMonthlyServer = createServerFn({

@@ -1,6 +1,6 @@
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
-import { useTransactionHoverContext } from "~/hooks/useTransactionHoverContext";
+import { useTransactionHoverContext } from "~/hooks/transactions/useTransactionHoverContext";
 
 const id = "disable-hover";
 export function DisableHoverInfo() {

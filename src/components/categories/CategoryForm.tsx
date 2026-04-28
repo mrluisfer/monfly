@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CATEGORY_ICONS } from "~/constants/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { CategoryFormSchema } from "~/zod-schemas/category-schema";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";

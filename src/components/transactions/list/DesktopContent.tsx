@@ -1,4 +1,4 @@
-import { DataNotFoundPlaceholder } from "~/components/DataNotFoundPlaceholder";
+import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import { ErrorState } from "./ErrorState";

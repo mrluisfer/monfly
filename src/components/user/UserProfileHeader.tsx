@@ -1,5 +1,5 @@
+import UserAvatar from "~/components/shared/UserAvatar";
 import { CardDescription, CardHeader, CardTitle } from "~/components/ui/card";
-import UserAvatar from "~/components/UserAvatar";
 import { UserIcon } from "lucide-react";
 
 interface User {

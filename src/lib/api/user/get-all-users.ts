@@ -4,8 +4,8 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
-import { getAllUsers } from "~/utils/user/get-all-users";
+} from "~/server/security/request-protection";
+import { getAllUsers } from "~/server/db/users/get-all-users";
 import z from "zod";
 
 export const getAllUsersServer = createServerFn({ method: "GET" })

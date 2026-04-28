@@ -21,7 +21,7 @@ export type SidebarItemType = {
 export enum SidebarRouteUrl {
   HOME = "/home",
   TRANSACTIONS = "/home/transactions",
-  BUDGET = "/home/budget",
+  LOANS = "/home/loans",
   REPORTS = "/home/reports",
   CATEGORIES = "/home/categories",
   CALCULATOR = "/home/balance-calculator",
@@ -35,10 +35,10 @@ export const sidebarRoutes: SidebarItemType[] = [
     url: SidebarRouteUrl.TRANSACTIONS,
   },
   {
-    title: "Budgets",
+    title: "Loans",
     icon: Wallet,
-    url: SidebarRouteUrl.BUDGET,
-    disabled: true,
+    url: SidebarRouteUrl.LOANS,
+    disabled: false,
   },
   { title: "Reports", icon: BarChart, url: SidebarRouteUrl.REPORTS },
   { title: "Categories", icon: List, url: SidebarRouteUrl.CATEGORIES },

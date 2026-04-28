@@ -1,5 +1,5 @@
 import type { Transaction } from "@prisma/client";
-import { useEditTransaction } from "~/hooks/useEditTransaction";
+import { useEditTransaction } from "~/hooks/transactions/useEditTransaction";
 
 import { TransactionForm } from "./TransactionForm";
 

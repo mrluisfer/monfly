@@ -4,10 +4,10 @@ import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
-} from "~/utils/security/request-protection";
+} from "~/server/security/request-protection";
 import { z } from "zod";
 
-import { putUserTotalBalance as putUserTotalBalanceUtils } from "../../../utils/user/put-user-total-balance";
+import { putUserTotalBalance as putUserTotalBalanceUtils } from "~/server/db/users/put-user-total-balance";
 
 export const putUserTotalBalanceServer = createServerFn({ method: "POST" })
   .inputValidator(

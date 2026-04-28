@@ -1,5 +1,5 @@
 import { fontsDisplay } from "~/constants/fonts-display";
-import { useFontDisplay } from "~/hooks/useFontDisplay";
+import { useFontDisplay } from "~/hooks/ui/useFontDisplay";
 
 import { cn } from "@/lib/utils";
 import {

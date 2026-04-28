@@ -3,7 +3,7 @@ import {
   defaultMutationHaptics,
   type AppHapticPreset,
 } from "~/constants/haptics";
-import { useAppHaptics } from "~/hooks/useAppHaptics";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { sileo, type SileoOptions } from "~/lib/toaster";
 
 type MutationHapticsConfig = {
@@ -101,9 +101,9 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
   >("idle");
   const inFlightRef = React.useRef<Promise<TData | undefined> | null>(null);
   const inFlightKeyRef = React.useRef<string | null>(null);
-  const recentSuccessRef = React.useRef<Map<string, RecentSuccessfulMutation<TData>>>(
-    new Map()
-  );
+  const recentSuccessRef = React.useRef<
+    Map<string, RecentSuccessfulMutation<TData>>
+  >(new Map());
   const { triggerPreset } = useAppHaptics();
 
   const resolvedHaptics = React.useMemo(() => {

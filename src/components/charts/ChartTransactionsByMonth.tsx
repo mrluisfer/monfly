@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { DataNotFoundPlaceholder } from "~/components/DataNotFoundPlaceholder";
+import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import {
   Card,
   CardContent,
@@ -118,7 +118,7 @@ export default function ChartTransactionsByMonth() {
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
   return (
-    <Card className="w-full max-w-5xl rounded-2xl border-0 shadow-none">
+    <Card className="w-full max-w-5xl rounded-2xl border-0 shadow-none h-fit">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
           <BarChart3Icon className="size-5 text-primary" />
