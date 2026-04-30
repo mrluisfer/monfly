@@ -3,7 +3,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 
 import { useAppSession } from "~/server/auth/session";
 
-export const getUserSession = createServerFn({ method: "GET" }).handler(
+export const getUserSession = createServerFn({ method: "POST" }).handler(
   async () => {
     try {
       // We need to auth on the server so we have access to secure cookies

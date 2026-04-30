@@ -5,15 +5,14 @@ import { getUserSession } from "~/server/db/users/get-user-session";
 
 export const Route = createFileRoute("/_authed")({
   beforeLoad: async () => {
-    const { data: userEmail } = await getUserSession();
-    if (!userEmail) {
-      // This means the user is not authenticated
+    const session = await getUserSession();
+    if (!session.success || !session.data) {
       throw redirect({
         to: "/login",
       });
     }
 
-    return { user: userEmail };
+    return { user: session.data };
   },
   errorComponent: (props) => <DefaultCatchBoundary {...props} />,
   component: () => {
