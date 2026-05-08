@@ -4,7 +4,7 @@ import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceho
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { SearchIcon } from "lucide-react";
+import { ExternalLinkIcon, SearchIcon } from "lucide-react";
 
 import { ErrorState } from "./ErrorState";
 import { LoadingState } from "./LoadingState";
@@ -123,7 +123,8 @@ export function MobileContent({
           {isTransactionsPage ? null : (
             <div className="flex justify-center items-center w-full md:justify-start">
               <Button render={<Link to="/home/transactions" />}>
-                See more transactions
+                <ExternalLinkIcon />
+                More transactions
               </Button>
             </div>
           )}

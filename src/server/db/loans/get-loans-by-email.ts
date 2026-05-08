@@ -1,5 +1,4 @@
 import type { Loan } from "@prisma/client";
-
 import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 

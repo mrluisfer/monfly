@@ -26,6 +26,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  useSidebar,
 } from "~/components/ui/sidebar";
 import { Skeleton } from "~/components/ui/skeleton";
 import { sidebarRoutes } from "~/constants/sidebar-routes";
@@ -33,11 +34,12 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
+import { sidebarOpenMobileAtom } from "~/state/atoms/ui/sidebarAtoms";
+import { useSetAtom } from "jotai";
 import {
   ChevronsUpDownIcon,
   LogOutIcon,
   SettingsIcon,
-  SparklesIcon,
   UserIcon,
 } from "lucide-react";
 
@@ -75,6 +77,11 @@ function AppSidebarHeader() {
 
 function NavMain() {
   const location = useLocation();
+  const setOpenMobile = useSetAtom(sidebarOpenMobileAtom);
+
+  const handleNavigate = () => {
+    setOpenMobile(false);
+  };
 
   return (
     <SidebarGroup>
@@ -109,7 +116,7 @@ function NavMain() {
                         </span>
                       </button>
                     ) : (
-                      <Link to={route.url}>
+                      <Link to={route.url} onClick={handleNavigate}>
                         <Icon aria-hidden="true" />
                         <span>{route.title}</span>
                       </Link>
@@ -138,12 +145,12 @@ function NavSecondary() {
               </SidebarMenuButton>
             </SettingsDialog>
           </SidebarMenuItem>
-          <SidebarMenuItem>
+          {/* <SidebarMenuItem>
             <SidebarMenuButton tooltip="What's new" disabled>
               <SparklesIcon aria-hidden="true" />
               <span>What&apos;s new</span>
             </SidebarMenuButton>
-          </SidebarMenuItem>
+          </SidebarMenuItem> */}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
@@ -152,6 +159,7 @@ function NavSecondary() {
 
 function NavUser() {
   const userEmail = useRouteUser();
+  const { isMobile, state } = useSidebar();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeDialog, setActiveDialog] = useState<
     "settings" | "sign-out" | null
@@ -227,10 +235,10 @@ function NavUser() {
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              side="right"
+              side={isMobile ? "top" : state === "collapsed" ? "right" : "top"}
               align="end"
               sideOffset={8}
-              className="min-w-56"
+              className="w-[14rem] min-w-56 max-w-[calc(100vw-1rem)]"
             >
               <DropdownMenuGroup>
                 <DropdownMenuLabel className="flex items-center gap-2 p-2">

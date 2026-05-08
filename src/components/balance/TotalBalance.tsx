@@ -162,7 +162,7 @@ const TotalBalance = () => {
   }
 
   return (
-    <section className="bg-card rounded-2xl p-5 sm:p-6 lg:p-7">
+    <section className="bg-card rounded-2xl px-1 py-3 sm:p-3 lg:p-7">
       <div className="relative grid gap-6">
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -185,8 +185,11 @@ const TotalBalance = () => {
               >
                 <span className="hidden md:block">Copy balance</span>
               </CopyButton>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm text-muted-foreground hidden md:block">
                 {summary.recentPoints.length} recorded periods
+              </span>
+              <span className="text-sm text-muted-foreground md:hidden">
+                {summary.recentPoints.length} records
               </span>
             </div>
           </div>

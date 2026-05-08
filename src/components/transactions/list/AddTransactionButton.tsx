@@ -26,9 +26,9 @@ const AddTransactionButton = ({
 
   const trigger = customTrigger ?? (
     <Button
-      className="group h-10 rounded-full px-3 md:h-11 md:px-4"
+      className="group"
       variant="outline"
-      size="sm"
+      size="lg"
       aria-expanded={open}
       aria-label={
         open ? "Close add transaction form" : "Open add transaction form"

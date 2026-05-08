@@ -24,7 +24,12 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { LOAN_STATUS_LABEL, type LoanStatus } from "~/constants/loan-status";
+import {
+  LOAN_DIRECTION_LABEL,
+  LOAN_STATUS_LABEL,
+  type LoanDirection,
+  type LoanStatus,
+} from "~/constants/loan-status";
 import { useAddLoan } from "~/hooks/loans/useAddLoan";
 import { useDeleteLoan } from "~/hooks/loans/useDeleteLoan";
 import { useLoans } from "~/hooks/loans/useLoans";
@@ -33,6 +38,8 @@ import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 import {
   AlertCircleIcon,
+  ArrowDownLeftIcon,
+  ArrowUpRightIcon,
   BanknoteArrowUpIcon,
   CalendarIcon,
   CheckCheck,
@@ -115,8 +122,33 @@ function AddLoanCard() {
         className="space-y-4"
         noValidate
       >
+        <Controller
+          control={form.control}
+          name="direction"
+          render={({ field }) => (
+            <Tabs
+              value={field.value}
+              onValueChange={(v) => field.onChange(v as LoanDirection)}
+              className="w-full"
+            >
+              <TabsList className="w-full">
+                <TabsTrigger value="lent" className="flex-1 gap-1.5">
+                  <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />
+                  Owed to me
+                </TabsTrigger>
+                <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
+                  <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
+                  I owe
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          )}
+        />
+
         <Field
-          label="Debtor"
+          label={
+            form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"
+          }
           error={errors.debtor?.message}
           icon={<UserIcon className="size-3.5" />}
         >
@@ -221,9 +253,12 @@ function AddLoanCard() {
 /* -------------------------------------------------------------------------- */
 
 type StatusFilter = "all" | LoanStatus;
+type DirectionFilter = "all" | LoanDirection;
 
 function LoansList() {
   const [filter, setFilter] = useState<StatusFilter>("all");
+  const [directionFilter, setDirectionFilter] =
+    useState<DirectionFilter>("all");
   const { data, isPending, error } = useLoans();
   const update = useUpdateLoan();
   const del = useDeleteLoan();
@@ -283,42 +318,102 @@ function LoansList() {
     { all: 0, pending: 0, partial: 0, paid: 0 } as Record<StatusFilter, number>
   );
 
-  const loans =
-    filter === "all" ? allLoans : allLoans.filter((l) => l.status === filter);
+  const loans = allLoans.filter((l) => {
+    const directionOk =
+      directionFilter === "all" || (l.direction ?? "lent") === directionFilter;
+    const statusOk = filter === "all" || l.status === filter;
+    return directionOk && statusOk;
+  });
+
+  const directionCounts = allLoans.reduce(
+    (acc, l) => {
+      const dir = (l.direction ?? "lent") as LoanDirection;
+      acc[dir] += 1;
+      return acc;
+    },
+    { lent: 0, borrowed: 0 } as Record<LoanDirection, number>
+  );
 
   const totals = allLoans.reduce(
     (acc, l) => {
-      acc.total += l.amount;
-      acc.paid += l.amountPaid;
-      if (l.status !== "paid") acc.outstanding += l.amount - l.amountPaid;
+      const dir = (l.direction ?? "lent") as LoanDirection;
+      const remaining = l.status !== "paid" ? l.amount - l.amountPaid : 0;
+      if (dir === "lent") {
+        acc.lentOutstanding += remaining;
+        acc.lentReceived += l.amountPaid;
+      } else {
+        acc.borrowedOutstanding += remaining;
+        acc.borrowedPaid += l.amountPaid;
+      }
       return acc;
     },
-    { total: 0, paid: 0, outstanding: 0 }
+    {
+      lentOutstanding: 0,
+      lentReceived: 0,
+      borrowedOutstanding: 0,
+      borrowedPaid: 0,
+    }
   );
+
+  const netBalance = totals.lentOutstanding - totals.borrowedOutstanding;
 
   return (
     <div className="space-y-4">
-      {/* Summary metrics — single col on phones, 3-col from sm+ */}
+      {/* Summary metrics — Owed to me / I owe / Net */}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
         <MetricCard
-          label="Outstanding"
-          value={formatCurrency(totals.outstanding, "USD")}
-          accent="destructive"
-          icon={<AlertCircleIcon className="size-4" aria-hidden="true" />}
-        />
-        <MetricCard
-          label="Received"
-          value={formatCurrency(totals.paid, "USD")}
+          label="Owed to me"
+          value={formatCurrency(totals.lentOutstanding, "USD")}
           accent="success"
-          icon={<TrendingUpIcon className="size-4" aria-hidden="true" />}
+          icon={<ArrowDownLeftIcon className="size-4" aria-hidden="true" />}
         />
         <MetricCard
-          label="Total"
-          value={formatCurrency(totals.total, "USD")}
-          accent="primary"
-          icon={<CircleDollarSignIcon className="size-4" aria-hidden="true" />}
+          label="I owe"
+          value={formatCurrency(totals.borrowedOutstanding, "USD")}
+          accent="destructive"
+          icon={<ArrowUpRightIcon className="size-4" aria-hidden="true" />}
+        />
+        <MetricCard
+          label="Net balance"
+          value={formatCurrency(netBalance, "USD")}
+          accent={netBalance >= 0 ? "primary" : "destructive"}
+          icon={
+            netBalance >= 0 ? (
+              <TrendingUpIcon className="size-4" aria-hidden="true" />
+            ) : (
+              <AlertCircleIcon className="size-4" aria-hidden="true" />
+            )
+          }
         />
       </div>
+
+      {/* Direction filter — quick toggle between perspectives */}
+      <Tabs
+        value={directionFilter}
+        onValueChange={(value) =>
+          setDirectionFilter(value as DirectionFilter)
+        }
+        className="w-full"
+      >
+        <TabsList className="w-full sm:w-fit">
+          <TabsTrigger value="all" className="flex-1 sm:flex-initial">
+            All
+          </TabsTrigger>
+          <TabsTrigger value="lent" className="flex-1 gap-1.5 sm:flex-initial">
+            <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />
+            Owed to me
+            <CountBadge n={directionCounts.lent} />
+          </TabsTrigger>
+          <TabsTrigger
+            value="borrowed"
+            className="flex-1 gap-1.5 sm:flex-initial"
+          >
+            <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
+            I owe
+            <CountBadge n={directionCounts.borrowed} />
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       {/* Status filter tabs — full-width on mobile (4 equal columns), fits content on sm+ */}
       <Tabs
@@ -385,6 +480,7 @@ type LoanRow = {
   amount: number;
   amountPaid: number;
   status: string;
+  direction?: string | null;
   dueAt?: Date | string | null;
   notes?: string | null;
 };
@@ -403,6 +499,8 @@ function LoanListItem({
   onDelete: () => void;
 }) {
   const status = loan.status as LoanStatus;
+  const direction = (loan.direction ?? "lent") as LoanDirection;
+  const isBorrowed = direction === "borrowed";
   const isPaid = status === "paid";
   const remaining = Math.max(loan.amount - loan.amountPaid, 0);
   const progressPct =
@@ -417,6 +515,7 @@ function LoanListItem({
             <span className="text-foreground truncate text-sm font-semibold capitalize sm:text-base">
               {loan.debtor}
             </span>
+            <DirectionBadge direction={direction} />
             <StatusBadge status={status} />
           </div>
           <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-xs tabular-nums">
@@ -452,7 +551,7 @@ function LoanListItem({
               {formatCurrency(remaining, "USD")}
             </p>
             <p className="text-muted-foreground text-[10px] sm:text-xs">
-              remaining
+              {isBorrowed ? "to pay" : "remaining"}
             </p>
           </div>
         )}
@@ -551,6 +650,28 @@ function Field({
         </span>
       )}
     </label>
+  );
+}
+
+function DirectionBadge({ direction }: { direction: LoanDirection }) {
+  const isBorrowed = direction === "borrowed";
+  return (
+    <Badge
+      variant="outline"
+      className={cn(
+        "gap-1 uppercase tracking-wide",
+        isBorrowed
+          ? "border-destructive/30 bg-destructive/10 text-destructive"
+          : "border-success/30 bg-success/10 text-success"
+      )}
+    >
+      {isBorrowed ? (
+        <ArrowUpRightIcon className="size-3" aria-hidden="true" />
+      ) : (
+        <ArrowDownLeftIcon className="size-3" aria-hidden="true" />
+      )}
+      {LOAN_DIRECTION_LABEL[direction]}
+    </Badge>
   );
 }
 

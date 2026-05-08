@@ -1,13 +1,26 @@
 import { type ReactNode } from "react";
+import { useAtom } from "jotai";
 
+import {
+  sidebarOpenAtom,
+  sidebarOpenMobileAtom,
+} from "~/state/atoms/ui/sidebarAtoms";
 import { AppSidebar } from "../shell/AppSidebar";
 import { CommandPaletteProvider } from "../shell/CommandPalette";
 import { Topbar } from "../shell/Topbar";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 
 const Layout = ({ children }: { children: ReactNode }) => {
+  const [open, setOpen] = useAtom(sidebarOpenAtom);
+  const [openMobile, setOpenMobile] = useAtom(sidebarOpenMobileAtom);
+
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      open={open}
+      onOpenChange={setOpen}
+      openMobile={openMobile}
+      onOpenMobileChange={setOpenMobile}
+    >
       <CommandPaletteProvider>
         <a
           href="#main-content"

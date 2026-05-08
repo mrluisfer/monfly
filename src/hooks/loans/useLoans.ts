@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getLoansByEmailServer } from "~/lib/api/loan/get-loans-by-email";
 import { queryDictionary } from "~/queries/dictionary";

@@ -19,11 +19,11 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 pb-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6",
+        "flex flex-col gap-3 pb-2 sm:flex-row sm:items-end sm:justify-between sm:gap-6 flex-wrap lg:flex-nowrap",
         className
       )}
     >
-      <div className="flex min-w-0 items-start gap-3">
+      <div className="flex min-w-0 items-start gap-3 flex-wrap lg:flex-nowrap">
         {icon && (
           <div
             aria-hidden="true"
@@ -37,7 +37,7 @@ export function PageHeader({
             {title}
           </h1>
           {description && (
-            <p className="text-muted-foreground text-sm leading-relaxed sm:text-base">
+            <p className="text-muted-foreground text-sm leading-relaxed sm:text-base truncate max-w-sm md:max-w-md lg:max-w-lg xl:max-w-7xl text-ellipsis">
               {description}
             </p>
           )}

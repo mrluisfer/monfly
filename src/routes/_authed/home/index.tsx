@@ -2,16 +2,6 @@ import { lazy, Suspense } from "react";
 import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  AnimatePresence,
-  domAnimation,
-  LazyMotion,
-  m,
-  useReducedMotion,
-} from "framer-motion";
-import { useAtomValue } from "jotai";
-import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
-
 import TotalBalance from "~/components/balance/TotalBalance";
 import { DashboardMetrics } from "~/components/home/DashboardMetrics";
 import { PageHeader } from "~/components/layout/PageHeader";
@@ -26,6 +16,15 @@ import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
+import {
+  AnimatePresence,
+  domAnimation,
+  LazyMotion,
+  m,
+  useReducedMotion,
+} from "framer-motion";
+import { useAtomValue } from "jotai";
+import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
@@ -166,12 +165,7 @@ function RouteComponent() {
                   delay: shouldReduceMotion ? 0 : 0.15,
                 }}
               >
-                <Section
-                  title="Recent transactions"
-                  description="Your latest activity across accounts."
-                >
-                  <TransactionsList />
-                </Section>
+                <TransactionsList />
               </m.div>
 
               <m.div
@@ -187,7 +181,9 @@ function RouteComponent() {
                   title="Income vs expenses"
                   description="Monthly comparison of inflow and outflow."
                 >
-                  <Suspense fallback={<Skeleton className="h-72 w-full rounded-2xl" />}>
+                  <Suspense
+                    fallback={<Skeleton className="h-72 w-full rounded-2xl" />}
+                  >
                     <IncomeExpenseChart />
                   </Suspense>
                 </Section>

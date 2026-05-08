@@ -1,6 +1,4 @@
 import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
-
 import { getLoansByEmail } from "~/server/db/loans/get-loans-by-email";
 import {
   enforceRateLimit,
@@ -8,6 +6,7 @@ import {
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
 import type { ApiResponse } from "~/types/ApiResponse";
+import { z } from "zod";
 
 export const getLoansByEmailServer = createServerFn({ method: "GET" })
   .inputValidator(

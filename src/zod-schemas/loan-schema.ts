@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { LOAN_STATUSES } from "~/constants/loan-status";
+import { LOAN_DIRECTIONS, LOAN_STATUSES } from "~/constants/loan-status";
 
 /**
  * Form-level schema (string inputs from React Hook Form).
@@ -22,6 +22,7 @@ export const LoanFormSchema = z.object({
   dueAt: z.date().optional().nullable(),
   notes: z.string().max(500).optional().nullable(),
   transactionId: z.string().uuid().optional().nullable(),
+  direction: z.enum(LOAN_DIRECTIONS),
 });
 
 export type LoanFormValues = z.infer<typeof LoanFormSchema>;
@@ -36,6 +37,7 @@ export const CreateLoanInputSchema = z.object({
   dueAt: z.date().nullable().optional(),
   notes: z.string().max(500).nullable().optional(),
   transactionId: z.string().uuid().nullable().optional(),
+  direction: z.enum(LOAN_DIRECTIONS).optional(),
 });
 
 export type CreateLoanInput = z.infer<typeof CreateLoanInputSchema>;
@@ -49,6 +51,7 @@ export const UpdateLoanInputSchema = z.object({
   amount: z.number().positive().optional(),
   amountPaid: z.number().min(0).optional(),
   status: z.enum(LOAN_STATUSES).optional(),
+  direction: z.enum(LOAN_DIRECTIONS).optional(),
   issuedAt: z.date().optional(),
   dueAt: z.date().nullable().optional(),
   notes: z.string().max(500).nullable().optional(),

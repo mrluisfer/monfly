@@ -2,13 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "@tanstack/react-router";
 import { BalanceStatusBadge } from "~/components/header/badges/BalanceStatusBadge";
 import { Button } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent } from "~/components/ui/card";
 import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -19,7 +13,9 @@ import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { PageHeader } from "@/components/layout/PageHeader";
 
+import AddTransactionButton from "./AddTransactionButton";
 import { DesktopContent } from "./DesktopContent";
 import { MobileContent } from "./MobileContent";
 import { MobileHeader } from "./MobileHeader";
@@ -34,13 +30,14 @@ export default function TransactionsList() {
   const userEmail = useRouteUser();
   const pathname = useLocation().pathname;
   const isTransactionsRoute = pathname.includes("/transactions");
+  const limit = isTransactionsRoute ? 1000 : 30;
 
-  const { data, isPending, error, refetch } = useQuery({
-    queryKey: [queryDictionary.transactions, userEmail],
+  const { data, isPending, error, refetch, isRefetching } = useQuery({
+    queryKey: [queryDictionary.transactions, userEmail, limit],
     queryFn: createSafeQuery(
       () =>
         getTransactionByEmailServer({
-          data: { email: userEmail, limit: isTransactionsRoute ? 1000 : 30 },
+          data: { email: userEmail, limit },
         }),
       8000
     ),
@@ -56,50 +53,46 @@ export default function TransactionsList() {
 
   return (
     <TransactionHoverProvider>
-      <div className="hidden md:block">
-        <Card className="min-h-[30rem] rounded-2xl border-2 p-0 shadow-none">
-          <CardHeader className="border-b border-border/60 px-5 pt-5 pb-4">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="space-y-1">
-                <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-                  Activity feed
-                </p>
-                <CardTitle className="text-xl flex items-center gap-2">
-                  <WalletIcon className="size-5 text-primary" />
-                  Transactions
-                </CardTitle>
-              </div>
-              <div className="ml-auto flex items-center gap-3 md:gap-4">
-                <Badge variant={"outline"}>
-                  {total} {total === 1 ? "record" : "records"}
-                </Badge>
-                <BalanceStatusBadge className="rounded-full" />
-                <Button
-                  onClick={() => refetch()}
-                  disabled={isPending || transactions.length === 0}
-                  title="Refresh transactions"
-                  variant="default"
-                  size="default"
-                >
-                  {isPending ? (
-                    <>
-                      <Spinner className="mr-2 h-4 w-4" />
-                      <span>Loading...</span>
-                    </>
-                  ) : (
-                    <>
-                      <RefreshCcwIcon className="h-4 w-4" />
-                      <span className="ml-2">Refresh</span>
-                    </>
-                  )}
-                </Button>
-              </div>
+      <div className="hidden md:block mt-4">
+        <PageHeader
+          icon={<WalletIcon className="size-5" aria-hidden="true" />}
+          title="Transactions"
+          description="Search, filter, edit, or add transactions from one place."
+          actions={
+            <div className="flex gap-4 items-center justify-end">
+              <Badge variant={"default"}>
+                {total} {total === 1 ? "record" : "records"}
+              </Badge>
+              <BalanceStatusBadge className="rounded-full" />
+              <Button
+                onClick={() => refetch()}
+                disabled={isPending || transactions.length === 0}
+                title="Refresh transactions"
+                variant={isRefetching ? "default" : "outline"}
+                size="sm"
+              >
+                {isPending || isRefetching ? (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    <span>Loading...</span>
+                  </>
+                ) : (
+                  <>
+                    <RefreshCcwIcon className="h-4 w-4" />
+                    <span className="ml-2">Refresh</span>
+                  </>
+                )}
+              </Button>
+              {pathname.includes("/transactions") && (
+                <div className="hidden md:block">
+                  <AddTransactionButton />
+                </div>
+              )}
             </div>
-            <CardDescription className="pt-2 text-sm leading-6">
-              Search, filter, edit, or add transactions from one place.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="px-5 py-5">
+          }
+        />
+        <Card className="min-h-[30rem] rounded-2xl border-2 p-0 shadow-none mt-2">
+          <CardContent className="px-5 pb-5 pt-3">
             <DesktopContent
               userEmail={userEmail}
               isPending={isPending}
@@ -115,7 +108,7 @@ export default function TransactionsList() {
       </div>
 
       <div className="space-y-4 md:hidden">
-        <section className="bg-card rounded-2xl lg:p-4 pb-4">
+        <section className="bg-card rounded-2xl lg:p-4 py-4 px-2">
           <MobileHeader
             total={total}
             isPending={isPending}

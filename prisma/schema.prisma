@@ -12,33 +12,33 @@ model User {
   email          String           @unique
   password       String
   name           String?
-  transactions   Transaction[]
-  budgets        Budget[]
-  pots           Pot[]
-  recurringBills RecurringBill[]
-  categories     Category[]
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now()) @updatedAt
   totalBalance   Float            @default(0)
-  MonthlySummary MonthlySummary[]
+  budgets        Budget[]
   cards          Card[]
+  categories     Category[]
   loans          Loan[]
+  MonthlySummary MonthlySummary[]
+  pots           Pot[]
+  recurringBills RecurringBill[]
+  transactions   Transaction[]
 }
 
 model Transaction {
   id          String   @id @default(uuid())
-  user        User     @relation(fields: [userEmail], references: [email])
   userEmail   String
   amount      Float
   type        String
   category    String
   description String?
   date        DateTime
-  card        Card?    @relation(fields: [cardId], references: [id])
   cardId      String?
-  loans       Loan[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
+  loans       Loan[]
+  card        Card?    @relation(fields: [cardId], references: [id])
+  user        User     @relation(fields: [userEmail], references: [email])
 
   @@index([userEmail])
   @@index([userEmail, type])
@@ -48,7 +48,6 @@ model Transaction {
 
 model Budget {
   id          String   @id @default(uuid())
-  user        User     @relation(fields: [userEmail], references: [email])
   userEmail   String
   category    String
   amountLimit Float
@@ -56,11 +55,11 @@ model Budget {
   startDate   DateTime
   endDate     DateTime
   createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userEmail], references: [email])
 }
 
 model Pot {
   id            String   @id @default(uuid())
-  user          User     @relation(fields: [userEmail], references: [email])
   userEmail     String
   title         String
   goalAmount    Float
@@ -68,11 +67,11 @@ model Pot {
   category      String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now()) @updatedAt
+  user          User     @relation(fields: [userEmail], references: [email])
 }
 
 model RecurringBill {
   id          String   @id @default(uuid())
-  user        User     @relation(fields: [userEmail], references: [email])
   userEmail   String
   title       String
   amount      Float
@@ -81,23 +80,23 @@ model RecurringBill {
   category    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now()) @updatedAt
+  user        User     @relation(fields: [userEmail], references: [email])
 }
 
 model Category {
   id        String   @id @default(uuid())
   name      String
   icon      String
-  user      User     @relation(fields: [userEmail], references: [email])
   userEmail String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  user      User     @relation(fields: [userEmail], references: [email])
 
   @@index([userEmail])
 }
 
 model MonthlySummary {
   id           String   @id @default(uuid())
-  user         User     @relation(fields: [userEmail], references: [email])
   userEmail    String
   month        Int
   year         Int
@@ -105,11 +104,11 @@ model MonthlySummary {
   expenseTotal Float    @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userEmail], references: [email])
 }
 
 model Card {
   id           String        @id @default(uuid())
-  user         User          @relation(fields: [userEmail], references: [email])
   userEmail    String
   name         String
   type         String?
@@ -118,38 +117,31 @@ model Card {
   balance      Float?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
+  user         User          @relation(fields: [userEmail], references: [email])
   transactions Transaction[]
 }
 
-// Loan = money owed TO the user (debt receivable).
-// Can be linked to a transaction (e.g. cash given to a friend) or
-// stand-alone (e.g. expected SAT refund, insurance claim, etc.).
 model Loan {
   id            String       @id @default(uuid())
-  user          User         @relation(fields: [userEmail], references: [email])
   userEmail     String
-  // Who owes us — free text so it can be a person OR an entity (e.g. "SAT").
   debtor        String
   amount        Float
-  // Amount already received from the debtor (allows partial payments).
   amountPaid    Float        @default(0)
-  // "pending" | "partial" | "paid"
   status        String       @default("pending")
-  // When we lent the money / when the debt was generated.
   issuedAt      DateTime     @default(now())
-  // Expected repayment date (optional).
   dueAt         DateTime?
-  // When the debt was fully settled (set when status flips to "paid").
   paidAt        DateTime?
   notes         String?
-  // Optional link to the transaction that originated this loan.
-  transaction   Transaction? @relation(fields: [transactionId], references: [id], onDelete: SetNull)
   transactionId String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now()) @updatedAt
+  direction     String       @default("lent")
+  transaction   Transaction? @relation(fields: [transactionId], references: [id])
+  user          User         @relation(fields: [userEmail], references: [email])
 
   @@index([userEmail])
   @@index([userEmail, status])
+  @@index([userEmail, direction])
   @@index([userEmail, dueAt])
   @@index([transactionId])
 }

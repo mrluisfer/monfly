@@ -35,6 +35,7 @@ export const postLoanByEmail = async (
         amount: input.amount,
         amountPaid: 0,
         status: "pending",
+        direction: input.direction ?? "lent",
         issuedAt: input.issuedAt ?? new Date(),
         dueAt: input.dueAt ?? null,
         notes: input.notes ?? null,

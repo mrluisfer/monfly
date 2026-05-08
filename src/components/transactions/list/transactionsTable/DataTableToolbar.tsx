@@ -97,7 +97,7 @@ export function DataTableToolbar({
           {hasActiveFilters && (
             <Button
               size="lg"
-              variant="ghost"
+              variant="outline"
               onClick={() => {
                 setGlobalFilter("");
                 table.resetColumnFilters();
