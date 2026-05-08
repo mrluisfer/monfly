@@ -62,6 +62,7 @@ export const putLoanById = async (
         amount: nextAmount,
         amountPaid: nextAmountPaid,
         status: nextStatus,
+        direction: input.direction ?? existing.direction,
         issuedAt: input.issuedAt ?? existing.issuedAt,
         dueAt: input.dueAt === undefined ? existing.dueAt : input.dueAt,
         notes: input.notes === undefined ? existing.notes : input.notes,

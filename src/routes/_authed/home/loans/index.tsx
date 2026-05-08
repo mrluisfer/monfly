@@ -13,6 +13,15 @@ import {
 } from "~/components/ui/alert-dialog";
 import { Badge } from "~/components/ui/badge";
 import { Button, buttonVariants } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { MetricCard } from "~/components/ui/metric-card";
 import { Separator } from "~/components/ui/separator";
@@ -46,6 +55,7 @@ import {
   CircleDollarSignIcon,
   FileTextIcon,
   HandCoinsIcon,
+  PencilIcon,
   PlusCircleIcon,
   RotateCcwIcon,
   Trash2Icon,
@@ -137,8 +147,8 @@ function AddLoanCard() {
                   Owed to me
                 </TabsTrigger>
                 <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
-                  <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
-                  I owe
+                  <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />I
+                  owe
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -146,9 +156,7 @@ function AddLoanCard() {
         />
 
         <Field
-          label={
-            form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"
-          }
+          label={form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"}
           error={errors.debtor?.message}
           icon={<UserIcon className="size-3.5" />}
         >
@@ -387,59 +395,64 @@ function LoansList() {
         />
       </div>
 
-      {/* Direction filter — quick toggle between perspectives */}
-      <Tabs
-        value={directionFilter}
-        onValueChange={(value) =>
-          setDirectionFilter(value as DirectionFilter)
-        }
-        className="w-full"
-      >
-        <TabsList className="w-full sm:w-fit">
-          <TabsTrigger value="all" className="flex-1 sm:flex-initial">
-            All
-          </TabsTrigger>
-          <TabsTrigger value="lent" className="flex-1 gap-1.5 sm:flex-initial">
-            <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />
-            Owed to me
-            <CountBadge n={directionCounts.lent} />
-          </TabsTrigger>
-          <TabsTrigger
-            value="borrowed"
-            className="flex-1 gap-1.5 sm:flex-initial"
-          >
-            <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
-            I owe
-            <CountBadge n={directionCounts.borrowed} />
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div className="grid grid-cols-2 items-center justify-between flex-wrap w-full">
+        {/* Direction filter — quick toggle between perspectives */}
+        <Tabs
+          value={directionFilter}
+          onValueChange={(value) =>
+            setDirectionFilter(value as DirectionFilter)
+          }
+          className="w-full"
+        >
+          <TabsList className="w-full sm:w-fit">
+            <TabsTrigger value="all" className="flex-1 sm:flex-initial">
+              All
+            </TabsTrigger>
+            <TabsTrigger
+              value="lent"
+              className="flex-1 gap-1.5 sm:flex-initial"
+            >
+              <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />
+              Owed to me
+              <CountBadge n={directionCounts.lent} />
+            </TabsTrigger>
+            <TabsTrigger
+              value="borrowed"
+              className="flex-1 gap-1.5 sm:flex-initial"
+            >
+              <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
+              I owe
+              <CountBadge n={directionCounts.borrowed} />
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
 
-      {/* Status filter tabs — full-width on mobile (4 equal columns), fits content on sm+ */}
-      <Tabs
-        value={filter}
-        onValueChange={(value) => setFilter(value as StatusFilter)}
-        className="w-full"
-      >
-        <TabsList className="w-full sm:w-fit">
-          <TabsTrigger value="all" className="flex-1 sm:flex-initial">
-            All
-            <CountBadge n={counts.all} />
-          </TabsTrigger>
-          <TabsTrigger value="pending" className="flex-1 sm:flex-initial">
-            Pending
-            <CountBadge n={counts.pending} />
-          </TabsTrigger>
-          <TabsTrigger value="partial" className="flex-1 sm:flex-initial">
-            Partial
-            <CountBadge n={counts.partial} />
-          </TabsTrigger>
-          <TabsTrigger value="paid" className="flex-1 sm:flex-initial">
-            Paid
-            <CountBadge n={counts.paid} />
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+        {/* Status filter tabs — full-width on mobile (4 equal columns), fits content on sm+ */}
+        <Tabs
+          value={filter}
+          onValueChange={(value) => setFilter(value as StatusFilter)}
+          className="w-full"
+        >
+          <TabsList className="w-full sm:w-fit ml-auto">
+            <TabsTrigger value="all" className="flex-1 sm:flex-initial">
+              All
+              <CountBadge n={counts.all} />
+            </TabsTrigger>
+            <TabsTrigger value="pending" className="flex-1 sm:flex-initial">
+              Pending
+              <CountBadge n={counts.pending} />
+            </TabsTrigger>
+            <TabsTrigger value="partial" className="flex-1 sm:flex-initial">
+              Partial
+              <CountBadge n={counts.partial} />
+            </TabsTrigger>
+            <TabsTrigger value="paid" className="flex-1 sm:flex-initial">
+              Paid
+              <CountBadge n={counts.paid} />
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
 
       {/* Loan items */}
       {loans.length === 0 ? (
@@ -461,6 +474,7 @@ function LoansList() {
               onRecordPayment={(amount) =>
                 update.recordPayment(loan.id, loan.amountPaid + amount)
               }
+              onEdit={(patch) => update.update({ id: loan.id, ...patch })}
               onDelete={() => del.remove(loan.id)}
             />
           ))}
@@ -485,17 +499,25 @@ type LoanRow = {
   notes?: string | null;
 };
 
+type EditLoanPatch = {
+  debtor?: string;
+  amount?: number;
+  direction?: LoanDirection;
+};
+
 function LoanListItem({
   loan,
   onMarkPaid,
   onMarkPending,
   onRecordPayment,
+  onEdit,
   onDelete,
 }: {
   loan: LoanRow;
   onMarkPaid: () => void;
   onMarkPending: () => void;
   onRecordPayment: (amount: number) => void;
+  onEdit: (patch: EditLoanPatch) => void;
   onDelete: () => void;
 }) {
   const status = loan.status as LoanStatus;
@@ -606,6 +628,7 @@ function LoanListItem({
               Reopen
             </Button>
           )}
+          <EditLoanButton loan={loan} onSubmit={onEdit} />
           <DeleteLoanButton debtor={loan.debtor} onConfirm={onDelete} />
         </div>
       </div>
@@ -735,6 +758,135 @@ function PartialPaymentControl({
         <BanknoteArrowUpIcon aria-hidden="true" />
       </Button>
     </form>
+  );
+}
+
+function EditLoanButton({
+  loan,
+  onSubmit,
+}: {
+  loan: LoanRow;
+  onSubmit: (patch: EditLoanPatch) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const initialDirection = (loan.direction ?? "lent") as LoanDirection;
+  const [debtor, setDebtor] = useState(loan.debtor);
+  const [amount, setAmount] = useState(String(loan.amount));
+  const [direction, setDirection] = useState<LoanDirection>(initialDirection);
+
+  // When opening, hydrate from the latest loan values in case of upstream updates.
+  const handleOpenChange = (next: boolean) => {
+    if (next) {
+      setDebtor(loan.debtor);
+      setAmount(String(loan.amount));
+      setDirection((loan.direction ?? "lent") as LoanDirection);
+    }
+    setOpen(next);
+  };
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    const parsed = Number(amount);
+    if (!Number.isFinite(parsed) || parsed <= 0) return;
+
+    const patch: EditLoanPatch = {};
+    const trimmed = debtor.trim();
+    if (trimmed && trimmed !== loan.debtor) patch.debtor = trimmed;
+    if (parsed !== loan.amount) patch.amount = parsed;
+    if (direction !== initialDirection) patch.direction = direction;
+
+    if (Object.keys(patch).length > 0) onSubmit(patch);
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <DialogTrigger
+              render={
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  aria-label={`Edit loan from ${loan.debtor}`}
+                  className="text-muted-foreground hover:bg-accent shrink-0"
+                >
+                  <PencilIcon className="size-4" aria-hidden="true" />
+                </Button>
+              }
+            />
+          }
+        />
+        <TooltipContent side="top">Edit loan</TooltipContent>
+      </Tooltip>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit loan</DialogTitle>
+          <DialogDescription>
+            Update the debtor, amount or direction. Status and payments stay
+            untouched.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={handleSave} className="space-y-4" noValidate>
+          <Tabs
+            value={direction}
+            onValueChange={(v) => setDirection(v as LoanDirection)}
+            className="w-full"
+          >
+            <TabsList className="w-full">
+              <TabsTrigger value="lent" className="flex-1 gap-1.5">
+                <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />
+                Owed to me
+              </TabsTrigger>
+              <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
+                <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />I
+                owe
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <Field
+            label={direction === "borrowed" ? "Creditor" : "Debtor"}
+            icon={<UserIcon className="size-3.5" />}
+          >
+            <Input
+              value={debtor}
+              onChange={(e) => setDebtor(e.target.value)}
+              autoComplete="off"
+            />
+          </Field>
+
+          <Field
+            label="Amount (USD)"
+            icon={<CircleDollarSignIcon className="size-3.5" />}
+          >
+            <Input
+              type="number"
+              inputMode="decimal"
+              step="0.01"
+              min="0"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+          </Field>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit">Save changes</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 
