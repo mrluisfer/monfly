@@ -26,7 +26,7 @@ export const getLoansByEmail = async ({
     const [loans, total] = await Promise.all([
       prismaClient.loan.findMany({
         where,
-        orderBy: [{ status: "asc" }, { dueAt: "asc" }, { createdAt: "desc" }],
+        orderBy: [{ status: "desc" }, { dueAt: "asc" }, { createdAt: "desc" }],
       }),
       prismaClient.loan.count({ where }),
     ]);

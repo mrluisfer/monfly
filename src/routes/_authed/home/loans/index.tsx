@@ -672,7 +672,7 @@ function LoanListItem({
               type="button"
               variant="outline"
               onClick={onMarkPending}
-              className="flex-1 sm:flex-initial"
+              className="flex-initial"
             >
               <RotateCcwIcon aria-hidden="true" />
               Reopen

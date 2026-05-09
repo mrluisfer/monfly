@@ -7,4 +7,5 @@ export enum queryDictionary {
   incomeExpenseByCategory = "income-expense-by-category",
   trendingMonthly = "trending-monthly",
   loans = "loans",
+  activeLoans = "active-loans",
 }

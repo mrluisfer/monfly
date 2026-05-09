@@ -1,22 +1,4 @@
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  type FocusEvent,
-} from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { transactionFormNames } from "~/constants/forms/transaction-form-names";
-import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
-import { isErrorPayload, useMutation } from "~/hooks/useMutation";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
-import { sileo } from "~/lib/toaster";
-import { cn } from "~/lib/utils";
-import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-import { validLimitNumber } from "~/utils/valid-limit-number";
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -30,7 +12,34 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+  type FocusEvent,
+} from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
+import {
+  transactionFormNames,
+  type LoanMode,
+} from "~/constants/forms/transaction-form-names";
+import {
+  LOAN_DIRECTION_LABEL,
+  type LoanDirection,
+} from "~/constants/loan-status";
+import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
+import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
+import { useActiveLoans } from "~/hooks/loans/useActiveLoans";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
+import { sileo } from "~/lib/toaster";
+import { cn } from "~/lib/utils";
+import { formatCurrency } from "~/utils/format-currency";
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
+import { validLimitNumber } from "~/utils/valid-limit-number";
 
 import { Button } from "../ui/button";
 import {
@@ -51,7 +60,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Switch } from "../ui/switch";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -562,46 +570,136 @@ function LoanSection<FormValues extends FieldValues>({
 }: {
   form: UseFormReturn<FormValues>;
 }) {
-  const markAsLoan = form.watch(
-    transactionFormNames.markAsLoan as Path<FormValues>
-  );
-  const isOn = Boolean(markAsLoan);
+  const mode = (form.watch(transactionFormNames.loanMode as Path<FormValues>) ??
+    "none") as LoanMode;
+
+  // Capture the initially linked loan id at first render so that — even if
+  // it's now fully paid — it stays visible in the picker while the user
+  // edits the transaction. Captured once via useRef so changing selection
+  // mid-edit doesn't refetch.
+  const initialLoanIdRef = useRef<string | null>(null);
+  if (initialLoanIdRef.current === null) {
+    const v = form.getValues(
+      transactionFormNames.appliedToLoanId as Path<FormValues>
+    );
+    initialLoanIdRef.current = typeof v === "string" ? v : "";
+  }
+  const includeLoanId = initialLoanIdRef.current || null;
+
+  // Only fetch the picker list when the user actually opens "apply" mode.
+  // Avoids one wasted request per form mount in the common case.
+  const enableQuery = mode === "apply";
+  const { data: activeLoansResponse, isPending } = useActiveLoans({
+    includeId: includeLoanId,
+  });
+  const activeLoans = activeLoansResponse?.data ?? [];
+
+  // Group loans by direction so the picker can render two clear sections:
+  // "Owed to me" (income side) vs "I owe" (expense side).
+  const grouped = useMemo(() => {
+    const lent: typeof activeLoans = [];
+    const borrowed: typeof activeLoans = [];
+    for (const loan of activeLoans) {
+      if (loan.direction === "borrowed") borrowed.push(loan);
+      else lent.push(loan);
+    }
+    return { lent, borrowed };
+  }, [activeLoans]);
+
+  // When the user picks a loan, the transaction type is fully determined by
+  // the loan's direction — flipping it here keeps server-side validation
+  // happy and removes a manual coordination step.
+  const handleLoanPick = (
+    loanId: string,
+    fieldOnChange: (val: string | null) => void
+  ) => {
+    fieldOnChange(loanId === "" ? null : loanId);
+    if (!loanId) return;
+    const loan = activeLoans.find((l) => l.id === loanId);
+    if (!loan) return;
+    const nextType: "income" | "expense" =
+      loan.direction === "lent" ? "income" : "expense";
+    form.setValue(
+      transactionFormNames.type as Path<FormValues>,
+      nextType as never,
+      { shouldDirty: true, shouldValidate: true }
+    );
+  };
+
+  const setMode = (next: LoanMode) => {
+    form.setValue(
+      transactionFormNames.loanMode as Path<FormValues>,
+      next as never,
+      { shouldValidate: false, shouldDirty: true }
+    );
+    // Mirror to legacy boolean for any consumer still reading it.
+    form.setValue(
+      transactionFormNames.markAsLoan as Path<FormValues>,
+      (next === "create") as never,
+      { shouldDirty: true }
+    );
+    // Clear fields belonging to the *other* modes so we don't submit stale data.
+    if (next !== "create") {
+      form.setValue(
+        transactionFormNames.loanDebtor as Path<FormValues>,
+        "" as never
+      );
+      form.setValue(
+        transactionFormNames.loanDueAt as Path<FormValues>,
+        null as never
+      );
+    }
+    if (next !== "apply") {
+      form.setValue(
+        transactionFormNames.appliedToLoanId as Path<FormValues>,
+        null as never
+      );
+    }
+  };
 
   return (
     <div className={sectionClassName}>
-      <FormField
-        control={form.control}
-        name={transactionFormNames.markAsLoan as Path<FormValues>}
-        render={({ field }) => (
-          <FormItem className="flex items-center justify-between gap-3 space-y-0">
-            <div className="flex items-center gap-3">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-                <HandCoinsIcon className="size-4 text-primary" />
-              </div>
-              <div>
-                <FormLabel className="text-sm font-medium text-foreground">
-                  Mark as loan
-                </FormLabel>
-                <FormDescription className="text-xs text-muted-foreground">
-                  Track money owed to you (e.g. lent to a friend).
-                </FormDescription>
-              </div>
-            </div>
-            <FormControl>
-              <Switch
-                checked={Boolean(field.value)}
-                onCheckedChange={(checked) => field.onChange(checked)}
-                aria-label="Mark transaction as loan"
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
+      <div className="flex items-center gap-3">
+        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+          <HandCoinsIcon className="size-4 text-primary" />
+        </div>
+        <div>
+          <FormLabel className="text-sm font-medium text-foreground">
+            Loan linkage
+          </FormLabel>
+          <FormDescription className="text-xs text-muted-foreground">
+            Optionally tie this transaction to a loan.
+          </FormDescription>
+        </div>
+      </div>
 
-      <AnimatePresence initial={false}>
-        {isOn && (
+      {/* Tri-state segmented control */}
+      <div
+        className="mt-4 grid grid-cols-3 gap-1 rounded-xl bg-muted/50 p-1"
+        role="radiogroup"
+        aria-label="Loan linkage mode"
+      >
+        <ModeButton
+          active={mode === "none"}
+          onClick={() => setMode("none")}
+          label="None"
+        />
+        <ModeButton
+          active={mode === "create"}
+          onClick={() => setMode("create")}
+          label="New loan"
+        />
+        <ModeButton
+          active={mode === "apply"}
+          onClick={() => setMode("apply")}
+          label="Apply to loan"
+        />
+      </div>
+
+      <AnimatePresence initial={false} mode="wait">
+        {mode === "create" && (
           <motion.div
-            key="loan-fields"
+            key="loan-create"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -669,7 +767,185 @@ function LoanSection<FormValues extends FieldValues>({
             </div>
           </motion.div>
         )}
+
+        {mode === "apply" && (
+          <motion.div
+            key="loan-apply"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="mt-4">
+              <FormField
+                control={form.control}
+                name={transactionFormNames.appliedToLoanId as Path<FormValues>}
+                render={({ field }) => (
+                  <FormItem className="space-y-2">
+                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                      Loan to pay
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        value={(field.value as string | undefined) ?? ""}
+                        onValueChange={(val) => {
+                          if (val) handleLoanPick(val, field.onChange);
+                        }}
+                        disabled={!enableQuery || isPending}
+                      >
+                        <SelectTrigger
+                          className={cn(
+                            inputClassName,
+                            "w-full justify-between"
+                          )}
+                        >
+                          <SelectValue
+                            placeholder={
+                              isPending
+                                ? "Loading…"
+                                : activeLoans.length === 0
+                                  ? "No active loans"
+                                  : "Select a loan"
+                            }
+                          >
+                            {(value: unknown) => {
+                              const id = typeof value === "string" ? value : "";
+                              const loan = id
+                                ? activeLoans.find((l) => l.id === id)
+                                : undefined;
+                              if (!loan) {
+                                return isPending
+                                  ? "Loading…"
+                                  : activeLoans.length === 0
+                                    ? "No active loans"
+                                    : "Select a loan";
+                              }
+                              // const remaining = loan.amount - loan.amountPaid;
+                              return (
+                                <span className="flex w-full items-center justify-between gap-3">
+                                  <span className="truncate capitalize">
+                                    {loan.debtor}
+                                  </span>
+                                  <span
+                                    className={cn(
+                                      "text-xs tabular-nums",
+                                      loan.direction === "lent"
+                                        ? "text-emerald-600 dark:text-emerald-400"
+                                        : "text-red-600 dark:text-red-400"
+                                    )}
+                                  >
+                                    {formatCurrency(loan.amount, "USD")} ·{" "}
+                                    {
+                                      LOAN_DIRECTION_LABEL[
+                                        loan.direction as LoanDirection
+                                      ]
+                                    }
+                                  </span>
+                                </span>
+                              );
+                            }}
+                          </SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                          {grouped.lent.length > 0 && (
+                            <SelectGroup>
+                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold uppercase tracking-wider">
+                                {LOAN_DIRECTION_LABEL.lent} · sets income
+                              </div>
+                              {grouped.lent.map((loan) => (
+                                <LoanOption
+                                  key={loan.id}
+                                  loan={loan}
+                                  direction="lent"
+                                />
+                              ))}
+                            </SelectGroup>
+                          )}
+                          {grouped.borrowed.length > 0 && (
+                            <SelectGroup>
+                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold uppercase tracking-wider">
+                                {LOAN_DIRECTION_LABEL.borrowed} · sets expense
+                              </div>
+                              {grouped.borrowed.map((loan) => (
+                                <LoanOption
+                                  key={loan.id}
+                                  loan={loan}
+                                  direction="borrowed"
+                                />
+                              ))}
+                            </SelectGroup>
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      Pick any active loan. Income for "Owed to me" (someone
+                      paid you); expense for "I owe" (you paid someone).
+                      Transaction type is set automatically.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
     </div>
+  );
+}
+
+function LoanOption({
+  loan,
+  direction,
+}: {
+  loan: { id: string; debtor: string; amount: number; amountPaid: number };
+  direction: LoanDirection;
+}) {
+  const remaining = loan.amount - loan.amountPaid;
+  return (
+    <SelectItem value={loan.id}>
+      <span className="flex w-full items-center justify-between gap-3">
+        <span className="truncate capitalize">{loan.debtor}</span>
+        <span
+          className={cn(
+            "text-xs tabular-nums",
+            direction === "lent"
+              ? "text-emerald-600 dark:text-emerald-400"
+              : "text-red-600 dark:text-red-400"
+          )}
+        >
+          {formatCurrency(remaining, "USD")} left
+        </span>
+      </span>
+    </SelectItem>
+  );
+}
+
+function ModeButton({
+  active,
+  onClick,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={active}
+      onClick={onClick}
+      className={cn(
+        "rounded-lg py-2 text-xs font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+        active
+          ? "bg-background text-foreground shadow-sm"
+          : "text-muted-foreground hover:text-foreground"
+      )}
+    >
+      {label}
+    </button>
   );
 }

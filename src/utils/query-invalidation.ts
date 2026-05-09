@@ -21,6 +21,14 @@ export const invalidateTransactionQueries = async (
     queryClient.invalidateQueries({
       queryKey: [queryDictionary.user, userEmail],
     }),
+    // Loan totals can shift whenever a transaction is created/edited/deleted
+    // because of the loan-payment linkage; invalidate so totals stay fresh.
+    queryClient.invalidateQueries({
+      queryKey: [queryDictionary.loans, userEmail],
+    }),
+    queryClient.invalidateQueries({
+      queryKey: [queryDictionary.activeLoans, userEmail],
+    }),
     // Chart data queries - these display transaction statistics and aggregations
     queryClient.invalidateQueries({
       queryKey: [queryDictionary.transactionsByMonth, userEmail],
@@ -91,6 +99,12 @@ export const invalidateLoanQueries = async (
     }),
     queryClient.invalidateQueries({
       queryKey: [queryDictionary.loans],
+    }),
+    queryClient.invalidateQueries({
+      queryKey: [queryDictionary.activeLoans, userEmail],
+    }),
+    queryClient.invalidateQueries({
+      queryKey: [queryDictionary.activeLoans],
     }),
   ]);
 };

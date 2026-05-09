@@ -37,6 +37,7 @@ export const getTransactionsByEmail = async ({
           description: true,
           date: true,
           cardId: true,
+          appliedToLoanId: true,
           createdAt: true,
           updatedAt: true,
           _count: { select: { loans: true } },

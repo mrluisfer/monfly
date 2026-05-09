@@ -26,6 +26,13 @@ export const useEditTransaction = (
   // Holds the loan that's already linked to this transaction (if any).
   const existingLoanRef = useRef<Loan | null>(null);
 
+  // Pre-resolve the initial loan mode from the transaction itself:
+  // if the row already has `appliedToLoanId`, we open in "apply" mode.
+  // Mode "create" is set later from a follow-up fetch (see effect below).
+  const initialAppliedToLoanId =
+    (transaction as Transaction & { appliedToLoanId?: string | null })
+      .appliedToLoanId ?? null;
+
   const form = useForm<z.infer<typeof TransactionFormSchema>>({
     // biome-ignore lint/suspicious/noExplicitAny: generic form field type
     resolver: zodResolver(TransactionFormSchema as any),
@@ -35,19 +42,33 @@ export const useEditTransaction = (
       [transactionFormNames.category]: transaction.category,
       [transactionFormNames.description]: transaction.description ?? "",
       [transactionFormNames.date]: transaction.date,
+      [transactionFormNames.loanMode]: initialAppliedToLoanId
+        ? "apply"
+        : "none",
       [transactionFormNames.markAsLoan]: false,
       [transactionFormNames.loanDebtor]: "",
       [transactionFormNames.loanDueAt]: null,
+      [transactionFormNames.appliedToLoanId]: initialAppliedToLoanId,
     },
   });
 
-  // Fetch the linked loan once and pre-fill the form fields.
+  // Fetch the linked-origin loan once and pre-fill the form fields, but
+  // only when the transaction is not already a payment of another loan
+  // (the two modes are mutually exclusive).
   useEffect(() => {
+    if (initialAppliedToLoanId) return;
+
     getLoanByTransactionIdServer({
       data: { transactionId: transaction.id },
     }).then((res) => {
       if (res.data) {
         existingLoanRef.current = res.data;
+        form.setValue(
+          transactionFormNames.loanMode as Parameters<
+            typeof form.setValue
+          >[0],
+          "create"
+        );
         form.setValue(
           transactionFormNames.markAsLoan as Parameters<
             typeof form.setValue
@@ -90,6 +111,7 @@ export const useEditTransaction = (
           description: variables.data.data.description.trim().toLowerCase(),
           id: variables.data.id,
           type: variables.data.data.type.toLowerCase(),
+          appliedToLoanId: variables.data.data.appliedToLoanId ?? null,
         }),
       onDuplicatePending: {
         title: "Changes are already being saved",
@@ -106,6 +128,10 @@ export const useEditTransaction = (
     data: z.infer<typeof TransactionFormSchema>
   ) => {
     try {
+      const mode = data.loanMode ?? "none";
+      const nextAppliedToLoanId =
+        mode === "apply" ? (data.appliedToLoanId ?? null) : null;
+
       const result = await putTransactionByIdMutation.mutate({
         data: {
           id: transaction.id,
@@ -115,6 +141,9 @@ export const useEditTransaction = (
             category: data.category,
             description: data.description || "",
             date: data.date || new Date(),
+            // Send only when in apply or explicitly clearing; in "create"/"none"
+            // we want to keep this column in sync (set to null).
+            appliedToLoanId: nextAppliedToLoanId,
           },
         },
       });
@@ -124,18 +153,18 @@ export const useEditTransaction = (
       const amount = Number.parseFloat(data.amount);
       const txDate = data.date || new Date();
       const debtor = (data.loanDebtor ?? "").trim();
-
       const existing = existingLoanRef.current;
 
-      // The user unchecked "Mark as loan" on a transaction that already
-      // had a linked loan — remove the link so the toggle is reversible.
-      if (!data.markAsLoan && existing) {
+      // ── Origin-loan side (mode === "create") ──────────────────────────
+      // Only touch the origin loan when in "create" or when leaving it
+      // (existing was set previously and user picked another mode).
+      if (mode !== "create" && existing) {
+        // User left the create-loan flow on a transaction that previously
+        // had a linked origin loan — remove it so toggling is reversible.
         await deleteLoanByIdServer({ data: { id: existing.id } });
         existingLoanRef.current = null;
-        await invalidateLoanQueries(queryClient, transaction.userEmail);
-      } else if (data.markAsLoan && debtor) {
+      } else if (mode === "create" && debtor) {
         if (existing) {
-          // Update the existing linked loan.
           await putLoanByIdServer({
             data: {
               id: existing.id,
@@ -147,7 +176,6 @@ export const useEditTransaction = (
             },
           });
         } else {
-          // Create a new loan linked to this transaction.
           const loanResult = await postLoanByEmailServer({
             data: {
               email: transaction.userEmail,
@@ -170,10 +198,13 @@ export const useEditTransaction = (
             });
           }
         }
-
-        await invalidateLoanQueries(queryClient, transaction.userEmail);
       }
 
+      // The transaction PUT already invalidates loan queries via
+      // invalidateTransactionQueries, but we keep this explicit call here
+      // so any side-effect from the origin-loan flow above also triggers a
+      // refetch of the loans list.
+      await invalidateLoanQueries(queryClient, transaction.userEmail);
       onCloseDialog();
     } catch {
       sileo.error({ title: "Error editing transaction" });

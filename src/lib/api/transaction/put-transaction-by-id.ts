@@ -20,6 +20,7 @@ export const putTransactionByIdServer = createServerFn({ method: "POST" })
         category: z.string(),
         description: z.string(),
         date: z.date(),
+        appliedToLoanId: z.string().uuid().nullable().optional(),
       }),
     })
   )

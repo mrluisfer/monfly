@@ -27,7 +27,7 @@ const AddTransactionButton = ({
   const trigger = customTrigger ?? (
     <Button
       className="group"
-      variant="outline"
+      variant="default"
       size="lg"
       aria-expanded={open}
       aria-label={
@@ -35,7 +35,7 @@ const AddTransactionButton = ({
       }
     >
       <PlusIcon
-        className="text-primary transition-transform duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)] group-aria-expanded:rotate-135"
+        className="transition-transform duration-500 ease-[cubic-bezier(0.68,-0.6,0.32,1.6)] group-aria-expanded:rotate-135"
         size={16}
         aria-hidden="true"
       />

@@ -26,24 +26,27 @@ model User {
 }
 
 model Transaction {
-  id          String   @id @default(uuid())
-  userEmail   String
-  amount      Float
-  type        String
-  category    String
-  description String?
-  date        DateTime
-  cardId      String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
-  loans       Loan[]
-  card        Card?    @relation(fields: [cardId], references: [id])
-  user        User     @relation(fields: [userEmail], references: [email])
+  id              String   @id @default(uuid())
+  userEmail       String
+  amount          Float
+  type            String
+  category        String
+  description     String?
+  date            DateTime
+  cardId          String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+  appliedToLoanId String?
+  loans           Loan[]   @relation("LoanOrigin")
+  appliedToLoan   Loan?    @relation("LoanPayments", fields: [appliedToLoanId], references: [id])
+  card            Card?    @relation(fields: [cardId], references: [id])
+  user            User     @relation(fields: [userEmail], references: [email])
 
   @@index([userEmail])
   @@index([userEmail, type])
   @@index([userEmail, date])
   @@index([userEmail, createdAt])
+  @@index([appliedToLoanId])
 }
 
 model Budget {
@@ -122,22 +125,23 @@ model Card {
 }
 
 model Loan {
-  id            String       @id @default(uuid())
+  id            String        @id @default(uuid())
   userEmail     String
   debtor        String
   amount        Float
-  amountPaid    Float        @default(0)
-  status        String       @default("pending")
-  issuedAt      DateTime     @default(now())
+  amountPaid    Float         @default(0)
+  status        String        @default("pending")
+  issuedAt      DateTime      @default(now())
   dueAt         DateTime?
   paidAt        DateTime?
   notes         String?
   transactionId String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now()) @updatedAt
-  direction     String       @default("lent")
-  transaction   Transaction? @relation(fields: [transactionId], references: [id])
-  user          User         @relation(fields: [userEmail], references: [email])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
+  direction     String        @default("lent")
+  transaction   Transaction?  @relation("LoanOrigin", fields: [transactionId], references: [id])
+  user          User          @relation(fields: [userEmail], references: [email])
+  payments      Transaction[] @relation("LoanPayments")
 
   @@index([userEmail])
   @@index([userEmail, status])

@@ -30,9 +30,11 @@ export const useAddTransaction = () => {
       [transactionFormNames.category]: "",
       [transactionFormNames.amount]: "",
       [transactionFormNames.description]: "",
+      [transactionFormNames.loanMode]: "none",
       [transactionFormNames.markAsLoan]: false,
       [transactionFormNames.loanDebtor]: "",
       [transactionFormNames.loanDueAt]: null,
+      [transactionFormNames.appliedToLoanId]: null,
     },
   });
 
@@ -59,6 +61,8 @@ export const useAddTransaction = () => {
           description:
             variables.data.transaction.description?.trim().toLowerCase() ?? "",
           type: variables.data.transaction.type.toLowerCase(),
+          appliedToLoanId:
+            variables.data.transaction.appliedToLoanId ?? null,
         }),
       onDuplicatePending: {
         title: "Transaction is already being saved",
@@ -78,6 +82,9 @@ export const useAddTransaction = () => {
 
       const txDate = data.date ? new Date(data.date) : new Date();
       const amount = Number.parseFloat(data.amount);
+      const loanMode = data.loanMode ?? "none";
+      const appliedToLoanId =
+        loanMode === "apply" ? (data.appliedToLoanId ?? null) : null;
 
       const txResult = await postTransactionByEmail.mutate({
         data: {
@@ -88,12 +95,13 @@ export const useAddTransaction = () => {
             category: data.category,
             description: data.description || null,
             date: txDate,
+            appliedToLoanId,
           },
         },
       });
 
       // If the user opted-in, also create a Loan linked to this transaction.
-      if (data.markAsLoan && txResult && !isErrorPayload(txResult)) {
+      if (loanMode === "create" && txResult && !isErrorPayload(txResult)) {
         const createdTx = (txResult as { data?: { id?: string } }).data;
         const debtor = (data.loanDebtor ?? "").trim();
 

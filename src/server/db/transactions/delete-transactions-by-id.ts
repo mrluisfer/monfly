@@ -1,6 +1,10 @@
 import type { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
+import {
+  applyLoanPaymentDelta,
+  LoanPaymentError,
+} from "~/server/db/loans/apply-loan-payment";
 
 export const deleteTransactionsById = async (transactionIds: string[]) => {
   try {
@@ -18,11 +22,31 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
       // Read transactions before deleting to calculate balance impact
       const transactions = await tx.transaction.findMany({
         where: { id: { in: transactionIds } },
-        select: { id: true, amount: true, type: true, userEmail: true },
+        select: {
+          id: true,
+          amount: true,
+          type: true,
+          userEmail: true,
+          appliedToLoanId: true,
+        },
       });
 
       if (transactions.length === 0) {
         return { count: 0 };
+      }
+
+      // Refund any loan that this batch was paying. Done sequentially so
+      // each loan's totals stay consistent if multiple transactions in the
+      // batch reference the same loan.
+      for (const t of transactions) {
+        if (t.appliedToLoanId) {
+          await applyLoanPaymentDelta(tx, {
+            loanId: t.appliedToLoanId,
+            delta: -t.amount,
+            userEmail: t.userEmail,
+            transactionType: t.type,
+          });
+        }
       }
 
       // Calculate balance delta per user
@@ -78,6 +102,15 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
       statusCode: 200,
     } as ApiResponse<{ count: number; deletedIds: string[] }>;
   } catch (error) {
+    if (error instanceof LoanPaymentError) {
+      return {
+        success: false,
+        message: error.message,
+        data: null,
+        error: true,
+        statusCode: error.statusCode,
+      } as ApiResponse<null>;
+    }
     return {
       success: false,
       message: "Error deleting transactions",
