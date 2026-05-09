@@ -1,4 +1,5 @@
 # 🦋 Monfly
+[![React Doctor](https://www.react.doctor/share/badge?p=monfly&s=74&e=5&w=323&f=198)](https://www.react.doctor/share?p=monfly&s=74&e=5&w=323&f=198)
 
 Monfly is a modern, full-stack personal finance dashboard that helps you track transactions, categorize expenses, set budgets, and visualize your money—all in one place.
 
