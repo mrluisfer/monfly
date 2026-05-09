@@ -134,7 +134,7 @@ export function OnlineStatusBadge({
             >
               <span
                 className={cn(
-                  "relative inline-flex h-2 w-2 rounded-full",
+                  "relative inline-flex size-2 rounded-full",
                   config.color
                 )}
                 aria-hidden="true"
@@ -142,7 +142,7 @@ export function OnlineStatusBadge({
                 {animate && isOnline && (
                   <span
                     className={cn(
-                      "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+                      "absolute inline-flex size-full rounded-full opacity-75 animate-ping",
                       config.color
                     )}
                   />
@@ -152,8 +152,8 @@ export function OnlineStatusBadge({
               {showIcon && (
                 <Icon
                   className={cn(
-                    "h-3.5 w-3.5 shrink-0 opacity-75",
-                    fullWidth && "h-4 w-4"
+                    "size-3.5 shrink-0 opacity-75",
+                    fullWidth && "size-4"
                   )}
                   aria-hidden="true"
                 />

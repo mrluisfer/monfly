@@ -85,7 +85,7 @@ export function UserStatsSection() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-6 top-10 h-48 w-48 rounded-full bg-[radial-gradient(circle,#22c55e_0%,transparent_72%)] opacity-22 blur-2xl"
+            className="pointer-events-none absolute -right-6 top-10 size-48 rounded-full bg-[radial-gradient(circle,#22c55e_0%,transparent_72%)] opacity-22 blur-2xl"
           />
           <div className="relative">
             <Safari

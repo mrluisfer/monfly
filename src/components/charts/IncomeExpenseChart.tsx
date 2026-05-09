@@ -47,7 +47,7 @@ function IncomeExpenseTooltip({
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-primary" />
+            <div className="size-3 rounded-full bg-primary" />
             <span className="text-sm text-muted-foreground">Income:</span>
           </div>
           <span className="font-semibold text-primary">
@@ -56,7 +56,7 @@ function IncomeExpenseTooltip({
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-destructive" />
+            <div className="size-3 rounded-full bg-destructive" />
             <span className="text-sm text-muted-foreground">Expenses:</span>
           </div>
           <span className="font-semibold text-destructive">
@@ -293,7 +293,7 @@ export default function IncomeExpenseChart() {
           No financial data found.
           <br />
           <span className="text-xs text-muted-foreground mt-2 block">
-            <DollarSign className="w-4 h-4 inline mr-1" />
+            <DollarSign className="size-4 inline mr-1" />
             Start adding income and expense transactions to see your financial
             flow.
           </span>

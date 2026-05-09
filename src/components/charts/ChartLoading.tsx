@@ -16,7 +16,7 @@ export function ChartLoading({
       {showSkeleton ? (
         <div className="w-full space-y-3">
           <div className="flex items-center gap-4 mb-6">
-            <Skeleton className="h-4 w-4 rounded-full" />
+            <Skeleton className="size-4 rounded-full" />
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-4 w-16" />
           </div>
@@ -31,7 +31,7 @@ export function ChartLoading({
         </div>
       ) : (
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loader2 className="size-8 animate-spin text-primary" />
           <span className="text-sm text-muted-foreground font-medium">
             {message}
           </span>
@@ -55,8 +55,8 @@ export function ChartError({
   return (
     <div className="flex flex-col items-center justify-center py-12 space-y-4">
       <div className="flex flex-col items-center gap-3 text-center">
-        <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full bg-destructive" />
+        <div className="size-12 rounded-full bg-destructive/10 flex items-center justify-center">
+          <div className="size-6 rounded-full bg-destructive" />
         </div>
         <div>
           <p className="font-medium text-destructive">{title}</p>

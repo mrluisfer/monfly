@@ -13,11 +13,11 @@ import {
 const getTrendingIcon = (percentChange: number) => {
   if (percentChange > 0)
     return (
-      <TrendingUp className="h-4 w-4 text-primary" />
+      <TrendingUp className="size-4 text-primary" />
     );
   if (percentChange < 0)
-    return <TrendingDown className="h-4 w-4 text-destructive" />;
-  return <TrendingUpDown className="h-4 w-4 text-muted-foreground" />;
+    return <TrendingDown className="size-4 text-destructive" />;
+  return <TrendingUpDown className="size-4 text-muted-foreground" />;
 };
 
 export function TrendingStatus({

@@ -16,7 +16,7 @@ export function Logo({ withTitle = true }: { withTitle?: boolean }) {
       <img
         src={LogoSvg}
         alt="Monfly Logo"
-        className="h-6 w-6 md:h-8 md:w-8"
+        className="size-6 md:size-8"
         title="Monfly"
       />
       {withTitle && (

@@ -138,7 +138,7 @@ export function SystemStatusBadgeCompact({
           render={
             <button
               className={cn(
-                "relative inline-flex h-3 w-3 cursor-pointer rounded-full transition-transform hover:scale-125",
+                "relative inline-flex size-3 cursor-pointer rounded-full transition-transform hover:scale-125",
                 config.color,
                 className
               )}

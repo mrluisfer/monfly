@@ -46,6 +46,15 @@ const signupHighlights = [
 ];
 
 export const Route = createFileRoute("/signup")({
+  beforeLoad: async () => {
+    const { data: userEmail } = await getUserSession();
+
+    if (userEmail) {
+      throw redirect({
+        to: "/home",
+      });
+    }
+  },
   head: () => ({
     title: "Sign Up | Monfly",
     meta: [
@@ -61,15 +70,6 @@ export const Route = createFileRoute("/signup")({
     ],
   }),
   component: Signup,
-  beforeLoad: async () => {
-    const { data: userEmail } = await getUserSession();
-
-    if (userEmail) {
-      throw redirect({
-        to: "/home",
-      });
-    }
-  },
 });
 
 function Signup() {
@@ -110,11 +110,11 @@ function Signup() {
     <div className="landing-shell relative min-h-dvh overflow-x-clip">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-44 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--landing-aurora)_0%,transparent_72%)] opacity-52 blur-2xl"
+        className="pointer-events-none absolute -top-44 left-1/2 size-96 -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--landing-aurora)_0%,transparent_72%)] opacity-52 blur-2xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-24 top-28 hidden h-80 w-80 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_74%)] opacity-20 blur-2xl sm:block"
+        className="pointer-events-none absolute -left-24 top-28 hidden size-80 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_74%)] opacity-20 blur-2xl sm:block"
       />
 
       <main className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-6">

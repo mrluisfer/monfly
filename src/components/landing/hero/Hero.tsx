@@ -112,7 +112,7 @@ export function LandingHero() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -left-8 top-14 h-40 w-40 rounded-full bg-[radial-gradient(circle,#14b8a6_0%,transparent_72%)] opacity-32 blur-2xl"
+            className="pointer-events-none absolute -left-8 top-14 size-40 rounded-full bg-[radial-gradient(circle,#14b8a6_0%,transparent_72%)] opacity-32 blur-2xl"
           />
           <Card>
             <CardContent>

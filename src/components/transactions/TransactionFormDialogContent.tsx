@@ -68,7 +68,7 @@ export function TransactionFormDialogContent({
                     className="h-11 w-full rounded-full"
                     disabled={isLoading}
                   >
-                    <XIcon className="h-5 w-5" />
+                    <XIcon className="size-5" />
                     {cancelLabel}
                   </Button>
                 }

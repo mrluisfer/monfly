@@ -213,9 +213,9 @@ export default function ChartTransactionsByMonth() {
                 <>
                   <div className="bg-muted flex flex-wrap items-center gap-2 rounded-xl p-3.5">
                     {isPositiveTrend ? (
-                      <TrendingUpIcon className="w-4 h-4 text-primary" />
+                      <TrendingUpIcon className="size-4 text-primary" />
                     ) : (
-                      <TrendingDownIcon className="w-4 h-4 text-destructive" />
+                      <TrendingDownIcon className="size-4 text-destructive" />
                     )}
                     <span className="font-medium">
                       {isPositiveTrend ? "+" : ""}
@@ -309,7 +309,7 @@ export default function ChartTransactionsByMonth() {
             No transaction data found.
             <br />
             <span className="text-xs text-muted-foreground mt-2 block">
-              <Calendar className="w-4 h-4 inline mr-1" />
+              <Calendar className="size-4 inline mr-1" />
               Start making transactions to see your monthly activity.
             </span>
           </DataNotFoundPlaceholder>

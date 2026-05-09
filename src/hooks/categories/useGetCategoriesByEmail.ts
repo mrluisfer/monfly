@@ -5,22 +5,17 @@ import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-ema
 import { queryDictionary } from "~/queries/dictionary";
 
 export const useGetCategoriesByEmail = () => {
-  try {
-    const userEmail = useRouteUser();
+  const userEmail = useRouteUser();
 
-    const { data, isPending, error } = useQuery({
-      queryKey: [queryDictionary.categories, userEmail],
-      queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
-      enabled: !!userEmail,
-      staleTime: 1000 * 60 * 5, // 5 minutes cache
-      gcTime: 1000 * 60 * 10, // 10 minutes garbage collection
-      retry: 1,
-      retryDelay: 1000,
-    });
+  const { data, isPending, error } = useQuery({
+    queryKey: [queryDictionary.categories, userEmail],
+    queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
+    enabled: !!userEmail,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    retry: 1,
+    retryDelay: 1000,
+  });
 
-    return { data: data?.data as Category[], isPending, error };
-  } catch (error) {
-    console.error(error);
-    return { data: [], isPending: false, error: error as Error };
-  }
+  return { data: (data?.data ?? []) as Category[], isPending, error };
 };

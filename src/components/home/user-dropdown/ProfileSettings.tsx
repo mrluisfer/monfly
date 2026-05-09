@@ -80,7 +80,7 @@ export default function ProfileSettings({
   if (isPending) {
     return renderDialog(
       <div className="flex items-center justify-center p-8 space-x-2">
-        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full size-4 border-b-2 border-primary"></div>
         <div className="text-sm text-muted-foreground">
           Loading user profile...
         </div>

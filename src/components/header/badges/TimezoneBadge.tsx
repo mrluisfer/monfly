@@ -91,8 +91,8 @@ export const TimezoneBadge = ({
       {showIcon && (
         <ZapIcon
           className={cn(
-            "h-3.5 w-3.5 shrink-0 text-primary",
-            fullWidth && "h-4 w-4",
+            "size-3.5 shrink-0 text-primary",
+            fullWidth && "size-4",
             animate ? "animate-pulse" : "opacity-60"
           )}
           aria-hidden="true"

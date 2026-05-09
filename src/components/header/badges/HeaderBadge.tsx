@@ -76,13 +76,13 @@ export interface StatusDotProps {
 export function StatusDot({ color, animate = false }: StatusDotProps) {
   return (
     <span
-      className={cn("relative inline-flex h-2 w-2 rounded-full", color)}
+      className={cn("relative inline-flex size-2 rounded-full", color)}
       aria-hidden="true"
     >
       {animate && (
         <span
           className={cn(
-            "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
+            "absolute inline-flex size-full rounded-full opacity-75 animate-ping",
             color
           )}
         />
@@ -107,8 +107,8 @@ export function BadgeIcon({
   return (
     <Icon
       className={cn(
-        "h-3.5 w-3.5 shrink-0",
-        fullWidth && "h-4 w-4",
+        "size-3.5 shrink-0",
+        fullWidth && "size-4",
         animate && "animate-spin",
         className
       )}

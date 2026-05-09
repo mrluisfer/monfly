@@ -64,7 +64,7 @@ export default function UserDropdown() {
   if (isPending) {
     return (
       <Button variant="outline" size="icon-lg" disabled>
-        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full size-4 border-b-2 border-primary"></div>
         <span className="sr-only">Loading user...</span>
       </Button>
     );

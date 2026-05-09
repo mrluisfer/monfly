@@ -73,12 +73,12 @@ export default function TransactionsList() {
               >
                 {isPending || isRefetching ? (
                   <>
-                    <Spinner className="mr-2 h-4 w-4" />
+                    <Spinner className="mr-2 size-4" />
                     <span>Loading...</span>
                   </>
                 ) : (
                   <>
-                    <RefreshCcwIcon className="h-4 w-4" />
+                    <RefreshCcwIcon className="size-4" />
                     <span className="ml-2">Refresh</span>
                   </>
                 )}
