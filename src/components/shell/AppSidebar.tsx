@@ -34,8 +34,6 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
-import { sidebarOpenMobileAtom } from "~/state/atoms/ui/sidebarAtoms";
-import { useSetAtom } from "jotai";
 import {
   ChevronsUpDownIcon,
   LogOutIcon,
@@ -77,7 +75,7 @@ function AppSidebarHeader() {
 
 function NavMain() {
   const location = useLocation();
-  const setOpenMobile = useSetAtom(sidebarOpenMobileAtom);
+  const { setOpenMobile } = useSidebar();
 
   const handleNavigate = () => {
     setOpenMobile(false);

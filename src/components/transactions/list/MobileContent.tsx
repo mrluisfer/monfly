@@ -122,7 +122,7 @@ export function MobileContent({
           <TransactionCardList data={filteredTransactions} />
           {isTransactionsPage ? null : (
             <div className="flex justify-center items-center w-full md:justify-start">
-              <Button render={<Link to="/home/transactions" />}>
+              <Button nativeButton={false} render={<Link to="/home/transactions" />}>
                 <ExternalLinkIcon />
                 More transactions
               </Button>

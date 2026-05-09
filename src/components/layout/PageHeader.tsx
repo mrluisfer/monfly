@@ -37,7 +37,7 @@ export function PageHeader({
             {title}
           </h1>
           {description && (
-            <p className="text-muted-foreground text-sm leading-relaxed sm:text-base truncate max-w-sm md:max-w-md lg:max-w-lg xl:max-w-7xl text-ellipsis">
+            <p className="text-muted-foreground text-sm leading-relaxed sm:text-base truncate max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-7xl text-ellipsis">
               {description}
             </p>
           )}

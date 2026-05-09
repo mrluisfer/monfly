@@ -1,10 +1,7 @@
 import { type ReactNode } from "react";
+import { sidebarOpenAtom } from "~/state/atoms/ui/sidebarAtoms";
 import { useAtom } from "jotai";
 
-import {
-  sidebarOpenAtom,
-  sidebarOpenMobileAtom,
-} from "~/state/atoms/ui/sidebarAtoms";
 import { AppSidebar } from "../shell/AppSidebar";
 import { CommandPaletteProvider } from "../shell/CommandPalette";
 import { Topbar } from "../shell/Topbar";
@@ -12,15 +9,9 @@ import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useAtom(sidebarOpenAtom);
-  const [openMobile, setOpenMobile] = useAtom(sidebarOpenMobileAtom);
 
   return (
-    <SidebarProvider
-      open={open}
-      onOpenChange={setOpen}
-      openMobile={openMobile}
-      onOpenMobileChange={setOpenMobile}
-    >
+    <SidebarProvider open={open} onOpenChange={setOpen}>
       <CommandPaletteProvider>
         <a
           href="#main-content"
@@ -34,7 +25,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           <main
             id="main-content"
             tabIndex={-1}
-            className="scrollbar-custom flex flex-1 flex-col gap-6 overflow-y-auto p-4 pb-10 outline-none md:p-6 lg:p-8"
+            className="scrollbar-custom flex flex-1 flex-col gap-6 overflow-y-auto p-2 sm:p-4 pb-10 outline-none md:p-6 lg:p-8"
           >
             <div className="mx-auto flex w-full max-w-[96rem] flex-col gap-6">
               {children}

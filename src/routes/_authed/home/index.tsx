@@ -76,6 +76,7 @@ function RouteComponent() {
   return (
     <div className="space-y-6 sm:space-y-8">
       <PageHeader
+        className="mt-4 md:mt-0"
         icon={<LayoutDashboardIcon className="size-5" aria-hidden="true" />}
         title="Overview"
         description="Track balance, cashflow, and recent activity in one place."

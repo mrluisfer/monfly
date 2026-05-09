@@ -24,7 +24,6 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { MetricCard } from "~/components/ui/metric-card";
-import { Separator } from "~/components/ui/separator";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
@@ -44,7 +43,9 @@ import { useDeleteLoan } from "~/hooks/loans/useDeleteLoan";
 import { useLoans } from "~/hooks/loans/useLoans";
 import { useUpdateLoan } from "~/hooks/loans/useUpdateLoan";
 import { cn } from "~/lib/utils";
+import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import { formatCurrency } from "~/utils/format-currency";
+import { useAtomValue } from "jotai";
 import {
   AlertCircleIcon,
   ArrowDownLeftIcon,
@@ -52,6 +53,7 @@ import {
   BanknoteArrowUpIcon,
   CalendarIcon,
   CheckCheck,
+  ChevronDownIcon,
   CircleDollarSignIcon,
   FileTextIcon,
   HandCoinsIcon,
@@ -64,6 +66,11 @@ import {
 } from "lucide-react";
 import { Controller } from "react-hook-form";
 
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { PageHeader } from "@/components/layout/PageHeader";
 
 export const Route = createFileRoute("/_authed/home/loans/")({
@@ -99,13 +106,24 @@ function AddLoanCard() {
   const { form, onSubmit, mutation } = useAddLoan();
   const isLoading = mutation.status === "pending";
   const errors = form.formState.errors;
+  const [openCollapsible, setOpenCollapsible] = useState(false);
 
   return (
-    <section
-      className="bg-card border-border/60 flex flex-col gap-5 rounded-2xl border p-5"
+    <Collapsible
+      className="bg-card border-border/60 flex flex-col gap-5 rounded-2xl border p-1"
       aria-labelledby="add-loan-heading"
+      open={openCollapsible}
+      onOpenChange={setOpenCollapsible}
     >
-      <header className="flex items-center gap-3">
+      <CollapsibleTrigger
+        render={
+          <Button
+            variant={"ghost"}
+            className="flex items-center gap-3 p-3 group h-16"
+            size={"lg"}
+          />
+        }
+      >
         <span
           aria-hidden="true"
           className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-xl"
@@ -115,144 +133,158 @@ function AddLoanCard() {
         <div>
           <h2
             id="add-loan-heading"
-            className="text-sm font-semibold tracking-tight"
+            className="text-sm font-semibold tracking-tight text-left select-none"
           >
             New loan
           </h2>
-          <p className="text-muted-foreground text-xs">
+          <p className="text-muted-foreground text-xs select-none">
             Register a debt someone owes you.
           </p>
         </div>
-      </header>
-
-      <Separator />
-
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4"
-        noValidate
-      >
-        <Controller
-          control={form.control}
-          name="direction"
-          render={({ field }) => (
-            <Tabs
-              value={field.value}
-              onValueChange={(v) => field.onChange(v as LoanDirection)}
-              className="w-full"
-            >
-              <TabsList className="w-full">
-                <TabsTrigger value="lent" className="flex-1 gap-1.5">
-                  <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />
-                  Owed to me
-                </TabsTrigger>
-                <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
-                  <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />I
-                  owe
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+        <ChevronDownIcon
+          className={cn(
+            "ml-auto group-data-[state=open]:rotate-180 transition-transform",
+            openCollapsible ? "rotate-180" : "rotate-0"
           )}
         />
+      </CollapsibleTrigger>
 
-        <Field
-          label={form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"}
-          error={errors.debtor?.message}
-          icon={<UserIcon className="size-3.5" />}
+      <CollapsibleContent>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 px-1 md:px-2"
+          noValidate
         >
           <Controller
             control={form.control}
-            name="debtor"
+            name="direction"
             render={({ field }) => (
-              <Input
-                {...field}
-                placeholder="e.g. Juan, SAT, Insurance Co."
-                autoComplete="off"
-              />
+              <Tabs
+                value={field.value}
+                onValueChange={(v) => field.onChange(v as LoanDirection)}
+                className="w-full"
+              >
+                <TabsList className="w-full">
+                  <TabsTrigger value="lent" className="flex-1 gap-1.5">
+                    <ArrowDownLeftIcon
+                      className="size-3.5"
+                      aria-hidden="true"
+                    />
+                    Owed to me
+                  </TabsTrigger>
+                  <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
+                    <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
+                    I owe
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
             )}
           />
-        </Field>
 
-        <Field
-          label="Amount (USD)"
-          error={errors.amount?.message}
-          icon={<CircleDollarSignIcon className="size-3.5" />}
-        >
-          <Controller
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <Input
-                {...field}
-                type="number"
-                inputMode="decimal"
-                step="0.01"
-                min="0"
-                placeholder="0.00"
-              />
-            )}
-          />
-        </Field>
-
-        <div className="grid grid-cols-2 gap-3">
-          <Field label="Issued at" icon={<CalendarIcon className="size-3.5" />}>
-            <Controller
-              control={form.control}
-              name="issuedAt"
-              render={({ field }) => (
-                <Input
-                  type="date"
-                  value={toDateInputValue(field.value)}
-                  onChange={(e) =>
-                    field.onChange(fromDateInputValue(e.target.value))
-                  }
-                />
-              )}
-            />
-          </Field>
           <Field
-            label="Due (optional)"
-            icon={<CalendarIcon className="size-3.5" />}
+            label={
+              form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"
+            }
+            error={errors.debtor?.message}
+            icon={<UserIcon className="size-3.5" />}
           >
             <Controller
               control={form.control}
-              name="dueAt"
+              name="debtor"
               render={({ field }) => (
                 <Input
-                  type="date"
-                  value={toDateInputValue(field.value ?? null)}
-                  onChange={(e) =>
-                    field.onChange(fromDateInputValue(e.target.value))
-                  }
+                  {...field}
+                  placeholder="e.g. Juan, SAT, Insurance Co."
+                  autoComplete="off"
                 />
               )}
             />
           </Field>
-        </div>
 
-        <Field
-          label="Notes (optional)"
-          icon={<FileTextIcon className="size-3.5" />}
-        >
-          <Controller
-            control={form.control}
-            name="notes"
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                value={field.value ?? ""}
-                rows={2}
-                placeholder="Context, agreement, etc."
+          <Field
+            label="Amount (USD)"
+            error={errors.amount?.message}
+            icon={<CircleDollarSignIcon className="size-3.5" />}
+          >
+            <Controller
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="number"
+                  inputMode="decimal"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                />
+              )}
+            />
+          </Field>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Field
+              label="Issued at"
+              icon={<CalendarIcon className="size-3.5" />}
+            >
+              <Controller
+                control={form.control}
+                name="issuedAt"
+                render={({ field }) => (
+                  <Input
+                    type="date"
+                    value={toDateInputValue(field.value)}
+                    onChange={(e) =>
+                      field.onChange(fromDateInputValue(e.target.value))
+                    }
+                  />
+                )}
               />
-            )}
-          />
-        </Field>
+            </Field>
+            <Field
+              label="Due (optional)"
+              icon={<CalendarIcon className="size-3.5" />}
+            >
+              <Controller
+                control={form.control}
+                name="dueAt"
+                render={({ field }) => (
+                  <Input
+                    type="date"
+                    value={toDateInputValue(field.value ?? null)}
+                    onChange={(e) =>
+                      field.onChange(fromDateInputValue(e.target.value))
+                    }
+                  />
+                )}
+              />
+            </Field>
+          </div>
 
-        <Button type="submit" disabled={isLoading} className="w-full">
-          {isLoading ? "Saving…" : "Create loan"}
-        </Button>
-      </form>
-    </section>
+          <Field
+            label="Notes (optional)"
+            icon={<FileTextIcon className="size-3.5" />}
+          >
+            <Controller
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  value={field.value ?? ""}
+                  rows={2}
+                  placeholder="Context, agreement, etc."
+                />
+              )}
+            />
+          </Field>
+
+          <Button type="submit" disabled={isLoading} className="w-full">
+            {isLoading ? "Saving…" : "Create loan"}
+          </Button>
+        </form>
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 
@@ -270,6 +302,9 @@ function LoansList() {
   const { data, isPending, error } = useLoans();
   const update = useUpdateLoan();
   const del = useDeleteLoan();
+  const isBalanceHidden = useAtomValue(hideBalanceAtom);
+  const maskAmount = (n: number) =>
+    isBalanceHidden ? "$••••" : formatCurrency(n, "USD");
 
   if (isPending) {
     return (
@@ -371,19 +406,19 @@ function LoansList() {
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
         <MetricCard
           label="Owed to me"
-          value={formatCurrency(totals.lentOutstanding, "USD")}
+          value={maskAmount(totals.lentOutstanding)}
           accent="success"
           icon={<ArrowDownLeftIcon className="size-4" aria-hidden="true" />}
         />
         <MetricCard
           label="I owe"
-          value={formatCurrency(totals.borrowedOutstanding, "USD")}
+          value={maskAmount(totals.borrowedOutstanding)}
           accent="destructive"
           icon={<ArrowUpRightIcon className="size-4" aria-hidden="true" />}
         />
         <MetricCard
           label="Net balance"
-          value={formatCurrency(netBalance, "USD")}
+          value={maskAmount(netBalance)}
           accent={netBalance >= 0 ? "primary" : "destructive"}
           icon={
             netBalance >= 0 ? (
@@ -395,7 +430,7 @@ function LoansList() {
         />
       </div>
 
-      <div className="grid grid-cols-2 items-center justify-between flex-wrap w-full">
+      <div className="lg:grid lg:grid-cols-2 gap-6 md:gap-2 xl:gap-0 flex items-center justify-between flex-wrap w-full">
         {/* Direction filter — quick toggle between perspectives */}
         <Tabs
           value={directionFilter}
@@ -527,12 +562,15 @@ function LoanListItem({
   const remaining = Math.max(loan.amount - loan.amountPaid, 0);
   const progressPct =
     loan.amount > 0 ? Math.round((loan.amountPaid / loan.amount) * 100) : 0;
+  const isBalanceHidden = useAtomValue(hideBalanceAtom);
+  const maskAmount = (n: number) =>
+    isBalanceHidden ? "$••••" : formatCurrency(n, "USD");
 
   return (
     <li className="flex flex-col gap-3 px-3 py-3 sm:px-4 sm:py-4">
       {/* Top row: debtor info + remaining */}
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0 flex-1 space-y-1">
+        <div className="min-w-0 flex-1 space-y-3">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="text-foreground truncate text-sm font-semibold capitalize sm:text-base">
               {loan.debtor}
@@ -541,11 +579,11 @@ function LoanListItem({
             <StatusBadge status={status} />
           </div>
           <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-xs tabular-nums">
-            <span>{formatCurrency(loan.amount, "USD")} total</span>
+            <span>{maskAmount(loan.amount)} total</span>
             {loan.amountPaid > 0 && (
               <span className="before:mr-1.5 before:text-muted-foreground/50 before:content-['·']">
                 <span className="text-foreground">
-                  {formatCurrency(loan.amountPaid, "USD")}
+                  {maskAmount(loan.amountPaid)}
                 </span>{" "}
                 paid
               </span>
@@ -570,7 +608,7 @@ function LoanListItem({
         {!isPaid && remaining > 0 && (
           <div className="shrink-0 text-right">
             <p className="text-foreground text-sm font-semibold tabular-nums sm:text-base">
-              {formatCurrency(remaining, "USD")}
+              {maskAmount(remaining)}
             </p>
             <p className="text-muted-foreground text-[10px] sm:text-xs">
               {isBorrowed ? "to pay" : "remaining"}
@@ -608,15 +646,27 @@ function LoanListItem({
         )}
         <div className="flex items-center gap-2 sm:ml-auto">
           {!isPaid ? (
-            <Button
-              type="button"
-              variant="default"
-              onClick={onMarkPaid}
-              className="flex-1 sm:flex-initial"
-            >
-              <CheckCheck aria-hidden="true" />
-              Mark paid
-            </Button>
+            <>
+              <Button
+                type="button"
+                variant="default"
+                onClick={onMarkPaid}
+                className="flex-1 sm:flex-initial hidden sm:inline-flex"
+              >
+                <CheckCheck aria-hidden="true" />
+                Mark paid
+              </Button>
+
+              <Button
+                type="button"
+                variant={"default"}
+                onClick={onMarkPaid}
+                className={"sm:hidden"}
+                title="Mark paid"
+              >
+                <CheckCheck aria-hidden="true" />
+              </Button>
+            </>
           ) : (
             <Button
               type="button"
@@ -745,7 +795,7 @@ function PartialPaymentControl({
         step="0.01"
         min="0"
         placeholder="Add payment"
-        className="h-9 min-w-0 flex-1"
+        className="min-w-0 flex-1"
         aria-label="Partial payment amount"
       />
       <Button
@@ -809,7 +859,7 @@ function EditLoanButton({
                 <Button
                   type="button"
                   size="icon"
-                  variant="ghost"
+                  variant="outline"
                   aria-label={`Edit loan from ${loan.debtor}`}
                   className="text-muted-foreground hover:bg-accent shrink-0"
                 >
@@ -839,11 +889,11 @@ function EditLoanButton({
           >
             <TabsList className="w-full">
               <TabsTrigger value="lent" className="flex-1 gap-1.5">
-                <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />
+                <ArrowDownLeftIcon className="size-3.5" aria-hidden="true" />{" "}
                 Owed to me
               </TabsTrigger>
               <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
-                <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />I
+                <ArrowUpRightIcon className="size-3.5" aria-hidden="true" /> I
                 owe
               </TabsTrigger>
             </TabsList>
@@ -907,7 +957,7 @@ function DeleteLoanButton({
                 <Button
                   type="button"
                   size="icon"
-                  variant="ghost"
+                  variant="outline"
                   aria-label={`Delete loan from ${debtor}`}
                   className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive shrink-0"
                 >
