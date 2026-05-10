@@ -193,7 +193,7 @@ function RootComponent() {
 // Component that can be used outside providers (for error boundaries)
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-built-by="bHVpcy1hbHZhcmV6L0Btckx1aXNGZXI=">
       <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
         <HeadContent />
       </head>
@@ -220,7 +220,7 @@ function RootDocumentWithProviders({
   const { theme } = useDarkMode();
 
   return (
-    <html lang="en">
+    <html lang="en" data-built-by="bHVpcy1hbHZhcmV6L0Btckx1aXNGZXI=">
       <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
         <HeadContent />
       </head>

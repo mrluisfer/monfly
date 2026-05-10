@@ -3,6 +3,17 @@
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
 
+/*
+ * ───────────────────────────────────────────────
+ *  ✦ originality watermark · do not remove ✦
+ *  crafted with care by Luis Álvarez (mrLuisFer)
+ *  github.com/mrluisfer · monfly · since 2026
+ * ───────────────────────────────────────────────
+ */
+:root {
+  --__signature: "luis-alvarez/@mrLuisFer · monfly · originality watermark";
+}
+
 /* PWA native-app behavior */
 html {
   /* Prevent font size inflation on orientation change (iOS) */

@@ -335,7 +335,7 @@ function LoansList() {
 
   if (allLoans.length === 0) {
     return (
-      <div className="bg-card border-border/60 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center">
+      <div className="bg-card border-border/60 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center h-fit">
         <span
           aria-hidden="true"
           className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-2xl"

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import LogoSvg from "~/assets/logo.svg";
-import { SettingsDialog } from "~/components/settings/SettingsDialog";
 import UserAvatar from "~/components/shared/UserAvatar";
 import { SignOutDialog } from "~/components/sidebar/SignOutDialog";
 import {
@@ -40,6 +39,8 @@ import {
   SettingsIcon,
   UserIcon,
 } from "lucide-react";
+
+const SETTINGS_PATH = "/user/settings";
 
 function isRouteActive(currentPath: string, url: string) {
   if (url === "/home") return currentPath === "/home";
@@ -131,24 +132,34 @@ function NavMain() {
 }
 
 function NavSecondary() {
+  const location = useLocation();
+  const { setOpenMobile } = useSidebar();
+  const active = isRouteActive(location.pathname, SETTINGS_PATH);
+
   return (
     <SidebarGroup className="mt-auto">
       <SidebarGroupContent>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SettingsDialog>
-              <SidebarMenuButton tooltip="Settings">
-                <SettingsIcon aria-hidden="true" />
-                <span>Settings</span>
-              </SidebarMenuButton>
-            </SettingsDialog>
+            <SidebarMenuButton
+              tooltip="Settings"
+              isActive={active}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium",
+                "transition-colors"
+              )}
+              render={
+                <Link
+                  to={SETTINGS_PATH}
+                  onClick={() => setOpenMobile(false)}
+                >
+                  <SettingsIcon aria-hidden="true" />
+                  <span>Settings</span>
+                </Link>
+              }
+            />
           </SidebarMenuItem>
-          {/* <SidebarMenuItem>
-            <SidebarMenuButton tooltip="What's new" disabled>
-              <SparklesIcon aria-hidden="true" />
-              <span>What&apos;s new</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem> */}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
@@ -157,12 +168,10 @@ function NavSecondary() {
 
 function NavUser() {
   const userEmail = useRouteUser();
-  const { isMobile, state } = useSidebar();
+  const { isMobile, state, setOpenMobile } = useSidebar();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [activeDialog, setActiveDialog] = useState<
-    "settings" | "sign-out" | null
-  >(null);
-  const pendingActionRef = useRef<"settings" | "sign-out" | null>(null);
+  const [signOutOpen, setSignOutOpen] = useState(false);
+  const pendingSignOutRef = useRef(false);
 
   const { data, isPending } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
@@ -174,17 +183,22 @@ function NavUser() {
   });
 
   useEffect(() => {
-    if (dropdownOpen || !pendingActionRef.current) return;
+    if (dropdownOpen || !pendingSignOutRef.current) return;
     const timer = window.setTimeout(() => {
-      setActiveDialog(pendingActionRef.current);
-      pendingActionRef.current = null;
+      setSignOutOpen(true);
+      pendingSignOutRef.current = false;
     }, 0);
     return () => window.clearTimeout(timer);
   }, [dropdownOpen]);
 
-  const queueAction = (action: "settings" | "sign-out") => {
-    pendingActionRef.current = action;
+  const queueSignOut = () => {
+    pendingSignOutRef.current = true;
     setDropdownOpen(false);
+  };
+
+  const handleNavigate = () => {
+    setDropdownOpen(false);
+    setOpenMobile(false);
   };
 
   const user = data?.data;
@@ -254,21 +268,29 @@ function NavUser() {
                 {user?.id && (
                   <DropdownMenuItem
                     render={
-                      <Link to="/user/$userId" params={{ userId: user.id }} />
+                      <Link
+                        to="/user/$userId"
+                        params={{ userId: user.id }}
+                        onClick={handleNavigate}
+                      />
                     }
                   >
                     <UserIcon />
                     Profile
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem onClick={() => queueAction("settings")}>
+                <DropdownMenuItem
+                  render={
+                    <Link to={SETTINGS_PATH} onClick={handleNavigate} />
+                  }
+                >
                   <SettingsIcon />
                   Settings
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => queueAction("sign-out")}
+                onClick={queueSignOut}
                 className="text-destructive focus:text-destructive"
               >
                 <LogOutIcon />
@@ -279,18 +301,10 @@ function NavUser() {
         </SidebarMenuItem>
       </SidebarMenu>
 
-      <SettingsDialog
-        open={activeDialog === "settings"}
-        onOpenChange={(open) => {
-          if (!open) setActiveDialog(null);
-        }}
-        showTrigger={false}
-      />
-
       <SignOutDialog
-        open={activeDialog === "sign-out"}
+        open={signOutOpen}
         onOpenChange={(open) => {
-          if (!open) setActiveDialog(null);
+          if (!open) setSignOutOpen(false);
         }}
       />
     </>
