@@ -17,11 +17,13 @@ import {
   ChartNoAxesCombined,
   ShieldCheck,
   Sparkles,
+  UserRoundPlusIcon,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { SharedHeader } from "@/components/auth/SharedHeader";
 
 const loginSchema = z.object({
   email: z.string().email("Enter a valid email address."),
@@ -112,22 +114,19 @@ function Login() {
       />
 
       <main className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-6">
-        <header className="mb-4 flex items-center justify-between gap-3 sm:mb-6">
+        <SharedHeader>
           <Button
-            variant="ghost"
             size="lg"
-            className="rounded-full bg-background/75"
             render={
-              <Link to="/" className="inline-flex items-center gap-1.5">
-                <ArrowLeft className="size-4" />
-                Back to home
+              <Link to="/signup">
+                <UserRoundPlusIcon />
+                Create account
               </Link>
             }
           />
-          <Button size="lg" render={<Link to="/signup">Create account</Link>} />
-        </header>
+        </SharedHeader>
 
-        <div className="grid flex-1 items-stretch gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
+        <div className="grid flex-1 lg:flex-none items-stretch gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
           <Card className="order-2 hidden lg:flex lg:flex-col">
             <CardContent className="flex flex-1 flex-col justify-between">
               <div>

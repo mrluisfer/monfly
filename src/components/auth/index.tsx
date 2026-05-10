@@ -2,6 +2,7 @@ import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { cn } from "~/lib/utils";
+import { UserIcon } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 
 import Card from "../shared/Card";
@@ -64,6 +65,14 @@ export function Auth<TFormValues extends BaseAuthValues>({
           className="space-y-4"
           noValidate
         >
+          {shouldShowSignupFields && (
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => <UsernameInput field={field} />}
+            />
+          )}
+
           <FormField
             control={form.control}
             name="email"
@@ -82,13 +91,6 @@ export function Auth<TFormValues extends BaseAuthValues>({
             }
           />
 
-          {shouldShowSignupFields && (
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => <UsernameInput field={field} />}
-            />
-          )}
           <Button
             type="submit"
             className="h-11 w-full font-semibold uppercase tracking-[0.08em]"

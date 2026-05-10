@@ -26,6 +26,8 @@ import {
 import { useAtomValue } from "jotai";
 import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
+import { BalanceDetails } from "@/components/balance/BalanceDetails";
+
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart")
 );
@@ -119,8 +121,10 @@ function RouteComponent() {
                 transition={{
                   duration: shouldReduceMotion ? 0 : 0.45,
                 }}
+                className="space-y-4"
               >
                 <TotalBalance />
+                <BalanceDetails />
               </m.div>
 
               <AnimatePresence initial={false}>

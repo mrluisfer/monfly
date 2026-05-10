@@ -11,7 +11,7 @@ import {
 } from "~/components/ui/form";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { sileo } from "~/lib/toaster";
-import { AtSignIcon } from "lucide-react";
+import { AtSignIcon, SendIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -55,9 +55,9 @@ export function StayConnect() {
   };
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <Label htmlFor={id} className="space-y-2 text-base md:max-w-md">
-        <span className="text-base font-semibold uppercase tracking-[0.12em] text-muted-foreground hidden xl:inline-block">
+        <span className="text-base font-semibold uppercase tracking-[0.12em] text-muted-foreground hidden 3xl:inline-block">
           Stay connected
         </span>
         <span className="block text-sm text-muted-foreground sm:text-base">
@@ -94,7 +94,8 @@ export function StayConnect() {
               </FormItem>
             )}
           />
-          <Button type="submit" size="lg" className="h-10 rounded-full px-5">
+          <Button type="submit" size="lg">
+            <SendIcon aria-hidden="true" />
             Subscribe
           </Button>
         </form>

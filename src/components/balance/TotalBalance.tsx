@@ -34,8 +34,6 @@ export type MonthlyPoint = {
   net: number;
 };
 
-export type BalanceTone = "positive" | "negative";
-
 export type TotalBalanceSummary = {
   latestPoint: MonthlyPoint | null;
   peakPoint: MonthlyPoint | null;
@@ -122,14 +120,6 @@ const TotalBalance = () => {
       trendDelta,
     };
   }, [incomeExpenseData?.data]);
-
-  const balanceTone: BalanceTone = balanceValue >= 0 ? "positive" : "negative";
-  const balanceToneClass =
-    balanceTone === "positive" ? "text-primary" : "text-destructive";
-  const TrendIcon =
-    (summary.latestPoint?.net ?? 0) >= 0
-      ? ArrowUpRightIcon
-      : ArrowDownRightIcon;
 
   if (error) {
     return (
@@ -250,53 +240,6 @@ const TotalBalance = () => {
               </div>
             </LazyMotion>
           </div>
-
-          <dl className="grid gap-3 sm:grid-cols-3">
-            <div className="bg-muted rounded-xl p-4">
-              <dt className="text-sm font-medium text-muted-foreground">
-                Latest net
-              </dt>
-              <div className="mt-3 flex items-center gap-2">
-                <TrendIcon className={cn("size-4", balanceToneClass)} />
-                <dd className={cn("text-lg font-semibold", balanceToneClass)}>
-                  {isBalanceHidden
-                    ? "$••••"
-                    : formatCurrency(summary.latestPoint?.net ?? 0, "MXN")}
-                </dd>
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {summary.latestPoint?.label ?? "Latest period"}
-              </p>
-            </div>
-
-            <div className="bg-muted rounded-xl p-4">
-              <dt className="text-sm font-medium text-muted-foreground">
-                Income tracked
-              </dt>
-              <dd className="mt-3 text-lg font-semibold text-foreground">
-                {isBalanceHidden
-                  ? "$••••"
-                  : formatCurrency(summary.totalIncome, "MXN")}
-              </dd>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Recent recorded periods
-              </p>
-            </div>
-
-            <div className="bg-muted rounded-xl p-4">
-              <dt className="text-sm font-medium text-muted-foreground">
-                Expenses tracked
-              </dt>
-              <dd className="mt-3 text-lg font-semibold text-foreground">
-                {isBalanceHidden
-                  ? "$••••"
-                  : formatCurrency(summary.totalExpenses, "MXN")}
-              </dd>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Recent recorded periods
-              </p>
-            </div>
-          </dl>
         </div>
       </div>
       <BalanceActions />

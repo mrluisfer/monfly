@@ -1,6 +1,22 @@
-import { BookOpenIcon, InfoIcon, LifeBuoyIcon } from "lucide-react";
+import {
+  BookOpenIcon,
+  InfoIcon,
+  LifeBuoyIcon,
+  MailIcon,
+  ScaleIcon,
+  ShieldCheckIcon,
+} from "lucide-react";
 
 import { HeaderIconName } from "./NavigationLinks";
+
+const iconMap: Record<HeaderIconName, typeof BookOpenIcon> = {
+  BookOpenIcon,
+  LifeBuoyIcon,
+  InfoIcon,
+  ShieldCheckIcon,
+  ScaleIcon,
+  MailIcon,
+};
 
 export function HeaderMenuIcon({
   icon,
@@ -9,38 +25,17 @@ export function HeaderMenuIcon({
   icon: HeaderIconName;
   label: string;
 }) {
-  if (icon === "BookOpenIcon")
-    return (
-      <span className="flex items-center gap-2">
-        <BookOpenIcon
-          size={16}
-          className="text-foreground opacity-60"
-          aria-hidden="true"
-        />
-        <span>{label}</span>
-      </span>
-    );
-  if (icon === "LifeBuoyIcon")
-    return (
-      <span className="flex items-center gap-2">
-        <LifeBuoyIcon
-          size={16}
-          className="text-foreground opacity-60"
-          aria-hidden="true"
-        />
-        <span>{label}</span>
-      </span>
-    );
-  if (icon === "InfoIcon")
-    return (
-      <span className="flex items-center gap-2">
-        <InfoIcon
-          size={16}
-          className="text-foreground opacity-60"
-          aria-hidden="true"
-        />
-        <span>{label}</span>
-      </span>
-    );
-  return <span>{label}</span>;
+  const Icon = iconMap[icon];
+  if (!Icon) return <span>{label}</span>;
+
+  return (
+    <span className="flex items-center gap-2">
+      <Icon
+        size={16}
+        className="text-foreground opacity-60"
+        aria-hidden="true"
+      />
+      <span>{label}</span>
+    </span>
+  );
 }

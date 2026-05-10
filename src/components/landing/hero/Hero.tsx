@@ -144,7 +144,7 @@ export function LandingHero() {
                     key={item.title}
                     className="rounded-4xl border border-border/60 bg-background/72 px-3 py-2.5"
                   >
-                    <div className="flex items-start gap-2.5">
+                    <div className="flex items-start lg:items-center gap-2.5">
                       <item.icon className={`mt-0.5 size-4 ${item.tone}`} />
                       <div>
                         <p className="text-sm font-semibold text-foreground">

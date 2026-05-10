@@ -1,4 +1,10 @@
-export type HeaderIconName = "BookOpenIcon" | "LifeBuoyIcon" | "InfoIcon";
+export type HeaderIconName =
+  | "BookOpenIcon"
+  | "LifeBuoyIcon"
+  | "InfoIcon"
+  | "ShieldCheckIcon"
+  | "ScaleIcon"
+  | "MailIcon";
 
 type NavigationBaseItem = {
   href: string;
@@ -71,6 +77,16 @@ export const navigationLinks: NavigationLink[] = [
       },
       { href: "/#pricing", label: "Plans", icon: "LifeBuoyIcon" },
       { href: "/#about", label: "About Monfly", icon: "InfoIcon" },
+    ],
+  },
+  {
+    label: "Legal",
+    submenu: true,
+    type: "icon",
+    items: [
+      { href: "/privacy", label: "Privacy Policy", icon: "ShieldCheckIcon" },
+      { href: "/terms", label: "Terms & Conditions", icon: "ScaleIcon" },
+      { href: "/contact", label: "Contact", icon: "MailIcon" },
     ],
   },
 ];

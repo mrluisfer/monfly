@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Footer } from "~/components/landing/footer";
 import { GlobalHeader } from "~/components/landing/global-header";
 import { LandingHero } from "~/components/landing/hero/Hero";
+import { GlobeIcon } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { PricingSection } from "@/components/landing/pricing-section";
 import { UserStatsSection } from "@/components/landing/UserStats";
 
@@ -36,7 +38,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   return (
-    <div className="landing-shell relative min-h-screen overflow-x-clip">
+    <div className="landing-shell relative min-h-screen overflow-x-clip pb-8">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-70 focus:rounded-full focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
@@ -62,6 +64,23 @@ function Home() {
         <PricingSection />
       </main>
       <Footer />
+      <div className="flex items-center justify-center">
+        <Button
+          variant={"link"}
+          size={"xs"}
+          render={
+            <a
+              href="https://github.com/mrluisfer/monfly"
+              target="_blank"
+              rel="noopener"
+              className="uppercase tracking-[0.13em]"
+            ></a>
+          }
+        >
+          <GlobeIcon className="size-4" />
+          Built by people around the world
+        </Button>
+      </div>
     </div>
   );
 }

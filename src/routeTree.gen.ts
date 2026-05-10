@@ -15,6 +15,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TermsIndexRouteImport } from './routes/terms.index'
+import { Route as PrivacyIndexRouteImport } from './routes/privacy.index'
 import { Route as ContactIndexRouteImport } from './routes/contact.index'
 import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home/index'
 import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
@@ -52,6 +54,16 @@ const SplatRoute = SplatRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsIndexRoute = TermsIndexRouteImport.update({
+  id: '/terms/',
+  path: '/terms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyIndexRoute = PrivacyIndexRouteImport.update({
+  id: '/privacy/',
+  path: '/privacy/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactIndexRoute = ContactIndexRouteImport.update({
@@ -110,6 +122,8 @@ export interface FileRoutesByFullPath {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/contact/': typeof ContactIndexRoute
+  '/privacy/': typeof PrivacyIndexRoute
+  '/terms/': typeof TermsIndexRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
   '/home/': typeof AuthedHomeIndexRoute
   '/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
@@ -126,6 +140,8 @@ export interface FileRoutesByTo {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/contact': typeof ContactIndexRoute
+  '/privacy': typeof PrivacyIndexRoute
+  '/terms': typeof TermsIndexRoute
   '/user/$userId': typeof AuthedUserUserIdRoute
   '/home': typeof AuthedHomeIndexRoute
   '/home/balance-calculator': typeof AuthedHomeBalanceCalculatorIndexRoute
@@ -144,6 +160,8 @@ export interface FileRoutesById {
   '/logout': typeof LogoutRoute
   '/signup': typeof SignupRoute
   '/contact/': typeof ContactIndexRoute
+  '/privacy/': typeof PrivacyIndexRoute
+  '/terms/': typeof TermsIndexRoute
   '/_authed/user/$userId': typeof AuthedUserUserIdRoute
   '/_authed/home/': typeof AuthedHomeIndexRoute
   '/_authed/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
@@ -162,6 +180,8 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/contact/'
+    | '/privacy/'
+    | '/terms/'
     | '/user/$userId'
     | '/home/'
     | '/home/balance-calculator/'
@@ -178,6 +198,8 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/contact'
+    | '/privacy'
+    | '/terms'
     | '/user/$userId'
     | '/home'
     | '/home/balance-calculator'
@@ -195,6 +217,8 @@ export interface FileRouteTypes {
     | '/logout'
     | '/signup'
     | '/contact/'
+    | '/privacy/'
+    | '/terms/'
     | '/_authed/user/$userId'
     | '/_authed/home/'
     | '/_authed/home/balance-calculator/'
@@ -213,6 +237,8 @@ export interface RootRouteChildren {
   LogoutRoute: typeof LogoutRoute
   SignupRoute: typeof SignupRoute
   ContactIndexRoute: typeof ContactIndexRoute
+  PrivacyIndexRoute: typeof PrivacyIndexRoute
+  TermsIndexRoute: typeof TermsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -257,6 +283,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms/': {
+      id: '/terms/'
+      path: '/terms'
+      fullPath: '/terms/'
+      preLoaderRoute: typeof TermsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy/': {
+      id: '/privacy/'
+      path: '/privacy'
+      fullPath: '/privacy/'
+      preLoaderRoute: typeof PrivacyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact/': {
@@ -358,6 +398,8 @@ const rootRouteChildren: RootRouteChildren = {
   LogoutRoute: LogoutRoute,
   SignupRoute: SignupRoute,
   ContactIndexRoute: ContactIndexRoute,
+  PrivacyIndexRoute: PrivacyIndexRoute,
+  TermsIndexRoute: TermsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

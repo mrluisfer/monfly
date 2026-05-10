@@ -12,6 +12,34 @@ export const FooterNavigation = () => {
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Monfly. All rights reserved.
         </p>
+        <ul className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+          <li>
+            <Link
+              to="/privacy"
+              className="transition-colors hover:text-foreground"
+            >
+              Privacy
+            </Link>
+          </li>
+          <li aria-hidden="true">·</li>
+          <li>
+            <Link
+              to="/terms"
+              className="transition-colors hover:text-foreground"
+            >
+              Terms
+            </Link>
+          </li>
+          <li aria-hidden="true">·</li>
+          <li>
+            <Link
+              to="/contact"
+              className="transition-colors hover:text-foreground"
+            >
+              Contact
+            </Link>
+          </li>
+        </ul>
       </div>
 
       <div className="grid grid-cols-2 gap-6 text-sm text-muted-foreground sm:flex sm:justify-between sm:gap-8">
