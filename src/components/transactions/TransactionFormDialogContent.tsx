@@ -30,8 +30,6 @@ export function TransactionFormDialogContent({
   title,
   description,
   children,
-  showCancelButton = true,
-  cancelLabel = "Cancel",
   className,
   bodyClassName,
   isLoading,
@@ -56,25 +54,6 @@ export function TransactionFormDialogContent({
           <div className={cn("px-4 py-4 sm:px-6", bodyClassName)}>
             {children}
           </div>
-
-          {showCancelButton ? (
-            <div className="border-t border-border/60 px-4 py-3 sm:px-6">
-              <DialogClose
-                className="w-full"
-                disabled={isLoading}
-                render={
-                  <Button
-                    variant="outline"
-                    className="h-11 w-full rounded-full"
-                    disabled={isLoading}
-                  >
-                    <XIcon className="size-5" />
-                    {cancelLabel}
-                  </Button>
-                }
-              />
-            </div>
-          ) : null}
         </ScrollArea>
       </div>
     </DialogContent>

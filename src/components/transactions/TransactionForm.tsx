@@ -10,6 +10,7 @@ import {
   TagIcon,
   TrendingDownIcon,
   TrendingUpIcon,
+  XIcon,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import {
@@ -60,6 +61,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { DialogClose } from "../ui/dialog";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -541,11 +543,18 @@ export function TransactionForm<FormValues extends FieldValues>({
 
         <LoanSection form={form} />
 
-        <div className="pt-1 sm:pt-2">
+        <div className="pt-1 sm:pt-2 flex items-center justify-between">
+          <DialogClose render={
+            <Button type="button" variant={'outline'} size={'lg'}></Button>
+          }>
+            <XIcon />
+            Cancel
+          </DialogClose>
           <Button
             type="submit"
-            className="h-12 w-full rounded-full text-base font-medium shadow-[0_28px_46px_-28px_color-mix(in_oklab,var(--primary)_75%,transparent)] transition-all duration-200 active:scale-[0.97] hover:shadow-xl sm:hover:scale-[1.01]"
+            className="font-medium hover:shadow-xl"
             disabled={isLoading}
+            size={'lg'}
           >
             {isLoading ? (
               <div className="flex items-center gap-2">

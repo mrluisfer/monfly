@@ -6,6 +6,7 @@ import { AppSidebar } from "../shell/AppSidebar";
 import { CommandPaletteProvider } from "../shell/CommandPalette";
 import { Topbar } from "../shell/Topbar";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
+import Footer from "./Footer";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useAtom(sidebarOpenAtom);
@@ -27,8 +28,11 @@ const Layout = ({ children }: { children: ReactNode }) => {
             tabIndex={-1}
             className="scrollbar-custom flex flex-1 flex-col gap-6 overflow-y-auto p-2 sm:p-4 pb-10 outline-none md:p-6 lg:p-8"
           >
-            <div className="mx-auto flex w-full max-w-[96rem] flex-col gap-6">
+            <div className="mx-auto flex w-full max-w-[96rem] flex-1 flex-col gap-6">
               {children}
+            </div>
+            <div className="mx-auto w-full max-w-[96rem]">
+              <Footer />
             </div>
           </main>
         </SidebarInset>

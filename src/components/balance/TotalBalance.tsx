@@ -161,7 +161,7 @@ const TotalBalance = () => {
                 <p className="text-sm font-medium text-muted-foreground">
                   Net total
                 </p>
-                <Badge>
+                <Badge className="capitalize">
                   {summary.latestPoint?.label ? <CalendarIcon /> : null}
                   {summary.latestPoint?.label ?? "No activity yet"}
                 </Badge>
@@ -170,7 +170,7 @@ const TotalBalance = () => {
             <div className="flex items-center gap-2 justify-end">
               <CopyButton
                 text={`$${totalBalance}`}
-                variant={"outline"}
+                variant={"secondary"}
                 size={"default"}
               >
                 <span className="hidden md:block">Copy balance</span>

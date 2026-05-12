@@ -29,8 +29,13 @@ body {
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y;
   -webkit-tap-highlight-color: transparent;
-  -webkit-user-select: none;
-  user-select: none;
+}
+
+@media (max-width: 1000px) {
+  html,body {
+    -webkit-user-select: none;
+    user-select: none;
+  }
 }
 
 body {

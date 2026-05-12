@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, ReactNode, useMemo } from "react";
 import { hideBalanceAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -193,11 +193,11 @@ function BalanceDetailsComponent() {
             <Skeleton key={item} className="h-32 rounded-2xl" />
           ))}
         </dl>
-        <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <DlContainer>
           {[0, 1, 2, 3].map((item) => (
             <Skeleton key={item} className="h-24 rounded-2xl" />
           ))}
-        </dl>
+        </DlContainer>
       </div>
     );
   }
@@ -327,7 +327,7 @@ function BalanceDetailsComponent() {
       </dl>
 
       {hasData ? (
-        <dl className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <DlContainer>
           <SavingsRateCard
             rate={summary.savingsRate}
             hidden={isBalanceHidden}
@@ -395,7 +395,7 @@ function BalanceDetailsComponent() {
               }
             />
           )}
-        </dl>
+        </DlContainer>
       ) : (
         <EmptyInsights />
       )}
@@ -583,7 +583,7 @@ function InsightCard({
   hint,
 }: InsightCardProps) {
   return (
-    <div className="group/insight relative overflow-hidden rounded-2xl border border-border/60 bg-card p-3 ring-1 ring-foreground/5 transition-all duration-300 hover:-translate-y-0.5 hover:ring-foreground/10 motion-reduce:hover:translate-y-0">
+    <div className="group/insight relative overflow-hidden rounded-2xl border border-border/60 bg-card p-3 sm:p-4 ring-1 ring-foreground/5 transition-all duration-300 hover:-translate-y-0.5 hover:ring-foreground/10 motion-reduce:hover:translate-y-0">
       <div className="flex items-center justify-between gap-2">
         <dt className="text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
           {label}
@@ -782,5 +782,13 @@ function EmptyInsights() {
         Add a few transactions to see savings rate, runway and trends.
       </p>
     </div>
+  );
+}
+
+function DlContainer({children}: {children: ReactNode}) {
+  return (
+    <dl className="grid grid-cols-2 gap-3 lg:grid-cols-3 4xl:grid-cols-4">
+      {children}
+    </dl>
   );
 }
