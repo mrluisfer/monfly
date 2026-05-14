@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckIcon, CircleXIcon, CopyIcon } from "lucide-react";
+import { CheckIcon, CircleXIcon, ClipboardIcon } from "lucide-react";
 import type { HTMLMotionProps, Variants } from "motion/react";
 import { AnimatePresence, motion } from "motion/react";
 import type { ComponentProps } from "react";
@@ -52,7 +52,7 @@ export function CopyStateIcon({
     <AnimatePresence mode="popLayout" initial={false}>
       {state === "idle" ? (
         <motion.span key="idle" {...motionIconProps}>
-          {idleIcon ?? <CopyIcon />}
+          {idleIcon ?? <ClipboardIcon />}
         </motion.span>
       ) : state === "done" ? (
         <motion.span key="done" {...motionIconProps}>
