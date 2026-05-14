@@ -1,14 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
 import { hideBalanceAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "~/components/ui/skeleton";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { cn } from "~/lib/utils";
-import { queryDictionary } from "~/queries/dictionary";
-import { formatCurrency } from "~/utils/format-currency";
-import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 import {
   AnimatePresence,
   domAnimation,
@@ -17,14 +8,18 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { useAtomValue } from "jotai";
-import {
-  ArrowDownRightIcon,
-  ArrowUpRightIcon,
-  CalendarIcon,
-} from "lucide-react";
+import { CalendarIcon } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Skeleton } from "~/components/ui/skeleton";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
+import { queryDictionary } from "~/queries/dictionary";
+import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 
 import { CopyButton } from "../copy-button/copy-button";
 import { Badge } from "../ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { BalanceActions } from "./BalanceActions";
 
 export type MonthlyPoint = {
@@ -33,6 +28,16 @@ export type MonthlyPoint = {
   label: string;
   net: number;
 };
+
+const LONG_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+function formatLongDate(date: Date): string {
+  return LONG_DATE_FORMATTER.format(date);
+}
 
 export type TotalBalanceSummary = {
   latestPoint: MonthlyPoint | null;
@@ -161,20 +166,37 @@ const TotalBalance = () => {
                 <p className="text-muted-foreground text-sm font-medium">
                   Net total
                 </p>
-                <Badge className="capitalize">
-                  {summary.latestPoint?.label ? <CalendarIcon /> : null}
-                  {summary.latestPoint?.label ?? "No activity yet"}
-                </Badge>
+                <Tooltip>
+                  <TooltipTrigger render={<Badge className="capitalize" />}>
+                    {summary.latestPoint?.label ? <CalendarIcon /> : null}
+                    {summary.latestPoint?.label ?? "No activity yet"}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {summary.latestPoint ? (
+                      <p className="text-sm">{formatLongDate(new Date())}</p>
+                    ) : (
+                      <p className="text-sm">No recorded activity yet.</p>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
               </div>
             </div>
             <div className="flex items-center justify-end gap-2">
-              <CopyButton
-                text={`$${totalBalance}`}
-                variant={"secondary"}
-                size={"default"}
-              >
-                <span className="hidden md:block">Copy balance</span>
-              </CopyButton>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <CopyButton
+                      text={`$${totalBalance}`}
+                      variant={"secondary"}
+                      size={"default"}
+                    />
+                  }
+                />
+                <TooltipContent>
+                  <p>Copy total balance</p>
+                </TooltipContent>
+              </Tooltip>
+
               <span className="text-muted-foreground hidden text-sm md:block">
                 {summary.recentPoints.length} recorded periods
               </span>
