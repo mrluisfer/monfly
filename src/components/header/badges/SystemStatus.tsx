@@ -1,17 +1,17 @@
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "~/components/ui/tooltip";
-import { cn } from "~/lib/utils";
-import {
   Activity,
   AlertCircle,
   AlertTriangle,
   CheckCircle2,
   XCircle,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~/components/ui/tooltip";
+import { cn } from "~/lib/utils";
 
 import { BadgeIcon, HeaderBadge, StatusDot } from "./HeaderBadge";
 
@@ -132,7 +132,7 @@ export function SystemStatusBadgeCompact({
   const config = statusConfig[status];
 
   return (
-    <TooltipProvider delay={200}>
+    <TooltipProvider >
       <Tooltip>
         <TooltipTrigger
           render={

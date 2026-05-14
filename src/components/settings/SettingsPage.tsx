@@ -12,6 +12,7 @@ import {
   BellRingIcon,
   EyeIcon,
   EyeOffIcon,
+  GlobeIcon,
   KeyboardIcon,
   PaletteIcon,
   ScaleIcon,
@@ -24,6 +25,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import FontDisplaySelect from "./FontDisplaySelect";
+import { NumberFormatSelector } from "./NumberFormatSelector";
 import { SonnerPositionSelector } from "./SonnerPositionSelector";
 import { ThemeSelector } from "./ThemeSelector";
 import ToggleDarkMode from "./ToggleDarkMode";
@@ -138,6 +140,18 @@ export function SettingsPage() {
               atom={hideMetricsAtom}
               title="Hide metrics on dashboards"
               description="Useful for screen sharing or recording demos."
+            />
+          </SettingsSection>
+
+          <SettingsSection
+            icon={GlobeIcon}
+            title="Regional"
+            description="Number and currency formatting used across the workspace."
+          >
+            <SettingsRow
+              title="Number format"
+              description="Affects how pasted values are parsed in the balance calculator and future inputs."
+              control={<NumberFormatSelector />}
             />
           </SettingsSection>
 

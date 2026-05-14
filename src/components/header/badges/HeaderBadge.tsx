@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -7,7 +8,6 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
-import type { LucideIcon } from "lucide-react";
 
 export interface HeaderBadgeProps {
   variant?: "default" | "secondary" | "outline" | "destructive";
@@ -37,7 +37,7 @@ export function HeaderBadge({
   if (!isActive) return null;
 
   return (
-    <TooltipProvider delay={200}>
+    <TooltipProvider >
       <Tooltip>
         <TooltipTrigger
           render={

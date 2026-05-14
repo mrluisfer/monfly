@@ -1,6 +1,6 @@
+import { TrendingDown, TrendingUp, TrendingUpDown } from "lucide-react";
 import { TransactionType } from "~/constants/transaction-types";
 import { formatCurrency } from "~/utils/format-currency";
-import { TrendingDown, TrendingUp, TrendingUpDown } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -67,7 +67,7 @@ export function TrendingStatus({
       : "the same as";
 
   return (
-    <TooltipProvider delay={300}>
+    <TooltipProvider>
       <div className="flex flex-col gap-2 mt-2">
         {/* Current Month Display */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">

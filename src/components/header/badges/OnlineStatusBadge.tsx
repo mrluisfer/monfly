@@ -1,3 +1,4 @@
+import { Wifi, WifiOff } from "lucide-react";
 import { useEffect, useReducer } from "react";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -7,7 +8,6 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
-import { Wifi, WifiOff } from "lucide-react";
 
 interface OnlineStatusBadgeProps {
   showIcon?: boolean;
@@ -118,7 +118,7 @@ export function OnlineStatusBadge({
   }
 
   return (
-    <TooltipProvider delay={200}>
+    <TooltipProvider >
       <Tooltip>
         <TooltipTrigger
           render={

@@ -1,10 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { cn } from "~/lib/utils";
-import { queryDictionary } from "~/queries/dictionary";
-import { formatCurrency } from "~/utils/format-currency";
+import { useAtom } from "jotai";
 import {
   Calculator,
   Delete,
@@ -13,9 +8,19 @@ import {
   Info,
   RotateCcw,
   Sigma,
+  XIcon,
 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { NumberFormatId } from "~/constants/number-formats";
+import { useNumberFormat } from "~/hooks/ui/useNumberFormat";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
+import { cn } from "~/lib/utils";
+import { queryDictionary } from "~/queries/dictionary";
+import { balanceSimulationAlertDismissedAtom } from "~/state/atoms";
+import { formatCurrency } from "~/utils/format-currency";
 
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Alert, AlertAction, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -27,6 +32,7 @@ import {
 import { Kbd } from "../ui/kbd";
 import { Skeleton } from "../ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type CalculatorMode = "normal" | "scientific";
 type BinaryOperator = "+" | "-" | "*" | "/" | "^";
@@ -71,7 +77,7 @@ const BASIC_KEYS: CalculatorKey[] = [
   {
     token: "AC",
     label: "AC",
-    ariaLabel: "Clear simulation",
+    ariaLabel: "Clear display to zero",
     role: "utility",
   },
   {
@@ -363,6 +369,65 @@ function getButtonClassName(role: ButtonRole) {
   return "h-13 rounded-2xl text-lg font-semibold";
 }
 
+function parseClipboardNumber(
+  rawText: string,
+  formatPreference: NumberFormatId
+): number | null {
+  if (!rawText) {
+    return null;
+  }
+
+  const cleaned = rawText.replace(/[^\d.,-]/g, "").trim();
+  if (!cleaned) {
+    return null;
+  }
+
+  const isNegative = cleaned.startsWith("-");
+  const digits = cleaned.replace(/-/g, "");
+  if (!digits) {
+    return null;
+  }
+
+  const lastDot = digits.lastIndexOf(".");
+  const lastComma = digits.lastIndexOf(",");
+  const dotCount = (digits.match(/\./g) || []).length;
+  const commaCount = (digits.match(/,/g) || []).length;
+
+  let decimalIdx = -1;
+
+  if (formatPreference === "dot-decimal") {
+    decimalIdx = lastDot;
+  } else if (formatPreference === "comma-decimal") {
+    decimalIdx = lastComma;
+  } else if (lastDot !== -1 && lastComma !== -1) {
+    decimalIdx = Math.max(lastDot, lastComma);
+  } else if (lastDot !== -1) {
+    decimalIdx = dotCount === 1 ? lastDot : -1;
+  } else if (lastComma !== -1) {
+    decimalIdx = commaCount === 1 ? lastComma : -1;
+  }
+
+  let integerPart: string;
+  let decimalPart: string;
+  if (decimalIdx === -1) {
+    integerPart = digits.replace(/[.,]/g, "");
+    decimalPart = "";
+  } else {
+    integerPart = digits.slice(0, decimalIdx).replace(/[.,]/g, "");
+    decimalPart = digits.slice(decimalIdx + 1).replace(/[.,]/g, "");
+  }
+
+  if (!integerPart && !decimalPart) {
+    return null;
+  }
+
+  const numericString = `${isNegative ? "-" : ""}${integerPart || "0"}${
+    decimalPart ? `.${decimalPart}` : ""
+  }`;
+  const parsed = Number(numericString);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
 function isFormElement(target: EventTarget | null): boolean {
   const element = target as HTMLElement | null;
   if (!element) {
@@ -379,6 +444,7 @@ function isFormElement(target: EventTarget | null): boolean {
 
 export function BalanceCalculator() {
   const userEmail = useRouteUser();
+  const { format: numberFormatPreference } = useNumberFormat();
   const historyIdRef = useRef(0);
 
   const [mode, setMode] = useState<CalculatorMode>("normal");
@@ -452,6 +518,15 @@ export function BalanceCalculator() {
     setStoredValue(null);
     setWaitingForOperand(true);
     setStatusMessage(message);
+  }, []);
+
+  const clearAll = useCallback(() => {
+    setDisplay("0");
+    setExpression("");
+    setPendingOperator(null);
+    setStoredValue(null);
+    setWaitingForOperand(false);
+    setStatusMessage("Calculator cleared.");
   }, []);
 
   const resetToBaseline = useCallback(
@@ -662,6 +737,8 @@ export function BalanceCalculator() {
         return;
       }
 
+      let nextStoredValue = storedValue;
+
       if (pendingOperator && !waitingForOperand) {
         const result = computeBinaryResult(
           storedValue,
@@ -677,13 +754,14 @@ export function BalanceCalculator() {
         const resultDisplay = toDisplayValue(result);
         setDisplay(resultDisplay);
         setStoredValue(result);
-        setExpression(
-          `${formatOperationValue(storedValue)} ${OPERATOR_SYMBOL[pendingOperator]} ${formatOperationValue(currentValue)}`
-        );
+        nextStoredValue = result;
       }
 
       setPendingOperator(operator);
       setWaitingForOperand(true);
+      setExpression(
+        `${formatOperationValue(nextStoredValue)} ${OPERATOR_SYMBOL[operator]}`
+      );
       setStatusMessage(`Operator ${OPERATOR_SYMBOL[operator]} ready.`);
     },
     [display, pendingOperator, setErrorState, storedValue, waitingForOperand]
@@ -762,7 +840,7 @@ export function BalanceCalculator() {
       }
 
       if (token === "AC") {
-        resetToBaseline(true);
+        clearAll();
         return;
       }
 
@@ -812,6 +890,7 @@ export function BalanceCalculator() {
       }
     },
     [
+      clearAll,
       handleBackspace,
       handleDecimal,
       handleDigit,
@@ -821,7 +900,6 @@ export function BalanceCalculator() {
       handlePercent,
       handleToggleSign,
       handleUnaryOperation,
-      resetToBaseline,
     ]
   );
 
@@ -857,6 +935,38 @@ export function BalanceCalculator() {
       window.removeEventListener("keydown", handleKeyboardInput);
     };
   }, [handleInputToken]);
+
+  useEffect(() => {
+    const handlePaste = (event: ClipboardEvent) => {
+      if (isFormElement(event.target)) {
+        return;
+      }
+
+      const pastedText = event.clipboardData?.getData("text") ?? "";
+      const parsedValue = parseClipboardNumber(
+        pastedText,
+        numberFormatPreference
+      );
+
+      if (parsedValue === null) {
+        setStatusMessage("Clipboard does not contain a valid number.");
+        return;
+      }
+
+      event.preventDefault();
+      const normalizedValue = normalizeNumber(parsedValue);
+      const nextDisplay = toDisplayValue(normalizedValue);
+
+      setDisplay(nextDisplay);
+      setWaitingForOperand(false);
+      setStatusMessage(`Pasted value ${formatDisplayValue(nextDisplay)}.`);
+    };
+
+    window.addEventListener("paste", handlePaste);
+    return () => {
+      window.removeEventListener("paste", handlePaste);
+    };
+  }, [numberFormatPreference]);
 
   const visibleKeys = useMemo(
     () =>
@@ -936,15 +1046,7 @@ export function BalanceCalculator() {
 
   return (
     <div className="space-y-4">
-      <Alert className="border-primary/25 bg-primary/5">
-        <Info className="size-4" />
-        <AlertTitle>Safe simulation</AlertTitle>
-        <AlertDescription>
-          This calculator uses a static copy of your{" "}
-          <strong>Total Balance</strong>. No calculation updates your real
-          balance or saves data to the database.
-        </AlertDescription>
-      </Alert>
+    <SimulationAlert />
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
         <Card className="relative overflow-hidden border-border/70 bg-linear-to-br from-card via-card to-primary/5 h-fit">
@@ -961,16 +1063,22 @@ export function BalanceCalculator() {
                   Mobile-first, with keyboard support and scientific mode.
                 </CardDescription>
               </div>
-              <Button
+              <Tooltip>
+                <TooltipTrigger render={<Button
                 variant="secondary"
-                size="lg"
                 onClick={() => resetToBaseline(true)}
                 className="shrink-0"
                 aria-label="Reset to initial balance"
-              >
+                />}>
                 <RotateCcw className="size-4" />
+                <span className="md:hidden">
                 Reset
-              </Button>
+                </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Reset to initial balance</p>
+                </TooltipContent>
+                </Tooltip>
             </div>
 
             <Tabs
@@ -1081,12 +1189,12 @@ export function BalanceCalculator() {
                 )}
               </dl>
 
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-4 gap-2">
                 {SCENARIO_PRESETS.map((preset) => (
                   <Button
                     key={preset.id}
                     type="button"
-                    variant="outline"
+                    variant="secondary"
                     aria-label={preset.description}
                     onClick={() => applyScenario(preset)}
                     size={"lg"}
@@ -1158,13 +1266,44 @@ export function BalanceCalculator() {
               <Kbd>+ - * /</Kbd>
               <Kbd>Enter =</Kbd>
               <Kbd>Backspace</Kbd>
-              <Kbd>Esc (reset)</Kbd>
+              <Kbd>Esc (clear)</Kbd>
               <Kbd>.</Kbd>
               <Kbd>%</Kbd>
+              <Kbd>Ctrl/⌘ + V (paste)</Kbd>
             </CardContent>
           </Card>
         </div>
       </div>
     </div>
+  );
+}
+
+function SimulationAlert() {
+  const [dismissed, setDismissed] = useAtom(balanceSimulationAlertDismissedAtom);
+
+  if (dismissed) {
+    return null;
+  }
+
+  return (
+    <Alert className="border-primary/25 bg-primary/5">
+      <Info className="size-4" />
+      <AlertTitle>Safe simulation</AlertTitle>
+      <AlertDescription>
+        This calculator uses a static copy of your{" "}
+        <strong>Total Balance</strong>. No calculation updates your real
+        balance or saves data to the database.
+      </AlertDescription>
+      <AlertAction>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => setDismissed(true)}
+          aria-label="Dismiss simulation information"
+        >
+          <XIcon />
+        </Button>
+      </AlertAction>
+    </Alert>
   );
 }

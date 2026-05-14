@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-import type * as React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createRootRoute,
@@ -8,6 +7,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import type * as React from "react";
 import { DefaultCatchBoundary } from "~/components/shared/DefaultCatchBoundary";
 import { NotFound } from "~/components/shared/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
@@ -198,7 +198,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider delay={200}>
+        <TooltipProvider >
           {children}
           <TanStackRouterDevtools position="bottom-right" />
           <Scripts />
@@ -225,7 +225,7 @@ function RootDocumentWithProviders({
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider delay={200}>
+        <TooltipProvider >
           <SileoToaster position={position} theme={theme} />
           {children}
           <TanStackRouterDevtools position="bottom-right" />

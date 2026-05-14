@@ -1,5 +1,12 @@
-import { TOTAL_BALANCE_VISIBILITY_STORAGE_KEY } from "@/constants/localStorageKeys";
+import {
+  BALANCE_SIMULATION_ALERT_DISMISSED_KEY,
+  TOTAL_BALANCE_VISIBILITY_STORAGE_KEY,
+} from "@/constants/localStorageKeys";
 import { FontValues } from "~/constants/fonts-display";
+import {
+  DEFAULT_NUMBER_FORMAT,
+  type NumberFormatId,
+} from "~/constants/number-formats";
 import type { SonnerPosition } from "~/types/SonnerPosition";
 import { atom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
@@ -71,4 +78,21 @@ export const setDisableTransactionHoverAtom = atom(
 export const hideBalanceAtom = atomWithStorage<boolean>(
   TOTAL_BALANCE_VISIBILITY_STORAGE_KEY,
   false
+);
+
+export const balanceSimulationAlertDismissedAtom = atomWithStorage<boolean>(
+  BALANCE_SIMULATION_ALERT_DISMISSED_KEY,
+  false
+);
+
+export const numberFormatAtom = atomWithStorage<NumberFormatId>(
+  "monfly-number-format",
+  DEFAULT_NUMBER_FORMAT
+);
+
+export const setNumberFormatAtom = atom(
+  null,
+  (_get, set, value: NumberFormatId) => {
+    set(numberFormatAtom, value);
+  }
 );
