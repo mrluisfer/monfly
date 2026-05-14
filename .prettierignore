@@ -1,3 +1,10 @@
-# Ignore artifacts:
-build
-coverage
+node_modules
+.next
+.vercel
+public
+dist
+
+# Ignore dependency locks
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
