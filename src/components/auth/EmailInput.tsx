@@ -1,15 +1,22 @@
-import { useId } from "react";
 import { MailIcon } from "lucide-react";
-import { ControllerRenderProps } from "react-hook-form";
+import { useId } from "react";
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 
-export default function EmailInput({
+export default function EmailInput<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   field,
 }: {
-  field: ControllerRenderProps<any, "email">;
+  field: ControllerRenderProps<TFieldValues, TName>;
 }) {
   const id = useId();
 

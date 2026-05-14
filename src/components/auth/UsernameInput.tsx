@@ -1,16 +1,23 @@
 "use client";
 
 import { useId, type ChangeEvent } from "react";
-import { ControllerRenderProps } from "react-hook-form";
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 
-export default function UsernameInput({
+export default function UsernameInput<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   field,
 }: {
-  field: ControllerRenderProps<any, "name">;
+  field: ControllerRenderProps<TFieldValues, TName>;
 }) {
   const id = useId();
   const maxLength = 25;

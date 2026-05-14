@@ -1,5 +1,6 @@
-import { Fragment } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
+import { SearchIcon } from "lucide-react";
+import { Fragment } from "react";
 import { SystemStatusBadge } from "~/components/header/badges/SystemStatus";
 import { HideData } from "~/components/header/HideData";
 import ToggleDarkMode from "~/components/settings/ToggleDarkMode";
@@ -12,7 +13,7 @@ import {
   BreadcrumbSeparator,
 } from "~/components/ui/breadcrumb";
 import { Button } from "~/components/ui/button";
-import { Kbd } from "~/components/ui/kbd";
+import { Kbd, KbdGroup } from "~/components/ui/kbd";
 import { Separator } from "~/components/ui/separator";
 import { SidebarTrigger } from "~/components/ui/sidebar";
 import {
@@ -23,7 +24,6 @@ import {
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useIsMac } from "~/hooks/ui/useIsMac";
 import { cn } from "~/lib/utils";
-import { SearchIcon } from "lucide-react";
 
 import { useCommandPalette } from "./CommandPalette";
 
@@ -70,10 +70,22 @@ export function Topbar() {
         "md:px-4",
       )}
     >
-      <SidebarTrigger
-        className="-ml-1 shrink-0"
-        aria-label="Toggle navigation"
-      />
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <SidebarTrigger
+              className="-ml-1 shrink-0"
+              aria-label="Toggle navigation"
+            />
+          }
+        />
+        <TooltipContent side="bottom">
+          Toggle navigation{" "}
+          <KbdGroup>
+            <Kbd>{isMac ? "⌘" : "Ctrl"}</Kbd> +<Kbd>b</Kbd>
+          </KbdGroup>
+        </TooltipContent>
+      </Tooltip>
       <Separator
         orientation="vertical"
         className="mr-1 data-[orientation=vertical]:h-full"

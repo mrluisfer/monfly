@@ -1,3 +1,4 @@
+import type { Loan } from "@prisma/client";
 import { Link } from "@tanstack/react-router";
 import { ArrowRightIcon, ClockIcon, HandCoinsIcon } from "lucide-react";
 
@@ -6,9 +7,9 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { useLoans } from "~/hooks/loans/useLoans";
 import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
+import { ScrollArea } from "../ui/scroll-area";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
-const HORIZON_DAYS = 30;
 const MAX_VISIBLE = 5;
 
 type ReceivableEntry = {
@@ -20,17 +21,7 @@ type ReceivableEntry = {
   status: string;
 };
 
-function buildEntries(
-  loans: {
-    id: string;
-    debtor: string;
-    amount: number;
-    amountPaid: number;
-    status: string;
-    dueAt: Date | string | null;
-  }[],
-  now: Date,
-): ReceivableEntry[] {
+function buildEntries(loans: Loan[], now: Date): ReceivableEntry[] {
   const entries = loans
     .filter((l) => l.status !== "paid")
     .map((l) => {
@@ -88,8 +79,8 @@ export function UpcomingReceivablesCard() {
   const now = new Date();
 
   return (
-    <section className="bg-card border-border/60 flex flex-col gap-3 rounded-2xl border p-4">
-      <header className="flex items-center justify-between gap-2">
+    <section className="bg-card border-border/60 flex flex-col gap-3 rounded-2xl border">
+      <header className="flex items-center justify-between gap-2 px-4 pt-4">
         <div className="flex items-center gap-2">
           <span
             aria-hidden="true"
@@ -107,9 +98,9 @@ export function UpcomingReceivablesCard() {
           </div>
         </div>
         <Button
-          variant="ghost"
-          size="sm"
-          className="h-7 gap-1 px-2 text-xs"
+          variant="link"
+          className="gap-1 px-2"
+          size={"sm"}
           render={<Link to="/home/loans" />}
         >
           View all
@@ -135,7 +126,7 @@ function UpcomingBody({
 }: {
   isPending: boolean;
   error: boolean;
-  loans: any[];
+  loans: Loan[];
   now: Date;
 }) {
   if (isPending) {
@@ -154,7 +145,7 @@ function UpcomingBody({
     );
   }
 
-  const entries = buildEntries(loans as any, now);
+  const entries = buildEntries(loans, now);
 
   if (entries.length === 0) {
     return (
@@ -170,7 +161,7 @@ function UpcomingBody({
 
   return (
     <div className="space-y-3">
-      <div className="text-foreground flex items-baseline justify-between">
+      <div className="text-foreground flex items-baseline justify-between px-4">
         <span className="text-2xl font-semibold tracking-tight tabular-nums">
           {formatCurrency(totalOutstanding, "USD")}
         </span>
@@ -179,7 +170,14 @@ function UpcomingBody({
         </span>
       </div>
 
-      <ul role="list" className="divide-border/60 divide-y">
+      <ScrollArea
+        render={
+          <ul
+            role="list"
+            className="divide-border/60 h-40 divide-y px-2 pb-4"
+          />
+        }
+      >
         {visible.map((entry) => (
           <li
             key={entry.id}
@@ -204,7 +202,7 @@ function UpcomingBody({
             </span>
           </li>
         ))}
-      </ul>
+      </ScrollArea>
 
       {hidden > 0 && (
         <p className="text-muted-foreground text-xs">

@@ -2,16 +2,23 @@
 
 import { useId, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { ControllerRenderProps } from "react-hook-form";
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 
 import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 
-export function SimplePasswordInput({
+export function SimplePasswordInput<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   field,
 }: {
-  field: ControllerRenderProps<any, "password">;
+  field: ControllerRenderProps<TFieldValues, TName>;
 }) {
   const id = useId();
   const [isVisible, setIsVisible] = useState<boolean>(false);

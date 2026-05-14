@@ -1,8 +1,12 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react";
-import { ControllerRenderProps } from "react-hook-form";
+import { useId, useMemo, useState } from "react";
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from "react-hook-form";
 
 import { Input } from "@/components/ui/input";
 
@@ -30,10 +34,13 @@ const getStrengthText = (score: number) => {
   return "Strong password";
 };
 
-export default function ComplexPasswordInput({
+export default function ComplexPasswordInput<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   field,
 }: {
-  field: ControllerRenderProps<any, "password">;
+  field: ControllerRenderProps<TFieldValues, TName>;
 }) {
   const id = useId();
   const [isVisible, setIsVisible] = useState<boolean>(false);

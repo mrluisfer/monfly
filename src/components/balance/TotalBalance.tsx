@@ -9,7 +9,7 @@ import {
 } from "framer-motion";
 import { useAtomValue } from "jotai";
 import { CalendarIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
@@ -27,6 +27,13 @@ export type MonthlyPoint = {
   income: number;
   label: string;
   net: number;
+};
+
+type IncomeExpensePoint = {
+  month: string;
+  year: number;
+  income: number;
+  expense: number;
 };
 
 const LONG_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
@@ -49,7 +56,6 @@ export type TotalBalanceSummary = {
 };
 
 const TotalBalance = () => {
-  const [totalBalance, setTotalBalance] = useState<string>("0");
   const isBalanceHidden = useAtomValue(hideBalanceAtom);
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
@@ -74,17 +80,14 @@ const TotalBalance = () => {
     retryDelay: 1000,
   });
 
-  useEffect(() => {
-    if (data?.data?.totalBalance !== undefined) {
-      setTotalBalance(formatToTwoDecimals(data.data.totalBalance).stringValue);
-    }
-  }, [data]);
-
-  const balanceValue = Number(data?.data?.totalBalance ?? 0);
+  const totalBalance =
+    data?.data?.totalBalance !== undefined && data?.data?.totalBalance !== null
+      ? formatToTwoDecimals(data.data.totalBalance).stringValue
+      : "0";
 
   const summary = useMemo<TotalBalanceSummary>(() => {
     const normalizedData: MonthlyPoint[] =
-      incomeExpenseData?.data?.map((item: any) => {
+      incomeExpenseData?.data?.map((item: IncomeExpensePoint) => {
         const income = Number.isFinite(item.income) ? item.income : 0;
         const expense = Number.isFinite(item.expense) ? item.expense : 0;
 

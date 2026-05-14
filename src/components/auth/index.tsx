@@ -1,9 +1,8 @@
-import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
+import { type ReactNode } from "react";
+import type { Path, UseFormReturn } from "react-hook-form";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { cn } from "~/lib/utils";
-import { UserIcon } from "lucide-react";
-import type { UseFormReturn } from "react-hook-form";
 
 import Card from "../shared/Card";
 import { Button } from "../ui/button";
@@ -68,20 +67,20 @@ export function Auth<TFormValues extends BaseAuthValues>({
           {shouldShowSignupFields && (
             <FormField
               control={form.control}
-              name="name"
+              name={"name" as Path<TFormValues>}
               render={({ field }) => <UsernameInput field={field} />}
             />
           )}
 
           <FormField
             control={form.control}
-            name="email"
+            name={"email" as Path<TFormValues>}
             render={({ field }) => <EmailInput field={field} />}
           />
 
           <FormField
             control={form.control}
-            name="password"
+            name={"password" as Path<TFormValues>}
             render={({ field }) =>
               shouldShowSignupFields ? (
                 <ComplexPasswordInput field={field} />
