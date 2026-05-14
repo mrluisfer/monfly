@@ -1,5 +1,26 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { useAtomValue } from "jotai";
+import {
+  AlertCircleIcon,
+  ArrowDownLeftIcon,
+  ArrowUpRightIcon,
+  BanknoteArrowUpIcon,
+  CalendarIcon,
+  CheckCheck,
+  ChevronDownIcon,
+  CircleDollarSignIcon,
+  FileTextIcon,
+  HandCoinsIcon,
+  PencilIcon,
+  PlusCircleIcon,
+  PlusIcon,
+  RotateCcwIcon,
+  Trash2Icon,
+  TrendingUpIcon,
+  UserIcon,
+} from "lucide-react";
+import { useState } from "react";
+import { Controller } from "react-hook-form";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,33 +66,14 @@ import { useUpdateLoan } from "~/hooks/loans/useUpdateLoan";
 import { cn } from "~/lib/utils";
 import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import { formatCurrency } from "~/utils/format-currency";
-import { useAtomValue } from "jotai";
-import {
-  AlertCircleIcon,
-  ArrowDownLeftIcon,
-  ArrowUpRightIcon,
-  BanknoteArrowUpIcon,
-  CalendarIcon,
-  CheckCheck,
-  ChevronDownIcon,
-  CircleDollarSignIcon,
-  FileTextIcon,
-  HandCoinsIcon,
-  PencilIcon,
-  PlusCircleIcon,
-  RotateCcwIcon,
-  Trash2Icon,
-  TrendingUpIcon,
-  UserIcon,
-} from "lucide-react";
-import { Controller } from "react-hook-form";
 
+import { PageHeader } from "@/components/layout/PageHeader";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { PageHeader } from "@/components/layout/PageHeader";
+import { Spinner } from "@/components/ui/spinner";
 
 export const Route = createFileRoute("/_authed/home/loans/")({
   component: RouteComponent,
@@ -280,7 +282,17 @@ function AddLoanCard() {
           </Field>
 
           <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Saving…" : "Create loan"}
+            {isLoading ? (
+              <>
+                <Spinner className="animate-spin" />
+                Saving…
+              </>
+            ) : (
+              <>
+                <PlusIcon />
+                Create loan
+              </>
+            )}
           </Button>
         </form>
       </CollapsibleContent>
