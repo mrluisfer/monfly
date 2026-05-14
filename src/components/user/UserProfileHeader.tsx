@@ -1,5 +1,5 @@
-import UserAvatar from "~/components/shared/UserAvatar";
 import { CircleUserIcon, MailIcon } from "lucide-react";
+import UserAvatar from "~/components/shared/UserAvatar";
 
 interface User {
   name?: string | null;

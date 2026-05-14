@@ -1,5 +1,15 @@
-import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { m } from "framer-motion";
+import {
+  ArrowDownLeftIcon,
+  ArrowUpRightIcon,
+  CalendarIcon,
+  EditIcon,
+  HandCoinsIcon,
+  TagIcon,
+  TrashIcon,
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -16,16 +26,6 @@ import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
-import { m } from "framer-motion";
-import {
-  ArrowDownLeftIcon,
-  ArrowUpRightIcon,
-  CalendarIcon,
-  EditIcon,
-  HandCoinsIcon,
-  TagIcon,
-  TrashIcon,
-} from "lucide-react";
 
 import EditTransaction from "../EditTransaction";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
@@ -53,7 +53,8 @@ export function TransactionRow({
   const category =
     typeof transaction.category === "string"
       ? transaction.category
-      : (transaction.category as any)?.name || "Uncategorized";
+      : ((transaction.category as { name?: string } | null)?.name ??
+        "Uncategorized");
 
   const deleteTransactionByIdMutation = useMutation({
     fn: deleteTransactionByIdServer,
@@ -175,7 +176,7 @@ export function TransactionRow({
                   {currencyFormatter.format(transaction.amount)}
                 </span>
                 <TransactionItemActions
-                  transaction={transaction as any}
+                  transaction={transaction}
                   setIsOpenDialog={setIsDialogOpen}
                 />
               </div>

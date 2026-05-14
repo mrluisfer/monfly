@@ -1,8 +1,4 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
 import {
   format,
   formatDistanceToNowStrict,
@@ -14,6 +10,10 @@ import {
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
 } from "lucide-react";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import { TransactionActionsCell } from "./TransactionActionsCell";
 

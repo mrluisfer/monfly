@@ -1,5 +1,6 @@
-import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ClipboardIcon, EditIcon, Ellipsis, TrashIcon } from "lucide-react";
+import React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +27,6 @@ import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transa
 import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { ClipboardIcon, EditIcon, Ellipsis, TrashIcon } from "lucide-react";
 
 import EditTransaction from "../../EditTransaction";
 import { TransactionFormDialogContent } from "../../TransactionFormDialogContent";
@@ -62,8 +62,7 @@ export function TransactionActionsCell({
       setIsDeleteDialogOpen(false);
     },
     idempotency: {
-      //@ts-ignore
-      getKey: (variables) => variables.data.id,
+      getKey: (variables) => (variables as { data: { id: string } }).data.id,
       onDuplicatePending: {
         title: "Transaction is already being deleted",
       },
@@ -73,25 +72,16 @@ export function TransactionActionsCell({
     },
   });
 
-  React.useEffect(() => {
-    if (
-      deleteTransactionByIdMutation.status === "error" &&
-      deleteTransactionByIdMutation.error
-    ) {
-      sileo.error({ title: "Failed to delete transaction" });
-      setIsDeleteDialogOpen(false);
-    }
-  }, [
-    deleteTransactionByIdMutation.status,
-    deleteTransactionByIdMutation.error,
-  ]);
-
-  const handleDelete = () => {
-    deleteTransactionByIdMutation.mutate({
+  const handleDelete = async () => {
+    const result = await deleteTransactionByIdMutation.mutate({
       data: {
         id: transaction.id,
       },
     });
+    if (result === undefined) {
+      sileo.error({ title: "Failed to delete transaction" });
+      setIsDeleteDialogOpen(false);
+    }
   };
 
   return (
@@ -161,7 +151,7 @@ export function TransactionActionsCell({
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              transaction "{transaction.description}" with amount $
+              transaction &quot;{transaction.description}&quot; with amount $
               {Math.abs(transaction.amount).toFixed(2)}.
             </AlertDialogDescription>
           </AlertDialogHeader>

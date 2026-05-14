@@ -1,11 +1,11 @@
-import { useMemo } from "react";
+import { ShieldCheckIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 import { cn } from "~/lib/utils";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
-import { ShieldCheckIcon } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { Badge } from "@/components/ui/badge";
 
 import { ExpenseConcentrationCard } from "./insights/ExpenseConcentrationCard";
 import { ImprovementIdeasCard } from "./insights/ImprovementIdeasCard";
@@ -86,8 +86,8 @@ export function TransactionsInsights({
   transactions,
   className,
 }: TransactionsInsightsProps) {
+  const [now] = useState(() => Date.now());
   const insights = useMemo(() => {
-    const now = Date.now();
     const last30Start = now - 30 * ONE_DAY_MS;
 
     const normalized: NormalizedTransaction[] = transactions
@@ -361,7 +361,7 @@ export function TransactionsInsights({
       totalExpense,
       totalIncome,
     };
-  }, [transactions]);
+  }, [transactions, now]);
 
   if (!insights) {
     return null;

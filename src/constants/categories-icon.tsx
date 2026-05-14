@@ -1,4 +1,3 @@
-import { ComponentProps } from "react";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowDown,
@@ -49,6 +48,7 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
+import { ComponentProps } from "react";
 
 type CategoryIconDef = {
   name: string;

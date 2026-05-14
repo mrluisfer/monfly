@@ -15,11 +15,7 @@ import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 export function SimplePasswordInput<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  field,
-}: {
-  field: ControllerRenderProps<TFieldValues, TName>;
-}) {
+>({ field }: { field: ControllerRenderProps<TFieldValues, TName> }) {
   const id = useId();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 

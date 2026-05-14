@@ -1,10 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "~/lib/utils";
-import { XIcon } from "lucide-react";
 
-import { Button } from "../ui/button";
 import {
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -23,7 +20,6 @@ type TransactionFormDialogContentProps = {
   cancelLabel?: string;
   className?: string;
   bodyClassName?: string;
-  isLoading?: boolean | undefined;
 };
 
 export function TransactionFormDialogContent({
@@ -32,7 +28,6 @@ export function TransactionFormDialogContent({
   children,
   className,
   bodyClassName,
-  isLoading,
 }: TransactionFormDialogContentProps) {
   return (
     <DialogContent

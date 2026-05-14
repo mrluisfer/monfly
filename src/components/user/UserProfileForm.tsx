@@ -1,5 +1,8 @@
-import { useCallback, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ShieldCheckIcon, SparklesIcon } from "lucide-react";
+import { useCallback, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
@@ -8,9 +11,6 @@ import {
   type SupportedCurrency,
   userFormSchema,
 } from "~/zod-schemas/user-schema";
-import { ShieldCheckIcon, SparklesIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 import { UserFormActions } from "./UserFormActions";
 import { UserFormFields } from "./UserFormFields";

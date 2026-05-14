@@ -43,6 +43,7 @@ import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 import { validLimitNumber } from "~/utils/valid-limit-number";
 
 import { Button } from "../ui/button";
+import { DialogClose } from "../ui/dialog";
 import {
   Form,
   FormControl,
@@ -61,7 +62,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { DialogClose } from "../ui/dialog";
 
 type TransactionFormProps<FormValues extends FieldValues> = {
   form: UseFormReturn<FormValues>;
@@ -586,16 +586,15 @@ function LoanSection<FormValues extends FieldValues>({
 
   // Capture the initially linked loan id at first render so that — even if
   // it's now fully paid — it stays visible in the picker while the user
-  // edits the transaction. Captured once via useRef so changing selection
-  // mid-edit doesn't refetch.
-  const initialLoanIdRef = useRef<string | null>(null);
-  if (initialLoanIdRef.current === null) {
+  // edits the transaction. Captured once via useState lazy initializer so
+  // changing selection mid-edit doesn't refetch.
+  const [initialLoanId] = useState<string | null>(() => {
     const v = form.getValues(
       transactionFormNames.appliedToLoanId as Path<FormValues>,
     );
-    initialLoanIdRef.current = typeof v === "string" ? v : "";
-  }
-  const includeLoanId = initialLoanIdRef.current || null;
+    return typeof v === "string" && v.length > 0 ? v : null;
+  });
+  const includeLoanId = initialLoanId;
 
   // Only fetch the picker list when the user actually opens "apply" mode.
   // Avoids one wasted request per form mount in the common case.
@@ -603,7 +602,10 @@ function LoanSection<FormValues extends FieldValues>({
   const { data: activeLoansResponse, isPending } = useActiveLoans({
     includeId: includeLoanId,
   });
-  const activeLoans = activeLoansResponse?.data ?? [];
+  const activeLoans = useMemo(
+    () => activeLoansResponse?.data ?? [],
+    [activeLoansResponse?.data],
+  );
 
   // Group loans by direction so the picker can render two clear sections:
   // "Owed to me" (income side) vs "I owe" (expense side).
@@ -758,9 +760,8 @@ function LoanSection<FormValues extends FieldValues>({
                           "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]",
                         )}
                         value={
-                          // @ts-ignore
-                          field.value instanceof Date
-                            ? format(field.value, "yyyy-MM-dd")
+                          (field.value as unknown) instanceof Date
+                            ? format(field.value as Date, "yyyy-MM-dd")
                             : ""
                         }
                         onChange={(e) => {
@@ -891,9 +892,9 @@ function LoanSection<FormValues extends FieldValues>({
                       </Select>
                     </FormControl>
                     <FormDescription className="text-xs">
-                      Pick any active loan. Income for "Owed to me" (someone
-                      paid you); expense for "I owe" (you paid someone).
-                      Transaction type is set automatically.
+                      Pick any active loan. Income for &quot;Owed to me&quot;
+                      (someone paid you); expense for &quot;I owe&quot; (you
+                      paid someone). Transaction type is set automatically.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>

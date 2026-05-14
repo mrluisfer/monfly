@@ -1,5 +1,17 @@
-import { useId, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import {
+  BellRingIcon,
+  EyeIcon,
+  EyeOffIcon,
+  LockKeyholeIcon,
+  MailIcon,
+  ScaleIcon,
+  UserIcon,
+  WalletIcon,
+} from "lucide-react";
+import { useId, useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { z } from "zod";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   FormControl,
@@ -21,18 +33,6 @@ import { Switch } from "~/components/ui/switch";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { cn } from "~/lib/utils";
 import { supportedCurrencies, userFormSchema } from "~/zod-schemas/user-schema";
-import {
-  BellRingIcon,
-  EyeIcon,
-  EyeOffIcon,
-  LockKeyholeIcon,
-  MailIcon,
-  ScaleIcon,
-  UserIcon,
-  WalletIcon,
-} from "lucide-react";
-import { UseFormReturn } from "react-hook-form";
-import { z } from "zod";
 
 type UserFormValues = z.infer<typeof userFormSchema>;
 

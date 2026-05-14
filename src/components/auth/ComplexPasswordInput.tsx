@@ -37,11 +37,7 @@ const getStrengthText = (score: number) => {
 export default function ComplexPasswordInput<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  field,
-}: {
-  field: ControllerRenderProps<TFieldValues, TName>;
-}) {
+>({ field }: { field: ControllerRenderProps<TFieldValues, TName> }) {
   const id = useId();
   const [isVisible, setIsVisible] = useState<boolean>(false);
 

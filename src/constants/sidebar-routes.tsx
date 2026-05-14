@@ -1,4 +1,3 @@
-import type { ForwardRefExoticComponent, RefAttributes } from "react";
 import {
   BarChart,
   Calculator,
@@ -8,6 +7,7 @@ import {
   LucideProps,
   Wallet,
 } from "lucide-react";
+import type { ForwardRefExoticComponent, RefAttributes } from "react";
 
 export type SidebarItemType = {
   title: string;

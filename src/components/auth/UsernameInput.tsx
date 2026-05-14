@@ -14,11 +14,7 @@ import { FormControl, FormItem, FormLabel, FormMessage } from "../ui/form";
 export default function UsernameInput<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->({
-  field,
-}: {
-  field: ControllerRenderProps<TFieldValues, TName>;
-}) {
+>({ field }: { field: ControllerRenderProps<TFieldValues, TName> }) {
   const id = useId();
   const maxLength = 25;
   const {

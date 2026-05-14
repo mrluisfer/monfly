@@ -1,3 +1,11 @@
+import {
+  CheckCircle2Icon,
+  CircleAlertIcon,
+  DownloadIcon,
+  LoaderIcon,
+  SaveIcon,
+  TrashIcon,
+} from "lucide-react";
 import { useState } from "react";
 import {
   AlertDialog,
@@ -17,14 +25,6 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
-import {
-  CheckCircle2Icon,
-  CircleAlertIcon,
-  DownloadIcon,
-  LoaderIcon,
-  SaveIcon,
-  TrashIcon,
-} from "lucide-react";
 
 interface UserFormActionsProps {
   submitting: boolean;

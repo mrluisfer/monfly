@@ -3,15 +3,23 @@ import { useEditTransaction } from "~/hooks/transactions/useEditTransaction";
 
 import { TransactionForm } from "./TransactionForm";
 
+type EditableTransaction = Omit<Transaction, "appliedToLoanId"> & {
+  appliedToLoanId?: string | null;
+};
+
 const EditTransaction = ({
   transaction,
   onClose,
 }: {
-  transaction: Transaction;
+  transaction: EditableTransaction;
   onClose: () => void;
 }) => {
+  const normalizedTransaction: Transaction = {
+    ...transaction,
+    appliedToLoanId: transaction.appliedToLoanId ?? null,
+  };
   const { form, onSubmitEditedTransaction, mutation } = useEditTransaction(
-    transaction,
+    normalizedTransaction,
     onClose,
   );
 
