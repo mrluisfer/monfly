@@ -1,5 +1,13 @@
-import { ReactNode, useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import {
+  Check,
+  Clock3,
+  LayoutGrid,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
+import { ReactNode, useMemo, useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -16,14 +24,6 @@ import {
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
-import {
-  Check,
-  Clock3,
-  LayoutGrid,
-  ShieldCheck,
-  Sparkles,
-  TrendingUp,
-} from "lucide-react";
 
 import { DotPattern } from "../../magicui/dot-pattern";
 import { BillingCard } from "./BillingCard";
@@ -53,39 +53,39 @@ export const planOptions: PlanOption[] = [
   {
     id: "starter",
     name: "Starter",
-    description: "Perfecto para uso personal y control diario.",
+    description: "Perfect for personal use and daily financial tracking.",
     monthly: "$2.99/mo",
     annual: "$35.99/year",
     features: [
-      "Transacciones y categorías ilimitadas",
-      "Alertas básicas de presupuesto",
-      "Dashboard optimizado para móvil",
+      "Unlimited transactions and categories",
+      "Basic budget alerts",
+      "Mobile-optimized dashboard",
     ],
     accent: "from-emerald-500/25 to-teal-500/10",
   },
   {
     id: "pro",
     name: "Pro",
-    description: "Planeación avanzada para usuarios con objetivos claros.",
+    description: "Advanced planning for users with clear financial goals.",
     monthly: "$12/mo",
     annual: "$120/year",
     features: [
-      "Escenarios y proyecciones de cashflow",
-      "Reglas inteligentes de categorización",
-      "Reportes accionables por periodos",
+      "Cash flow scenarios and projections",
+      "Smart categorization rules",
+      "Actionable reports by period",
     ],
     accent: "from-orange-400/30 to-amber-400/10",
   },
   {
     id: "enterprise",
     name: "Enterprise",
-    description: "Gobernanza, seguridad y soporte para equipos financieros.",
+    description: "Governance, security, and support for finance teams.",
     monthly: "Custom",
     annual: "Contract",
     features: [
-      "Permisos por rol y trazabilidad",
-      "Onboarding dedicado y migración",
-      "Acuerdos de soporte y cumplimiento",
+      "Role-based permissions and audit trails",
+      "Dedicated onboarding and migration",
+      "Support and compliance agreements",
     ],
     accent: "from-sky-500/25 to-indigo-500/10",
   },
@@ -117,10 +117,6 @@ const valueTiles: ValueTile[] = [
     icon: <ShieldCheck className="text-primary size-4" />,
   },
 ];
-
-const viewportOptions: IntersectionObserverInit = {
-  threshold: 0.2,
-};
 
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(false);

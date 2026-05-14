@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import {
-  ArrowRight,
   CheckCheck,
+  ChevronRightIcon,
   CircleAlert,
   MoveUpRight,
   ShieldCheck,
@@ -77,7 +77,7 @@ export function LandingHero() {
               render={
                 <Link to="/signup">
                   Start For Free
-                  <ArrowRight className="size-4" />
+                  <ChevronRightIcon />
                 </Link>
               }
             />
@@ -165,8 +165,8 @@ export function LandingHero() {
             <CardContent>
               <figure>
                 <blockquote className="text-foreground leading-relaxed tracking-wide italic">
-                  "We replaced three dashboards and two spreadsheets with one
-                  decision stream."
+                  &ldquo;We replaced three dashboards and two spreadsheets with
+                  one decision stream.&rdquo;
                 </blockquote>
                 <figcaption className="text-muted-foreground mt-1 text-[0.7rem] font-semibold tracking-[0.12em] uppercase">
                   Finance Ops, Salt Studio

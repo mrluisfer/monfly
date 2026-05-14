@@ -1,8 +1,15 @@
+import {
+  BadgeQuestionMarkIcon,
+  Clock3,
+  DollarSign,
+  ShieldCheck,
+  Star,
+} from "lucide-react";
 import { ReactNode } from "react";
-import { Clock3, DollarSign, ShieldCheck, Star } from "lucide-react";
 
 import demoImg from "../../assets/demo.png";
 import { Safari } from "../magicui/safari";
+import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 const trustStats = [
@@ -46,9 +53,10 @@ export function UserStatsSection() {
       <div className="mx-auto grid max-w-6xl gap-7 xl:grid-cols-[minmax(0,0.45fr)_minmax(0,0.55fr)] xl:items-center">
         <div className="space-y-6">
           <div className="space-y-3">
-            <p className="border-border/75 bg-background/72 text-muted-foreground inline-flex rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.13em] uppercase">
+            <Badge>
+              <BadgeQuestionMarkIcon />
               Why teams switch
-            </p>
+            </Badge>
             <h2
               id="features-title"
               className="font-[family-name:var(--font-syne)] text-3xl leading-[1.08] font-semibold text-balance sm:text-4xl"
@@ -72,8 +80,9 @@ export function UserStatsSection() {
           <Card>
             <CardContent>
               <p>
-                "Our monthly planning meeting dropped from 90 minutes to 35
-                because everyone now shares the same operating picture."
+                &ldquo;Our monthly planning meeting dropped from 90 minutes to
+                35 because everyone now shares the same operating
+                picture.&rdquo;
               </p>
             </CardContent>
           </Card>

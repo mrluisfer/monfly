@@ -88,13 +88,14 @@ function RouteComponent() {
         icon={<HandCoinsIcon className="size-5" aria-hidden="true" />}
       />
 
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(320px,360px)_minmax(0,1fr)] xl:grid-cols-[minmax(340px,380px)_minmax(0,1fr)]">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(320px,360px)] xl:grid-cols-[minmax(0,1fr)_minmax(340px,380px)]">
+        <LoansList />
+
         {/* Form: full-width on mobile/tablet, sticky aside on lg+ so it stays
-            within reach while scrolling a long list. */}
+      within reach while scrolling a long list. */}
         <div className="lg:sticky lg:top-20 lg:self-start">
           <AddLoanCard />
         </div>
-        <LoansList />
       </div>
     </div>
   );
