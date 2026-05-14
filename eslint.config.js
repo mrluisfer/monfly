@@ -1,64 +1,43 @@
-import js from "@eslint/js";
-import pluginReact from "eslint-plugin-react";
-import { defineConfig } from "eslint/config";
-import globals from "globals";
-import tseslint from "typescript-eslint";
+import nextConfig from "eslint-config-next";
+import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
+import nextTypescript from "eslint-config-next/typescript";
+import prettierConfig from "eslint-config-prettier";
+import pluginPrisma from "eslint-plugin-prisma";
+import pluginUnusedImports from "eslint-plugin-unused-imports";
 
-/** @type {import("eslint").Linter.Config} */
-export default defineConfig([
+/** @type {import("eslint").Linter.Config[]} */
+export default [
   {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    plugins: { js },
-    extends: ["js/recommended"],
-  },
-  {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    languageOptions: { globals: { ...globals.browser, ...globals.node } },
-  },
-  tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
-  {
-    env: {
-      browser: true,
-      node: true,
-    },
-    settings: {
-      react: { version: "detect" },
-      "import/resolver": {
-        typescript: { project: "./tsconfig.json" },
-        node: { extensions: [".js", ".jsx", ".ts", ".tsx"] },
-      },
-    },
     ignores: [
       "node_modules/",
       "dist/",
       "build/",
       ".next/",
+      ".output/",
+      ".vinxi/",
+      ".vercel/",
+      ".tanstack/",
+      "coverage/",
       "src/routeTree.gen.ts",
       "src/components/ui/**",
     ],
-    plugins: [
-      "@typescript-eslint",
-      "react",
-      "react-hooks",
-      "unused-imports",
-      "import",
-      "tailwindcss",
-      "prisma",
-      "jsx-a11y",
-      "prettier",
-    ],
-    extends: [
-      "eslint:recommended",
-      "plugin:@typescript-eslint/recommended-type-checked",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "plugin:import/recommended",
-      "plugin:import/typescript",
-      "plugin:tailwindcss/recommended",
-      "plugin:prisma/recommended",
-      "plugin:jsx-a11y/recommended",
-      "plugin:prettier/recommended",
-    ],
   },
-]);
+  ...nextConfig,
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  {
+    plugins: {
+      prisma: pluginPrisma,
+      "unused-imports": pluginUnusedImports,
+    },
+    rules: {
+      ...prettierConfig.rules,
+      "unused-imports/no-unused-imports": "warn",
+      "@next/next/no-html-link-for-pages": "off",
+      "react/react-in-jsx-scope": "off",
+    },
+    settings: {
+      react: { version: "detect" },
+    },
+  },
+];

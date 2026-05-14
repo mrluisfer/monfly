@@ -12,7 +12,10 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "Bash(pnpm lint *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(pnpm add *)",
+      "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('./node_modules/eslint-config-next/package.json'\\).exports, null, 2\\)\\)\")",
+      "Bash(npx eslint *)"
     ]
   },
   "enabledMcpjsonServers": [
