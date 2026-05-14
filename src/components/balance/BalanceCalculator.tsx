@@ -477,9 +477,19 @@ export function BalanceCalculator() {
   });
 
   useEffect(() => {
-    const fetchedBalance = Number(data?.data?.totalBalance ?? 0);
+    const rawBalance = data?.data?.totalBalance;
 
-    if (!Number.isFinite(fetchedBalance) || hasInitializedBalanceRef.current) {
+    if (rawBalance === undefined || rawBalance === null) {
+      return;
+    }
+
+    if (hasInitializedBalanceRef.current) {
+      return;
+    }
+
+    const fetchedBalance = Number(rawBalance);
+
+    if (!Number.isFinite(fetchedBalance)) {
       return;
     }
 
