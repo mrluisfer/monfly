@@ -16,7 +16,7 @@ export const postCategoryByEmailServer = createServerFn({ method: "POST" })
         name: z.string(),
         icon: z.string(),
       }),
-    })
+    }),
   )
   .handler(async ({ data: { email, category } }) => {
     try {

@@ -21,16 +21,16 @@ export const TotalBalanceAside = ({
   balanceToneClass,
 }: TotalBalanceAsideProps) => {
   return (
-    <aside className="bg-card rounded-2xl p-4 sm:p-5 hidden lg:block">
+    <aside className="bg-card hidden rounded-2xl p-4 sm:p-5 lg:block">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-medium text-muted-foreground">Trend</p>
-          <h2 className="mt-1 text-lg font-semibold tracking-tight text-foreground">
+          <p className="text-muted-foreground text-sm font-medium">Trend</p>
+          <h2 className="text-foreground mt-1 text-lg font-semibold tracking-tight">
             Balance over time
           </h2>
         </div>
 
-        <span className="text-sm text-muted-foreground">
+        <span className="text-muted-foreground text-sm">
           {summary.recentPoints.length} periods
         </span>
       </div>
@@ -40,9 +40,9 @@ export const TotalBalanceAside = ({
       </div>
 
       <div className="mt-5">
-        <div className="rounded-xl border border-border/70 bg-background/65 p-4">
-          <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-            <ActivityIcon className="size-4 text-primary" />
+        <div className="border-border/70 bg-background/65 rounded-xl border p-4">
+          <div className="text-foreground flex items-center gap-2 text-sm font-medium">
+            <ActivityIcon className="text-primary size-4" />
             Change vs previous period
           </div>
           <p className={cn("mt-3 text-base font-semibold", balanceToneClass)}>
@@ -51,7 +51,7 @@ export const TotalBalanceAside = ({
               : formatCurrency(summary.trendDelta, "USD")}
           </p>
           {summary.peakPoint && (
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="text-muted-foreground mt-2 text-xs">
               Peak period: {summary.peakPoint.label} (
               {formatCurrency(summary.peakPoint.net, "USD")})
             </p>
@@ -70,7 +70,7 @@ function Sparkline({
 }) {
   if (data.length < 2) {
     return (
-      <div className="flex h-48 items-center justify-center rounded-2xl border border-dashed border-border/70 bg-background/50 px-5 text-center text-sm text-muted-foreground">
+      <div className="border-border/70 bg-background/50 text-muted-foreground flex h-48 items-center justify-center rounded-2xl border border-dashed px-5 text-center text-sm">
         Add a few transactions to reveal your balance momentum over time.
       </div>
     );
@@ -138,7 +138,7 @@ function Sparkline({
         <circle cx={lastPoint[0]} cy={lastPoint[1]} r="4" fill={strokeColor} />
       </svg>
 
-      <div className="mt-3 flex items-center justify-between text-xs font-medium text-muted-foreground">
+      <div className="text-muted-foreground mt-3 flex items-center justify-between text-xs font-medium">
         <span>{data[0]?.label}</span>
         <span>{data[data.length - 1]?.label}</span>
       </div>

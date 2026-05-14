@@ -9,7 +9,7 @@ export const getUserByEmail = async (email: string) => {
     const user = await withDatabaseTimeout(() =>
       prismaClient.user.findUnique({
         where: { email },
-      })
+      }),
     );
 
     if (!user) {

@@ -22,7 +22,7 @@ function formatRelativeDate(date: Date): string {
 }
 
 function groupTransactionsByDate(
-  transactions: Transaction[]
+  transactions: Transaction[],
 ): Record<string, Transaction[]> {
   const groups: Record<string, Transaction[]> = {};
   for (const tx of transactions) {
@@ -38,12 +38,12 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
 
   if (!data.length) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center px-6">
-        <div className="rounded-full bg-muted/60 p-4 mb-4">
-          <ArrowDownLeftIcon className="size-6 text-muted-foreground/60" />
+      <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
+        <div className="bg-muted/60 mb-4 rounded-full p-4">
+          <ArrowDownLeftIcon className="text-muted-foreground/60 size-6" />
         </div>
         <p className="text-muted-foreground font-medium">No transactions yet</p>
-        <p className="text-muted-foreground/60 text-sm mt-1">
+        <p className="text-muted-foreground/60 mt-1 text-sm">
           Your transactions will appear here
         </p>
       </div>
@@ -69,13 +69,13 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
               >
                 <div className="mb-3 flex items-center gap-2 px-1">
                   <span className="bg-muted inline-flex items-center gap-2 rounded-full px-3 py-1.5">
-                    <CalendarIcon className="size-3.5 text-muted-foreground/70" />
-                    <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                    <CalendarIcon className="text-muted-foreground/70 size-3.5" />
+                    <h3 className="text-muted-foreground text-[0.7rem] font-semibold tracking-[0.22em] uppercase">
                       {dateLabel}
                     </h3>
                   </span>
-                  <div className="h-px flex-1 bg-border/50" />
-                  <span className="bg-muted rounded-full px-2.5 py-1 text-[10px] font-semibold text-muted-foreground">
+                  <div className="bg-border/50 h-px flex-1" />
+                  <span className="bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-[10px] font-semibold">
                     {transactions.length}
                   </span>
                 </div>
@@ -92,7 +92,7 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
                   ))}
                 </div>
               </m.section>
-            )
+            ),
           )}
         </AnimatePresence>
       </div>

@@ -70,9 +70,9 @@ export function ApiDebugComponent() {
   });
 
   return (
-    <div className="p-4 border rounded-lg bg-muted/50 space-y-4">
-      <h3 className="font-bold text-lg">API Debug Panel</h3>
-      <p className="text-sm text-muted-foreground">User: {userEmail}</p>
+    <div className="bg-muted/50 space-y-4 rounded-lg border p-4">
+      <h3 className="text-lg font-bold">API Debug Panel</h3>
+      <p className="text-muted-foreground text-sm">User: {userEmail}</p>
 
       <div className="flex flex-wrap gap-2">
         <Button

@@ -21,7 +21,7 @@ export function MobileMenuPopover() {
       <PopoverTrigger
         render={
           <Button
-            className="group size-9 rounded-full border border-border/70 bg-background/85 lg:hidden"
+            className="group border-border/70 bg-background/85 size-9 rounded-full border lg:hidden"
             variant="ghost"
             size="lg"
             aria-label="Open navigation menu"
@@ -50,7 +50,7 @@ export function MobileMenuPopover() {
       />
       <PopoverContent
         align="end"
-        className="mt-3 w-[min(19rem,calc(100vw-1.2rem))] rounded-2xl border border-border/75 bg-background/96 p-2 shadow-[0_30px_48px_-30px_rgba(2,6,23,0.85)] backdrop-blur-md lg:hidden"
+        className="border-border/75 bg-background/96 mt-3 w-[min(19rem,calc(100vw-1.2rem))] rounded-2xl border p-2 shadow-[0_30px_48px_-30px_rgba(2,6,23,0.85)] backdrop-blur-md lg:hidden"
       >
         <NavigationMenu
           className="max-w-none *:w-full"
@@ -61,7 +61,7 @@ export function MobileMenuPopover() {
               <NavigationMenuItem key={link.label} className="w-full">
                 {link.submenu ? (
                   <>
-                    <div className="px-2 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                    <div className="text-muted-foreground px-2 py-1 text-xs font-semibold tracking-[0.14em] uppercase">
                       {link.label}
                     </div>
                     <ul className="space-y-1">

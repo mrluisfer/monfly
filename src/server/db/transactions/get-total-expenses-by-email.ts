@@ -7,7 +7,7 @@ export const getTotalExpensesByEmail = async ({ email }: { email: string }) => {
     prismaClient.transaction.aggregate({
       where: { userEmail: email, type: "expense" },
       _sum: { amount: true },
-    })
+    }),
   );
   return totalExpenses._sum.amount ?? 0;
 };

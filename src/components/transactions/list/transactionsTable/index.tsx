@@ -34,7 +34,7 @@ interface DataTableDemoProps {
 export function DataTableDemo({ data }: DataTableDemoProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -68,7 +68,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       ];
 
       return searchableFields.some((field) =>
-        field.toLowerCase().includes(search)
+        field.toLowerCase().includes(search),
       );
     },
     state: {
@@ -105,8 +105,8 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
         JSON.stringify(
           //@ts-ignore
           [...variables.data.ids].sort((left, right) =>
-            left.localeCompare(right)
-          )
+            left.localeCompare(right),
+          ),
         ),
       onDuplicatePending: {
         title: "Deletion already in progress",
@@ -147,7 +147,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
 
   const selectedRowsCount = table.getSelectedRowModel().rows.length;
   const typeFilterValue = String(
-    table.getColumn("type")?.getFilterValue() ?? ""
+    table.getColumn("type")?.getFilterValue() ?? "",
   ).toLowerCase();
   const hasActiveFilters =
     Boolean(globalFilter) || table.getState().columnFilters.length > 0;
@@ -159,21 +159,21 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       transaction.type.toLowerCase() === "income"
         ? sum + transaction.amount
         : sum,
-    0
+    0,
   );
   const filteredExpenses = filteredTransactions.reduce(
     (sum, transaction) =>
       transaction.type.toLowerCase() === "expense"
         ? sum + transaction.amount
         : sum,
-    0
+    0,
   );
   const filteredNet = filteredIncome - filteredExpenses;
   const latestTransactionDate = filteredTransactions.length
     ? filteredTransactions.reduce((latest, transaction) =>
         new Date(transaction.date).getTime() > new Date(latest.date).getTime()
           ? transaction
-          : latest
+          : latest,
       ).date
     : null;
   const getColumnClassName = (columnId: string) =>
@@ -185,7 +185,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       columnId === "date" && "min-w-[160px]",
       columnId === "createdAt" && "min-w-[160px]",
       columnId === "amount" && "min-w-[130px]",
-      columnId === "actions" && "w-14 min-w-14"
+      columnId === "actions" && "w-14 min-w-14",
     );
 
   const stats = [
@@ -230,19 +230,19 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       />
       <div className="mb-4 grid gap-3 lg:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-muted rounded-xl py-3 px-5">
-            <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+          <div key={stat.label} className="bg-muted rounded-xl px-5 py-3">
+            <div className="text-muted-foreground text-xs font-medium tracking-[0.16em] uppercase">
               {stat.label}
             </div>
             <div
               className={cn(
-                "mt-2 text-lg font-semibold text-foreground",
-                "valueClassName" in stat && stat.valueClassName
+                "text-foreground mt-2 text-lg font-semibold",
+                "valueClassName" in stat && stat.valueClassName,
               )}
             >
               {stat.value}
             </div>
-            <div className="text-xs text-muted-foreground">
+            <div className="text-muted-foreground text-xs">
               {stat.description}
             </div>
           </div>

@@ -44,7 +44,7 @@ export function UserProfileForm({
 }: UserProfileFormProps) {
   const { warning } = useAppHaptics();
   const defaultTotalBalance = formatToTwoDecimals(
-    user?.totalBalance ?? 0
+    user?.totalBalance ?? 0,
   ).numberValue;
 
   const buildDefaults = useCallback(
@@ -69,7 +69,7 @@ export function UserProfileForm({
       user?.productUpdatesOptIn,
       user?.acceptedTermsAt,
       user?.acceptedPrivacyAt,
-    ]
+    ],
   );
 
   const form = useForm<FormValues>({
@@ -92,7 +92,7 @@ export function UserProfileForm({
       });
       e.currentTarget.value = stringValue;
     },
-    [form]
+    [form],
   );
 
   const onSubmit = useCallback(
@@ -101,7 +101,7 @@ export function UserProfileForm({
       void values;
       void userId;
     },
-    [userId]
+    [userId],
   );
 
   const submitting = form.formState.isSubmitting;
@@ -129,19 +129,19 @@ export function UserProfileForm({
           <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent text-primary ring-1 ring-primary/20"
+              className="from-primary/20 via-primary/10 text-primary ring-primary/20 relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br to-transparent ring-1"
             >
               <ShieldCheckIcon className="size-5" />
             </span>
             <div className="space-y-1">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/5 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
+              <span className="bg-foreground/5 text-muted-foreground inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.13em] uppercase">
                 <SparklesIcon className="size-3" aria-hidden="true" />
                 Profile settings
               </span>
-              <h3 className="font-[family-name:var(--font-syne)] text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              <h3 className="text-foreground font-[family-name:var(--font-syne)] text-xl font-semibold tracking-tight sm:text-2xl">
                 Account &amp; preferences
               </h3>
-              <p className="max-w-xl text-sm text-muted-foreground">
+              <p className="text-muted-foreground max-w-xl text-sm">
                 Update your profile, security, communication preferences and
                 legal acknowledgements.
               </p>

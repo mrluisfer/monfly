@@ -26,16 +26,16 @@ const enterpriseFeatures = [
 export function EnterpriseCard() {
   return (
     <PricingCard title={<span>Enterprise</span>}>
-      <span className="text-sm font-medium text-muted-foreground">
+      <span className="text-muted-foreground text-sm font-medium">
         Custom contracts for high-scale finance organizations
       </span>
       <div className="mt-5 flex flex-col gap-2.5 text-sm">
         {enterpriseFeatures.map((feature) => (
           <div
             key={feature.label}
-            className="group flex items-center gap-2 rounded-xl border border-border/55 bg-background/72 px-3 py-2.5 transition-colors duration-150 ease-out hover:border-primary/35"
+            className="group border-border/55 bg-background/72 hover:border-primary/35 flex items-center gap-2 rounded-xl border px-3 py-2.5 transition-colors duration-150 ease-out"
           >
-            <feature.icon className="size-4 text-primary" />
+            <feature.icon className="text-primary size-4" />
             <span className="text-muted-foreground group-hover:text-foreground">
               {feature.label}
             </span>

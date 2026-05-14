@@ -14,6 +14,6 @@ export const useTransactionHoverContext = () => {
       disableHover,
       setDisableHover: (value: boolean) => setDisableHover(value),
     }),
-    [disableHover, setDisableHover]
+    [disableHover, setDisableHover],
   );
 };

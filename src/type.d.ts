@@ -25,6 +25,6 @@ declare module "@tanstack/react-start/config" {
 declare module "@tanstack/react-start/api" {
   export const defaultAPIFileRouteHandler: unknown;
   export function createStartAPIHandler(
-    handler: unknown
+    handler: unknown,
   ): (event: unknown) => unknown;
 }

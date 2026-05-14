@@ -135,7 +135,8 @@ function BalanceDetailsComponent() {
       latestPoint && previousPoint ? latestPoint.net - previousPoint.net : null;
     const trendPercent =
       latestPoint && previousPoint && previousPoint.net !== 0
-        ? ((latestPoint.net - previousPoint.net) / Math.abs(previousPoint.net)) *
+        ? ((latestPoint.net - previousPoint.net) /
+            Math.abs(previousPoint.net)) *
           100
         : null;
 
@@ -156,9 +157,7 @@ function BalanceDetailsComponent() {
     }
 
     const runwayMonths =
-      avgNet < 0 && balanceValue > 0
-        ? balanceValue / Math.abs(avgNet)
-        : null;
+      avgNet < 0 && balanceValue > 0 ? balanceValue / Math.abs(avgNet) : null;
 
     return {
       latestPoint,
@@ -179,7 +178,7 @@ function BalanceDetailsComponent() {
 
   if (error) {
     return (
-      <p className="text-sm font-medium text-destructive" role="alert">
+      <p className="text-destructive text-sm font-medium" role="alert">
         Failed to load balance details
       </p>
     );
@@ -215,14 +214,11 @@ function BalanceDetailsComponent() {
 
   const sparkMax = summary.recentPoints.reduce(
     (max, point) => Math.max(max, Math.abs(point.net)),
-    0
+    0,
   );
 
   return (
-    <section
-      className="space-y-3"
-      aria-label="Balance details and insights"
-    >
+    <section className="space-y-3" aria-label="Balance details and insights">
       <dl className="grid gap-3 sm:grid-cols-3">
         <BalanceCard
           accent={isLatestPositive ? "primary" : "destructive"}
@@ -233,12 +229,10 @@ function BalanceDetailsComponent() {
               : formatCurrency(summary.latestPoint?.net ?? 0, "MXN")
           }
           valueClassName={cn("tabular-nums", balanceToneClass)}
-          leadingIcon={
-            <TrendIcon className={cn("size-4", balanceToneClass)} />
-          }
+          leadingIcon={<TrendIcon className={cn("size-4", balanceToneClass)} />}
           footer={
             <div className="flex items-end justify-between gap-3">
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {summary.latestPoint?.label ?? "Latest period"}
               </p>
               {summary.trendPercent !== null && !isBalanceHidden ? (
@@ -266,14 +260,14 @@ function BalanceDetailsComponent() {
           }
           footer={
             <div className="space-y-1.5">
-              <p className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+              <p className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
                 <span>
                   {hasData
                     ? `${summary.recentPoints.length} recorded periods`
                     : "Recent recorded periods"}
                 </span>
                 {hasData && !isBalanceHidden ? (
-                  <span className="tabular-nums font-medium text-emerald-700 dark:text-emerald-300">
+                  <span className="font-medium text-emerald-700 tabular-nums dark:text-emerald-300">
                     {(incomeRatio * 100).toFixed(0)}%
                   </span>
                 ) : null}
@@ -300,7 +294,7 @@ function BalanceDetailsComponent() {
           }
           footer={
             <div className="space-y-1.5">
-              <p className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+              <p className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
                 <span>
                   {hasData
                     ? `~ ${
@@ -311,7 +305,7 @@ function BalanceDetailsComponent() {
                     : "Recent recorded periods"}
                 </span>
                 {hasData && !isBalanceHidden ? (
-                  <span className="tabular-nums font-medium text-amber-700 dark:text-amber-300">
+                  <span className="font-medium text-amber-700 tabular-nums dark:text-amber-300">
                     {(expenseRatio * 100).toFixed(0)}%
                   </span>
                 ) : null}
@@ -337,9 +331,7 @@ function BalanceDetailsComponent() {
             iconTone="text-sky-600 dark:text-sky-300"
             label="Avg net / period"
             value={
-              isBalanceHidden
-                ? HIDDEN
-                : formatCurrency(summary.avgNet, "MXN")
+              isBalanceHidden ? HIDDEN : formatCurrency(summary.avgNet, "MXN")
             }
             valueTone={
               summary.avgNet >= 0 ? "text-primary" : "text-destructive"
@@ -400,11 +392,11 @@ function BalanceDetailsComponent() {
         <EmptyInsights />
       )}
 
-      {hasData && summary.worstPoint && summary.bestPoint && !isBalanceHidden ? (
-        <RangeStrip
-          best={summary.bestPoint}
-          worst={summary.worstPoint}
-        />
+      {hasData &&
+      summary.worstPoint &&
+      summary.bestPoint &&
+      !isBalanceHidden ? (
+        <RangeStrip best={summary.bestPoint} worst={summary.worstPoint} />
       ) : null}
     </section>
   );
@@ -447,23 +439,23 @@ function BalanceCard({
   return (
     <div
       className={cn(
-        "group/balance-card relative overflow-hidden rounded-2xl bg-muted p-4 ring-1 ring-foreground/5 transition-all duration-300",
+        "group/balance-card bg-muted ring-foreground/5 relative overflow-hidden rounded-2xl p-4 ring-1 transition-all duration-300",
         "hover:ring-foreground/10 hover:shadow-sm",
         "before:pointer-events-none before:absolute before:inset-0 before:opacity-60 before:transition-opacity before:duration-300 group-hover/balance-card:before:opacity-100",
-        accentClass[accent]
+        accentClass[accent],
       )}
     >
       <div className="relative flex flex-col gap-2.5">
-        <dt className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
-          <span className="inline-flex size-6 items-center justify-center rounded-full bg-background/70 ring-1 ring-foreground/5">
+        <dt className="text-muted-foreground flex items-center gap-1.5 text-sm font-medium">
+          <span className="bg-background/70 ring-foreground/5 inline-flex size-6 items-center justify-center rounded-full ring-1">
             {leadingIcon}
           </span>
           {label}
         </dt>
         <dd
           className={cn(
-            "text-lg font-semibold tabular-nums tracking-tight text-foreground sm:text-xl",
-            valueClassName
+            "text-foreground text-lg font-semibold tracking-tight tabular-nums sm:text-xl",
+            valueClassName,
           )}
         >
           {value}
@@ -499,7 +491,7 @@ function Sparkline({ points, max }: SparklineProps) {
               "flex-1 rounded-sm transition-all duration-300",
               isPositive
                 ? "bg-primary/30 group-hover/balance-card:bg-primary/60"
-                : "bg-destructive/30 group-hover/balance-card:bg-destructive/60"
+                : "bg-destructive/30 group-hover/balance-card:bg-destructive/60",
             )}
             style={{ height: `${heightPct}%` }}
             title={`${point.label}: ${point.net}`}
@@ -521,7 +513,7 @@ function FlowBar({ ratio, tone, ariaLabel }: FlowBarProps) {
   const pct = Math.max(0, Math.min(1, ratio)) * 100;
   return (
     <div
-      className="h-1.5 overflow-hidden rounded-full bg-foreground/5"
+      className="bg-foreground/5 h-1.5 overflow-hidden rounded-full"
       role="progressbar"
       aria-valuemin={0}
       aria-valuemax={100}
@@ -533,7 +525,7 @@ function FlowBar({ ratio, tone, ariaLabel }: FlowBarProps) {
           "h-full rounded-full transition-[width] duration-500 ease-out motion-reduce:transition-none",
           tone === "emerald"
             ? "bg-gradient-to-r from-emerald-400 to-emerald-600"
-            : "bg-gradient-to-r from-amber-400 to-amber-600"
+            : "bg-gradient-to-r from-amber-400 to-amber-600",
         )}
         style={{ width: `${pct}%` }}
       />
@@ -555,7 +547,7 @@ function TrendBadge({ percent }: TrendBadgeProps) {
         "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[0.65rem] font-semibold tabular-nums",
         isPositive
           ? "bg-primary/10 text-primary"
-          : "bg-destructive/10 text-destructive"
+          : "bg-destructive/10 text-destructive",
       )}
       aria-label={`Change vs previous period ${formatted}`}
     >
@@ -583,22 +575,22 @@ function InsightCard({
   hint,
 }: InsightCardProps) {
   return (
-    <div className="group/insight relative overflow-hidden rounded-2xl border border-border/60 bg-card p-3 sm:p-4 ring-1 ring-foreground/5 transition-all duration-300 hover:-translate-y-0.5 hover:ring-foreground/10 motion-reduce:hover:translate-y-0">
+    <div className="group/insight border-border/60 bg-card ring-foreground/5 hover:ring-foreground/10 relative overflow-hidden rounded-2xl border p-3 ring-1 transition-all duration-300 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 sm:p-4">
       <div className="flex items-center justify-between gap-2">
-        <dt className="text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
+        <dt className="text-muted-foreground text-[0.7rem] tracking-[0.12em] uppercase">
           {label}
         </dt>
         <Icon className={cn("size-4", iconTone)} aria-hidden={true} />
       </div>
       <dd
         className={cn(
-          "mt-2 text-base font-semibold tabular-nums tracking-tight sm:text-lg",
-          valueTone ?? "text-foreground"
+          "mt-2 text-base font-semibold tracking-tight tabular-nums sm:text-lg",
+          valueTone ?? "text-foreground",
         )}
       >
         {value}
       </dd>
-      <p className="mt-0.5 text-[0.7rem] text-muted-foreground">{hint}</p>
+      <p className="text-muted-foreground mt-0.5 text-[0.7rem]">{hint}</p>
     </div>
   );
 }
@@ -633,21 +625,21 @@ function SavingsRateCard({ rate, hidden }: SavingsRateCardProps) {
           : "spending exceeds income";
 
   return (
-    <div className="group/insight relative overflow-hidden rounded-2xl border border-border/60 bg-card p-3 ring-1 ring-foreground/5 transition-all duration-300 hover:-translate-y-0.5 hover:ring-foreground/10 motion-reduce:hover:translate-y-0">
+    <div className="group/insight border-border/60 bg-card ring-foreground/5 hover:ring-foreground/10 relative overflow-hidden rounded-2xl border p-3 ring-1 transition-all duration-300 hover:-translate-y-0.5 motion-reduce:hover:translate-y-0">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <dt className="text-[0.7rem] uppercase tracking-[0.12em] text-muted-foreground">
+          <dt className="text-muted-foreground text-[0.7rem] tracking-[0.12em] uppercase">
             Savings rate
           </dt>
           <dd
             className={cn(
-              "mt-2 text-base font-semibold tabular-nums tracking-tight sm:text-lg",
-              tone
+              "mt-2 text-base font-semibold tracking-tight tabular-nums sm:text-lg",
+              tone,
             )}
           >
             {display}
           </dd>
-          <p className="mt-0.5 truncate text-[0.7rem] text-muted-foreground">
+          <p className="text-muted-foreground mt-0.5 truncate text-[0.7rem]">
             {hint}
           </p>
         </div>
@@ -690,7 +682,7 @@ function SavingsRing({ value, tone, dimmed }: SavingsRingProps) {
       viewBox="0 0 40 40"
       className={cn(
         "size-12 shrink-0 -rotate-90 transition-opacity",
-        dimmed ? "opacity-40" : "opacity-100"
+        dimmed ? "opacity-40" : "opacity-100",
       )}
       role="img"
       aria-label={`Savings ratio ${(value * 100).toFixed(0)} percent`}
@@ -700,7 +692,7 @@ function SavingsRing({ value, tone, dimmed }: SavingsRingProps) {
         cx="20"
         cy="20"
         r={radius}
-        className="fill-none stroke-foreground/10"
+        className="stroke-foreground/10 fill-none"
         strokeWidth={4}
       />
       <circle
@@ -709,7 +701,7 @@ function SavingsRing({ value, tone, dimmed }: SavingsRingProps) {
         r={radius}
         className={cn(
           "fill-none transition-[stroke-dashoffset] duration-700 ease-out motion-reduce:transition-none",
-          stroke
+          stroke,
         )}
         strokeWidth={4}
         strokeLinecap="round"
@@ -728,38 +720,35 @@ type RangeStripProps = {
 function RangeStrip({ best, worst }: RangeStripProps) {
   if (best.label === worst.label) return null;
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-border/60 bg-card/60 p-3 text-xs sm:flex-row sm:items-center sm:justify-between">
-      <span className="flex items-center gap-2 text-muted-foreground">
+    <div className="border-border/60 bg-card/60 flex flex-col gap-2 rounded-2xl border p-3 text-xs sm:flex-row sm:items-center sm:justify-between">
+      <span className="text-muted-foreground flex items-center gap-2">
         <CalendarRangeIcon
-          className="size-3.5 text-muted-foreground"
+          className="text-muted-foreground size-3.5"
           aria-hidden={true}
         />
         Range across recent periods
       </span>
       <span className="flex flex-wrap items-center gap-3">
         <span className="inline-flex items-center gap-1.5">
-          <span
-            className="size-2 rounded-full bg-primary"
-            aria-hidden={true}
-          />
+          <span className="bg-primary size-2 rounded-full" aria-hidden={true} />
           <span className="text-muted-foreground">Best</span>
-          <span className="tabular-nums font-medium text-foreground">
+          <span className="text-foreground font-medium tabular-nums">
             {best.label}
           </span>
-          <span className="tabular-nums text-primary">
+          <span className="text-primary tabular-nums">
             {formatCurrency(best.net, "MXN")}
           </span>
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span
-            className="size-2 rounded-full bg-destructive"
+            className="bg-destructive size-2 rounded-full"
             aria-hidden={true}
           />
           <span className="text-muted-foreground">Lowest</span>
-          <span className="tabular-nums font-medium text-foreground">
+          <span className="text-foreground font-medium tabular-nums">
             {worst.label}
           </span>
-          <span className="tabular-nums text-destructive">
+          <span className="text-destructive tabular-nums">
             {formatCurrency(worst.net, "MXN")}
           </span>
         </span>
@@ -770,24 +759,24 @@ function RangeStrip({ best, worst }: RangeStripProps) {
 
 function EmptyInsights() {
   return (
-    <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-6 text-center">
+    <div className="border-border/60 bg-card/40 rounded-2xl border border-dashed p-6 text-center">
       <PiggyBankIcon
-        className="mx-auto size-6 text-muted-foreground"
+        className="text-muted-foreground mx-auto size-6"
         aria-hidden={true}
       />
-      <p className="mt-2 text-sm font-medium text-foreground">
+      <p className="text-foreground mt-2 text-sm font-medium">
         No periods recorded yet
       </p>
-      <p className="mt-1 text-xs text-muted-foreground">
+      <p className="text-muted-foreground mt-1 text-xs">
         Add a few transactions to see savings rate, runway and trends.
       </p>
     </div>
   );
 }
 
-function DlContainer({children}: {children: ReactNode}) {
+function DlContainer({ children }: { children: ReactNode }) {
   return (
-    <dl className="grid grid-cols-2 gap-3 lg:grid-cols-3 4xl:grid-cols-4">
+    <dl className="4xl:grid-cols-4 grid grid-cols-2 gap-3 lg:grid-cols-3">
       {children}
     </dl>
   );

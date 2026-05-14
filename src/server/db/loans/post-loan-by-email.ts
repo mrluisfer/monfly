@@ -6,7 +6,7 @@ import type { CreateLoanInput } from "~/zod-schemas/loan-schema";
 
 export const postLoanByEmail = async (
   email: string,
-  input: CreateLoanInput
+  input: CreateLoanInput,
 ): Promise<ApiResponse<Loan | null>> => {
   try {
     if (!email) throw new Error("Email is required");

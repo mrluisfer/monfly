@@ -198,7 +198,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider >
+        <TooltipProvider>
           {children}
           <TanStackRouterDevtools position="bottom-right" />
           <Scripts />
@@ -225,7 +225,7 @@ function RootDocumentWithProviders({
         <HeadContent />
       </head>
       <body>
-        <TooltipProvider >
+        <TooltipProvider>
           <SileoToaster position={position} theme={theme} />
           {children}
           <TanStackRouterDevtools position="bottom-right" />

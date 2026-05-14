@@ -1,132 +1,132 @@
 - generic [active] [ref=e1]:
-  - generic [ref=e2]:
-    - link "Skip to content" [ref=e363] [cursor=pointer]:
-      - /url: "#main-content"
-    - generic [ref=e6]:
-      - list [ref=e8]:
-        - listitem [ref=e9]:
-          - link "Monfly Personal finance" [ref=e364] [cursor=pointer]:
-            - /url: /home
-            - img [ref=e12]
-            - generic [ref=e13]:
-              - generic [ref=e14]: Monfly
-              - generic [ref=e15]: Personal finance
-      - generic [ref=e16]:
-        - generic [ref=e17]:
-          - generic [ref=e18]: Workspace
-          - list [ref=e20]:
-            - listitem [ref=e21]:
-              - link "Home" [ref=e365] [cursor=pointer]:
-                - /url: /home
-                - img [ref=e23]
-                - generic [ref=e26]: Home
-            - listitem [ref=e27]:
-              - link "Transactions" [ref=e366] [cursor=pointer]:
-                - /url: /home/transactions
-                - img [ref=e29]
-                - generic [ref=e31]: Transactions
-            - listitem [ref=e32]:
-              - button "Budgets Soon" [disabled]:
-                - img
-                - generic: Budgets
-                - generic: Soon
-            - listitem [ref=e33]:
-              - link "Reports" [ref=e367] [cursor=pointer]:
-                - /url: /home/reports
-                - img [ref=e35]
-                - generic [ref=e36]: Reports
-            - listitem [ref=e37]:
-              - link "Categories" [ref=e368] [cursor=pointer]:
-                - /url: /home/categories
-                - img [ref=e39]
-                - generic [ref=e40]: Categories
-            - listitem [ref=e41]:
-              - link "Calculator" [ref=e369] [cursor=pointer]:
-                - /url: /home/balance-calculator
-                - img [ref=e43]
-                - generic [ref=e45]: Calculator
-        - list [ref=e48]:
-          - listitem [ref=e49]:
-            - button "Settings" [ref=e370]:
-              - img [ref=e51]
-              - generic [ref=e54]: Settings
-          - listitem [ref=e55]:
-            - button "What's new" [ref=e371]:
-              - img [ref=e57]
-              - generic [ref=e60]: What's new
-      - list [ref=e62]:
-        - listitem [ref=e63]:
-          - button "test test@gmail.com" [ref=e372]:
-            - img [ref=e65]
-            - generic [ref=e73]:
-              - generic [ref=e74]: test
-              - generic [ref=e75]: test@gmail.com
-            - img [ref=e76]
-      - button "Toggle Sidebar" [ref=e373]
-    - main [ref=e80]:
-      - generic [ref=e81]:
-        - button "Toggle navigation" [ref=e374]:
-          - img
-          - generic [ref=e83]: Toggle Sidebar
-        - separator [ref=e84]
-        - navigation "breadcrumb" [ref=e375]:
-          - list [ref=e86]:
-            - listitem [ref=e87]:
-              - link "Home" [ref=e376] [cursor=pointer]:
-                - /url: /home
-            - listitem [ref=e377]:
-              - img [ref=e378]
-            - listitem [ref=e380]:
-              - link "Transactions" [disabled] [ref=e381]
-        - generic [ref=e89]:
-          - button "Search or run a command" [ref=e382]:
-            - img
-            - generic [ref=e91]: Search…
-            - generic:
-              - generic: Ctrl
-              - text: K
-          - generic [ref=e96]: Operational
-          - button "Hide information" [ref=e383]:
-            - img
-          - button "Switch to dark mode" [ref=e384]:
-            - img
-      - main [ref=e99]:
-        - generic [ref=e385]:
-          - generic [ref=e386]:
-            - generic [ref=e387]:
-              - img [ref=e389]
-              - generic [ref=e391]:
-                - heading "Transactions" [level=1] [ref=e392]
-                - paragraph [ref=e393]: Manage every income and expense, filter and audit your activity.
-            - button "Open add transaction form" [ref=e396]:
-              - img
-              - generic [ref=e397]: New Transaction
-          - generic [ref=e399]:
-            - generic [ref=e400]:
-              - generic [ref=e401]:
-                - generic [ref=e402]:
-                  - paragraph [ref=e403]: Activity feed
-                  - generic [ref=e404]:
-                    - img [ref=e405]
-                    - text: Transactions
-                - generic [ref=e408]:
-                  - generic [ref=e409]: 0 records
-                  - generic [ref=e410]:
+    - generic [ref=e2]:
+        - link "Skip to content" [ref=e363] [cursor=pointer]:
+            - /url: "#main-content"
+        - generic [ref=e6]:
+            - list [ref=e8]:
+                - listitem [ref=e9]:
+                    - link "Monfly Personal finance" [ref=e364] [cursor=pointer]:
+                        - /url: /home
+                        - img [ref=e12]
+                        - generic [ref=e13]:
+                            - generic [ref=e14]: Monfly
+                            - generic [ref=e15]: Personal finance
+            - generic [ref=e16]:
+                - generic [ref=e17]:
+                    - generic [ref=e18]: Workspace
+                    - list [ref=e20]:
+                        - listitem [ref=e21]:
+                            - link "Home" [ref=e365] [cursor=pointer]:
+                                - /url: /home
+                                - img [ref=e23]
+                                - generic [ref=e26]: Home
+                        - listitem [ref=e27]:
+                            - link "Transactions" [ref=e366] [cursor=pointer]:
+                                - /url: /home/transactions
+                                - img [ref=e29]
+                                - generic [ref=e31]: Transactions
+                        - listitem [ref=e32]:
+                            - button "Budgets Soon" [disabled]:
+                                - img
+                                - generic: Budgets
+                                - generic: Soon
+                        - listitem [ref=e33]:
+                            - link "Reports" [ref=e367] [cursor=pointer]:
+                                - /url: /home/reports
+                                - img [ref=e35]
+                                - generic [ref=e36]: Reports
+                        - listitem [ref=e37]:
+                            - link "Categories" [ref=e368] [cursor=pointer]:
+                                - /url: /home/categories
+                                - img [ref=e39]
+                                - generic [ref=e40]: Categories
+                        - listitem [ref=e41]:
+                            - link "Calculator" [ref=e369] [cursor=pointer]:
+                                - /url: /home/balance-calculator
+                                - img [ref=e43]
+                                - generic [ref=e45]: Calculator
+                - list [ref=e48]:
+                    - listitem [ref=e49]:
+                        - button "Settings" [ref=e370]:
+                            - img [ref=e51]
+                            - generic [ref=e54]: Settings
+                    - listitem [ref=e55]:
+                        - button "What's new" [ref=e371]:
+                            - img [ref=e57]
+                            - generic [ref=e60]: What's new
+            - list [ref=e62]:
+                - listitem [ref=e63]:
+                    - button "test test@gmail.com" [ref=e372]:
+                        - img [ref=e65]
+                        - generic [ref=e73]:
+                            - generic [ref=e74]: test
+                            - generic [ref=e75]: test@gmail.com
+                        - img [ref=e76]
+            - button "Toggle Sidebar" [ref=e373]
+        - main [ref=e80]:
+            - generic [ref=e81]:
+                - button "Toggle navigation" [ref=e374]:
                     - img
-                    - generic [ref=e412]: Balanced
-                  - button "Refresh" [disabled]:
-                    - img
-                    - generic: Refresh
-              - generic [ref=e413]: Search, filter, edit, or add transactions from one place.
-            - generic [ref=e415]: No transactions found. Try adding your first transaction!
-    - generic [ref=e222]:
-      - heading "Command Palette" [level=2] [ref=e416]
-      - paragraph [ref=e224]: Search for a command to run...
-  - generic:
-    - contentinfo:
-      - button "Open TanStack Router Devtools" [ref=e417] [cursor=pointer]:
-        - generic [ref=e226]:
-          - img [ref=e228]
-          - img [ref=e263]
-        - generic [ref=e297]: "-"
-        - generic [ref=e298]: TanStack Router
+                    - generic [ref=e83]: Toggle Sidebar
+                - separator [ref=e84]
+                - navigation "breadcrumb" [ref=e375]:
+                    - list [ref=e86]:
+                        - listitem [ref=e87]:
+                            - link "Home" [ref=e376] [cursor=pointer]:
+                                - /url: /home
+                        - listitem [ref=e377]:
+                            - img [ref=e378]
+                        - listitem [ref=e380]:
+                            - link "Transactions" [disabled] [ref=e381]
+                - generic [ref=e89]:
+                    - button "Search or run a command" [ref=e382]:
+                        - img
+                        - generic [ref=e91]: Search…
+                        - generic:
+                            - generic: Ctrl
+                            - text: K
+                    - generic [ref=e96]: Operational
+                    - button "Hide information" [ref=e383]:
+                        - img
+                    - button "Switch to dark mode" [ref=e384]:
+                        - img
+            - main [ref=e99]:
+                - generic [ref=e385]:
+                    - generic [ref=e386]:
+                        - generic [ref=e387]:
+                            - img [ref=e389]
+                            - generic [ref=e391]:
+                                - heading "Transactions" [level=1] [ref=e392]
+                                - paragraph [ref=e393]: Manage every income and expense, filter and audit your activity.
+                        - button "Open add transaction form" [ref=e396]:
+                            - img
+                            - generic [ref=e397]: New Transaction
+                    - generic [ref=e399]:
+                        - generic [ref=e400]:
+                            - generic [ref=e401]:
+                                - generic [ref=e402]:
+                                    - paragraph [ref=e403]: Activity feed
+                                    - generic [ref=e404]:
+                                        - img [ref=e405]
+                                        - text: Transactions
+                                - generic [ref=e408]:
+                                    - generic [ref=e409]: 0 records
+                                    - generic [ref=e410]:
+                                        - img
+                                        - generic [ref=e412]: Balanced
+                                    - button "Refresh" [disabled]:
+                                        - img
+                                        - generic: Refresh
+                            - generic [ref=e413]: Search, filter, edit, or add transactions from one place.
+                        - generic [ref=e415]: No transactions found. Try adding your first transaction!
+        - generic [ref=e222]:
+            - heading "Command Palette" [level=2] [ref=e416]
+            - paragraph [ref=e224]: Search for a command to run...
+    - generic:
+        - contentinfo:
+            - button "Open TanStack Router Devtools" [ref=e417] [cursor=pointer]:
+                - generic [ref=e226]:
+                    - img [ref=e228]
+                    - img [ref=e263]
+                - generic [ref=e297]: "-"
+                - generic [ref=e298]: TanStack Router

@@ -93,7 +93,7 @@ export function Auth<TFormValues extends BaseAuthValues>({
 
           <Button
             type="submit"
-            className="h-11 w-full font-semibold uppercase tracking-[0.08em]"
+            className="h-11 w-full font-semibold tracking-[0.08em] uppercase"
             disabled={status === "pending"}
             size="lg"
             variant="default"
@@ -101,13 +101,13 @@ export function Auth<TFormValues extends BaseAuthValues>({
             {status === "pending" ? "Please wait..." : actionText}
           </Button>
           {afterSubmit ? afterSubmit : null}
-          <p className="pt-2 text-center text-sm text-muted-foreground">
+          <p className="text-muted-foreground pt-2 text-center text-sm">
             {actionText === authActions.login
               ? "Don't have an account?"
               : "Already have an account?"}
             <Link
               to={actionText === authActions.login ? "/signup" : "/login"}
-              className="ml-1 font-medium text-primary underline-offset-4 hover:underline"
+              className="text-primary ml-1 font-medium underline-offset-4 hover:underline"
             >
               {actionText === authActions.login ? "Sign up" : "Log in"}
             </Link>

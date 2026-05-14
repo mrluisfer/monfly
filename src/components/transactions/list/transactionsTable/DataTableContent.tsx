@@ -17,8 +17,8 @@ export function DataTableContent({
   getColumnClassName: (columnId: string) => string;
 }) {
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-border/70 bg-background/65">
-      <Table className="min-w-190 [&_td]:border-border/40 [&_th]:border-border/60">
+    <div className="border-border/70 bg-background/65 overflow-hidden rounded-[1.5rem] border">
+      <Table className="[&_td]:border-border/40 [&_th]:border-border/60 min-w-190">
         <TableHeader className="bg-muted/35">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -32,7 +32,7 @@ export function DataTableContent({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
                 );

@@ -15,7 +15,7 @@ export type DarkModeTheme = "light" | "dark";
 
 export const darkModeThemeAtom = atomWithStorage<DarkModeTheme>(
   "theme",
-  "light"
+  "light",
 );
 
 export const isDarkModeAtom = atom((get) => get(darkModeThemeAtom) === "dark");
@@ -24,7 +24,7 @@ export const setDarkModeThemeAtom = atom(
   null,
   (_get, set, theme: DarkModeTheme) => {
     set(darkModeThemeAtom, theme);
-  }
+  },
 );
 
 export const toggleDarkModeThemeAtom = atom(null, (get, set) => {
@@ -35,7 +35,7 @@ export const toggleDarkModeThemeAtom = atom(null, (get, set) => {
 
 export const activeThemeAtom = atomWithStorage<string>(
   "active_theme",
-  "default"
+  "default",
 );
 
 export const setActiveThemeAtom = atom(null, (_get, set, theme: string) => {
@@ -44,7 +44,7 @@ export const setActiveThemeAtom = atom(null, (_get, set, theme: string) => {
 
 export const fontDisplayAtom = atomWithStorage<string>(
   "fontDisplay",
-  FontValues.SpaceGrotesk
+  FontValues.SpaceGrotesk,
 );
 
 export const setFontDisplayAtom = atom(null, (_get, set, value: string) => {
@@ -53,46 +53,46 @@ export const setFontDisplayAtom = atom(null, (_get, set, value: string) => {
 
 export const sonnerPositionAtom = atomWithStorage<SonnerPosition>(
   "sonner_position",
-  "bottom-right"
+  "bottom-right",
 );
 
 export const setSonnerPositionAtom = atom(
   null,
   (_get, set, position: SonnerPosition) => {
     set(sonnerPositionAtom, position);
-  }
+  },
 );
 
 export const disableTransactionHoverAtom = atomWithStorage<boolean>(
   "disable-hover",
-  false
+  false,
 );
 
 export const setDisableTransactionHoverAtom = atom(
   null,
   (_get, set, value: boolean) => {
     set(disableTransactionHoverAtom, value);
-  }
+  },
 );
 
 export const hideBalanceAtom = atomWithStorage<boolean>(
   TOTAL_BALANCE_VISIBILITY_STORAGE_KEY,
-  false
+  false,
 );
 
 export const balanceSimulationAlertDismissedAtom = atomWithStorage<boolean>(
   BALANCE_SIMULATION_ALERT_DISMISSED_KEY,
-  false
+  false,
 );
 
 export const numberFormatAtom = atomWithStorage<NumberFormatId>(
   "monfly-number-format",
-  DEFAULT_NUMBER_FORMAT
+  DEFAULT_NUMBER_FORMAT,
 );
 
 export const setNumberFormatAtom = atom(
   null,
   (_get, set, value: NumberFormatId) => {
     set(numberFormatAtom, value);
-  }
+  },
 );

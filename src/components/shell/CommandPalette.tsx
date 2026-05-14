@@ -35,7 +35,7 @@ export function useCommandPalette() {
   const ctx = React.useContext(CommandPaletteContext);
   if (!ctx)
     throw new Error(
-      "useCommandPalette must be used inside CommandPaletteProvider"
+      "useCommandPalette must be used inside CommandPaletteProvider",
     );
   return ctx;
 }
@@ -144,7 +144,7 @@ export function CommandPaletteProvider({
                 value="theme dark light toggle"
                 onSelect={() =>
                   runCommand(() =>
-                    setTheme(theme === "dark" ? "light" : "dark")
+                    setTheme(theme === "dark" ? "light" : "dark"),
                   )
                 }
               >

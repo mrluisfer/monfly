@@ -51,7 +51,7 @@ export function OnlineStatusBadge({
       action:
         | { type: "sync"; value: boolean }
         | { type: "online" }
-        | { type: "offline" }
+        | { type: "offline" },
     ) => {
       if (action.type === "sync") {
         return {
@@ -71,7 +71,7 @@ export function OnlineStatusBadge({
     {
       isOnline: typeof window === "undefined" ? true : window.navigator.onLine,
       lastChanged: null,
-    }
+    },
   );
 
   useEffect(() => {
@@ -118,32 +118,32 @@ export function OnlineStatusBadge({
   }
 
   return (
-    <TooltipProvider >
+    <TooltipProvider>
       <Tooltip>
         <TooltipTrigger
           render={
             <Badge
               variant={variant}
               className={cn(
-                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
+                "border-border/70 bg-background/85 text-foreground hover:bg-muted/70 inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border px-3 py-1.5 shadow-xs backdrop-blur-[2px] transition-colors duration-200 select-none",
                 fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
                 compact && "h-8 px-2.5 py-1",
                 !compact && !fullWidth && "h-9",
-                className
+                className,
               )}
             >
               <span
                 className={cn(
                   "relative inline-flex size-2 rounded-full",
-                  config.color
+                  config.color,
                 )}
                 aria-hidden="true"
               >
                 {animate && isOnline && (
                   <span
                     className={cn(
-                      "absolute inline-flex size-full rounded-full opacity-75 animate-ping",
-                      config.color
+                      "absolute inline-flex size-full animate-ping rounded-full opacity-75",
+                      config.color,
                     )}
                   />
                 )}
@@ -153,7 +153,7 @@ export function OnlineStatusBadge({
                 <Icon
                   className={cn(
                     "size-3.5 shrink-0 opacity-75",
-                    fullWidth && "size-4"
+                    fullWidth && "size-4",
                   )}
                   aria-hidden="true"
                 />
@@ -162,7 +162,7 @@ export function OnlineStatusBadge({
               <span
                 className={cn(
                   "min-w-0 truncate text-xs font-medium",
-                  fullWidth && "flex-1"
+                  fullWidth && "flex-1",
                 )}
               >
                 {compact ? config.compactLabel : config.label}
@@ -181,7 +181,7 @@ export function OnlineStatusBadge({
             </div>
             <p className="text-[10px]">{config.description}</p>
             {timeAgo && (
-              <p className="mt-1 border-t border-border pt-1 text-[10px]">
+              <p className="border-border mt-1 border-t pt-1 text-[10px]">
                 Status changed {timeAgo}
               </p>
             )}

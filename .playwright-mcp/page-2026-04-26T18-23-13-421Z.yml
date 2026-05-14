@@ -1,175 +1,175 @@
 - generic [active] [ref=e1]:
-  - generic [ref=e2]:
-    - link "Skip to content" [ref=e3] [cursor=pointer]:
-      - /url: "#main-content"
-    - generic [ref=e6]:
-      - list [ref=e8]:
-        - listitem [ref=e9]:
-          - link "Monfly Personal finance" [ref=e10] [cursor=pointer]:
-            - /url: /home
-            - img [ref=e12]
-            - generic [ref=e13]:
-              - generic [ref=e14]: Monfly
-              - generic [ref=e15]: Personal finance
-      - generic [ref=e16]:
-        - generic [ref=e17]:
-          - generic [ref=e18]: Workspace
-          - list [ref=e20]:
-            - listitem [ref=e21]:
-              - link "Home" [ref=e22] [cursor=pointer]:
-                - /url: /home
-                - img [ref=e23]
-                - generic [ref=e26]: Home
-            - listitem [ref=e27]:
-              - link "Transactions" [ref=e28] [cursor=pointer]:
-                - /url: /home/transactions
-                - img [ref=e29]
-                - generic [ref=e31]: Transactions
-            - listitem [ref=e32]:
-              - button "Budgets Soon" [disabled]:
-                - img
-                - generic: Budgets
-                - generic: Soon
-            - listitem [ref=e33]:
-              - link "Reports" [ref=e34] [cursor=pointer]:
-                - /url: /home/reports
-                - img [ref=e35]
-                - generic [ref=e36]: Reports
-            - listitem [ref=e37]:
-              - link "Categories" [ref=e38] [cursor=pointer]:
-                - /url: /home/categories
-                - img [ref=e39]
-                - generic [ref=e40]: Categories
-            - listitem [ref=e41]:
-              - link "Calculator" [ref=e42] [cursor=pointer]:
-                - /url: /home/balance-calculator
-                - img [ref=e43]
-                - generic [ref=e45]: Calculator
-        - list [ref=e48]:
-          - listitem [ref=e49]:
-            - button "Settings" [ref=e50]:
-              - img [ref=e51]
-              - generic [ref=e54]: Settings
-          - listitem [ref=e55]:
-            - button "What's new" [ref=e56]:
-              - img [ref=e57]
-              - generic [ref=e60]: What's new
-      - list [ref=e62]:
-        - listitem [ref=e63]:
-          - button "test test@gmail.com" [ref=e64]:
-            - img [ref=e65]
-            - generic [ref=e73]:
-              - generic [ref=e74]: test
-              - generic [ref=e75]: test@gmail.com
-            - img [ref=e76]
-      - button "Toggle Sidebar" [ref=e79]
-    - main [ref=e80]:
-      - generic [ref=e81]:
-        - button "Toggle navigation" [ref=e82]:
-          - img
-          - generic [ref=e83]: Toggle Sidebar
-        - separator [ref=e84]
-        - navigation "breadcrumb" [ref=e85]:
-          - list [ref=e86]:
-            - listitem [ref=e87]:
-              - link "Home" [ref=e88] [cursor=pointer]:
-                - /url: /home
-            - listitem [ref=e89]:
-              - img [ref=e90]
-            - listitem [ref=e92]:
-              - link "Reports" [disabled] [ref=e93]
-        - generic [ref=e94]:
-          - button "Search or run a command" [ref=e95]:
-            - img
-            - generic [ref=e96]: Search…
-            - generic:
-              - generic: Ctrl
-              - text: K
-          - generic [ref=e101]: Operational
-          - button "Hide information" [ref=e102]:
-            - img
-          - button "Switch to dark mode" [ref=e103]:
-            - img
-      - main [ref=e104]:
-        - generic [ref=e106]:
-          - generic [ref=e108]:
-            - img [ref=e110]
-            - generic [ref=e111]:
-              - heading "Reports & Analytics" [level=1] [ref=e112]
-              - paragraph [ref=e113]: Visualize your financial trends and category breakdowns.
-          - generic [ref=e114]:
-            - generic [ref=e115]:
-              - generic [ref=e117]:
-                - text: Income vs Expenses
-                - generic [ref=e118]: Track your monthly financial flow
-              - generic [ref=e120]:
-                - generic [ref=e123]:
-                  - list [ref=e125]:
-                    - listitem [ref=e126]:
-                      - img "Expenses legend icon" [ref=e127]
-                      - text: Expenses
-                    - listitem [ref=e129]:
-                      - img "Income legend icon" [ref=e130]
-                      - text: Income
-                  - application [ref=e132]:
-                    - generic [ref=e136]:
-                      - generic [ref=e137]:
-                        - generic [ref=e139]: noviembre
-                        - generic [ref=e141]: diciembre
-                        - generic [ref=e143]: enero
-                        - generic [ref=e145]: febrero
-                        - generic [ref=e147]: marzo
-                        - generic [ref=e149]: abril
-                      - generic [ref=e150]:
-                        - generic [ref=e152]: $0k
-                        - generic [ref=e154]: $0k
-                        - generic [ref=e156]: $0k
-                        - generic [ref=e158]: $0k
-                        - generic [ref=e160]: $0k
-                - generic [ref=e161]:
-                  - generic [ref=e162]:
-                    - paragraph [ref=e163]: Income
-                    - paragraph [ref=e164]: $0.00
-                  - generic [ref=e165]:
-                    - paragraph [ref=e166]: Expenses
-                    - paragraph [ref=e167]: $0.00
-                  - generic [ref=e168]:
-                    - paragraph [ref=e169]: Net
-                    - paragraph [ref=e170]: +$0.00
-            - generic [ref=e171]:
-              - generic [ref=e172]:
-                - generic [ref=e173]:
-                  - img [ref=e174]
-                  - text: Monthly Activity
-                - generic [ref=e176]: Track your transaction activity over time
-              - generic [ref=e178]:
-                - text: No transaction data found.
-                - generic [ref=e179]:
-                  - img [ref=e180]
-                  - text: Start making transactions to see your monthly activity.
-            - generic [ref=e182]:
-              - generic [ref=e183]:
-                - generic [ref=e184]: Expense by Category
-                - generic [ref=e185]: Visualize your expense distribution across categories
-              - generic [ref=e186]:
-                - text: "0"
-                - generic [ref=e187]: No expense data for categories
-            - generic [ref=e188]:
-              - generic [ref=e189]:
-                - generic [ref=e190]: Income by Category
-                - generic [ref=e191]: Visualize your income distribution across categories
-              - generic [ref=e192]:
-                - text: "0"
-                - generic [ref=e193]: No income data for categories
-    - generic [ref=e194]:
-      - heading "Command Palette" [level=2] [ref=e195]
-      - paragraph [ref=e196]: Search for a command to run...
-  - generic:
-    - contentinfo:
-      - button "Open TanStack Router Devtools" [ref=e197] [cursor=pointer]:
-        - generic [ref=e198]:
-          - img [ref=e200]
-          - img [ref=e235]
-        - generic [ref=e269]: "-"
-        - generic [ref=e270]: TanStack Router
-  - generic [ref=e271]: $0k
+    - generic [ref=e2]:
+        - link "Skip to content" [ref=e3] [cursor=pointer]:
+            - /url: "#main-content"
+        - generic [ref=e6]:
+            - list [ref=e8]:
+                - listitem [ref=e9]:
+                    - link "Monfly Personal finance" [ref=e10] [cursor=pointer]:
+                        - /url: /home
+                        - img [ref=e12]
+                        - generic [ref=e13]:
+                            - generic [ref=e14]: Monfly
+                            - generic [ref=e15]: Personal finance
+            - generic [ref=e16]:
+                - generic [ref=e17]:
+                    - generic [ref=e18]: Workspace
+                    - list [ref=e20]:
+                        - listitem [ref=e21]:
+                            - link "Home" [ref=e22] [cursor=pointer]:
+                                - /url: /home
+                                - img [ref=e23]
+                                - generic [ref=e26]: Home
+                        - listitem [ref=e27]:
+                            - link "Transactions" [ref=e28] [cursor=pointer]:
+                                - /url: /home/transactions
+                                - img [ref=e29]
+                                - generic [ref=e31]: Transactions
+                        - listitem [ref=e32]:
+                            - button "Budgets Soon" [disabled]:
+                                - img
+                                - generic: Budgets
+                                - generic: Soon
+                        - listitem [ref=e33]:
+                            - link "Reports" [ref=e34] [cursor=pointer]:
+                                - /url: /home/reports
+                                - img [ref=e35]
+                                - generic [ref=e36]: Reports
+                        - listitem [ref=e37]:
+                            - link "Categories" [ref=e38] [cursor=pointer]:
+                                - /url: /home/categories
+                                - img [ref=e39]
+                                - generic [ref=e40]: Categories
+                        - listitem [ref=e41]:
+                            - link "Calculator" [ref=e42] [cursor=pointer]:
+                                - /url: /home/balance-calculator
+                                - img [ref=e43]
+                                - generic [ref=e45]: Calculator
+                - list [ref=e48]:
+                    - listitem [ref=e49]:
+                        - button "Settings" [ref=e50]:
+                            - img [ref=e51]
+                            - generic [ref=e54]: Settings
+                    - listitem [ref=e55]:
+                        - button "What's new" [ref=e56]:
+                            - img [ref=e57]
+                            - generic [ref=e60]: What's new
+            - list [ref=e62]:
+                - listitem [ref=e63]:
+                    - button "test test@gmail.com" [ref=e64]:
+                        - img [ref=e65]
+                        - generic [ref=e73]:
+                            - generic [ref=e74]: test
+                            - generic [ref=e75]: test@gmail.com
+                        - img [ref=e76]
+            - button "Toggle Sidebar" [ref=e79]
+        - main [ref=e80]:
+            - generic [ref=e81]:
+                - button "Toggle navigation" [ref=e82]:
+                    - img
+                    - generic [ref=e83]: Toggle Sidebar
+                - separator [ref=e84]
+                - navigation "breadcrumb" [ref=e85]:
+                    - list [ref=e86]:
+                        - listitem [ref=e87]:
+                            - link "Home" [ref=e88] [cursor=pointer]:
+                                - /url: /home
+                        - listitem [ref=e89]:
+                            - img [ref=e90]
+                        - listitem [ref=e92]:
+                            - link "Reports" [disabled] [ref=e93]
+                - generic [ref=e94]:
+                    - button "Search or run a command" [ref=e95]:
+                        - img
+                        - generic [ref=e96]: Search…
+                        - generic:
+                            - generic: Ctrl
+                            - text: K
+                    - generic [ref=e101]: Operational
+                    - button "Hide information" [ref=e102]:
+                        - img
+                    - button "Switch to dark mode" [ref=e103]:
+                        - img
+            - main [ref=e104]:
+                - generic [ref=e106]:
+                    - generic [ref=e108]:
+                        - img [ref=e110]
+                        - generic [ref=e111]:
+                            - heading "Reports & Analytics" [level=1] [ref=e112]
+                            - paragraph [ref=e113]: Visualize your financial trends and category breakdowns.
+                    - generic [ref=e114]:
+                        - generic [ref=e115]:
+                            - generic [ref=e117]:
+                                - text: Income vs Expenses
+                                - generic [ref=e118]: Track your monthly financial flow
+                            - generic [ref=e120]:
+                                - generic [ref=e123]:
+                                    - list [ref=e125]:
+                                        - listitem [ref=e126]:
+                                            - img "Expenses legend icon" [ref=e127]
+                                            - text: Expenses
+                                        - listitem [ref=e129]:
+                                            - img "Income legend icon" [ref=e130]
+                                            - text: Income
+                                    - application [ref=e132]:
+                                        - generic [ref=e136]:
+                                            - generic [ref=e137]:
+                                                - generic [ref=e139]: noviembre
+                                                - generic [ref=e141]: diciembre
+                                                - generic [ref=e143]: enero
+                                                - generic [ref=e145]: febrero
+                                                - generic [ref=e147]: marzo
+                                                - generic [ref=e149]: abril
+                                            - generic [ref=e150]:
+                                                - generic [ref=e152]: $0k
+                                                - generic [ref=e154]: $0k
+                                                - generic [ref=e156]: $0k
+                                                - generic [ref=e158]: $0k
+                                                - generic [ref=e160]: $0k
+                                - generic [ref=e161]:
+                                    - generic [ref=e162]:
+                                        - paragraph [ref=e163]: Income
+                                        - paragraph [ref=e164]: $0.00
+                                    - generic [ref=e165]:
+                                        - paragraph [ref=e166]: Expenses
+                                        - paragraph [ref=e167]: $0.00
+                                    - generic [ref=e168]:
+                                        - paragraph [ref=e169]: Net
+                                        - paragraph [ref=e170]: +$0.00
+                        - generic [ref=e171]:
+                            - generic [ref=e172]:
+                                - generic [ref=e173]:
+                                    - img [ref=e174]
+                                    - text: Monthly Activity
+                                - generic [ref=e176]: Track your transaction activity over time
+                            - generic [ref=e178]:
+                                - text: No transaction data found.
+                                - generic [ref=e179]:
+                                    - img [ref=e180]
+                                    - text: Start making transactions to see your monthly activity.
+                        - generic [ref=e182]:
+                            - generic [ref=e183]:
+                                - generic [ref=e184]: Expense by Category
+                                - generic [ref=e185]: Visualize your expense distribution across categories
+                            - generic [ref=e186]:
+                                - text: "0"
+                                - generic [ref=e187]: No expense data for categories
+                        - generic [ref=e188]:
+                            - generic [ref=e189]:
+                                - generic [ref=e190]: Income by Category
+                                - generic [ref=e191]: Visualize your income distribution across categories
+                            - generic [ref=e192]:
+                                - text: "0"
+                                - generic [ref=e193]: No income data for categories
+        - generic [ref=e194]:
+            - heading "Command Palette" [level=2] [ref=e195]
+            - paragraph [ref=e196]: Search for a command to run...
+    - generic:
+        - contentinfo:
+            - button "Open TanStack Router Devtools" [ref=e197] [cursor=pointer]:
+                - generic [ref=e198]:
+                    - img [ref=e200]
+                    - img [ref=e235]
+                - generic [ref=e269]: "-"
+                - generic [ref=e270]: TanStack Router
+    - generic [ref=e271]: $0k

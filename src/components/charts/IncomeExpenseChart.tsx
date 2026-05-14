@@ -42,30 +42,30 @@ function IncomeExpenseTooltip({
   const net = income - expense;
 
   return (
-    <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-4 shadow-lg min-w-[200px]">
-      <p className="font-semibold text-foreground mb-2">{label}</p>
+    <div className="bg-background/95 border-border min-w-[200px] rounded-lg border p-4 shadow-lg backdrop-blur-sm">
+      <p className="text-foreground mb-2 font-semibold">{label}</p>
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="size-3 rounded-full bg-primary" />
-            <span className="text-sm text-muted-foreground">Income:</span>
+            <div className="bg-primary size-3 rounded-full" />
+            <span className="text-muted-foreground text-sm">Income:</span>
           </div>
-          <span className="font-semibold text-primary">
+          <span className="text-primary font-semibold">
             {formatCurrency(income, "USD")}
           </span>
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="size-3 rounded-full bg-destructive" />
-            <span className="text-sm text-muted-foreground">Expenses:</span>
+            <div className="bg-destructive size-3 rounded-full" />
+            <span className="text-muted-foreground text-sm">Expenses:</span>
           </div>
-          <span className="font-semibold text-destructive">
+          <span className="text-destructive font-semibold">
             {formatCurrency(expense, "USD")}
           </span>
         </div>
-        <div className="border-t border-border pt-2">
+        <div className="border-border border-t pt-2">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-sm font-medium text-muted-foreground">
+            <span className="text-muted-foreground text-sm font-medium">
               Net:
             </span>
             <span
@@ -108,11 +108,11 @@ export default function IncomeExpenseChart() {
   // Calculate totals and statistics
   const totalIncome = chartData.reduce(
     (sum: number, item: any) => sum + item.income,
-    0
+    0,
   );
   const totalExpenses = chartData.reduce(
     (sum: number, item: any) => sum + item.expense,
-    0
+    0,
   );
   const netTotal = totalIncome - totalExpenses;
 
@@ -152,7 +152,7 @@ export default function IncomeExpenseChart() {
                 color: "var(--destructive)",
               },
             }}
-            className="w-full h-64 sm:h-80"
+            className="h-64 w-full sm:h-80"
           >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
@@ -174,14 +174,14 @@ export default function IncomeExpenseChart() {
                   dataKey="month"
                   tickLine={false}
                   axisLine={false}
-                  className="text-xs fill-muted-foreground"
+                  className="fill-muted-foreground text-xs"
                   tick={{ fontSize: 12 }}
                   tickMargin={8}
                 />
                 <YAxis
                   tickLine={false}
                   axisLine={false}
-                  className="text-xs fill-muted-foreground"
+                  className="fill-muted-foreground text-xs"
                   tick={{ fontSize: 10 }}
                   tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
                 />
@@ -258,23 +258,23 @@ export default function IncomeExpenseChart() {
 
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="bg-muted rounded-xl p-3.5">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="text-muted-foreground text-xs font-medium tracking-[0.18em] uppercase">
                 Income
               </p>
-              <p className="mt-2 text-base font-semibold text-primary">
+              <p className="text-primary mt-2 text-base font-semibold">
                 {formatCurrency(totalIncome, "USD")}
               </p>
             </div>
             <div className="bg-muted rounded-xl p-3.5">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="text-muted-foreground text-xs font-medium tracking-[0.18em] uppercase">
                 Expenses
               </p>
-              <p className="mt-2 text-base font-semibold text-destructive">
+              <p className="text-destructive mt-2 text-base font-semibold">
                 {formatCurrency(totalExpenses, "USD")}
               </p>
             </div>
             <div className="bg-muted rounded-xl p-3.5">
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="text-muted-foreground text-xs font-medium tracking-[0.18em] uppercase">
                 Net
               </p>
               <p
@@ -292,8 +292,8 @@ export default function IncomeExpenseChart() {
         <DataNotFoundPlaceholder>
           No financial data found.
           <br />
-          <span className="text-xs text-muted-foreground mt-2 block">
-            <DollarSign className="size-4 inline mr-1" />
+          <span className="text-muted-foreground mt-2 block text-xs">
+            <DollarSign className="mr-1 inline size-4" />
             Start adding income and expense transactions to see your financial
             flow.
           </span>

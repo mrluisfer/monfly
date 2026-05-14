@@ -2,7 +2,10 @@ import type { Category } from "@prisma/client";
 import { useMemo, useState } from "react";
 import { FolderOpen, Loader2, Search, X } from "lucide-react";
 
-import { getCategoryIconByName, getCategoryIconLabelByName } from "~/constants/categories-icon";
+import {
+  getCategoryIconByName,
+  getCategoryIconLabelByName,
+} from "~/constants/categories-icon";
 import { useCategoriesList } from "~/hooks/categories/useCategoriesList";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
@@ -65,7 +68,7 @@ export const CategoriesList = () => {
 
   const selectedSet = useMemo(
     () => new Set(selectedCategories),
-    [selectedCategories]
+    [selectedCategories],
   );
 
   const handleConfirmDelete = async () => {
@@ -91,7 +94,10 @@ export const CategoriesList = () => {
     return (
       <Empty className="border-border/60 rounded-2xl border py-16">
         <EmptyHeader>
-          <EmptyMedia variant="icon" className="bg-destructive/10 text-destructive">
+          <EmptyMedia
+            variant="icon"
+            className="bg-destructive/10 text-destructive"
+          >
             <X aria-hidden="true" />
           </EmptyMedia>
           <EmptyTitle>Error loading categories</EmptyTitle>
@@ -205,7 +211,7 @@ export const CategoriesList = () => {
                 className={cn(
                   "group flex items-center gap-3 px-3 py-2.5 transition-colors",
                   "hover:bg-accent/40",
-                  isSelected && "bg-primary/[0.04]"
+                  isSelected && "bg-primary/[0.04]",
                 )}
               >
                 <Checkbox
@@ -227,7 +233,7 @@ export const CategoriesList = () => {
                       "flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors",
                       isSelected
                         ? "bg-primary/15 text-primary"
-                        : "bg-muted text-foreground group-hover:bg-primary/10 group-hover:text-primary"
+                        : "bg-muted text-foreground group-hover:bg-primary/10 group-hover:text-primary",
                     )}
                   >
                     {getCategoryIconByName(category.icon, {

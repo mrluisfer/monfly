@@ -21,8 +21,15 @@ type ReceivableEntry = {
 };
 
 function buildEntries(
-  loans: { id: string; debtor: string; amount: number; amountPaid: number; status: string; dueAt: Date | string | null }[],
-  now: Date
+  loans: {
+    id: string;
+    debtor: string;
+    amount: number;
+    amountPaid: number;
+    status: string;
+    dueAt: Date | string | null;
+  }[],
+  now: Date,
 ): ReceivableEntry[] {
   const entries = loans
     .filter((l) => l.status !== "paid")
@@ -71,7 +78,8 @@ function dueTone(entry: ReceivableEntry) {
   if (entry.dueAt === null) return "text-muted-foreground";
   if (entry.daysUntilDue === null) return "text-muted-foreground";
   if (entry.daysUntilDue < 0) return "text-destructive";
-  if (entry.daysUntilDue <= 3) return "text-warning-foreground dark:text-warning";
+  if (entry.daysUntilDue <= 3)
+    return "text-warning-foreground dark:text-warning";
   return "text-muted-foreground";
 }
 
@@ -184,7 +192,7 @@ function UpcomingBody({
               <p
                 className={cn(
                   "inline-flex items-center gap-1 text-xs",
-                  dueTone(entry)
+                  dueTone(entry),
                 )}
               >
                 <ClockIcon className="size-3" aria-hidden="true" />

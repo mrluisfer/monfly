@@ -166,7 +166,7 @@ export function TransactionsInsights({
         expenseByCategory.set(
           transaction.category,
           (expenseByCategory.get(transaction.category) ?? 0) +
-            transaction.amount
+            transaction.amount,
         );
       }
 
@@ -198,7 +198,7 @@ export function TransactionsInsights({
       ) {
         descriptionFrequency.set(
           cleanedDescription,
-          (descriptionFrequency.get(cleanedDescription) ?? 0) + 1
+          (descriptionFrequency.get(cleanedDescription) ?? 0) + 1,
         );
       }
 
@@ -323,30 +323,30 @@ export function TransactionsInsights({
 
     if (netLast30 < 0) {
       ideas.add(
-        "Set a weekly expense cap for the next 30 days and compare variance against this baseline."
+        "Set a weekly expense cap for the next 30 days and compare variance against this baseline.",
       );
     }
 
     if (topCategory && topCategory.share >= 0.35) {
       ideas.add(
-        `Split "${topCategory.category}" into sub-categories to identify specific cost drivers.`
+        `Split "${topCategory.category}" into sub-categories to identify specific cost drivers.`,
       );
     }
 
     if (missingDescriptionRate >= 0.2) {
       ideas.add(
-        "Add short, consistent descriptions to improve search precision and anomaly detection."
+        "Add short, consistent descriptions to improve search precision and anomaly detection.",
       );
     }
 
     if (incomeLast30 > 0 && expenseLast30 > 0) {
       ideas.add(
-        "Create a monthly alert when expenses exceed 80% of income for faster intervention."
+        "Create a monthly alert when expenses exceed 80% of income for faster intervention.",
       );
     }
 
     ideas.add(
-      "Review this section weekly; small adjustments are safer and more effective than large late changes."
+      "Review this section weekly; small adjustments are safer and more effective than large late changes.",
     );
 
     return {
@@ -381,7 +381,7 @@ export function TransactionsInsights({
         title="Insights & Ideas"
         description="Actionable insights based on your transaction history. Updated in real-time as you add more data."
         icon={
-          <ShieldCheckIcon className="size-5 text-primary" aria-hidden="true" />
+          <ShieldCheckIcon className="text-primary size-5" aria-hidden="true" />
         }
         actions={
           <Badge variant="default">

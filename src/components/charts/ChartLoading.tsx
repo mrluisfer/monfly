@@ -12,17 +12,17 @@ export function ChartLoading({
   showSkeleton = true,
 }: ChartLoadingProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-12 space-y-4">
+    <div className="flex flex-col items-center justify-center space-y-4 py-12">
       {showSkeleton ? (
         <div className="w-full space-y-3">
-          <div className="flex items-center gap-4 mb-6">
+          <div className="mb-6 flex items-center gap-4">
             <Skeleton className="size-4 rounded-full" />
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-4 w-16" />
           </div>
           <div className="space-y-2">
             <Skeleton className="h-32 w-full rounded-lg" />
-            <div className="flex justify-between items-center">
+            <div className="flex items-center justify-between">
               <Skeleton className="h-3 w-16" />
               <Skeleton className="h-3 w-20" />
               <Skeleton className="h-3 w-14" />
@@ -31,8 +31,8 @@ export function ChartLoading({
         </div>
       ) : (
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="size-8 animate-spin text-primary" />
-          <span className="text-sm text-muted-foreground font-medium">
+          <Loader2 className="text-primary size-8 animate-spin" />
+          <span className="text-muted-foreground text-sm font-medium">
             {message}
           </span>
         </div>
@@ -53,21 +53,21 @@ export function ChartError({
   onRetry,
 }: ChartErrorProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-12 space-y-4">
+    <div className="flex flex-col items-center justify-center space-y-4 py-12">
       <div className="flex flex-col items-center gap-3 text-center">
-        <div className="size-12 rounded-full bg-destructive/10 flex items-center justify-center">
-          <div className="size-6 rounded-full bg-destructive" />
+        <div className="bg-destructive/10 flex size-12 items-center justify-center rounded-full">
+          <div className="bg-destructive size-6 rounded-full" />
         </div>
         <div>
-          <p className="font-medium text-destructive">{title}</p>
+          <p className="text-destructive font-medium">{title}</p>
           {message && (
-            <p className="text-sm text-muted-foreground mt-1">{message}</p>
+            <p className="text-muted-foreground mt-1 text-sm">{message}</p>
           )}
         </div>
         {onRetry && (
           <button
             onClick={onRetry}
-            className="px-3 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-3 py-2 text-sm transition-colors"
           >
             Try Again
           </button>

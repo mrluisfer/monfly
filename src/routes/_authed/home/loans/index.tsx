@@ -119,7 +119,7 @@ function AddLoanCard() {
         render={
           <Button
             variant={"ghost"}
-            className="flex items-center gap-3 p-3 group h-16"
+            className="group flex h-16 items-center gap-3 p-3"
             size={"lg"}
           />
         }
@@ -133,7 +133,7 @@ function AddLoanCard() {
         <div>
           <h2
             id="add-loan-heading"
-            className="text-sm font-semibold tracking-tight text-left select-none"
+            className="text-left text-sm font-semibold tracking-tight select-none"
           >
             New loan
           </h2>
@@ -143,8 +143,8 @@ function AddLoanCard() {
         </div>
         <ChevronDownIcon
           className={cn(
-            "ml-auto group-data-[state=open]:rotate-180 transition-transform",
-            openCollapsible ? "rotate-180" : "rotate-0"
+            "ml-auto transition-transform group-data-[state=open]:rotate-180",
+            openCollapsible ? "rotate-180" : "rotate-0",
           )}
         />
       </CollapsibleTrigger>
@@ -335,7 +335,7 @@ function LoansList() {
 
   if (allLoans.length === 0) {
     return (
-      <div className="bg-card border-border/60 flex flex-col items-center gap-3 rounded-2xl border p-12 text-center h-fit">
+      <div className="bg-card border-border/60 flex h-fit flex-col items-center gap-3 rounded-2xl border p-12 text-center">
         <span
           aria-hidden="true"
           className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-2xl"
@@ -358,7 +358,7 @@ function LoansList() {
       acc[l.status as LoanStatus] = (acc[l.status as LoanStatus] ?? 0) + 1;
       return acc;
     },
-    { all: 0, pending: 0, partial: 0, paid: 0 } as Record<StatusFilter, number>
+    { all: 0, pending: 0, partial: 0, paid: 0 } as Record<StatusFilter, number>,
   );
 
   const loans = allLoans.filter((l) => {
@@ -374,7 +374,7 @@ function LoansList() {
       acc[dir] += 1;
       return acc;
     },
-    { lent: 0, borrowed: 0 } as Record<LoanDirection, number>
+    { lent: 0, borrowed: 0 } as Record<LoanDirection, number>,
   );
 
   const totals = allLoans.reduce(
@@ -395,7 +395,7 @@ function LoansList() {
       lentReceived: 0,
       borrowedOutstanding: 0,
       borrowedPaid: 0,
-    }
+    },
   );
 
   const netBalance = totals.lentOutstanding - totals.borrowedOutstanding;
@@ -430,7 +430,7 @@ function LoansList() {
         />
       </div>
 
-      <div className="lg:grid lg:grid-cols-2 gap-6 md:gap-2 xl:gap-0 flex items-center justify-between flex-wrap w-full">
+      <div className="flex w-full flex-wrap items-center justify-between gap-6 md:gap-2 lg:grid lg:grid-cols-2 xl:gap-0">
         {/* Direction filter — quick toggle between perspectives */}
         <Tabs
           value={directionFilter}
@@ -468,7 +468,7 @@ function LoansList() {
           onValueChange={(value) => setFilter(value as StatusFilter)}
           className="w-full"
         >
-          <TabsList className="w-full sm:w-fit ml-auto">
+          <TabsList className="ml-auto w-full sm:w-fit">
             <TabsTrigger value="all" className="flex-1 sm:flex-initial">
               All
               <CountBadge n={counts.all} />
@@ -581,7 +581,7 @@ function LoanListItem({
           <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-xs tabular-nums">
             <span>{maskAmount(loan.amount)} total</span>
             {loan.amountPaid > 0 && (
-              <span className="before:mr-1.5 before:text-muted-foreground/50 before:content-['·']">
+              <span className="before:text-muted-foreground/50 before:mr-1.5 before:content-['·']">
                 <span className="text-foreground">
                   {maskAmount(loan.amountPaid)}
                 </span>{" "}
@@ -589,7 +589,7 @@ function LoanListItem({
               </span>
             )}
             {loan.dueAt && (
-              <span className="before:mr-1.5 before:text-muted-foreground/50 before:content-['·']">
+              <span className="before:text-muted-foreground/50 before:mr-1.5 before:content-['·']">
                 due {new Date(loan.dueAt).toLocaleDateString()}
               </span>
             )}
@@ -630,7 +630,7 @@ function LoanListItem({
           <div
             className={cn(
               "h-full rounded-full transition-all duration-500",
-              isPaid ? "bg-success" : "bg-primary"
+              isPaid ? "bg-success" : "bg-primary",
             )}
             style={{ width: `${progressPct}%` }}
           />
@@ -640,7 +640,7 @@ function LoanListItem({
       {/* Action row — stacks on mobile, inline on sm+ */}
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         {!isPaid && (
-          <div className="w-full sm:w-auto sm:flex-1 sm:max-w-[260px]">
+          <div className="w-full sm:w-auto sm:max-w-[260px] sm:flex-1">
             <PartialPaymentControl onSubmit={onRecordPayment} />
           </div>
         )}
@@ -651,7 +651,7 @@ function LoanListItem({
                 type="button"
                 variant="default"
                 onClick={onMarkPaid}
-                className="flex-1 sm:flex-initial hidden sm:inline-flex"
+                className="hidden flex-1 sm:inline-flex sm:flex-initial"
               >
                 <CheckCheck aria-hidden="true" />
                 Mark paid
@@ -693,7 +693,7 @@ function LoanListItem({
 function CountBadge({ n }: { n: number }) {
   if (!n) return null;
   return (
-    <span className="ml-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-muted-foreground/15 px-1 text-[10px] font-medium tabular-nums">
+    <span className="bg-muted-foreground/15 ml-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-medium tabular-nums">
       {n}
     </span>
   );
@@ -732,10 +732,10 @@ function DirectionBadge({ direction }: { direction: LoanDirection }) {
     <Badge
       variant="outline"
       className={cn(
-        "gap-1 uppercase tracking-wide",
+        "gap-1 tracking-wide uppercase",
         isBorrowed
           ? "border-destructive/30 bg-destructive/10 text-destructive"
-          : "border-success/30 bg-success/10 text-success"
+          : "border-success/30 bg-success/10 text-success",
       )}
     >
       {isBorrowed ? (
@@ -758,7 +758,7 @@ function StatusBadge({ status }: { status: LoanStatus }) {
   return (
     <Badge
       className={cn(
-        "uppercase tracking-wide"
+        "tracking-wide uppercase",
         // status === "paid" && "border-success/20 bg-success/10 text-success",
         // status === "partial" && "border-warning/20 bg-warning/15 text-warning-foreground dark:text-warning",
         // status === "pending" && "border-border bg-muted text-muted-foreground"

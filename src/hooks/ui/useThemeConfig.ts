@@ -17,6 +17,6 @@ export function useThemeConfig() {
       setActiveTheme: (theme: string) => setActiveTheme(theme),
       isDark,
     }),
-    [activeTheme, isDark, setActiveTheme]
+    [activeTheme, isDark, setActiveTheme],
   );
 }

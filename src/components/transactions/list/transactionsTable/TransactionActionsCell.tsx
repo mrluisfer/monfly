@@ -102,14 +102,7 @@ export function TransactionActionsCell({
             <Button
               variant="outline"
               size="icon-lg"
-              className="
-                transition-all duration-200 ease-out
-                hover:scale-105 hover:shadow-sm hover:border-primary/20
-                active:scale-95
-                focus-visible:scale-105
-                data-[state=open]:scale-105 data-[state=open]:shadow-sm
-                dark:hover:shadow-primary/10 rounded-full
-              "
+              className="hover:border-primary/20 dark:hover:shadow-primary/10 rounded-full transition-all duration-200 ease-out hover:scale-105 hover:shadow-sm focus-visible:scale-105 active:scale-95 data-[state=open]:scale-105 data-[state=open]:shadow-sm"
             >
               <span className="sr-only">Open menu</span>
               <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
@@ -118,7 +111,7 @@ export function TransactionActionsCell({
         />
         <DropdownMenuContent
           align="end"
-          className="space-y-2 animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200 w-[200px] border"
+          className="animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 w-[200px] space-y-2 border duration-200"
         >
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>

@@ -43,7 +43,7 @@ interface UserFormFieldsProps {
 
 export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
   return (
-    <div className="divide-y divide-border/60">
+    <div className="divide-border/60 divide-y">
       <FormSection
         icon={UserIcon}
         title="Account details"
@@ -59,7 +59,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
                 <FormControl>
                   <div className="relative">
                     <MailIcon
-                      className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                      className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
                       aria-hidden="true"
                     />
                     <Input
@@ -68,7 +68,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
                       placeholder="you@email.com"
                       readOnly
                       aria-readonly="true"
-                      className="h-11 bg-muted/40 pl-9 opacity-90"
+                      className="bg-muted/40 h-11 pl-9 opacity-90"
                       {...field}
                     />
                   </div>
@@ -152,8 +152,8 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
             <FormItem className="max-w-md">
               <FormLabel>Total balance</FormLabel>
               <FormControl>
-                <div className="flex h-11 w-full overflow-hidden rounded-md border border-input bg-background shadow-xs focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/30">
-                  <span className="inline-flex w-10 shrink-0 items-center justify-center border-e border-input text-sm text-muted-foreground">
+                <div className="border-input bg-background focus-within:border-ring focus-within:ring-ring/30 flex h-11 w-full overflow-hidden rounded-md border shadow-xs focus-within:ring-3">
+                  <span className="border-input text-muted-foreground inline-flex w-10 shrink-0 items-center justify-center border-e text-sm">
                     $
                   </span>
                   <Input
@@ -161,7 +161,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
                     inputMode="decimal"
                     pattern="[0-9]*[.,]?[0-9]*"
                     placeholder="0.00"
-                    className="h-full rounded-none border-0 px-3 shadow-none tabular-nums focus-visible:ring-0"
+                    className="h-full rounded-none border-0 px-3 tabular-nums shadow-none focus-visible:ring-0"
                     {...field}
                     value={field.value ?? ""}
                     onBlur={(e) => {
@@ -169,7 +169,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
                       onBalanceBlur(e);
                     }}
                   />
-                  <span className="inline-flex items-center border-s border-input bg-muted/30 px-3 text-sm font-medium text-muted-foreground">
+                  <span className="border-input bg-muted/30 text-muted-foreground inline-flex items-center border-s px-3 text-sm font-medium">
                     {form.watch(userFormNames.preferredCurrency) ?? "MXN"}
                   </span>
                 </div>
@@ -224,7 +224,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
         title="Communication preferences"
         description="Decide how Monfly may contact you. You can change this anytime."
       >
-        <ul className="divide-y divide-border/50">
+        <ul className="divide-border/50 divide-y">
           <FormField
             control={form.control}
             name={userFormNames.productUpdatesOptIn}
@@ -257,7 +257,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
         title="Legal acknowledgements"
         description="Required to keep using Monfly. Read them anytime from your account."
       >
-        <ul className="divide-y divide-border/50">
+        <ul className="divide-border/50 divide-y">
           <FormField
             control={form.control}
             name={userFormNames.acceptTerms}
@@ -271,7 +271,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
                     I accept the{" "}
                     <Link
                       to="/terms"
-                      className="font-medium text-primary underline-offset-4 hover:underline"
+                      className="text-primary font-medium underline-offset-4 hover:underline"
                     >
                       Terms &amp; Conditions
                     </Link>
@@ -295,7 +295,7 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
                     I have read the{" "}
                     <Link
                       to="/privacy"
-                      className="font-medium text-primary underline-offset-4 hover:underline"
+                      className="text-primary font-medium underline-offset-4 hover:underline"
                     >
                       Privacy Policy
                     </Link>
@@ -330,15 +330,15 @@ function FormSection({
       <header className="flex items-start gap-3 md:sticky md:top-24 md:self-start">
         <span
           aria-hidden="true"
-          className="relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/0 text-primary ring-1 ring-primary/15 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent after:to-foreground/5"
+          className="from-primary/15 to-primary/0 text-primary ring-primary/15 after:to-foreground/5 relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ring-1 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent"
         >
           <Icon className="size-4" aria-hidden={true} />
         </span>
         <div className="min-w-0 space-y-1">
-          <h4 className="font-[family-name:var(--font-syne)] text-sm font-semibold tracking-tight text-foreground sm:text-base">
+          <h4 className="text-foreground font-[family-name:var(--font-syne)] text-sm font-semibold tracking-tight sm:text-base">
             {title}
           </h4>
-          <p className="text-xs leading-relaxed text-muted-foreground sm:text-[0.8rem]">
+          <p className="text-muted-foreground text-xs leading-relaxed sm:text-[0.8rem]">
             {description}
           </p>
         </div>
@@ -376,7 +376,7 @@ function PasswordField({
       <FormControl>
         <div className="relative">
           <LockKeyholeIcon
-            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
             aria-hidden="true"
           />
           <Input
@@ -392,7 +392,7 @@ function PasswordField({
             onClick={() => setVisible((v) => !v)}
             aria-label={visible ? "Hide password" : "Show password"}
             aria-pressed={visible}
-            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+            className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring/40 absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1.5 transition-colors focus-visible:ring-2 focus-visible:outline-none"
           >
             {visible ? (
               <EyeOffIcon className="size-4" />
@@ -442,12 +442,12 @@ function PasswordStrength({ value }: { value: string }) {
             key={i}
             className={cn(
               "h-1.5 flex-1 rounded-full transition-colors duration-300 motion-reduce:transition-none",
-              i < score ? tone : "bg-foreground/10"
+              i < score ? tone : "bg-foreground/10",
             )}
           />
         ))}
       </div>
-      <span className="text-xs font-medium text-muted-foreground">{label}</span>
+      <span className="text-muted-foreground text-xs font-medium">{label}</span>
     </div>
   );
 }
@@ -472,7 +472,7 @@ function SwitchRow({
         <FormLabel htmlFor={id} className="text-sm font-medium">
           {title}
         </FormLabel>
-        <p className="text-xs text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground text-xs">{description}</p>
       </div>
       <FormControl>
         <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
@@ -500,8 +500,8 @@ function ConsentRow({
   return (
     <FormItem
       className={cn(
-        "flex flex-row items-start gap-3 px-0 py-3 first:pt-0 last:pb-0 transition-colors",
-        error && "rounded-lg bg-destructive/5 px-3"
+        "flex flex-row items-start gap-3 px-0 py-3 transition-colors first:pt-0 last:pb-0",
+        error && "bg-destructive/5 rounded-lg px-3",
       )}
     >
       <FormControl>
@@ -517,11 +517,11 @@ function ConsentRow({
         <FormLabel htmlFor={id} className="text-sm font-medium">
           {title}
         </FormLabel>
-        <p id={`${id}-desc`} className="text-xs text-muted-foreground">
+        <p id={`${id}-desc`} className="text-muted-foreground text-xs">
           {description}
         </p>
         {error ? (
-          <p className="text-xs font-medium text-destructive" role="alert">
+          <p className="text-destructive text-xs font-medium" role="alert">
             {error}
           </p>
         ) : null}

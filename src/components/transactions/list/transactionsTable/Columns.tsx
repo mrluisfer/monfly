@@ -73,8 +73,8 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
           variant="outline"
           className={
             isIncome
-              ? "gap-1.5 border-primary/25 bg-primary/10 text-primary"
-              : "gap-1.5 border-destructive/25 bg-destructive/10 text-destructive"
+              ? "border-primary/25 bg-primary/10 text-primary gap-1.5"
+              : "border-destructive/25 bg-destructive/10 text-destructive gap-1.5"
           }
         >
           {isIncome ? (
@@ -111,10 +111,10 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
 
       return (
         <div className="max-w-[340px] space-y-1">
-          <div className="whitespace-normal break-words leading-5 font-medium text-foreground capitalize">
+          <div className="text-foreground leading-5 font-medium break-words whitespace-normal capitalize">
             {description || "No description"}
           </div>
-          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-xs">
             <span>
               Recorded{" "}
               {formatDistanceToNowStrict(createdAt, { addSuffix: true })}
@@ -184,7 +184,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
             {isIncome ? "+" : "-"}
             {formatted}
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             {isIncome ? "Money in" : "Money out"}
           </div>
         </div>
@@ -212,10 +212,10 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       const date = new Date(row.getValue("date") as Date);
       return (
         <div className="space-y-0.5">
-          <div className="text-sm font-medium text-foreground">
+          <div className="text-foreground text-sm font-medium">
             {format(date, "MMM d, yyyy")}
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             {formatRelativeTransactionDay(date)} • {format(date, "p")}
           </div>
         </div>
@@ -242,10 +242,10 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
 
       return (
         <div className="space-y-0.5">
-          <div className="text-sm font-medium text-foreground">
+          <div className="text-foreground text-sm font-medium">
             {formatDistanceToNowStrict(createdAt, { addSuffix: true })}
           </div>
-          <div className="text-xs text-muted-foreground">
+          <div className="text-muted-foreground text-xs">
             {wasEdited
               ? `Updated ${formatDistanceToNowStrict(updatedAt, {
                   addSuffix: true,

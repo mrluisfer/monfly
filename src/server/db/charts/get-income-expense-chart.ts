@@ -10,7 +10,7 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
     const sixMonthsAgo = new Date(
       now.getFullYear(),
       now.getMonth() - monthsToShow + 1,
-      1
+      1,
     );
 
     const transactions = await prismaClient.transaction.findMany({

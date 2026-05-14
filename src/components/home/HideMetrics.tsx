@@ -14,21 +14,18 @@ export const HideMetrics = ({ className }: { className?: string }) => {
 
   return (
     <Card
-      className={cn(
-        "rounded-xl border-0 p-0 shadow-none h-fit",
-        className
-      )}
+      className={cn("h-fit rounded-xl border-0 p-0 shadow-none", className)}
     >
       <CardContent className="p-4 sm:px-5 sm:py-3">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
               <div className="bg-muted flex size-10 shrink-0 items-center justify-center rounded-full">
-                <VisibilityIcon className="size-4 text-primary" />
+                <VisibilityIcon className="text-primary size-4" />
               </div>
               <div className="min-w-0">
                 <label
-                  className="mt-1 block cursor-pointer text-sm font-semibold tracking-tight text-foreground"
+                  className="text-foreground mt-1 block cursor-pointer text-sm font-semibold tracking-tight"
                   htmlFor="hide-metrics"
                 >
                   {hideMetrics
@@ -42,7 +39,7 @@ export const HideMetrics = ({ className }: { className?: string }) => {
           <div className="bg-muted flex items-center justify-between gap-3 rounded-full px-3 py-2 sm:justify-center">
             <Label
               htmlFor="hide-metrics"
-              className="text-xs font-medium text-muted-foreground"
+              className="text-muted-foreground text-xs font-medium"
             >
               Hide cards
             </Label>

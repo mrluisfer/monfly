@@ -103,14 +103,14 @@ function NavMain() {
                   aria-current={active ? "page" : undefined}
                   className={cn(
                     "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium",
-                    "transition-colors"
+                    "transition-colors",
                   )}
                   render={
                     disabled ? (
                       <button type="button" disabled aria-disabled="true">
                         <Icon aria-hidden="true" />
                         <span>{route.title}</span>
-                        <span className="ml-auto rounded-full border border-sidebar-border/60 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-sidebar-foreground/60">
+                        <span className="border-sidebar-border/60 text-sidebar-foreground/60 ml-auto rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase">
                           Soon
                         </span>
                       </button>
@@ -147,13 +147,10 @@ function NavSecondary() {
               aria-current={active ? "page" : undefined}
               className={cn(
                 "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium",
-                "transition-colors"
+                "transition-colors",
               )}
               render={
-                <Link
-                  to={SETTINGS_PATH}
-                  onClick={() => setOpenMobile(false)}
-                >
+                <Link to={SETTINGS_PATH} onClick={() => setOpenMobile(false)}>
                   <SettingsIcon aria-hidden="true" />
                   <span>Settings</span>
                 </Link>
@@ -250,7 +247,7 @@ function NavUser() {
               side={isMobile ? "top" : state === "collapsed" ? "right" : "top"}
               align="end"
               sideOffset={8}
-              className="w-[14rem] min-w-56 max-w-[calc(100vw-1rem)]"
+              className="w-[14rem] max-w-[calc(100vw-1rem)] min-w-56"
             >
               <DropdownMenuGroup>
                 <DropdownMenuLabel className="flex items-center gap-2 p-2">
@@ -280,9 +277,7 @@ function NavUser() {
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem
-                  render={
-                    <Link to={SETTINGS_PATH} onClick={handleNavigate} />
-                  }
+                  render={<Link to={SETTINGS_PATH} onClick={handleNavigate} />}
                 >
                   <SettingsIcon />
                   Settings

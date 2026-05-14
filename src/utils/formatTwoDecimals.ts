@@ -22,7 +22,7 @@ export function formatToTwoDecimals(value: number | string): {
 
 export function formatToTwoDecimalsWithCurrency(
   value: number | string,
-  currencySymbol: string = "$"
+  currencySymbol: string = "$",
 ): string {
   const formattedValue = formatToTwoDecimals(value);
   return formattedValue ? `${currencySymbol}${formattedValue}` : "";

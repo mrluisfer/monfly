@@ -63,10 +63,10 @@ function TermsRoute() {
           >
             <CardContent>
               <pillar.icon className={`size-5 ${pillar.tone}`} />
-              <p className="mt-2 text-sm font-semibold text-foreground">
+              <p className="text-foreground mt-2 text-sm font-semibold">
                 {pillar.title}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 {pillar.description}
               </p>
             </CardContent>
@@ -80,9 +80,8 @@ function TermsRoute() {
             <p>
               These Terms & Conditions ("Terms") form a binding agreement
               between you and Monfly ("we", "our", "us"). By signing up,
-              accessing, or using Monfly you confirm that you can lawfully
-              enter into this agreement and that you accept these Terms in
-              full.
+              accessing, or using Monfly you confirm that you can lawfully enter
+              into this agreement and that you accept these Terms in full.
             </p>
           </LegalSection>
 
@@ -91,24 +90,20 @@ function TermsRoute() {
               Monfly is a personal finance dashboard that lets you record
               transactions, organize categories, plan budgets, and visualize
               reports. Monfly does not provide financial, tax, investment, or
-              legal advice. Any decision you make based on the information
-              shown in the dashboard remains your own responsibility.
+              legal advice. Any decision you make based on the information shown
+              in the dashboard remains your own responsibility.
             </p>
           </LegalSection>
 
-          <LegalSection
-            id="accounts"
-            index={3}
-            title="Accounts & Eligibility"
-          >
+          <LegalSection id="accounts" index={3} title="Accounts & Eligibility">
             <p>
               You must provide accurate registration information and keep your
               credentials confidential. You are responsible for everything that
-              happens under your account, including activity by anyone you
-              share access with. Notify us immediately at{" "}
+              happens under your account, including activity by anyone you share
+              access with. Notify us immediately at{" "}
               <a
                 href="mailto:mrluisfeer@gmail.com"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="text-foreground font-medium underline-offset-4 hover:underline"
               >
                 mrluisfeer@gmail.com
               </a>{" "}
@@ -130,24 +125,20 @@ function TermsRoute() {
             </p>
           </LegalSection>
 
-          <LegalSection
-            id="acceptable-use"
-            index={5}
-            title="Acceptable Use"
-          >
+          <LegalSection id="acceptable-use" index={5} title="Acceptable Use">
             <p>You agree not to:</p>
             <ul className="ml-1 list-inside list-disc space-y-1.5">
               <li>
-                Reverse engineer, scrape, or attempt to bypass authentication
-                or rate limiting.
+                Reverse engineer, scrape, or attempt to bypass authentication or
+                rate limiting.
               </li>
               <li>
                 Use the service to store or transmit malicious code or content
                 that infringes the rights of others.
               </li>
               <li>
-                Resell, sublicense, or use Monfly to provide a competing
-                service without written permission.
+                Resell, sublicense, or use Monfly to provide a competing service
+                without written permission.
               </li>
               <li>
                 Attempt to access another user's workspace or aggregate user
@@ -170,18 +161,14 @@ function TermsRoute() {
             </p>
           </LegalSection>
 
-          <LegalSection
-            id="pricing"
-            index={7}
-            title="Pricing & Free Tier"
-          >
+          <LegalSection id="pricing" index={7} title="Pricing & Free Tier">
             <p>
-              Monfly currently offers free access while the product is in
-              active development. If we introduce paid plans, pricing will be
-              displayed on the{" "}
+              Monfly currently offers free access while the product is in active
+              development. If we introduce paid plans, pricing will be displayed
+              on the{" "}
               <a
                 href="/#pricing"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="text-foreground font-medium underline-offset-4 hover:underline"
               >
                 pricing section
               </a>{" "}
@@ -191,12 +178,11 @@ function TermsRoute() {
 
           <LegalSection id="termination" index={8} title="Termination">
             <p>
-              You may close your account at any time from the user settings.
-              We may suspend or terminate accounts that violate these Terms,
-              create risk for the platform, or are inactive for prolonged
-              periods. Upon termination your right to use the service ends,
-              but provisions that by their nature should survive will remain in
-              effect.
+              You may close your account at any time from the user settings. We
+              may suspend or terminate accounts that violate these Terms, create
+              risk for the platform, or are inactive for prolonged periods. Upon
+              termination your right to use the service ends, but provisions
+              that by their nature should survive will remain in effect.
             </p>
           </LegalSection>
 
@@ -225,19 +211,15 @@ function TermsRoute() {
 
           <LegalSection id="governing-law" index={11} title="Governing Law">
             <p>
-              These Terms are governed by the laws of the jurisdiction where
-              the operator of Monfly is established, without regard to its
-              conflict of laws rules. Any disputes will be resolved by the
-              competent courts of that jurisdiction, unless mandatory consumer
-              protection law dictates otherwise.
+              These Terms are governed by the laws of the jurisdiction where the
+              operator of Monfly is established, without regard to its conflict
+              of laws rules. Any disputes will be resolved by the competent
+              courts of that jurisdiction, unless mandatory consumer protection
+              law dictates otherwise.
             </p>
           </LegalSection>
 
-          <LegalSection
-            id="updates"
-            index={12}
-            title="Updates to These Terms"
-          >
+          <LegalSection id="updates" index={12} title="Updates to These Terms">
             <p>
               We may update these Terms from time to time. The "last updated"
               date reflects the most recent revision. Continued use of the
@@ -251,14 +233,14 @@ function TermsRoute() {
               Questions about these Terms? Reach out via the{" "}
               <Link
                 to="/contact"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="text-foreground font-medium underline-offset-4 hover:underline"
               >
                 contact page
               </Link>{" "}
               or email{" "}
               <a
                 href="mailto:mrluisfeer@gmail.com"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="text-foreground font-medium underline-offset-4 hover:underline"
               >
                 mrluisfeer@gmail.com
               </a>
@@ -273,13 +255,11 @@ function TermsRoute() {
           <div className="flex items-start gap-3">
             <CheckCircle2 className="mt-0.5 size-5 text-emerald-600 dark:text-emerald-300" />
             <div>
-              <p className="text-sm font-semibold text-foreground">
-                Summary
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Use Monfly for personal finance, keep your credentials safe,
-                and don't try to break things. We'll keep the service running
-                fairly and let you know before anything material changes.
+              <p className="text-foreground text-sm font-semibold">Summary</p>
+              <p className="text-muted-foreground mt-1 text-sm">
+                Use Monfly for personal finance, keep your credentials safe, and
+                don't try to break things. We'll keep the service running fairly
+                and let you know before anything material changes.
               </p>
             </div>
           </div>

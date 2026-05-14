@@ -22,7 +22,7 @@ interface ManagementTabsProps {
 /** Helper function to check if a specific tab is active */
 export const isTabActive = (
   currentTab: string,
-  targetTab: ManagementTab
+  targetTab: ManagementTab,
 ): boolean => {
   return currentTab === targetTab;
 };
@@ -32,7 +32,7 @@ export const getAvailableTabs = () => Object.values(ManagementTab);
 
 /** Hook to manage tab state externally */
 export const useManagementTabs = (
-  initialTab: ManagementTab = ManagementTab.CATEGORIES
+  initialTab: ManagementTab = ManagementTab.CATEGORIES,
 ) => {
   const [activeTab, setActiveTab] = useState<string>(initialTab);
 
@@ -82,7 +82,7 @@ export const ManagementTabs = ({
   className,
 }: ManagementTabsProps) => {
   const [internalActiveTab, setInternalActiveTab] = useState<string>(
-    ManagementTab.CATEGORIES
+    ManagementTab.CATEGORIES,
   );
 
   useEffect(() => {
@@ -110,7 +110,7 @@ export const ManagementTabs = ({
       <TabsList>
         <TabsTrigger
           value={ManagementTab.CATEGORIES}
-          className="capitalize gap-2"
+          className="gap-2 capitalize"
         >
           {isTabActive(currentTab, ManagementTab.CATEGORIES) ? (
             <FolderOpenIcon className="text-primary transition-colors duration-200" />

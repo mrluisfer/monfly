@@ -20,7 +20,7 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
         description: z.string().nullable().optional(),
         appliedToLoanId: z.string().uuid().nullable().optional(),
       }),
-    })
+    }),
   )
   .handler(async ({ data: { email, transaction } }) => {
     try {

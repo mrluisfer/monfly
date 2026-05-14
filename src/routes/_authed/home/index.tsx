@@ -29,7 +29,7 @@ import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 import { BalanceDetails } from "@/components/balance/BalanceDetails";
 
 const IncomeExpenseChart = lazy(
-  () => import("~/components/charts/IncomeExpenseChart")
+  () => import("~/components/charts/IncomeExpenseChart"),
 );
 
 export const Route = createFileRoute("/_authed/home/")({
@@ -52,7 +52,7 @@ function RouteComponent() {
   const { isPending, error } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
     queryFn: createSafeQuery(() =>
-      getUserByEmailServer({ data: { email: userEmail } })
+      getUserByEmailServer({ data: { email: userEmail } }),
     ),
     enabled: !!userEmail,
   });
@@ -107,7 +107,7 @@ function RouteComponent() {
                 "grid grid-cols-1 gap-6",
                 hideMetrics
                   ? "xl:grid-cols-1"
-                  : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]"
+                  : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]",
               )}
             >
               <m.div
@@ -159,7 +159,7 @@ function RouteComponent() {
             <div
               className={cn(
                 "grid grid-cols-1 gap-6",
-                "3xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]"
+                "3xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]",
               )}
             >
               <m.div
@@ -213,7 +213,7 @@ function DashboardSkeleton({ hideMetrics }: { hideMetrics: boolean }) {
           "grid gap-6",
           hideMetrics
             ? "xl:grid-cols-1"
-            : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]"
+            : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]",
         )}
       >
         <Skeleton className="h-[26rem] w-full rounded-2xl" />

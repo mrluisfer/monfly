@@ -96,18 +96,18 @@ const TotalBalance = () => {
     const previousPoint = recentPoints.at(-2) ?? null;
     const totalIncome = recentPoints.reduce(
       (sum, item) => sum + item.income,
-      0
+      0,
     );
     const totalExpenses = recentPoints.reduce(
       (sum, item) => sum + item.expense,
-      0
+      0,
     );
     const trendDelta =
       latestPoint && previousPoint ? latestPoint.net - previousPoint.net : null;
     const peakPoint =
       recentPoints.length > 0
         ? recentPoints.reduce((best, current) =>
-            current.net > best.net ? current : best
+            current.net > best.net ? current : best,
           )
         : null;
 
@@ -124,7 +124,7 @@ const TotalBalance = () => {
   if (error) {
     return (
       <section className="bg-card rounded-2xl p-5">
-        <p className="text-sm font-medium text-destructive">
+        <p className="text-destructive text-sm font-medium">
           Failed to load balance
         </p>
       </section>
@@ -157,8 +157,8 @@ const TotalBalance = () => {
         <div className="space-y-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-row items-center gap-4">
-              <div className="flex items-center gap-2 justify-start">
-                <p className="text-sm font-medium text-muted-foreground">
+              <div className="flex items-center justify-start gap-2">
+                <p className="text-muted-foreground text-sm font-medium">
                   Net total
                 </p>
                 <Badge className="capitalize">
@@ -167,7 +167,7 @@ const TotalBalance = () => {
                 </Badge>
               </div>
             </div>
-            <div className="flex items-center gap-2 justify-end">
+            <div className="flex items-center justify-end gap-2">
               <CopyButton
                 text={`$${totalBalance}`}
                 variant={"secondary"}
@@ -175,10 +175,10 @@ const TotalBalance = () => {
               >
                 <span className="hidden md:block">Copy balance</span>
               </CopyButton>
-              <span className="text-sm text-muted-foreground hidden md:block">
+              <span className="text-muted-foreground hidden text-sm md:block">
                 {summary.recentPoints.length} recorded periods
               </span>
-              <span className="text-sm text-muted-foreground md:hidden">
+              <span className="text-muted-foreground text-sm md:hidden">
                 {summary.recentPoints.length} records
               </span>
             </div>
@@ -207,7 +207,7 @@ const TotalBalance = () => {
                           duration: shouldReduceMotion ? 0 : 0.22,
                           ease: "easeOut",
                         }}
-                        className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+                        className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
                         aria-label="Total balance hidden"
                       >
                         $••••••
@@ -230,7 +230,7 @@ const TotalBalance = () => {
                           duration: shouldReduceMotion ? 0 : 0.22,
                           ease: "easeOut",
                         }}
-                        className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+                        className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
                       >
                         ${totalBalance}
                       </m.span>

@@ -12,6 +12,6 @@ export const useSonnerPosition = () => {
       position,
       setPosition: (nextPosition: SonnerPosition) => setPosition(nextPosition),
     }),
-    [position, setPosition]
+    [position, setPosition],
   );
 };

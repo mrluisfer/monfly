@@ -23,7 +23,7 @@ const Square = ({
     data-square
     className={cn(
       "bg-muted text-muted-foreground flex size-5 items-center justify-center rounded text-xs font-medium",
-      className
+      className,
     )}
     aria-hidden="true"
   >

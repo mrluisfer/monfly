@@ -26,7 +26,7 @@ const trustStats = [
   {
     label: "Data policy",
     value: "SOC aligned",
-    icon: <ShieldCheck className="size-4 text-primary" />,
+    icon: <ShieldCheck className="text-primary size-4" />,
   },
 ];
 
@@ -46,16 +46,16 @@ export function UserStatsSection() {
       <div className="mx-auto grid max-w-6xl gap-7 xl:grid-cols-[minmax(0,0.45fr)_minmax(0,0.55fr)] xl:items-center">
         <div className="space-y-6">
           <div className="space-y-3">
-            <p className="inline-flex rounded-full border border-border/75 bg-background/72 px-3 py-1 text-xs font-semibold uppercase tracking-[0.13em] text-muted-foreground">
+            <p className="border-border/75 bg-background/72 text-muted-foreground inline-flex rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.13em] uppercase">
               Why teams switch
             </p>
             <h2
               id="features-title"
-              className="text-balance font-[family-name:var(--font-syne)] text-3xl font-semibold leading-[1.08] sm:text-4xl"
+              className="font-[family-name:var(--font-syne)] text-3xl leading-[1.08] font-semibold text-balance sm:text-4xl"
             >
               Replace reactive tracking with live financial direction
             </h2>
-            <p className="text-pretty text-sm text-muted-foreground sm:text-base">
+            <p className="text-muted-foreground text-sm text-pretty sm:text-base">
               More than 200,000 users rely on Monfly to monitor spending, flag
               risk, and align day-to-day actions with long-term targets.
             </p>
@@ -85,7 +85,7 @@ export function UserStatsSection() {
         >
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -right-6 top-10 size-48 rounded-full bg-[radial-gradient(circle,#22c55e_0%,transparent_72%)] opacity-22 blur-2xl"
+            className="pointer-events-none absolute top-10 -right-6 size-48 rounded-full bg-[radial-gradient(circle,#22c55e_0%,transparent_72%)] opacity-22 blur-2xl"
           />
           <div className="relative">
             <Safari
@@ -101,13 +101,13 @@ export function UserStatsSection() {
               <Card key={label}>
                 <CardHeader>
                   <CardTitle>
-                    <p className="uppercase tracking-[0.12em] text-muted-foreground">
+                    <p className="text-muted-foreground tracking-[0.12em] uppercase">
                       {label}
                     </p>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="font-semibold text-lg">{value}</p>
+                  <p className="text-lg font-semibold">{value}</p>
                 </CardContent>
               </Card>
             ))}
@@ -130,13 +130,13 @@ function StatCard({
   return (
     <Card>
       <CardHeader>
-        <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.12em] text-muted-foreground">
+        <span className="text-muted-foreground inline-flex items-center gap-2 text-xs tracking-[0.12em] uppercase">
           {children}
           <CardTitle>{label}</CardTitle>
         </span>
       </CardHeader>
       <CardContent>
-        <p className="mt-2 text-xl font-semibold text-foreground">{value}</p>
+        <p className="text-foreground mt-2 text-xl font-semibold">{value}</p>
       </CardContent>
     </Card>
   );

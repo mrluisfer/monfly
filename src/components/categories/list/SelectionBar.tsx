@@ -31,11 +31,11 @@ export const SelectionBar = ({
 }: SelectionBarProps) => {
   const filteredCategoryIds = useMemo(
     () => filteredCategories.map((c) => c.id),
-    [filteredCategories]
+    [filteredCategories],
   );
   const selectedFilteredCount = useMemo(
     () => filteredCategoryIds.filter((id) => selectedSet.has(id)).length,
-    [filteredCategoryIds, selectedSet]
+    [filteredCategoryIds, selectedSet],
   );
 
   const total = isFiltering ? filteredCategories.length : totalCategories;
@@ -67,10 +67,10 @@ export const SelectionBar = ({
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 rounded-2xl border bg-card px-3 py-2 transition-colors",
+        "bg-card flex items-center justify-between gap-3 rounded-2xl border px-3 py-2 transition-colors",
         hasAny
           ? "border-primary/30 bg-primary/[0.04]"
-          : "border-border/60 bg-muted/30"
+          : "border-border/60 bg-muted/30",
       )}
     >
       <div className="flex items-center gap-2.5">

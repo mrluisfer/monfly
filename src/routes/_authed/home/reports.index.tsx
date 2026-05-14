@@ -6,13 +6,13 @@ import { transactionTypes } from "~/constants/transaction-types";
 import { BarChartIcon } from "lucide-react";
 
 const IncomeExpenseChart = lazy(
-  () => import("~/components/charts/IncomeExpenseChart")
+  () => import("~/components/charts/IncomeExpenseChart"),
 );
 const ChartTransactionsByMonth = lazy(
-  () => import("~/components/charts/ChartTransactionsByMonth")
+  () => import("~/components/charts/ChartTransactionsByMonth"),
 );
 const ChartByCategoryRadar = lazy(
-  () => import("~/components/charts/ChartByCategoryRadar")
+  () => import("~/components/charts/ChartByCategoryRadar"),
 );
 
 export const Route = createFileRoute("/_authed/home/reports/")({

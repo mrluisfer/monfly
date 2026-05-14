@@ -179,12 +179,12 @@ export function SpendingAlertBadge({
 
   const spent = useMemo(
     () => Math.max(0, toSafeNumber(spentData)),
-    [spentData]
+    [spentData],
   );
 
   const balance = useMemo(
     () => Math.max(0, toSafeNumber(userData?.data?.totalBalance)),
-    [userData?.data?.totalBalance]
+    [userData?.data?.totalBalance],
   );
 
   const { status, percent } = useMemo(() => {
@@ -224,7 +224,7 @@ export function SpendingAlertBadge({
 
   const remaining = useMemo(
     () => Math.max(0, balance - spent),
-    [balance, spent]
+    [balance, spent],
   );
 
   if (!userEmail || !isActive) {
@@ -318,7 +318,7 @@ function SpendingTooltip({
       <p className="text-[10px]">{config.description}</p>
 
       {canShowDetails && (
-        <div className="mt-1 space-y-1 border-t border-border pt-1">
+        <div className="border-border mt-1 space-y-1 border-t pt-1">
           <div className="flex items-center justify-between gap-4 text-[10px]">
             <span>Total budget:</span>
             <span className="font-mono font-semibold">
@@ -330,7 +330,7 @@ function SpendingTooltip({
             <span
               className={cn(
                 "font-mono font-semibold",
-                percent >= 80 && "text-destructive"
+                percent >= 80 && "text-destructive",
               )}
             >
               {formatCurrency(spent)}
@@ -341,13 +341,13 @@ function SpendingTooltip({
             <span
               className={cn(
                 "font-mono font-semibold",
-                remaining > 0 ? "text-foreground" : "text-destructive"
+                remaining > 0 ? "text-foreground" : "text-destructive",
               )}
             >
               {formatCurrency(remaining)}
             </span>
           </div>
-          <div className="flex items-center justify-between gap-4 border-t border-border pt-1 text-[10px]">
+          <div className="border-border flex items-center justify-between gap-4 border-t pt-1 text-[10px]">
             <span>Usage:</span>
             <span
               className={cn(
@@ -355,7 +355,7 @@ function SpendingTooltip({
                 percent < 50 && "text-foreground",
                 percent >= 50 && percent < 80 && "text-secondary-foreground",
                 percent >= 80 && percent < 100 && "text-accent-foreground",
-                percent >= 100 && "text-destructive"
+                percent >= 100 && "text-destructive",
               )}
             >
               {percent.toFixed(1)}%
@@ -365,7 +365,7 @@ function SpendingTooltip({
       )}
 
       {(spentError || userError) && (
-        <p className="mt-1 border-t border-border pt-1 text-[10px] text-destructive">
+        <p className="border-border text-destructive mt-1 border-t pt-1 text-[10px]">
           {spentError instanceof Error
             ? spentError.message
             : userError instanceof Error

@@ -51,9 +51,9 @@ const CategoryItem = ({
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-      <div className="flex w-full min-w-0 items-center justify-between group">
+      <div className="group flex w-full min-w-0 items-center justify-between">
         <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-          <div className="flex size-8 shrink-0 items-center justify-center rounded-4xl bg-primary/10 text-primary">
+          <div className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-4xl">
             {getCategoryIconByName(category.icon, {
               className: "size-4",
             })}
@@ -80,7 +80,7 @@ const CategoryItem = ({
                 className={cn(
                   "rounded-4xl opacity-60 transition-all",
                   "group-hover:opacity-100",
-                  "hover:bg-primary/10 hover:text-primary"
+                  "hover:bg-primary/10 hover:text-primary",
                 )}
               >
                 <Pencil className="size-3.5" />
@@ -110,7 +110,7 @@ function EditDialog({
     <DialogContent className="sm:max-w-md">
       <DialogHeader className="space-y-3">
         <DialogTitle className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-4xl bg-primary/10 text-primary">
+          <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-4xl">
             {getCategoryIconByName(category.icon, {
               className: "size-4",
             })}

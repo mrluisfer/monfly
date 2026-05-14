@@ -10,7 +10,7 @@ type NumberFormatBadgeProps = {
 export const NumberFormatBadge = ({ className }: NumberFormatBadgeProps) => {
   const { format } = useNumberFormat();
   const activeOption = NUMBER_FORMAT_OPTIONS.find(
-    (option) => option.id === format
+    (option) => option.id === format,
   );
 
   return (

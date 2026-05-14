@@ -29,7 +29,7 @@ export async function ensureDatabaseConnection(): Promise<void> {
 
 export async function gracefulDatabaseOperation<T>(
   operation: () => Promise<T>,
-  retries = 3
+  retries = 3,
 ): Promise<T> {
   for (let i = 0; i < retries; i++) {
     try {
@@ -44,7 +44,7 @@ export async function gracefulDatabaseOperation<T>(
 
       // Wait before retry with exponential backoff
       await new Promise((resolve) =>
-        setTimeout(resolve, 1000 * Math.pow(2, i))
+        setTimeout(resolve, 1000 * Math.pow(2, i)),
       );
     }
   }

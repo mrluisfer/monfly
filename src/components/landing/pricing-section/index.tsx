@@ -96,25 +96,25 @@ const valueTiles: ValueTile[] = [
     title: "Setup rápido",
     meta: "< 3 min",
     description: "Configura categorías, objetivos y límites sin fricción.",
-    icon: <Clock3 className="size-4 text-primary" />,
+    icon: <Clock3 className="text-primary size-4" />,
   },
   {
     title: "Visión accionable",
     meta: "Realtime",
     description: "Detecta desviaciones antes de que impacten tu mes.",
-    icon: <TrendingUp className="size-4 text-primary" />,
+    icon: <TrendingUp className="text-primary size-4" />,
   },
   {
     title: "Control granular",
     meta: "Flexible",
     description: "Estructura gastos e ingresos por contexto real de uso.",
-    icon: <LayoutGrid className="size-4 text-primary" />,
+    icon: <LayoutGrid className="text-primary size-4" />,
   },
   {
     title: "Seguridad",
     meta: "Protected",
     description: "Sesiones cifradas con flujos seguros por defecto.",
-    icon: <ShieldCheck className="size-4 text-primary" />,
+    icon: <ShieldCheck className="text-primary size-4" />,
   },
 ];
 
@@ -128,35 +128,35 @@ export function PricingSection() {
 
   const selectedPlanData = useMemo(
     () => planOptions.find((p) => p.id === selectedPlan) ?? planOptions[1],
-    [selectedPlan]
+    [selectedPlan],
   );
 
   return (
     <section
       id="pricing"
       aria-labelledby="pricing-title"
-      className="px-4 pb-18 pt-10 sm:px-6 md:pb-24 md:pt-14"
+      className="px-4 pt-10 pb-18 sm:px-6 md:pt-14 md:pb-24"
     >
-      <div className={`landing-fade-up-scroll mx-auto max-w-6xl in-view`}>
-        <div className="landing-glass-panel relative overflow-hidden rounded-[2rem] border border-border/70 px-4 py-8 sm:px-8 md:px-10 md:py-11">
+      <div className={`landing-fade-up-scroll in-view mx-auto max-w-6xl`}>
+        <div className="landing-glass-panel border-border/70 relative overflow-hidden rounded-[2rem] border px-4 py-8 sm:px-8 md:px-10 md:py-11">
           <DotPattern
-            className="opacity-35 [mask-image:radial-gradient(650px_circle_at_top,white,transparent)]"
+            className="[mask-image:radial-gradient(650px_circle_at_top,white,transparent)] opacity-35"
             glow
           />
 
           <div className="relative z-10 space-y-7">
             <div className="mx-auto max-w-3xl space-y-3 text-center">
-              <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+              <p className="border-primary/20 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.12em] uppercase">
                 <Sparkles className="size-3.5" />
                 Flexible Plans
               </p>
               <h2
                 id="pricing-title"
-                className="text-balance font-[family-name:var(--font-syne)] text-3xl font-semibold sm:text-4xl md:text-5xl"
+                className="font-[family-name:var(--font-syne)] text-3xl font-semibold text-balance sm:text-4xl md:text-5xl"
               >
                 Pricing designed for speed, clarity, and financial control
               </h2>
-              <p className="text-pretty text-muted-foreground md:text-lg">
+              <p className="text-muted-foreground text-pretty md:text-lg">
                 Start lean, upgrade as your planning workflow grows, and keep
                 one coherent money system across devices.
               </p>
@@ -164,7 +164,7 @@ export function PricingSection() {
 
             <div
               aria-label="Billing cycle switch"
-              className="mx-auto flex w-fit items-center gap-3 rounded-full border border-border/70 bg-background/72 px-3 py-2"
+              className="border-border/70 bg-background/72 mx-auto flex w-fit items-center gap-3 rounded-full border px-3 py-2"
             >
               <BillingLabel active={!isAnnual} className="justify-end">
                 Monthly
@@ -179,7 +179,7 @@ export function PricingSection() {
                 <Badge
                   className={cn(
                     isAnnual ? "" : "bg-muted",
-                    "transition-colors duration-150 ease-out"
+                    "transition-colors duration-150 ease-out",
                   )}
                 >
                   Save 15%
@@ -200,17 +200,17 @@ export function PricingSection() {
                 >
                   <CardContent>
                     <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex size-7 items-center justify-center rounded-lg border border-border/65 bg-background/80">
+                      <span className="border-border/65 bg-background/80 inline-flex size-7 items-center justify-center rounded-lg border">
                         {tile.icon}
                       </span>
-                      <span className="text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+                      <span className="text-muted-foreground text-[0.68rem] font-semibold tracking-[0.1em] uppercase">
                         {tile.meta}
                       </span>
                     </div>
-                    <h3 className="mt-3 text-sm font-semibold text-foreground">
+                    <h3 className="text-foreground mt-3 text-sm font-semibold">
                       {tile.title}
                     </h3>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                    <p className="text-muted-foreground mt-1 text-xs">
                       {tile.description}
                     </p>
                   </CardContent>
@@ -218,8 +218,8 @@ export function PricingSection() {
               ))}
             </div>
 
-            <div className="flex flex-col gap-3 rounded-4xl border border-border/70 bg-background/72 p-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-muted-foreground">
+            <div className="border-border/70 bg-background/72 flex flex-col gap-3 rounded-4xl border p-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-muted-foreground text-sm">
                 Not sure which plan fits best? Compare features side by side and
                 choose the one matching your workflow.
               </p>
@@ -233,7 +233,7 @@ export function PricingSection() {
                   }
                 />
 
-                <DialogContent className="w-[min(34rem,calc(100vw-1.5rem))] rounded-2xl border border-border/75 bg-background/96 p-4 sm:p-5">
+                <DialogContent className="border-border/75 bg-background/96 w-[min(34rem,calc(100vw-1.5rem))] rounded-2xl border p-4 sm:p-5">
                   <DialogHeader className="space-y-2">
                     <DialogTitle className="font-[family-name:var(--font-syne)] text-xl">
                       Choose your best plan
@@ -266,14 +266,14 @@ export function PricingSection() {
                             "relative block cursor-pointer rounded-xl border p-3.5 transition-colors duration-150",
                             active
                               ? "border-primary/45 bg-background"
-                              : "border-border/70 bg-background/72 hover:border-border"
+                              : "border-border/70 bg-background/72 hover:border-border",
                           )}
                         >
                           <div
                             className={cn(
                               "pointer-events-none absolute inset-0 rounded-xl bg-linear-to-br opacity-0 transition-opacity duration-150",
                               plan.accent,
-                              active && "opacity-100"
+                              active && "opacity-100",
                             )}
                           />
                           <div className="relative flex items-start gap-3">
@@ -285,14 +285,14 @@ export function PricingSection() {
                             <div className="min-w-0 flex-1">
                               <div className="flex flex-wrap items-start justify-between gap-2">
                                 <div>
-                                  <p className="text-sm font-semibold text-foreground">
+                                  <p className="text-foreground text-sm font-semibold">
                                     {plan.name}
                                   </p>
-                                  <p className="text-xs text-muted-foreground">
+                                  <p className="text-muted-foreground text-xs">
                                     {plan.description}
                                   </p>
                                 </div>
-                                <p className="text-sm font-semibold text-foreground">
+                                <p className="text-foreground text-sm font-semibold">
                                   {displayedPrice}
                                 </p>
                               </div>
@@ -301,9 +301,9 @@ export function PricingSection() {
                                 {plan.features.map((feature) => (
                                   <li
                                     key={feature}
-                                    className="flex items-start gap-1.5 text-xs text-muted-foreground"
+                                    className="text-muted-foreground flex items-start gap-1.5 text-xs"
                                   >
-                                    <Check className="mt-0.5 size-3.5 text-primary" />
+                                    <Check className="text-primary mt-0.5 size-3.5" />
                                     <span>{feature}</span>
                                   </li>
                                 ))}
@@ -315,7 +315,7 @@ export function PricingSection() {
                     })}
                   </RadioGroup>
 
-                  <DialogFooter className="-mx-0 -mb-0 mt-2 border-0 bg-transparent p-0 sm:flex-row">
+                  <DialogFooter className="-mx-0 mt-2 -mb-0 border-0 bg-transparent p-0 sm:flex-row">
                     <DialogClose
                       render={
                         <Button

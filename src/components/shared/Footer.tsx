@@ -25,7 +25,7 @@ const Footer = () => {
       <Separator className="bg-border/60 dark:bg-border/40 mb-4 sm:mb-5" />
 
       <div className="flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <p className="flex flex-wrap items-center gap-1.5 justify-center md:justify-start">
+        <p className="flex flex-wrap items-center justify-center gap-1.5 md:justify-start">
           <span className="text-foreground font-semibold tracking-tight">
             Monfly
           </span>
@@ -50,7 +50,7 @@ const Footer = () => {
             <Link
               key={to}
               to={to}
-              className="group hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:ring-ring dark:hover:bg-accent/60 inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 sm:px-2.5"
+              className="group hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:ring-ring dark:hover:bg-accent/60 inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:px-2.5"
               activeProps={{
                 className:
                   "text-foreground bg-accent/70 dark:bg-accent/40 dark:text-foreground",
@@ -77,7 +77,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="View source on GitHub"
-                  className="hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:ring-ring dark:hover:bg-accent/60 ml-auto inline-flex size-8 items-center justify-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 sm:ml-0"
+                  className="hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:ring-ring dark:hover:bg-accent/60 ml-auto inline-flex size-8 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:ml-0"
                 >
                   <GitBranchIcon className="size-4" aria-hidden />
                 </a>

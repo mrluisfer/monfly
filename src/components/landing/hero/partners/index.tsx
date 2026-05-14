@@ -54,7 +54,7 @@ export const Partners = () => {
         <li
           key={partner.name}
           aria-label={partner.name}
-          className="inline-flex h-9 items-center justify-center rounded-full border border-border/60 bg-background/85 px-3 transition-colors duration-150 ease-out hover:border-primary/30 hover:bg-background"
+          className="border-border/60 bg-background/85 hover:border-primary/30 hover:bg-background inline-flex h-9 items-center justify-center rounded-full border px-3 transition-colors duration-150 ease-out"
         >
           {partner.icon ? (
             partner.icon

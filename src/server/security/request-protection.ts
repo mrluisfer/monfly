@@ -34,7 +34,10 @@ function getRateLimitBuckets() {
   return globalScope[RATE_LIMIT_BUCKETS_SYMBOL];
 }
 
-function cleanupExpiredBuckets(buckets: Map<string, RateLimitBucket>, now: number) {
+function cleanupExpiredBuckets(
+  buckets: Map<string, RateLimitBucket>,
+  now: number,
+) {
   if (buckets.size < RATE_LIMIT_MAX_BUCKETS) {
     return;
   }
@@ -131,7 +134,7 @@ export async function resolveSessionEmail(expectedEmail?: string) {
 
 export function toSecurityErrorResponse(
   error: unknown,
-  fallbackMessage = "Security policy blocked the request"
+  fallbackMessage = "Security policy blocked the request",
 ): ApiResponse<null> | null {
   if (!(error instanceof SecurityError)) {
     return null;

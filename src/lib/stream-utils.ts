@@ -16,14 +16,14 @@ export class StreamTimeoutError extends Error {
 export function withTimeout<T>(
   promise: Promise<T>,
   timeoutMs: number = 10000,
-  timeoutMessage?: string
+  timeoutMessage?: string,
 ): Promise<T> {
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       reject(
         new StreamTimeoutError(
-          timeoutMessage || `Operation timed out after ${timeoutMs}ms`
-        )
+          timeoutMessage || `Operation timed out after ${timeoutMs}ms`,
+        ),
       );
     }, timeoutMs);
 
@@ -45,7 +45,7 @@ export function withTimeout<T>(
  */
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
@@ -59,7 +59,7 @@ export function debounce<T extends (...args: any[]) => any>(
  */
 export function createSafeQuery<TData = unknown>(
   queryFn: () => Promise<TData>,
-  timeoutMs: number = 8000
+  timeoutMs: number = 8000,
 ) {
   return async () => {
     try {
@@ -81,7 +81,7 @@ export function createSafeQuery<TData = unknown>(
       ) {
         console.warn(
           "Stream controller error detected, preventing cascade:",
-          error.message
+          error.message,
         );
         throw new Error("Connection issue - please refresh the page");
       }

@@ -32,7 +32,7 @@ export function DotPattern({
       aria-hidden="true"
       className={cn(
         "pointer-events-none absolute inset-0 h-full w-full",
-        className
+        className,
       )}
       {...props}
     >

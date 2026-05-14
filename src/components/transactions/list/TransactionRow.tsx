@@ -111,16 +111,16 @@ export function TransactionRow({
                 "group flex items-center gap-3 rounded-2xl px-3.5 py-3.5 select-none",
                 "bg-muted/50 hover:bg-muted",
                 "transition-colors duration-200",
-                "active:scale-[0.98] active:transition-transform active:duration-100"
+                "active:scale-[0.98] active:transition-transform active:duration-100",
               )}
             >
               <div
                 className={cn(
-                  "flex md:size-11 size-8 shrink-0 items-center justify-center rounded-xl",
-                  "transition-shadow duration-200 shadow-[0_18px_28px_-24px_rgba(15,23,42,0.55)]",
+                  "flex size-8 shrink-0 items-center justify-center rounded-xl md:size-11",
+                  "shadow-[0_18px_28px_-24px_rgba(15,23,42,0.55)] transition-shadow duration-200",
                   isIncome
                     ? "bg-primary/10 text-primary"
-                    : "bg-destructive/10 text-destructive"
+                    : "bg-destructive/10 text-destructive",
                 )}
               >
                 {isIncome ? (
@@ -131,17 +131,17 @@ export function TransactionRow({
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold leading-tight tracking-tight text-foreground">
+                <p className="text-foreground truncate text-sm leading-tight font-semibold tracking-tight">
                   {transaction.description || "No description"}
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground/78 capitalize">
-                    <TagIcon className="size-3 text-muted-foreground/50" />
+                  <span className="text-muted-foreground/78 inline-flex items-center gap-1.5 text-xs capitalize">
+                    <TagIcon className="text-muted-foreground/50 size-3" />
                     {category}
                   </span>
-                  <span className="h-1 w-1 rounded-full bg-border/80" />
-                  <span className="inline-flex items-center gap-1.5 text-xs text-muted-foreground/78">
-                    <CalendarIcon className="size-3 text-muted-foreground/50" />
+                  <span className="bg-border/80 h-1 w-1 rounded-full" />
+                  <span className="text-muted-foreground/78 inline-flex items-center gap-1.5 text-xs">
+                    <CalendarIcon className="text-muted-foreground/50 size-3" />
                     {new Date(transaction.date).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -149,9 +149,9 @@ export function TransactionRow({
                   </span>
                   {(transaction.loanCount ?? 0) > 0 && (
                     <>
-                      <span className="h-1 w-1 rounded-full bg-border/80" />
+                      <span className="bg-border/80 h-1 w-1 rounded-full" />
                       <span
-                        className="inline-flex items-center gap-1 rounded-full border border-warning/30 bg-warning/10 px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-warning-foreground dark:text-warning"
+                        className="border-warning/30 bg-warning/10 text-warning-foreground dark:text-warning inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase"
                         title="This transaction is tracked as a loan"
                       >
                         <HandCoinsIcon className="size-3" aria-hidden="true" />
@@ -162,13 +162,13 @@ export function TransactionRow({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex shrink-0 items-center gap-2">
                 <span
                   className={cn(
                     "rounded-full px-3 py-1 text-sm font-semibold tabular-nums",
                     isIncome
                       ? "bg-primary/10 text-primary"
-                      : "bg-destructive/10 text-destructive"
+                      : "bg-destructive/10 text-destructive",
                   )}
                 >
                   {isIncome ? "+" : "-"}
@@ -183,12 +183,7 @@ export function TransactionRow({
           }
         />
 
-        <ContextMenuContent
-          className="
-            w-56 space-y-2
-            animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200
-          "
-        >
+        <ContextMenuContent className="animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 w-56 space-y-2 duration-200">
           <ContextMenuGroup>
             <ContextMenuLabel>Actions for transaction</ContextMenuLabel>
           </ContextMenuGroup>

@@ -22,7 +22,7 @@ export const putTransactionByIdServer = createServerFn({ method: "POST" })
         date: z.date(),
         appliedToLoanId: z.string().uuid().nullable().optional(),
       }),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     try {

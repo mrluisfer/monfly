@@ -39,7 +39,7 @@ export default function TransactionsList() {
         getTransactionByEmailServer({
           data: { email: userEmail, limit },
         }),
-      8000
+      8000,
     ),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 2,
@@ -53,13 +53,13 @@ export default function TransactionsList() {
 
   return (
     <TransactionHoverProvider>
-      <div className="hidden md:block mt-4">
+      <div className="mt-4 hidden md:block">
         <PageHeader
           icon={<WalletIcon className="size-5" aria-hidden="true" />}
           title="Transactions"
           description="Search, filter, edit, or add transactions from one place."
           actions={
-            <div className="flex gap-4 items-center justify-end">
+            <div className="flex items-center justify-end gap-4">
               <Badge variant={"default"}>
                 {total} {total === 1 ? "record" : "records"}
               </Badge>
@@ -91,8 +91,8 @@ export default function TransactionsList() {
             </div>
           }
         />
-        <Card className="min-h-[30rem] rounded-2xl border-2 p-0 shadow-none mt-2">
-          <CardContent className="px-5 pb-5 pt-3">
+        <Card className="mt-2 min-h-[30rem] rounded-2xl border-2 p-0 shadow-none">
+          <CardContent className="px-5 pt-3 pb-5">
             <DesktopContent
               userEmail={userEmail}
               isPending={isPending}
@@ -108,7 +108,7 @@ export default function TransactionsList() {
       </div>
 
       <div className="space-y-4 md:hidden">
-        <section className="bg-card rounded-2xl lg:p-4 py-4 px-2">
+        <section className="bg-card rounded-2xl px-2 py-4 lg:p-4">
           <MobileHeader
             total={total}
             isPending={isPending}

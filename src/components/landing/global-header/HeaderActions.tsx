@@ -8,12 +8,12 @@ export function HeaderActions() {
       <Button
         variant="ghost"
         size="lg"
-        className="hidden rounded-full px-3 text-foreground/80 hover:bg-background/85 hover:text-foreground sm:inline-flex"
+        className="text-foreground/80 hover:bg-background/85 hover:text-foreground hidden rounded-full px-3 sm:inline-flex"
         render={<Link to="/login">Sign In</Link>}
       />
       <Button
         size="lg"
-        className="rounded-full bg-primary px-3 text-primary-foreground shadow-[0_18px_30px_-22px_rgba(15,118,110,0.72)] transition-colors duration-150 ease-out hover:bg-primary/90"
+        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-3 shadow-[0_18px_30px_-22px_rgba(15,118,110,0.72)] transition-colors duration-150 ease-out"
         render={
           <Link to="/signup" className="inline-flex items-center gap-1.5">
             <span className="hidden sm:inline">Launch App</span>

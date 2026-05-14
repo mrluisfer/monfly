@@ -9,14 +9,14 @@ export const FooterNavigation = () => {
     <div className="grid gap-8 md:grid-cols-[240px_1fr] md:items-start">
       <div className="flex flex-col gap-4">
         <HeaderLogo />
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           © {new Date().getFullYear()} Monfly. All rights reserved.
         </p>
-        <ul className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+        <ul className="text-muted-foreground flex flex-wrap gap-x-3 gap-y-1 text-xs">
           <li>
             <Link
               to="/privacy"
-              className="transition-colors hover:text-foreground"
+              className="hover:text-foreground transition-colors"
             >
               Privacy
             </Link>
@@ -25,7 +25,7 @@ export const FooterNavigation = () => {
           <li>
             <Link
               to="/terms"
-              className="transition-colors hover:text-foreground"
+              className="hover:text-foreground transition-colors"
             >
               Terms
             </Link>
@@ -34,7 +34,7 @@ export const FooterNavigation = () => {
           <li>
             <Link
               to="/contact"
-              className="transition-colors hover:text-foreground"
+              className="hover:text-foreground transition-colors"
             >
               Contact
             </Link>
@@ -42,18 +42,18 @@ export const FooterNavigation = () => {
         </ul>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 text-sm text-muted-foreground sm:flex sm:justify-between sm:gap-8">
+      <div className="text-muted-foreground grid grid-cols-2 gap-6 text-sm sm:flex sm:justify-between sm:gap-8">
         {navigationLinks.map((link) => (
           <div key={link.label} className="flex flex-col gap-2">
             {link.href ? (
               <Button
                 variant="link"
                 size="lg"
-                className="h-auto justify-start px-0 py-0 text-left font-semibold text-foreground no-underline hover:text-primary hover:no-underline"
+                className="text-foreground hover:text-primary h-auto justify-start px-0 py-0 text-left font-semibold no-underline hover:no-underline"
                 render={<Link to={link.href}>{link.label}</Link>}
               />
             ) : (
-              <p className="font-semibold text-foreground">{link.label}</p>
+              <p className="text-foreground font-semibold">{link.label}</p>
             )}
 
             {link.submenu && (
@@ -63,7 +63,7 @@ export const FooterNavigation = () => {
                     <Button
                       variant="link"
                       size="lg"
-                      className="h-auto justify-start px-0 py-0 text-xs text-muted-foreground no-underline hover:text-foreground hover:no-underline"
+                      className="text-muted-foreground hover:text-foreground h-auto justify-start px-0 py-0 text-xs no-underline hover:no-underline"
                       render={<Link to={item.href}>{item.label}</Link>}
                     />
                   </li>

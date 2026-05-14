@@ -271,7 +271,7 @@ function formatOperationValue(value: number): string {
 
 function formatDeltaPercentage(
   deltaValue: number,
-  baselineValue: number
+  baselineValue: number,
 ): string | null {
   if (baselineValue === 0) {
     return null;
@@ -284,7 +284,7 @@ function formatDeltaPercentage(
 function computeBinaryResult(
   leftValue: number,
   rightValue: number,
-  operator: BinaryOperator
+  operator: BinaryOperator,
 ): number | null {
   switch (operator) {
     case "+":
@@ -307,7 +307,7 @@ function computeBinaryResult(
 
 function computeUnaryResult(
   value: number,
-  token: UnaryToken
+  token: UnaryToken,
 ): { result: number | null; statement: string } {
   if (token === "SQUARE") {
     return {
@@ -371,7 +371,7 @@ function getButtonClassName(role: ButtonRole) {
 
 function parseClipboardNumber(
   rawText: string,
-  formatPreference: NumberFormatId
+  formatPreference: NumberFormatId,
 ): number | null {
   if (!rawText) {
     return null;
@@ -451,7 +451,7 @@ export function BalanceCalculator() {
   const [display, setDisplay] = useState("0");
   const [expression, setExpression] = useState("Initial balance");
   const [pendingOperator, setPendingOperator] = useState<BinaryOperator | null>(
-    null
+    null,
   );
   const [storedValue, setStoredValue] = useState<number | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
@@ -459,7 +459,7 @@ export function BalanceCalculator() {
   const [baselineBalance, setBaselineBalance] = useState(0);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [statusMessage, setStatusMessage] = useState(
-    "Calculator ready to simulate scenarios."
+    "Calculator ready to simulate scenarios.",
   );
 
   const initialBalanceRef = useRef(0);
@@ -508,7 +508,7 @@ export function BalanceCalculator() {
         return [nextEntry, ...previousHistory].slice(0, HISTORY_LIMIT);
       });
     },
-    []
+    [],
   );
 
   const setErrorState = useCallback((message: string) => {
@@ -549,7 +549,7 @@ export function BalanceCalculator() {
         setBaselineBalance(baselineNumber);
       }
     },
-    [baselineBalance, pushHistory]
+    [baselineBalance, pushHistory],
   );
 
   const handleDigit = useCallback(
@@ -590,7 +590,7 @@ export function BalanceCalculator() {
       setWaitingForOperand(false);
       setStatusMessage(`Number ${digit} added.`);
     },
-    [waitingForOperand]
+    [waitingForOperand],
   );
 
   const handleDecimal = useCallback(() => {
@@ -636,7 +636,7 @@ export function BalanceCalculator() {
     setDisplay((previousDisplay) =>
       previousDisplay.startsWith("-")
         ? previousDisplay.slice(1)
-        : `-${previousDisplay}`
+        : `-${previousDisplay}`,
     );
     setStatusMessage("Sign toggled.");
   }, [display]);
@@ -680,7 +680,7 @@ export function BalanceCalculator() {
       setStatusMessage("Scientific operation applied.");
       pushHistory(statement, resultDisplay);
     },
-    [display, pushHistory, setErrorState]
+    [display, pushHistory, setErrorState],
   );
 
   const handleMemoryOperation = useCallback(
@@ -704,18 +704,18 @@ export function BalanceCalculator() {
 
       if (token === "M_PLUS") {
         setMemoryValue((previousValue) =>
-          normalizeNumber(previousValue + currentValue)
+          normalizeNumber(previousValue + currentValue),
         );
         setStatusMessage("Value added to memory.");
         return;
       }
 
       setMemoryValue((previousValue) =>
-        normalizeNumber(previousValue - currentValue)
+        normalizeNumber(previousValue - currentValue),
       );
       setStatusMessage("Value subtracted from memory.");
     },
-    [display, memoryValue]
+    [display, memoryValue],
   );
 
   const handleOperator = useCallback(
@@ -731,7 +731,7 @@ export function BalanceCalculator() {
         setPendingOperator(operator);
         setWaitingForOperand(true);
         setExpression(
-          `${formatOperationValue(currentValue)} ${OPERATOR_SYMBOL[operator]}`
+          `${formatOperationValue(currentValue)} ${OPERATOR_SYMBOL[operator]}`,
         );
         setStatusMessage(`Operator ${OPERATOR_SYMBOL[operator]} ready.`);
         return;
@@ -743,7 +743,7 @@ export function BalanceCalculator() {
         const result = computeBinaryResult(
           storedValue,
           currentValue,
-          pendingOperator
+          pendingOperator,
         );
 
         if (result === null) {
@@ -760,11 +760,11 @@ export function BalanceCalculator() {
       setPendingOperator(operator);
       setWaitingForOperand(true);
       setExpression(
-        `${formatOperationValue(nextStoredValue)} ${OPERATOR_SYMBOL[operator]}`
+        `${formatOperationValue(nextStoredValue)} ${OPERATOR_SYMBOL[operator]}`,
       );
       setStatusMessage(`Operator ${OPERATOR_SYMBOL[operator]} ready.`);
     },
-    [display, pendingOperator, setErrorState, storedValue, waitingForOperand]
+    [display, pendingOperator, setErrorState, storedValue, waitingForOperand],
   );
 
   const handleEqual = useCallback(() => {
@@ -781,7 +781,7 @@ export function BalanceCalculator() {
     const result = computeBinaryResult(
       storedValue,
       currentValue,
-      pendingOperator
+      pendingOperator,
     );
 
     if (result === null) {
@@ -813,7 +813,7 @@ export function BalanceCalculator() {
       const sourceValue =
         display === "Error" ? baselineBalance : parseDisplayValue(display);
       const scenarioValue = normalizeNumber(
-        preset.apply(sourceValue, initialBalanceRef.current)
+        preset.apply(sourceValue, initialBalanceRef.current),
       );
       const scenarioDisplay = toDisplayValue(scenarioValue);
       const statement = `Scenario ${preset.label}`;
@@ -824,7 +824,7 @@ export function BalanceCalculator() {
       setStatusMessage(`${preset.description}.`);
       pushHistory(statement, scenarioDisplay);
     },
-    [baselineBalance, display, pushHistory]
+    [baselineBalance, display, pushHistory],
   );
 
   const handleInputToken = useCallback(
@@ -900,7 +900,7 @@ export function BalanceCalculator() {
       handlePercent,
       handleToggleSign,
       handleUnaryOperation,
-    ]
+    ],
   );
 
   useEffect(() => {
@@ -945,7 +945,7 @@ export function BalanceCalculator() {
       const pastedText = event.clipboardData?.getData("text") ?? "";
       const parsedValue = parseClipboardNumber(
         pastedText,
-        numberFormatPreference
+        numberFormatPreference,
       );
 
       if (parsedValue === null) {
@@ -971,39 +971,39 @@ export function BalanceCalculator() {
   const visibleKeys = useMemo(
     () =>
       mode === "scientific" ? [...SCIENTIFIC_KEYS, ...BASIC_KEYS] : BASIC_KEYS,
-    [mode]
+    [mode],
   );
 
   const displayLabel = useMemo(() => formatDisplayValue(display), [display]);
 
   const simulatedValue = useMemo(
     () => (display === "Error" ? 0 : parseDisplayValue(display)),
-    [display]
+    [display],
   );
 
   const deltaValue = useMemo(
     () => normalizeNumber(simulatedValue - baselineBalance),
-    [baselineBalance, simulatedValue]
+    [baselineBalance, simulatedValue],
   );
 
   const deltaPercentageLabel = useMemo(
     () => formatDeltaPercentage(deltaValue, baselineBalance),
-    [baselineBalance, deltaValue]
+    [baselineBalance, deltaValue],
   );
 
   const deltaValueLabel = useMemo(
     () => formatCurrency(deltaValue, "USD"),
-    [deltaValue]
+    [deltaValue],
   );
 
   const baselineBalanceLabel = useMemo(
     () => formatCurrency(baselineBalance, "USD"),
-    [baselineBalance]
+    [baselineBalance],
   );
 
   const simulatedBalanceLabel = useMemo(
     () => formatCurrency(simulatedValue, "USD"),
-    [simulatedValue]
+    [simulatedValue],
   );
 
   if (!userEmail) {
@@ -1046,11 +1046,11 @@ export function BalanceCalculator() {
 
   return (
     <div className="space-y-4">
-    <SimulationAlert />
+      <SimulationAlert />
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
-        <Card className="relative overflow-hidden border-border/70 bg-linear-to-br from-card via-card to-primary/5 h-fit">
-          <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
+        <Card className="border-border/70 from-card via-card to-primary/5 relative h-fit overflow-hidden bg-linear-to-br">
+          <div className="from-primary/10 pointer-events-none absolute inset-0 bg-linear-to-br via-transparent to-transparent" />
 
           <CardHeader className="relative space-y-4">
             <div className="flex items-start justify-between gap-3">
@@ -1064,21 +1064,23 @@ export function BalanceCalculator() {
                 </CardDescription>
               </div>
               <Tooltip>
-                <TooltipTrigger render={<Button
-                variant="secondary"
-                onClick={() => resetToBaseline(true)}
-                className="shrink-0"
-                aria-label="Reset to initial balance"
-                />}>
-                <RotateCcw className="size-4" />
-                <span className="md:hidden">
-                Reset
-                </span>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      variant="secondary"
+                      onClick={() => resetToBaseline(true)}
+                      className="shrink-0"
+                      aria-label="Reset to initial balance"
+                    />
+                  }
+                >
+                  <RotateCcw className="size-4" />
+                  <span className="md:hidden">Reset</span>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Reset to initial balance</p>
                 </TooltipContent>
-                </Tooltip>
+              </Tooltip>
             </div>
 
             <Tabs
@@ -1098,17 +1100,17 @@ export function BalanceCalculator() {
           <CardContent className="relative space-y-4">
             <div
               className={cn(
-                "rounded-2xl border border-border/70 bg-background/85 p-4 text-right shadow-inner",
-                display === "Error" && "border-destructive/50 text-destructive"
+                "border-border/70 bg-background/85 rounded-2xl border p-4 text-right shadow-inner",
+                display === "Error" && "border-destructive/50 text-destructive",
               )}
               role="status"
               aria-live="polite"
               aria-atomic="true"
             >
-              <p className="text-xs text-muted-foreground break-all">
+              <p className="text-muted-foreground text-xs break-all">
                 {expression}
               </p>
-              <p className="mt-1 text-[2.15rem] font-semibold leading-tight break-all sm:text-5xl">
+              <p className="mt-1 text-[2.15rem] leading-tight font-semibold break-all sm:text-5xl">
                 {displayLabel}
               </p>
             </div>
@@ -1123,7 +1125,7 @@ export function BalanceCalculator() {
                   aria-label={keyConfig.ariaLabel}
                   className={cn(
                     getButtonClassName(keyConfig.role),
-                    keyConfig.colSpan === 2 && "col-span-2"
+                    keyConfig.colSpan === 2 && "col-span-2",
                   )}
                 >
                   {keyConfig.label}
@@ -1165,7 +1167,7 @@ export function BalanceCalculator() {
                       "font-semibold",
                       deltaValue > 0 &&
                         "text-emerald-600 dark:text-emerald-400",
-                      deltaValue < 0 && "text-rose-600 dark:text-rose-400"
+                      deltaValue < 0 && "text-rose-600 dark:text-rose-400",
                     )}
                   >
                     {deltaValue >= 0 ? "+" : ""}
@@ -1180,7 +1182,7 @@ export function BalanceCalculator() {
                         "font-medium",
                         deltaValue > 0 &&
                           "text-emerald-600 dark:text-emerald-400",
-                        deltaValue < 0 && "text-rose-600 dark:text-rose-400"
+                        deltaValue < 0 && "text-rose-600 dark:text-rose-400",
                       )}
                     >
                       {deltaPercentageLabel}
@@ -1204,7 +1206,7 @@ export function BalanceCalculator() {
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-2 text-xs">
                 <Sigma className="size-3.5" aria-hidden="true" />
                 Current memory: {formatOperationValue(memoryValue)}
               </div>
@@ -1223,7 +1225,7 @@ export function BalanceCalculator() {
             </CardHeader>
             <CardContent>
               {history.length === 0 ? (
-                <div className="rounded-xl border border-dashed p-4 text-center text-sm text-muted-foreground">
+                <div className="text-muted-foreground rounded-xl border border-dashed p-4 text-center text-sm">
                   No operations registered yet.
                 </div>
               ) : (
@@ -1231,9 +1233,9 @@ export function BalanceCalculator() {
                   {history.map((entry) => (
                     <li
                       key={entry.id}
-                      className="rounded-xl border bg-muted/40 px-3 py-2"
+                      className="bg-muted/40 rounded-xl border px-3 py-2"
                     >
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-muted-foreground text-xs">
                         {entry.statement}
                       </p>
                       <p className="text-sm font-medium">{entry.result}</p>
@@ -1279,7 +1281,9 @@ export function BalanceCalculator() {
 }
 
 function SimulationAlert() {
-  const [dismissed, setDismissed] = useAtom(balanceSimulationAlertDismissedAtom);
+  const [dismissed, setDismissed] = useAtom(
+    balanceSimulationAlertDismissedAtom,
+  );
 
   if (dismissed) {
     return null;
@@ -1291,8 +1295,8 @@ function SimulationAlert() {
       <AlertTitle>Safe simulation</AlertTitle>
       <AlertDescription>
         This calculator uses a static copy of your{" "}
-        <strong>Total Balance</strong>. No calculation updates your real
-        balance or saves data to the database.
+        <strong>Total Balance</strong>. No calculation updates your real balance
+        or saves data to the database.
       </AlertDescription>
       <AlertAction>
         <Button

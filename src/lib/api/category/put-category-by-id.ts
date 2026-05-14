@@ -15,7 +15,7 @@ export const putCategoryByIdServer = createServerFn({ method: "POST" })
       categoryId: z.string(),
       name: z.string(),
       icon: z.string(),
-    })
+    }),
   )
   .handler(async ({ data: { categoryId, name, icon } }) => {
     try {

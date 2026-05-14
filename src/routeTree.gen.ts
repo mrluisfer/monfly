@@ -8,392 +8,392 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as LogoutRouteImport } from './routes/logout'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AuthedRouteImport } from './routes/_authed'
-import { Route as SplatRouteImport } from './routes/$'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as TermsIndexRouteImport } from './routes/terms.index'
-import { Route as PrivacyIndexRouteImport } from './routes/privacy.index'
-import { Route as ContactIndexRouteImport } from './routes/contact.index'
-import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home/index'
-import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
-import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
-import { Route as AuthedUserSettingsIndexRouteImport } from './routes/_authed/user/settings.index'
-import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authed/home/transactions.index'
-import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
-import { Route as AuthedHomeLoansIndexRouteImport } from './routes/_authed/home/loans/index'
-import { Route as AuthedHomeCategoriesIndexRouteImport } from './routes/_authed/home/categories.index'
-import { Route as AuthedHomeBalanceCalculatorIndexRouteImport } from './routes/_authed/home/balance-calculator.index'
+import { Route as rootRouteImport } from "./routes/__root";
+import { Route as SignupRouteImport } from "./routes/signup";
+import { Route as LogoutRouteImport } from "./routes/logout";
+import { Route as LoginRouteImport } from "./routes/login";
+import { Route as AuthedRouteImport } from "./routes/_authed";
+import { Route as SplatRouteImport } from "./routes/$";
+import { Route as IndexRouteImport } from "./routes/index";
+import { Route as TermsIndexRouteImport } from "./routes/terms.index";
+import { Route as PrivacyIndexRouteImport } from "./routes/privacy.index";
+import { Route as ContactIndexRouteImport } from "./routes/contact.index";
+import { Route as AuthedHomeIndexRouteImport } from "./routes/_authed/home/index";
+import { Route as AuthedUserUserIdRouteImport } from "./routes/_authed/user.$userId";
+import { Route as AuthedUserThemeIndexRouteImport } from "./routes/_authed/user/theme.index";
+import { Route as AuthedUserSettingsIndexRouteImport } from "./routes/_authed/user/settings.index";
+import { Route as AuthedHomeTransactionsIndexRouteImport } from "./routes/_authed/home/transactions.index";
+import { Route as AuthedHomeReportsIndexRouteImport } from "./routes/_authed/home/reports.index";
+import { Route as AuthedHomeLoansIndexRouteImport } from "./routes/_authed/home/loans/index";
+import { Route as AuthedHomeCategoriesIndexRouteImport } from "./routes/_authed/home/categories.index";
+import { Route as AuthedHomeBalanceCalculatorIndexRouteImport } from "./routes/_authed/home/balance-calculator.index";
 
 const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
+  id: "/signup",
+  path: "/signup",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const LogoutRoute = LogoutRouteImport.update({
-  id: '/logout',
-  path: '/logout',
+  id: "/logout",
+  path: "/logout",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AuthedRoute = AuthedRouteImport.update({
-  id: '/_authed',
+  id: "/_authed",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SplatRoute = SplatRouteImport.update({
-  id: '/$',
-  path: '/$',
+  id: "/$",
+  path: "/$",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const TermsIndexRoute = TermsIndexRouteImport.update({
-  id: '/terms/',
-  path: '/terms/',
+  id: "/terms/",
+  path: "/terms/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const PrivacyIndexRoute = PrivacyIndexRouteImport.update({
-  id: '/privacy/',
-  path: '/privacy/',
+  id: "/privacy/",
+  path: "/privacy/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ContactIndexRoute = ContactIndexRouteImport.update({
-  id: '/contact/',
-  path: '/contact/',
+  id: "/contact/",
+  path: "/contact/",
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AuthedHomeIndexRoute = AuthedHomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
+  id: "/home/",
+  path: "/home/",
   getParentRoute: () => AuthedRoute,
-} as any)
+} as any);
 const AuthedUserUserIdRoute = AuthedUserUserIdRouteImport.update({
-  id: '/user/$userId',
-  path: '/user/$userId',
+  id: "/user/$userId",
+  path: "/user/$userId",
   getParentRoute: () => AuthedRoute,
-} as any)
+} as any);
 const AuthedUserThemeIndexRoute = AuthedUserThemeIndexRouteImport.update({
-  id: '/user/theme/',
-  path: '/user/theme/',
+  id: "/user/theme/",
+  path: "/user/theme/",
   getParentRoute: () => AuthedRoute,
-} as any)
+} as any);
 const AuthedUserSettingsIndexRoute = AuthedUserSettingsIndexRouteImport.update({
-  id: '/user/settings/',
-  path: '/user/settings/',
+  id: "/user/settings/",
+  path: "/user/settings/",
   getParentRoute: () => AuthedRoute,
-} as any)
+} as any);
 const AuthedHomeTransactionsIndexRoute =
   AuthedHomeTransactionsIndexRouteImport.update({
-    id: '/home/transactions/',
-    path: '/home/transactions/',
+    id: "/home/transactions/",
+    path: "/home/transactions/",
     getParentRoute: () => AuthedRoute,
-  } as any)
+  } as any);
 const AuthedHomeReportsIndexRoute = AuthedHomeReportsIndexRouteImport.update({
-  id: '/home/reports/',
-  path: '/home/reports/',
+  id: "/home/reports/",
+  path: "/home/reports/",
   getParentRoute: () => AuthedRoute,
-} as any)
+} as any);
 const AuthedHomeLoansIndexRoute = AuthedHomeLoansIndexRouteImport.update({
-  id: '/home/loans/',
-  path: '/home/loans/',
+  id: "/home/loans/",
+  path: "/home/loans/",
   getParentRoute: () => AuthedRoute,
-} as any)
+} as any);
 const AuthedHomeCategoriesIndexRoute =
   AuthedHomeCategoriesIndexRouteImport.update({
-    id: '/home/categories/',
-    path: '/home/categories/',
+    id: "/home/categories/",
+    path: "/home/categories/",
     getParentRoute: () => AuthedRoute,
-  } as any)
+  } as any);
 const AuthedHomeBalanceCalculatorIndexRoute =
   AuthedHomeBalanceCalculatorIndexRouteImport.update({
-    id: '/home/balance-calculator/',
-    path: '/home/balance-calculator/',
+    id: "/home/balance-calculator/",
+    path: "/home/balance-calculator/",
     getParentRoute: () => AuthedRoute,
-  } as any)
+  } as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/$': typeof SplatRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/signup': typeof SignupRoute
-  '/contact/': typeof ContactIndexRoute
-  '/privacy/': typeof PrivacyIndexRoute
-  '/terms/': typeof TermsIndexRoute
-  '/user/$userId': typeof AuthedUserUserIdRoute
-  '/home/': typeof AuthedHomeIndexRoute
-  '/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
-  '/home/categories/': typeof AuthedHomeCategoriesIndexRoute
-  '/home/loans/': typeof AuthedHomeLoansIndexRoute
-  '/home/reports/': typeof AuthedHomeReportsIndexRoute
-  '/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
-  '/user/settings/': typeof AuthedUserSettingsIndexRoute
-  '/user/theme/': typeof AuthedUserThemeIndexRoute
+  "/": typeof IndexRoute;
+  "/$": typeof SplatRoute;
+  "/login": typeof LoginRoute;
+  "/logout": typeof LogoutRoute;
+  "/signup": typeof SignupRoute;
+  "/contact/": typeof ContactIndexRoute;
+  "/privacy/": typeof PrivacyIndexRoute;
+  "/terms/": typeof TermsIndexRoute;
+  "/user/$userId": typeof AuthedUserUserIdRoute;
+  "/home/": typeof AuthedHomeIndexRoute;
+  "/home/balance-calculator/": typeof AuthedHomeBalanceCalculatorIndexRoute;
+  "/home/categories/": typeof AuthedHomeCategoriesIndexRoute;
+  "/home/loans/": typeof AuthedHomeLoansIndexRoute;
+  "/home/reports/": typeof AuthedHomeReportsIndexRoute;
+  "/home/transactions/": typeof AuthedHomeTransactionsIndexRoute;
+  "/user/settings/": typeof AuthedUserSettingsIndexRoute;
+  "/user/theme/": typeof AuthedUserThemeIndexRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/$': typeof SplatRoute
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/signup': typeof SignupRoute
-  '/contact': typeof ContactIndexRoute
-  '/privacy': typeof PrivacyIndexRoute
-  '/terms': typeof TermsIndexRoute
-  '/user/$userId': typeof AuthedUserUserIdRoute
-  '/home': typeof AuthedHomeIndexRoute
-  '/home/balance-calculator': typeof AuthedHomeBalanceCalculatorIndexRoute
-  '/home/categories': typeof AuthedHomeCategoriesIndexRoute
-  '/home/loans': typeof AuthedHomeLoansIndexRoute
-  '/home/reports': typeof AuthedHomeReportsIndexRoute
-  '/home/transactions': typeof AuthedHomeTransactionsIndexRoute
-  '/user/settings': typeof AuthedUserSettingsIndexRoute
-  '/user/theme': typeof AuthedUserThemeIndexRoute
+  "/": typeof IndexRoute;
+  "/$": typeof SplatRoute;
+  "/login": typeof LoginRoute;
+  "/logout": typeof LogoutRoute;
+  "/signup": typeof SignupRoute;
+  "/contact": typeof ContactIndexRoute;
+  "/privacy": typeof PrivacyIndexRoute;
+  "/terms": typeof TermsIndexRoute;
+  "/user/$userId": typeof AuthedUserUserIdRoute;
+  "/home": typeof AuthedHomeIndexRoute;
+  "/home/balance-calculator": typeof AuthedHomeBalanceCalculatorIndexRoute;
+  "/home/categories": typeof AuthedHomeCategoriesIndexRoute;
+  "/home/loans": typeof AuthedHomeLoansIndexRoute;
+  "/home/reports": typeof AuthedHomeReportsIndexRoute;
+  "/home/transactions": typeof AuthedHomeTransactionsIndexRoute;
+  "/user/settings": typeof AuthedUserSettingsIndexRoute;
+  "/user/theme": typeof AuthedUserThemeIndexRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/$': typeof SplatRoute
-  '/_authed': typeof AuthedRouteWithChildren
-  '/login': typeof LoginRoute
-  '/logout': typeof LogoutRoute
-  '/signup': typeof SignupRoute
-  '/contact/': typeof ContactIndexRoute
-  '/privacy/': typeof PrivacyIndexRoute
-  '/terms/': typeof TermsIndexRoute
-  '/_authed/user/$userId': typeof AuthedUserUserIdRoute
-  '/_authed/home/': typeof AuthedHomeIndexRoute
-  '/_authed/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
-  '/_authed/home/categories/': typeof AuthedHomeCategoriesIndexRoute
-  '/_authed/home/loans/': typeof AuthedHomeLoansIndexRoute
-  '/_authed/home/reports/': typeof AuthedHomeReportsIndexRoute
-  '/_authed/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
-  '/_authed/user/settings/': typeof AuthedUserSettingsIndexRoute
-  '/_authed/user/theme/': typeof AuthedUserThemeIndexRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexRoute;
+  "/$": typeof SplatRoute;
+  "/_authed": typeof AuthedRouteWithChildren;
+  "/login": typeof LoginRoute;
+  "/logout": typeof LogoutRoute;
+  "/signup": typeof SignupRoute;
+  "/contact/": typeof ContactIndexRoute;
+  "/privacy/": typeof PrivacyIndexRoute;
+  "/terms/": typeof TermsIndexRoute;
+  "/_authed/user/$userId": typeof AuthedUserUserIdRoute;
+  "/_authed/home/": typeof AuthedHomeIndexRoute;
+  "/_authed/home/balance-calculator/": typeof AuthedHomeBalanceCalculatorIndexRoute;
+  "/_authed/home/categories/": typeof AuthedHomeCategoriesIndexRoute;
+  "/_authed/home/loans/": typeof AuthedHomeLoansIndexRoute;
+  "/_authed/home/reports/": typeof AuthedHomeReportsIndexRoute;
+  "/_authed/home/transactions/": typeof AuthedHomeTransactionsIndexRoute;
+  "/_authed/user/settings/": typeof AuthedUserSettingsIndexRoute;
+  "/_authed/user/theme/": typeof AuthedUserThemeIndexRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/$'
-    | '/login'
-    | '/logout'
-    | '/signup'
-    | '/contact/'
-    | '/privacy/'
-    | '/terms/'
-    | '/user/$userId'
-    | '/home/'
-    | '/home/balance-calculator/'
-    | '/home/categories/'
-    | '/home/loans/'
-    | '/home/reports/'
-    | '/home/transactions/'
-    | '/user/settings/'
-    | '/user/theme/'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/$"
+    | "/login"
+    | "/logout"
+    | "/signup"
+    | "/contact/"
+    | "/privacy/"
+    | "/terms/"
+    | "/user/$userId"
+    | "/home/"
+    | "/home/balance-calculator/"
+    | "/home/categories/"
+    | "/home/loans/"
+    | "/home/reports/"
+    | "/home/transactions/"
+    | "/user/settings/"
+    | "/user/theme/";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/$'
-    | '/login'
-    | '/logout'
-    | '/signup'
-    | '/contact'
-    | '/privacy'
-    | '/terms'
-    | '/user/$userId'
-    | '/home'
-    | '/home/balance-calculator'
-    | '/home/categories'
-    | '/home/loans'
-    | '/home/reports'
-    | '/home/transactions'
-    | '/user/settings'
-    | '/user/theme'
+    | "/"
+    | "/$"
+    | "/login"
+    | "/logout"
+    | "/signup"
+    | "/contact"
+    | "/privacy"
+    | "/terms"
+    | "/user/$userId"
+    | "/home"
+    | "/home/balance-calculator"
+    | "/home/categories"
+    | "/home/loans"
+    | "/home/reports"
+    | "/home/transactions"
+    | "/user/settings"
+    | "/user/theme";
   id:
-    | '__root__'
-    | '/'
-    | '/$'
-    | '/_authed'
-    | '/login'
-    | '/logout'
-    | '/signup'
-    | '/contact/'
-    | '/privacy/'
-    | '/terms/'
-    | '/_authed/user/$userId'
-    | '/_authed/home/'
-    | '/_authed/home/balance-calculator/'
-    | '/_authed/home/categories/'
-    | '/_authed/home/loans/'
-    | '/_authed/home/reports/'
-    | '/_authed/home/transactions/'
-    | '/_authed/user/settings/'
-    | '/_authed/user/theme/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/$"
+    | "/_authed"
+    | "/login"
+    | "/logout"
+    | "/signup"
+    | "/contact/"
+    | "/privacy/"
+    | "/terms/"
+    | "/_authed/user/$userId"
+    | "/_authed/home/"
+    | "/_authed/home/balance-calculator/"
+    | "/_authed/home/categories/"
+    | "/_authed/home/loans/"
+    | "/_authed/home/reports/"
+    | "/_authed/home/transactions/"
+    | "/_authed/user/settings/"
+    | "/_authed/user/theme/";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  SplatRoute: typeof SplatRoute
-  AuthedRoute: typeof AuthedRouteWithChildren
-  LoginRoute: typeof LoginRoute
-  LogoutRoute: typeof LogoutRoute
-  SignupRoute: typeof SignupRoute
-  ContactIndexRoute: typeof ContactIndexRoute
-  PrivacyIndexRoute: typeof PrivacyIndexRoute
-  TermsIndexRoute: typeof TermsIndexRoute
+  IndexRoute: typeof IndexRoute;
+  SplatRoute: typeof SplatRoute;
+  AuthedRoute: typeof AuthedRouteWithChildren;
+  LoginRoute: typeof LoginRoute;
+  LogoutRoute: typeof LogoutRoute;
+  SignupRoute: typeof SignupRoute;
+  ContactIndexRoute: typeof ContactIndexRoute;
+  PrivacyIndexRoute: typeof PrivacyIndexRoute;
+  TermsIndexRoute: typeof TermsIndexRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/logout': {
-      id: '/logout'
-      path: '/logout'
-      fullPath: '/logout'
-      preLoaderRoute: typeof LogoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authed': {
-      id: '/_authed'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$': {
-      id: '/$'
-      path: '/$'
-      fullPath: '/$'
-      preLoaderRoute: typeof SplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms/': {
-      id: '/terms/'
-      path: '/terms'
-      fullPath: '/terms/'
-      preLoaderRoute: typeof TermsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy/': {
-      id: '/privacy/'
-      path: '/privacy'
-      fullPath: '/privacy/'
-      preLoaderRoute: typeof PrivacyIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact/': {
-      id: '/contact/'
-      path: '/contact'
-      fullPath: '/contact/'
-      preLoaderRoute: typeof ContactIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authed/home/': {
-      id: '/_authed/home/'
-      path: '/home'
-      fullPath: '/home/'
-      preLoaderRoute: typeof AuthedHomeIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/user/$userId': {
-      id: '/_authed/user/$userId'
-      path: '/user/$userId'
-      fullPath: '/user/$userId'
-      preLoaderRoute: typeof AuthedUserUserIdRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/user/theme/': {
-      id: '/_authed/user/theme/'
-      path: '/user/theme'
-      fullPath: '/user/theme/'
-      preLoaderRoute: typeof AuthedUserThemeIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/user/settings/': {
-      id: '/_authed/user/settings/'
-      path: '/user/settings'
-      fullPath: '/user/settings/'
-      preLoaderRoute: typeof AuthedUserSettingsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/transactions/': {
-      id: '/_authed/home/transactions/'
-      path: '/home/transactions'
-      fullPath: '/home/transactions/'
-      preLoaderRoute: typeof AuthedHomeTransactionsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/reports/': {
-      id: '/_authed/home/reports/'
-      path: '/home/reports'
-      fullPath: '/home/reports/'
-      preLoaderRoute: typeof AuthedHomeReportsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/loans/': {
-      id: '/_authed/home/loans/'
-      path: '/home/loans'
-      fullPath: '/home/loans/'
-      preLoaderRoute: typeof AuthedHomeLoansIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/categories/': {
-      id: '/_authed/home/categories/'
-      path: '/home/categories'
-      fullPath: '/home/categories/'
-      preLoaderRoute: typeof AuthedHomeCategoriesIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/balance-calculator/': {
-      id: '/_authed/home/balance-calculator/'
-      path: '/home/balance-calculator'
-      fullPath: '/home/balance-calculator/'
-      preLoaderRoute: typeof AuthedHomeBalanceCalculatorIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
+    "/signup": {
+      id: "/signup";
+      path: "/signup";
+      fullPath: "/signup";
+      preLoaderRoute: typeof SignupRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/logout": {
+      id: "/logout";
+      path: "/logout";
+      fullPath: "/logout";
+      preLoaderRoute: typeof LogoutRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/login": {
+      id: "/login";
+      path: "/login";
+      fullPath: "/login";
+      preLoaderRoute: typeof LoginRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_authed": {
+      id: "/_authed";
+      path: "";
+      fullPath: "/";
+      preLoaderRoute: typeof AuthedRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/$": {
+      id: "/$";
+      path: "/$";
+      fullPath: "/$";
+      preLoaderRoute: typeof SplatRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/terms/": {
+      id: "/terms/";
+      path: "/terms";
+      fullPath: "/terms/";
+      preLoaderRoute: typeof TermsIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/privacy/": {
+      id: "/privacy/";
+      path: "/privacy";
+      fullPath: "/privacy/";
+      preLoaderRoute: typeof PrivacyIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/contact/": {
+      id: "/contact/";
+      path: "/contact";
+      fullPath: "/contact/";
+      preLoaderRoute: typeof ContactIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/_authed/home/": {
+      id: "/_authed/home/";
+      path: "/home";
+      fullPath: "/home/";
+      preLoaderRoute: typeof AuthedHomeIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/user/$userId": {
+      id: "/_authed/user/$userId";
+      path: "/user/$userId";
+      fullPath: "/user/$userId";
+      preLoaderRoute: typeof AuthedUserUserIdRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/user/theme/": {
+      id: "/_authed/user/theme/";
+      path: "/user/theme";
+      fullPath: "/user/theme/";
+      preLoaderRoute: typeof AuthedUserThemeIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/user/settings/": {
+      id: "/_authed/user/settings/";
+      path: "/user/settings";
+      fullPath: "/user/settings/";
+      preLoaderRoute: typeof AuthedUserSettingsIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/home/transactions/": {
+      id: "/_authed/home/transactions/";
+      path: "/home/transactions";
+      fullPath: "/home/transactions/";
+      preLoaderRoute: typeof AuthedHomeTransactionsIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/home/reports/": {
+      id: "/_authed/home/reports/";
+      path: "/home/reports";
+      fullPath: "/home/reports/";
+      preLoaderRoute: typeof AuthedHomeReportsIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/home/loans/": {
+      id: "/_authed/home/loans/";
+      path: "/home/loans";
+      fullPath: "/home/loans/";
+      preLoaderRoute: typeof AuthedHomeLoansIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/home/categories/": {
+      id: "/_authed/home/categories/";
+      path: "/home/categories";
+      fullPath: "/home/categories/";
+      preLoaderRoute: typeof AuthedHomeCategoriesIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
+    "/_authed/home/balance-calculator/": {
+      id: "/_authed/home/balance-calculator/";
+      path: "/home/balance-calculator";
+      fullPath: "/home/balance-calculator/";
+      preLoaderRoute: typeof AuthedHomeBalanceCalculatorIndexRouteImport;
+      parentRoute: typeof AuthedRoute;
+    };
   }
 }
 
 interface AuthedRouteChildren {
-  AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute
-  AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
-  AuthedHomeBalanceCalculatorIndexRoute: typeof AuthedHomeBalanceCalculatorIndexRoute
-  AuthedHomeCategoriesIndexRoute: typeof AuthedHomeCategoriesIndexRoute
-  AuthedHomeLoansIndexRoute: typeof AuthedHomeLoansIndexRoute
-  AuthedHomeReportsIndexRoute: typeof AuthedHomeReportsIndexRoute
-  AuthedHomeTransactionsIndexRoute: typeof AuthedHomeTransactionsIndexRoute
-  AuthedUserSettingsIndexRoute: typeof AuthedUserSettingsIndexRoute
-  AuthedUserThemeIndexRoute: typeof AuthedUserThemeIndexRoute
+  AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute;
+  AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute;
+  AuthedHomeBalanceCalculatorIndexRoute: typeof AuthedHomeBalanceCalculatorIndexRoute;
+  AuthedHomeCategoriesIndexRoute: typeof AuthedHomeCategoriesIndexRoute;
+  AuthedHomeLoansIndexRoute: typeof AuthedHomeLoansIndexRoute;
+  AuthedHomeReportsIndexRoute: typeof AuthedHomeReportsIndexRoute;
+  AuthedHomeTransactionsIndexRoute: typeof AuthedHomeTransactionsIndexRoute;
+  AuthedUserSettingsIndexRoute: typeof AuthedUserSettingsIndexRoute;
+  AuthedUserThemeIndexRoute: typeof AuthedUserThemeIndexRoute;
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
@@ -406,10 +406,10 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedHomeTransactionsIndexRoute: AuthedHomeTransactionsIndexRoute,
   AuthedUserSettingsIndexRoute: AuthedUserSettingsIndexRoute,
   AuthedUserThemeIndexRoute: AuthedUserThemeIndexRoute,
-}
+};
 
 const AuthedRouteWithChildren =
-  AuthedRoute._addFileChildren(AuthedRouteChildren)
+  AuthedRoute._addFileChildren(AuthedRouteChildren);
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -421,16 +421,16 @@ const rootRouteChildren: RootRouteChildren = {
   ContactIndexRoute: ContactIndexRoute,
   PrivacyIndexRoute: PrivacyIndexRoute,
   TermsIndexRoute: TermsIndexRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
+import type { getRouter } from "./router.tsx";
+import type { createStart } from "@tanstack/react-start";
+declare module "@tanstack/react-start" {
   interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
+    ssr: true;
+    router: Awaited<ReturnType<typeof getRouter>>;
   }
 }

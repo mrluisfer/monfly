@@ -1,5 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
-import { enforceRateLimit, resolveSessionEmail } from "~/server/security/request-protection";
+import {
+  enforceRateLimit,
+  resolveSessionEmail,
+} from "~/server/security/request-protection";
 import { getTransactionsCountByMonth } from "~/server/db/charts/get-transaction-count-by-month";
 import { z } from "zod";
 

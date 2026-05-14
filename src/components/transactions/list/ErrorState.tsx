@@ -8,12 +8,12 @@ export function ErrorState({
   onRetry: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center p-8 space-y-4">
+    <div className="flex flex-col items-center justify-center space-y-4 p-8">
       <div className="text-center">
-        <p className="font-medium text-destructive">
+        <p className="text-destructive font-medium">
           Failed to load transactions
         </p>
-        <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+        <p className="text-muted-foreground mt-1 text-sm">{error.message}</p>
       </div>
       <Button onClick={onRetry} variant="outline" size="lg">
         Retry

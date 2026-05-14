@@ -51,14 +51,14 @@ function MonthlyActivityTooltip({
       : "0";
 
   return (
-    <div className="bg-background/95 backdrop-blur-sm border border-border rounded-lg p-3 shadow-lg">
-      <p className="font-semibold text-foreground">{label}</p>
-      <div className="flex items-center gap-2 mt-1">
-        <Activity className="size-5 text-primary" />
-        <span className="text-sm text-muted-foreground">Transactions:</span>
-        <span className="font-bold text-foreground">{value}</span>
+    <div className="bg-background/95 border-border rounded-lg border p-3 shadow-lg backdrop-blur-sm">
+      <p className="text-foreground font-semibold">{label}</p>
+      <div className="mt-1 flex items-center gap-2">
+        <Activity className="text-primary size-5" />
+        <span className="text-muted-foreground text-sm">Transactions:</span>
+        <span className="text-foreground font-bold">{value}</span>
       </div>
-      <p className="text-xs text-muted-foreground mt-1">
+      <p className="text-muted-foreground mt-1 text-xs">
         {percentage}% of total activity
       </p>
     </div>
@@ -89,7 +89,7 @@ export default function ChartTransactionsByMonth() {
 
   const totalTransactions = chartData.reduce(
     (sum: number, item: any) => sum + item.count,
-    0
+    0,
   );
   const averagePerMonth =
     chartData.length > 0 ? Math.round(totalTransactions / chartData.length) : 0;
@@ -118,10 +118,10 @@ export default function ChartTransactionsByMonth() {
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
   return (
-    <Card className="w-full max-w-5xl rounded-2xl border-0 shadow-none h-fit">
+    <Card className="h-fit w-full max-w-5xl rounded-2xl border-0 shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-          <BarChart3Icon className="size-5 text-primary" />
+          <BarChart3Icon className="text-primary size-5" />
           Monthly Activity
         </CardTitle>
         <CardDescription>
@@ -153,7 +153,7 @@ export default function ChartTransactionsByMonth() {
                   color: "hsl(221, 83%, 53%)", // Blue
                 },
               }}
-              className="min-w-0 w-full h-60 sm:h-70 md:h-80"
+              className="h-60 w-full min-w-0 sm:h-70 md:h-80"
             >
               <BarChart
                 data={chartData}
@@ -181,7 +181,7 @@ export default function ChartTransactionsByMonth() {
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
-                  className="text-xs fill-muted-foreground"
+                  className="fill-muted-foreground text-xs"
                   tick={{ fontSize: 12 }}
                   minTickGap={14}
                   interval="preserveStartEnd"
@@ -193,7 +193,7 @@ export default function ChartTransactionsByMonth() {
                   allowDecimals={false}
                   tickLine={false}
                   axisLine={false}
-                  className="text-xs fill-muted-foreground"
+                  className="fill-muted-foreground text-xs"
                   tick={{ fontSize: 10 }}
                   width={36}
                 />
@@ -207,15 +207,15 @@ export default function ChartTransactionsByMonth() {
                 />
               </BarChart>
             </ChartContainer>
-            <div className="min-w-0 w-full space-y-3 text-sm">
+            <div className="w-full min-w-0 space-y-3 text-sm">
               {/* Trend Information */}
               {chartData.length >= 2 && (
                 <>
                   <div className="bg-muted flex flex-wrap items-center gap-2 rounded-xl p-3.5">
                     {isPositiveTrend ? (
-                      <TrendingUpIcon className="size-4 text-primary" />
+                      <TrendingUpIcon className="text-primary size-4" />
                     ) : (
-                      <TrendingDownIcon className="size-4 text-destructive" />
+                      <TrendingDownIcon className="text-destructive size-4" />
                     )}
                     <span className="font-medium">
                       {isPositiveTrend ? "+" : ""}
@@ -236,13 +236,13 @@ export default function ChartTransactionsByMonth() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div className="bg-muted space-y-2 rounded-xl p-3.5">
                   <div className="flex items-center gap-2">
-                    <ArrowUpIcon className="size-5 text-primary" />
+                    <ArrowUpIcon className="text-primary size-5" />
                     <div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-muted-foreground text-xs">
                         Peak Month
                       </div>
                       <div className="font-semibold">{maxMonth}</div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-muted-foreground text-xs">
                         {maxCount} transactions
                       </div>
                     </div>
@@ -251,15 +251,15 @@ export default function ChartTransactionsByMonth() {
 
                 <div className="bg-muted space-y-2 rounded-xl p-3.5">
                   <div className="flex items-center gap-2">
-                    <TargetIcon className="size-5 text-primary" />
+                    <TargetIcon className="text-primary size-5" />
                     <div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-muted-foreground text-xs">
                         Data Period
                       </div>
                       <div className="font-semibold">
                         {monthsWithData} months
                       </div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="text-muted-foreground text-xs">
                         Average: {averagePerMonth}/month
                       </div>
                     </div>
@@ -269,10 +269,10 @@ export default function ChartTransactionsByMonth() {
 
               {/* Activity Distribution Bar */}
               <div className="bg-muted space-y-2 rounded-xl p-3.5">
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   Monthly Distribution
                 </div>
-                <div className="flex gap-1 h-2">
+                <div className="flex h-2 gap-1">
                   {chartData.map((item: any) => {
                     const percentage =
                       totalTransactions > 0
@@ -281,7 +281,7 @@ export default function ChartTransactionsByMonth() {
                     return (
                       <div
                         key={item.month}
-                        className="bg-primary rounded-sm flex-1 transition-opacity hover:opacity-80"
+                        className="bg-primary flex-1 rounded-sm transition-opacity hover:opacity-80"
                         style={{
                           opacity: Math.max(0.3, percentage / 100),
                           minWidth: "4px",
@@ -291,7 +291,7 @@ export default function ChartTransactionsByMonth() {
                     );
                   })}
                 </div>
-                <div className="flex justify-between gap-2 text-xs text-muted-foreground">
+                <div className="text-muted-foreground flex justify-between gap-2 text-xs">
                   <span className="truncate">
                     {minMonth} ({minCount})
                   </span>
@@ -308,8 +308,8 @@ export default function ChartTransactionsByMonth() {
           <DataNotFoundPlaceholder>
             No transaction data found.
             <br />
-            <span className="text-xs text-muted-foreground mt-2 block">
-              <Calendar className="size-4 inline mr-1" />
+            <span className="text-muted-foreground mt-2 block text-xs">
+              <Calendar className="mr-1 inline size-4" />
               Start making transactions to see your monthly activity.
             </span>
           </DataNotFoundPlaceholder>

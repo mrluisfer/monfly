@@ -22,7 +22,7 @@ export type ActiveLoanRow = {
  */
 export const getActiveLoansByEmail = async (
   email: string,
-  options: { includeId?: string | null } = {}
+  options: { includeId?: string | null } = {},
 ): Promise<ApiResponse<ActiveLoanRow[] | null>> => {
   try {
     if (!email) throw new Error("Email is required");
@@ -31,10 +31,7 @@ export const getActiveLoansByEmail = async (
     const where = includeId
       ? {
           userEmail: email,
-          OR: [
-            { status: { in: ["pending", "partial"] } },
-            { id: includeId },
-          ],
+          OR: [{ status: { in: ["pending", "partial"] } }, { id: includeId }],
         }
       : {
           userEmail: email,

@@ -11,7 +11,7 @@ import { queryDictionary } from "~/queries/dictionary";
  */
 export const invalidateTransactionQueries = async (
   queryClient: QueryClient,
-  userEmail: string
+  userEmail: string,
 ): Promise<void> => {
   await Promise.all([
     // Core transaction and user data (categories excluded — they don't depend on transactions)
@@ -58,7 +58,7 @@ export const invalidateTransactionQueries = async (
  */
 export const invalidateCategoryQueries = async (
   queryClient: QueryClient,
-  userEmail: string
+  userEmail: string,
 ): Promise<void> => {
   await Promise.all([
     // Core category data
@@ -91,7 +91,7 @@ export const invalidateCategoryQueries = async (
  */
 export const invalidateLoanQueries = async (
   queryClient: QueryClient,
-  userEmail: string
+  userEmail: string,
 ): Promise<void> => {
   await Promise.all([
     queryClient.invalidateQueries({
@@ -118,7 +118,7 @@ export const invalidateLoanQueries = async (
  */
 export const invalidateUserQueries = async (
   queryClient: QueryClient,
-  userEmail: string
+  userEmail: string,
 ): Promise<void> => {
   await Promise.all([
     // User data
@@ -141,7 +141,7 @@ export const invalidateUserQueries = async (
  */
 export const invalidateAllUserQueries = async (
   queryClient: QueryClient,
-  userEmail: string
+  userEmail: string,
 ): Promise<void> => {
   await Promise.all([
     invalidateTransactionQueries(queryClient, userEmail),
@@ -158,13 +158,13 @@ export const invalidateAllUserQueries = async (
  */
 export const invalidateQueriesByPattern = async (
   queryClient: QueryClient,
-  queryKeys: (string | (string | any)[])[]
+  queryKeys: (string | (string | any)[])[],
 ): Promise<void> => {
   await Promise.all(
     queryKeys.map((queryKey) =>
       queryClient.invalidateQueries({
         queryKey: Array.isArray(queryKey) ? queryKey : [queryKey],
-      })
-    )
+      }),
+    ),
   );
 };

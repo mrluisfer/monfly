@@ -10,7 +10,7 @@ export function SharedHeader({ children }: { children: ReactNode }) {
       <Button
         variant="outline"
         size="lg"
-        className="rounded-full bg-background/75"
+        className="bg-background/75 rounded-full"
         render={
           <Link to="/" className="inline-flex items-center gap-1.5">
             <ArrowLeftIcon className="size-4" />

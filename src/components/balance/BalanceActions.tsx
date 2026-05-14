@@ -14,7 +14,7 @@ export function BalanceActions() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex items-center flex-wrap justify-between md:justify-start w-full gap-4 mt-4">
+    <div className="mt-4 flex w-full flex-wrap items-center justify-between gap-4 md:justify-start">
       <ActionButton
         icon={<BarChart3Icon />}
         label="Reports"

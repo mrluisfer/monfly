@@ -9,7 +9,11 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { SelectionBar } from "./SelectionBar";
 
@@ -79,8 +83,8 @@ export const CategoryToolbar = ({
           {/* Result count */}
           <span
             className={cn(
-              "text-muted-foreground tabular-nums text-xs",
-              !isFiltering && "hidden"
+              "text-muted-foreground text-xs tabular-nums",
+              !isFiltering && "hidden",
             )}
             aria-live="polite"
           >

@@ -15,7 +15,7 @@ export const postLoanByEmailServer = createServerFn({ method: "POST" })
     z.object({
       email: z.string(),
       loan: CreateLoanInputSchema,
-    })
+    }),
   )
   .handler(async ({ data }) => {
     try {

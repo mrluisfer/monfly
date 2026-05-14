@@ -13,7 +13,7 @@ export const getLoansByEmailServer = createServerFn({ method: "GET" })
     z.object({
       email: z.string(),
       status: z.string().optional(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     try {

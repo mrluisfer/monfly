@@ -12,6 +12,6 @@ export const useFontDisplay = () => {
       setFontDisplay: (value: string) => setFontDisplay(value),
       onChangeFontDisplay: (value: string) => setFontDisplay(value),
     }),
-    [fontDisplay, setFontDisplay]
+    [fontDisplay, setFontDisplay],
   );
 };

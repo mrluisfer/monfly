@@ -6,7 +6,7 @@ import type { UpdateLoanInput } from "~/zod-schemas/loan-schema";
 
 export const putLoanById = async (
   email: string,
-  input: UpdateLoanInput
+  input: UpdateLoanInput,
 ): Promise<ApiResponse<Loan | null>> => {
   try {
     if (!email) throw new Error("Email is required");
@@ -30,7 +30,7 @@ export const putLoanById = async (
     let nextAmountPaid = clamp(
       input.amountPaid ?? existing.amountPaid,
       0,
-      nextAmount
+      nextAmount,
     );
 
     let nextStatus = input.status ?? existing.status;
@@ -51,9 +51,7 @@ export const putLoanById = async (
     }
 
     const paidAt =
-      nextStatus === "paid"
-        ? (existing.paidAt ?? new Date())
-        : null;
+      nextStatus === "paid" ? (existing.paidAt ?? new Date()) : null;
 
     const loan = await prismaClient.loan.update({
       where: { id: input.id },

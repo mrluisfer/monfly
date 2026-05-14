@@ -15,12 +15,11 @@
       "Bash(npx tsc *)",
       "Bash(pnpm add *)",
       "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('./node_modules/eslint-config-next/package.json'\\).exports, null, 2\\)\\)\")",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('./node_modules/prettier-plugin-tailwindcss/package.json'\\).peerDependencies, null, 2\\)\\)\")",
+      "Bash(npm view *)",
+      "Bash(npx prettier *)"
     ]
   },
-  "enabledMcpjsonServers": [
-    "shadcn",
-    "magicuidesign-mcp",
-    "playwright"
-  ]
+  "enabledMcpjsonServers": ["shadcn", "magicuidesign-mcp", "playwright"]
 }

@@ -49,8 +49,10 @@ export function DashboardMetrics({ className }: { className?: string }) {
     const netTotal = totalIncome - totalExpenses;
     const last = points.at(-1);
     const prev = points.at(-2);
-    const incomeDelta = last && prev ? pctDelta(safe(last.income), safe(prev.income)) : null;
-    const expenseDelta = last && prev ? pctDelta(safe(last.expense), safe(prev.expense)) : null;
+    const incomeDelta =
+      last && prev ? pctDelta(safe(last.income), safe(prev.income)) : null;
+    const expenseDelta =
+      last && prev ? pctDelta(safe(last.expense), safe(prev.expense)) : null;
     const netLast = last ? safe(last.income) - safe(last.expense) : 0;
     const netPrev = prev ? safe(prev.income) - safe(prev.expense) : 0;
     const netDelta = last && prev ? pctDelta(netLast, netPrev) : null;
@@ -73,15 +75,14 @@ export function DashboardMetrics({ className }: { className?: string }) {
 
   if (error) {
     return (
-      <div className="bg-card text-destructive rounded-2xl border border-destructive/20 p-4 text-sm">
+      <div className="bg-card text-destructive border-destructive/20 rounded-2xl border p-4 text-sm">
         Failed to load financial metrics.
       </div>
     );
   }
 
   const trend = (delta: number | null) => {
-    if (delta === null || !Number.isFinite(delta))
-      return undefined;
+    if (delta === null || !Number.isFinite(delta)) return undefined;
     const direction =
       Math.abs(delta) < 0.5 ? "flat" : delta > 0 ? "up" : "down";
     return {
@@ -91,12 +92,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
   };
 
   return (
-    <div
-      className={cn(
-        "grid gap-3 sm:grid-cols-2 xl:grid-cols-1",
-        className
-      )}
-    >
+    <div className={cn("grid gap-3 sm:grid-cols-2 xl:grid-cols-1", className)}>
       <MetricCard
         label="Income"
         value={formatCurrency(summary.totalIncome, "USD")}
@@ -111,11 +107,9 @@ export function DashboardMetrics({ className }: { className?: string }) {
         value={formatCurrency(summary.totalExpenses, "USD")}
         icon={<TrendingDown />}
         accent="destructive"
-        trend={
-          trend(
-            summary.expenseDelta === null ? null : -summary.expenseDelta
-          )
-        }
+        trend={trend(
+          summary.expenseDelta === null ? null : -summary.expenseDelta,
+        )}
         helper={`${summary.latestLabel} vs previous period`}
         loading={isLoading}
       />

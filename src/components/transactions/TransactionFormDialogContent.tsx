@@ -40,8 +40,8 @@ export function TransactionFormDialogContent({
       className={cn(transactionFormDialogContentClassName, className)}
     >
       <div className="flex max-h-[92dvh] flex-col overflow-hidden">
-        <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />
-        <DialogHeader className="border-b border-border/60 px-5 pt-4 pb-4 text-left sm:px-6">
+        <div className="bg-border/80 mx-auto mt-3 h-1.5 w-14 rounded-full sm:hidden" />
+        <DialogHeader className="border-border/60 border-b px-5 pt-4 pb-4 text-left sm:px-6">
           <DialogTitle className="text-lg font-semibold tracking-tight">
             {title}
           </DialogTitle>

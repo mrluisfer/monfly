@@ -15,7 +15,7 @@ export const signupFn = createServerFn({ method: "POST" })
       password: string;
       redirectUrl?: string;
       name: string;
-    }) => d
+    }) => d,
   )
   .handler(async ({ data }) => {
     try {

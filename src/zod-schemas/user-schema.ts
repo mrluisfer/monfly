@@ -24,9 +24,7 @@ export const userFormSchema = z
       .number()
       .min(0, { message: "Total balance must be a positive number" })
       .optional(),
-    [userFormNames.preferredCurrency]: z
-      .enum(supportedCurrencies)
-      .optional(),
+    [userFormNames.preferredCurrency]: z.enum(supportedCurrencies).optional(),
     [userFormNames.marketingOptIn]: z.boolean().optional(),
     [userFormNames.productUpdatesOptIn]: z.boolean().optional(),
     [userFormNames.acceptTerms]: z.boolean().refine((v) => v === true, {
@@ -36,10 +34,7 @@ export const userFormSchema = z
       message: "You must acknowledge the Privacy Policy to continue",
     }),
   })
-  .refine(
-    (data) => !data.password || data.password === data.confirmPassword,
-    {
-      message: "Passwords don't match",
-      path: [userFormNames.confirmPassword],
-    }
-  );
+  .refine((data) => !data.password || data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: [userFormNames.confirmPassword],
+  });

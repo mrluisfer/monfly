@@ -28,16 +28,16 @@ export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
 
   return (
     <PricingCard title={price}>
-      <span className="text-sm font-medium text-muted-foreground">
+      <span className="text-muted-foreground text-sm font-medium">
         {billingPeriod}
       </span>
       <div className="mt-5 flex flex-col gap-2.5 text-sm">
         {pricingFeatures.map((plan) => (
           <div
             key={plan.label}
-            className="group flex items-center gap-2 rounded-xl border border-border/55 bg-background/72 px-3 py-2.5 transition-colors duration-150 ease-out hover:border-primary/35"
+            className="group border-border/55 bg-background/72 hover:border-primary/35 flex items-center gap-2 rounded-xl border px-3 py-2.5 transition-colors duration-150 ease-out"
           >
-            <plan.icon className="size-4 text-primary" />
+            <plan.icon className="text-primary size-4" />
             <span className="text-muted-foreground group-hover:text-foreground">
               {plan.label}
             </span>
@@ -55,7 +55,7 @@ export function BillingCard({ isAnnual }: { isAnnual?: boolean }) {
             </Link>
           }
         />
-        <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+        <p className="text-muted-foreground flex items-center justify-center gap-2 text-xs">
           <CreditCard className="size-4" />
           No credit card required.
         </p>

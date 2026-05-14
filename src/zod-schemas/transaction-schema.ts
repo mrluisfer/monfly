@@ -10,10 +10,9 @@ export const TransactionFormSchema = z
     [transactionFormNames.amount]: z
       .string()
       .min(1, { message: "Amount is required" })
-      .refine(
-        (v) => Number.isFinite(Number(v)) && Number(v) > 0,
-        { message: "Amount must be a positive number" }
-      )
+      .refine((v) => Number.isFinite(Number(v)) && Number(v) > 0, {
+        message: "Amount must be a positive number",
+      })
       .refine((v) => Number(v) < 1_000_000, {
         message: "Amount must be less than 1,000,000",
       }),
@@ -29,7 +28,11 @@ export const TransactionFormSchema = z
     [transactionFormNames.loanMode]: z.enum(LOAN_MODES).default("none"),
     [transactionFormNames.loanDebtor]: z.string().optional(),
     [transactionFormNames.loanDueAt]: z.date().nullable().optional(),
-    [transactionFormNames.appliedToLoanId]: z.string().uuid().nullable().optional(),
+    [transactionFormNames.appliedToLoanId]: z
+      .string()
+      .uuid()
+      .nullable()
+      .optional(),
     // Legacy alias kept so older callers don't break; the form derives this
     // from `loanMode === "create"` before submitting.
     [transactionFormNames.markAsLoan]: z.boolean().optional(),

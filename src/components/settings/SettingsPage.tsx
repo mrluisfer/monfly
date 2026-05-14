@@ -32,14 +32,14 @@ import ToggleDarkMode from "./ToggleDarkMode";
 
 export function SettingsPage() {
   return (
-    <div className="relative min-h-dvh overflow-x-clip bg-background">
+    <div className="bg-background relative min-h-dvh overflow-x-clip">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-20 left-1/2 -z-10 size-[40rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--primary)/8%,transparent_70%)] blur-3xl"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-40 -z-10 size-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-15 blur-3xl dark:opacity-20"
+        className="pointer-events-none absolute top-40 right-0 -z-10 size-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-15 blur-3xl dark:opacity-20"
       />
 
       <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-8 sm:py-14 lg:max-w-6xl lg:py-16">
@@ -47,27 +47,27 @@ export function SettingsPage() {
           <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent text-primary ring-1 ring-primary/20"
+              className="from-primary/20 via-primary/10 text-primary ring-primary/20 relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br to-transparent ring-1"
             >
               <SlidersHorizontalIcon className="size-5" />
             </span>
             <div className="space-y-1">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/5 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.13em] text-muted-foreground">
+              <span className="bg-foreground/5 text-muted-foreground inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.13em] uppercase">
                 <Sparkles className="size-3" aria-hidden="true" />
                 Workspace settings
               </span>
-              <h1 className="font-[family-name:var(--font-syne)] text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+              <h1 className="text-foreground font-[family-name:var(--font-syne)] text-2xl font-semibold tracking-tight sm:text-3xl">
                 Settings
               </h1>
-              <p className="max-w-xl text-sm text-muted-foreground">
-                Personalize the look, behavior, and notifications of your
-                Monfly workspace. Changes save instantly to this device.
+              <p className="text-muted-foreground max-w-xl text-sm">
+                Personalize the look, behavior, and notifications of your Monfly
+                workspace. Changes save instantly to this device.
               </p>
             </div>
           </div>
         </header>
 
-        <div className="mt-10 divide-y divide-border/60 sm:mt-14">
+        <div className="divide-border/60 mt-10 divide-y sm:mt-14">
           <SettingsSection
             icon={PaletteIcon}
             title="Appearance"
@@ -98,13 +98,10 @@ export function SettingsPage() {
               control={
                 <Link
                   to="/user/theme"
-                  className="inline-flex items-center gap-1 rounded-full bg-foreground/5 px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-foreground/10"
+                  className="bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
                 >
                   Open gallery
-                  <ArrowUpRight
-                    className="size-3.5"
-                    aria-hidden="true"
-                  />
+                  <ArrowUpRight className="size-3.5" aria-hidden="true" />
                 </Link>
               }
             />
@@ -219,20 +216,20 @@ function SettingsSection({
       <header className="flex items-start gap-3 md:sticky md:top-24 md:self-start">
         <span
           aria-hidden="true"
-          className="relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/0 text-primary ring-1 ring-primary/15 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent after:to-foreground/5"
+          className="from-primary/15 to-primary/0 text-primary ring-primary/15 after:to-foreground/5 relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ring-1 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent"
         >
           <Icon className="size-4" aria-hidden={true} />
         </span>
         <div className="min-w-0 space-y-1">
-          <h2 className="font-[family-name:var(--font-syne)] text-sm font-semibold tracking-tight text-foreground sm:text-base">
+          <h2 className="text-foreground font-[family-name:var(--font-syne)] text-sm font-semibold tracking-tight sm:text-base">
             {title}
           </h2>
-          <p className="text-xs leading-relaxed text-muted-foreground sm:text-[0.8rem]">
+          <p className="text-muted-foreground text-xs leading-relaxed sm:text-[0.8rem]">
             {description}
           </p>
         </div>
       </header>
-      <ul className="min-w-0 divide-y divide-border/50">{children}</ul>
+      <ul className="divide-border/50 min-w-0 divide-y">{children}</ul>
     </section>
   );
 }
@@ -254,12 +251,12 @@ function SettingsRow({
     <li
       className={cn(
         "flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between",
-        className
+        className,
       )}
     >
       <div className="min-w-0 space-y-0.5 pr-4">
-        <p className="text-sm font-medium text-foreground">{title}</p>
-        <p className="text-xs leading-relaxed text-muted-foreground">
+        <p className="text-foreground text-sm font-medium">{title}</p>
+        <p className="text-muted-foreground text-xs leading-relaxed">
           {description}
         </p>
       </div>
@@ -274,11 +271,7 @@ type PrivacyToggleRowProps = {
   description: string;
 };
 
-function PrivacyToggleRow({
-  atom,
-  title,
-  description,
-}: PrivacyToggleRowProps) {
+function PrivacyToggleRow({ atom, title, description }: PrivacyToggleRowProps) {
   const id = useId();
   const [enabled, setEnabled] = useAtom(atom);
   return (
@@ -286,22 +279,22 @@ function PrivacyToggleRow({
       <div className="min-w-0 space-y-0.5 pr-4">
         <label
           htmlFor={id}
-          className="flex items-center gap-1.5 text-sm font-medium text-foreground"
+          className="text-foreground flex items-center gap-1.5 text-sm font-medium"
         >
           {enabled ? (
             <EyeOffIcon
-              className="size-3.5 text-muted-foreground"
+              className="text-muted-foreground size-3.5"
               aria-hidden="true"
             />
           ) : (
             <EyeIcon
-              className="size-3.5 text-muted-foreground"
+              className="text-muted-foreground size-3.5"
               aria-hidden="true"
             />
           )}
           {title}
         </label>
-        <p className="text-xs leading-relaxed text-muted-foreground">
+        <p className="text-muted-foreground text-xs leading-relaxed">
           {description}
         </p>
       </div>
@@ -320,16 +313,19 @@ function NavLink({ to, label, hint }: NavLinkProps) {
   return (
     <Link
       to={to}
-      className="group inline-flex items-center gap-1.5 rounded-full bg-foreground/5 px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-foreground/10"
+      className="group bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
     >
       {hint ? (
-        <span className="text-xs text-muted-foreground">{hint}</span>
+        <span className="text-muted-foreground text-xs">{hint}</span>
       ) : (
-        <UserIcon className="size-3.5 text-muted-foreground" aria-hidden="true" />
+        <UserIcon
+          className="text-muted-foreground size-3.5"
+          aria-hidden="true"
+        />
       )}
       {label}
       <ArrowUpRight
-        className="size-3.5 text-muted-foreground transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+        className="text-muted-foreground size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
         aria-hidden="true"
       />
     </Link>

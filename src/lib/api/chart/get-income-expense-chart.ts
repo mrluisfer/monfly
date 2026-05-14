@@ -1,5 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
-import { enforceRateLimit, resolveSessionEmail } from "~/server/security/request-protection";
+import {
+  enforceRateLimit,
+  resolveSessionEmail,
+} from "~/server/security/request-protection";
 import { getIncomeExpenseData } from "~/server/db/charts/get-income-expense-chart";
 import { z } from "zod";
 
@@ -7,7 +10,7 @@ export const getIncomeExpenseDataServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const sessionEmail = await resolveSessionEmail(data.email);

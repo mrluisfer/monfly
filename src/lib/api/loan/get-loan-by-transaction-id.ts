@@ -12,7 +12,7 @@ export const getLoanByTransactionIdServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       transactionId: z.string().uuid(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     try {

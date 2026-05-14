@@ -110,10 +110,10 @@ function Login() {
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-20 top-36 hidden size-80 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-20 blur-2xl sm:block"
+        className="pointer-events-none absolute top-36 -right-20 hidden size-80 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-20 blur-2xl sm:block"
       />
 
-      <main className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-6">
+      <main className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pt-4 pb-6 sm:px-6 sm:pt-6 sm:pb-8">
         <SharedHeader>
           <Button
             size="lg"
@@ -126,18 +126,18 @@ function Login() {
           />
         </SharedHeader>
 
-        <div className="grid flex-1 lg:flex-none items-stretch gap-5 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
+        <div className="grid flex-1 items-stretch gap-5 lg:flex-none lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-6">
           <Card className="order-2 hidden lg:flex lg:flex-col">
             <CardContent className="flex flex-1 flex-col justify-between">
               <div>
-                <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.12em] uppercase">
                   <Sparkles className="size-3.5" />
                   Smart Money Control
                 </p>
-                <h2 className="mt-5 text-balance font-[family-name:var(--font-syne)] text-3xl font-semibold leading-tight xl:text-4xl">
+                <h2 className="mt-5 font-[family-name:var(--font-syne)] text-3xl leading-tight font-semibold text-balance xl:text-4xl">
                   Keep your financial workflow focused and secure.
                 </h2>
-                <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
+                <p className="text-muted-foreground mt-3 max-w-lg text-sm sm:text-base">
                   Log in to continue tracking your expenses, income, and budget
                   health with real-time clarity.
                 </p>
@@ -148,12 +148,12 @@ function Login() {
                   {loginStats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="rounded-2xl border border-border/65 bg-background/80 p-3"
+                      className="border-border/65 bg-background/80 rounded-2xl border p-3"
                     >
-                      <dt className="text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground">
+                      <dt className="text-muted-foreground text-[0.68rem] tracking-[0.12em] uppercase">
                         {stat.label}
                       </dt>
-                      <dd className="mt-1 text-lg font-semibold text-foreground">
+                      <dd className="text-foreground mt-1 text-lg font-semibold">
                         {stat.value}
                       </dd>
                     </div>
@@ -164,9 +164,9 @@ function Login() {
                   {loginHighlights.map((item) => (
                     <li
                       key={item}
-                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                      className="text-muted-foreground flex items-start gap-2 text-sm"
                     >
-                      <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
+                      <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -181,15 +181,15 @@ function Login() {
           </Card>
 
           <section className="order-1 flex items-start sm:items-center">
-            <div className="landing-glass-panel w-full rounded-3xl border border-border/70 p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
-              <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-primary">
+            <div className="landing-glass-panel border-border/70 w-full rounded-3xl border p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
+              <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.1em] uppercase">
                 <BadgeCheck className="size-3.5" />
                 Sign In
               </p>
-              <h1 className="mt-4 text-balance font-[family-name:var(--font-syne)] text-2xl font-bold leading-tight sm:text-3xl">
+              <h1 className="mt-4 font-[family-name:var(--font-syne)] text-2xl leading-tight font-bold text-balance sm:text-3xl">
                 Access your Monfly workspace
               </h1>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+              <p className="text-muted-foreground mt-2 text-sm sm:text-base">
                 Continue where you left off and keep your finances under
                 control.
               </p>
@@ -222,14 +222,14 @@ function Login() {
             </div>
           </section>
 
-          <section className="landing-glass-panel order-3 rounded-2xl border border-border/65 p-4 lg:hidden">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-primary">
+          <section className="landing-glass-panel border-border/65 order-3 rounded-2xl border p-4 lg:hidden">
+            <h2 className="text-primary text-sm font-semibold tracking-[0.08em] uppercase">
               Why Monfly
             </h2>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+            <ul className="text-muted-foreground mt-3 space-y-2 text-sm">
               {loginHighlights.slice(0, 2).map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
+                  <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
                   <span>{item}</span>
                 </li>
               ))}

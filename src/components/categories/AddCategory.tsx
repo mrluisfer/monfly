@@ -81,8 +81,8 @@ export default function AddCategory() {
   return (
     <Card>
       <CardHeader className="flex items-center gap-2.5">
-        <div className="flex size-9 items-center justify-center rounded-4xl bg-primary/10">
-          <PlusCircleIcon className="size-4.5 text-primary" />
+        <div className="bg-primary/10 flex size-9 items-center justify-center rounded-4xl">
+          <PlusCircleIcon className="text-primary size-4.5" />
         </div>
         <div className="text-left">
           <CardTitle>New Category</CardTitle>

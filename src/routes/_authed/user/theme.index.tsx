@@ -211,10 +211,10 @@ function ThemeCard({
       onClick={onSelect}
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-xl border-2 transition-all",
-        "hover:shadow-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
+        "focus-visible:ring-ring hover:shadow-md focus-visible:ring-2 focus-visible:outline-none",
         isActive
           ? "border-primary shadow-sm"
-          : "border-border hover:border-primary/40"
+          : "border-border hover:border-primary/40",
       )}
     >
       {/* Preview area */}
@@ -243,10 +243,10 @@ function ThemeCard({
       </div>
 
       {/* Label */}
-      <div className="flex items-center justify-between bg-card px-3 py-2.5">
+      <div className="bg-card flex items-center justify-between px-3 py-2.5">
         <span className="text-sm font-medium">{name}</span>
         {isActive && (
-          <span className="flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
+          <span className="bg-primary text-primary-foreground flex size-5 items-center justify-center rounded-full">
             <CheckIcon className="size-3" />
           </span>
         )}
@@ -263,17 +263,17 @@ function ThemePage() {
     <Card className="app-panel">
       <div className="mx-auto w-full max-w-3xl space-y-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-primary">
+          <h1 className="text-primary text-2xl font-semibold tracking-tight">
             Theme
           </h1>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-muted-foreground mt-1 text-sm">
             Choose a theme for the app.
           </p>
         </div>
 
         <div className="space-y-6">
           <div className="space-y-3">
-            <h2 className="text-sm font-medium text-muted-foreground">
+            <h2 className="text-muted-foreground text-sm font-medium">
               Default
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
@@ -291,7 +291,7 @@ function ThemePage() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-sm font-medium text-muted-foreground">
+            <h2 className="text-muted-foreground text-sm font-medium">
               Scaled
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">

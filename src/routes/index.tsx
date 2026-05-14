@@ -41,7 +41,7 @@ function Home() {
     <div className="landing-shell relative min-h-screen overflow-x-clip pb-8">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-70 focus:rounded-full focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
+        className="focus:bg-foreground focus:text-background sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-70 focus:rounded-full focus:px-4 focus:py-2"
       >
         Skip to main content
       </a>
@@ -51,11 +51,11 @@ function Home() {
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-20 top-90 size-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-20 blur-2xl dark:opacity-25"
+        className="pointer-events-none absolute top-90 -right-20 size-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-20 blur-2xl dark:opacity-25"
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-28 top-130 size-80 rounded-full bg-[radial-gradient(circle,#fb923c_0%,transparent_72%)] opacity-16 blur-2xl"
+        className="pointer-events-none absolute top-130 -left-28 size-80 rounded-full bg-[radial-gradient(circle,#fb923c_0%,transparent_72%)] opacity-16 blur-2xl"
       />
       <GlobalHeader />
       <main id="main-content" className="relative z-10 pb-10">
@@ -73,7 +73,7 @@ function Home() {
               href="https://github.com/mrluisfer/monfly"
               target="_blank"
               rel="noopener"
-              className="uppercase tracking-[0.13em]"
+              className="tracking-[0.13em] uppercase"
             ></a>
           }
         >

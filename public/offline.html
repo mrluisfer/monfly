@@ -1,95 +1,106 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#000000" />
+    <title>Monfly — No connection</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#000000" />
-  <title>Monfly — No connection</title>
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+      html,
+      body {
+        height: 100%;
+        height: 100dvh;
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: #09090b;
+        color: #fafafa;
+      }
 
-    html,
-    body {
-      height: 100%;
-      height: 100dvh;
-      font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-      background: #09090b;
-      color: #fafafa;
-    }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        padding: 2rem;
+        padding-bottom: env(safe-area-inset-bottom, 2rem);
+        text-align: center;
+      }
 
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      padding: 2rem;
-      padding-bottom: env(safe-area-inset-bottom, 2rem);
-      text-align: center;
-    }
+      svg {
+        opacity: 0.4;
+      }
 
-    svg {
-      opacity: 0.4;
-    }
+      h1 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
 
-    h1 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
+      p {
+        font-size: 0.9rem;
+        color: #a1a1aa;
+        max-width: 280px;
+        line-height: 1.6;
+      }
 
-    p {
-      font-size: 0.9rem;
-      color: #a1a1aa;
-      max-width: 280px;
-      line-height: 1.6;
-    }
+      button {
+        margin-top: 0.5rem;
+        padding: 0.6rem 1.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid #27272a;
+        background: #18181b;
+        color: #fafafa;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+      }
 
-    button {
-      margin-top: 0.5rem;
-      padding: 0.6rem 1.5rem;
-      border-radius: 0.5rem;
-      border: 1px solid #27272a;
-      background: #18181b;
-      color: #fafafa;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
+      button:active {
+        opacity: 0.7;
+      }
+    </style>
+  </head>
 
-    button:active {
-      opacity: 0.7;
-    }
-  </style>
-</head>
-
-<body>
-  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-    stroke-linecap="round" stroke-linejoin="round">
-    <line x1="1" y1="1" x2="23" y2="23" />
-    <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" />
-    <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" />
-    <path d="M10.71 5.05A16 16 0 0 1 22.56 9" />
-    <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88" />
-    <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
-    <line x1="12" y1="20" x2="12.01" y2="20" />
-  </svg>
-  <h1>You're offline</h1>
-  <p>Check your connection and try again. Your data is safe and will sync when you reconnect.</p>
-  <button onclick="window.location.reload()">Try again</button>
-</body>
-
+  <body>
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="1" y1="1" x2="23" y2="23" />
+      <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" />
+      <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" />
+      <path d="M10.71 5.05A16 16 0 0 1 22.56 9" />
+      <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88" />
+      <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+      <line x1="12" y1="20" x2="12.01" y2="20" />
+    </svg>
+    <h1>You're offline</h1>
+    <p>
+      Check your connection and try again. Your data is safe and will sync when
+      you reconnect.
+    </p>
+    <button onclick="window.location.reload()">Try again</button>
+  </body>
 </html>

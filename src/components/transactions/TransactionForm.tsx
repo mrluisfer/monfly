@@ -98,7 +98,7 @@ export function TransactionForm<FormValues extends FieldValues>({
         label: cat.name,
         value: cat.name,
       })) ?? [],
-    [categories]
+    [categories],
   );
   const userEmail = useRouteUser();
 
@@ -148,11 +148,11 @@ export function TransactionForm<FormValues extends FieldValues>({
     const updateKeyboardInset = () => {
       const nextInset = Math.max(
         0,
-        window.innerHeight - viewport.height - viewport.offsetTop
+        window.innerHeight - viewport.height - viewport.offsetTop,
       );
 
       setKeyboardInset((currentInset) =>
-        Math.abs(currentInset - nextInset) > 1 ? nextInset : currentInset
+        Math.abs(currentInset - nextInset) > 1 ? nextInset : currentInset,
       );
     };
 
@@ -199,7 +199,7 @@ export function TransactionForm<FormValues extends FieldValues>({
     }
 
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
 
     focusScrollTimeoutRef.current = window.setTimeout(() => {
@@ -235,7 +235,7 @@ export function TransactionForm<FormValues extends FieldValues>({
           className={cn(
             sectionClassName,
             "transition-colors duration-500",
-            "border-border/60"
+            "border-border/60",
           )}
           layout
         >
@@ -245,13 +245,13 @@ export function TransactionForm<FormValues extends FieldValues>({
               name={transactionFormNames.amount as Path<FormValues>}
               render={({ field }) => (
                 <FormItem className="space-y-2">
-                  <FormLabel className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                  <FormLabel className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
                     <DollarSignIcon className="size-3 text-emerald-500" />
                     Amount
                   </FormLabel>
                   <FormControl>
                     <div className="relative flex items-center">
-                      <span className="pointer-events-none absolute left-4 text-xl font-semibold text-muted-foreground/60 select-none">
+                      <span className="text-muted-foreground/60 pointer-events-none absolute left-4 text-xl font-semibold select-none">
                         $
                       </span>
                       <Input
@@ -262,7 +262,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                         placeholder="0.00"
                         className={cn(
                           inputClassName,
-                          "pl-9 text-xl font-bold tracking-tight [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                          "[appearance:textfield] pl-9 text-xl font-bold tracking-tight [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
                         )}
                         {...field}
                         onChange={(e) =>
@@ -285,14 +285,14 @@ export function TransactionForm<FormValues extends FieldValues>({
                   <FormItem className="space-y-2">
                     <FormLabel
                       id={typeLabelId}
-                      className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
+                      className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
                     >
                       <SparklesIcon className="size-3 text-purple-500" />
                       Type
                     </FormLabel>
                     <FormControl>
                       <div
-                        className="relative flex p-1 rounded-xl bg-muted/50"
+                        className="bg-muted/50 relative flex rounded-xl p-1"
                         role="radiogroup"
                         aria-labelledby={typeLabelId}
                       >
@@ -329,10 +329,10 @@ export function TransactionForm<FormValues extends FieldValues>({
                           aria-checked={currentType === "income"}
                           onClick={() => field.onChange("income")}
                           className={cn(
-                            "relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                            "focus-visible:ring-ring/50 relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none",
                             currentType === "income"
                               ? "text-emerald-700 dark:text-emerald-300"
-                              : "text-muted-foreground hover:text-foreground"
+                              : "text-muted-foreground hover:text-foreground",
                           )}
                         >
                           <TrendingUpIcon className="size-4 shrink-0" />
@@ -344,10 +344,10 @@ export function TransactionForm<FormValues extends FieldValues>({
                           aria-checked={currentType === "expense"}
                           onClick={() => field.onChange("expense")}
                           className={cn(
-                            "relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+                            "focus-visible:ring-ring/50 relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none",
                             currentType === "expense"
                               ? "text-red-700 dark:text-red-300"
-                              : "text-muted-foreground hover:text-foreground"
+                              : "text-muted-foreground hover:text-foreground",
                           )}
                         >
                           <TrendingDownIcon className="size-4 shrink-0" />
@@ -376,14 +376,14 @@ export function TransactionForm<FormValues extends FieldValues>({
                   !categories?.some(
                     (cat) =>
                       cat.name.toLowerCase() ===
-                      categoryInputValue.toLowerCase()
+                      categoryInputValue.toLowerCase(),
                   );
 
                 return (
                   <FormItem className="space-y-2">
                     <FormLabel
                       htmlFor={transactionFormNames.category}
-                      className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
+                      className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
                     >
                       <TagIcon className="size-3 text-blue-500" />
                       Category
@@ -395,7 +395,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                             value={value ?? ""}
                             onValueChange={(val) => field.onChange(val)}
                           >
-                            <SelectTrigger className="w-full rounded-xl border-border/60 bg-input/40 h-12">
+                            <SelectTrigger className="border-border/60 bg-input/40 h-12 w-full rounded-xl">
                               <SelectValue placeholder="Select a category" />
                             </SelectTrigger>
                             <SelectContent>
@@ -412,7 +412,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                             </SelectContent>
                           </Select>
                         ) : (
-                          <p className="py-3 text-center text-sm text-muted-foreground">
+                          <p className="text-muted-foreground py-3 text-center text-sm">
                             No categories yet
                           </p>
                         )}
@@ -423,7 +423,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                               setCategoryInputValue(e.target.value)
                             }
                             placeholder="New category name..."
-                            className="h-10 flex-1 rounded-xl border-border/60 bg-input/40 text-sm shadow-none"
+                            className="border-border/60 bg-input/40 h-10 flex-1 rounded-xl text-sm shadow-none"
                           />
                           <Button
                             type="button"
@@ -470,7 +470,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                 <FormItem className="space-y-2">
                   <FormLabel
                     htmlFor={transactionFormNames.description}
-                    className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
+                    className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
                   >
                     <FileTextIcon className="size-3 text-orange-500" />
                     Description
@@ -483,7 +483,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                         className={cn(inputClassName, "pl-10 text-sm")}
                         {...field}
                       />
-                      <FileTextIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/60" />
+                      <FileTextIcon className="text-muted-foreground/60 absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -499,7 +499,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                   <FormItem className="flex flex-col space-y-2">
                     <FormLabel
                       htmlFor={transactionFormNames.date}
-                      className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70"
+                      className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
                     >
                       <CalendarIcon className="size-3 text-indigo-500" />
                       Date
@@ -511,7 +511,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                           type="date"
                           className={cn(
                             inputClassName,
-                            "w-full cursor-pointer pl-10 [color-scheme:light] dark:[color-scheme:dark]"
+                            "w-full cursor-pointer pl-10 [color-scheme:light] dark:[color-scheme:dark]",
                           )}
                           value={
                             field.value
@@ -525,7 +525,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                             field.onChange(date);
                           }}
                         />
-                        <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground/60 pointer-events-none" />
+                        <CalendarIcon className="text-muted-foreground/60 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
                       </div>
                     </FormControl>
                     {showDateDescription && (
@@ -543,10 +543,12 @@ export function TransactionForm<FormValues extends FieldValues>({
 
         <LoanSection form={form} />
 
-        <div className="pt-1 sm:pt-2 flex items-center justify-between">
-          <DialogClose render={
-            <Button type="button" variant={'outline'} size={'lg'}></Button>
-          }>
+        <div className="flex items-center justify-between pt-1 sm:pt-2">
+          <DialogClose
+            render={
+              <Button type="button" variant={"outline"} size={"lg"}></Button>
+            }
+          >
             <XIcon />
             Cancel
           </DialogClose>
@@ -554,11 +556,11 @@ export function TransactionForm<FormValues extends FieldValues>({
             type="submit"
             className="font-medium hover:shadow-xl"
             disabled={isLoading}
-            size={'lg'}
+            size={"lg"}
           >
             {isLoading ? (
               <div className="flex items-center gap-2">
-                <div className="size-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                 Saving...
               </div>
             ) : (
@@ -589,7 +591,7 @@ function LoanSection<FormValues extends FieldValues>({
   const initialLoanIdRef = useRef<string | null>(null);
   if (initialLoanIdRef.current === null) {
     const v = form.getValues(
-      transactionFormNames.appliedToLoanId as Path<FormValues>
+      transactionFormNames.appliedToLoanId as Path<FormValues>,
     );
     initialLoanIdRef.current = typeof v === "string" ? v : "";
   }
@@ -620,7 +622,7 @@ function LoanSection<FormValues extends FieldValues>({
   // happy and removes a manual coordination step.
   const handleLoanPick = (
     loanId: string,
-    fieldOnChange: (val: string | null) => void
+    fieldOnChange: (val: string | null) => void,
   ) => {
     fieldOnChange(loanId === "" ? null : loanId);
     if (!loanId) return;
@@ -631,7 +633,7 @@ function LoanSection<FormValues extends FieldValues>({
     form.setValue(
       transactionFormNames.type as Path<FormValues>,
       nextType as never,
-      { shouldDirty: true, shouldValidate: true }
+      { shouldDirty: true, shouldValidate: true },
     );
   };
 
@@ -639,29 +641,29 @@ function LoanSection<FormValues extends FieldValues>({
     form.setValue(
       transactionFormNames.loanMode as Path<FormValues>,
       next as never,
-      { shouldValidate: false, shouldDirty: true }
+      { shouldValidate: false, shouldDirty: true },
     );
     // Mirror to legacy boolean for any consumer still reading it.
     form.setValue(
       transactionFormNames.markAsLoan as Path<FormValues>,
       (next === "create") as never,
-      { shouldDirty: true }
+      { shouldDirty: true },
     );
     // Clear fields belonging to the *other* modes so we don't submit stale data.
     if (next !== "create") {
       form.setValue(
         transactionFormNames.loanDebtor as Path<FormValues>,
-        "" as never
+        "" as never,
       );
       form.setValue(
         transactionFormNames.loanDueAt as Path<FormValues>,
-        null as never
+        null as never,
       );
     }
     if (next !== "apply") {
       form.setValue(
         transactionFormNames.appliedToLoanId as Path<FormValues>,
-        null as never
+        null as never,
       );
     }
   };
@@ -669,14 +671,14 @@ function LoanSection<FormValues extends FieldValues>({
   return (
     <div className={sectionClassName}>
       <div className="flex items-center gap-3">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
-          <HandCoinsIcon className="size-4 text-primary" />
+        <div className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-xl">
+          <HandCoinsIcon className="text-primary size-4" />
         </div>
         <div>
-          <FormLabel className="text-sm font-medium text-foreground">
+          <FormLabel className="text-foreground text-sm font-medium">
             Loan linkage
           </FormLabel>
-          <FormDescription className="text-xs text-muted-foreground">
+          <FormDescription className="text-muted-foreground text-xs">
             Optionally tie this transaction to a loan.
           </FormDescription>
         </div>
@@ -684,7 +686,7 @@ function LoanSection<FormValues extends FieldValues>({
 
       {/* Tri-state segmented control */}
       <div
-        className="mt-4 grid grid-cols-3 gap-1 rounded-xl bg-muted/50 p-1"
+        className="bg-muted/50 mt-4 grid grid-cols-3 gap-1 rounded-xl p-1"
         role="radiogroup"
         aria-label="Loan linkage mode"
       >
@@ -721,7 +723,7 @@ function LoanSection<FormValues extends FieldValues>({
                 name={transactionFormNames.loanDebtor as Path<FormValues>}
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    <FormLabel className="text-muted-foreground/70 text-xs font-semibold tracking-wider uppercase">
                       Debtor
                     </FormLabel>
                     <FormControl>
@@ -742,9 +744,9 @@ function LoanSection<FormValues extends FieldValues>({
                 name={transactionFormNames.loanDueAt as Path<FormValues>}
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    <FormLabel className="text-muted-foreground/70 text-xs font-semibold tracking-wider uppercase">
                       Due date{" "}
-                      <span className="font-normal normal-case tracking-normal text-muted-foreground/50">
+                      <span className="text-muted-foreground/50 font-normal tracking-normal normal-case">
                         (optional)
                       </span>
                     </FormLabel>
@@ -753,7 +755,7 @@ function LoanSection<FormValues extends FieldValues>({
                         type="date"
                         className={cn(
                           inputClassName,
-                          "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                          "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]",
                         )}
                         value={
                           // @ts-ignore
@@ -792,7 +794,7 @@ function LoanSection<FormValues extends FieldValues>({
                 name={transactionFormNames.appliedToLoanId as Path<FormValues>}
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                    <FormLabel className="text-muted-foreground/70 text-xs font-semibold tracking-wider uppercase">
                       Loan to pay
                     </FormLabel>
                     <FormControl>
@@ -806,7 +808,7 @@ function LoanSection<FormValues extends FieldValues>({
                         <SelectTrigger
                           className={cn(
                             inputClassName,
-                            "w-full justify-between"
+                            "w-full justify-between",
                           )}
                         >
                           <SelectValue
@@ -841,7 +843,7 @@ function LoanSection<FormValues extends FieldValues>({
                                       "text-xs tabular-nums",
                                       loan.direction === "lent"
                                         ? "text-emerald-600 dark:text-emerald-400"
-                                        : "text-red-600 dark:text-red-400"
+                                        : "text-red-600 dark:text-red-400",
                                     )}
                                   >
                                     {formatCurrency(loan.amount, "USD")} ·{" "}
@@ -859,7 +861,7 @@ function LoanSection<FormValues extends FieldValues>({
                         <SelectContent>
                           {grouped.lent.length > 0 && (
                             <SelectGroup>
-                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold uppercase tracking-wider">
+                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold tracking-wider uppercase">
                                 {LOAN_DIRECTION_LABEL.lent} · sets income
                               </div>
                               {grouped.lent.map((loan) => (
@@ -873,7 +875,7 @@ function LoanSection<FormValues extends FieldValues>({
                           )}
                           {grouped.borrowed.length > 0 && (
                             <SelectGroup>
-                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold uppercase tracking-wider">
+                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold tracking-wider uppercase">
                                 {LOAN_DIRECTION_LABEL.borrowed} · sets expense
                               </div>
                               {grouped.borrowed.map((loan) => (
@@ -922,7 +924,7 @@ function LoanOption({
             "text-xs tabular-nums",
             direction === "lent"
               ? "text-emerald-600 dark:text-emerald-400"
-              : "text-red-600 dark:text-red-400"
+              : "text-red-600 dark:text-red-400",
           )}
         >
           {formatCurrency(remaining, "USD")} left
@@ -948,10 +950,10 @@ function ModeButton({
       aria-checked={active}
       onClick={onClick}
       className={cn(
-        "rounded-lg py-2 text-xs font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+        "focus-visible:ring-ring/50 rounded-lg py-2 text-xs font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none",
         active
           ? "bg-background text-foreground shadow-sm"
-          : "text-muted-foreground hover:text-foreground"
+          : "text-muted-foreground hover:text-foreground",
       )}
     >
       {label}

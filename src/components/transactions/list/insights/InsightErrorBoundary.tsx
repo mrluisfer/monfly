@@ -23,15 +23,15 @@ export class InsightErrorBoundary extends Component<Props, State> {
     console.error(
       `[InsightErrorBoundary] ${this.props.label ?? ""}`,
       error,
-      info
+      info,
     );
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <article className="bg-muted rounded-2xl border border-border/70 p-4 sm:p-5 flex items-center justify-center min-h-24">
-          <p className="text-sm text-muted-foreground">
+        <article className="bg-muted border-border/70 flex min-h-24 items-center justify-center rounded-2xl border p-4 sm:p-5">
+          <p className="text-muted-foreground text-sm">
             {this.props.label
               ? `Could not load "${this.props.label}".`
               : "This section could not be loaded."}

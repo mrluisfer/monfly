@@ -16,7 +16,7 @@ const trendVariants = cva(
       },
     },
     defaultVariants: { direction: "flat" },
-  }
+  },
 );
 
 type Trend = {
@@ -74,15 +74,15 @@ export function MetricCard({
     <div
       className={cn(
         "group bg-card text-card-foreground border-border/60 relative flex flex-col gap-3 overflow-hidden rounded-2xl border p-4 shadow-xs transition-all hover:shadow-md",
-        className
+        className,
       )}
       {...props}
     >
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -right-8 -top-8 size-32 rounded-full bg-gradient-to-br opacity-60 blur-2xl transition-opacity group-hover:opacity-90",
-          accentMap[accent]
+          "pointer-events-none absolute -top-8 -right-8 size-32 rounded-full bg-gradient-to-br opacity-60 blur-2xl transition-opacity group-hover:opacity-90",
+          accentMap[accent],
         )}
       />
       <div className="relative flex items-center justify-between gap-3">
@@ -92,7 +92,7 @@ export function MetricCard({
             aria-hidden="true"
             className={cn(
               "flex size-8 items-center justify-center rounded-lg [&>svg]:size-4",
-              iconAccentMap[accent]
+              iconAccentMap[accent],
             )}
           >
             {icon}

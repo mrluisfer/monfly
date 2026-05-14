@@ -57,10 +57,10 @@ export function StayConnect() {
   return (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <Label htmlFor={id} className="space-y-2 text-base md:max-w-md">
-        <span className="text-base font-semibold uppercase tracking-[0.12em] text-muted-foreground hidden 3xl:inline-block">
+        <span className="text-muted-foreground 3xl:inline-block hidden text-base font-semibold tracking-[0.12em] uppercase">
           Stay connected
         </span>
-        <span className="block text-sm text-muted-foreground sm:text-base">
+        <span className="text-muted-foreground block text-sm sm:text-base">
           Subscribe for product updates, finance playbooks, and launch offers.
         </span>
       </Label>
@@ -79,13 +79,13 @@ export function StayConnect() {
                   <FormControl>
                     <Input
                       id={id}
-                      className="peer h-10 rounded-full border-border/75 bg-background/92 ps-9"
+                      className="peer border-border/75 bg-background/92 h-10 rounded-full ps-9"
                       placeholder="you@company.com"
                       type="email"
                       {...field}
                     />
                   </FormControl>
-                  <div className="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+                  <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
                     <AtSignIcon size={16} aria-hidden="true" />
                   </div>
                   <FormDescription />

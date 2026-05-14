@@ -66,8 +66,8 @@ export function Topbar() {
   return (
     <header
       className={cn(
-        "bg-background/85 supports-[backdrop-filter]:bg-background/65 sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b border-border/60 px-3 backdrop-blur",
-        "md:px-4"
+        "bg-background/85 supports-[backdrop-filter]:bg-background/65 border-border/60 sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b px-3 backdrop-blur",
+        "md:px-4",
       )}
     >
       <SidebarTrigger
@@ -76,7 +76,7 @@ export function Topbar() {
       />
       <Separator
         orientation="vertical"
-        className="data-[orientation=vertical]:h-full mr-1"
+        className="mr-1 data-[orientation=vertical]:h-full"
       />
 
       <Breadcrumb className="min-w-0 flex-1">
@@ -88,7 +88,7 @@ export function Topbar() {
                 {idx > 0 && <BreadcrumbSeparator />}
                 <BreadcrumbItem className="min-w-0">
                   {isLast || !crumb.url ? (
-                    <BreadcrumbPage className="truncate font-medium text-foreground">
+                    <BreadcrumbPage className="text-foreground truncate font-medium">
                       {crumb.title}
                     </BreadcrumbPage>
                   ) : (
@@ -114,7 +114,7 @@ export function Topbar() {
                 onClick={() => setOpen(true)}
                 aria-label="Search or run a command"
                 aria-keyshortcuts={`${isMac ? "Meta" : "Control"}+K`}
-                className="hidden h-9 min-w-44 gap-2 rounded-full border-border/70 px-3 text-muted-foreground hover:text-foreground sm:inline-flex"
+                className="border-border/70 text-muted-foreground hover:text-foreground hidden h-9 min-w-44 gap-2 rounded-full px-3 sm:inline-flex"
               />
             }
           >
@@ -138,7 +138,7 @@ export function Topbar() {
           <SearchIcon className="size-4" aria-hidden="true" />
         </Button>
 
-        <div className="hidden lg:flex items-center gap-2">
+        <div className="hidden items-center gap-2 lg:flex">
           <SystemStatusBadge
             compact
             variant="outline"

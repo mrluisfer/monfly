@@ -36,9 +36,11 @@ export const useCategoriesList = () => {
     },
     idempotency: {
       getKey: (variables) =>
-        JSON.stringify([...variables.data.ids].sort((left, right) =>
-          left.localeCompare(right)
-        )),
+        JSON.stringify(
+          [...variables.data.ids].sort((left, right) =>
+            left.localeCompare(right),
+          ),
+        ),
       onDuplicatePending: {
         title: "Category deletion already in progress",
       },
@@ -50,7 +52,7 @@ export const useCategoriesList = () => {
 
   const handleCheckboxChange = (categoryId: string, checked: boolean) => {
     setSelectedCategories((prev) =>
-      checked ? [...prev, categoryId] : prev.filter((id) => id !== categoryId)
+      checked ? [...prev, categoryId] : prev.filter((id) => id !== categoryId),
     );
   };
 

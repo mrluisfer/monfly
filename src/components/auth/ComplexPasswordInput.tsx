@@ -46,7 +46,7 @@ export default function ComplexPasswordInput({
         met: req.regex.test(field.value || ""),
         text: req.text,
       })),
-    [field.value]
+    [field.value],
   );
   const strengthScore = strength.filter((req) => req.met).length;
 

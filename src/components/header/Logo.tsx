@@ -10,7 +10,7 @@ export function Logo({ withTitle = true }: { withTitle?: boolean }) {
       to="/home"
       className={cn(
         "flex w-fit items-center gap-2.5 text-xl font-bold md:text-2xl",
-        withTitle ? "md:me-4" : "md:me-0"
+        withTitle ? "md:me-4" : "md:me-0",
       )}
     >
       <img

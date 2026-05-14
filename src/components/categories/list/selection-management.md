@@ -92,7 +92,7 @@ const handleExportSelected = () => {
   // Export logic here
   console.log(
     "Exporting:",
-    selected.map((cat) => cat.name)
+    selected.map((cat) => cat.name),
   );
 };
 

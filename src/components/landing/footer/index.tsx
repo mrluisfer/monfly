@@ -9,7 +9,7 @@ import { TrialAlert } from "./TrialAlert";
 
 export function Footer() {
   return (
-    <Card className="max-w-6xl w-full mt-8 mb-4 mx-auto bg-transparent">
+    <Card className="mx-auto mt-8 mb-4 w-full max-w-6xl bg-transparent">
       <CardContent>
         <footer id="about" aria-labelledby="footer-title">
           <div>

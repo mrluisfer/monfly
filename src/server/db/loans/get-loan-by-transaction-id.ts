@@ -4,7 +4,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getLoanByTransactionId = async (
   transactionId: string,
-  userEmail: string
+  userEmail: string,
 ): Promise<ApiResponse<Loan | null>> => {
   try {
     const loan = await prismaClient.loan.findFirst({

@@ -15,7 +15,7 @@ export function GoToHomeButton({
     <div
       className={cn(
         "absolute top-4 z-10",
-        position === "right" ? "right-4" : "left-4"
+        position === "right" ? "right-4" : "left-4",
       )}
     >
       <Button

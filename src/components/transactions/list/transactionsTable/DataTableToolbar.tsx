@@ -56,7 +56,7 @@ export function DataTableToolbar({
         placeholder="Search transactions..."
         value={globalFilter ?? ""}
         onChange={(event) => setGlobalFilter(event.target.value)}
-        className="h-11 rounded-full border-border/70 bg-background/70 px-4 xl:max-w-sm"
+        className="border-border/70 bg-background/70 h-11 rounded-full px-4 xl:max-w-sm"
       />
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
@@ -68,7 +68,9 @@ export function DataTableToolbar({
               const column = table.getColumn("type");
               const currentFilter = column?.getFilterValue();
               column?.setFilterValue(
-                String(currentFilter).toLowerCase() === "income" ? "" : "income"
+                String(currentFilter).toLowerCase() === "income"
+                  ? ""
+                  : "income",
               );
             }}
             aria-label="Filter income transactions"
@@ -86,7 +88,7 @@ export function DataTableToolbar({
               column?.setFilterValue(
                 String(currentFilter).toLowerCase() === "expense"
                   ? ""
-                  : "expense"
+                  : "expense",
               );
             }}
             aria-label="Filter expense transactions"

@@ -36,7 +36,7 @@ export const getTransactionsCountByMonth = async ({
       (a, b) =>
         a.year - b.year ||
         new Date(`${a.month} 1, ${a.year}`).getMonth() -
-          new Date(`${b.month} 1, ${b.year}`).getMonth()
+          new Date(`${b.month} 1, ${b.year}`).getMonth(),
     );
 
     return {

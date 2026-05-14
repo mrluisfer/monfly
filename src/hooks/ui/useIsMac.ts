@@ -12,7 +12,9 @@ export function useIsMac() {
     if (typeof navigator === "undefined") return;
     const platform =
       (navigator as Navigator & { userAgentData?: { platform?: string } })
-        .userAgentData?.platform ?? navigator.platform ?? "";
+        .userAgentData?.platform ??
+      navigator.platform ??
+      "";
     setIsMac(/Mac|iPhone|iPad|iPod/i.test(platform));
   }, []);
 

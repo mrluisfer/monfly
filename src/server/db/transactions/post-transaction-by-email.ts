@@ -9,7 +9,7 @@ import {
 
 export const postTransactionByEmail = async (
   email: string,
-  data: Transaction
+  data: Transaction,
 ) => {
   try {
     const transaction = await prismaClient.$transaction(async (tx) => {

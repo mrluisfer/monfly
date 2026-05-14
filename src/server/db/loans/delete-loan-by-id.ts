@@ -3,7 +3,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 
 export const deleteLoanById = async (
   email: string,
-  id: string
+  id: string,
 ): Promise<ApiResponse<{ id: string } | null>> => {
   try {
     if (!email) throw new Error("Email is required");

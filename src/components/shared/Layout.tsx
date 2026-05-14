@@ -16,7 +16,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <CommandPaletteProvider>
         <a
           href="#main-content"
-          className="bg-primary text-primary-foreground sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:px-3 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+          className="bg-primary text-primary-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:px-3 focus:py-2 focus:shadow-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
         >
           Skip to content
         </a>
@@ -26,7 +26,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
           <main
             id="main-content"
             tabIndex={-1}
-            className="scrollbar-custom flex flex-1 flex-col gap-6 overflow-y-auto p-2 sm:p-4 pb-10 outline-none md:p-6 lg:p-8"
+            className="scrollbar-custom flex flex-1 flex-col gap-6 overflow-y-auto p-2 pb-10 outline-none sm:p-4 md:p-6 lg:p-8"
           >
             <div className="mx-auto flex w-full max-w-[96rem] flex-1 flex-col gap-6">
               {children}

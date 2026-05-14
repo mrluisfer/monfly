@@ -74,10 +74,10 @@ function PrivacyRoute() {
           >
             <CardContent>
               <item.icon className={`size-5 ${item.tone}`} />
-              <p className="mt-2 text-sm font-semibold text-foreground">
+              <p className="text-foreground mt-2 text-sm font-semibold">
                 {item.title}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 {item.description}
               </p>
             </CardContent>
@@ -119,8 +119,8 @@ function PrivacyRoute() {
               </li>
               <li>
                 <strong className="text-foreground">Financial entries:</strong>{" "}
-                transactions, categories, budgets, pots, recurring bills,
-                cards, and monthly summaries that you create inside Monfly.
+                transactions, categories, budgets, pots, recurring bills, cards,
+                and monthly summaries that you create inside Monfly.
               </li>
               <li>
                 <strong className="text-foreground">Preferences:</strong>{" "}
@@ -170,8 +170,8 @@ function PrivacyRoute() {
           >
             <p>
               Where applicable (for example under the GDPR or comparable
-              regimes), we rely on the following legal bases: performance of
-              the contract you accept by signing up, our legitimate interest in
+              regimes), we rely on the following legal bases: performance of the
+              contract you accept by signing up, our legitimate interest in
               keeping the service operational and secure, your consent for
               optional features, and legal obligations.
             </p>
@@ -232,25 +232,21 @@ function PrivacyRoute() {
             </ul>
             <p>
               You can exercise most of these rights directly inside the
-              application. For everything else, contact us at the address
-              listed below.
+              application. For everything else, contact us at the address listed
+              below.
             </p>
           </LegalSection>
 
           <LegalSection id="children" index={9} title="Children">
             <p>
               Monfly is not directed to children under 13 and we do not
-              knowingly collect personal information from them. If you believe
-              a child has provided us with personal information, please contact
-              us so we can take appropriate action.
+              knowingly collect personal information from them. If you believe a
+              child has provided us with personal information, please contact us
+              so we can take appropriate action.
             </p>
           </LegalSection>
 
-          <LegalSection
-            id="changes"
-            index={10}
-            title="Changes to This Policy"
-          >
+          <LegalSection id="changes" index={10} title="Changes to This Policy">
             <p>
               We may update this Privacy Policy as the product evolves. The
               "last updated" date at the top reflects the most recent revision.
@@ -264,14 +260,14 @@ function PrivacyRoute() {
               For privacy-related questions, write to{" "}
               <a
                 href="mailto:mrluisfeer@gmail.com"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="text-foreground font-medium underline-offset-4 hover:underline"
               >
                 mrluisfeer@gmail.com
               </a>{" "}
               or visit the{" "}
               <Link
                 to="/contact"
-                className="font-medium text-foreground underline-offset-4 hover:underline"
+                className="text-foreground font-medium underline-offset-4 hover:underline"
               >
                 contact page
               </Link>
@@ -286,12 +282,12 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Database className="mt-0.5 size-5 text-teal-600 dark:text-teal-300" />
             <div>
-              <p className="text-sm font-semibold text-foreground">
+              <p className="text-foreground text-sm font-semibold">
                 Data portability
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Export your transactions, budgets, and reports whenever you
-                need them.
+              <p className="text-muted-foreground mt-1 text-xs">
+                Export your transactions, budgets, and reports whenever you need
+                them.
               </p>
             </div>
           </CardContent>
@@ -300,10 +296,10 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Scale className="mt-0.5 size-5 text-amber-600 dark:text-amber-300" />
             <div>
-              <p className="text-sm font-semibold text-foreground">
+              <p className="text-foreground text-sm font-semibold">
                 Compliance-ready
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 Designed with GDPR, CCPA, and similar privacy regimes in mind.
               </p>
             </div>
@@ -313,10 +309,10 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Cookie className="mt-0.5 size-5 text-emerald-600 dark:text-emerald-300" />
             <div>
-              <p className="text-sm font-semibold text-foreground">
+              <p className="text-foreground text-sm font-semibold">
                 Minimal cookies
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 Only the essentials we need to keep your session alive.
               </p>
             </div>
@@ -326,10 +322,10 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Mail className="mt-0.5 size-5 text-sky-600 dark:text-sky-300" />
             <div>
-              <p className="text-sm font-semibold text-foreground">
+              <p className="text-foreground text-sm font-semibold">
                 Direct line
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 Real humans answer privacy requests at mrluisfeer@gmail.com.
               </p>
             </div>

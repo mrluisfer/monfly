@@ -14,7 +14,7 @@ export const putUserTotalBalanceServer = createServerFn({ method: "POST" })
     z.object({
       totalBalance: z.number(),
       email: z.string().email(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     try {

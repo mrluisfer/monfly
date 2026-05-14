@@ -55,7 +55,7 @@ import {
 
 export function HomePage() {
   const { activeTab, switchToTab, isActive } = useManagementTabs(
-    ManagementTab.CATEGORIES
+    ManagementTab.CATEGORIES,
   );
 
   const handleSomeAction = () => {

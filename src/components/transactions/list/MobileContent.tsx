@@ -81,11 +81,11 @@ export function MobileContent({
             value={searchTerm}
             onChange={(event) => setSearchTerm(event.target.value)}
             placeholder="Search description or category"
-            className="h-11 rounded-full border-border/70 bg-background/70 pl-10"
+            className="border-border/70 bg-background/70 h-11 rounded-full pl-10"
             type="search"
             inputMode="search"
           />
-          <SearchIcon className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
+          <SearchIcon className="text-muted-foreground absolute top-1/2 left-3.5 size-4 -translate-y-1/2" />
         </div>
 
         <div
@@ -121,8 +121,11 @@ export function MobileContent({
         <>
           <TransactionCardList data={filteredTransactions} />
           {isTransactionsPage ? null : (
-            <div className="flex justify-center items-center w-full md:justify-start">
-              <Button nativeButton={false} render={<Link to="/home/transactions" />}>
+            <div className="flex w-full items-center justify-center md:justify-start">
+              <Button
+                nativeButton={false}
+                render={<Link to="/home/transactions" />}
+              >
                 <ExternalLinkIcon />
                 More transactions
               </Button>

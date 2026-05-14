@@ -11,8 +11,7 @@ const statusBadgeVariants = cva(
           "border-success/20 bg-success/10 text-success [&>[data-dot]]:bg-success",
         warning:
           "border-warning/30 bg-warning/15 text-warning-foreground dark:text-warning [&>[data-dot]]:bg-warning",
-        info:
-          "border-info/20 bg-info/10 text-info [&>[data-dot]]:bg-info",
+        info: "border-info/20 bg-info/10 text-info [&>[data-dot]]:bg-info",
         danger:
           "border-destructive/20 bg-destructive/10 text-destructive [&>[data-dot]]:bg-destructive",
         neutral:
@@ -30,7 +29,7 @@ const statusBadgeVariants = cva(
       variant: "neutral",
       size: "md",
     },
-  }
+  },
 );
 
 type StatusBadgeProps = React.HTMLAttributes<HTMLSpanElement> &

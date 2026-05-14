@@ -43,5 +43,5 @@ hydrateRoot(
   document,
   <StrictMode>
     <StartClient />
-  </StrictMode>
+  </StrictMode>,
 );

@@ -37,7 +37,7 @@ export function Section({
             )}
           </div>
           {actions && (
-            <div className="flex items-center gap-2 shrink-0">{actions}</div>
+            <div className="flex shrink-0 items-center gap-2">{actions}</div>
           )}
         </header>
       )}

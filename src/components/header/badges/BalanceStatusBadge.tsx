@@ -181,7 +181,7 @@ function BalanceTooltip({
       <p className="text-[10px]">{config.description}</p>
 
       {status !== "loading" && status !== "error" && (
-        <div className="mt-1 border-t border-border pt-1">
+        <div className="border-border mt-1 border-t pt-1">
           <div className="flex items-center justify-between gap-4 text-[10px]">
             <span>Current balance:</span>
             <span className={cn("font-mono font-semibold")}>
@@ -192,7 +192,7 @@ function BalanceTooltip({
       )}
 
       {error && (
-        <p className="mt-1 border-t border-border pt-1 text-[10px] text-destructive">
+        <p className="border-border text-destructive mt-1 border-t pt-1 text-[10px]">
           {error instanceof Error ? error.message : "Unknown error occurred"}
         </p>
       )}

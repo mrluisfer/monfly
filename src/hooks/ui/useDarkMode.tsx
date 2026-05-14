@@ -21,6 +21,6 @@ export const useDarkMode = () => {
       toggleDarkMode: () => toggleDarkMode(),
       isDark,
     }),
-    [isDark, setTheme, theme, toggleDarkMode]
+    [isDark, setTheme, theme, toggleDarkMode],
   );
 };

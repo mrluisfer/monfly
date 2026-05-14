@@ -90,7 +90,7 @@ const action = (options: SileoOptions) =>
   runWhenReady(() => baseSileo.action(options), "");
 const promise = <T>(
   promiseInput: Promise<T> | (() => Promise<T>),
-  options: SileoPromiseOptions<T>
+  options: SileoPromiseOptions<T>,
 ) => {
   if (isToasterReady) {
     return baseSileo.promise(promiseInput, options);
@@ -128,14 +128,14 @@ const feedback = {
     success({ title: `${entity} deleted successfully` }),
   copied: (label = "Copied to clipboard") => info({ title: label }),
   validationError: (
-    description = "Please review the form fields and try again."
+    description = "Please review the form fields and try again.",
   ) =>
     warning({
       title: "Validation error",
       description,
     }),
   networkError: (
-    description = "Check your connection and try again in a moment."
+    description = "Check your connection and try again in a moment.",
   ) =>
     error({
       title: "Network error",

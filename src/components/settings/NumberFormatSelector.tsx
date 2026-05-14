@@ -21,7 +21,9 @@ export const NumberFormatSelector = () => {
 
   const handleChange = (value: NumberFormatId) => {
     setFormat(value);
-    const selected = NUMBER_FORMAT_OPTIONS.find((option) => option.id === value);
+    const selected = NUMBER_FORMAT_OPTIONS.find(
+      (option) => option.id === value,
+    );
     sileo.info({
       title: "Number format updated",
       description: selected?.label ?? value,
@@ -51,10 +53,10 @@ export const NumberFormatSelector = () => {
               <SelectItem key={option.id} value={option.id}>
                 <div className="flex flex-col gap-0.5">
                   <span className="font-medium">{option.label}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     {option.description}
                   </span>
-                  <span className="text-[0.7rem] font-mono text-muted-foreground/80">
+                  <span className="text-muted-foreground/80 font-mono text-[0.7rem]">
                     {option.example}
                   </span>
                 </div>

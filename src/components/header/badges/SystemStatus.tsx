@@ -116,7 +116,7 @@ export function SystemStatusBadge({
       <span
         className={cn(
           "min-w-0 truncate text-xs font-medium",
-          fullWidth && "flex-1"
+          fullWidth && "flex-1",
         )}
       >
         {compact ? config.shortLabel : config.label}
@@ -132,7 +132,7 @@ export function SystemStatusBadgeCompact({
   const config = statusConfig[status];
 
   return (
-    <TooltipProvider >
+    <TooltipProvider>
       <Tooltip>
         <TooltipTrigger
           render={
@@ -140,15 +140,15 @@ export function SystemStatusBadgeCompact({
               className={cn(
                 "relative inline-flex size-3 cursor-pointer rounded-full transition-transform hover:scale-125",
                 config.color,
-                className
+                className,
               )}
               aria-label={config.label}
             >
               {status === "operational" && (
                 <span
                   className={cn(
-                    "absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping",
-                    config.color
+                    "absolute inline-flex h-full w-full animate-ping rounded-full opacity-75",
+                    config.color,
                   )}
                 />
               )}

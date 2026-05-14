@@ -37,7 +37,7 @@ export function useAppHaptics(options?: UseAppHapticsOptions) {
 
       return triggerRaw(input, triggerOptions) ?? Promise.resolve();
     },
-    [enabled, triggerRaw]
+    [enabled, triggerRaw],
   );
 
   const triggerPreset = useCallback(
@@ -52,7 +52,7 @@ export function useAppHaptics(options?: UseAppHapticsOptions) {
         ...triggerOptions,
       });
     },
-    [trigger]
+    [trigger],
   );
 
   return {

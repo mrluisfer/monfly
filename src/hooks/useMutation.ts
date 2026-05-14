@@ -175,7 +175,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
               typeof feedback === "function"
                 ? feedback({ data: recentSuccess.data, variables })
                 : feedback,
-              "info"
+              "info",
             );
           }
 
@@ -193,7 +193,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
               typeof feedback === "function"
                 ? feedback({ variables })
                 : feedback,
-              "info"
+              "info",
             );
           }
 
@@ -209,7 +209,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
               typeof feedback === "function"
                 ? feedback({ variables })
                 : feedback,
-              "warning"
+              "warning",
             );
           }
 
@@ -271,7 +271,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
       opts.onSuccess,
       resolvedHaptics,
       triggerPreset,
-    ]
+    ],
   );
 
   return {

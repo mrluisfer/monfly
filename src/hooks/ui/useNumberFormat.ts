@@ -12,6 +12,6 @@ export const useNumberFormat = () => {
       format,
       setFormat: (nextFormat: NumberFormatId) => setFormat(nextFormat),
     }),
-    [format, setFormat]
+    [format, setFormat],
   );
 };

@@ -15,7 +15,9 @@ function parseBooleanEnv(name: string): boolean | undefined {
   }
 
   if (!isBooleanString(value)) {
-    throw new Error(`Invalid boolean value for ${name}. Use "true" or "false".`);
+    throw new Error(
+      `Invalid boolean value for ${name}. Use "true" or "false".`,
+    );
   }
 
   return value === "true";
@@ -37,13 +39,13 @@ const sessionPassword = getRequiredSecret("SESSION_PASSWORD");
 if (isProduction) {
   if (sessionPassword.length < 32) {
     throw new Error(
-      "SESSION_PASSWORD must be at least 32 characters in production."
+      "SESSION_PASSWORD must be at least 32 characters in production.",
     );
   }
 
   if (sessionPassword === "default_password") {
     throw new Error(
-      "SESSION_PASSWORD cannot use insecure defaults in production."
+      "SESSION_PASSWORD cannot use insecure defaults in production.",
     );
   }
 }

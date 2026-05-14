@@ -118,7 +118,7 @@ export default function ChartByCategoryRadar({
       <CardContent>
         {isLoading && <div className="py-12 text-center">Loading chart...</div>}
         {error && (
-          <div className="py-12 text-center text-destructive">
+          <div className="text-destructive py-12 text-center">
             Error loading data
           </div>
         )}
@@ -157,7 +157,7 @@ export default function ChartByCategoryRadar({
 
       {stats && (
         <CardFooter className="bg-transparent">
-          <div className="space-y-3 text-sm w-full">
+          <div className="w-full space-y-3 text-sm">
             <div className="flex items-center gap-2 leading-none font-medium">
               <TrendingStatus type={type} data={trendingMonthlyData} />
             </div>
@@ -166,7 +166,7 @@ export default function ChartByCategoryRadar({
 
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-muted space-y-1 rounded-xl p-3">
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   Top Category
                 </div>
                 <Badge variant="secondary" className="text-xs font-medium">
@@ -174,8 +174,8 @@ export default function ChartByCategoryRadar({
                 </Badge>
               </div>
               <div className="bg-muted space-y-1 rounded-xl p-3">
-                <div className="text-xs text-muted-foreground">Categories</div>
-                <div className="font-semibold text-sm">
+                <div className="text-muted-foreground text-xs">Categories</div>
+                <div className="text-sm font-semibold">
                   {stats.categoriesCount}
                 </div>
               </div>
@@ -183,23 +183,23 @@ export default function ChartByCategoryRadar({
 
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-muted space-y-1 rounded-xl p-3">
-                <div className="text-xs text-muted-foreground">
+                <div className="text-muted-foreground text-xs">
                   Total {chartLabel}
                 </div>
-                <div className="font-semibold text-sm">
+                <div className="text-sm font-semibold">
                   ${stats.total.toLocaleString()}
                 </div>
               </div>
               <div className="bg-muted space-y-1 rounded-xl p-3">
-                <div className="text-xs text-muted-foreground">Average</div>
-                <div className="font-semibold text-sm">
+                <div className="text-muted-foreground text-xs">Average</div>
+                <div className="text-sm font-semibold">
                   ${Math.round(stats.avg).toLocaleString()}
                 </div>
               </div>
             </div>
 
             <div className="pt-1">
-              <div className="text-xs text-muted-foreground mb-2">
+              <div className="text-muted-foreground mb-2 text-xs">
                 Distribution
               </div>
               <div className="flex gap-1">
@@ -211,7 +211,7 @@ export default function ChartByCategoryRadar({
                   return (
                     <div
                       key={item.category}
-                      className="h-2 bg-primary rounded-sm flex-1"
+                      className="bg-primary h-2 flex-1 rounded-sm"
                       style={{
                         opacity: Math.max(0.2, percentage / 100),
                         minWidth: "2px",

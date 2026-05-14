@@ -10,7 +10,7 @@ export const getTotalExpensesByEmailServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     const sessionEmail = await resolveSessionEmail(data.email);

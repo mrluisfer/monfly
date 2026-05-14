@@ -20,7 +20,7 @@ import type { z } from "zod";
 
 export const useEditTransaction = (
   transaction: Transaction,
-  onCloseDialog: () => void
+  onCloseDialog: () => void,
 ) => {
   const queryClient = useQueryClient();
   // Holds the loan that's already linked to this transaction (if any).
@@ -64,26 +64,24 @@ export const useEditTransaction = (
       if (res.data) {
         existingLoanRef.current = res.data;
         form.setValue(
-          transactionFormNames.loanMode as Parameters<
-            typeof form.setValue
-          >[0],
-          "create"
+          transactionFormNames.loanMode as Parameters<typeof form.setValue>[0],
+          "create",
         );
         form.setValue(
           transactionFormNames.markAsLoan as Parameters<
             typeof form.setValue
           >[0],
-          true
+          true,
         );
         form.setValue(
           transactionFormNames.loanDebtor as Parameters<
             typeof form.setValue
           >[0],
-          res.data.debtor
+          res.data.debtor,
         );
         form.setValue(
           transactionFormNames.loanDueAt as Parameters<typeof form.setValue>[0],
-          res.data.dueAt ?? null
+          res.data.dueAt ?? null,
         );
       }
     });
@@ -125,7 +123,7 @@ export const useEditTransaction = (
   });
 
   const onSubmitEditedTransaction = async (
-    data: z.infer<typeof TransactionFormSchema>
+    data: z.infer<typeof TransactionFormSchema>,
   ) => {
     try {
       const mode = data.loanMode ?? "none";

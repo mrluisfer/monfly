@@ -66,12 +66,12 @@ export function UserFormActions({
     <div
       className={cn(
         "sticky bottom-3 z-30 mt-6",
-        "rounded-2xl border border-border/60 bg-background/75 px-3 py-2.5 ring-1 ring-foreground/5 shadow-[0_22px_36px_-30px_rgba(2,6,23,0.55)] backdrop-blur-md",
-        "supports-backdrop-filter:bg-background/65"
+        "border-border/60 bg-background/75 ring-foreground/5 rounded-2xl border px-3 py-2.5 shadow-[0_22px_36px_-30px_rgba(2,6,23,0.55)] ring-1 backdrop-blur-md",
+        "supports-backdrop-filter:bg-background/65",
       )}
     >
       <div className="grid gap-3 sm:flex sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-2 order-2 sm:order-1">
+        <div className="order-2 flex flex-wrap items-center gap-2 sm:order-1">
           <StatusPill hasChanges={hasChanges} submitting={submitting} />
         </div>
 
@@ -99,8 +99,8 @@ export function UserFormActions({
               }
             />
             <TooltipContent sideOffset={8}>
-              Download a copy of your transactions, categories and reports
-              (GDPR / CCPA portability).
+              Download a copy of your transactions, categories and reports (GDPR
+              / CCPA portability).
             </TooltipContent>
           </Tooltip>
 
@@ -127,7 +127,7 @@ export function UserFormActions({
               <AlertDialogHeader>
                 <span
                   data-slot="alert-dialog-media"
-                  className="mb-2 inline-flex size-16 items-center justify-center rounded-full bg-destructive/10 text-destructive"
+                  className="bg-destructive/10 text-destructive mb-2 inline-flex size-16 items-center justify-center rounded-full"
                   aria-hidden="true"
                 >
                   <CircleAlertIcon />
@@ -135,8 +135,7 @@ export function UserFormActions({
                 <AlertDialogTitle>Delete your account?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This permanently removes your workspace, transactions,
-                  budgets, categories and reports. This action cannot be
-                  undone.
+                  budgets, categories and reports. This action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -144,9 +143,7 @@ export function UserFormActions({
                   Cancel
                 </AlertDialogCancel>
                 <AlertDialogAction
-                  render={
-                    <Button variant="destructive" onClick={runDelete} />
-                  }
+                  render={<Button variant="destructive" onClick={runDelete} />}
                 >
                   <TrashIcon />
                   Yes, delete forever
@@ -157,7 +154,7 @@ export function UserFormActions({
 
           <span
             aria-hidden="true"
-            className="hidden h-6 w-px bg-border/60 sm:inline-block"
+            className="bg-border/60 hidden h-6 w-px sm:inline-block"
           />
 
           <Button
@@ -189,7 +186,7 @@ function StatusPill({
   if (submitting) {
     return (
       <span
-        className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary"
+        className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
         aria-live="polite"
       >
         <LoaderIcon className="size-3 animate-spin" aria-hidden="true" />

@@ -34,5 +34,5 @@ export const getUserSession = createServerFn({ method: "GET" }).handler(
         statusCode: 500,
       } as ApiResponse<string | null>;
     }
-  }
+  },
 );

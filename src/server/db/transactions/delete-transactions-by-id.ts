@@ -55,7 +55,7 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
         const impact = t.type === "income" ? -t.amount : t.amount;
         balanceByUser.set(
           t.userEmail,
-          (balanceByUser.get(t.userEmail) ?? 0) + impact
+          (balanceByUser.get(t.userEmail) ?? 0) + impact,
         );
       }
 

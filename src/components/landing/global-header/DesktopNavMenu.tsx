@@ -20,14 +20,14 @@ export function DesktopNavMenu() {
           <NavigationMenuItem key={link.label}>
             {link.submenu ? (
               <>
-                <NavigationMenuTrigger className="rounded-full border border-transparent bg-transparent px-3 py-1.5 text-sm font-medium tracking-[0.01em] text-foreground/78 transition-colors hover:border-border/75 hover:bg-background/85 hover:text-foreground *:[svg]:-me-0.5 *:[svg]:size-3.5">
+                <NavigationMenuTrigger className="text-foreground/78 hover:border-border/75 hover:bg-background/85 hover:text-foreground rounded-full border border-transparent bg-transparent px-3 py-1.5 text-sm font-medium tracking-[0.01em] transition-colors *:[svg]:-me-0.5 *:[svg]:size-3.5">
                   {link.label}
                 </NavigationMenuTrigger>
-                <NavigationMenuContent className="z-50 rounded-2xl border border-border/70 bg-background/97 p-1.5 shadow-[0_24px_38px_-28px_rgba(2,6,23,0.85)] backdrop-blur-md">
+                <NavigationMenuContent className="border-border/70 bg-background/97 z-50 rounded-2xl border p-1.5 shadow-[0_24px_38px_-28px_rgba(2,6,23,0.85)] backdrop-blur-md">
                   <ul
                     className={cn(
                       "grid gap-1.5",
-                      link.type === "description" ? "min-w-72" : "min-w-52"
+                      link.type === "description" ? "min-w-72" : "min-w-52",
                     )}
                   >
                     {link.items.map((item) => (
@@ -48,7 +48,7 @@ export function DesktopNavMenu() {
                               <div className="text-sm font-semibold">
                                 {item.label}
                               </div>
-                              <p className="line-clamp-2 text-xs text-muted-foreground">
+                              <p className="text-muted-foreground line-clamp-2 text-xs">
                                 {item.description}
                               </p>
                             </div>
@@ -63,7 +63,7 @@ export function DesktopNavMenu() {
               </>
             ) : (
               <NavigationMenuLink
-                className="rounded-full px-3 py-1.5 text-sm font-medium tracking-[0.01em] text-foreground/78 transition-colors hover:bg-background/85 hover:text-foreground"
+                className="text-foreground/78 hover:bg-background/85 hover:text-foreground rounded-full px-3 py-1.5 text-sm font-medium tracking-[0.01em] transition-colors"
                 render={<Link to={link.href} />}
               >
                 {link.label}

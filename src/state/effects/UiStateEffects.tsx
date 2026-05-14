@@ -1,6 +1,10 @@
 import { useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
-import { activeThemeAtom, darkModeThemeAtom, fontDisplayAtom } from "~/state/atoms";
+import {
+  activeThemeAtom,
+  darkModeThemeAtom,
+  fontDisplayAtom,
+} from "~/state/atoms";
 
 function syncThemeClass(theme: "light" | "dark") {
   if (typeof window === "undefined") return;

@@ -30,7 +30,9 @@ const TransactionItemActions = ({
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to delete transaction" });
+        sileo.error({
+          title: response.message ?? "Failed to delete transaction",
+        });
         return;
       }
 
@@ -59,35 +61,20 @@ const TransactionItemActions = ({
               variant="outline"
               size="icon-sm"
               aria-label="Open transaction actions"
-              className="
-                transition-all duration-200 ease-out
-                hover:scale-105 hover:shadow-sm hover:border-primary/20
-                active:scale-95
-                focus-visible:scale-105
-                data-[state=open]:scale-105 data-[state=open]:shadow-sm
-                dark:hover:shadow-primary/10 rounded-full sm:size-9"
+              className="hover:border-primary/20 dark:hover:shadow-primary/10 rounded-full transition-all duration-200 ease-out hover:scale-105 hover:shadow-sm focus-visible:scale-105 active:scale-95 data-[state=open]:scale-105 data-[state=open]:shadow-sm sm:size-9"
             >
               <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
             </Button>
           }
         />
-        <DropdownMenuContent
-          className="
-          space-y-2
-          animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 duration-200
-        "
-        >
+        <DropdownMenuContent className="animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 space-y-2 duration-200">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="default"
-            className="
-              transition-all duration-200 ease-out
-              hover:bg-primary/10 focus:bg-primary/10
-              cursor-pointer group
-            "
+            className="hover:bg-primary/10 focus:bg-primary/10 group cursor-pointer transition-all duration-200 ease-out"
             onClick={() => setIsOpenDialog(true)}
           >
             <Edit className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
@@ -95,11 +82,7 @@ const TransactionItemActions = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
-            className="
-              transition-all duration-200 ease-out
-              hover:bg-destructive/10 focus:bg-destructive/10
-              cursor-pointer group
-            "
+            className="hover:bg-destructive/10 focus:bg-destructive/10 group cursor-pointer transition-all duration-200 ease-out"
             onClick={() =>
               deleteTransactionByIdMutation.mutate({
                 data: {

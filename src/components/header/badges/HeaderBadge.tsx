@@ -37,18 +37,18 @@ export function HeaderBadge({
   if (!isActive) return null;
 
   return (
-    <TooltipProvider >
+    <TooltipProvider>
       <Tooltip>
         <TooltipTrigger
           render={
             <Badge
               variant={variant}
               className={cn(
-                "inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border border-border/70 bg-card px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] select-none transition-colors duration-200 hover:bg-muted/70",
+                "border-border/70 bg-card text-foreground hover:bg-muted/70 inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border px-3 py-1.5 shadow-xs backdrop-blur-[2px] transition-colors duration-200 select-none",
                 fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
                 compact && "h-8 px-2.5 py-1",
                 !compact && !fullWidth && "h-9",
-                className
+                className,
               )}
               aria-live={ariaLive}
             >
@@ -82,8 +82,8 @@ export function StatusDot({ color, animate = false }: StatusDotProps) {
       {animate && (
         <span
           className={cn(
-            "absolute inline-flex size-full rounded-full opacity-75 animate-ping",
-            color
+            "absolute inline-flex size-full animate-ping rounded-full opacity-75",
+            color,
           )}
         />
       )}
@@ -110,7 +110,7 @@ export function BadgeIcon({
         "size-3.5 shrink-0",
         fullWidth && "size-4",
         animate && "animate-spin",
-        className
+        className,
       )}
       aria-hidden="true"
     />

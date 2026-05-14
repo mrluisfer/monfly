@@ -44,7 +44,7 @@ export const loginFn = createServerFn({ method: "POST" })
       // Check if the password is correct
       const isPasswordCorrect = await bcrypt.compare(
         data.password,
-        user.password
+        user.password,
       );
 
       if (!isPasswordCorrect) {

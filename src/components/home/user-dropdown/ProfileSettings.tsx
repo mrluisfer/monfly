@@ -69,22 +69,22 @@ export default function ProfileSettings({
   if (!userEmail) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-sm">
           No user session found. Please log in.
         </div>
-      </div>
+      </div>,
     );
   }
 
   // Handle loading state
   if (isPending) {
     return renderDialog(
-      <div className="flex items-center justify-center p-8 space-x-2">
-        <div className="animate-spin rounded-full size-4 border-b-2 border-primary"></div>
-        <div className="text-sm text-muted-foreground">
+      <div className="flex items-center justify-center space-x-2 p-8">
+        <div className="border-primary size-4 animate-spin rounded-full border-b-2"></div>
+        <div className="text-muted-foreground text-sm">
           Loading user profile...
         </div>
-      </div>
+      </div>,
     );
   }
 
@@ -92,10 +92,10 @@ export default function ProfileSettings({
   if (error) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-destructive">
+        <div className="text-destructive text-sm">
           Error loading profile: {error.message}
         </div>
-      </div>
+      </div>,
     );
   }
 
@@ -103,10 +103,10 @@ export default function ProfileSettings({
   if (data?.error || !data?.data) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-destructive">
+        <div className="text-destructive text-sm">
           {data?.message || "User not found"}
         </div>
-      </div>
+      </div>,
     );
   }
 
@@ -117,10 +117,10 @@ export default function ProfileSettings({
   if (!user || !user.id || !user.email) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
-        <div className="text-sm text-destructive">
+        <div className="text-destructive text-sm">
           Invalid user data: missing required fields
         </div>
-      </div>
+      </div>,
     );
   }
 

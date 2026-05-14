@@ -13,7 +13,7 @@ export const deleteCategoryByIdServer = createServerFn({ method: "POST" })
   .inputValidator(
     z.object({
       id: z.string(),
-    })
+    }),
   )
   .handler(async ({ data }) => {
     try {

@@ -12,7 +12,7 @@ const EditTransaction = ({
 }) => {
   const { form, onSubmitEditedTransaction, mutation } = useEditTransaction(
     transaction,
-    onClose
+    onClose,
   );
 
   return (

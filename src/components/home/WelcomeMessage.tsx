@@ -11,16 +11,16 @@ export function WelcomeMessage({ children }: { children: ReactNode }) {
         month: "long",
         day: "numeric",
       }).format(new Date()),
-    []
+    [],
   );
 
   return (
     <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
       <div className="space-y-1.5">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+        <h1 className="text-foreground text-2xl font-semibold tracking-tight sm:text-3xl">
           Overview
         </h1>
-        <p className="max-w-3xl text-sm leading-6 text-muted-foreground">
+        <p className="text-muted-foreground max-w-3xl text-sm leading-6">
           {children}
         </p>
       </div>

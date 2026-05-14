@@ -12,7 +12,7 @@ self.addEventListener("install", (event) => {
     caches
       .open(CACHE_NAME)
       .then((cache) => cache.addAll(PRECACHE_ASSETS))
-      .then(() => self.skipWaiting())
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -25,10 +25,10 @@ self.addEventListener("activate", (event) => {
         Promise.all(
           names
             .filter((n) => n.startsWith("monfly-") && n !== CACHE_NAME)
-            .map((n) => caches.delete(n))
-        )
+            .map((n) => caches.delete(n)),
+        ),
       )
-      .then(() => self.clients.claim())
+      .then(() => self.clients.claim()),
   );
 });
 
@@ -62,8 +62,8 @@ self.addEventListener("fetch", (event) => {
 
           // Return cached immediately if available, otherwise wait for network
           return cached || network;
-        })
-      )
+        }),
+      ),
     );
     return;
   }
@@ -88,8 +88,8 @@ self.addEventListener("fetch", (event) => {
             if (response.ok) cache.put(request, response.clone());
             return response;
           });
-        })
-      )
+        }),
+      ),
     );
   }
 });

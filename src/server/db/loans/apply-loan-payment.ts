@@ -47,7 +47,7 @@ export class LoanPaymentError extends Error {
  */
 export const applyLoanPaymentDelta = async (
   tx: Prisma.TransactionClient,
-  { loanId, delta, userEmail, transactionType }: LoanPaymentDelta
+  { loanId, delta, userEmail, transactionType }: LoanPaymentDelta,
 ) => {
   const loan = await tx.loan.findFirst({
     where: { id: loanId, userEmail },
@@ -63,7 +63,7 @@ export const applyLoanPaymentDelta = async (
     throw new LoanPaymentError(
       loan.direction === "lent"
         ? "An 'Owed to me' loan can only be paid by an income transaction"
-        : "An 'I owe' loan can only be paid by an expense transaction"
+        : "An 'I owe' loan can only be paid by an expense transaction",
     );
   }
 
@@ -71,12 +71,12 @@ export const applyLoanPaymentDelta = async (
 
   if (nextAmountPaid < 0) {
     throw new LoanPaymentError(
-      "This change would make the loan's paid amount negative"
+      "This change would make the loan's paid amount negative",
     );
   }
   if (nextAmountPaid > loan.amount) {
     throw new LoanPaymentError(
-      `Payment exceeds the loan's outstanding balance`
+      `Payment exceeds the loan's outstanding balance`,
     );
   }
 

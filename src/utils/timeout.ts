@@ -4,7 +4,7 @@
 export function withTimeout<T>(
   promise: Promise<T>,
   timeoutMs: number = 10000, // 10 seconds default
-  timeoutMessage: string = "Request timed out"
+  timeoutMessage: string = "Request timed out",
 ): Promise<T> {
   return Promise.race([
     promise,
@@ -21,13 +21,13 @@ export function withTimeout<T>(
  */
 export async function withDatabaseTimeout<T>(
   operation: () => Promise<T>,
-  timeoutMs: number = 15000 // 15 seconds for database operations
+  timeoutMs: number = 15000, // 15 seconds for database operations
 ): Promise<T> {
   try {
     const result = await withTimeout(
       operation(),
       timeoutMs,
-      "Database operation timed out"
+      "Database operation timed out",
     );
     return result;
   } catch (error) {

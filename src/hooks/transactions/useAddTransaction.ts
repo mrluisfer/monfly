@@ -61,8 +61,7 @@ export const useAddTransaction = () => {
           description:
             variables.data.transaction.description?.trim().toLowerCase() ?? "",
           type: variables.data.transaction.type.toLowerCase(),
-          appliedToLoanId:
-            variables.data.transaction.appliedToLoanId ?? null,
+          appliedToLoanId: variables.data.transaction.appliedToLoanId ?? null,
         }),
       onDuplicatePending: {
         title: "Transaction is already being saved",

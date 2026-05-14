@@ -7,10 +7,7 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { postLoanByEmailServer } from "~/lib/api/loan/post-loan-by-email";
 import { sileo } from "~/lib/toaster";
 import { invalidateLoanQueries } from "~/utils/query-invalidation";
-import {
-  LoanFormSchema,
-  type LoanFormValues,
-} from "~/zod-schemas/loan-schema";
+import { LoanFormSchema, type LoanFormValues } from "~/zod-schemas/loan-schema";
 
 export const useAddLoan = () => {
   const queryClient = useQueryClient();

@@ -11,13 +11,10 @@ import {
 } from "@/components/ui/tooltip";
 
 const getTrendingIcon = (percentChange: number) => {
-  if (percentChange > 0)
-    return (
-      <TrendingUp className="size-4 text-primary" />
-    );
+  if (percentChange > 0) return <TrendingUp className="text-primary size-4" />;
   if (percentChange < 0)
-    return <TrendingDown className="size-4 text-destructive" />;
-  return <TrendingUpDown className="size-4 text-muted-foreground" />;
+    return <TrendingDown className="text-destructive size-4" />;
+  return <TrendingUpDown className="text-muted-foreground size-4" />;
 };
 
 export function TrendingStatus({
@@ -68,21 +65,21 @@ export function TrendingStatus({
 
   return (
     <TooltipProvider>
-      <div className="flex flex-col gap-2 mt-2">
+      <div className="mt-2 flex flex-col gap-2">
         {/* Current Month Display */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-          <span className="text-xs sm:text-sm text-muted-foreground font-medium">
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
+          <span className="text-muted-foreground text-xs font-medium sm:text-sm">
             {formattedType} this month:
           </span>
-          <span className="text-sm sm:text-base font-bold text-foreground">
+          <span className="text-foreground text-sm font-bold sm:text-base">
             {formatCurrency(safeThisMonth, "USD")}
           </span>
         </div>
 
         {/* Comparison Display */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               vs. {formatCurrency(safeLastMonth, "USD")}
             </span>
             <Tooltip>
@@ -92,7 +89,7 @@ export function TrendingStatus({
                     {getTrendingIcon(safePercentChange)}
                     <Badge
                       variant={badgeVariant}
-                      className={`px-2 py-0.5 text-xs font-semibold border ${badgeColorClasses}`}
+                      className={`border px-2 py-0.5 text-xs font-semibold ${badgeColorClasses}`}
                     >
                       {isNeutral
                         ? "0%"
@@ -136,7 +133,7 @@ export function TrendingStatus({
           </div>
 
           {!isNeutral && (
-            <span className="text-xs text-muted-foreground hidden sm:block">
+            <span className="text-muted-foreground hidden text-xs sm:block">
               {changeLabel} last month
             </span>
           )}

@@ -32,7 +32,8 @@ body {
 }
 
 @media (max-width: 1000px) {
-  html,body {
+  html,
+  body {
     -webkit-user-select: none;
     user-select: none;
   }
@@ -198,7 +199,7 @@ select,
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb {
-    @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40 transition-colors;
+    @apply bg-muted-foreground/20 hover:bg-muted-foreground/40 rounded-full transition-colors;
   }
 
   .no-scrollbar::-webkit-scrollbar {
@@ -220,7 +221,7 @@ select,
 
   /* Focus ring helper for custom interactive elements */
   .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    @apply focus-visible:ring-ring focus-visible:ring-offset-background focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none;
   }
 }
 

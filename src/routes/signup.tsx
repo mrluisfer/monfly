@@ -116,10 +116,10 @@ function Signup() {
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -left-24 top-28 hidden size-80 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_74%)] opacity-20 blur-2xl sm:block"
+        className="pointer-events-none absolute top-28 -left-24 hidden size-80 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_74%)] opacity-20 blur-2xl sm:block"
       />
 
-      <main className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-6">
+      <main className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 pt-4 pb-6 sm:px-6 sm:pt-6 sm:pb-8">
         <SharedHeader>
           <Button
             render={
@@ -135,15 +135,15 @@ function Signup() {
           <Card className="order-2 h-fit">
             <CardContent>
               <div>
-                <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-primary">
+                <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.12em] uppercase">
                   <Sparkles className="size-3.5" />
                   Build Your Money System
                 </p>
-                <h2 className="mt-5 text-balance font-[family-name:var(--font-syne)] text-3xl font-semibold leading-tight xl:text-4xl">
+                <h2 className="mt-5 font-[family-name:var(--font-syne)] text-3xl leading-tight font-semibold text-balance xl:text-4xl">
                   Start with a faster onboarding flow that works on every
                   screen.
                 </h2>
-                <p className="mt-3 max-w-lg text-sm text-muted-foreground sm:text-base">
+                <p className="text-muted-foreground mt-3 max-w-lg text-sm sm:text-base">
                   Create your account and move from scattered expenses to a
                   single operating dashboard.
                 </p>
@@ -154,12 +154,12 @@ function Signup() {
                   {signupStats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="rounded-2xl border border-border/65 bg-background/80 p-3"
+                      className="border-border/65 bg-background/80 rounded-2xl border p-3"
                     >
-                      <dt className="text-[0.68rem] uppercase tracking-[0.12em] text-muted-foreground">
+                      <dt className="text-muted-foreground text-[0.68rem] tracking-[0.12em] uppercase">
                         {stat.label}
                       </dt>
-                      <dd className="mt-1 text-lg font-semibold text-foreground">
+                      <dd className="text-foreground mt-1 text-lg font-semibold">
                         {stat.value}
                       </dd>
                     </div>
@@ -170,9 +170,9 @@ function Signup() {
                   {signupHighlights.map((item) => (
                     <li
                       key={item}
-                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                      className="text-muted-foreground flex items-start gap-2 text-sm"
                     >
-                      <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
+                      <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -187,15 +187,15 @@ function Signup() {
           </Card>
 
           <section className="order-1 flex items-start sm:items-center">
-            <div className="landing-glass-panel w-full rounded-3xl border border-border/70 p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
-              <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-primary">
+            <div className="landing-glass-panel border-border/70 w-full rounded-3xl border p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
+              <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.1em] uppercase">
                 <BadgeCheck className="size-3.5" />
                 Create Account
               </p>
-              <h1 className="mt-4 text-balance font-[family-name:var(--font-syne)] text-2xl font-bold leading-tight sm:text-3xl">
+              <h1 className="mt-4 font-[family-name:var(--font-syne)] text-2xl leading-tight font-bold text-balance sm:text-3xl">
                 Launch your personal finance workspace
               </h1>
-              <p className="mt-2 text-sm text-muted-foreground sm:text-base">
+              <p className="text-muted-foreground mt-2 text-sm sm:text-base">
                 It takes less than a minute to set up your account and start
                 tracking.
               </p>
@@ -205,11 +205,11 @@ function Signup() {
               </div>
 
               <div className="my-5 flex items-center gap-3">
-                <div className="h-px flex-1 bg-border" />
-                <span className="text-xs uppercase tracking-[0.08em] text-muted-foreground">
+                <div className="bg-border h-px flex-1" />
+                <span className="text-muted-foreground text-xs tracking-[0.08em] uppercase">
                   or continue with email
                 </span>
-                <div className="h-px flex-1 bg-border" />
+                <div className="bg-border h-px flex-1" />
               </div>
 
               <Auth<SignupFormValues>
@@ -221,7 +221,7 @@ function Signup() {
                 showActionTitle={false}
                 afterSubmit={
                   signupMutation.error ? (
-                    <p className="text-sm text-destructive" role="alert">
+                    <p className="text-destructive text-sm" role="alert">
                       {signupMutation.data?.message ||
                         "An error occurred. Please try again."}
                     </p>
@@ -231,14 +231,14 @@ function Signup() {
             </div>
           </section>
 
-          <section className="landing-glass-panel order-3 rounded-2xl border border-border/65 p-4 lg:hidden">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-primary">
+          <section className="landing-glass-panel border-border/65 order-3 rounded-2xl border p-4 lg:hidden">
+            <h2 className="text-primary text-sm font-semibold tracking-[0.08em] uppercase">
               What you get
             </h2>
-            <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+            <ul className="text-muted-foreground mt-3 space-y-2 text-sm">
               {signupHighlights.slice(0, 2).map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
+                  <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
                   <span>{item}</span>
                 </li>
               ))}

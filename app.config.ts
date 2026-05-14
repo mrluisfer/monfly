@@ -9,7 +9,7 @@ function preventSensitiveClientEnvLeak() {
     name: "prevent-sensitive-client-env-leak",
     configResolved() {
       const leakedClientSecrets = Object.keys(process.env).filter((envName) =>
-        CLIENT_SENSITIVE_ENV_PATTERN.test(envName)
+        CLIENT_SENSITIVE_ENV_PATTERN.test(envName),
       );
 
       if (leakedClientSecrets.length === 0) {
@@ -17,7 +17,7 @@ function preventSensitiveClientEnvLeak() {
       }
 
       throw new Error(
-        `Sensitive env vars cannot use VITE_ prefix: ${leakedClientSecrets.join(", ")}`
+        `Sensitive env vars cannot use VITE_ prefix: ${leakedClientSecrets.join(", ")}`,
       );
     },
   };

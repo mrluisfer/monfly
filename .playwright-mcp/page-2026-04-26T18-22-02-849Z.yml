@@ -1,195 +1,195 @@
 - generic [active] [ref=e1]:
-  - generic [ref=e2]:
-    - link "Skip to content" [ref=e3] [cursor=pointer]:
-      - /url: "#main-content"
-    - generic [ref=e6]:
-      - list [ref=e8]:
-        - listitem [ref=e9]:
-          - link "Monfly Personal finance" [ref=e10] [cursor=pointer]:
-            - /url: /home
-            - img [ref=e12]
-            - generic [ref=e13]:
-              - generic [ref=e14]: Monfly
-              - generic [ref=e15]: Personal finance
-      - generic [ref=e16]:
-        - generic [ref=e17]:
-          - generic [ref=e18]: Workspace
-          - list [ref=e20]:
-            - listitem [ref=e21]:
-              - link "Home" [ref=e22] [cursor=pointer]:
-                - /url: /home
-                - img [ref=e23]
-                - generic [ref=e26]: Home
-            - listitem [ref=e27]:
-              - link "Transactions" [ref=e28] [cursor=pointer]:
-                - /url: /home/transactions
-                - img [ref=e29]
-                - generic [ref=e31]: Transactions
-            - listitem [ref=e32]:
-              - button "Budgets Soon" [disabled]:
-                - img
-                - generic: Budgets
-                - generic: Soon
-            - listitem [ref=e33]:
-              - link "Reports" [ref=e34] [cursor=pointer]:
-                - /url: /home/reports
-                - img [ref=e35]
-                - generic [ref=e36]: Reports
-            - listitem [ref=e37]:
-              - link "Categories" [ref=e38] [cursor=pointer]:
-                - /url: /home/categories
-                - img [ref=e39]
-                - generic [ref=e40]: Categories
-            - listitem [ref=e41]:
-              - link "Calculator" [ref=e42] [cursor=pointer]:
-                - /url: /home/balance-calculator
-                - img [ref=e43]
-                - generic [ref=e45]: Calculator
-        - list [ref=e48]:
-          - listitem [ref=e49]:
-            - button "Settings" [ref=e50]:
-              - img [ref=e51]
-              - generic [ref=e54]: Settings
-          - listitem [ref=e55]:
-            - button "What's new" [ref=e56]:
-              - img [ref=e57]
-              - generic [ref=e60]: What's new
-      - list [ref=e62]:
-        - listitem [ref=e63]:
-          - button "test test@gmail.com" [ref=e64]:
-            - img [ref=e65]
-            - generic [ref=e73]:
-              - generic [ref=e74]: test
-              - generic [ref=e75]: test@gmail.com
-            - img [ref=e76]
-      - button "Toggle Sidebar" [ref=e79]
-    - main [ref=e80]:
-      - generic [ref=e81]:
-        - button "Toggle navigation" [ref=e82]:
-          - img
-          - generic [ref=e83]: Toggle Sidebar
-        - separator [ref=e84]
-        - navigation "breadcrumb" [ref=e85]:
-          - list [ref=e86]:
-            - listitem [ref=e87]:
-              - link "Home" [disabled] [ref=e88]
-        - generic [ref=e89]:
-          - button "Search or run a command" [ref=e90]:
-            - img
-            - generic [ref=e91]: Search…
-            - generic:
-              - generic: Ctrl
-              - text: K
-          - generic [ref=e96]: Operational
-          - button "Hide information" [ref=e97]:
-            - img
-          - button "Switch to dark mode" [ref=e98]:
-            - img
-      - main [ref=e99]:
-        - generic [ref=e101]:
-          - generic [ref=e102]:
-            - generic [ref=e103]:
-              - img [ref=e105]
-              - generic [ref=e110]:
-                - heading "Overview" [level=1] [ref=e111]
-                - paragraph [ref=e112]: Track balance, cashflow, and recent activity in one place.
-            - generic [ref=e114]:
-              - img [ref=e116]
-              - text: Sunday, April 26
-          - generic [ref=e118]:
-            - generic [ref=e119]:
-              - generic [ref=e121]:
-                - generic [ref=e123]:
-                  - generic [ref=e124]:
-                    - generic [ref=e126]:
-                      - paragraph [ref=e127]: Net total
-                      - generic [ref=e128]:
+    - generic [ref=e2]:
+        - link "Skip to content" [ref=e3] [cursor=pointer]:
+            - /url: "#main-content"
+        - generic [ref=e6]:
+            - list [ref=e8]:
+                - listitem [ref=e9]:
+                    - link "Monfly Personal finance" [ref=e10] [cursor=pointer]:
+                        - /url: /home
+                        - img [ref=e12]
+                        - generic [ref=e13]:
+                            - generic [ref=e14]: Monfly
+                            - generic [ref=e15]: Personal finance
+            - generic [ref=e16]:
+                - generic [ref=e17]:
+                    - generic [ref=e18]: Workspace
+                    - list [ref=e20]:
+                        - listitem [ref=e21]:
+                            - link "Home" [ref=e22] [cursor=pointer]:
+                                - /url: /home
+                                - img [ref=e23]
+                                - generic [ref=e26]: Home
+                        - listitem [ref=e27]:
+                            - link "Transactions" [ref=e28] [cursor=pointer]:
+                                - /url: /home/transactions
+                                - img [ref=e29]
+                                - generic [ref=e31]: Transactions
+                        - listitem [ref=e32]:
+                            - button "Budgets Soon" [disabled]:
+                                - img
+                                - generic: Budgets
+                                - generic: Soon
+                        - listitem [ref=e33]:
+                            - link "Reports" [ref=e34] [cursor=pointer]:
+                                - /url: /home/reports
+                                - img [ref=e35]
+                                - generic [ref=e36]: Reports
+                        - listitem [ref=e37]:
+                            - link "Categories" [ref=e38] [cursor=pointer]:
+                                - /url: /home/categories
+                                - img [ref=e39]
+                                - generic [ref=e40]: Categories
+                        - listitem [ref=e41]:
+                            - link "Calculator" [ref=e42] [cursor=pointer]:
+                                - /url: /home/balance-calculator
+                                - img [ref=e43]
+                                - generic [ref=e45]: Calculator
+                - list [ref=e48]:
+                    - listitem [ref=e49]:
+                        - button "Settings" [ref=e50]:
+                            - img [ref=e51]
+                            - generic [ref=e54]: Settings
+                    - listitem [ref=e55]:
+                        - button "What's new" [ref=e56]:
+                            - img [ref=e57]
+                            - generic [ref=e60]: What's new
+            - list [ref=e62]:
+                - listitem [ref=e63]:
+                    - button "test test@gmail.com" [ref=e64]:
+                        - img [ref=e65]
+                        - generic [ref=e73]:
+                            - generic [ref=e74]: test
+                            - generic [ref=e75]: test@gmail.com
+                        - img [ref=e76]
+            - button "Toggle Sidebar" [ref=e79]
+        - main [ref=e80]:
+            - generic [ref=e81]:
+                - button "Toggle navigation" [ref=e82]:
+                    - img
+                    - generic [ref=e83]: Toggle Sidebar
+                - separator [ref=e84]
+                - navigation "breadcrumb" [ref=e85]:
+                    - list [ref=e86]:
+                        - listitem [ref=e87]:
+                            - link "Home" [disabled] [ref=e88]
+                - generic [ref=e89]:
+                    - button "Search or run a command" [ref=e90]:
                         - img
-                        - text: abril
-                    - generic [ref=e129]:
-                      - button "Copy" [ref=e130]:
-                        - generic [ref=e131]:
-                          - img
-                        - generic [ref=e132]: Copy balance
-                      - generic [ref=e133]: 6 recorded periods
-                  - generic [ref=e137]: $0.00
-                  - generic [ref=e138]:
-                    - generic [ref=e139]:
-                      - term [ref=e140]: Latest net
-                      - generic [ref=e141]:
-                        - img [ref=e142]
-                        - definition [ref=e145]: $0.00
-                      - paragraph [ref=e146]: abril
-                    - generic [ref=e147]:
-                      - term [ref=e148]: Income tracked
-                      - definition [ref=e149]: $0.00
-                      - paragraph [ref=e150]: Recent recorded periods
-                    - generic [ref=e151]:
-                      - term [ref=e152]: Expenses tracked
-                      - definition [ref=e153]: $0.00
-                      - paragraph [ref=e154]: Recent recorded periods
-                - generic [ref=e155]:
-                  - button "Reports" [ref=e156]:
-                    - img
-                    - generic [ref=e157]: Reports
-                  - button "Categories" [ref=e158]:
-                    - img
-                    - generic [ref=e159]: Categories
-                  - button "Calculator" [ref=e160]:
-                    - img
-                    - generic [ref=e161]: Calculator
-                  - button "Add transaction" [ref=e162]:
-                    - img
-                    - generic [ref=e163]: Add transaction
-              - generic [ref=e165]:
-                - generic [ref=e166]:
-                  - generic [ref=e167]:
-                    - paragraph [ref=e168]: Income
-                    - img [ref=e170]
-                  - paragraph [ref=e174]: $0.00
-                  - paragraph [ref=e175]: abril vs previous period
-                - generic [ref=e176]:
-                  - generic [ref=e177]:
-                    - paragraph [ref=e178]: Expenses
-                    - img [ref=e180]
-                  - paragraph [ref=e184]: $0.00
-                  - paragraph [ref=e185]: abril vs previous period
-                - generic [ref=e186]:
-                  - generic [ref=e187]:
-                    - paragraph [ref=e188]: Net flow
-                    - img [ref=e190]
-                  - paragraph [ref=e194]: +$0.00
-                  - paragraph [ref=e195]: Savings rate 0%
-            - generic [ref=e198]:
-              - generic [ref=e200]:
-                - heading "Recent transactions" [level=2] [ref=e201]
-                - paragraph [ref=e202]: Your latest activity across accounts.
-              - generic [ref=e205]:
-                - generic [ref=e206]:
-                  - generic [ref=e207]:
-                    - generic [ref=e208]:
-                      - paragraph [ref=e209]: Activity feed
-                      - generic [ref=e210]:
-                        - img [ref=e211]
-                        - text: Transactions
-                    - generic [ref=e214]:
-                      - generic [ref=e215]: 0 records
-                      - generic [ref=e216]:
+                        - generic [ref=e91]: Search…
+                        - generic:
+                            - generic: Ctrl
+                            - text: K
+                    - generic [ref=e96]: Operational
+                    - button "Hide information" [ref=e97]:
                         - img
-                        - generic [ref=e218]: Balanced
-                      - button "Refresh" [disabled]:
+                    - button "Switch to dark mode" [ref=e98]:
                         - img
-                        - generic: Refresh
-                  - generic [ref=e219]: Search, filter, edit, or add transactions from one place.
-                - generic [ref=e221]: No transactions found. Try adding your first transaction!
-    - generic [ref=e222]:
-      - heading "Command Palette" [level=2] [ref=e223]
-      - paragraph [ref=e224]: Search for a command to run...
-  - generic:
-    - contentinfo:
-      - button "Open TanStack Router Devtools" [ref=e225] [cursor=pointer]:
-        - generic [ref=e226]:
-          - img [ref=e228]
-          - img [ref=e263]
-        - generic [ref=e297]: "-"
-        - generic [ref=e298]: TanStack Router
+            - main [ref=e99]:
+                - generic [ref=e101]:
+                    - generic [ref=e102]:
+                        - generic [ref=e103]:
+                            - img [ref=e105]
+                            - generic [ref=e110]:
+                                - heading "Overview" [level=1] [ref=e111]
+                                - paragraph [ref=e112]: Track balance, cashflow, and recent activity in one place.
+                        - generic [ref=e114]:
+                            - img [ref=e116]
+                            - text: Sunday, April 26
+                    - generic [ref=e118]:
+                        - generic [ref=e119]:
+                            - generic [ref=e121]:
+                                - generic [ref=e123]:
+                                    - generic [ref=e124]:
+                                        - generic [ref=e126]:
+                                            - paragraph [ref=e127]: Net total
+                                            - generic [ref=e128]:
+                                                - img
+                                                - text: abril
+                                        - generic [ref=e129]:
+                                            - button "Copy" [ref=e130]:
+                                                - generic [ref=e131]:
+                                                    - img
+                                                - generic [ref=e132]: Copy balance
+                                            - generic [ref=e133]: 6 recorded periods
+                                    - generic [ref=e137]: $0.00
+                                    - generic [ref=e138]:
+                                        - generic [ref=e139]:
+                                            - term [ref=e140]: Latest net
+                                            - generic [ref=e141]:
+                                                - img [ref=e142]
+                                                - definition [ref=e145]: $0.00
+                                            - paragraph [ref=e146]: abril
+                                        - generic [ref=e147]:
+                                            - term [ref=e148]: Income tracked
+                                            - definition [ref=e149]: $0.00
+                                            - paragraph [ref=e150]: Recent recorded periods
+                                        - generic [ref=e151]:
+                                            - term [ref=e152]: Expenses tracked
+                                            - definition [ref=e153]: $0.00
+                                            - paragraph [ref=e154]: Recent recorded periods
+                                - generic [ref=e155]:
+                                    - button "Reports" [ref=e156]:
+                                        - img
+                                        - generic [ref=e157]: Reports
+                                    - button "Categories" [ref=e158]:
+                                        - img
+                                        - generic [ref=e159]: Categories
+                                    - button "Calculator" [ref=e160]:
+                                        - img
+                                        - generic [ref=e161]: Calculator
+                                    - button "Add transaction" [ref=e162]:
+                                        - img
+                                        - generic [ref=e163]: Add transaction
+                            - generic [ref=e165]:
+                                - generic [ref=e166]:
+                                    - generic [ref=e167]:
+                                        - paragraph [ref=e168]: Income
+                                        - img [ref=e170]
+                                    - paragraph [ref=e174]: $0.00
+                                    - paragraph [ref=e175]: abril vs previous period
+                                - generic [ref=e176]:
+                                    - generic [ref=e177]:
+                                        - paragraph [ref=e178]: Expenses
+                                        - img [ref=e180]
+                                    - paragraph [ref=e184]: $0.00
+                                    - paragraph [ref=e185]: abril vs previous period
+                                - generic [ref=e186]:
+                                    - generic [ref=e187]:
+                                        - paragraph [ref=e188]: Net flow
+                                        - img [ref=e190]
+                                    - paragraph [ref=e194]: +$0.00
+                                    - paragraph [ref=e195]: Savings rate 0%
+                        - generic [ref=e198]:
+                            - generic [ref=e200]:
+                                - heading "Recent transactions" [level=2] [ref=e201]
+                                - paragraph [ref=e202]: Your latest activity across accounts.
+                            - generic [ref=e205]:
+                                - generic [ref=e206]:
+                                    - generic [ref=e207]:
+                                        - generic [ref=e208]:
+                                            - paragraph [ref=e209]: Activity feed
+                                            - generic [ref=e210]:
+                                                - img [ref=e211]
+                                                - text: Transactions
+                                        - generic [ref=e214]:
+                                            - generic [ref=e215]: 0 records
+                                            - generic [ref=e216]:
+                                                - img
+                                                - generic [ref=e218]: Balanced
+                                            - button "Refresh" [disabled]:
+                                                - img
+                                                - generic: Refresh
+                                    - generic [ref=e219]: Search, filter, edit, or add transactions from one place.
+                                - generic [ref=e221]: No transactions found. Try adding your first transaction!
+        - generic [ref=e222]:
+            - heading "Command Palette" [level=2] [ref=e223]
+            - paragraph [ref=e224]: Search for a command to run...
+    - generic:
+        - contentinfo:
+            - button "Open TanStack Router Devtools" [ref=e225] [cursor=pointer]:
+                - generic [ref=e226]:
+                    - img [ref=e228]
+                    - img [ref=e263]
+                - generic [ref=e297]: "-"
+                - generic [ref=e298]: TanStack Router

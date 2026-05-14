@@ -69,7 +69,7 @@ export function useChart({
 // Specific hook for financial charts
 export function useFinancialChart(
   queryKey: string[],
-  queryFn: () => Promise<any>
+  queryFn: () => Promise<any>,
 ) {
   const result = useChart({ queryKey, queryFn });
 
@@ -88,7 +88,7 @@ export function useFinancialChart(
       expense: acc.expense + (item.expense || 0),
       amount: acc.amount + (item.amount || 0),
     }),
-    { income: 0, expense: 0, amount: 0 }
+    { income: 0, expense: 0, amount: 0 },
   );
 
   return {
