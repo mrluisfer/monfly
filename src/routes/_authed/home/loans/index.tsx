@@ -81,21 +81,15 @@ export const Route = createFileRoute("/_authed/home/loans/")({
 
 function RouteComponent() {
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="space-y-6 sm:space-y-8 lg:space-y-10">
       <PageHeader
         title="Loans"
         description="Track who owes you money — friends, refunds (SAT, insurance), or any expected income. Mark partial or full payments."
         icon={<HandCoinsIcon className="size-5" aria-hidden="true" />}
       />
 
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-[minmax(320px,360px)_minmax(0,1fr)] xl:grid-cols-[minmax(340px,380px)_minmax(0,1fr)]">
-        {/* Form: full-width on mobile/tablet, sticky aside on lg+ so it stays
-            within reach while scrolling a long list. */}
-        <div className="lg:sticky lg:top-20 lg:self-start">
-          <AddLoanCard />
-        </div>
-        <LoansList />
-      </div>
+      <AddLoanCard />
+      <LoansList />
     </div>
   );
 }
@@ -112,7 +106,7 @@ function AddLoanCard() {
 
   return (
     <Collapsible
-      className="bg-card border-border/60 flex flex-col gap-5 rounded-2xl border p-1"
+      className="bg-card border-border/60 flex flex-col gap-5 rounded-2xl border p-2 sm:p-3 lg:p-4"
       aria-labelledby="add-loan-heading"
       open={openCollapsible}
       onOpenChange={setOpenCollapsible}
@@ -166,7 +160,7 @@ function AddLoanCard() {
                 onValueChange={(v) => field.onChange(v as LoanDirection)}
                 className="w-full"
               >
-                <TabsList className="w-full">
+                <TabsList className="w-full md:w-fit">
                   <TabsTrigger value="lent" className="flex-1 gap-1.5">
                     <ArrowDownLeftIcon
                       className="size-3.5"
@@ -183,48 +177,49 @@ function AddLoanCard() {
             )}
           />
 
-          <Field
-            label={
-              form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"
-            }
-            error={errors.debtor?.message}
-            icon={<UserIcon className="size-3.5" />}
-          >
-            <Controller
-              control={form.control}
-              name="debtor"
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="e.g. Juan, SAT, Insurance Co."
-                  autoComplete="off"
-                />
-              )}
-            />
-          </Field>
+          {/* Main inputs: stack on mobile, 4-column grid on md+ so debtor/amount/dates fit a single row. */}
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <Field
+              label={
+                form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"
+              }
+              error={errors.debtor?.message}
+              icon={<UserIcon className="size-3.5" />}
+            >
+              <Controller
+                control={form.control}
+                name="debtor"
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="e.g. Juan, SAT, Insurance Co."
+                    autoComplete="off"
+                  />
+                )}
+              />
+            </Field>
 
-          <Field
-            label="Amount (USD)"
-            error={errors.amount?.message}
-            icon={<CircleDollarSignIcon className="size-3.5" />}
-          >
-            <Controller
-              control={form.control}
-              name="amount"
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="number"
-                  inputMode="decimal"
-                  step="0.01"
-                  min="0"
-                  placeholder="0.00"
-                />
-              )}
-            />
-          </Field>
+            <Field
+              label="Amount (USD)"
+              error={errors.amount?.message}
+              icon={<CircleDollarSignIcon className="size-3.5" />}
+            >
+              <Controller
+                control={form.control}
+                name="amount"
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="number"
+                    inputMode="decimal"
+                    step="0.01"
+                    min="0"
+                    placeholder="0.00"
+                  />
+                )}
+              />
+            </Field>
 
-          <div className="grid grid-cols-2 gap-3">
             <Field
               label="Issued at"
               icon={<CalendarIcon className="size-3.5" />}
@@ -243,6 +238,7 @@ function AddLoanCard() {
                 )}
               />
             </Field>
+
             <Field
               label="Due (optional)"
               icon={<CalendarIcon className="size-3.5" />}
@@ -263,37 +259,46 @@ function AddLoanCard() {
             </Field>
           </div>
 
-          <Field
-            label="Notes (optional)"
-            icon={<FileTextIcon className="size-3.5" />}
-          >
-            <Controller
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <Textarea
-                  {...field}
-                  value={field.value ?? ""}
-                  rows={2}
-                  placeholder="Context, agreement, etc."
+          {/* Notes + submit row. Notes takes the available space, button stays
+              compact and right-aligned on md+ so the form ends in a clean line. */}
+          <div className="flex flex-col gap-3 md:flex-row md:items-end">
+            <div className="md:flex-1">
+              <Field
+                label="Notes (optional)"
+                icon={<FileTextIcon className="size-3.5" />}
+              >
+                <Controller
+                  control={form.control}
+                  name="notes"
+                  render={({ field }) => (
+                    <Textarea
+                      {...field}
+                      value={field.value ?? ""}
+                      rows={2}
+                      placeholder="Context, agreement, etc."
+                    />
+                  )}
                 />
+              </Field>
+            </div>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="w-full md:w-auto md:shrink-0"
+            >
+              {isLoading ? (
+                <>
+                  <Spinner className="animate-spin" />
+                  Saving…
+                </>
+              ) : (
+                <>
+                  <PlusIcon />
+                  Create loan
+                </>
               )}
-            />
-          </Field>
-
-          <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? (
-              <>
-                <Spinner className="animate-spin" />
-                Saving…
-              </>
-            ) : (
-              <>
-                <PlusIcon />
-                Create loan
-              </>
-            )}
-          </Button>
+            </Button>
+          </div>
         </form>
       </CollapsibleContent>
     </Collapsible>
@@ -413,9 +418,9 @@ function LoansList() {
   const netBalance = totals.lentOutstanding - totals.borrowedOutstanding;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5 sm:space-y-6 lg:space-y-8">
       {/* Summary metrics — Owed to me / I owe / Net */}
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:gap-5">
         <MetricCard
           label="Owed to me"
           value={maskAmount(totals.lentOutstanding)}
@@ -442,7 +447,7 @@ function LoansList() {
         />
       </div>
 
-      <div className="flex w-full flex-wrap items-center justify-between gap-6 md:gap-2 lg:grid lg:grid-cols-2 xl:gap-0">
+      <div className="flex w-full flex-wrap items-center justify-between gap-4 sm:gap-6 lg:grid lg:grid-cols-2 lg:gap-4 xl:gap-6">
         {/* Direction filter — quick toggle between perspectives */}
         <Tabs
           value={directionFilter}
@@ -579,7 +584,7 @@ function LoanListItem({
     isBalanceHidden ? "$••••" : formatCurrency(n, "USD");
 
   return (
-    <li className="flex flex-col gap-3 px-3 py-3 sm:px-4 sm:py-4">
+    <li className="flex flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:gap-5 lg:px-7 lg:py-6">
       {/* Top row: debtor info + remaining */}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1 space-y-3">

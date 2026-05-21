@@ -19,7 +19,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="grid min-w-0 grid-cols-1 gap-6 sm:gap-8">
       <TransactionsList />
       <AddTransactionDrawer />
     </div>

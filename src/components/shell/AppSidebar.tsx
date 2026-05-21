@@ -35,16 +35,28 @@ import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import {
   ChevronsUpDownIcon,
+  LifeBuoyIcon,
   LogOutIcon,
   SettingsIcon,
   UserIcon,
 } from "lucide-react";
 
 const SETTINGS_PATH = "/user/settings";
+const HELP_PATH = "/user/help";
 
-function isRouteActive(currentPath: string, url: string) {
-  if (url === "/home") return currentPath === "/home";
-  return currentPath === url || currentPath.startsWith(`${url}/`);
+function resolveRoutePath(url: string, params?: Record<string, string>) {
+  if (!params) return url;
+  return url.replace(/\$(\w+)/g, (_, key: string) => params[key] ?? `$${key}`);
+}
+
+function isRouteActive(
+  currentPath: string,
+  url: string,
+  params?: Record<string, string>,
+) {
+  const resolved = resolveRoutePath(url, params);
+  if (resolved === "/home") return currentPath === "/home";
+  return currentPath === resolved || currentPath.startsWith(`${resolved}/`);
 }
 
 function AppSidebarHeader() {
@@ -131,32 +143,91 @@ function NavMain() {
   );
 }
 
+type SecondaryItem = {
+  key: string;
+  label: string;
+  icon: typeof UserIcon;
+  to: string;
+  params?: Record<string, string>;
+};
+
 function NavSecondary() {
   const location = useLocation();
   const { setOpenMobile } = useSidebar();
-  const active = isRouteActive(location.pathname, SETTINGS_PATH);
+  const userEmail = useRouteUser();
+
+  const { data } = useQuery({
+    queryKey: [queryDictionary.user, userEmail],
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    enabled: !!userEmail,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    retry: 1,
+  });
+
+  const userId = data?.data?.id;
+
+  const items: SecondaryItem[] = [
+    ...(userId
+      ? [
+          {
+            key: "profile",
+            label: "Profile",
+            icon: UserIcon,
+            to: "/user/$userId",
+            params: { userId },
+          },
+        ]
+      : []),
+    {
+      key: "settings",
+      label: "Settings",
+      icon: SettingsIcon,
+      to: SETTINGS_PATH,
+    },
+    {
+      key: "help",
+      label: "Help",
+      icon: LifeBuoyIcon,
+      to: HELP_PATH,
+    },
+  ];
 
   return (
     <SidebarGroup className="mt-auto">
       <SidebarGroupContent>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              tooltip="Settings"
-              isActive={active}
-              aria-current={active ? "page" : undefined}
-              className={cn(
-                "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium",
-                "transition-colors",
-              )}
-              render={
-                <Link to={SETTINGS_PATH} onClick={() => setOpenMobile(false)}>
-                  <SettingsIcon aria-hidden="true" />
-                  <span>Settings</span>
-                </Link>
-              }
-            />
-          </SidebarMenuItem>
+          {items.map((item) => {
+            const Icon = item.icon;
+            const active = isRouteActive(
+              location.pathname,
+              item.to,
+              item.params,
+            );
+            return (
+              <SidebarMenuItem key={item.key}>
+                <SidebarMenuButton
+                  tooltip={item.label}
+                  isActive={active}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium",
+                    "transition-colors",
+                  )}
+                  render={
+                    <Link
+                      to={item.to}
+                      params={item.params}
+                      onClick={() => setOpenMobile(false)}
+                    />
+                  }
+                >
+                  <Icon aria-hidden="true" />
+                  <span>{item.label}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
