@@ -1,6 +1,14 @@
 import type { Loan } from "@prisma/client";
 import { Link } from "@tanstack/react-router";
-import { ArrowRightIcon, ClockIcon, HandCoinsIcon } from "lucide-react";
+import {
+  ArrowDownLeftIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  ClockIcon,
+  HandCoinsIcon,
+} from "lucide-react";
+
+import type { LoanDirection } from "~/constants/loan-status";
 
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -19,9 +27,12 @@ type ReceivableEntry = {
   dueAt: Date | null;
   daysUntilDue: number | null;
   status: string;
+  direction: LoanDirection;
 };
 
 function buildEntries(loans: Loan[], now: Date): ReceivableEntry[] {
+  // Include both directions for visibility, but `direction` lets the UI (and
+  // the total calculation) treat them differently.
   const entries = loans
     .filter((l) => l.status !== "paid")
     .map((l) => {
@@ -37,6 +48,7 @@ function buildEntries(loans: Loan[], now: Date): ReceivableEntry[] {
         dueAt,
         daysUntilDue,
         status: l.status,
+        direction: (l.direction ?? "lent") as LoanDirection,
       };
     })
     .filter((e) => e.remaining > 0);
@@ -101,6 +113,7 @@ export function UpcomingReceivablesCard() {
           variant="link"
           className="gap-1 px-2"
           size={"sm"}
+          nativeButton={false}
           render={<Link to="/home/loans" />}
         >
           View all
@@ -155,18 +168,31 @@ function UpcomingBody({
     );
   }
 
-  const totalOutstanding = entries.reduce((s, e) => s + e.remaining, 0);
+  // Total counts ONLY receivables (lent) — what I expect to collect. Payables
+  // (borrowed) are shown for context but never mixed into the headline number.
+  const totalOutstanding = entries.reduce(
+    (s, e) => (e.direction === "lent" ? s + e.remaining : s),
+    0,
+  );
+  const lentCount = entries.filter((e) => e.direction === "lent").length;
+  const borrowedCount = entries.length - lentCount;
   const visible = entries.slice(0, MAX_VISIBLE);
   const hidden = entries.length - visible.length;
 
   return (
     <div className="space-y-3">
       <div className="text-foreground flex items-baseline justify-between px-4">
-        <span className="text-2xl font-semibold tracking-tight tabular-nums">
+        <span className="text-success text-2xl font-semibold tracking-tight tabular-nums">
           {formatCurrency(totalOutstanding, "USD")}
         </span>
         <span className="text-muted-foreground text-xs">
-          {entries.length} pending
+          {lentCount} to collect
+          {borrowedCount > 0 && (
+            <>
+              {" · "}
+              <span className="text-destructive">{borrowedCount} to pay</span>
+            </>
+          )}
         </span>
       </div>
 
@@ -178,30 +204,57 @@ function UpcomingBody({
           />
         }
       >
-        {visible.map((entry) => (
-          <li
-            key={entry.id}
-            className="flex items-center justify-between gap-2 py-2"
-          >
-            <div className="min-w-0">
-              <p className="text-foreground truncate text-sm font-medium capitalize">
-                {entry.debtor}
-              </p>
-              <p
+        {visible.map((entry) => {
+          const isBorrowed = entry.direction === "borrowed";
+          return (
+            <li
+              key={entry.id}
+              className="flex items-center justify-between gap-2 py-2"
+            >
+              <div className="flex min-w-0 items-center gap-2">
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "flex size-7 shrink-0 items-center justify-center rounded-lg",
+                    isBorrowed
+                      ? "bg-destructive/10 text-destructive"
+                      : "bg-success/10 text-success",
+                  )}
+                  title={isBorrowed ? "I owe" : "Owed to me"}
+                >
+                  {isBorrowed ? (
+                    <ArrowUpRightIcon className="size-3.5" />
+                  ) : (
+                    <ArrowDownLeftIcon className="size-3.5" />
+                  )}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-foreground truncate text-sm font-medium capitalize">
+                    {entry.debtor}
+                  </p>
+                  <p
+                    className={cn(
+                      "inline-flex items-center gap-1 text-xs",
+                      dueTone(entry),
+                    )}
+                  >
+                    <ClockIcon className="size-3" aria-hidden="true" />
+                    {dueLabel(entry)}
+                  </p>
+                </div>
+              </div>
+              <span
                 className={cn(
-                  "inline-flex items-center gap-1 text-xs",
-                  dueTone(entry),
+                  "shrink-0 text-sm font-semibold tabular-nums",
+                  isBorrowed ? "text-destructive" : "text-success",
                 )}
               >
-                <ClockIcon className="size-3" aria-hidden="true" />
-                {dueLabel(entry)}
-              </p>
-            </div>
-            <span className="text-foreground shrink-0 text-sm font-semibold tabular-nums">
-              {formatCurrency(entry.remaining, "USD")}
-            </span>
-          </li>
-        ))}
+                {isBorrowed ? "−" : ""}
+                {formatCurrency(entry.remaining, "USD")}
+              </span>
+            </li>
+          );
+        })}
       </ScrollArea>
 
       {hidden > 0 && (
