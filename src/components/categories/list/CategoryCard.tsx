@@ -5,16 +5,9 @@ import { CheckIcon, PencilIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-import { EditCategory } from "../EditCategory";
+import { EditCategoryDialogContent } from "./EditCategoryDialogContent";
 
 type CategoryCardProps = {
   category: Category;
@@ -73,7 +66,7 @@ export function CategoryCard({
               variant="outline"
               size="icon"
               className={cn(
-                "absolute top-2 right-2 z-10 size-7 rounded-full transition-opacity",
+                "absolute top-2 right-2 z-10 rounded-full transition-opacity",
                 // Desktop: reveal on hover/focus only. Touch devices (no hover)
                 // always see it — there's no hover state to "wait for".
                 "opacity-100 md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100",
@@ -82,31 +75,14 @@ export function CategoryCard({
               aria-label={`Edit ${category.name}`}
               onClick={(e) => e.stopPropagation()}
             >
-              <PencilIcon className="size-3.5" aria-hidden="true" />
+              <PencilIcon aria-hidden="true" />
             </Button>
           }
         />
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader className="space-y-3">
-            <DialogTitle className="flex items-center gap-2">
-              <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-xl">
-                {getCategoryIconByName(category.icon, { className: "size-4" })}
-              </div>
-              Edit Category
-            </DialogTitle>
-            <DialogDescription>
-              Update the details of your{" "}
-              <strong className="text-foreground capitalize">
-                {category.name}
-              </strong>{" "}
-              category below.
-            </DialogDescription>
-          </DialogHeader>
-          <EditCategory
-            category={category}
-            onCloseDialog={() => setEditOpen(false)}
-          />
-        </DialogContent>
+        <EditCategoryDialogContent
+          category={category}
+          onClose={() => setEditOpen(false)}
+        />
       </Dialog>
 
       {/* icon */}

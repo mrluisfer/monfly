@@ -1,6 +1,14 @@
 import type { Category } from "@prisma/client";
 import { useMemo, useState } from "react";
-import { FolderOpen, Loader2, Search, Trash2Icon, X } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import {
+  ClockIcon,
+  FolderOpen,
+  Loader2,
+  Search,
+  Trash2,
+  X,
+} from "lucide-react";
 
 import {
   getCategoryIconByName,
@@ -8,6 +16,7 @@ import {
 } from "@/constants/categories/categories-icon";
 import { useCategoriesList } from "~/hooks/categories/useCategoriesList";
 import { cn } from "~/lib/utils";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
@@ -144,7 +153,7 @@ export const CategoriesList = () => {
             variant="destructive"
             onClick={() => setIsDeleteDialogOpen(true)}
           >
-            <Trash2Icon />
+            <Trash2 />
             Delete {selectedCount}
           </Button>
         )}
@@ -208,11 +217,20 @@ export const CategoriesList = () => {
           {filteredCategories.map((category) => {
             const isSelected = selectedSet.has(category.id);
             const checkboxId = `list-cat-${category.id}`;
+            const iconLabel = getCategoryIconLabelByName(category.icon);
+            const createdRelative = formatDistanceToNow(
+              new Date(category.createdAt),
+              { addSuffix: true },
+            );
+            const wasEdited =
+              new Date(category.updatedAt).getTime() -
+                new Date(category.createdAt).getTime() >
+              1000;
             return (
               <li
                 key={category.id}
                 className={cn(
-                  "group flex items-center gap-3 px-3 py-2.5 transition-colors",
+                  "group flex items-center gap-3 px-4 py-3 transition-colors sm:gap-4 sm:px-5 sm:py-4",
                   "hover:bg-accent/40",
                   isSelected && "bg-primary/[0.04]",
                 )}
@@ -228,32 +246,60 @@ export const CategoriesList = () => {
                 />
                 <label
                   htmlFor={checkboxId}
-                  className="flex min-w-0 flex-1 cursor-pointer items-center gap-3"
+                  className="flex min-w-0 flex-1 cursor-pointer items-center gap-3 sm:gap-4"
                 >
                   <div
                     aria-hidden="true"
                     className={cn(
-                      "flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors",
+                      "flex size-11 shrink-0 items-center justify-center rounded-2xl transition-colors sm:size-12",
                       isSelected
                         ? "bg-primary/15 text-primary"
                         : "bg-muted text-foreground group-hover:bg-primary/10 group-hover:text-primary",
                     )}
                   >
                     {getCategoryIconByName(category.icon, {
-                      className: "size-4",
+                      className: "size-5",
                     })}
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium capitalize">
-                      {category.name}
-                    </p>
-                    <p className="text-muted-foreground truncate text-xs">
-                      {getCategoryIconLabelByName(category.icon)}
-                    </p>
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="text-foreground truncate text-sm font-semibold capitalize sm:text-base">
+                        {category.name}
+                      </span>
+                      <Badge
+                        variant="outline"
+                        className="border-border/60 text-muted-foreground gap-1 text-[10px] font-medium tracking-wide uppercase"
+                      >
+                        {getCategoryIconByName(category.icon, {
+                          className: "size-3",
+                        })}
+                        {iconLabel}
+                      </Badge>
+                    </div>
+                    <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                      <span className="flex items-center gap-1">
+                        <ClockIcon
+                          className="size-3 shrink-0"
+                          aria-hidden="true"
+                        />
+                        Added {createdRelative}
+                      </span>
+                      {wasEdited && (
+                        <span className="before:text-muted-foreground/50 before:mr-3 before:content-['·']">
+                          Edited{" "}
+                          {formatDistanceToNow(new Date(category.updatedAt), {
+                            addSuffix: true,
+                          })}
+                        </span>
+                      )}
+                      <code className="text-muted-foreground/70 bg-muted/60 hidden rounded-md px-1.5 py-0.5 font-mono text-[10px] sm:inline-block">
+                        {category.icon}
+                      </code>
+                    </div>
                   </div>
                 </label>
                 <div className="shrink-0">
-                  <CategoryItem category={category} compact />
+                  <CategoryItem category={category} />
                 </div>
               </li>
             );
