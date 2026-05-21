@@ -1,11 +1,11 @@
 import type { Category } from "@prisma/client";
 import { useMemo, useState } from "react";
-import { FolderOpen, Loader2, Search, X } from "lucide-react";
+import { FolderOpen, Loader2, Search, Trash2Icon, X } from "lucide-react";
 
 import {
   getCategoryIconByName,
   getCategoryIconLabelByName,
-} from "~/constants/categories-icon";
+} from "@/constants/categories/categories-icon";
 import { useCategoriesList } from "~/hooks/categories/useCategoriesList";
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
@@ -48,7 +48,10 @@ export const CategoriesList = () => {
     selectedCount,
   } = useCategoriesList();
 
-  const allCategories = (data?.data ?? []) as Category[];
+  const allCategories = useMemo(
+    () => (data?.data ?? []) as Category[],
+    [data?.data],
+  );
   const normalizedQuery = searchValue.trim().toLowerCase();
   const isFiltering = normalizedQuery.length > 0;
 
@@ -139,9 +142,9 @@ export const CategoriesList = () => {
           <Button
             type="button"
             variant="destructive"
-            size="sm"
             onClick={() => setIsDeleteDialogOpen(true)}
           >
+            <Trash2Icon />
             Delete {selectedCount}
           </Button>
         )}

@@ -3,13 +3,29 @@ import type { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
 
-export const getCategoryByEmail = async (email: string) => {
+export const getCategoryByEmail = async (
+  email: string,
+): Promise<ApiResponse<Category[]> | ApiResponse<null>> => {
+  const normalizedEmail = email?.trim().toLowerCase();
+
+  if (!normalizedEmail) {
+    return {
+      success: false,
+      message: "Email is required",
+      data: null,
+      error: true,
+      statusCode: 400,
+    };
+  }
+
   try {
     const categories = await prismaClient.category.findMany({
-      where: {
-        userEmail: email,
-      },
+      where: { userEmail: normalizedEmail },
     });
+
+    categories.sort((a, b) =>
+      a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
+    );
 
     return {
       success: true,
@@ -17,14 +33,15 @@ export const getCategoryByEmail = async (email: string) => {
       data: categories,
       error: false,
       statusCode: 200,
-    } as ApiResponse<Category[]>;
+    };
   } catch (error) {
+    console.error("[getCategoryByEmail] failed", error);
     return {
       success: false,
       message: "Failed to get categories",
       data: null,
       error: true,
       statusCode: 500,
-    } as ApiResponse<null>;
+    };
   }
 };

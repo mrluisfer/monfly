@@ -1,6 +1,6 @@
 import type { Category } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { getCanonicalCategoryIconName } from "~/constants/categories-icon";
+import { getCanonicalCategoryIconName } from "@/constants/categories/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";

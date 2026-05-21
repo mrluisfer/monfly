@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ListIcon } from "lucide-react";
 import AddCategory from "~/components/categories/AddCategory";
+import { AvailableIconsGallery } from "~/components/categories/AvailableIconsGallery";
 import { CategoriesList } from "~/components/categories/list";
 import { PageHeader } from "~/components/layout/PageHeader";
+import { Separator } from "~/components/ui/separator";
 
 export const Route = createFileRoute("/_authed/home/categories/")({
   component: RouteComponent,
@@ -17,14 +19,12 @@ function RouteComponent() {
         description="Organize your transactions with custom categories."
       />
 
-      <div className="grid gap-5 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr]">
-        <div className="order-2 space-y-4 lg:sticky lg:top-20 lg:order-1 lg:self-start">
-          <AddCategory />
-        </div>
-        <div className="order-1 lg:order-2">
-          <CategoriesList />
-        </div>
-      </div>
+      <AddCategory />
+      <CategoriesList />
+
+      <Separator className="bg-border/60" />
+
+      <AvailableIconsGallery />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CATEGORY_ICONS } from "~/constants/categories-icon";
+import { CATEGORY_ICONS } from "@/constants/categories/icons";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { CategoryFormSchema } from "~/zod-schemas/category-schema";
@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { PlusIcon } from "lucide-react";
 
 type FormValues = z.infer<typeof CategoryFormSchema>;
 
@@ -56,13 +57,13 @@ export function CategoryForm({
         onSubmit={form.handleSubmit(onSubmit, () => {
           void warning();
         })}
-        className="flex flex-col gap-4"
+        className="flex flex-col gap-3 md:flex-row md:items-start md:gap-3"
       >
         <FormField
           control={form.control}
           name={categoryFormNames.name}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="md:flex-1">
               <FormLabel htmlFor={categoryFormNames.name}>Name</FormLabel>
               <FormControl>
                 <Input
@@ -79,12 +80,38 @@ export function CategoryForm({
           control={form.control}
           name={categoryFormNames.icon}
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="md:flex-1">
               <FormLabel>Select an icon</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select an icon" />
+                    <SelectValue placeholder="Select an icon">
+                      {(value: unknown) => {
+                        const selected =
+                          typeof value === "string" && value.length > 0
+                            ? CATEGORY_ICONS.find((i) => i.name === value)
+                            : undefined;
+                        if (!selected) {
+                          return (
+                            <span className="text-muted-foreground">
+                              Select an icon
+                            </span>
+                          );
+                        }
+                        const { Icon, label } = selected;
+                        return (
+                          <span className="flex items-center gap-2">
+                            <span
+                              aria-hidden="true"
+                              className="bg-primary/10 text-primary flex size-6 items-center justify-center rounded-md"
+                            >
+                              <Icon className="size-3.5" />
+                            </span>
+                            <span className="truncate capitalize">{label}</span>
+                          </span>
+                        );
+                      }}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -95,7 +122,10 @@ export function CategoryForm({
                           value={icon.name}
                           className="capitalize"
                         >
-                          <icon.Icon /> {icon.label}
+                          <span className="flex items-center gap-2">
+                            <icon.Icon className="size-4" />
+                            {icon.label}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -106,9 +136,20 @@ export function CategoryForm({
             </FormItem>
           )}
         />
-        <Button type="submit" size={"lg"} className="w-full" disabled={loading}>
-          {loading ? "Saving..." : submitText}
-        </Button>
+        {/* Spacer matches the label height so the button aligns with the inputs on md+ */}
+        <div className="flex flex-col md:shrink-0">
+          <span aria-hidden="true" className="hidden h-[1.125rem] md:block" />
+          <Button type="submit" className="w-full md:w-auto" disabled={loading}>
+            {loading ? (
+              "Saving..."
+            ) : (
+              <>
+                <PlusIcon />
+                {submitText}
+              </>
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );

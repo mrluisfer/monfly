@@ -10,8 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { getCategoryIconByName } from "~/constants/categories-icon";
-import { cn } from "~/lib/utils";
+import { getCategoryIconByName } from "@/constants/categories/categories-icon";
 import { Pencil, Tag } from "lucide-react";
 
 import { EditCategory } from "../EditCategory";
@@ -31,8 +30,8 @@ const CategoryItem = ({
         <DialogTrigger
           render={
             <Button
-              variant="ghost"
-              size="icon-xs"
+              variant="default"
+              size="icon-sm"
               className="rounded-full"
               aria-label={`Edit ${category.name}`}
             >
@@ -72,22 +71,10 @@ const CategoryItem = ({
         </div>
 
         <div className="ml-2 shrink-0">
-          <DialogTrigger
-            render={
-              <Button
-                variant="outline"
-                size="icon-sm"
-                className={cn(
-                  "rounded-4xl opacity-60 transition-all",
-                  "group-hover:opacity-100",
-                  "hover:bg-primary/10 hover:text-primary",
-                )}
-              >
-                <Pencil className="size-3.5" />
-                <span className="sr-only">Edit {category.name}</span>
-              </Button>
-            }
-          />
+          <DialogTrigger render={<Button variant="default" size="icon" />}>
+            <Pencil />
+            <span className="sr-only">Edit {category.name}</span>
+          </DialogTrigger>
         </div>
       </div>
 

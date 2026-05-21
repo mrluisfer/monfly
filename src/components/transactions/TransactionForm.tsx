@@ -404,6 +404,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                                   <SelectItem
                                     key={option.value}
                                     value={option.value}
+                                    className={"capitalize"}
                                   >
                                     {option.label}
                                   </SelectItem>
@@ -757,7 +758,7 @@ function LoanSection<FormValues extends FieldValues>({
                         type="date"
                         className={cn(
                           inputClassName,
-                          "w-full cursor-pointer [color-scheme:light] dark:[color-scheme:dark]",
+                          "cursor-pointer lg:w-full",
                         )}
                         value={
                           (field.value as unknown) instanceof Date

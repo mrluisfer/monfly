@@ -134,12 +134,40 @@ function NavMain() {
 function NavSecondary() {
   const location = useLocation();
   const { setOpenMobile } = useSidebar();
+  const userEmail = useRouteUser();
   const active = isRouteActive(location.pathname, SETTINGS_PATH);
+
+  const { data } = useQuery({
+    queryKey: [queryDictionary.user, userEmail],
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    enabled: !!userEmail,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    retry: 1,
+  });
+
+  const userId = data?.data?.id;
 
   return (
     <SidebarGroup className="mt-auto">
       <SidebarGroupContent>
         <SidebarMenu>
+          {userId && (
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                render={
+                  <Link
+                    to="/user/$userId"
+                    params={{ userId }}
+                    onClick={() => setOpenMobile(false)}
+                  />
+                }
+              >
+                <UserIcon />
+                Profile
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )}
           <SidebarMenuItem>
             <SidebarMenuButton
               tooltip="Settings"
