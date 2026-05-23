@@ -513,6 +513,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                           className={cn(
                             inputClassName,
                             "w-full cursor-pointer pl-10 [color-scheme:light] dark:[color-scheme:dark]",
+                            "max-w-fit md:max-w-none",
                           )}
                           value={
                             field.value
