@@ -148,15 +148,20 @@ export function TransactionRow({
                       day: "numeric",
                     })}
                   </span>
-                  {(transaction.loanCount ?? 0) > 0 && (
+                  {((transaction.loanCount ?? 0) > 0 ||
+                    transaction.appliedToLoanId) && (
                     <>
                       <span className="bg-border/80 h-1 w-1 rounded-full" />
                       <span
                         className="border-warning/30 bg-warning/10 text-warning-foreground dark:text-warning inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase"
-                        title="This transaction is tracked as a loan"
+                        title={
+                          transaction.appliedToLoanId
+                            ? "This transaction was applied as a payment to a loan"
+                            : "This transaction is tracked as a loan"
+                        }
                       >
                         <HandCoinsIcon className="size-3" aria-hidden="true" />
-                        Loan
+                        {transaction.appliedToLoanId ? "Loan payment" : "Loan"}
                       </span>
                     </>
                   )}
