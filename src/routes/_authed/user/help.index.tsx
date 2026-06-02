@@ -42,7 +42,8 @@ type QuickLink = {
 const quickLinks: QuickLink[] = [
   {
     title: "Overview",
-    description: "Your balance, monthly cashflow and recent activity at a glance.",
+    description:
+      "Your balance, monthly cashflow and recent activity at a glance.",
     icon: LayoutDashboardIcon,
     to: "/home",
     accent: "bg-primary/10 text-primary",
@@ -124,7 +125,7 @@ function HelpRoute() {
         actions={
           <Badge variant="outline" className="gap-1.5">
             <SparklesIcon className="size-3" aria-hidden="true" />
-            We're listening
+            We&apos;re listening
           </Badge>
         }
       />
@@ -260,8 +261,8 @@ function HelpRoute() {
               encrypted cookies and passwords are hashed with bcrypt.
             </p>
             <p className="text-muted-foreground">
-              We don't sell, analyze or share your personal finance data with
-              third parties.
+              We don&apos;t sell, analyze or share your personal finance data
+              with third parties.
             </p>
           </div>
         </div>
@@ -291,7 +292,10 @@ function HelpRoute() {
               </p>
             </div>
           </div>
-          <Button nativeButton={false} render={<a href="mailto:support@monfly.app" />}>
+          <Button
+            nativeButton={false}
+            render={<a href="mailto:support@monfly.app" />}
+          >
             <MailIcon aria-hidden="true" />
             Email support
           </Button>

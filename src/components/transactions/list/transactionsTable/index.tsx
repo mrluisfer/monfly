@@ -44,6 +44,9 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
   const userEmail = useRouteUser();
   const queryClient = useQueryClient();
 
+  // TanStack Table returns functions the React Compiler can't safely memoize;
+  // this is a known library limitation, not a correctness issue here.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns: Columns,
@@ -103,7 +106,6 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     idempotency: {
       getKey: (variables) =>
         JSON.stringify(
-          //@ts-ignore
           [...variables.data.ids].sort((left, right) =>
             left.localeCompare(right),
           ),

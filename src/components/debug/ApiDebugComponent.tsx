@@ -18,7 +18,6 @@ export function ApiDebugComponent() {
         const result = await getTransactionByEmailServer({
           data: { email: userEmail },
         });
-        const duration = Date.now() - start;
         return result;
       } catch (error) {
         const duration = Date.now() - start;
@@ -38,7 +37,6 @@ export function ApiDebugComponent() {
         const result = await getUserByEmailServer({
           data: { email: userEmail },
         });
-        const duration = Date.now() - start;
         return result;
       } catch (error) {
         const duration = Date.now() - start;
@@ -58,7 +56,6 @@ export function ApiDebugComponent() {
         const result = await getTotalExpensesByEmailServer({
           data: { email: userEmail },
         });
-        const duration = Date.now() - start;
         return result;
       } catch (error) {
         const duration = Date.now() - start;

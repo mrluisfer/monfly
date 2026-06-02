@@ -63,7 +63,7 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
       error: false,
       statusCode: 200,
     } as ApiResponse<typeof chartData>;
-  } catch (error) {
+  } catch {
     return {
       data: null,
       message: "Failed to retrieve income and expense data",

@@ -89,11 +89,11 @@ function PrivacyRoute() {
         <CardContent>
           <LegalSection id="introduction" index={1} title="Introduction">
             <p>
-              Monfly ("we", "our", "us") provides a personal finance dashboard
-              that helps individuals track expenses, plan budgets, and visualize
-              financial decisions. This Privacy Policy describes how we handle
-              the personal information of users ("you") who interact with the
-              service.
+              Monfly (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) provides
+              a personal finance dashboard that helps individuals track
+              expenses, plan budgets, and visualize financial decisions. This
+              Privacy Policy describes how we handle the personal information of
+              users (&quot;you&quot;) who interact with the service.
             </p>
             <p>
               By creating an account or using Monfly you agree to the practices
@@ -249,9 +249,9 @@ function PrivacyRoute() {
           <LegalSection id="changes" index={10} title="Changes to This Policy">
             <p>
               We may update this Privacy Policy as the product evolves. The
-              "last updated" date at the top reflects the most recent revision.
-              Material changes will be communicated through the application or
-              by email when appropriate.
+              &quot;last updated&quot; date at the top reflects the most recent
+              revision. Material changes will be communicated through the
+              application or by email when appropriate.
             </p>
           </LegalSection>
 

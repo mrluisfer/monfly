@@ -21,7 +21,7 @@ export const postMonthlySummaryByEmail = async (data: { email: string }) => {
       error: false,
       statusCode: 200,
     } as ApiResponse<MonthlySummary>;
-  } catch (error) {
+  } catch {
     return {
       error: true,
       message: "Error creating monthly summary",

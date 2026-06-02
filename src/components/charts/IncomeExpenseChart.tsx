@@ -96,24 +96,26 @@ export default function IncomeExpenseChart() {
 
   // Process and validate chart data
   const rawChartData = data?.data ?? [];
-  const chartData = rawChartData.map((item: any) => ({
-    month: String(item.month || "Unknown"),
-    income: Number.isFinite(item.income) ? Math.max(0, item.income) : 0,
-    expense: Number.isFinite(item.expense) ? Math.max(0, item.expense) : 0,
-    net:
-      (Number.isFinite(item.income) ? item.income : 0) -
-      (Number.isFinite(item.expense) ? item.expense : 0),
-  }));
+  const chartData = rawChartData.map(
+    (item: { month?: unknown; income?: unknown; expense?: unknown }) => {
+      const rawIncome = Number(item.income);
+      const rawExpense = Number(item.expense);
+      const income = Number.isFinite(rawIncome) ? Math.max(0, rawIncome) : 0;
+      const expense = Number.isFinite(rawExpense) ? Math.max(0, rawExpense) : 0;
+      return {
+        month: String(item.month || "Unknown"),
+        income,
+        expense,
+        net:
+          (Number.isFinite(rawIncome) ? rawIncome : 0) -
+          (Number.isFinite(rawExpense) ? rawExpense : 0),
+      };
+    },
+  );
 
   // Calculate totals and statistics
-  const totalIncome = chartData.reduce(
-    (sum: number, item: any) => sum + item.income,
-    0,
-  );
-  const totalExpenses = chartData.reduce(
-    (sum: number, item: any) => sum + item.expense,
-    0,
-  );
+  const totalIncome = chartData.reduce((sum, item) => sum + item.income, 0);
+  const totalExpenses = chartData.reduce((sum, item) => sum + item.expense, 0);
   const netTotal = totalIncome - totalExpenses;
 
   const shownChart = !isLoading && !error && chartData.length > 0;

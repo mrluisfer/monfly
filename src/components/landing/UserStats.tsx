@@ -72,8 +72,9 @@ export function UserStatsSection() {
           <Card>
             <CardContent>
               <p>
-                "Our monthly planning meeting dropped from 90 minutes to 35
-                because everyone now shares the same operating picture."
+                &ldquo;Our monthly planning meeting dropped from 90 minutes to
+                35 because everyone now shares the same operating
+                picture.&rdquo;
               </p>
             </CardContent>
           </Card>

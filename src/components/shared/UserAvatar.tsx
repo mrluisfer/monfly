@@ -1,11 +1,11 @@
 import BoringAvatar from "boring-avatars";
 
 const UserAvatar = ({
-  alt,
   name,
   size = 32,
 }: {
-  alt: string;
+  /** Accessible label kept for call-site semantics; BoringAvatar renders from `name`. */
+  alt?: string;
   name: string;
   size?: number;
 }) => {

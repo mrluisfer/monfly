@@ -18,7 +18,17 @@
       "Bash(npx eslint *)",
       "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('./node_modules/prettier-plugin-tailwindcss/package.json'\\).peerDependencies, null, 2\\)\\)\")",
       "Bash(npm view *)",
-      "Bash(npx prettier *)"
+      "Bash(npx prettier *)",
+      "mcp__playwright__browser_console_messages",
+      "mcp__playwright__browser_navigate",
+      "Bash(pkill -f \"vite dev\")",
+      "Bash(pkill -f node)",
+      "Bash(rm -f dev-run.log dev-out.log)",
+      "Bash(pnpm exec *)",
+      "PowerShell(pnpm exec eslint --version)",
+      "PowerShell(pnpm lint 2>&1)",
+      "PowerShell(\"---\")",
+      "PowerShell(pnpm lint 2>&1 | Select-String -Pattern \"problems|error|warning\" | Select-Object -Last 3; \"=== balance-details ===\"; pnpm exec eslint \"src/components/balance/balance-details\" 2>&1 | Select-Object -First 20; \"EXITBD=$LASTEXITCODE\")"
     ]
   },
   "enabledMcpjsonServers": ["shadcn", "magicuidesign-mcp", "playwright"]

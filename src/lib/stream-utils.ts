@@ -43,7 +43,7 @@ export function withTimeout<T>(
  * Debounces a function to prevent multiple rapid calls
  * that can cause stream issues
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: never[]) => unknown>(
   func: T,
   wait: number,
 ): (...args: Parameters<T>) => void {

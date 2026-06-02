@@ -13,7 +13,7 @@ export const getAllUsers = async () => {
       error: false,
       statusCode: 200,
     } as ApiResponse<User[]>;
-  } catch (error) {
+  } catch {
     return {
       error: true,
       message: "Error fetching users",

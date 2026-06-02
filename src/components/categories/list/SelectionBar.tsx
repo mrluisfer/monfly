@@ -48,20 +48,17 @@ export const SelectionBar = ({
 
   const toggleAll = () => {
     if (isAllSelected) {
-      isFiltering
-        ? handleDeselectCategories(filteredCategoryIds)
-        : handleDeselectAll();
+      if (isFiltering) handleDeselectCategories(filteredCategoryIds);
+      else handleDeselectAll();
     } else {
-      isFiltering
-        ? handleSelectCategories(filteredCategoryIds)
-        : handleSelectAll();
+      if (isFiltering) handleSelectCategories(filteredCategoryIds);
+      else handleSelectAll();
     }
   };
 
   const clearSelection = () => {
-    isFiltering
-      ? handleDeselectCategories(filteredCategoryIds)
-      : handleDeselectAll();
+    if (isFiltering) handleDeselectCategories(filteredCategoryIds);
+    else handleDeselectAll();
   };
 
   return (

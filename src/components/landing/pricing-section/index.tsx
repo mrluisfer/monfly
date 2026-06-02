@@ -118,10 +118,6 @@ const valueTiles: ValueTile[] = [
   },
 ];
 
-const viewportOptions: IntersectionObserverInit = {
-  threshold: 0.2,
-};
-
 export function PricingSection() {
   const [isAnnual, setIsAnnual] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PlanId>("pro");

@@ -22,7 +22,7 @@ export const logoutFn = createServerFn({ method: "POST" })
         } as ApiResponse<string | null>;
       }
       throw redirect({ href: destination ?? "/" });
-    } catch (error) {
+    } catch {
       return {
         error: true,
         message: "Error logging out",

@@ -500,10 +500,14 @@ export function BalanceCalculator() {
     initialDisplayRef.current = seededDisplay;
     hasInitializedBalanceRef.current = true;
 
+    // Seed simulation state once from async query data. These cannot be derived
+    // during render because the balance arrives asynchronously after mount.
+    /* eslint-disable react-hooks/set-state-in-effect */
     setBaselineBalance(normalizedBalance);
     setDisplay(seededDisplay);
     setExpression("Initial balance");
     setStatusMessage("Simulation started with your current total balance.");
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [data?.data?.totalBalance]);
 
   const pushHistory = useCallback(
@@ -1041,6 +1045,9 @@ export function BalanceCalculator() {
     );
   }
 
+  // Loading guard reads an init-once ref to avoid flashing the skeleton after
+  // the balance has already seeded the simulation.
+  // eslint-disable-next-line react-hooks/refs
   if (isPending && !hasInitializedBalanceRef.current) {
     return (
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">

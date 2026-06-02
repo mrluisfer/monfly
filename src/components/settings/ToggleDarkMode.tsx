@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { useDarkMode } from "~/hooks/ui/useDarkMode";
+import { useIsMounted } from "~/hooks/ui/useIsMounted";
 import { cn } from "~/lib/utils";
 import { MoonIcon, SunIcon } from "lucide-react";
 
@@ -18,6 +19,12 @@ export default function ToggleDarkMode({
 }: ToggleDarkModeProps) {
   const { theme, setTheme } = useDarkMode();
   const { selection } = useAppHaptics();
+  const isMounted = useIsMounted();
+
+  // Until mounted, render with the SSR default theme so the first client
+  // render matches the server HTML (avoids a hydration mismatch). The real
+  // theme from localStorage is applied right after mount.
+  const displayTheme = isMounted ? theme : "light";
 
   return (
     <Tooltip>
@@ -32,18 +39,20 @@ export default function ToggleDarkMode({
               setTheme(newTheme);
               selection();
             }}
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            aria-label={`Switch to ${displayTheme === "dark" ? "light" : "dark"} mode`}
           />
         }
       >
-        {theme === "light" ? (
+        {displayTheme === "light" ? (
           <MoonIcon size={16} aria-hidden="true" />
         ) : (
           <SunIcon size={16} aria-hidden="true" />
         )}
       </TooltipTrigger>
       <TooltipContent side="bottom">
-        {theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+        {displayTheme === "light"
+          ? "Switch to dark mode"
+          : "Switch to light mode"}
       </TooltipContent>
     </Tooltip>
   );

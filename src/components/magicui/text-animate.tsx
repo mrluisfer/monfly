@@ -377,6 +377,9 @@ const TextAnimateBase = ({
 
   return (
     <AnimatePresence mode="popLayout">
+      {/* `Component` is a dynamic `as` prop, so MotionComponent must be created
+          in render; it can't be hoisted without changing this vendored API. */}
+      {/* eslint-disable-next-line react-hooks/static-components */}
       <MotionComponent
         variants={finalVariants.container as Variants}
         initial="hidden"

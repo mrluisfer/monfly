@@ -44,11 +44,8 @@ export default function AddCategory() {
     idempotency: {
       getKey: (variables) =>
         JSON.stringify({
-          //@ts-ignore
           email: variables.data.email,
-          //@ts-ignore
           icon: variables.data.category.icon,
-          //@ts-ignore
           name: variables.data.category.name.trim().toLowerCase(),
         }),
       onDuplicatePending: {

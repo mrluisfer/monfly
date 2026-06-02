@@ -46,7 +46,7 @@ export const getTransactionsCountByMonth = async ({
       error: false,
       statusCode: 200,
     } as ApiResponse<typeof chartData>;
-  } catch (error) {
+  } catch {
     return {
       data: null,
       message: "Failed to retrieve transactions by month",

@@ -29,7 +29,7 @@ export const getMonthlySummaryByEmail = async (data: { email: string }) => {
       error: false,
       statusCode: 200,
     } as ApiResponse<MonthlySummary[]>;
-  } catch (error) {
+  } catch {
     return {
       message: "Error fetching monthly summary",
       error: true,

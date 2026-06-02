@@ -67,7 +67,7 @@ export function EditCategory({
           icon: getCanonicalCategoryIconName(icon),
         },
       });
-    } catch (error) {
+    } catch {
       sileo.error({ title: "Error updating category" });
     }
   };

@@ -78,10 +78,11 @@ function TermsRoute() {
         <CardContent>
           <LegalSection id="agreement" index={1} title="Agreement">
             <p>
-              These Terms & Conditions ("Terms") form a binding agreement
-              between you and Monfly ("we", "our", "us"). By signing up,
-              accessing, or using Monfly you confirm that you can lawfully enter
-              into this agreement and that you accept these Terms in full.
+              These Terms & Conditions (&quot;Terms&quot;) form a binding
+              agreement between you and Monfly (&quot;we&quot;, &quot;our&quot;,
+              &quot;us&quot;). By signing up, accessing, or using Monfly you
+              confirm that you can lawfully enter into this agreement and that
+              you accept these Terms in full.
             </p>
           </LegalSection>
 
@@ -114,9 +115,9 @@ function TermsRoute() {
           <LegalSection id="user-content" index={4} title="Your Content">
             <p>
               You retain all rights to the data, transactions, and notes you
-              upload to Monfly ("Your Content"). You grant us a limited,
-              non-exclusive license to host, process, and display Your Content
-              solely to provide the service to you.
+              upload to Monfly (&quot;Your Content&quot;). You grant us a
+              limited, non-exclusive license to host, process, and display Your
+              Content solely to provide the service to you.
             </p>
             <p>
               You are solely responsible for the accuracy and legality of Your
@@ -141,8 +142,8 @@ function TermsRoute() {
                 without written permission.
               </li>
               <li>
-                Attempt to access another user's workspace or aggregate user
-                data without consent.
+                Attempt to access another user&apos;s workspace or aggregate
+                user data without consent.
               </li>
             </ul>
           </LegalSection>
@@ -188,11 +189,11 @@ function TermsRoute() {
 
           <LegalSection id="disclaimers" index={9} title="Disclaimers">
             <p>
-              The service is provided <em>"as is"</em> and{" "}
-              <em>"as available"</em>, without warranties of any kind, whether
-              express or implied. We do not warrant that the dashboard will be
-              error-free, secure against every possible threat, or suitable for
-              a specific purpose.
+              The service is provided <em>&quot;as is&quot;</em> and{" "}
+              <em>&quot;as available&quot;</em>, without warranties of any kind,
+              whether express or implied. We do not warrant that the dashboard
+              will be error-free, secure against every possible threat, or
+              suitable for a specific purpose.
             </p>
           </LegalSection>
 
@@ -221,10 +222,10 @@ function TermsRoute() {
 
           <LegalSection id="updates" index={12} title="Updates to These Terms">
             <p>
-              We may update these Terms from time to time. The "last updated"
-              date reflects the most recent revision. Continued use of the
-              service after changes take effect constitutes acceptance of the
-              updated Terms.
+              We may update these Terms from time to time. The &quot;last
+              updated&quot; date reflects the most recent revision. Continued
+              use of the service after changes take effect constitutes
+              acceptance of the updated Terms.
             </p>
           </LegalSection>
 
@@ -258,8 +259,9 @@ function TermsRoute() {
               <p className="text-foreground text-sm font-semibold">Summary</p>
               <p className="text-muted-foreground mt-1 text-sm">
                 Use Monfly for personal finance, keep your credentials safe, and
-                don't try to break things. We'll keep the service running fairly
-                and let you know before anything material changes.
+                don&apos;t try to break things. We&apos;ll keep the service
+                running fairly and let you know before anything material
+                changes.
               </p>
             </div>
           </div>

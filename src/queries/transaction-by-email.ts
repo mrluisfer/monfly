@@ -10,7 +10,7 @@ import { queryDictionary } from "~/queries/dictionary";
 export const transactionByEmailQueryOptions = (email: string) =>
   queryOptions({
     queryKey: [queryDictionary.transactions, email] as const,
-    queryFn: async ({ queryKey: [_, email] }) => {
+    queryFn: async ({ queryKey: [, email] }) => {
       return getTransactionByEmailServer({ data: { email } });
     },
   });

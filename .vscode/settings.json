@@ -43,23 +43,6 @@
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": [
-    "dicebear",
-    "Gantt",
-    "ianvs",
-    "logoutfn",
-    "magicui",
-    "Merriweather",
-    "Monfly",
-    "notionists",
-    "nums",
-    "Pacifico",
-    "pgsql",
-    "Playfair",
-    "Roboto",
-    "Sonner",
-    "vercel"
-  ],
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
   "formattingToggle.affects": ["editor.formatOnSave"]

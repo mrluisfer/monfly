@@ -158,7 +158,7 @@ export const invalidateAllUserQueries = async (
  */
 export const invalidateQueriesByPattern = async (
   queryClient: QueryClient,
-  queryKeys: (string | (string | any)[])[],
+  queryKeys: (string | unknown[])[],
 ): Promise<void> => {
   await Promise.all(
     queryKeys.map((queryKey) =>

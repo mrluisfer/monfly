@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { FolderIcon, FolderOpenIcon } from "lucide-react";
 
@@ -81,15 +81,8 @@ export const ManagementTabs = ({
   onTabChange,
   className,
 }: ManagementTabsProps) => {
-  const [internalActiveTab, setInternalActiveTab] = useState<string>(
-    ManagementTab.CATEGORIES,
-  );
-
-  useEffect(() => {
-    if (activeTab === undefined) {
-      setInternalActiveTab(defaultTab);
-    }
-  }, [activeTab, defaultTab]);
+  const [internalActiveTab, setInternalActiveTab] =
+    useState<string>(defaultTab);
 
   // Use controlled or uncontrolled state
   const currentTab = activeTab !== undefined ? activeTab : internalActiveTab;

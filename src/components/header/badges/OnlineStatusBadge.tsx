@@ -101,6 +101,8 @@ export function OnlineStatusBadge({
 
   let timeAgo: string | null = null;
   if (lastChanged) {
+    // Relative "time ago" label inherently reads the current time on render.
+    // eslint-disable-next-line react-hooks/purity
     const seconds = Math.floor((Date.now() - lastChanged) / 1000);
     if (seconds < 60) {
       timeAgo = `${seconds}s ago`;

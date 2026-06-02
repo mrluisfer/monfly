@@ -14,7 +14,6 @@ import { useMutation } from "~/hooks/useMutation";
 import { signupFn } from "~/server/auth/signupfn";
 import { getUserSession } from "~/server/db/users/get-user-session";
 import {
-  ArrowLeft,
   BadgeCheck,
   ChartNoAxesCombined,
   ShieldCheck,

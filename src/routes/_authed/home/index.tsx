@@ -26,7 +26,7 @@ import {
 import { useAtomValue } from "jotai";
 import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
-import { BalanceDetails } from "@/components/balance/BalanceDetails";
+import { BalanceDetails } from "@/components/balance/balance-details";
 
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart"),

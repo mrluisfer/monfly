@@ -15,7 +15,7 @@ import {
   invalidateTransactionQueries,
 } from "~/utils/query-invalidation";
 import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import type { z } from "zod";
 
 export const useEditTransaction = (
@@ -34,8 +34,9 @@ export const useEditTransaction = (
       .appliedToLoanId ?? null;
 
   const form = useForm<z.infer<typeof TransactionFormSchema>>({
-    // biome-ignore lint/suspicious/noExplicitAny: generic form field type
-    resolver: zodResolver(TransactionFormSchema as any),
+    resolver: zodResolver(TransactionFormSchema) as Resolver<
+      z.infer<typeof TransactionFormSchema>
+    >,
     defaultValues: {
       [transactionFormNames.amount]: transaction.amount.toString(),
       [transactionFormNames.type]: transaction.type as "income" | "expense",

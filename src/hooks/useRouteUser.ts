@@ -11,7 +11,7 @@ export const useRouteUser = (): string => {
   }
 
   const userEmail =
-    authedRouteContext.user || (authedRouteContext as any)?.email;
+    authedRouteContext.user || (authedRouteContext as { email?: string }).email;
 
   if (!userEmail || typeof userEmail !== "string") {
     console.warn("⚠️ Invalid user email from context:", userEmail);

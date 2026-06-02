@@ -1,4 +1,16 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const subscribe = () => () => {};
+
+function getSnapshot() {
+  if (typeof navigator === "undefined") return false;
+  const platform =
+    (navigator as Navigator & { userAgentData?: { platform?: string } })
+      .userAgentData?.platform ??
+    navigator.platform ??
+    "";
+  return /Mac|iPhone|iPad|iPod/i.test(platform);
+}
 
 /**
  * Detects whether the current platform is Apple-based (Mac/iOS).
@@ -6,17 +18,5 @@ import { useEffect, useState } from "react";
  * then updates on the client after hydration.
  */
 export function useIsMac() {
-  const [isMac, setIsMac] = useState(false);
-
-  useEffect(() => {
-    if (typeof navigator === "undefined") return;
-    const platform =
-      (navigator as Navigator & { userAgentData?: { platform?: string } })
-        .userAgentData?.platform ??
-      navigator.platform ??
-      "";
-    setIsMac(/Mac|iPhone|iPad|iPod/i.test(platform));
-  }, []);
-
-  return isMac;
+  return useSyncExternalStore(subscribe, getSnapshot, () => false);
 }
