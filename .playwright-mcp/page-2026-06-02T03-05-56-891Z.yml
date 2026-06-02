@@ -1,0 +1,142 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - generic [ref=e6]:
+      - list [ref=e8]:
+        - listitem [ref=e9]:
+          - link "Monfly Personal finance" [ref=e10] [cursor=pointer]:
+            - /url: /home
+            - img [ref=e11]
+            - generic [ref=e12]:
+              - generic [ref=e13]: Monfly
+              - generic [ref=e14]: Personal finance
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: Workspace
+          - list [ref=e19]:
+            - listitem [ref=e20]:
+              - link "Home" [ref=e21] [cursor=pointer]:
+                - /url: /home
+                - img [ref=e22]
+                - generic [ref=e25]: Home
+            - listitem [ref=e26]:
+              - link "Transactions" [ref=e27] [cursor=pointer]:
+                - /url: /home/transactions
+                - img [ref=e28]
+                - generic [ref=e30]: Transactions
+            - listitem [ref=e31]:
+              - link "Loans" [ref=e32] [cursor=pointer]:
+                - /url: /home/loans
+                - img [ref=e33]
+                - generic [ref=e36]: Loans
+            - listitem [ref=e37]:
+              - link "Reports" [ref=e38] [cursor=pointer]:
+                - /url: /home/reports
+                - img [ref=e39]
+                - generic [ref=e40]: Reports
+            - listitem [ref=e41]:
+              - link "Categories" [ref=e42] [cursor=pointer]:
+                - /url: /home/categories
+                - img [ref=e43]
+                - generic [ref=e44]: Categories
+            - listitem [ref=e45]:
+              - link "Calculator" [ref=e46] [cursor=pointer]:
+                - /url: /home/balance-calculator
+                - img [ref=e47]
+                - generic [ref=e49]: Calculator
+        - list [ref=e52]:
+          - listitem [ref=e53]:
+            - link "Profile" [ref=e54] [cursor=pointer]:
+              - /url: /user/53610fbc-5306-453e-b9ce-03f6295ccb05
+              - img [ref=e55]
+              - generic [ref=e58]: Profile
+          - listitem [ref=e59]:
+            - link "Settings" [ref=e60] [cursor=pointer]:
+              - /url: /user/settings
+              - img [ref=e61]
+              - generic [ref=e64]: Settings
+          - listitem [ref=e65]:
+            - link "Help" [ref=e66] [cursor=pointer]:
+              - /url: /user/help
+              - img [ref=e67]
+              - generic [ref=e74]: Help
+      - list [ref=e76]:
+        - listitem [ref=e77]:
+          - button "Debug Tester debug.reports@example.com" [ref=e78] [cursor=pointer]:
+            - img [ref=e79]
+            - generic [ref=e87]:
+              - generic [ref=e88]: Debug Tester
+              - generic [ref=e89]: debug.reports@example.com
+            - img [ref=e90]
+      - button "Toggle Sidebar" [ref=e93]
+    - main [ref=e94]:
+      - generic [ref=e95]:
+        - button "Toggle navigation" [ref=e96] [cursor=pointer]:
+          - img
+          - generic [ref=e97]: Toggle Sidebar
+        - separator [ref=e98]
+        - navigation "breadcrumb" [ref=e99]:
+          - list [ref=e100]:
+            - listitem [ref=e101]:
+              - link "Home" [ref=e102] [cursor=pointer]:
+                - /url: /home
+            - listitem [ref=e103]:
+              - img [ref=e104]
+            - listitem [ref=e106]:
+              - link "Reports" [disabled] [ref=e107]
+        - generic [ref=e108]:
+          - button "Search or run a command" [ref=e109] [cursor=pointer]:
+            - img
+            - generic [ref=e110]: Search…
+            - generic:
+              - generic: Ctrl
+              - text: K
+          - generic [ref=e115]: Operational
+          - button "Hide information" [ref=e116] [cursor=pointer]:
+            - img
+          - button "Switch to dark mode" [ref=e117] [cursor=pointer]:
+            - img
+      - main [ref=e118]:
+        - generic [ref=e122]:
+          - img [ref=e124]
+          - generic [ref=e125]:
+            - heading "Reports & Analytics" [level=1] [ref=e126]
+            - paragraph [ref=e127]: Visualize your financial trends and category breakdowns.
+        - generic [ref=e134]:
+          - separator [ref=e135]
+          - generic [ref=e136]:
+            - paragraph [ref=e137]:
+              - generic [ref=e138]: Monfly
+              - generic [ref=e139]: ·
+              - generic [ref=e140]: © 2026
+              - generic [ref=e141]: ·
+              - generic [ref=e142]: All rights reserved
+            - navigation "Legal" [ref=e143]:
+              - link "Privacy" [ref=e144] [cursor=pointer]:
+                - /url: /privacy
+                - img [ref=e145]
+                - generic [ref=e147]: Privacy
+              - link "Terms" [ref=e148] [cursor=pointer]:
+                - /url: /terms
+                - img [ref=e149]
+                - generic [ref=e152]: Terms
+              - link "Contact" [ref=e153] [cursor=pointer]:
+                - /url: /contact
+                - img [ref=e154]
+                - generic [ref=e157]: Contact
+              - separator [ref=e158]
+              - link "View source on GitHub" [ref=e159] [cursor=pointer]:
+                - /url: https://github.com/mrluisfer/monfly
+                - img [ref=e160]
+    - generic [ref=e164]:
+      - heading "Command Palette" [level=2] [ref=e165]
+      - paragraph [ref=e166]: Search for a command to run...
+  - generic:
+    - contentinfo:
+      - button "Open TanStack Router Devtools" [ref=e167] [cursor=pointer]:
+        - generic [ref=e168]:
+          - img [ref=e170]
+          - img [ref=e205]
+        - generic [ref=e239]: "-"
+        - generic [ref=e240]: TanStack Router

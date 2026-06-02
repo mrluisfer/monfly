@@ -28,8 +28,18 @@
       "PowerShell(pnpm exec eslint --version)",
       "PowerShell(pnpm lint 2>&1)",
       "PowerShell(\"---\")",
-      "PowerShell(pnpm lint 2>&1 | Select-String -Pattern \"problems|error|warning\" | Select-Object -Last 3; \"=== balance-details ===\"; pnpm exec eslint \"src/components/balance/balance-details\" 2>&1 | Select-Object -First 20; \"EXITBD=$LASTEXITCODE\")"
+      "PowerShell(pnpm lint 2>&1 | Select-String -Pattern \"problems|error|warning\" | Select-Object -Last 3; \"=== balance-details ===\"; pnpm exec eslint \"src/components/balance/balance-details\" 2>&1 | Select-Object -First 20; \"EXITBD=$LASTEXITCODE\")",
+      "Bash(nohup pnpm dev)",
+      "Bash(echo \"started $!\")",
+      "Bash(break)",
+      "mcp__playwright__browser_fill_form",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_click"
     ]
   },
-  "enabledMcpjsonServers": ["shadcn", "magicuidesign-mcp", "playwright"]
+  "enabledMcpjsonServers": [
+    "shadcn",
+    "magicuidesign-mcp",
+    "playwright"
+  ]
 }
