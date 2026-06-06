@@ -23,6 +23,23 @@ export const deleteLoanById = async (
       };
     }
 
+    // Block deletion if any transaction is paying this loan. The relation is
+    // optional, so Prisma defaults to onDelete: SetNull — deleting here would
+    // silently unlink those payments (appliedToLoanId -> null) and corrupt the
+    // loan/transaction coupling. Surface a 409 instead.
+    const linkedPayments = await prismaClient.transaction.count({
+      where: { appliedToLoanId: id, userEmail: email },
+    });
+    if (linkedPayments > 0) {
+      return {
+        error: true,
+        message: "Cannot delete loan with linked payment transactions",
+        data: null,
+        success: false,
+        statusCode: 409,
+      };
+    }
+
     await prismaClient.loan.delete({ where: { id } });
 
     return {

@@ -29,21 +29,27 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
       expense: number;
     };
 
-    const months: { month: string; year: number }[] = [];
+    // Key buckets by (year, month index) instead of the month name. The name
+    // is locale-dependent ("default" yields e.g. "enero" on a Spanish-locale
+    // machine); keying by name happens to work only because both the months
+    // array and the transactions used the same locale. Index keys are robust,
+    // and "en-US" keeps the displayed label deterministic.
+    const months: { month: string; year: number; key: string }[] = [];
     for (let i = monthsToShow - 1; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
       months.push({
-        month: date.toLocaleString("default", { month: "long" }),
+        month: date.toLocaleString("en-US", { month: "long" }),
         year: date.getFullYear(),
+        key: `${date.getFullYear()}-${date.getMonth()}`,
       });
     }
 
     const summaryMap = new Map<string, ChartRow>();
-    transactions.forEach((t) => {
+    transactions.forEach((t: { date: Date; type: string; amount: number }) => {
       const date = new Date(t.date);
-      const month = date.toLocaleString("default", { month: "long" });
+      const month = date.toLocaleString("en-US", { month: "long" });
       const year = date.getFullYear();
-      const key = `${year}-${month}`;
+      const key = `${year}-${date.getMonth()}`;
       if (!summaryMap.has(key)) {
         summaryMap.set(key, { month, year, income: 0, expense: 0 });
       }
@@ -51,8 +57,7 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
       if (t.type === "expense") summaryMap.get(key)!.expense += t.amount;
     });
 
-    const chartData: ChartRow[] = months.map(({ month, year }) => {
-      const key = `${year}-${month}`;
+    const chartData: ChartRow[] = months.map(({ month, year, key }) => {
       return summaryMap.get(key) ?? { month, year, income: 0, expense: 0 };
     });
 
