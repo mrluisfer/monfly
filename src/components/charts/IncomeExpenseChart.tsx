@@ -12,7 +12,6 @@ import {
   AreaChart,
   CartesianGrid,
   Legend,
-  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -156,16 +155,15 @@ export default function IncomeExpenseChart() {
             }}
             className="h-64 w-full sm:h-80"
           >
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={chartData}
-                margin={{
-                  top: 20,
-                  right: 10,
-                  left: 10,
-                  bottom: 20,
-                }}
-              >
+            <AreaChart
+              data={chartData}
+              margin={{
+                top: 20,
+                right: 10,
+                left: 10,
+                bottom: 20,
+              }}
+            >
                 <ChartTooltip content={<IncomeExpenseTooltip />} />
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -254,8 +252,7 @@ export default function IncomeExpenseChart() {
                     fontSize: "14px",
                   }}
                 />
-              </AreaChart>
-            </ResponsiveContainer>
+            </AreaChart>
           </ChartContainer>
 
           <div className="grid gap-3 sm:grid-cols-3">
