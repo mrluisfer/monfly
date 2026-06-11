@@ -52,6 +52,8 @@ export const queryKeys = {
         queryDictionary.trendingMonthly,
         type,
       ] as const,
+    dailyActivity: (email: string) =>
+      [queryDictionary.charts, email, queryDictionary.dailyActivity] as const,
   },
 } as const;
 

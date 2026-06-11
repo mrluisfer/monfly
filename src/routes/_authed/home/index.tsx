@@ -26,6 +26,10 @@ const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart"),
 );
 
+const SpendingHeatmap = lazy(
+  () => import("~/components/charts/SpendingHeatmap"),
+);
+
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
 });
@@ -150,9 +154,21 @@ function RouteComponent() {
                   duration: shouldReduceMotion ? 0 : 0.4,
                   delay: shouldReduceMotion ? 0 : 0.2,
                 }}
-                className="xl:hidden"
+                className="space-y-6"
               >
                 <Section
+                  title="Daily activity"
+                  description="Spot your cashflow rhythm day by day."
+                >
+                  <Suspense
+                    fallback={<Skeleton className="h-56 w-full rounded-2xl" />}
+                  >
+                    <SpendingHeatmap />
+                  </Suspense>
+                </Section>
+
+                <Section
+                  className="xl:hidden"
                   title="Income vs expenses"
                   description="Monthly comparison of inflow and outflow."
                 >

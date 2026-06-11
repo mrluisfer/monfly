@@ -43,7 +43,8 @@
       "Bash(git stash *)",
       "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('recharts/package.json'\\).dependencies\\)\\)\")",
       "Bash(pnpm remove *)",
-      "Bash(pnpm build *)"
+      "Bash(pnpm build *)",
+      "Bash(node --input-type=module -e ' *)"
     ]
   },
   "enabledMcpjsonServers": [
