@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { m } from "framer-motion";
+import { m } from "motion/react";
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,

@@ -18,30 +18,30 @@ export async function getTrendingMonthly({ email, type }: TrendingQueryParams) {
   const startOfThisMonth = new Date(thisYear, thisMonth, 1);
   const startOfNextMonth = new Date(thisYear, thisMonth + 1, 1);
 
-  // Single query: fetch all matching transactions for both months
-  const transactions = await prismaClient.transaction.findMany({
-    where: {
-      userEmail: email,
-      type: type,
-      createdAt: {
-        gte: startOfPrevMonth,
-        lt: startOfNextMonth,
+  // Bucket by the transaction's own `date` (not `createdAt`) so trending
+  // agrees with the income/expense chart, and let the DB do the summing
+  // instead of loading every row into memory.
+  const [thisMonthSum, lastMonthSum] = await Promise.all([
+    prismaClient.transaction.aggregate({
+      _sum: { amount: true },
+      where: {
+        userEmail: email,
+        type,
+        date: { gte: startOfThisMonth, lt: startOfNextMonth },
       },
-    },
-    select: { amount: true, createdAt: true },
-  });
+    }),
+    prismaClient.transaction.aggregate({
+      _sum: { amount: true },
+      where: {
+        userEmail: email,
+        type,
+        date: { gte: startOfPrevMonth, lt: startOfThisMonth },
+      },
+    }),
+  ]);
 
-  let thisMonthTotal = 0;
-  let lastMonthTotal = 0;
-
-  for (const t of transactions) {
-    const txDate = new Date(t.createdAt);
-    if (txDate >= startOfThisMonth) {
-      thisMonthTotal += t.amount;
-    } else {
-      lastMonthTotal += t.amount;
-    }
-  }
+  const thisMonthTotal = thisMonthSum._sum.amount ?? 0;
+  const lastMonthTotal = lastMonthSum._sum.amount ?? 0;
 
   let percentChange = 0;
   if (lastMonthTotal !== 0) {

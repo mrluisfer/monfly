@@ -34,7 +34,16 @@
       "Bash(break)",
       "mcp__playwright__browser_fill_form",
       "mcp__playwright__browser_type",
-      "mcp__playwright__browser_click"
+      "mcp__playwright__browser_click",
+      "Bash(sed -n 30,60p src/components/balance/balance-details/use-balance-details.ts)",
+      "Bash(sed -n 60,95p src/components/balance/TotalBalance.tsx)",
+      "Bash(sed -n 35,60p src/components/charts/ChartByCategoryRadar.tsx)",
+      "Bash(sed -n 60,85p src/components/charts/ChartTransactionsByMonth.tsx)",
+      "Bash(sed -n 30,45p src/components/home/DashboardMetrics.tsx)",
+      "Bash(git stash *)",
+      "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('recharts/package.json'\\).dependencies\\)\\)\")",
+      "Bash(pnpm remove *)",
+      "Bash(pnpm build *)"
     ]
   },
   "enabledMcpjsonServers": [

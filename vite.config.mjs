@@ -34,13 +34,10 @@ export default defineConfig({
   },
   resolve: {
     tsconfigPaths: true,
-    alias: {
-      lodash: "lodash-es",
-    },
   },
   ssr: {
     external: ["@prisma/client", "prisma"],
-    noExternal: ["lodash", "lodash-es", "recharts"],
+    noExternal: ["recharts"],
     target: "node",
   },
   server: {

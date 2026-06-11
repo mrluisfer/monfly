@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
-import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import { formatCurrency } from "~/utils/format-currency";
 import { DollarSign } from "lucide-react";
 import {
@@ -84,7 +84,7 @@ export default function IncomeExpenseChart() {
   const userEmail = useRouteUser();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: [queryDictionary.incomeExpenseData, userEmail],
+    queryKey: queryKeys.charts.incomeExpense(userEmail),
     queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3, // 3 minutes cache

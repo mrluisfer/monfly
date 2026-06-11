@@ -12,7 +12,7 @@ import {
   LazyMotion,
   m,
   useReducedMotion,
-} from "framer-motion";
+} from "motion/react";
 import { PlusCircleIcon } from "lucide-react";
 
 import {

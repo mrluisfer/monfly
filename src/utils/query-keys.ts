@@ -14,8 +14,6 @@ export const queryKeys = {
   transactions: {
     all: () => [queryDictionary.transactions] as const,
     byEmail: (email: string) => [queryDictionary.transactions, email] as const,
-    byMonth: (email: string) =>
-      [queryDictionary.transactionsByMonth, email] as const,
   },
 
   // Category queries
@@ -24,14 +22,36 @@ export const queryKeys = {
     byEmail: (email: string) => [queryDictionary.categories, email] as const,
   },
 
-  // Chart queries
+  // Chart queries. They all share the [charts, email] prefix so a single
+  // invalidateQueries({ queryKey: queryKeys.charts.all(email) }) refreshes
+  // every chart after a transaction/category mutation.
   charts: {
+    all: (email: string) => [queryDictionary.charts, email] as const,
     incomeExpense: (email: string) =>
-      [queryDictionary.incomeExpenseData, email] as const,
+      [
+        queryDictionary.charts,
+        email,
+        queryDictionary.incomeExpenseData,
+      ] as const,
     byCategory: (email: string) =>
-      [queryDictionary.incomeExpenseByCategory, email] as const,
+      [
+        queryDictionary.charts,
+        email,
+        queryDictionary.incomeExpenseByCategory,
+      ] as const,
+    byMonth: (email: string) =>
+      [
+        queryDictionary.charts,
+        email,
+        queryDictionary.transactionsByMonth,
+      ] as const,
     trending: (email: string, type: "income" | "expense") =>
-      [queryDictionary.trendingMonthly, email, type] as const,
+      [
+        queryDictionary.charts,
+        email,
+        queryDictionary.trendingMonthly,
+        type,
+      ] as const,
   },
 } as const;
 

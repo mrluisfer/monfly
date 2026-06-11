@@ -11,10 +11,6 @@ interface TransactionsResponse<T> extends ApiResponse<T> {
   limit?: number;
 }
 
-interface TransactionsResponse<T> extends ApiResponse<T> {
-  total: number;
-}
-
 export const getTransactionsByEmail = async ({
   email,
   limit,

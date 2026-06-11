@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/card";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionsCountByMonthServer } from "~/lib/api/chart/get-transaction-count-by-month";
-import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import {
   Activity,
   ArrowUpIcon,
@@ -68,7 +68,7 @@ function MonthlyActivityTooltip({
 export default function ChartTransactionsByMonth() {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
-    queryKey: [queryDictionary.transactionsByMonth, userEmail],
+    queryKey: queryKeys.charts.byMonth(userEmail),
     queryFn: () =>
       getTransactionsCountByMonthServer({ data: { email: userEmail } }),
     enabled: !!userEmail,

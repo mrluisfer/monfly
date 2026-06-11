@@ -5,6 +5,7 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 
 import { deriveBalanceSummary } from "./derive-balance-summary";
 import type { BalanceSummary } from "./types";
@@ -37,7 +38,7 @@ export function useBalanceDetails(): UseBalanceDetailsResult {
     isPending: isIncomeExpensePending,
     error,
   } = useQuery({
-    queryKey: [queryDictionary.incomeExpenseData, userEmail],
+    queryKey: queryKeys.charts.incomeExpense(userEmail),
     queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3,
