@@ -7,20 +7,27 @@ const monthsToShow = 6;
 export const getIncomeExpenseData = async ({ email }: { email: string }) => {
   try {
     const now = new Date();
-    const sixMonthsAgo = new Date(
-      now.getFullYear(),
-      now.getMonth() - monthsToShow + 1,
-      1,
+    // Work in UTC end-to-end: stored dates are UTC and date_trunc below
+    // returns UTC, so the month frame must be built the same way or buckets
+    // could shift by one month on non-UTC machines.
+    const windowStart = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - monthsToShow + 1, 1),
     );
 
-    const transactions = await prismaClient.transaction.findMany({
-      where: {
-        userEmail: email,
-        date: { gte: sixMonthsAgo, lte: now },
-      },
-      select: { date: true, type: true, amount: true },
-      orderBy: { date: "asc" },
-    });
+    // Aggregate in the database instead of loading every transaction row;
+    // this stays O(months) in transfer size no matter how large the history.
+    const rows = await prismaClient.$queryRaw<
+      { month: Date; type: string; total: number }[]
+    >`
+      SELECT date_trunc('month', "date") AS month,
+             "type",
+             SUM("amount")::float AS total
+      FROM "Transaction"
+      WHERE "userEmail" = ${email}
+        AND "date" >= ${windowStart}
+        AND "date" <= ${now}
+      GROUP BY 1, 2
+    `;
 
     type ChartRow = {
       month: string;
@@ -29,37 +36,47 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
       expense: number;
     };
 
-    // Key buckets by (year, month index) instead of the month name. The name
-    // is locale-dependent ("default" yields e.g. "enero" on a Spanish-locale
-    // machine); keying by name happens to work only because both the months
-    // array and the transactions used the same locale. Index keys are robust,
-    // and "en-US" keeps the displayed label deterministic.
-    const months: { month: string; year: number; key: string }[] = [];
-    for (let i = monthsToShow - 1; i >= 0; i--) {
-      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      months.push({
-        month: date.toLocaleString("en-US", { month: "long" }),
-        year: date.getFullYear(),
-        key: `${date.getFullYear()}-${date.getMonth()}`,
-      });
+    const summaryMap = new Map<string, ChartRow>();
+    for (const row of rows) {
+      const date = new Date(row.month);
+      const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
+      if (!summaryMap.has(key)) {
+        summaryMap.set(key, {
+          // Fixed locale so labels are deterministic across environments
+          // ("default" yields e.g. "enero" on a Spanish-locale machine).
+          month: date.toLocaleString("en-US", {
+            month: "long",
+            timeZone: "UTC",
+          }),
+          year: date.getUTCFullYear(),
+          income: 0,
+          expense: 0,
+        });
+      }
+      const entry = summaryMap.get(key)!;
+      if (row.type === "income") entry.income = row.total;
+      if (row.type === "expense") entry.expense = row.total;
     }
 
-    const summaryMap = new Map<string, ChartRow>();
-    transactions.forEach((t: { date: Date; type: string; amount: number }) => {
-      const date = new Date(t.date);
-      const month = date.toLocaleString("en-US", { month: "long" });
-      const year = date.getFullYear();
-      const key = `${year}-${date.getMonth()}`;
-      if (!summaryMap.has(key)) {
-        summaryMap.set(key, { month, year, income: 0, expense: 0 });
-      }
-      if (t.type === "income") summaryMap.get(key)!.income += t.amount;
-      if (t.type === "expense") summaryMap.get(key)!.expense += t.amount;
-    });
-
-    const chartData: ChartRow[] = months.map(({ month, year, key }) => {
-      return summaryMap.get(key) ?? { month, year, income: 0, expense: 0 };
-    });
+    // Fill the full window so months without transactions still chart as 0.
+    const chartData: ChartRow[] = [];
+    for (let i = monthsToShow - 1; i >= 0; i--) {
+      const date = new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1),
+      );
+      const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
+      chartData.push(
+        summaryMap.get(key) ?? {
+          month: date.toLocaleString("en-US", {
+            month: "long",
+            timeZone: "UTC",
+          }),
+          year: date.getUTCFullYear(),
+          income: 0,
+          expense: 0,
+        },
+      );
+    }
 
     return {
       data: chartData,

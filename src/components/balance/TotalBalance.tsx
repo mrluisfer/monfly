@@ -6,7 +6,7 @@ import {
   LazyMotion,
   m,
   useReducedMotion,
-} from "framer-motion";
+} from "motion/react";
 import { useAtomValue } from "jotai";
 import { CalendarIcon } from "lucide-react";
 import { useMemo } from "react";
@@ -15,6 +15,7 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 
 import { CopyButton } from "../copy-button/copy-button";
@@ -71,7 +72,7 @@ const TotalBalance = () => {
   });
 
   const { data: incomeExpenseData } = useQuery({
-    queryKey: [queryDictionary.incomeExpenseData, userEmail],
+    queryKey: queryKeys.charts.incomeExpense(userEmail),
     queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3,

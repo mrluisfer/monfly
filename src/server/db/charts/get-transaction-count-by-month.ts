@@ -12,35 +12,29 @@ export const getTransactionsCountByMonth = async ({
   email: string;
 }) => {
   try {
-    const transactions = await prismaClient.transaction.findMany({
-      where: { userEmail: email },
-      select: { date: true },
-      orderBy: { date: "asc" },
-    });
+    // Aggregate in the database instead of loading every transaction row;
+    // this stays O(months) in transfer size no matter how large the history.
+    const rows = await prismaClient.$queryRaw<{ month: Date; count: number }[]>`
+      SELECT date_trunc('month', "date") AS month, COUNT(*)::int AS count
+      FROM "Transaction"
+      WHERE "userEmail" = ${email}
+      GROUP BY 1
+      ORDER BY 1 ASC
+    `;
 
     type ChartRow = { month: string; year: number; count: number };
-    // Track the numeric month index alongside the label so we can sort
-    // chronologically without re-parsing the (locale-dependent) month name.
-    const summaryMap = new Map<string, ChartRow & { monthIndex: number }>();
 
-    transactions.forEach((t: { date: Date }) => {
-      const date = new Date(t.date);
-      // Fixed locale so labels are deterministic across environments
-      // ("default" would yield e.g. "enero" on a Spanish-locale machine, which
-      // then broke the sort below: new Date("enero 1, 2024") is Invalid Date).
-      const month = date.toLocaleString("en-US", { month: "long" });
-      const monthIndex = date.getMonth();
-      const year = date.getFullYear();
-      const key = `${year}-${monthIndex}`;
-      if (!summaryMap.has(key)) {
-        summaryMap.set(key, { month, year, count: 0, monthIndex });
-      }
-      summaryMap.get(key)!.count += 1;
+    const chartData: ChartRow[] = rows.map((row) => {
+      const date = new Date(row.month);
+      return {
+        // Fixed locale + UTC so labels are deterministic across environments:
+        // date_trunc returns UTC timestamps, and local getters could shift the
+        // bucket into the previous month on non-UTC machines.
+        month: date.toLocaleString("en-US", { month: "long", timeZone: "UTC" }),
+        year: date.getUTCFullYear(),
+        count: row.count,
+      };
     });
-
-    const chartData: ChartRow[] = Array.from(summaryMap.values())
-      .sort((a, b) => a.year - b.year || a.monthIndex - b.monthIndex)
-      .map(({ monthIndex: _monthIndex, ...row }) => row);
 
     return {
       data: chartData,

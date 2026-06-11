@@ -6,7 +6,7 @@ import {
   LazyMotion,
   m,
   useReducedMotion,
-} from "framer-motion";
+} from "motion/react";
 import { ArrowDownLeftIcon, CalendarIcon } from "lucide-react";
 
 import { TransactionRow } from "./TransactionRow";

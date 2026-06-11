@@ -8,7 +8,7 @@ import { ArrowUpRightIcon, TrendingDown, TrendingUp } from "lucide-react";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { cn } from "~/lib/utils";
-import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import { formatCurrency } from "~/utils/format-currency";
 
 import { MetricCard } from "@/components/ui/metric-card";
@@ -33,7 +33,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
   const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: [queryDictionary.incomeExpenseData, userEmail],
+    queryKey: queryKeys.charts.incomeExpense(userEmail),
     queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3,

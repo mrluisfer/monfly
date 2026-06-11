@@ -5,6 +5,8 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
+import { useIsMobile } from "~/hooks/use-mobile";
+import { useIsMounted } from "~/hooks/ui/useIsMounted";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
@@ -51,79 +53,92 @@ export default function TransactionsList() {
   const transactions = (data as TransactionsResponse)?.data ?? [];
   const total = (data as TransactionsResponse)?.total ?? 0;
 
+  // The CSS classes (hidden md:block / md:hidden) keep SSR + the hydration
+  // frame consistent on any viewport; after mount we stop mounting the hidden
+  // variant entirely so mobile doesn't pay for the desktop table (and vice
+  // versa).
+  const isMobile = useIsMobile();
+  const isMounted = useIsMounted();
+  const showDesktop = !isMounted || !isMobile;
+  const showMobile = !isMounted || isMobile;
+
   return (
     <TransactionHoverProvider>
-      <div className="mt-4 hidden md:block">
-        <PageHeader
-          icon={<WalletIcon className="size-5" aria-hidden="true" />}
-          title="Transactions"
-          description="Search, filter, edit, or add transactions from one place."
-          actions={
-            <div className="flex items-center justify-end gap-4">
-              <Badge variant={"default"}>
-                {total} {total === 1 ? "record" : "records"}
-              </Badge>
-              <BalanceStatusBadge className="rounded-full" />
-              <Button
-                onClick={() => refetch()}
-                disabled={isPending || transactions.length === 0}
-                title="Refresh transactions"
-                variant={isRefetching ? "default" : "outline"}
-                size="sm"
-              >
-                {isPending || isRefetching ? (
-                  <>
-                    <Spinner className="mr-2 size-4" />
-                    <span>Loading...</span>
-                  </>
-                ) : (
-                  <>
-                    <RefreshCcwIcon className="size-4" />
-                    <span className="ml-2">Refresh</span>
-                  </>
+      {showDesktop && (
+        <div className="mt-4 hidden md:block">
+          <PageHeader
+            icon={<WalletIcon className="size-5" aria-hidden="true" />}
+            title="Transactions"
+            description="Search, filter, edit, or add transactions from one place."
+            actions={
+              <div className="flex items-center justify-end gap-4">
+                <Badge variant={"default"}>
+                  {total} {total === 1 ? "record" : "records"}
+                </Badge>
+                <BalanceStatusBadge className="rounded-full" />
+                <Button
+                  onClick={() => refetch()}
+                  disabled={isPending || transactions.length === 0}
+                  title="Refresh transactions"
+                  variant={isRefetching ? "default" : "outline"}
+                  size="sm"
+                >
+                  {isPending || isRefetching ? (
+                    <>
+                      <Spinner className="mr-2 size-4" />
+                      <span>Loading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCcwIcon className="size-4" />
+                      <span className="ml-2">Refresh</span>
+                    </>
+                  )}
+                </Button>
+                {pathname.includes("/transactions") && (
+                  <div className="hidden md:block">
+                    <AddTransactionButton />
+                  </div>
                 )}
-              </Button>
-              {pathname.includes("/transactions") && (
-                <div className="hidden md:block">
-                  <AddTransactionButton />
-                </div>
-              )}
-            </div>
-          }
-        />
-        <Card className="mt-2 min-h-[30rem] rounded-2xl border-2 p-0 shadow-none">
-          <CardContent className="px-5 pt-3 pb-5">
-            <DesktopContent
+              </div>
+            }
+          />
+          <Card className="mt-2 min-h-[30rem] rounded-2xl border-2 p-0 shadow-none">
+            <CardContent className="px-5 pt-3 pb-5">
+              <DesktopContent
+                userEmail={userEmail}
+                isPending={isPending}
+                error={error}
+                transactions={transactions}
+                refetch={refetch}
+              />
+            </CardContent>
+          </Card>
+          <div className="mt-4">
+            <TransactionsInsights transactions={transactions} />
+          </div>
+        </div>
+      )}
+
+      {showMobile && (
+        <div className="space-y-4 md:hidden">
+          <section className="bg-card rounded-2xl px-2 py-4 lg:p-4">
+            <MobileHeader
+              total={total}
+              isPending={isPending}
+              transactionsCount={transactions.length}
+              refetch={refetch}
+            />
+            <MobileContent
               userEmail={userEmail}
               isPending={isPending}
               error={error}
               transactions={transactions}
               refetch={refetch}
             />
-          </CardContent>
-        </Card>
-        <div className="mt-4">
-          <TransactionsInsights transactions={transactions} />
+          </section>
         </div>
-      </div>
-
-      <div className="space-y-4 md:hidden">
-        <section className="bg-card rounded-2xl px-2 py-4 lg:p-4">
-          <MobileHeader
-            total={total}
-            isPending={isPending}
-            transactionsCount={transactions.length}
-            refetch={refetch}
-          />
-          <MobileContent
-            userEmail={userEmail}
-            isPending={isPending}
-            error={error}
-            transactions={transactions}
-            refetch={refetch}
-          />
-        </section>
-      </div>
+      )}
     </TransactionHoverProvider>
   );
 }
