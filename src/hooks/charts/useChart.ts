@@ -2,16 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useRouteUser } from "~/hooks/useRouteUser";
 
-export interface ChartData {
-  [key: string]: any;
+export type ChartData = Record<string, unknown>;
+
+export interface ChartQueryResponse {
+  data?: ChartData[] | null;
 }
 
 export interface ChartHookOptions {
   queryKey: string[];
-  queryFn: () => Promise<any>;
+  queryFn: () => Promise<ChartQueryResponse>;
   enabled?: boolean;
-  staleTime?: number;
-  refetchOnWindowFocus?: boolean;
 }
 
 export interface ChartHookResult {
@@ -27,8 +27,6 @@ export function useChart({
   queryKey,
   queryFn,
   enabled = true,
-  staleTime = 5 * 60 * 1000, // 5 minutes
-  refetchOnWindowFocus = false,
 }: ChartHookOptions): ChartHookResult {
   const userEmail = useRouteUser();
 
@@ -50,7 +48,7 @@ export function useChart({
   // Process and sanitize data
   const data = rawData?.data ?? [];
   const processedData = Array.isArray(data)
-    ? data.filter((item: any) => item && typeof item === "object")
+    ? data.filter((item) => item && typeof item === "object")
     : [];
 
   const hasData = processedData.length > 0;
@@ -69,24 +67,29 @@ export function useChart({
 // Specific hook for financial charts
 export function useFinancialChart(
   queryKey: string[],
-  queryFn: () => Promise<any>,
+  queryFn: () => Promise<ChartQueryResponse>,
 ) {
   const result = useChart({ queryKey, queryFn });
 
   // Add financial-specific processing
-  const processedData = result.data.map((item: any) => ({
-    ...item,
-    income: Number.isFinite(item.income) ? Math.max(0, item.income) : 0,
-    expense: Number.isFinite(item.expense) ? Math.max(0, item.expense) : 0,
-    amount: Number.isFinite(item.amount) ? Math.abs(item.amount) : 0,
-  }));
+  const processedData = result.data.map((item) => {
+    const income = Number(item.income);
+    const expense = Number(item.expense);
+    const amount = Number(item.amount);
+    return {
+      ...item,
+      income: Number.isFinite(income) ? Math.max(0, income) : 0,
+      expense: Number.isFinite(expense) ? Math.max(0, expense) : 0,
+      amount: Number.isFinite(amount) ? Math.abs(amount) : 0,
+    };
+  });
 
   // Calculate totals
   const totals = processedData.reduce(
     (acc, item) => ({
-      income: acc.income + (item.income || 0),
-      expense: acc.expense + (item.expense || 0),
-      amount: acc.amount + (item.amount || 0),
+      income: acc.income + item.income,
+      expense: acc.expense + item.expense,
+      amount: acc.amount + item.amount,
     }),
     { income: 0, expense: 0, amount: 0 },
   );

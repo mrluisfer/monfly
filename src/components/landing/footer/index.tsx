@@ -1,5 +1,4 @@
 import { Separator } from "~/components/ui/separator";
-import { Globe } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 

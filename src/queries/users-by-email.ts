@@ -6,7 +6,7 @@ export const userByEmailQueryOptions = (email: string) =>
   queryOptions({
     queryKey: [queryDictionary.user, email] as const,
     queryFn: ({ queryKey }) => {
-      const [_, email] = queryKey;
+      const [, email] = queryKey;
       return getUserByEmailServer({ data: { email } });
     },
   });

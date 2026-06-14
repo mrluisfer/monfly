@@ -19,7 +19,7 @@ export const deleteCategoryById = async (id: string) => {
       error: false,
       statusCode: 200,
     } as ApiResponse<Category>;
-  } catch (error) {
+  } catch {
     return {
       data: null,
       message: "Failed to delete category",

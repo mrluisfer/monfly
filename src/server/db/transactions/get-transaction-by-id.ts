@@ -37,7 +37,7 @@ export const getTransactionById = async (data: { id: string }) => {
       success: true,
       message: "Transaction fetched successfully",
     } as ApiResponse<Transaction>;
-  } catch (error) {
+  } catch {
     return {
       error: true,
       message: "Error fetching transaction",

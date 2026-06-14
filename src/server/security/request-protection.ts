@@ -4,7 +4,9 @@ import {
   setResponseHeader,
 } from "@tanstack/react-start/server";
 import type { ApiResponse } from "~/types/ApiResponse";
-import { useAppSession } from "~/server/auth/session";
+// Aliased: this is a server-side session helper, not a React hook (the `use`
+// prefix would otherwise trip react-hooks/rules-of-hooks).
+import { useAppSession as getAppSession } from "~/server/auth/session";
 
 type RateLimitBucket = {
   count: number;
@@ -118,7 +120,7 @@ export function enforceRateLimit({
 }
 
 export async function resolveSessionEmail(expectedEmail?: string) {
-  const session = await useAppSession();
+  const session = await getAppSession();
   const sessionEmail = session.data.email?.trim();
 
   if (!sessionEmail) {

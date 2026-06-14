@@ -2,6 +2,7 @@ export { useDarkMode } from "./useDarkMode";
 export { useFontDisplay } from "./useFontDisplay";
 export { useInView } from "./useInView";
 export { useIsMac } from "./useIsMac";
+export { useIsMounted } from "./useIsMounted";
 export { useIsMobile } from "./useMobile";
 export { useNumberFormat } from "./useNumberFormat";
 export { useSonnerPosition } from "./useSonnerPosition";

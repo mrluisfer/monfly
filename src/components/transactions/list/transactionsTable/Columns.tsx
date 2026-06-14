@@ -9,6 +9,7 @@ import {
   ArrowUpDownIcon,
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
+  HandCoinsIcon,
 } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -108,11 +109,29 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       const description = row.getValue("description") as string;
       const transaction = row.original;
       const createdAt = new Date(transaction.createdAt);
+      const isLoanOrigin = (transaction.loanCount ?? 0) > 0;
+      const isLoanPayment = Boolean(transaction.appliedToLoanId);
+      const isLoan = isLoanOrigin || isLoanPayment;
 
       return (
         <div className="max-w-[340px] space-y-1">
-          <div className="text-foreground leading-5 font-medium break-words whitespace-normal capitalize">
-            {description || "No description"}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="text-foreground leading-5 font-medium break-words whitespace-normal capitalize">
+              {description || "No description"}
+            </div>
+            {isLoan && (
+              <span
+                className="border-warning/30 bg-warning/10 text-warning-foreground dark:text-warning inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase"
+                title={
+                  isLoanPayment
+                    ? "This transaction was applied as a payment to a loan"
+                    : "This transaction is tracked as a loan"
+                }
+              >
+                <HandCoinsIcon className="size-3" aria-hidden="true" />
+                {isLoanPayment ? "Loan payment" : "Loan"}
+              </span>
+            )}
           </div>
           <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-xs">
             <span>

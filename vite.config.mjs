@@ -4,7 +4,6 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
-import tsConfigPaths from "vite-tsconfig-paths";
 
 const preset = process.env.NITRO_PRESET || "vercel";
 const buildSourcemap = process.env.BUILD_SOURCEMAP === "true";
@@ -34,13 +33,11 @@ export default defineConfig({
     exclude: ["@prisma/client", "prisma"],
   },
   resolve: {
-    alias: {
-      lodash: "lodash-es",
-    },
+    tsconfigPaths: true,
   },
   ssr: {
     external: ["@prisma/client", "prisma"],
-    noExternal: ["lodash", "lodash-es", "recharts"],
+    noExternal: ["recharts"],
     target: "node",
   },
   server: {
@@ -52,9 +49,6 @@ export default defineConfig({
   },
   plugins: [
     preventSensitiveClientEnvLeak(),
-    tsConfigPaths({
-      projects: ["./tsconfig.json"],
-    }),
     tailwindcss(),
     tanstackStart(),
     nitro({ preset }),

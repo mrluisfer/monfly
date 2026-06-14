@@ -1,13 +1,13 @@
 /// <reference types="vite/client" />
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import {
-  createRootRoute,
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import type * as React from "react";
+import * as React from "react";
 import { DefaultCatchBoundary } from "~/components/shared/DefaultCatchBoundary";
 import { NotFound } from "~/components/shared/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
@@ -22,15 +22,26 @@ import { seo } from "~/utils/seo.js";
 
 import { Provider as JotaiProvider } from "jotai";
 
-export const Route = createRootRoute({
+// Dev-only and lazily imported so the devtools never ship in the production
+// bundle.
+const TanStackRouterDevtools = import.meta.env.PROD
+  ? () => null
+  : React.lazy(() =>
+      import("@tanstack/react-router-devtools").then((m) => ({
+        default: m.TanStackRouterDevtools,
+      })),
+    );
+
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
   head: () => ({
     title: "Monfly | Track your Expenses & Income | TanStack + shadcn",
     meta: [
       { charSet: "utf-8" },
       {
         name: "viewport",
-        content:
-          "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover",
+        content: "width=device-width, initial-scale=1.0, viewport-fit=cover",
       },
       // theme-color adapts to system light/dark mode
       {
@@ -144,54 +155,36 @@ export const Route = createRootRoute({
   component: RootComponent,
 });
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      networkMode: "online", // Only run queries when online
-      retry: (failureCount, error) => {
-        // Reduce retry attempts to prevent stream issues
-        if (failureCount >= 1) return false;
-
-        // Don't retry on 4xx errors
-        if (
-          error &&
-          "status" in error &&
-          typeof error.status === "number" &&
-          error.status >= 400 &&
-          error.status < 500
-        ) {
-          return false;
-        }
-        return failureCount < 1;
-      },
-      retryDelay: () => 1000, // Fixed 1 second delay
-    },
-    mutations: {
-      retry: 0, // No retries for mutations to prevent conflicts
-      networkMode: "online",
-    },
-  },
-});
-
 function RootComponent() {
+  // Per-request QueryClient created in getRouter() (src/router.tsx) and
+  // passed through router context, so SSR never shares cache across users.
+  const { queryClient } = Route.useRouteContext();
+
   return (
     <QueryClientProvider client={queryClient}>
       <JotaiProvider>
         <UiStateEffects />
-        <RootDocumentWithProviders>
+        <AppDocument>
           <Outlet />
-        </RootDocumentWithProviders>
+        </AppDocument>
       </JotaiProvider>
     </QueryClientProvider>
   );
 }
 
-// Component that can be used outside providers (for error boundaries)
-function RootDocument({ children }: { children: React.ReactNode }) {
+type ToasterProps = React.ComponentProps<typeof SileoToaster>;
+
+// Shared document shell. Safe to render outside providers (error boundaries)
+// with the default toaster settings.
+function RootDocument({
+  children,
+  toasterPosition = "bottom-right",
+  toasterTheme = "system",
+}: {
+  children: React.ReactNode;
+  toasterPosition?: ToasterProps["position"];
+  toasterTheme?: ToasterProps["theme"];
+}) {
   return (
     <html lang="en" data-built-by="bHVpcy1hbHZhcmV6L0Btckx1aXNGZXI=">
       <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
@@ -199,39 +192,30 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <TooltipProvider>
+          <SileoToaster position={toasterPosition} theme={toasterTheme} />
           {children}
-          <TanStackRouterDevtools position="bottom-right" />
+          {import.meta.env.DEV && (
+            <React.Suspense fallback={null}>
+              <TanStackRouterDevtools position="bottom-right" />
+            </React.Suspense>
+          )}
           <Scripts />
-          <SileoToaster position="bottom-right" theme="system" />
         </TooltipProvider>
       </body>
     </html>
   );
 }
 
-// Component that uses providers (for normal app flow)
-function RootDocumentWithProviders({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// Variant used in the normal app flow: reads user preferences (requires
+// providers above it in the tree).
+function AppDocument({ children }: { children: React.ReactNode }) {
   useGlobalHapticFeedback();
   const { position } = useSonnerPosition();
   const { theme } = useDarkMode();
 
   return (
-    <html lang="en" data-built-by="bHVpcy1hbHZhcmV6L0Btckx1aXNGZXI=">
-      <head title="Monfly | Track your Expenses & Income | TanStack + shadcn">
-        <HeadContent />
-      </head>
-      <body>
-        <TooltipProvider>
-          <SileoToaster position={position} theme={theme} />
-          {children}
-          <TanStackRouterDevtools position="bottom-right" />
-          <Scripts />
-        </TooltipProvider>
-      </body>
-    </html>
+    <RootDocument toasterPosition={position} toasterTheme={theme}>
+      {children}
+    </RootDocument>
   );
 }

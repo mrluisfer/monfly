@@ -1,5 +1,4 @@
 import { defineConfig } from "@tanstack/react-start/config";
-import tsConfigPaths from "vite-tsconfig-paths";
 
 const buildSourcemap = process.env.BUILD_SOURCEMAP === "true";
 const CLIENT_SENSITIVE_ENV_PATTERN = /^VITE_.*(KEY|SECRET|TOKEN|PASSWORD)/i;
@@ -38,13 +37,9 @@ export default defineConfig({
       sourcemap: buildSourcemap,
       minify: "esbuild",
     },
-    plugins: [
-      preventSensitiveClientEnvLeak(),
-      tsConfigPaths({
-        projects: ["./tsconfig.json"],
-      }),
-    ],
+    plugins: [preventSensitiveClientEnvLeak()],
     resolve: {
+      tsconfigPaths: true,
       alias: {
         lodash: "lodash-es",
       },

@@ -1,20 +1,13 @@
 import { useState } from "react";
-import { getCategoryIconByName } from "@/constants/categories-icon";
+import { getCategoryIconByName } from "@/constants/categories/categories-icon";
 import type { Category } from "@prisma/client";
 import { CheckIcon, PencilIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
-import { EditCategory } from "../EditCategory";
+import { EditCategoryDialogContent } from "./EditCategoryDialogContent";
 
 type CategoryCardProps = {
   category: Category;
@@ -70,48 +63,33 @@ export function CategoryCard({
         <DialogTrigger
           render={
             <Button
-              variant="ghost"
-              size="icon-xs"
+              variant="outline"
+              size="icon"
               className={cn(
-                "absolute top-2 right-2 z-10 size-7 rounded-full opacity-0 transition-opacity",
-                "group-focus-within:opacity-100 group-hover:opacity-100",
+                "absolute top-2 right-2 z-10 rounded-full transition-opacity",
+                // Desktop: reveal on hover/focus only. Touch devices (no hover)
+                // always see it — there's no hover state to "wait for".
+                "opacity-100 md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100",
                 "hover:bg-muted",
               )}
               aria-label={`Edit ${category.name}`}
               onClick={(e) => e.stopPropagation()}
             >
-              <PencilIcon className="size-3.5" aria-hidden="true" />
+              <PencilIcon aria-hidden="true" />
             </Button>
           }
         />
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader className="space-y-3">
-            <DialogTitle className="flex items-center gap-2">
-              <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-xl">
-                {getCategoryIconByName(category.icon, { className: "size-4" })}
-              </div>
-              Edit Category
-            </DialogTitle>
-            <DialogDescription>
-              Update the details of your{" "}
-              <strong className="text-foreground capitalize">
-                {category.name}
-              </strong>{" "}
-              category below.
-            </DialogDescription>
-          </DialogHeader>
-          <EditCategory
-            category={category}
-            onCloseDialog={() => setEditOpen(false)}
-          />
-        </DialogContent>
+        <EditCategoryDialogContent
+          category={category}
+          onClose={() => setEditOpen(false)}
+        />
       </Dialog>
 
       {/* icon */}
       <div
         aria-hidden="true"
         className={cn(
-          "relative z-0 mt-2 flex size-14 items-center justify-center rounded-2xl transition-colors",
+          "pointer-events-none relative z-0 mt-2 flex size-14 items-center justify-center rounded-2xl transition-colors",
           isSelected
             ? "bg-primary/15 text-primary"
             : "bg-muted text-foreground group-hover:bg-primary/10 group-hover:text-primary",
@@ -121,12 +99,7 @@ export function CategoryCard({
       </div>
 
       {/* name */}
-      <span
-        className={cn(
-          "relative z-0 w-full truncate text-sm font-medium capitalize",
-          isSelected ? "text-foreground" : "text-foreground",
-        )}
-      >
+      <span className="text-foreground pointer-events-none relative z-0 w-full truncate text-sm font-medium capitalize">
         {category.name}
       </span>
     </div>

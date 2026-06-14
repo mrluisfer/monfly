@@ -20,7 +20,7 @@ export const putUserTotalBalance = async (data: {
       error: false,
       statusCode: 200,
     } as ApiResponse<User | null>;
-  } catch (error) {
+  } catch {
     return {
       error: true,
       message: "User not found or error updating user total balance",

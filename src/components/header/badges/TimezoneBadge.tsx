@@ -32,6 +32,9 @@ export const TimezoneBadge = ({
   useEffect(() => {
     if (!isActive) return;
 
+    // Live clock: the initial value must come from the client at mount time to
+    // avoid an SSR/client hydration mismatch; it can't be derived in render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(new Date());
 
     const intervalMs = compact ? 60_000 : 30_000;

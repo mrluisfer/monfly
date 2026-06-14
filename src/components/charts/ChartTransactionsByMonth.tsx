@@ -9,7 +9,7 @@ import {
 } from "~/components/ui/card";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionsCountByMonthServer } from "~/lib/api/chart/get-transaction-count-by-month";
-import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import {
   Activity,
   ArrowUpIcon,
@@ -68,7 +68,7 @@ function MonthlyActivityTooltip({
 export default function ChartTransactionsByMonth() {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
-    queryKey: [queryDictionary.transactionsByMonth, userEmail],
+    queryKey: queryKeys.charts.byMonth(userEmail),
     queryFn: () =>
       getTransactionsCountByMonthServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
@@ -81,26 +81,29 @@ export default function ChartTransactionsByMonth() {
   // Process and validate chart data
   const rawChartData = data?.data ?? [];
   const chartData = rawChartData
-    .map((item: any) => ({
-      month: String(item.month || "Unknown"),
-      count: Number.isFinite(item.count) ? Math.max(0, item.count) : 0,
-    }))
-    .filter((item: any) => item.count > 0);
+    .map((item: { month?: unknown; count?: unknown }) => {
+      const count = Number(item.count);
+      return {
+        month: String(item.month || "Unknown"),
+        count: Number.isFinite(count) ? Math.max(0, count) : 0,
+      };
+    })
+    .filter((item) => item.count > 0);
 
   const totalTransactions = chartData.reduce(
-    (sum: number, item: any) => sum + item.count,
+    (sum, item) => sum + item.count,
     0,
   );
   const averagePerMonth =
     chartData.length > 0 ? Math.round(totalTransactions / chartData.length) : 0;
 
   // Calculate additional statistics
-  const maxCount = Math.max(...chartData.map((item: any) => item.count));
-  const minCount = Math.min(...chartData.map((item: any) => item.count));
+  const maxCount = Math.max(...chartData.map((item) => item.count));
+  const minCount = Math.min(...chartData.map((item) => item.count));
   const maxMonth =
-    chartData.find((item: any) => item.count === maxCount)?.month || "";
+    chartData.find((item) => item.count === maxCount)?.month || "";
   const minMonth =
-    chartData.find((item: any) => item.count === minCount)?.month || "";
+    chartData.find((item) => item.count === minCount)?.month || "";
 
   // Calculate trend (simple comparison of last 2 months if available)
   const trendPercentage =
@@ -273,7 +276,7 @@ export default function ChartTransactionsByMonth() {
                   Monthly Distribution
                 </div>
                 <div className="flex h-2 gap-1">
-                  {chartData.map((item: any) => {
+                  {chartData.map((item) => {
                     const percentage =
                       totalTransactions > 0
                         ? (item.count / totalTransactions) * 100

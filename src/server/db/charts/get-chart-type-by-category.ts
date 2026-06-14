@@ -40,7 +40,7 @@ export const getChartTypeByCategory = async ({ email }: { email: string }) => {
       error: false,
       statusCode: 200,
     } as ApiResponse<typeof data>;
-  } catch (error) {
+  } catch {
     return {
       data: null,
       message: "Failed to retrieve income/expense by category",

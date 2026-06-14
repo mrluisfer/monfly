@@ -25,7 +25,7 @@ export const getUserSession = createServerFn({ method: "GET" }).handler(
         statusCode: 200,
         message: "User session fetched successfully",
       } as ApiResponse<string>;
-    } catch (error) {
+    } catch {
       return {
         error: true,
         message: "Error fetching user session",

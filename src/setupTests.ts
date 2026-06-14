@@ -25,9 +25,8 @@ Object.defineProperty(window, "matchMedia", {
 // Suppress React 18 console warnings
 const originalError = console.error;
 beforeAll(() => {
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  console.error = (...args: any[]) => {
-    if (/Warning.*not wrapped in act/.test(args[0])) {
+  console.error = (...args: unknown[]) => {
+    if (/Warning.*not wrapped in act/.test(String(args[0]))) {
       return;
     }
     originalError.call(console, ...args);

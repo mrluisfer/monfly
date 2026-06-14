@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { getCanonicalCategoryIconName } from "~/constants/categories-icon";
+import { getCanonicalCategoryIconName } from "@/constants/categories/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -12,7 +12,7 @@ import {
   LazyMotion,
   m,
   useReducedMotion,
-} from "framer-motion";
+} from "motion/react";
 import { PlusCircleIcon } from "lucide-react";
 
 import {
@@ -44,11 +44,8 @@ export default function AddCategory() {
     idempotency: {
       getKey: (variables) =>
         JSON.stringify({
-          //@ts-ignore
           email: variables.data.email,
-          //@ts-ignore
           icon: variables.data.category.icon,
-          //@ts-ignore
           name: variables.data.category.name.trim().toLowerCase(),
         }),
       onDuplicatePending: {
@@ -80,11 +77,11 @@ export default function AddCategory() {
 
   return (
     <Card>
-      <CardHeader className="flex items-center gap-2.5">
-        <div className="bg-primary/10 flex size-9 items-center justify-center rounded-4xl">
+      <CardHeader className="flex flex-row items-center gap-2.5 space-y-0">
+        <div className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-4xl">
           <PlusCircleIcon className="text-primary size-4.5" />
         </div>
-        <div className="text-left">
+        <div className="min-w-0 text-left">
           <CardTitle>New Category</CardTitle>
           <CardDescription>
             Add a new expense or income category
@@ -106,13 +103,11 @@ export default function AddCategory() {
               }}
               className="overflow-hidden"
             >
-              <div className="pt-4">
-                <CategoryForm
-                  submitText="Create category"
-                  loading={isLoading}
-                  onSubmit={handleSubmit}
-                />
-              </div>
+              <CategoryForm
+                submitText="Create category"
+                loading={isLoading}
+                onSubmit={handleSubmit}
+              />
             </m.div>
           </AnimatePresence>
         </LazyMotion>

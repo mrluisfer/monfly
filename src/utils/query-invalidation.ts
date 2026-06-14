@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 
 /**
  * Invalidates all queries related to transaction data for a specific user.
@@ -29,22 +30,10 @@ export const invalidateTransactionQueries = async (
     queryClient.invalidateQueries({
       queryKey: [queryDictionary.activeLoans, userEmail],
     }),
-    // Chart data queries - these display transaction statistics and aggregations
+    // All chart queries share the [charts, userEmail] prefix (see
+    // queryKeys.charts), so one prefix invalidation covers every chart.
     queryClient.invalidateQueries({
-      queryKey: [queryDictionary.transactionsByMonth, userEmail],
-    }),
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.incomeExpenseData, userEmail],
-    }),
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.incomeExpenseByCategory, userEmail],
-    }),
-    // Trending data queries - invalidate for both income and expense
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.trendingMonthly, userEmail, "income"],
-    }),
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.trendingMonthly, userEmail, "expense"],
+      queryKey: queryKeys.charts.all(userEmail),
     }),
   ]);
 };
@@ -69,19 +58,10 @@ export const invalidateCategoryQueries = async (
     queryClient.invalidateQueries({
       queryKey: [queryDictionary.categories],
     }),
-    // Chart queries that depend on category data
+    // Chart queries depend on category data; one prefix invalidation covers
+    // every chart (see queryKeys.charts).
     queryClient.invalidateQueries({
-      queryKey: [queryDictionary.incomeExpenseByCategory, userEmail],
-    }),
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.transactionsByMonth, userEmail],
-    }),
-    // Trending data queries - categories affect trending calculations
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.trendingMonthly, userEmail, "income"],
-    }),
-    queryClient.invalidateQueries({
-      queryKey: [queryDictionary.trendingMonthly, userEmail, "expense"],
+      queryKey: queryKeys.charts.all(userEmail),
     }),
   ]);
 };
@@ -158,7 +138,7 @@ export const invalidateAllUserQueries = async (
  */
 export const invalidateQueriesByPattern = async (
   queryClient: QueryClient,
-  queryKeys: (string | (string | any)[])[],
+  queryKeys: (string | unknown[])[],
 ): Promise<void> => {
   await Promise.all(
     queryKeys.map((queryKey) =>

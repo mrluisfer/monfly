@@ -19,14 +19,8 @@ import {
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getChartTypeByCategoryServer } from "~/lib/api/chart/get-chart-type-by-category";
 import { getTrendingMonthlyServer } from "~/lib/api/chart/get-trending-monthly";
-import { queryDictionary } from "~/queries/dictionary";
-import {
-  PolarAngleAxis,
-  PolarGrid,
-  Radar,
-  RadarChart,
-  ResponsiveContainer,
-} from "recharts";
+import { queryKeys } from "~/utils/query-keys";
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
   ChartConfig,
@@ -46,7 +40,7 @@ export default function ChartByCategoryRadar({
 }: ChartByCategoryRadarProps) {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
-    queryKey: [queryDictionary.incomeExpenseByCategory, userEmail],
+    queryKey: queryKeys.charts.byCategory(userEmail),
     queryFn: () => getChartTypeByCategoryServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3, // 3 minutes cache
@@ -56,7 +50,7 @@ export default function ChartByCategoryRadar({
   });
 
   const { data: trendingMonthlyData } = useQuery({
-    queryKey: [queryDictionary.trendingMonthly, userEmail, type],
+    queryKey: queryKeys.charts.trending(userEmail, type),
     queryFn: () =>
       getTrendingMonthlyServer({
         data: {
@@ -123,29 +117,24 @@ export default function ChartByCategoryRadar({
           </div>
         )}
         {shownChart && (
-          <ChartContainer config={chartConfig} className="h-full">
-            <ResponsiveContainer width="100%" height="100%" minHeight={250}>
-              <RadarChart
-                data={chartData}
-                margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-              >
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent />}
-                />
-                <PolarGrid />
-                <PolarAngleAxis dataKey="category" />
-                <Radar
-                  dataKey={type} // <- "income" o "expense"
-                  fill={color}
-                  fillOpacity={0.6}
-                  stroke="var(--primary)"
-                  dot={{ r: 5, fillOpacity: 1 }}
-                  strokeWidth={2}
-                  name={chartLabel}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
+          <ChartContainer config={chartConfig} className="h-full min-h-[250px]">
+            <RadarChart
+              data={chartData}
+              margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+            >
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <PolarGrid />
+              <PolarAngleAxis dataKey="category" />
+              <Radar
+                dataKey={type}
+                fill={color}
+                fillOpacity={0.6}
+                stroke="var(--primary)"
+                dot={{ r: 5, fillOpacity: 1 }}
+                strokeWidth={2}
+                name={chartLabel}
+              />
+            </RadarChart>
           </ChartContainer>
         )}
         {shownPlaceholder && (

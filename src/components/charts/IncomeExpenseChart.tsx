@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
-import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import { formatCurrency } from "~/utils/format-currency";
 import { DollarSign } from "lucide-react";
 import {
@@ -12,7 +12,6 @@ import {
   AreaChart,
   CartesianGrid,
   Legend,
-  ResponsiveContainer,
   XAxis,
   YAxis,
 } from "recharts";
@@ -85,7 +84,7 @@ export default function IncomeExpenseChart() {
   const userEmail = useRouteUser();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: [queryDictionary.incomeExpenseData, userEmail],
+    queryKey: queryKeys.charts.incomeExpense(userEmail),
     queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3, // 3 minutes cache
@@ -96,24 +95,26 @@ export default function IncomeExpenseChart() {
 
   // Process and validate chart data
   const rawChartData = data?.data ?? [];
-  const chartData = rawChartData.map((item: any) => ({
-    month: String(item.month || "Unknown"),
-    income: Number.isFinite(item.income) ? Math.max(0, item.income) : 0,
-    expense: Number.isFinite(item.expense) ? Math.max(0, item.expense) : 0,
-    net:
-      (Number.isFinite(item.income) ? item.income : 0) -
-      (Number.isFinite(item.expense) ? item.expense : 0),
-  }));
+  const chartData = rawChartData.map(
+    (item: { month?: unknown; income?: unknown; expense?: unknown }) => {
+      const rawIncome = Number(item.income);
+      const rawExpense = Number(item.expense);
+      const income = Number.isFinite(rawIncome) ? Math.max(0, rawIncome) : 0;
+      const expense = Number.isFinite(rawExpense) ? Math.max(0, rawExpense) : 0;
+      return {
+        month: String(item.month || "Unknown"),
+        income,
+        expense,
+        net:
+          (Number.isFinite(rawIncome) ? rawIncome : 0) -
+          (Number.isFinite(rawExpense) ? rawExpense : 0),
+      };
+    },
+  );
 
   // Calculate totals and statistics
-  const totalIncome = chartData.reduce(
-    (sum: number, item: any) => sum + item.income,
-    0,
-  );
-  const totalExpenses = chartData.reduce(
-    (sum: number, item: any) => sum + item.expense,
-    0,
-  );
+  const totalIncome = chartData.reduce((sum, item) => sum + item.income, 0);
+  const totalExpenses = chartData.reduce((sum, item) => sum + item.expense, 0);
   const netTotal = totalIncome - totalExpenses;
 
   const shownChart = !isLoading && !error && chartData.length > 0;
@@ -154,16 +155,15 @@ export default function IncomeExpenseChart() {
             }}
             className="h-64 w-full sm:h-80"
           >
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={chartData}
-                margin={{
-                  top: 20,
-                  right: 10,
-                  left: 10,
-                  bottom: 20,
-                }}
-              >
+            <AreaChart
+              data={chartData}
+              margin={{
+                top: 20,
+                right: 10,
+                left: 10,
+                bottom: 20,
+              }}
+            >
                 <ChartTooltip content={<IncomeExpenseTooltip />} />
                 <CartesianGrid
                   strokeDasharray="3 3"
@@ -252,8 +252,7 @@ export default function IncomeExpenseChart() {
                     fontSize: "14px",
                   }}
                 />
-              </AreaChart>
-            </ResponsiveContainer>
+            </AreaChart>
           </ChartContainer>
 
           <div className="grid gap-3 sm:grid-cols-3">

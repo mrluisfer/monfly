@@ -1,56 +1,90 @@
-import type { LucideIcon } from "lucide-react";
 import {
   ArrowDown,
   ArrowUp,
+  Baby,
+  Banknote,
+  Beer,
+  Bike,
+  Bitcoin,
   BookOpen,
   Briefcase,
   Building2,
   Bus,
+  Cake,
+  Camera,
   Car,
   CarTaxiFront,
+  Church,
+  CircleDollarSign,
   Clapperboard,
   Coffee,
   Coins,
+  Cookie,
   CreditCard,
+  Dog,
   Dumbbell,
+  Flower,
   Fuel,
   Gamepad2,
   Gift,
+  Globe,
   GraduationCap,
+  Hammer,
   HandCoins,
+  Headphones,
+  Heart,
   HeartPulse,
   Home,
   HousePlus,
+  IceCream,
   Landmark,
   Laptop,
+  Martini,
+  Mountain,
+  Music,
+  Newspaper,
+  Notebook,
+  ParkingCircle,
+  PartyPopper,
   PawPrint,
   PiggyBank,
+  Pill,
+  Pizza,
   Plane,
+  Popcorn,
   Receipt,
+  Sandwich,
+  Scissors,
   Shield,
   Shirt,
   ShoppingBag,
   ShoppingCart,
   Smartphone,
   Soup,
+  Sparkles,
+  Stethoscope,
   Sun,
+  TentTree,
   Ticket,
   TrainFront,
   TrendingDown,
   TrendingUp,
+  Trophy,
   Tv,
   Umbrella,
   Users,
   Utensils,
   Wallet,
+  WashingMachine,
   Waves,
   Wifi,
+  Wine,
   Wrench,
   Zap,
 } from "lucide-react";
-import { ComponentProps } from "react";
+import type { LucideIcon } from "lucide-react";
 
-type CategoryIconDef = {
+export type CategoryIconDef = {
   name: string;
   label: string;
   Icon: LucideIcon;
@@ -340,63 +374,225 @@ export const CATEGORY_ICONS: CategoryIconDef[] = [
     Icon: Building2,
     aliases: ["office-building", "Building2Icon"],
   },
+  {
+    name: "personal-care",
+    label: "Personal Care",
+    Icon: Scissors,
+    aliases: [
+      "beauty",
+      "haircut",
+      "salon",
+      "barber",
+      "cabello",
+      "peluqueria",
+      "estetica",
+      "belleza",
+      "ScissorsIcon",
+    ],
+  },
+  {
+    name: "alcohol",
+    label: "Alcohol",
+    Icon: Wine,
+    aliases: ["wine", "vino", "bar", "drinks", "WineIcon"],
+  },
+  {
+    name: "beer",
+    label: "Beer",
+    Icon: Beer,
+    aliases: ["cerveza", "pub", "BeerIcon"],
+  },
+  {
+    name: "cocktails",
+    label: "Cocktails",
+    Icon: Martini,
+    aliases: ["coctel", "drinks", "nightlife", "MartiniIcon"],
+  },
+  {
+    name: "snacks",
+    label: "Snacks",
+    Icon: Cookie,
+    aliases: ["sweets", "dulces", "galletas", "CookieIcon"],
+  },
+  {
+    name: "fast-food",
+    label: "Fast Food",
+    Icon: Sandwich,
+    aliases: ["burger", "sandwich", "comida-rapida", "SandwichIcon"],
+  },
+  {
+    name: "pizza",
+    label: "Pizza",
+    Icon: Pizza,
+    aliases: ["PizzaIcon"],
+  },
+  {
+    name: "ice-cream",
+    label: "Ice Cream",
+    Icon: IceCream,
+    aliases: ["dessert", "helado", "postre", "IceCreamIcon"],
+  },
+  {
+    name: "bakery",
+    label: "Bakery",
+    Icon: Cake,
+    aliases: ["cake", "pastry", "panaderia", "pasteleria", "CakeIcon"],
+  },
+  {
+    name: "movies",
+    label: "Movies",
+    Icon: Popcorn,
+    aliases: ["cinema", "cine", "peliculas", "PopcornIcon"],
+  },
+  {
+    name: "music",
+    label: "Music",
+    Icon: Music,
+    aliases: ["musica", "MusicIcon"],
+  },
+  {
+    name: "audio",
+    label: "Audio",
+    Icon: Headphones,
+    aliases: ["headphones", "audifonos", "HeadphonesIcon"],
+  },
+  {
+    name: "photography",
+    label: "Photography",
+    Icon: Camera,
+    aliases: ["camera", "photo", "fotografia", "CameraIcon"],
+  },
+  {
+    name: "hardware",
+    label: "Hardware",
+    Icon: Hammer,
+    aliases: ["tools", "herramientas", "HammerIcon"],
+  },
+  {
+    name: "parking",
+    label: "Parking",
+    Icon: ParkingCircle,
+    aliases: ["estacionamiento", "ParkingCircleIcon"],
+  },
+  {
+    name: "bike",
+    label: "Bike",
+    Icon: Bike,
+    aliases: ["bicycle", "bicicleta", "cycling", "BikeIcon"],
+  },
+  {
+    name: "pharmacy",
+    label: "Pharmacy",
+    Icon: Pill,
+    aliases: ["medicine", "medicina", "drugs", "farmacia", "PillIcon"],
+  },
+  {
+    name: "doctor",
+    label: "Doctor",
+    Icon: Stethoscope,
+    aliases: ["clinic", "medico", "consulta", "StethoscopeIcon"],
+  },
+  {
+    name: "cryptocurrency",
+    label: "Cryptocurrency",
+    Icon: Bitcoin,
+    aliases: ["crypto", "btc", "BitcoinIcon"],
+  },
+  {
+    name: "dividends",
+    label: "Dividends",
+    Icon: CircleDollarSign,
+    aliases: ["interest", "intereses", "dividendos", "CircleDollarSignIcon"],
+  },
+  {
+    name: "cash",
+    label: "Cash",
+    Icon: Banknote,
+    aliases: ["atm", "withdrawal", "efectivo", "retiro", "BanknoteIcon"],
+  },
+  {
+    name: "charity",
+    label: "Charity",
+    Icon: Heart,
+    aliases: ["donation", "donations", "donacion", "caridad", "HeartIcon"],
+  },
+  {
+    name: "church",
+    label: "Church",
+    Icon: Church,
+    aliases: ["religion", "tithe", "iglesia", "diezmo", "ChurchIcon"],
+  },
+  {
+    name: "kids",
+    label: "Kids",
+    Icon: Baby,
+    aliases: ["children", "baby", "ninos", "bebe", "BabyIcon"],
+  },
+  {
+    name: "pet-supplies",
+    label: "Pet Supplies",
+    Icon: Dog,
+    aliases: ["dog", "perro", "mascota", "DogIcon"],
+  },
+  {
+    name: "garden",
+    label: "Garden",
+    Icon: Flower,
+    aliases: ["plants", "jardin", "plantas", "FlowerIcon"],
+  },
+  {
+    name: "outdoors",
+    label: "Outdoors",
+    Icon: Mountain,
+    aliases: ["hiking", "nature", "naturaleza", "MountainIcon"],
+  },
+  {
+    name: "camping",
+    label: "Camping",
+    Icon: TentTree,
+    aliases: ["acampar", "TentTreeIcon"],
+  },
+  {
+    name: "sports",
+    label: "Sports",
+    Icon: Trophy,
+    aliases: ["sport", "deportes", "TrophyIcon"],
+  },
+  {
+    name: "stationery",
+    label: "Stationery",
+    Icon: Notebook,
+    aliases: ["office-supplies", "papeleria", "NotebookIcon"],
+  },
+  {
+    name: "news",
+    label: "News",
+    Icon: Newspaper,
+    aliases: ["magazines", "noticias", "periodico", "NewspaperIcon"],
+  },
+  {
+    name: "celebration",
+    label: "Celebration",
+    Icon: PartyPopper,
+    aliases: ["party", "birthday", "fiesta", "cumpleanos", "PartyPopperIcon"],
+  },
+  {
+    name: "cleaning",
+    label: "Cleaning",
+    Icon: WashingMachine,
+    aliases: ["laundry", "limpieza", "lavanderia", "WashingMachineIcon"],
+  },
+  {
+    name: "internet",
+    label: "Internet",
+    Icon: Globe,
+    aliases: ["online", "web", "GlobeIcon"],
+  },
+  {
+    name: "tip",
+    label: "Tip",
+    Icon: Sparkles,
+    aliases: ["gratuity", "propina", "tips", "SparklesIcon"],
+  },
   { name: "other", label: "Other", Icon: Sun, aliases: ["misc", "SunIcon"] },
 ];
-
-const normalizeCategoryIconKey = (value: string) =>
-  value.trim().toLowerCase().replaceAll("_", "-").replace(/\s+/g, "-");
-
-const toPascalCase = (value: string) =>
-  normalizeCategoryIconKey(value)
-    .split("-")
-    .filter(Boolean)
-    .map((chunk) => chunk.charAt(0).toUpperCase() + chunk.slice(1))
-    .join("");
-
-const categoryIconsByName = new Map<string, CategoryIconDef>();
-
-for (const iconDef of CATEGORY_ICONS) {
-  const keys = new Set([
-    iconDef.name,
-    iconDef.label,
-    toPascalCase(iconDef.name),
-    `${toPascalCase(iconDef.name)}Icon`,
-    ...(iconDef.aliases ?? []),
-  ]);
-
-  for (const key of keys) {
-    const normalizedKey = normalizeCategoryIconKey(key);
-    if (!categoryIconsByName.has(normalizedKey)) {
-      categoryIconsByName.set(normalizedKey, iconDef);
-    }
-  }
-}
-
-const fallbackCategoryIcon =
-  CATEGORY_ICONS.find((icon) => icon.name === "other") ?? CATEGORY_ICONS[0];
-
-export const getCategoryIconDefinition = (name: string) => {
-  const normalizedName = normalizeCategoryIconKey(name);
-  return categoryIconsByName.get(normalizedName) ?? fallbackCategoryIcon;
-};
-
-export const getCanonicalCategoryIconName = (name: string) =>
-  getCategoryIconDefinition(name).name;
-
-export const getCategoryIconLabelByName = (name: string) =>
-  getCategoryIconDefinition(name).label;
-
-export const getCategoryIconsWithSize = (width: number, height: number) =>
-  CATEGORY_ICONS.map(({ name, label, Icon }) => ({
-    name,
-    label,
-    icon: <Icon width={width} height={height} />,
-  }));
-
-export function getCategoryIconByName(
-  name: string,
-  props?: ComponentProps<LucideIcon>,
-) {
-  const { Icon } = getCategoryIconDefinition(name);
-  return <Icon {...props} />;
-}

@@ -26,7 +26,7 @@ export const postCategoryByEmail = async (
       error: false,
       statusCode: 200,
     } as ApiResponse<Category>;
-  } catch (error) {
+  } catch {
     return {
       success: false,
       message: "Error posting category",

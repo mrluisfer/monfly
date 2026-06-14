@@ -22,6 +22,10 @@ import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home/index
 import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
 import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
 import { Route as AuthedUserSettingsIndexRouteImport } from './routes/_authed/user/settings.index'
+<<<<<<< HEAD
+=======
+import { Route as AuthedUserHelpIndexRouteImport } from './routes/_authed/user/help.index'
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
 import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authed/home/transactions.index'
 import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
 import { Route as AuthedHomeLoansIndexRouteImport } from './routes/_authed/home/loans/index'
@@ -92,6 +96,14 @@ const AuthedUserSettingsIndexRoute = AuthedUserSettingsIndexRouteImport.update({
   path: '/user/settings/',
   getParentRoute: () => AuthedRoute,
 } as any)
+<<<<<<< HEAD
+=======
+const AuthedUserHelpIndexRoute = AuthedUserHelpIndexRouteImport.update({
+  id: '/user/help/',
+  path: '/user/help/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
 const AuthedHomeTransactionsIndexRoute =
   AuthedHomeTransactionsIndexRouteImport.update({
     id: '/home/transactions/',
@@ -137,6 +149,10 @@ export interface FileRoutesByFullPath {
   '/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/home/reports/': typeof AuthedHomeReportsIndexRoute
   '/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
+<<<<<<< HEAD
+=======
+  '/user/help/': typeof AuthedUserHelpIndexRoute
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   '/user/settings/': typeof AuthedUserSettingsIndexRoute
   '/user/theme/': typeof AuthedUserThemeIndexRoute
 }
@@ -156,6 +172,10 @@ export interface FileRoutesByTo {
   '/home/loans': typeof AuthedHomeLoansIndexRoute
   '/home/reports': typeof AuthedHomeReportsIndexRoute
   '/home/transactions': typeof AuthedHomeTransactionsIndexRoute
+<<<<<<< HEAD
+=======
+  '/user/help': typeof AuthedUserHelpIndexRoute
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   '/user/settings': typeof AuthedUserSettingsIndexRoute
   '/user/theme': typeof AuthedUserThemeIndexRoute
 }
@@ -177,6 +197,10 @@ export interface FileRoutesById {
   '/_authed/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/_authed/home/reports/': typeof AuthedHomeReportsIndexRoute
   '/_authed/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
+<<<<<<< HEAD
+=======
+  '/_authed/user/help/': typeof AuthedUserHelpIndexRoute
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   '/_authed/user/settings/': typeof AuthedUserSettingsIndexRoute
   '/_authed/user/theme/': typeof AuthedUserThemeIndexRoute
 }
@@ -198,6 +222,10 @@ export interface FileRouteTypes {
     | '/home/loans/'
     | '/home/reports/'
     | '/home/transactions/'
+<<<<<<< HEAD
+=======
+    | '/user/help/'
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
     | '/user/settings/'
     | '/user/theme/'
   fileRoutesByTo: FileRoutesByTo
@@ -217,6 +245,10 @@ export interface FileRouteTypes {
     | '/home/loans'
     | '/home/reports'
     | '/home/transactions'
+<<<<<<< HEAD
+=======
+    | '/user/help'
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
     | '/user/settings'
     | '/user/theme'
   id:
@@ -237,6 +269,10 @@ export interface FileRouteTypes {
     | '/_authed/home/loans/'
     | '/_authed/home/reports/'
     | '/_authed/home/transactions/'
+<<<<<<< HEAD
+=======
+    | '/_authed/user/help/'
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
     | '/_authed/user/settings/'
     | '/_authed/user/theme/'
   fileRoutesById: FileRoutesById
@@ -346,6 +382,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedUserSettingsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
+<<<<<<< HEAD
+=======
+    '/_authed/user/help/': {
+      id: '/_authed/user/help/'
+      path: '/user/help'
+      fullPath: '/user/help/'
+      preLoaderRoute: typeof AuthedUserHelpIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
     '/_authed/home/transactions/': {
       id: '/_authed/home/transactions/'
       path: '/home/transactions'
@@ -392,6 +438,10 @@ interface AuthedRouteChildren {
   AuthedHomeLoansIndexRoute: typeof AuthedHomeLoansIndexRoute
   AuthedHomeReportsIndexRoute: typeof AuthedHomeReportsIndexRoute
   AuthedHomeTransactionsIndexRoute: typeof AuthedHomeTransactionsIndexRoute
+<<<<<<< HEAD
+=======
+  AuthedUserHelpIndexRoute: typeof AuthedUserHelpIndexRoute
+>>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   AuthedUserSettingsIndexRoute: typeof AuthedUserSettingsIndexRoute
   AuthedUserThemeIndexRoute: typeof AuthedUserThemeIndexRoute
 }
@@ -404,6 +454,7 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedHomeLoansIndexRoute: AuthedHomeLoansIndexRoute,
   AuthedHomeReportsIndexRoute: AuthedHomeReportsIndexRoute,
   AuthedHomeTransactionsIndexRoute: AuthedHomeTransactionsIndexRoute,
+  AuthedUserHelpIndexRoute: AuthedUserHelpIndexRoute,
   AuthedUserSettingsIndexRoute: AuthedUserSettingsIndexRoute,
   AuthedUserThemeIndexRoute: AuthedUserThemeIndexRoute,
 }

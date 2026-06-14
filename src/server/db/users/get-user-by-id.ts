@@ -24,7 +24,7 @@ export const getUserById = async (userId: string) => {
       success: true,
       statusCode: 200,
     } as ApiResponse<User>;
-  } catch (error) {
+  } catch {
     return {
       error: true,
       message: "Error fetching user",

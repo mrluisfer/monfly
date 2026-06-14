@@ -143,6 +143,10 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
         opts.idempotency?.onDuplicateRecentSuccess ??
         "This action was already applied a moment ago.",
     };
+    // Granular primitive deps are intentional: they keep `resolvedIdempotency`
+    // (and therefore `mutate`) referentially stable when callers pass an inline
+    // idempotency object.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     opts.idempotency?.enabled,
     opts.idempotency?.getKey,
@@ -247,10 +251,9 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
             }
           }
           return data;
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        } catch (err: any) {
+        } catch (err) {
           setStatus("error");
-          setError(err);
+          setError(err as TError);
           if (resolvedHaptics?.onError) {
             void triggerPreset(resolvedHaptics.onError);
           }
@@ -264,6 +267,9 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
       inFlightKeyRef.current = mutationKey ?? null;
       return mutationPromise;
     },
+    // Granular deps are intentional to keep `mutate` referentially stable even
+    // when callers pass inline option objects.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       opts.allowConcurrent,
       resolvedIdempotency,

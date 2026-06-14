@@ -12,32 +12,29 @@ export const getTransactionsCountByMonth = async ({
   email: string;
 }) => {
   try {
-    const transactions = await prismaClient.transaction.findMany({
-      where: { userEmail: email },
-      select: { date: true },
-      orderBy: { date: "asc" },
-    });
+    // Aggregate in the database instead of loading every transaction row;
+    // this stays O(months) in transfer size no matter how large the history.
+    const rows = await prismaClient.$queryRaw<{ month: Date; count: number }[]>`
+      SELECT date_trunc('month', "date") AS month, COUNT(*)::int AS count
+      FROM "Transaction"
+      WHERE "userEmail" = ${email}
+      GROUP BY 1
+      ORDER BY 1 ASC
+    `;
 
     type ChartRow = { month: string; year: number; count: number };
-    const summaryMap = new Map<string, ChartRow>();
 
-    transactions.forEach((t) => {
-      const date = new Date(t.date);
-      const month = date.toLocaleString("default", { month: "long" });
-      const year = date.getFullYear();
-      const key = `${year}-${month}`;
-      if (!summaryMap.has(key)) {
-        summaryMap.set(key, { month, year, count: 0 });
-      }
-      summaryMap.get(key)!.count += 1;
+    const chartData: ChartRow[] = rows.map((row) => {
+      const date = new Date(row.month);
+      return {
+        // Fixed locale + UTC so labels are deterministic across environments:
+        // date_trunc returns UTC timestamps, and local getters could shift the
+        // bucket into the previous month on non-UTC machines.
+        month: date.toLocaleString("en-US", { month: "long", timeZone: "UTC" }),
+        year: date.getUTCFullYear(),
+        count: row.count,
+      };
     });
-
-    const chartData = Array.from(summaryMap.values()).sort(
-      (a, b) =>
-        a.year - b.year ||
-        new Date(`${a.month} 1, ${a.year}`).getMonth() -
-          new Date(`${b.month} 1, ${b.year}`).getMonth(),
-    );
 
     return {
       data: chartData,
@@ -46,7 +43,7 @@ export const getTransactionsCountByMonth = async ({
       error: false,
       statusCode: 200,
     } as ApiResponse<typeof chartData>;
-  } catch (error) {
+  } catch {
     return {
       data: null,
       message: "Failed to retrieve transactions by month",
