@@ -1,0 +1,93 @@
+name: 🐛 Bug Report
+description: Report a problem or unexpected behavior in Monfly
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! 🦋
+        Please search [existing issues](https://github.com/mrluisfer/monfly/issues) first to avoid duplicates.
+
+        ⚠️ **Do not report security vulnerabilities here.** Use the
+        [Security Advisory form](https://github.com/mrluisfer/monfly/security/advisories/new) instead.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce the issue?
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Logs
+      description: If applicable, add screenshots or console/server logs. Redact any sensitive data.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the app is affected?
+      options:
+        - Transactions
+        - Categories
+        - Charts / Analytics
+        - Budgets / Pots
+        - Loans
+        - Authentication / Session
+        - UI / Theming
+        - Other / Not sure
+    validations:
+      required: false
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser & OS
+      placeholder: "e.g. Chrome 138 on macOS 15"
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Version / Commit
+      description: The Monfly version or commit hash you are running.
+      placeholder: "e.g. 1.0.1 or commit d4e9836"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This is not a security vulnerability (those go through Security Advisories).
+          required: true

@@ -1,0 +1,71 @@
+name: ✨ Feature Request
+description: Suggest a new feature or improvement for Monfly
+title: "[Feature]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make Monfly better! 🦋
+        Please search [existing issues](https://github.com/mrluisfer/monfly/issues) and
+        [discussions](https://github.com/mrluisfer/monfly/discussions) first.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Motivation
+      description: What problem does this solve? Is your request related to a frustration? ("I'm always frustrated when ...")
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe what you'd like to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any alternative solutions or features you've considered.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the app would this affect?
+      options:
+        - Transactions
+        - Categories
+        - Charts / Analytics
+        - Budgets / Pots
+        - Loans
+        - Authentication / Session
+        - UI / Theming
+        - Developer Experience / Tooling
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Mockups, screenshots, or references that help illustrate the idea.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing issues/discussions and this is not a duplicate.
+          required: true
+        - label: I'd be willing to help implement this (optional).
+          required: false
