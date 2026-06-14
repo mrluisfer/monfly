@@ -3,9 +3,14 @@ import { prismaClient } from "~/server/prisma";
 type TrendingQueryParams = {
   email: string;
   type: "income" | "expense";
+  cardId?: string | null;
 };
 
-export async function getTrendingMonthly({ email, type }: TrendingQueryParams) {
+export async function getTrendingMonthly({
+  email,
+  type,
+  cardId,
+}: TrendingQueryParams) {
   const now = new Date();
   const thisMonth = now.getMonth();
   const thisYear = now.getFullYear();
@@ -27,6 +32,7 @@ export async function getTrendingMonthly({ email, type }: TrendingQueryParams) {
       where: {
         userEmail: email,
         type,
+        ...(cardId ? { cardId } : {}),
         date: { gte: startOfThisMonth, lt: startOfNextMonth },
       },
     }),
@@ -35,6 +41,7 @@ export async function getTrendingMonthly({ email, type }: TrendingQueryParams) {
       where: {
         userEmail: email,
         type,
+        ...(cardId ? { cardId } : {}),
         date: { gte: startOfPrevMonth, lt: startOfThisMonth },
       },
     }),

@@ -16,6 +16,7 @@ import {
   TransactionType,
   transactionTypes,
 } from "~/constants/transaction-types";
+import { useActiveCard } from "~/hooks/cards";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getChartTypeByCategoryServer } from "~/lib/api/chart/get-chart-type-by-category";
 import { getTrendingMonthlyServer } from "~/lib/api/chart/get-trending-monthly";
@@ -39,9 +40,13 @@ export default function ChartByCategoryRadar({
   type,
 }: ChartByCategoryRadarProps) {
   const userEmail = useRouteUser();
+  const activeCard = useActiveCard();
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.charts.byCategory(userEmail),
-    queryFn: () => getChartTypeByCategoryServer({ data: { email: userEmail } }),
+    queryKey: queryKeys.charts.byCategory(userEmail, activeCard),
+    queryFn: () =>
+      getChartTypeByCategoryServer({
+        data: { email: userEmail, cardId: activeCard },
+      }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3, // 3 minutes cache
     gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
@@ -50,12 +55,13 @@ export default function ChartByCategoryRadar({
   });
 
   const { data: trendingMonthlyData } = useQuery({
-    queryKey: queryKeys.charts.trending(userEmail, type),
+    queryKey: queryKeys.charts.trending(userEmail, type, activeCard),
     queryFn: () =>
       getTrendingMonthlyServer({
         data: {
           email: userEmail,
           type,
+          cardId: activeCard,
         },
       }),
     enabled: !!userEmail,

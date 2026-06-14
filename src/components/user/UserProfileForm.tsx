@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
 import { ShieldCheckIcon, SparklesIcon } from "lucide-react";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -6,7 +7,12 @@ import { z } from "zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance";
+import { updateUserProfileServer } from "~/lib/api/user/update-user-profile";
+import { sileo } from "~/lib/toaster";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
+import { invalidateUserQueries } from "~/utils/query-invalidation";
 import {
   type SupportedCurrency,
   userFormSchema,
@@ -20,7 +26,7 @@ interface User {
   email: string;
   name?: string | null;
   totalBalance?: number | null;
-  preferredCurrency?: SupportedCurrency | null;
+  preferredCurrency?: string | null;
   marketingOptIn?: boolean | null;
   productUpdatesOptIn?: boolean | null;
   acceptedTermsAt?: string | Date | null;
@@ -43,6 +49,7 @@ export function UserProfileForm({
   onDelete,
 }: UserProfileFormProps) {
   const { warning } = useAppHaptics();
+  const queryClient = useQueryClient();
   const defaultTotalBalance = formatToTwoDecimals(
     user?.totalBalance ?? 0,
   ).numberValue;
@@ -51,10 +58,9 @@ export function UserProfileForm({
     (): FormValues => ({
       [userFormNames.email]: user?.email ?? "",
       [userFormNames.name]: user?.name ?? "",
-      [userFormNames.password]: "",
-      [userFormNames.confirmPassword]: "",
       [userFormNames.totalBalance]: defaultTotalBalance,
-      [userFormNames.preferredCurrency]: user?.preferredCurrency ?? "MXN",
+      [userFormNames.preferredCurrency]:
+        (user?.preferredCurrency as SupportedCurrency | undefined) ?? "MXN",
       [userFormNames.marketingOptIn]: user?.marketingOptIn ?? false,
       [userFormNames.productUpdatesOptIn]: user?.productUpdatesOptIn ?? true,
       [userFormNames.acceptTerms]: !!user?.acceptedTermsAt,
@@ -95,17 +101,88 @@ export function UserProfileForm({
     [form],
   );
 
-  const onSubmit = useCallback(
-    async (values: FormValues) => {
-      // TODO: llama a tu server action aquí
-      void values;
-      void userId;
+  const profileMutation = useMutation({
+    fn: updateUserProfileServer,
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to save changes" });
+        return;
+      }
+      sileo.success({ title: "Changes saved" });
+      // Reset the dirty baseline to what we just persisted.
+      form.reset(form.getValues());
+      if (user?.email) {
+        await invalidateUserQueries(queryClient, user.email);
+      }
     },
-    [userId],
-  );
+  });
+
+  const onSubmit = async (values: FormValues) => {
+    void userId;
+    if (!user?.email) {
+      sileo.error({ title: "User session not found" });
+      return;
+    }
+    try {
+      await profileMutation.mutate({
+        data: {
+          email: user.email,
+          name: values.name,
+          preferredCurrency: values.preferredCurrency ?? null,
+          marketingOptIn: values.marketingOptIn,
+          productUpdatesOptIn: values.productUpdatesOptIn,
+          acceptTerms: values.acceptTerms,
+          acceptPrivacy: values.acceptPrivacy,
+        },
+      });
+    } catch {
+      sileo.error({ title: "Failed to save changes" });
+    }
+  };
+
+  const balanceMutation = useMutation({
+    fn: putUserTotalBalanceServer,
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to update balance" });
+        return;
+      }
+      sileo.success({ title: "Total balance updated" });
+      // Reset the field's dirty baseline to the value we just persisted.
+      const persisted = form.getValues(userFormNames.totalBalance) ?? 0;
+      form.resetField(userFormNames.totalBalance, { defaultValue: persisted });
+      if (user?.email) {
+        await invalidateUserQueries(queryClient, user.email);
+      }
+    },
+  });
+
+  const handleUpdateBalance = async () => {
+    if (!user?.email) {
+      sileo.error({ title: "User session not found" });
+      return;
+    }
+    const { numberValue } = formatToTwoDecimals(
+      form.getValues(userFormNames.totalBalance) ?? 0,
+    );
+    if (!Number.isFinite(numberValue)) {
+      sileo.error({ title: "Enter a valid balance amount" });
+      return;
+    }
+    try {
+      await balanceMutation.mutate({
+        data: { totalBalance: numberValue, email: user.email },
+      });
+    } catch {
+      sileo.error({ title: "Failed to update balance" });
+    }
+  };
 
   const submitting = form.formState.isSubmitting;
   const hasChanges = form.formState.isDirty;
+  const updatingBalance = balanceMutation.status === "pending";
 
   return (
     <Form {...form}>
@@ -149,7 +226,12 @@ export function UserProfileForm({
           </div>
         </header>
 
-        <UserFormFields form={form} onBalanceBlur={handleBalanceBlur} />
+        <UserFormFields
+          form={form}
+          onBalanceBlur={handleBalanceBlur}
+          onUpdateBalance={handleUpdateBalance}
+          updatingBalance={updatingBalance}
+        />
 
         <UserFormActions
           submitting={submitting}

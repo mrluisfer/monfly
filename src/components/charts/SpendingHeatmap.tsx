@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { useActiveCard } from "~/hooks/cards";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getDailyActivityServer } from "~/lib/api/chart/get-daily-activity";
 import { cn } from "~/lib/utils";
@@ -201,10 +202,14 @@ function HeatmapCell({ cell }: { cell: DayCell }) {
 
 export default function SpendingHeatmap() {
   const userEmail = useRouteUser();
+  const activeCard = useActiveCard();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: queryKeys.charts.dailyActivity(userEmail),
-    queryFn: () => getDailyActivityServer({ data: { email: userEmail } }),
+    queryKey: queryKeys.charts.dailyActivity(userEmail, activeCard),
+    queryFn: () =>
+      getDailyActivityServer({
+        data: { email: userEmail, cardId: activeCard },
+      }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3,
     gcTime: 1000 * 60 * 5,

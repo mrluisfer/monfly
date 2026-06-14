@@ -10,6 +10,7 @@ export const getChartTypeByCategoryServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
+      cardId: z.string().uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {

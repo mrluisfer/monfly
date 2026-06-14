@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { hideMetricsAtom } from "@/state";
 import { createFileRoute } from "@tanstack/react-router";
+import { z } from "zod";
 import TotalBalance from "~/components/balance/TotalBalance";
 import { DashboardMetrics } from "~/components/home/DashboardMetrics";
 import { PageHeader } from "~/components/layout/PageHeader";
@@ -21,6 +22,7 @@ import { useAtomValue } from "jotai";
 import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
 import { BalanceDetails } from "@/components/balance/balance-details";
+import { CardSelector } from "@/components/cards/CardSelector";
 
 const IncomeExpenseChart = lazy(
   () => import("~/components/charts/IncomeExpenseChart"),
@@ -30,8 +32,18 @@ const SpendingHeatmap = lazy(
   () => import("~/components/charts/SpendingHeatmap"),
 );
 
+/**
+ * `card` is an optional filter: undefined = aggregate "all cards" view (the
+ * default, identical to the pre-cards behavior); a uuid scopes the whole
+ * dashboard to that card.
+ */
+const homeSearchSchema = z.object({
+  card: z.string().uuid().optional(),
+});
+
 export const Route = createFileRoute("/_authed/home/")({
   component: RouteComponent,
+  validateSearch: homeSearchSchema,
 });
 
 function todayLabel() {
@@ -57,9 +69,16 @@ function RouteComponent() {
         title="Overview"
         description="Track balance, cashflow, and recent activity in one place."
         actions={
-          <StatusBadge variant="primary" size="md" icon={<CalendarDaysIcon />}>
-            {todayLabel()}
-          </StatusBadge>
+          <div className="flex flex-wrap items-center gap-2">
+            <CardSelector className="w-44" />
+            <StatusBadge
+              variant="primary"
+              size="md"
+              icon={<CalendarDaysIcon />}
+            >
+              {todayLabel()}
+            </StatusBadge>
+          </div>
         }
       />
 

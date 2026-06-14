@@ -8,6 +8,11 @@ interface User {
   email: string;
   name?: string | null;
   totalBalance?: number | null;
+  preferredCurrency?: string | null;
+  marketingOptIn?: boolean | null;
+  productUpdatesOptIn?: boolean | null;
+  acceptedTermsAt?: string | Date | null;
+  acceptedPrivacyAt?: string | Date | null;
 }
 
 interface UserProfilePageProps {

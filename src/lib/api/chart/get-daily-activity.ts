@@ -10,6 +10,7 @@ export const getDailyActivityServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
+      cardId: z.string().uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {
@@ -21,5 +22,5 @@ export const getDailyActivityServer = createServerFn({ method: "GET" })
       identifier: sessionEmail,
     });
 
-    return await getDailyActivity({ email: sessionEmail });
+    return await getDailyActivity({ email: sessionEmail, cardId: data.cardId });
   });

@@ -11,6 +11,7 @@ import { useAtomValue } from "jotai";
 import { CalendarIcon } from "lucide-react";
 import { useMemo } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
+import { useActiveCard, useCards } from "~/hooks/cards";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
@@ -60,6 +61,7 @@ const TotalBalance = () => {
   const isBalanceHidden = useAtomValue(hideBalanceAtom);
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
+  const activeCard = useActiveCard();
 
   const { error, isPending, data } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
@@ -71,9 +73,15 @@ const TotalBalance = () => {
     retryDelay: 1000,
   });
 
+  // Only fetched when a card is active; otherwise the query stays disabled.
+  const { data: cardsData } = useCards();
+
   const { data: incomeExpenseData } = useQuery({
-    queryKey: queryKeys.charts.incomeExpense(userEmail),
-    queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
+    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
+    queryFn: () =>
+      getIncomeExpenseDataServer({
+        data: { email: userEmail, cardId: activeCard },
+      }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3,
     gcTime: 1000 * 60 * 5,
@@ -81,9 +89,15 @@ const TotalBalance = () => {
     retryDelay: 1000,
   });
 
+  // When a card is selected, show that card's balance; otherwise the global
+  // user total. Both are kept in sync atomically server-side.
+  const scopedBalance = activeCard
+    ? (cardsData?.data?.find((card) => card.id === activeCard)?.balance ?? 0)
+    : data?.data?.totalBalance;
+
   const totalBalance =
-    data?.data?.totalBalance !== undefined && data?.data?.totalBalance !== null
-      ? formatToTwoDecimals(data.data.totalBalance).stringValue
+    scopedBalance !== undefined && scopedBalance !== null
+      ? formatToTwoDecimals(scopedBalance).stringValue
       : "0";
 
   const summary = useMemo<TotalBalanceSummary>(() => {

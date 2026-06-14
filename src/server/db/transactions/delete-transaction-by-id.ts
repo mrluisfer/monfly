@@ -19,6 +19,7 @@ export const deleteTransactionById = async (transactionId: string) => {
           type: true,
           userEmail: true,
           appliedToLoanId: true,
+          cardId: true,
         },
       });
 
@@ -46,6 +47,15 @@ export const deleteTransactionById = async (transactionId: string) => {
         where: { email: transaction.userEmail },
         data: { totalBalance: { increment: balanceReversal } },
       });
+
+      // Mirror the reversal on the linked card so its balance stays in sync
+      // with totalBalance.
+      if (transaction.cardId) {
+        await tx.card.updateMany({
+          where: { id: transaction.cardId, userEmail: transaction.userEmail },
+          data: { balance: { increment: balanceReversal } },
+        });
+      }
 
       return deleted;
     });

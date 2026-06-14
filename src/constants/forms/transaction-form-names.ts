@@ -4,6 +4,8 @@ export const transactionFormNames = {
   category: "category",
   description: "description",
   date: "date",
+  // Optional card/account this transaction belongs to. null = no card.
+  cardId: "cardId",
   /**
    * Tri-state mode for the loan section of the transaction form:
    *  - "none"   → regular transaction (no loan linkage)

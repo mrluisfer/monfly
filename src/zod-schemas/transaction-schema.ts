@@ -24,6 +24,7 @@ export const TransactionFormSchema = z
       .min(1, { message: "Category is required" }),
     [transactionFormNames.description]: z.string().optional(),
     [transactionFormNames.date]: z.date().optional(),
+    [transactionFormNames.cardId]: z.string().uuid().nullable().optional(),
     // Loan section ─ tri-state mode + per-mode optional fields.
     [transactionFormNames.loanMode]: z.enum(LOAN_MODES).default("none"),
     [transactionFormNames.loanDebtor]: z.string().optional(),

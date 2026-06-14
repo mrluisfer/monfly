@@ -5,6 +5,7 @@ import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-e
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import {
   AlertCircle,
   AlertTriangle,
@@ -151,7 +152,7 @@ export function SpendingAlertBadge({
     isPending: isSpentLoading,
     error: spentError,
   } = useQuery({
-    queryKey: ["total-expenses", userEmail],
+    queryKey: queryKeys.transactions.totalExpenses(userEmail),
     queryFn: () =>
       getTotalExpensesByEmailServer({ data: { email: userEmail } }),
     enabled: isQueryEnabled,

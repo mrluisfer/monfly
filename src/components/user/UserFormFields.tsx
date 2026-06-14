@@ -1,17 +1,17 @@
 import { Link } from "@tanstack/react-router";
 import {
   BellRingIcon,
-  EyeIcon,
-  EyeOffIcon,
-  LockKeyholeIcon,
+  CheckIcon,
+  LoaderIcon,
   MailIcon,
   ScaleIcon,
   UserIcon,
   WalletIcon,
 } from "lucide-react";
-import { useId, useState } from "react";
+import { useId } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
+import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   FormControl,
@@ -39,9 +39,16 @@ type UserFormValues = z.infer<typeof userFormSchema>;
 interface UserFormFieldsProps {
   form: UseFormReturn<UserFormValues>;
   onBalanceBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onUpdateBalance?: () => void | Promise<void>;
+  updatingBalance?: boolean;
 }
 
-export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
+export function UserFormFields({
+  form,
+  onBalanceBlur,
+  onUpdateBalance,
+  updatingBalance = false,
+}: UserFormFieldsProps) {
   return (
     <div className="divide-border/60 divide-y">
       <FormSection
@@ -151,72 +158,58 @@ export function UserFormFields({ form, onBalanceBlur }: UserFormFieldsProps) {
           render={({ field }) => (
             <FormItem className="max-w-md">
               <FormLabel>Total balance</FormLabel>
-              <FormControl>
-                <div className="border-input bg-background focus-within:border-ring focus-within:ring-ring/30 flex h-11 w-full overflow-hidden rounded-md border shadow-xs focus-within:ring-3">
-                  <span className="border-input text-muted-foreground inline-flex w-10 shrink-0 items-center justify-center border-e text-sm">
-                    $
-                  </span>
-                  <Input
-                    type="text"
-                    inputMode="decimal"
-                    pattern="[0-9]*[.,]?[0-9]*"
-                    placeholder="0.00"
-                    className="h-full rounded-none border-0 px-3 tabular-nums shadow-none focus-visible:ring-0"
-                    {...field}
-                    value={field.value ?? ""}
-                    onBlur={(e) => {
-                      field.onBlur();
-                      onBalanceBlur(e);
-                    }}
-                  />
-                  <span className="border-input bg-muted/30 text-muted-foreground inline-flex items-center border-s px-3 text-sm font-medium">
-                    {form.watch(userFormNames.preferredCurrency) ?? "MXN"}
-                  </span>
-                </div>
-              </FormControl>
+              <div className="flex items-center gap-2">
+                <FormControl>
+                  <div className="border-input bg-background focus-within:border-ring focus-within:ring-ring/30 flex h-11 w-full overflow-hidden rounded-3xl border shadow-xs focus-within:ring-3">
+                    <span className="border-input text-muted-foreground inline-flex w-10 shrink-0 items-center justify-center border-e text-sm">
+                      $
+                    </span>
+                    <Input
+                      type="text"
+                      inputMode="decimal"
+                      pattern="[0-9]*[.,]?[0-9]*"
+                      placeholder="0.00"
+                      className="h-full rounded-none border-0 px-3 tabular-nums shadow-none focus-visible:ring-0"
+                      {...field}
+                      value={field.value ?? ""}
+                      onBlur={(e) => {
+                        field.onBlur();
+                        onBalanceBlur(e);
+                      }}
+                    />
+                    <span className="border-input bg-muted/30 text-muted-foreground inline-flex items-center border-s px-3 text-sm font-medium">
+                      {form.watch(userFormNames.preferredCurrency) ?? "MXN"}
+                    </span>
+                  </div>
+                </FormControl>
+                {onUpdateBalance && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={onUpdateBalance}
+                    disabled={updatingBalance}
+                    className="h-11 shrink-0"
+                    aria-label="Update total balance"
+                  >
+                    {updatingBalance ? (
+                      <LoaderIcon className="animate-spin" aria-hidden="true" />
+                    ) : (
+                      <CheckIcon aria-hidden="true" />
+                    )}
+                    <span className="hidden sm:inline">
+                      {updatingBalance ? "Updating…" : "Update"}
+                    </span>
+                  </Button>
+                )}
+              </div>
               <FormDescription>
-                Sets your starting balance for new period summaries.
+                Sets your starting balance for new period summaries. Use
+                “Update” to save just this value instantly.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-      </FormSection>
-
-      <FormSection
-        icon={LockKeyholeIcon}
-        title="Security"
-        description="Choose a strong password and confirm it. Leave blank to keep the current one."
-      >
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <FormField
-            control={form.control}
-            name={userFormNames.password}
-            render={({ field }) => (
-              <PasswordField
-                label="New password"
-                description="At least 8 characters."
-                autoComplete="new-password"
-                placeholder="Leave blank to keep current password"
-                field={field}
-              />
-            )}
-          />
-          <FormField
-            control={form.control}
-            name={userFormNames.confirmPassword}
-            render={({ field }) => (
-              <PasswordField
-                label="Confirm password"
-                description="Must match the new password."
-                autoComplete="new-password"
-                placeholder="Repeat the new password"
-                field={field}
-              />
-            )}
-          />
-        </div>
-        <PasswordStrength value={form.watch(userFormNames.password) ?? ""} />
       </FormSection>
 
       <FormSection
@@ -345,110 +338,6 @@ function FormSection({
       </header>
       <div className="min-w-0 space-y-4">{children}</div>
     </section>
-  );
-}
-
-type PasswordFieldProps = {
-  label: string;
-  description: string;
-  placeholder: string;
-  autoComplete: "new-password" | "current-password";
-  field: {
-    name: string;
-    value?: string;
-    onChange: (...args: unknown[]) => void;
-    onBlur: () => void;
-    ref?: React.Ref<HTMLInputElement>;
-  };
-};
-
-function PasswordField({
-  label,
-  description,
-  placeholder,
-  autoComplete,
-  field,
-}: PasswordFieldProps) {
-  const [visible, setVisible] = useState(false);
-  return (
-    <FormItem>
-      <FormLabel>{label}</FormLabel>
-      <FormControl>
-        <div className="relative">
-          <LockKeyholeIcon
-            className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
-            aria-hidden="true"
-          />
-          <Input
-            type={visible ? "text" : "password"}
-            autoComplete={autoComplete}
-            placeholder={placeholder}
-            className="h-11 px-9"
-            {...field}
-            value={field.value ?? ""}
-          />
-          <button
-            type="button"
-            onClick={() => setVisible((v) => !v)}
-            aria-label={visible ? "Hide password" : "Show password"}
-            aria-pressed={visible}
-            className="text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-ring/40 absolute top-1/2 right-2 -translate-y-1/2 rounded-md p-1.5 transition-colors focus-visible:ring-2 focus-visible:outline-none"
-          >
-            {visible ? (
-              <EyeOffIcon className="size-4" />
-            ) : (
-              <EyeIcon className="size-4" />
-            )}
-          </button>
-        </div>
-      </FormControl>
-      <FormDescription>{description}</FormDescription>
-      <FormMessage />
-    </FormItem>
-  );
-}
-
-function passwordStrength(value: string): {
-  score: 0 | 1 | 2 | 3 | 4;
-  label: string;
-} {
-  if (!value) return { score: 0, label: "—" };
-  let score = 0;
-  if (value.length >= 8) score++;
-  if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
-  if (/\d/.test(value)) score++;
-  if (/[^A-Za-z0-9]/.test(value)) score++;
-  const labels = ["Too short", "Weak", "Fair", "Good", "Strong"];
-  return { score: score as 0 | 1 | 2 | 3 | 4, label: labels[score] };
-}
-
-function PasswordStrength({ value }: { value: string }) {
-  if (!value) return null;
-  const { score, label } = passwordStrength(value);
-  const segments = 4;
-  const tone =
-    score <= 1
-      ? "bg-destructive"
-      : score === 2
-        ? "bg-amber-500"
-        : score === 3
-          ? "bg-emerald-500"
-          : "bg-primary";
-  return (
-    <div className="flex items-center gap-3" aria-live="polite">
-      <div className="flex flex-1 gap-1" role="presentation">
-        {Array.from({ length: segments }).map((_, i) => (
-          <span
-            key={i}
-            className={cn(
-              "h-1.5 flex-1 rounded-full transition-colors duration-300 motion-reduce:transition-none",
-              i < score ? tone : "bg-foreground/10",
-            )}
-          />
-        ))}
-      </div>
-      <span className="text-muted-foreground text-xs font-medium">{label}</span>
-    </div>
   );
 }
 

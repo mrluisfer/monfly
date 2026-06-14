@@ -2,11 +2,17 @@ import { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
 
-export const getChartTypeByCategory = async ({ email }: { email: string }) => {
+export const getChartTypeByCategory = async ({
+  email,
+  cardId,
+}: {
+  email: string;
+  cardId?: string | null;
+}) => {
   try {
     const result = await prismaClient.transaction.groupBy({
       by: ["category", "type"],
-      where: { userEmail: email },
+      where: { userEmail: email, ...(cardId ? { cardId } : {}) },
       _sum: { amount: true },
     });
 

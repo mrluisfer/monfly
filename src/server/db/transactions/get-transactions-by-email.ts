@@ -4,6 +4,7 @@ import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
 type GetTransactionsParams = {
   email: string;
+  cardId?: string | null;
 };
 
 interface TransactionsResponse<T> extends ApiResponse<T> {
@@ -14,15 +15,18 @@ interface TransactionsResponse<T> extends ApiResponse<T> {
 export const getTransactionsByEmail = async ({
   email,
   limit,
+  cardId,
 }: GetTransactionsParams & { limit?: number }) => {
   try {
     if (!email) {
       throw new Error("Email is required");
     }
 
+    const where = { userEmail: email, ...(cardId ? { cardId } : {}) };
+
     const [transactions, total] = await Promise.all([
       prismaClient.transaction.findMany({
-        where: { userEmail: email },
+        where,
         take: limit,
         select: {
           id: true,
@@ -41,7 +45,7 @@ export const getTransactionsByEmail = async ({
         orderBy: { createdAt: "desc" },
       }),
       prismaClient.transaction.count({
-        where: { userEmail: email },
+        where,
       }),
     ]);
 

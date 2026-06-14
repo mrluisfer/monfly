@@ -29,6 +29,7 @@ import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authe
 import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
 import { Route as AuthedHomeLoansIndexRouteImport } from './routes/_authed/home/loans/index'
 import { Route as AuthedHomeCategoriesIndexRouteImport } from './routes/_authed/home/categories.index'
+import { Route as AuthedHomeCardsIndexRouteImport } from './routes/_authed/home/cards.index'
 import { Route as AuthedHomeBalanceCalculatorIndexRouteImport } from './routes/_authed/home/balance-calculator.index'
 
 const SignupRoute = SignupRouteImport.update({
@@ -133,6 +134,11 @@ const AuthedHomeCategoriesIndexRoute =
     path: '/home/categories/',
     getParentRoute: () => AuthedRoute,
   } as any)
+const AuthedHomeCardsIndexRoute = AuthedHomeCardsIndexRouteImport.update({
+  id: '/home/cards/',
+  path: '/home/cards/',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const AuthedHomeBalanceCalculatorIndexRoute =
   AuthedHomeBalanceCalculatorIndexRouteImport.update({
     id: '/home/balance-calculator/',
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/user/$userId': typeof AuthedUserUserIdRoute
   '/home/': typeof AuthedHomeIndexRoute
   '/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
+  '/home/cards/': typeof AuthedHomeCardsIndexRoute
   '/home/categories/': typeof AuthedHomeCategoriesIndexRoute
   '/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/home/reports/': typeof AuthedHomeReportsIndexRoute
@@ -175,6 +182,7 @@ export interface FileRoutesByTo {
   '/user/$userId': typeof AuthedUserUserIdRoute
   '/home': typeof AuthedHomeIndexRoute
   '/home/balance-calculator': typeof AuthedHomeBalanceCalculatorIndexRoute
+  '/home/cards': typeof AuthedHomeCardsIndexRoute
   '/home/categories': typeof AuthedHomeCategoriesIndexRoute
   '/home/loans': typeof AuthedHomeLoansIndexRoute
   '/home/reports': typeof AuthedHomeReportsIndexRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/_authed/user/$userId': typeof AuthedUserUserIdRoute
   '/_authed/home/': typeof AuthedHomeIndexRoute
   '/_authed/home/balance-calculator/': typeof AuthedHomeBalanceCalculatorIndexRoute
+  '/_authed/home/cards/': typeof AuthedHomeCardsIndexRoute
   '/_authed/home/categories/': typeof AuthedHomeCategoriesIndexRoute
   '/_authed/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/_authed/home/reports/': typeof AuthedHomeReportsIndexRoute
@@ -223,6 +232,7 @@ export interface FileRouteTypes {
     | '/user/$userId'
     | '/home/'
     | '/home/balance-calculator/'
+    | '/home/cards/'
     | '/home/categories/'
     | '/home/loans/'
     | '/home/reports/'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/user/$userId'
     | '/home'
     | '/home/balance-calculator'
+    | '/home/cards'
     | '/home/categories'
     | '/home/loans'
     | '/home/reports'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/_authed/user/$userId'
     | '/_authed/home/'
     | '/_authed/home/balance-calculator/'
+    | '/_authed/home/cards/'
     | '/_authed/home/categories/'
     | '/_authed/home/loans/'
     | '/_authed/home/reports/'
@@ -433,6 +445,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedHomeCategoriesIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/home/cards/': {
+      id: '/_authed/home/cards/'
+      path: '/home/cards'
+      fullPath: '/home/cards/'
+      preLoaderRoute: typeof AuthedHomeCardsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/home/balance-calculator/': {
       id: '/_authed/home/balance-calculator/'
       path: '/home/balance-calculator'
@@ -447,6 +466,7 @@ interface AuthedRouteChildren {
   AuthedUserUserIdRoute: typeof AuthedUserUserIdRoute
   AuthedHomeIndexRoute: typeof AuthedHomeIndexRoute
   AuthedHomeBalanceCalculatorIndexRoute: typeof AuthedHomeBalanceCalculatorIndexRoute
+  AuthedHomeCardsIndexRoute: typeof AuthedHomeCardsIndexRoute
   AuthedHomeCategoriesIndexRoute: typeof AuthedHomeCategoriesIndexRoute
   AuthedHomeLoansIndexRoute: typeof AuthedHomeLoansIndexRoute
   AuthedHomeReportsIndexRoute: typeof AuthedHomeReportsIndexRoute
@@ -461,6 +481,7 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedUserUserIdRoute: AuthedUserUserIdRoute,
   AuthedHomeIndexRoute: AuthedHomeIndexRoute,
   AuthedHomeBalanceCalculatorIndexRoute: AuthedHomeBalanceCalculatorIndexRoute,
+  AuthedHomeCardsIndexRoute: AuthedHomeCardsIndexRoute,
   AuthedHomeCategoriesIndexRoute: AuthedHomeCategoriesIndexRoute,
   AuthedHomeLoansIndexRoute: AuthedHomeLoansIndexRoute,
   AuthedHomeReportsIndexRoute: AuthedHomeReportsIndexRoute,

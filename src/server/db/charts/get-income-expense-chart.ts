@@ -1,10 +1,17 @@
+import { Prisma } from "@prisma/client";
 import { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
 
 const monthsToShow = 6;
 
-export const getIncomeExpenseData = async ({ email }: { email: string }) => {
+export const getIncomeExpenseData = async ({
+  email,
+  cardId,
+}: {
+  email: string;
+  cardId?: string | null;
+}) => {
   try {
     const now = new Date();
     // Work in UTC end-to-end: stored dates are UTC and date_trunc below
@@ -16,6 +23,10 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
 
     // Aggregate in the database instead of loading every transaction row;
     // this stays O(months) in transfer size no matter how large the history.
+    const cardFilter = cardId
+      ? Prisma.sql`AND "cardId" = ${cardId}`
+      : Prisma.empty;
+
     const rows = await prismaClient.$queryRaw<
       { month: Date; type: string; total: number }[]
     >`
@@ -26,6 +37,7 @@ export const getIncomeExpenseData = async ({ email }: { email: string }) => {
       WHERE "userEmail" = ${email}
         AND "date" >= ${windowStart}
         AND "date" <= ${now}
+        ${cardFilter}
       GROUP BY 1, 2
     `;
 

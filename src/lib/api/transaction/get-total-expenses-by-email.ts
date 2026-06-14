@@ -10,6 +10,7 @@ export const getTotalExpensesByEmailServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
+      cardId: z.string().uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {
@@ -21,5 +22,8 @@ export const getTotalExpensesByEmailServer = createServerFn({ method: "GET" })
       identifier: sessionEmail,
     });
 
-    return await getTotalExpensesByEmail({ email: sessionEmail });
+    return await getTotalExpensesByEmail({
+      email: sessionEmail,
+      cardId: data.cardId,
+    });
   });

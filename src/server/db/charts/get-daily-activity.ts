@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
@@ -18,7 +19,13 @@ export type DailyActivityRow = {
  * database (O(days) transfer size regardless of history length). Buckets are
  * UTC calendar days, matching the month bucketing of the other chart queries.
  */
-export const getDailyActivity = async ({ email }: { email: string }) => {
+export const getDailyActivity = async ({
+  email,
+  cardId,
+}: {
+  email: string;
+  cardId?: string | null;
+}) => {
   try {
     const now = new Date();
     const windowStart = new Date(
@@ -28,6 +35,10 @@ export const getDailyActivity = async ({ email }: { email: string }) => {
         now.getUTCDate() - (DAYS_TO_SHOW - 1),
       ),
     );
+
+    const cardFilter = cardId
+      ? Prisma.sql`AND "cardId" = ${cardId}`
+      : Prisma.empty;
 
     const rows = await prismaClient.$queryRaw<
       { day: Date; income: number; expense: number; count: number }[]
@@ -39,6 +50,7 @@ export const getDailyActivity = async ({ email }: { email: string }) => {
       FROM "Transaction"
       WHERE "userEmail" = ${email}
         AND "date" >= ${windowStart}
+        ${cardFilter}
       GROUP BY 1
       ORDER BY 1 ASC
     `;

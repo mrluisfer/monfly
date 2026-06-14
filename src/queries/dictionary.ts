@@ -14,4 +14,6 @@ export enum queryDictionary {
   dailyActivity = "daily-activity",
   loans = "loans",
   activeLoans = "active-loans",
+  cards = "cards",
+  totalExpenses = "total-expenses",
 }

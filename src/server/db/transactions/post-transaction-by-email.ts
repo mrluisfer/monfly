@@ -32,14 +32,31 @@ export const postTransactionByEmail = async (
         });
       }
 
+      const signedDelta =
+        data.type === "income" ? data.amount : -data.amount;
+
       await tx.user.update({
         where: { email },
         data: {
           totalBalance: {
-            increment: data.type === "income" ? data.amount : -data.amount,
+            increment: signedDelta,
           },
         },
       });
+
+      // Keep the per-card balance in sync within the same atomic transaction
+      // using the SAME signed delta, so totalBalance and the sum of card
+      // balances can never drift. updateMany scoped by userEmail enforces that
+      // the card belongs to this user.
+      if (data.cardId) {
+        const { count } = await tx.card.updateMany({
+          where: { id: data.cardId, userEmail: email },
+          data: { balance: { increment: signedDelta } },
+        });
+        if (count === 0) {
+          throw new Error("Card not found for this user");
+        }
+      }
 
       return created;
     });

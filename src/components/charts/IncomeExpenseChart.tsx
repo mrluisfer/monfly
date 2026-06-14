@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
+import { useActiveCard } from "~/hooks/cards";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { queryKeys } from "~/utils/query-keys";
@@ -82,10 +83,14 @@ function IncomeExpenseTooltip({
 
 export default function IncomeExpenseChart() {
   const userEmail = useRouteUser();
+  const activeCard = useActiveCard();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.charts.incomeExpense(userEmail),
-    queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
+    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
+    queryFn: () =>
+      getIncomeExpenseDataServer({
+        data: { email: userEmail, cardId: activeCard },
+      }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3, // 3 minutes cache
     gcTime: 1000 * 60 * 5, // 5 minutes garbage collection

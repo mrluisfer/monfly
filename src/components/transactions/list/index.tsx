@@ -5,12 +5,13 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
+import { useActiveCard } from "~/hooks/cards";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { useIsMounted } from "~/hooks/ui/useIsMounted";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
-import { queryDictionary } from "~/queries/dictionary";
+import { queryKeys } from "~/utils/query-keys";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
@@ -30,16 +31,17 @@ type TransactionsResponse = {
 
 export default function TransactionsList() {
   const userEmail = useRouteUser();
+  const activeCard = useActiveCard();
   const pathname = useLocation().pathname;
   const isTransactionsRoute = pathname.includes("/transactions");
   const limit = isTransactionsRoute ? 1000 : 30;
 
   const { data, isPending, error, refetch, isRefetching } = useQuery({
-    queryKey: [queryDictionary.transactions, userEmail, limit],
+    queryKey: [...queryKeys.transactions.byEmail(userEmail, activeCard), limit],
     queryFn: createSafeQuery(
       () =>
         getTransactionByEmailServer({
-          data: { email: userEmail, limit },
+          data: { email: userEmail, limit, cardId: activeCard },
         }),
       8000,
     ),

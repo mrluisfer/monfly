@@ -10,7 +10,11 @@ export const getTrendingMonthlyServer = createServerFn({
   method: "GET",
 })
   .inputValidator(
-    z.object({ email: z.string(), type: z.enum(["income", "expense"]) }),
+    z.object({
+      email: z.string(),
+      type: z.enum(["income", "expense"]),
+      cardId: z.string().uuid().nullable().optional(),
+    }),
   )
   .handler(async ({ data }) => {
     const sessionEmail = await resolveSessionEmail(data.email);

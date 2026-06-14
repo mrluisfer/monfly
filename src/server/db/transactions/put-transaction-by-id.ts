@@ -21,6 +21,12 @@ type PutTransactionInput = {
      * string    = caller wants this transaction applied as payment of that loan.
      */
     appliedToLoanId?: string | null;
+    /**
+     * undefined = caller didn't touch card linkage; preserve existing.
+     * null      = caller explicitly unlinked the transaction from any card.
+     * string    = caller wants this transaction attached to that card.
+     */
+    cardId?: string | null;
   };
 };
 
@@ -36,6 +42,7 @@ export const putTransactionById = async (input: PutTransactionInput) => {
           type: true,
           userEmail: true,
           appliedToLoanId: true,
+          cardId: true,
         },
       });
 
@@ -103,6 +110,9 @@ export const putTransactionById = async (input: PutTransactionInput) => {
           ...(transactionData.appliedToLoanId === undefined
             ? {}
             : { appliedToLoanId: transactionData.appliedToLoanId }),
+          ...(transactionData.cardId === undefined
+            ? {}
+            : { cardId: transactionData.cardId }),
         },
       });
 
@@ -111,6 +121,39 @@ export const putTransactionById = async (input: PutTransactionInput) => {
           where: { email: oldTransaction.userEmail },
           data: { totalBalance: { increment: balanceDelta } },
         });
+      }
+
+      // ── Card balance: mirror the same impact on the linked card(s) ───────
+      // Same card pre/post: apply just the difference. Different cards (incl.
+      // link/unlink): revert old impact on the old card, apply new impact on
+      // the new one. Uses the same oldImpact/newImpact as the user balance so
+      // totalBalance and the sum of card balances never drift.
+      const nextCardId =
+        transactionData.cardId === undefined
+          ? oldTransaction.cardId
+          : transactionData.cardId;
+      const oldCardId = oldTransaction.cardId;
+
+      if (oldCardId && oldCardId === nextCardId) {
+        if (balanceDelta !== 0) {
+          await tx.card.updateMany({
+            where: { id: oldCardId, userEmail: oldTransaction.userEmail },
+            data: { balance: { increment: balanceDelta } },
+          });
+        }
+      } else {
+        if (oldCardId) {
+          await tx.card.updateMany({
+            where: { id: oldCardId, userEmail: oldTransaction.userEmail },
+            data: { balance: { increment: -oldImpact } },
+          });
+        }
+        if (nextCardId) {
+          await tx.card.updateMany({
+            where: { id: nextCardId, userEmail: oldTransaction.userEmail },
+            data: { balance: { increment: newImpact } },
+          });
+        }
       }
 
       return updated;

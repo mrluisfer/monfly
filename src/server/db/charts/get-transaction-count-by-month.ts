@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
@@ -8,16 +9,23 @@ import { prismaClient } from "~/server/prisma";
  */
 export const getTransactionsCountByMonth = async ({
   email,
+  cardId,
 }: {
   email: string;
+  cardId?: string | null;
 }) => {
   try {
+    const cardFilter = cardId
+      ? Prisma.sql`AND "cardId" = ${cardId}`
+      : Prisma.empty;
+
     // Aggregate in the database instead of loading every transaction row;
     // this stays O(months) in transfer size no matter how large the history.
     const rows = await prismaClient.$queryRaw<{ month: Date; count: number }[]>`
       SELECT date_trunc('month', "date") AS month, COUNT(*)::int AS count
       FROM "Transaction"
       WHERE "userEmail" = ${email}
+        ${cardFilter}
       GROUP BY 1
       ORDER BY 1 ASC
     `;

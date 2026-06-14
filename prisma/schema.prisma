@@ -7,13 +7,18 @@ datasource db {
 }
 
 model User {
-  id             String           @id @default(uuid())
-  email          String           @unique
-  password       String
-  name           String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now()) @updatedAt
-  totalBalance   Float            @default(0)
+  id                  String           @id @default(uuid())
+  email               String           @unique
+  password            String
+  name                String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @default(now()) @updatedAt
+  totalBalance        Float            @default(0)
+  preferredCurrency   String?
+  marketingOptIn      Boolean          @default(false)
+  productUpdatesOptIn Boolean          @default(true)
+  acceptedTermsAt     DateTime?
+  acceptedPrivacyAt   DateTime?
   budgets        Budget[]
   cards          Card[]
   categories     Category[]
@@ -45,6 +50,8 @@ model Transaction {
   @@index([userEmail, type])
   @@index([userEmail, date])
   @@index([userEmail, createdAt])
+  @@index([userEmail, cardId])
+  @@index([cardId, date])
   @@index([appliedToLoanId])
 }
 
@@ -117,10 +124,14 @@ model Card {
   last4        String?
   provider     String?
   balance      Float?
+  color        String?
+  status       String        @default("active")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @default(now()) @updatedAt
   user         User          @relation(fields: [userEmail], references: [email])
   transactions Transaction[]
+
+  @@index([userEmail])
 }
 
 model Loan {

@@ -35,6 +35,32 @@ export const invalidateTransactionQueries = async (
     queryClient.invalidateQueries({
       queryKey: queryKeys.charts.all(userEmail),
     }),
+    // Card balances move atomically with transactions, so refresh the card
+    // list/balances too.
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.cards.all(userEmail),
+    }),
+  ]);
+};
+
+/**
+ * Invalidates card-related queries for a specific user. Card balances also
+ * affect the user total, so the user query is invalidated as well.
+ *
+ * @param queryClient - The TanStack Query client instance
+ * @param userEmail - The email of the user whose data should be invalidated
+ */
+export const invalidateCardQueries = async (
+  queryClient: QueryClient,
+  userEmail: string,
+): Promise<void> => {
+  await Promise.all([
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.cards.all(userEmail),
+    }),
+    queryClient.invalidateQueries({
+      queryKey: [queryDictionary.user, userEmail],
+    }),
   ]);
 };
 

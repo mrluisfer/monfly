@@ -10,6 +10,7 @@ export const getIncomeExpenseDataServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
+      cardId: z.string().uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {
@@ -21,5 +22,8 @@ export const getIncomeExpenseDataServer = createServerFn({ method: "GET" })
       identifier: sessionEmail,
     });
 
-    return await getIncomeExpenseData({ email: sessionEmail });
+    return await getIncomeExpenseData({
+      email: sessionEmail,
+      cardId: data.cardId,
+    });
   });

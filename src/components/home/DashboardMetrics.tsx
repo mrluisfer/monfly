@@ -5,6 +5,7 @@ import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { ArrowUpRightIcon, TrendingDown, TrendingUp } from "lucide-react";
+import { useActiveCard } from "~/hooks/cards";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { cn } from "~/lib/utils";
@@ -30,11 +31,15 @@ function pctDelta(current: number, previous: number) {
 
 export function DashboardMetrics({ className }: { className?: string }) {
   const userEmail = useRouteUser();
+  const activeCard = useActiveCard();
   const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.charts.incomeExpense(userEmail),
-    queryFn: () => getIncomeExpenseDataServer({ data: { email: userEmail } }),
+    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
+    queryFn: () =>
+      getIncomeExpenseDataServer({
+        data: { email: userEmail, cardId: activeCard },
+      }),
     enabled: !!userEmail,
     staleTime: 1000 * 60 * 3,
     gcTime: 1000 * 60 * 5,

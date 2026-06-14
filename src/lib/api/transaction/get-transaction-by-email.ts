@@ -19,6 +19,7 @@ const GetTransactionsInputSchema = z.object({
     .positive()
     .max(MAX_TRANSACTION_LIMIT)
     .optional(),
+  cardId: z.string().uuid().nullable().optional(),
 });
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
@@ -36,6 +37,7 @@ export const getTransactionByEmailServer = createServerFn({ method: "GET" })
       const result = await getTransactionsByEmail({
         email: sessionEmail,
         limit: data.limit ?? DEFAULT_TRANSACTION_LIMIT,
+        cardId: data.cardId,
       });
       return result;
     } catch (error) {

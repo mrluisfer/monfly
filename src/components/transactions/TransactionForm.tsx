@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
   CalendarIcon,
+  CreditCardIcon,
   DollarSignIcon,
   FileTextIcon,
   HandCoinsIcon,
@@ -30,6 +31,7 @@ import {
   LOAN_DIRECTION_LABEL,
   type LoanDirection,
 } from "~/constants/loan-status";
+import { useCards } from "~/hooks/cards";
 import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { useActiveLoans } from "~/hooks/loans/useActiveLoans";
@@ -543,6 +545,8 @@ export function TransactionForm<FormValues extends FieldValues>({
           </div>
         </div>
 
+        <CardField form={form} />
+
         <LoanSection form={form} />
 
         <div className="flex items-center justify-between pt-1 sm:pt-2">
@@ -575,6 +579,76 @@ export function TransactionForm<FormValues extends FieldValues>({
         </div>
       </form>
     </Form>
+  );
+}
+
+const NO_CARD = "none";
+
+function CardField<FormValues extends FieldValues>({
+  form,
+}: {
+  form: UseFormReturn<FormValues>;
+}) {
+  const { data, isPending } = useCards({ status: "active" });
+  const cards = useMemo(() => data?.data ?? [], [data?.data]);
+
+  // Nothing to assign until the user has created at least one card. Hiding the
+  // field keeps the form unchanged for users who don't use cards.
+  if (!isPending && cards.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className={sectionClassName}>
+      <FormField
+        control={form.control}
+        name={transactionFormNames.cardId as Path<FormValues>}
+        render={({ field }) => {
+          const value = (field.value as string | null | undefined) ?? null;
+          return (
+            <FormItem className="space-y-2">
+              <FormLabel className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
+                <CreditCardIcon className="size-3 text-sky-500" />
+                Card
+                <span className="text-muted-foreground/50 font-normal tracking-normal normal-case">
+                  (optional)
+                </span>
+              </FormLabel>
+              <FormControl>
+                <Select
+                  value={value ?? NO_CARD}
+                  onValueChange={(val) =>
+                    field.onChange(!val || val === NO_CARD ? null : val)
+                  }
+                >
+                  <SelectTrigger
+                    className={cn(inputClassName, "w-full justify-between")}
+                  >
+                    <SelectValue placeholder="No card" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value={NO_CARD}>No card</SelectItem>
+                    <SelectGroup>
+                      {cards.map((card) => (
+                        <SelectItem key={card.id} value={card.id}>
+                          {card.name}
+                          {card.last4 ? ` •••• ${card.last4}` : ""}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription className="text-xs">
+                Assign this transaction to a card to track its balance
+                separately.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          );
+        }}
+      />
+    </div>
   );
 }
 

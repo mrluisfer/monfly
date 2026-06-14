@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import type { z } from "zod";
 
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
+import { useActiveCard } from "~/hooks/cards";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postLoanByEmailServer } from "~/lib/api/loan/post-loan-by-email";
@@ -21,6 +22,7 @@ type FormValues = z.infer<typeof TransactionFormSchema>;
 export const useAddTransaction = () => {
   const queryClient = useQueryClient();
   const userEmail = useRouteUser();
+  const activeCard = useActiveCard();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(TransactionFormSchema),
@@ -30,6 +32,8 @@ export const useAddTransaction = () => {
       [transactionFormNames.category]: "",
       [transactionFormNames.amount]: "",
       [transactionFormNames.description]: "",
+      // Pre-select the card currently in focus on the dashboard, if any.
+      [transactionFormNames.cardId]: activeCard ?? null,
       [transactionFormNames.loanMode]: "none",
       [transactionFormNames.markAsLoan]: false,
       [transactionFormNames.loanDebtor]: "",
@@ -62,6 +66,7 @@ export const useAddTransaction = () => {
             variables.data.transaction.description?.trim().toLowerCase() ?? "",
           type: variables.data.transaction.type.toLowerCase(),
           appliedToLoanId: variables.data.transaction.appliedToLoanId ?? null,
+          cardId: variables.data.transaction.cardId ?? null,
         }),
       onDuplicatePending: {
         title: "Transaction is already being saved",
@@ -95,6 +100,9 @@ export const useAddTransaction = () => {
             description: data.description || null,
             date: txDate,
             appliedToLoanId,
+            // Card chosen in the form (pre-seeded from the active dashboard
+            // card; null = no card).
+            cardId: data.cardId ?? null,
           },
         },
       });

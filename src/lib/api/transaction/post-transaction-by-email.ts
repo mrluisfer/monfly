@@ -19,6 +19,7 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
         category: z.string(),
         description: z.string().nullable().optional(),
         appliedToLoanId: z.string().uuid().nullable().optional(),
+        cardId: z.string().uuid().nullable().optional(),
       }),
     }),
   )
@@ -36,11 +37,11 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
         ...transaction,
         description: transaction.description ?? null,
         appliedToLoanId: transaction.appliedToLoanId ?? null,
+        cardId: transaction.cardId ?? null,
         id: crypto.randomUUID(),
         userEmail: sessionEmail,
         createdAt: new Date(),
         updatedAt: new Date(),
-        cardId: null,
       };
 
       return await postTransactionByEmail(sessionEmail, fullTransaction);

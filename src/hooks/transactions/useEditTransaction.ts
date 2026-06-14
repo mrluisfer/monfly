@@ -43,6 +43,7 @@ export const useEditTransaction = (
       [transactionFormNames.category]: transaction.category,
       [transactionFormNames.description]: transaction.description ?? "",
       [transactionFormNames.date]: transaction.date,
+      [transactionFormNames.cardId]: transaction.cardId ?? null,
       [transactionFormNames.loanMode]: initialAppliedToLoanId
         ? "apply"
         : "none",
@@ -111,6 +112,7 @@ export const useEditTransaction = (
           id: variables.data.id,
           type: variables.data.data.type.toLowerCase(),
           appliedToLoanId: variables.data.data.appliedToLoanId ?? null,
+          cardId: variables.data.data.cardId ?? null,
         }),
       onDuplicatePending: {
         title: "Changes are already being saved",
@@ -143,6 +145,9 @@ export const useEditTransaction = (
             // Send only when in apply or explicitly clearing; in "create"/"none"
             // we want to keep this column in sync (set to null).
             appliedToLoanId: nextAppliedToLoanId,
+            // Reassign (or clear) the linked card; the DB layer moves the
+            // balance delta to the right card atomically.
+            cardId: data.cardId ?? null,
           },
         },
       });

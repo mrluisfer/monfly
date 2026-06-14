@@ -6,6 +6,7 @@ import {
   List,
   LucideProps,
   Wallet,
+  WalletCards,
 } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -21,6 +22,7 @@ export type SidebarItemType = {
 export enum SidebarRouteUrl {
   HOME = "/home",
   TRANSACTIONS = "/home/transactions",
+  CARDS = "/home/cards",
   LOANS = "/home/loans",
   REPORTS = "/home/reports",
   CATEGORIES = "/home/categories",
@@ -33,6 +35,11 @@ export const sidebarRoutes: SidebarItemType[] = [
     title: "Transactions",
     icon: CreditCard,
     url: SidebarRouteUrl.TRANSACTIONS,
+  },
+  {
+    title: "Cards",
+    icon: WalletCards,
+    url: SidebarRouteUrl.CARDS,
   },
   {
     title: "Loans",
