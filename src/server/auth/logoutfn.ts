@@ -11,17 +11,6 @@ export const logoutFn = createServerFn({ method: "POST" })
       const session = await useAppSession();
 
       await session.clear();
-
-      if (manualRedirect) {
-        return {
-          error: false,
-          message: "Logout successful",
-          data: null,
-          success: true,
-          statusCode: 200,
-        } as ApiResponse<string | null>;
-      }
-      throw redirect({ href: destination ?? "/" });
     } catch {
       return {
         error: true,
@@ -31,4 +20,16 @@ export const logoutFn = createServerFn({ method: "POST" })
         statusCode: 500,
       } as ApiResponse<string | null>;
     }
+
+    if (manualRedirect) {
+      return {
+        error: false,
+        message: "Logout successful",
+        data: null,
+        success: true,
+        statusCode: 200,
+      } as ApiResponse<string | null>;
+    }
+
+    throw redirect({ href: destination ?? "/" });
   });

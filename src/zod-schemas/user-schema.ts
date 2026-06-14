@@ -1,4 +1,7 @@
-import { userFormNames } from "~/constants/forms/user-form-names";
+import {
+  changePasswordFormNames,
+  userFormNames,
+} from "~/constants/forms/user-form-names";
 import { z } from "zod";
 
 export const supportedCurrencies = ["MXN", "USD", "EUR", "GBP"] as const;
@@ -38,3 +41,30 @@ export const userFormSchema = z
     message: "Passwords don't match",
     path: [userFormNames.confirmPassword],
   });
+
+export const changePasswordSchema = z
+  .object({
+    [changePasswordFormNames.currentPassword]: z
+      .string()
+      .min(1, { message: "Your current password is required" }),
+    [changePasswordFormNames.newPassword]: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" })
+      .regex(/[a-z]/, { message: "Include at least 1 lowercase letter" })
+      .regex(/[A-Z]/, { message: "Include at least 1 uppercase letter" })
+      .regex(/[0-9]/, { message: "Include at least 1 number" }),
+    [changePasswordFormNames.confirmNewPassword]: z.string(),
+  })
+  .refine(
+    (data) => data.newPassword === data.confirmNewPassword,
+    {
+      message: "Passwords don't match",
+      path: [changePasswordFormNames.confirmNewPassword],
+    },
+  )
+  .refine((data) => data.currentPassword !== data.newPassword, {
+    message: "Your new password must be different from the current one",
+    path: [changePasswordFormNames.newPassword],
+  });
+
+export type ChangePasswordFormValues = z.infer<typeof changePasswordSchema>;

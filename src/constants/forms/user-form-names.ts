@@ -10,3 +10,9 @@ export const userFormNames = {
   acceptTerms: "acceptTerms",
   acceptPrivacy: "acceptPrivacy",
 } as const;
+
+export const changePasswordFormNames = {
+  currentPassword: "currentPassword",
+  newPassword: "newPassword",
+  confirmNewPassword: "confirmNewPassword",
+} as const;

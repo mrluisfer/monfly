@@ -1,9 +1,9 @@
+import { useAtom } from "jotai";
 import { type ReactNode } from "react";
 import { sidebarOpenAtom } from "~/state/atoms/ui/sidebarAtoms";
-import { useAtom } from "jotai";
 
-import { AppSidebar } from "../shell/AppSidebar";
 import { CommandPaletteProvider } from "../shell/CommandPalette";
+import { AppSidebar } from "../shell/sidebar/AppSidebar";
 import { Topbar } from "../shell/Topbar";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import Footer from "./Footer";

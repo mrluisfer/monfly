@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SignoutRouteImport } from './routes/signout'
 import { Route as LogoutRouteImport } from './routes/logout'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthedRouteImport } from './routes/_authed'
@@ -22,10 +23,8 @@ import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home/index
 import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
 import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
 import { Route as AuthedUserSettingsIndexRouteImport } from './routes/_authed/user/settings.index'
-<<<<<<< HEAD
-=======
 import { Route as AuthedUserHelpIndexRouteImport } from './routes/_authed/user/help.index'
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
+import { Route as AuthedUserChangePasswordIndexRouteImport } from './routes/_authed/user/change-password.index'
 import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authed/home/transactions.index'
 import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
 import { Route as AuthedHomeLoansIndexRouteImport } from './routes/_authed/home/loans/index'
@@ -35,6 +34,11 @@ import { Route as AuthedHomeBalanceCalculatorIndexRouteImport } from './routes/_
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignoutRoute = SignoutRouteImport.update({
+  id: '/signout',
+  path: '/signout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LogoutRoute = LogoutRouteImport.update({
@@ -96,14 +100,17 @@ const AuthedUserSettingsIndexRoute = AuthedUserSettingsIndexRouteImport.update({
   path: '/user/settings/',
   getParentRoute: () => AuthedRoute,
 } as any)
-<<<<<<< HEAD
-=======
 const AuthedUserHelpIndexRoute = AuthedUserHelpIndexRouteImport.update({
   id: '/user/help/',
   path: '/user/help/',
   getParentRoute: () => AuthedRoute,
 } as any)
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
+const AuthedUserChangePasswordIndexRoute =
+  AuthedUserChangePasswordIndexRouteImport.update({
+    id: '/user/change-password/',
+    path: '/user/change-password/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
 const AuthedHomeTransactionsIndexRoute =
   AuthedHomeTransactionsIndexRouteImport.update({
     id: '/home/transactions/',
@@ -138,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/$': typeof SplatRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/signout': typeof SignoutRoute
   '/signup': typeof SignupRoute
   '/contact/': typeof ContactIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
@@ -149,10 +157,8 @@ export interface FileRoutesByFullPath {
   '/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/home/reports/': typeof AuthedHomeReportsIndexRoute
   '/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
-<<<<<<< HEAD
-=======
+  '/user/change-password/': typeof AuthedUserChangePasswordIndexRoute
   '/user/help/': typeof AuthedUserHelpIndexRoute
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   '/user/settings/': typeof AuthedUserSettingsIndexRoute
   '/user/theme/': typeof AuthedUserThemeIndexRoute
 }
@@ -161,6 +167,7 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/signout': typeof SignoutRoute
   '/signup': typeof SignupRoute
   '/contact': typeof ContactIndexRoute
   '/privacy': typeof PrivacyIndexRoute
@@ -172,10 +179,8 @@ export interface FileRoutesByTo {
   '/home/loans': typeof AuthedHomeLoansIndexRoute
   '/home/reports': typeof AuthedHomeReportsIndexRoute
   '/home/transactions': typeof AuthedHomeTransactionsIndexRoute
-<<<<<<< HEAD
-=======
+  '/user/change-password': typeof AuthedUserChangePasswordIndexRoute
   '/user/help': typeof AuthedUserHelpIndexRoute
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   '/user/settings': typeof AuthedUserSettingsIndexRoute
   '/user/theme': typeof AuthedUserThemeIndexRoute
 }
@@ -186,6 +191,7 @@ export interface FileRoutesById {
   '/_authed': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
+  '/signout': typeof SignoutRoute
   '/signup': typeof SignupRoute
   '/contact/': typeof ContactIndexRoute
   '/privacy/': typeof PrivacyIndexRoute
@@ -197,10 +203,8 @@ export interface FileRoutesById {
   '/_authed/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/_authed/home/reports/': typeof AuthedHomeReportsIndexRoute
   '/_authed/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
-<<<<<<< HEAD
-=======
+  '/_authed/user/change-password/': typeof AuthedUserChangePasswordIndexRoute
   '/_authed/user/help/': typeof AuthedUserHelpIndexRoute
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   '/_authed/user/settings/': typeof AuthedUserSettingsIndexRoute
   '/_authed/user/theme/': typeof AuthedUserThemeIndexRoute
 }
@@ -211,6 +215,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/login'
     | '/logout'
+    | '/signout'
     | '/signup'
     | '/contact/'
     | '/privacy/'
@@ -222,10 +227,8 @@ export interface FileRouteTypes {
     | '/home/loans/'
     | '/home/reports/'
     | '/home/transactions/'
-<<<<<<< HEAD
-=======
+    | '/user/change-password/'
     | '/user/help/'
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
     | '/user/settings/'
     | '/user/theme/'
   fileRoutesByTo: FileRoutesByTo
@@ -234,6 +237,7 @@ export interface FileRouteTypes {
     | '/$'
     | '/login'
     | '/logout'
+    | '/signout'
     | '/signup'
     | '/contact'
     | '/privacy'
@@ -245,10 +249,8 @@ export interface FileRouteTypes {
     | '/home/loans'
     | '/home/reports'
     | '/home/transactions'
-<<<<<<< HEAD
-=======
+    | '/user/change-password'
     | '/user/help'
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
     | '/user/settings'
     | '/user/theme'
   id:
@@ -258,6 +260,7 @@ export interface FileRouteTypes {
     | '/_authed'
     | '/login'
     | '/logout'
+    | '/signout'
     | '/signup'
     | '/contact/'
     | '/privacy/'
@@ -269,10 +272,8 @@ export interface FileRouteTypes {
     | '/_authed/home/loans/'
     | '/_authed/home/reports/'
     | '/_authed/home/transactions/'
-<<<<<<< HEAD
-=======
+    | '/_authed/user/change-password/'
     | '/_authed/user/help/'
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
     | '/_authed/user/settings/'
     | '/_authed/user/theme/'
   fileRoutesById: FileRoutesById
@@ -283,6 +284,7 @@ export interface RootRouteChildren {
   AuthedRoute: typeof AuthedRouteWithChildren
   LoginRoute: typeof LoginRoute
   LogoutRoute: typeof LogoutRoute
+  SignoutRoute: typeof SignoutRoute
   SignupRoute: typeof SignupRoute
   ContactIndexRoute: typeof ContactIndexRoute
   PrivacyIndexRoute: typeof PrivacyIndexRoute
@@ -296,6 +298,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signout': {
+      id: '/signout'
+      path: '/signout'
+      fullPath: '/signout'
+      preLoaderRoute: typeof SignoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/logout': {
@@ -382,8 +391,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedUserSettingsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
-<<<<<<< HEAD
-=======
     '/_authed/user/help/': {
       id: '/_authed/user/help/'
       path: '/user/help'
@@ -391,7 +398,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedUserHelpIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
+    '/_authed/user/change-password/': {
+      id: '/_authed/user/change-password/'
+      path: '/user/change-password'
+      fullPath: '/user/change-password/'
+      preLoaderRoute: typeof AuthedUserChangePasswordIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/_authed/home/transactions/': {
       id: '/_authed/home/transactions/'
       path: '/home/transactions'
@@ -438,10 +451,8 @@ interface AuthedRouteChildren {
   AuthedHomeLoansIndexRoute: typeof AuthedHomeLoansIndexRoute
   AuthedHomeReportsIndexRoute: typeof AuthedHomeReportsIndexRoute
   AuthedHomeTransactionsIndexRoute: typeof AuthedHomeTransactionsIndexRoute
-<<<<<<< HEAD
-=======
+  AuthedUserChangePasswordIndexRoute: typeof AuthedUserChangePasswordIndexRoute
   AuthedUserHelpIndexRoute: typeof AuthedUserHelpIndexRoute
->>>>>>> 9f064704ecb7e29c759bff4d116e449972b1dd1e
   AuthedUserSettingsIndexRoute: typeof AuthedUserSettingsIndexRoute
   AuthedUserThemeIndexRoute: typeof AuthedUserThemeIndexRoute
 }
@@ -454,6 +465,7 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedHomeLoansIndexRoute: AuthedHomeLoansIndexRoute,
   AuthedHomeReportsIndexRoute: AuthedHomeReportsIndexRoute,
   AuthedHomeTransactionsIndexRoute: AuthedHomeTransactionsIndexRoute,
+  AuthedUserChangePasswordIndexRoute: AuthedUserChangePasswordIndexRoute,
   AuthedUserHelpIndexRoute: AuthedUserHelpIndexRoute,
   AuthedUserSettingsIndexRoute: AuthedUserSettingsIndexRoute,
   AuthedUserThemeIndexRoute: AuthedUserThemeIndexRoute,
@@ -468,6 +480,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthedRoute: AuthedRouteWithChildren,
   LoginRoute: LoginRoute,
   LogoutRoute: LogoutRoute,
+  SignoutRoute: SignoutRoute,
   SignupRoute: SignupRoute,
   ContactIndexRoute: ContactIndexRoute,
   PrivacyIndexRoute: PrivacyIndexRoute,

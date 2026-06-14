@@ -106,7 +106,7 @@ function AddLoanCard() {
 
   return (
     <Collapsible
-      className="bg-card border-border/60 flex flex-col gap-5 rounded-2xl border p-2 sm:p-3 lg:p-4"
+      className="bg-card border-border/60 flex flex-col gap-5 rounded-2xl border p-2 sm:p-3 lg:px-0 lg:pt-2"
       aria-labelledby="add-loan-heading"
       open={openCollapsible}
       onOpenChange={setOpenCollapsible}
