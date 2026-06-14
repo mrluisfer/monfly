@@ -1,20 +1,13 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { ClientOnly } from "~/components/shared/ClientOnly";
 import { Skeleton } from "~/components/ui/skeleton";
 import { transactionTypes } from "~/constants/transaction-types";
 import { BarChartIcon } from "lucide-react";
-
-const IncomeExpenseChart = lazy(
-  () => import("~/components/charts/IncomeExpenseChart"),
-);
-const ChartTransactionsByMonth = lazy(
-  () => import("~/components/charts/ChartTransactionsByMonth"),
-);
-const ChartByCategoryRadar = lazy(
-  () => import("~/components/charts/ChartByCategoryRadar"),
-);
+import IncomeExpenseChart from "@/components/charts/IncomeExpenseChart";
+import ChartTransactionsByMonth from "@/components/charts/ChartTransactionsByMonth";
+import ChartByCategoryRadar from "@/components/charts/ChartByCategoryRadar";
 
 export const Route = createFileRoute("/_authed/home/reports/")({
   component: RouteComponent,
