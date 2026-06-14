@@ -30,8 +30,8 @@ export function CardSelector({ className }: { className?: string }) {
     return null;
   }
 
-  const handleChange = (value: string | null) => {
-    navigate({
+  const handleChange = async (value: string | null) => {
+    await navigate({
       to: ".",
       search: (prev: Record<string, unknown>) => ({
         ...prev,
