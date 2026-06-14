@@ -1,5 +1,6 @@
 export enum queryDictionary {
   user = "user",
+  session = "session",
   transactions = "transactions",
   categories = "categories",
   // Common prefix for every chart query (see queryKeys.charts in
