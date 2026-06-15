@@ -13,6 +13,7 @@ import type { LoanDirection } from "~/constants/loan-status";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useLoans } from "~/hooks/loans/useLoans";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 import { ScrollArea } from "../ui/scroll-area";
@@ -142,6 +143,7 @@ function UpcomingBody({
   loans: Loan[];
   now: Date;
 }) {
+  const currency = usePreferredCurrency();
   if (isPending) {
     return (
       <div className="space-y-2">
@@ -183,7 +185,7 @@ function UpcomingBody({
     <div className="space-y-3">
       <div className="text-foreground flex items-baseline justify-between px-4">
         <span className="text-success text-2xl font-semibold tracking-tight tabular-nums">
-          {formatCurrency(totalOutstanding, "USD")}
+          {formatCurrency(totalOutstanding, currency)}
         </span>
         <span className="text-muted-foreground text-xs">
           {lentCount} to collect
@@ -250,7 +252,7 @@ function UpcomingBody({
                 )}
               >
                 {isBorrowed ? "−" : ""}
-                {formatCurrency(entry.remaining, "USD")}
+                {formatCurrency(entry.remaining, currency)}
               </span>
             </li>
           );

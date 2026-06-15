@@ -1,8 +1,9 @@
 import { FlameIcon, GaugeIcon, TimerIcon, TrophyIcon } from "lucide-react";
 
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { formatCurrency } from "~/utils/format-currency";
 
-import { BALANCE_CURRENCY, HIDDEN_VALUE } from "./constants";
+import { HIDDEN_VALUE } from "./constants";
 import { InsightCard } from "./InsightCard";
 import { InsightsGrid } from "./InsightsGrid";
 import { SavingsRateCard } from "./SavingsRateCard";
@@ -17,6 +18,7 @@ export function BalanceInsights({
   summary,
   isBalanceHidden,
 }: BalanceInsightsProps) {
+  const currency = usePreferredCurrency();
   const periodCount = summary.recentPoints.length;
 
   return (
@@ -30,7 +32,7 @@ export function BalanceInsights({
         value={
           isBalanceHidden
             ? HIDDEN_VALUE
-            : formatCurrency(summary.avgNet, BALANCE_CURRENCY)
+            : formatCurrency(summary.avgNet, currency)
         }
         valueTone={summary.avgNet >= 0 ? "text-primary" : "text-destructive"}
         hint={`across ${periodCount} period${periodCount === 1 ? "" : "s"}`}
@@ -44,7 +46,7 @@ export function BalanceInsights({
           isBalanceHidden
             ? HIDDEN_VALUE
             : summary.bestPoint
-              ? formatCurrency(summary.bestPoint.net, BALANCE_CURRENCY)
+              ? formatCurrency(summary.bestPoint.net, currency)
               : "—"
         }
         valueTone={

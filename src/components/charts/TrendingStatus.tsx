@@ -1,5 +1,6 @@
 import { TrendingDown, TrendingUp, TrendingUpDown } from "lucide-react";
 import { TransactionType } from "~/constants/transaction-types";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { formatCurrency } from "~/utils/format-currency";
 
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,7 @@ export function TrendingStatus({
     percentChange?: number;
   };
 }) {
+  const currency = usePreferredCurrency();
   const {
     thisMonthTotal = 0,
     lastMonthTotal = 0,
@@ -72,7 +74,7 @@ export function TrendingStatus({
             {formattedType} this month:
           </span>
           <span className="text-foreground text-sm font-bold sm:text-base">
-            {formatCurrency(safeThisMonth, "USD")}
+            {formatCurrency(safeThisMonth, currency)}
           </span>
         </div>
 
@@ -80,7 +82,7 @@ export function TrendingStatus({
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <div className="flex items-center gap-2">
             <span className="text-muted-foreground text-xs">
-              vs. {formatCurrency(safeLastMonth, "USD")}
+              vs. {formatCurrency(safeLastMonth, currency)}
             </span>
             <Tooltip>
               <TooltipTrigger
@@ -102,11 +104,11 @@ export function TrendingStatus({
                 <div className="space-y-1 text-xs">
                   <p>
                     <strong>This month:</strong>{" "}
-                    {formatCurrency(safeThisMonth, "USD")}
+                    {formatCurrency(safeThisMonth, currency)}
                   </p>
                   <p>
                     <strong>Last month:</strong>{" "}
-                    {formatCurrency(safeLastMonth, "USD")}
+                    {formatCurrency(safeLastMonth, currency)}
                   </p>
                   <p>
                     <strong>Change:</strong> {safePercentChange >= 0 ? "+" : ""}

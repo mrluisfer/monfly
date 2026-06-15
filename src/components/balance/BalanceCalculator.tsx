@@ -13,6 +13,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { NumberFormatId } from "~/constants/number-formats";
 import { useNumberFormat } from "~/hooks/ui/useNumberFormat";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
@@ -444,6 +445,7 @@ function isFormElement(target: EventTarget | null): boolean {
 
 export function BalanceCalculator() {
   const userEmail = useRouteUser();
+  const currency = usePreferredCurrency();
   const { format: numberFormatPreference } = useNumberFormat();
   const historyIdRef = useRef(0);
 
@@ -1006,18 +1008,18 @@ export function BalanceCalculator() {
   );
 
   const deltaValueLabel = useMemo(
-    () => formatCurrency(deltaValue, "USD"),
-    [deltaValue],
+    () => formatCurrency(deltaValue, currency),
+    [deltaValue, currency],
   );
 
   const baselineBalanceLabel = useMemo(
-    () => formatCurrency(baselineBalance, "USD"),
-    [baselineBalance],
+    () => formatCurrency(baselineBalance, currency),
+    [baselineBalance, currency],
   );
 
   const simulatedBalanceLabel = useMemo(
-    () => formatCurrency(simulatedValue, "USD"),
-    [simulatedValue],
+    () => formatCurrency(simulatedValue, currency),
+    [simulatedValue, currency],
   );
 
   if (!userEmail) {

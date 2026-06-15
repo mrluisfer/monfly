@@ -32,6 +32,7 @@ import {
 import { Switch } from "~/components/ui/switch";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { cn } from "~/lib/utils";
+import { DEFAULT_CURRENCY } from "~/utils/format-currency";
 import { supportedCurrencies, userFormSchema } from "~/zod-schemas/user-schema";
 
 type UserFormValues = z.infer<typeof userFormSchema>;
@@ -117,7 +118,7 @@ export function UserFormFields({
               <FormItem>
                 <FormLabel>Preferred currency</FormLabel>
                 <Select
-                  value={field.value ?? "MXN"}
+                  value={field.value ?? DEFAULT_CURRENCY}
                   onValueChange={field.onChange}
                 >
                   <FormControl>
@@ -178,7 +179,8 @@ export function UserFormFields({
                       }}
                     />
                     <span className="border-input bg-muted/30 text-muted-foreground inline-flex items-center border-s px-3 text-sm font-medium">
-                      {form.watch(userFormNames.preferredCurrency) ?? "MXN"}
+                      {form.watch(userFormNames.preferredCurrency) ??
+                        DEFAULT_CURRENCY}
                     </span>
                   </div>
                 </FormControl>

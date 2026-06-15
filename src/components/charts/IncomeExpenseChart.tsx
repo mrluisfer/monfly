@@ -3,10 +3,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { useActiveCard } from "~/hooks/cards";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { queryKeys } from "~/utils/query-keys";
-import { formatCurrency } from "~/utils/format-currency";
+import {
+  formatCurrency,
+  getCurrencySymbol,
+  type SupportedCurrency,
+} from "~/utils/format-currency";
 import { DollarSign } from "lucide-react";
 import {
   Area,
@@ -26,12 +31,14 @@ type IncomeExpenseTooltipProps = {
   active?: boolean;
   payload?: Array<{ dataKey?: string; value?: number }>;
   label?: string;
+  currency?: SupportedCurrency;
 };
 
 function IncomeExpenseTooltip({
   active,
   payload,
   label,
+  currency = "USD",
 }: IncomeExpenseTooltipProps) {
   if (!active || !payload?.length) {
     return null;
@@ -51,7 +58,7 @@ function IncomeExpenseTooltip({
             <span className="text-muted-foreground text-sm">Income:</span>
           </div>
           <span className="text-primary font-semibold">
-            {formatCurrency(income, "USD")}
+            {formatCurrency(income, currency)}
           </span>
         </div>
         <div className="flex items-center justify-between gap-4">
@@ -60,7 +67,7 @@ function IncomeExpenseTooltip({
             <span className="text-muted-foreground text-sm">Expenses:</span>
           </div>
           <span className="text-destructive font-semibold">
-            {formatCurrency(expense, "USD")}
+            {formatCurrency(expense, currency)}
           </span>
         </div>
         <div className="border-border border-t pt-2">
@@ -72,7 +79,7 @@ function IncomeExpenseTooltip({
               className={`font-bold ${net >= 0 ? "text-primary" : "text-destructive"}`}
             >
               {net >= 0 ? "+" : ""}
-              {formatCurrency(net, "USD")}
+              {formatCurrency(net, currency)}
             </span>
           </div>
         </div>
@@ -84,6 +91,7 @@ function IncomeExpenseTooltip({
 export default function IncomeExpenseChart() {
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
+  const currency = usePreferredCurrency();
 
   const { data, isLoading, error } = useQuery({
     queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
@@ -131,7 +139,7 @@ export default function IncomeExpenseChart() {
       title="Income vs Expenses"
       subtitle={
         totalIncome > 0 || totalExpenses > 0
-          ? `${formatCurrency(totalIncome, "USD")} in • ${formatCurrency(totalExpenses, "USD")} out`
+          ? `${formatCurrency(totalIncome, currency)} in • ${formatCurrency(totalExpenses, currency)} out`
           : "Track your monthly financial flow"
       }
     >
@@ -169,7 +177,9 @@ export default function IncomeExpenseChart() {
                 bottom: 20,
               }}
             >
-                <ChartTooltip content={<IncomeExpenseTooltip />} />
+                <ChartTooltip
+                  content={<IncomeExpenseTooltip currency={currency} />}
+                />
                 <CartesianGrid
                   strokeDasharray="3 3"
                   className="stroke-border/30"
@@ -188,7 +198,9 @@ export default function IncomeExpenseChart() {
                   axisLine={false}
                   className="fill-muted-foreground text-xs"
                   tick={{ fontSize: 10 }}
-                  tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
+                  tickFormatter={(value) =>
+                    `${getCurrencySymbol(currency)}${(value / 1000).toFixed(0)}k`
+                  }
                 />
                 <defs>
                   <linearGradient
@@ -266,7 +278,7 @@ export default function IncomeExpenseChart() {
                 Income
               </p>
               <p className="text-primary mt-2 text-base font-semibold">
-                {formatCurrency(totalIncome, "USD")}
+                {formatCurrency(totalIncome, currency)}
               </p>
             </div>
             <div className="bg-muted rounded-xl p-3.5">
@@ -274,7 +286,7 @@ export default function IncomeExpenseChart() {
                 Expenses
               </p>
               <p className="text-destructive mt-2 text-base font-semibold">
-                {formatCurrency(totalExpenses, "USD")}
+                {formatCurrency(totalExpenses, currency)}
               </p>
             </div>
             <div className="bg-muted rounded-xl p-3.5">
@@ -285,7 +297,7 @@ export default function IncomeExpenseChart() {
                 className={`mt-2 text-base font-semibold ${netTotal >= 0 ? "text-primary" : "text-destructive"}`}
               >
                 {netTotal >= 0 ? "+" : ""}
-                {formatCurrency(netTotal, "USD")}
+                {formatCurrency(netTotal, currency)}
               </p>
             </div>
           </div>

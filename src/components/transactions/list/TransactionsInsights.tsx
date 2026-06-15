@@ -1,5 +1,6 @@
 import { ShieldCheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
@@ -86,6 +87,7 @@ export function TransactionsInsights({
   transactions,
   className,
 }: TransactionsInsightsProps) {
+  const currency = usePreferredCurrency();
   const [now] = useState(() => Date.now());
   const insights = useMemo(() => {
     const last30Start = now - 30 * ONE_DAY_MS;
@@ -261,7 +263,7 @@ export function TransactionsInsights({
       if (savingsRate < 0) {
         notes.push({
           id: "negative-savings",
-          detail: `Expenses are above income by ${formatCurrency(Math.abs(totalIncome - totalExpense), "USD")}.`,
+          detail: `Expenses are above income by ${formatCurrency(Math.abs(totalIncome - totalExpense), currency)}.`,
           title: "Negative savings trend",
           tone: "warning",
         });
@@ -361,7 +363,7 @@ export function TransactionsInsights({
       totalExpense,
       totalIncome,
     };
-  }, [transactions, now]);
+  }, [transactions, now, currency]);
 
   if (!insights) {
     return null;

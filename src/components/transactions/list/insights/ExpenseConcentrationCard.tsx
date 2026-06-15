@@ -1,3 +1,4 @@
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
@@ -21,6 +22,7 @@ export function ExpenseConcentrationCard({
   totalExpense,
   totalIncome,
 }: ExpenseConcentrationCardProps) {
+  const currency = usePreferredCurrency();
   const TrendIcon = isPositiveLast30 ? TrendingUpIcon : TrendingDownIcon;
 
   return (
@@ -58,7 +60,7 @@ export function ExpenseConcentrationCard({
                 />
               </div>
               <div className="text-muted-foreground text-xs">
-                {formatCurrency(category.amount, "USD")}
+                {formatCurrency(category.amount, currency)}
               </div>
             </div>
           ))
@@ -70,8 +72,8 @@ export function ExpenseConcentrationCard({
       </div>
 
       <div className="border-border/60 text-muted-foreground mt-4 border-t pt-3 text-xs">
-        Total tracked: {formatCurrency(totalIncome, "USD")} in •{" "}
-        {formatCurrency(totalExpense, "USD")} out
+        Total tracked: {formatCurrency(totalIncome, currency)} in •{" "}
+        {formatCurrency(totalExpense, currency)} out
       </div>
     </article>
   );

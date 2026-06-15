@@ -19,6 +19,7 @@ model User {
   productUpdatesOptIn Boolean          @default(true)
   acceptedTermsAt     DateTime?
   acceptedPrivacyAt   DateTime?
+  avatarSeed          String?
   budgets        Budget[]
   cards          Card[]
   categories     Category[]

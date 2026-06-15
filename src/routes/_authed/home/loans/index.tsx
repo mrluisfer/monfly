@@ -63,9 +63,13 @@ import { useAddLoan } from "~/hooks/loans/useAddLoan";
 import { useDeleteLoan } from "~/hooks/loans/useDeleteLoan";
 import { useLoans } from "~/hooks/loans/useLoans";
 import { useUpdateLoan } from "~/hooks/loans/useUpdateLoan";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
-import { formatCurrency } from "~/utils/format-currency";
+import {
+  formatCurrency,
+  getCurrencySymbol,
+} from "~/utils/format-currency";
 
 import { PageHeader } from "@/components/layout/PageHeader";
 import {
@@ -320,8 +324,11 @@ function LoansList() {
   const update = useUpdateLoan();
   const del = useDeleteLoan();
   const isBalanceHidden = useAtomValue(hideBalanceAtom);
+  const currency = usePreferredCurrency();
   const maskAmount = (n: number) =>
-    isBalanceHidden ? "$••••" : formatCurrency(n, "USD");
+    isBalanceHidden
+      ? `${getCurrencySymbol(currency)}••••`
+      : formatCurrency(n, currency);
 
   if (isPending) {
     return (
@@ -580,8 +587,11 @@ function LoanListItem({
   const progressPct =
     loan.amount > 0 ? Math.round((loan.amountPaid / loan.amount) * 100) : 0;
   const isBalanceHidden = useAtomValue(hideBalanceAtom);
+  const currency = usePreferredCurrency();
   const maskAmount = (n: number) =>
-    isBalanceHidden ? "$••••" : formatCurrency(n, "USD");
+    isBalanceHidden
+      ? `${getCurrencySymbol(currency)}••••`
+      : formatCurrency(n, currency);
 
   return (
     <li className="flex flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:gap-5 lg:px-7 lg:py-6">

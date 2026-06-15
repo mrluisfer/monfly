@@ -12,12 +12,16 @@ import { CalendarIcon } from "lucide-react";
 import { useMemo } from "react";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useActiveCard, useCards } from "~/hooks/cards";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import { queryKeys } from "~/utils/query-keys";
-import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
+import {
+  formatCurrency,
+  getCurrencySymbol,
+} from "~/utils/format-currency";
 
 import { CopyButton } from "../copy-button/copy-button";
 import { Badge } from "../ui/badge";
@@ -62,6 +66,7 @@ const TotalBalance = () => {
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
+  const currency = usePreferredCurrency();
 
   const { error, isPending, data } = useQuery({
     queryKey: [queryDictionary.user, userEmail],
@@ -95,10 +100,13 @@ const TotalBalance = () => {
     ? (cardsData?.data?.find((card) => card.id === activeCard)?.balance ?? 0)
     : data?.data?.totalBalance;
 
-  const totalBalance =
+  // Currency-aware display string (symbol + grouping for the active currency).
+  const displayBalance = formatCurrency(
     scopedBalance !== undefined && scopedBalance !== null
-      ? formatToTwoDecimals(scopedBalance).stringValue
-      : "0";
+      ? Number(scopedBalance)
+      : 0,
+    currency,
+  );
 
   const summary = useMemo<TotalBalanceSummary>(() => {
     const normalizedData: MonthlyPoint[] =
@@ -204,7 +212,7 @@ const TotalBalance = () => {
                 <TooltipTrigger
                   render={
                     <CopyButton
-                      text={`$${totalBalance}`}
+                      text={displayBalance}
                       variant={"secondary"}
                       size={"default"}
                     />
@@ -250,7 +258,7 @@ const TotalBalance = () => {
                         className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
                         aria-label="Total balance hidden"
                       >
-                        $••••••
+                        {getCurrencySymbol(currency)}••••••
                       </m.span>
                     ) : (
                       <m.span
@@ -272,7 +280,7 @@ const TotalBalance = () => {
                         }}
                         className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
                       >
-                        ${totalBalance}
+                        {displayBalance}
                       </m.span>
                     )}
                   </AnimatePresence>

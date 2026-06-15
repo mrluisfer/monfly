@@ -3,10 +3,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 
-import { BALANCE_CURRENCY } from "./constants";
 import type { IncomeExpensePoint } from "./types";
 
 type SparklineProps = {
@@ -18,6 +18,7 @@ type SparklineProps = {
 const MIN_BAR_HEIGHT_PCT = 6;
 
 export function Sparkline({ points, max }: SparklineProps) {
+  const currency = usePreferredCurrency();
   if (max <= 0) return null;
   return (
     <div
@@ -55,7 +56,7 @@ export function Sparkline({ points, max }: SparklineProps) {
                     isPositive ? "text-primary" : "text-destructive",
                   )}
                 >
-                  {formatCurrency(point.net, BALANCE_CURRENCY)}
+                  {formatCurrency(point.net, currency)}
                 </span>
               </p>
             </TooltipContent>

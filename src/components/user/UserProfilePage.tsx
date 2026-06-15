@@ -13,6 +13,7 @@ interface User {
   productUpdatesOptIn?: boolean | null;
   acceptedTermsAt?: string | Date | null;
   acceptedPrivacyAt?: string | Date | null;
+  avatarSeed?: string | null;
 }
 
 interface UserProfilePageProps {

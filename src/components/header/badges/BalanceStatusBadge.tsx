@@ -1,8 +1,13 @@
 import type { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
+import {
+  formatCurrency,
+  type SupportedCurrency,
+} from "~/utils/format-currency";
 import { queryDictionary } from "~/queries/dictionary";
 import type { ApiResponse } from "~/types/ApiResponse";
 import {
@@ -70,15 +75,6 @@ const statusConfig = {
   },
 };
 
-const currencyFormatter = new Intl.NumberFormat("es-MX", {
-  style: "currency",
-  currency: "MXN",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-
-const formatBalance = (amount: number) => currencyFormatter.format(amount);
-
 export function BalanceStatusBadge({
   showIcon = true,
   showAmount = false,
@@ -89,6 +85,7 @@ export function BalanceStatusBadge({
   className = "",
 }: BalanceStatusBadgeProps) {
   const userEmail = useRouteUser();
+  const currency = usePreferredCurrency();
 
   const { error, isPending, data } = useQuery<ApiResponse<User | null>>({
     queryKey: [queryDictionary.user, userEmail],
@@ -132,6 +129,7 @@ export function BalanceStatusBadge({
           status={status}
           balance={balance}
           error={error}
+          currency={currency}
         />
       }
     >
@@ -152,7 +150,7 @@ export function BalanceStatusBadge({
       <span className="text-xs font-medium">
         {config.label}
         {showAmount && status !== "loading" && status !== "error" && (
-          <span className="ml-1.5 font-mono">{formatBalance(balance)}</span>
+          <span className="ml-1.5 font-mono">{formatCurrency(balance, currency)}</span>
         )}
       </span>
     </HeaderBadge>
@@ -164,11 +162,13 @@ function BalanceTooltip({
   status,
   balance,
   error,
+  currency,
 }: {
   config: (typeof statusConfig)[keyof typeof statusConfig];
   status: BalanceStatus;
   balance: number;
   error: Error | null;
+  currency: SupportedCurrency;
 }) {
   return (
     <div className="space-y-1">
@@ -185,7 +185,7 @@ function BalanceTooltip({
           <div className="flex items-center justify-between gap-4 text-[10px]">
             <span>Current balance:</span>
             <span className={cn("font-mono font-semibold")}>
-              {formatBalance(balance)}
+              {formatCurrency(balance, currency)}
             </span>
           </div>
         </div>

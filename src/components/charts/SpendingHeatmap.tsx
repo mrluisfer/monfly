@@ -8,10 +8,14 @@ import {
   TooltipTrigger,
 } from "~/components/ui/tooltip";
 import { useActiveCard } from "~/hooks/cards";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getDailyActivityServer } from "~/lib/api/chart/get-daily-activity";
 import { cn } from "~/lib/utils";
-import { formatCurrency } from "~/utils/format-currency";
+import {
+  formatCurrency,
+  type SupportedCurrency,
+} from "~/utils/format-currency";
 import { queryKeys } from "~/utils/query-keys";
 import type { DailyActivityRow } from "~/server/db/charts/get-daily-activity";
 import { FlameIcon } from "lucide-react";
@@ -157,7 +161,13 @@ function summarize(rows: DailyActivityRow[]) {
   };
 }
 
-function HeatmapCell({ cell }: { cell: DayCell }) {
+function HeatmapCell({
+  cell,
+  currency,
+}: {
+  cell: DayCell;
+  currency: SupportedCurrency;
+}) {
   if (!cell.date) {
     return <div aria-hidden="true" className="size-3.5 rounded-[3px]" />;
   }
@@ -185,13 +195,13 @@ function HeatmapCell({ cell }: { cell: DayCell }) {
             <p>
               {cell.count} {cell.count === 1 ? "transaction" : "transactions"}
             </p>
-            {cell.income > 0 && <p>In: {formatCurrency(cell.income, "USD")}</p>}
+            {cell.income > 0 && <p>In: {formatCurrency(cell.income, currency)}</p>}
             {cell.expense > 0 && (
-              <p>Out: {formatCurrency(cell.expense, "USD")}</p>
+              <p>Out: {formatCurrency(cell.expense, currency)}</p>
             )}
             <p className="font-medium">
               Net: {net >= 0 ? "+" : ""}
-              {formatCurrency(net, "USD")}
+              {formatCurrency(net, currency)}
             </p>
           </div>
         )}
@@ -203,6 +213,7 @@ function HeatmapCell({ cell }: { cell: DayCell }) {
 export default function SpendingHeatmap() {
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
+  const currency = usePreferredCurrency();
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: queryKeys.charts.dailyActivity(userEmail, activeCard),
@@ -259,7 +270,7 @@ export default function SpendingHeatmap() {
                 "en-US",
                 { month: "short", day: "numeric", timeZone: "UTC" },
               )}{" "}
-              · {formatCurrency(busiest.expense, "USD")} out
+              · {formatCurrency(busiest.expense, currency)} out
             </Badge>
           )}
 
@@ -284,7 +295,11 @@ export default function SpendingHeatmap() {
                 {weeks.map((week, weekIndex) => (
                   <div key={weekIndex} className="flex flex-col gap-1">
                     {week.map((cell, dayIndex) => (
-                      <HeatmapCell key={cell.date ?? dayIndex} cell={cell} />
+                      <HeatmapCell
+                        key={cell.date ?? dayIndex}
+                        cell={cell}
+                        currency={currency}
+                      />
                     ))}
                   </div>
                 ))}

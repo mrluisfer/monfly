@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 
@@ -35,6 +36,7 @@ export function NetMomentumCard({
   netLast30,
   sparkline,
 }: NetMomentumCardProps) {
+  const currency = usePreferredCurrency();
   const gradientId = useId().replace(/:/g, "");
   const isPositiveLast30 = netLast30 >= 0;
   const trendColor = isPositiveLast30 ? "var(--primary)" : "var(--destructive)";
@@ -42,12 +44,12 @@ export function NetMomentumCard({
   const last30Stats = [
     {
       label: "Income (30d)",
-      value: formatCurrency(incomeLast30, "USD"),
+      value: formatCurrency(incomeLast30, currency),
       valueClassName: "text-primary",
     },
     {
       label: "Expenses (30d)",
-      value: formatCurrency(expenseLast30, "USD"),
+      value: formatCurrency(expenseLast30, currency),
       valueClassName: "text-destructive",
     },
   ] as const;
@@ -61,7 +63,7 @@ export function NetMomentumCard({
               Net momentum (last 6 months)
             </p>
             <h4 className="text-foreground mt-1 text-lg font-semibold tracking-tight">
-              {formatCurrency(netLast30, "USD")} in last 30 days
+              {formatCurrency(netLast30, currency)} in last 30 days
             </h4>
           </div>
           <span className="bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-xs">

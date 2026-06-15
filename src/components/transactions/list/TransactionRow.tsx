@@ -20,21 +20,18 @@ import {
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
 import { Dialog } from "~/components/ui/dialog";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
+import { formatCurrency } from "~/utils/format-currency";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 
 import EditTransaction from "../EditTransaction";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
 import TransactionItemActions from "./TransactionItemActions";
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
 
 export function TransactionRow({
   transaction,
@@ -49,6 +46,7 @@ export function TransactionRow({
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const queryClient = useQueryClient();
+  const currency = usePreferredCurrency();
   const isIncome = transaction.type.toLowerCase() === "income";
   const category =
     typeof transaction.category === "string"
@@ -178,7 +176,7 @@ export function TransactionRow({
                   )}
                 >
                   {isIncome ? "+" : "-"}
-                  {currencyFormatter.format(transaction.amount)}
+                  {formatCurrency(transaction.amount, currency)}
                 </span>
                 <TransactionItemActions
                   transaction={transaction}

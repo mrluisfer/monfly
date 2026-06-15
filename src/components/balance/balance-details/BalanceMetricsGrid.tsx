@@ -5,11 +5,12 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 
 import { BalanceCard } from "./BalanceCard";
-import { BALANCE_CURRENCY, HIDDEN_VALUE } from "./constants";
+import { HIDDEN_VALUE } from "./constants";
 import { FlowBar } from "./FlowBar";
 import { Sparkline } from "./Sparkline";
 import { TrendBadge } from "./TrendBadge";
@@ -24,6 +25,7 @@ export function BalanceMetricsGrid({
   summary,
   isBalanceHidden,
 }: BalanceMetricsGridProps) {
+  const currency = usePreferredCurrency();
   const hasData = summary.recentPoints.length > 0;
   const isLatestPositive = (summary.latestPoint?.net ?? 0) >= 0;
   const TrendIcon = isLatestPositive ? ArrowUpRightIcon : ArrowDownRightIcon;
@@ -48,7 +50,7 @@ export function BalanceMetricsGrid({
         value={
           isBalanceHidden
             ? HIDDEN_VALUE
-            : formatCurrency(summary.latestPoint?.net ?? 0, BALANCE_CURRENCY)
+            : formatCurrency(summary.latestPoint?.net ?? 0, currency)
         }
         valueClassName={cn("tabular-nums", balanceToneClass)}
         leadingIcon={<TrendIcon className={cn("size-4", balanceToneClass)} />}
@@ -75,7 +77,7 @@ export function BalanceMetricsGrid({
         value={
           isBalanceHidden
             ? HIDDEN_VALUE
-            : formatCurrency(summary.totalIncome, BALANCE_CURRENCY)
+            : formatCurrency(summary.totalIncome, currency)
         }
         leadingIcon={
           <TrendingUpIcon className="size-4 text-emerald-600 dark:text-emerald-300" />
@@ -109,7 +111,7 @@ export function BalanceMetricsGrid({
         value={
           isBalanceHidden
             ? HIDDEN_VALUE
-            : formatCurrency(summary.totalExpenses, BALANCE_CURRENCY)
+            : formatCurrency(summary.totalExpenses, currency)
         }
         leadingIcon={
           <TrendingDownIcon className="size-4 text-amber-600 dark:text-amber-300" />
@@ -124,7 +126,7 @@ export function BalanceMetricsGrid({
                         ? HIDDEN_VALUE
                         : formatCurrency(
                             summary.expenseBurnRate,
-                            BALANCE_CURRENCY,
+                            currency,
                           )
                     } / period`
                   : "Recent recorded periods"}

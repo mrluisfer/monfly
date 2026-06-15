@@ -11,6 +11,7 @@ import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance";
 import { updateUserProfileServer } from "~/lib/api/user/update-user-profile";
 import { sileo } from "~/lib/toaster";
+import { DEFAULT_CURRENCY } from "~/utils/format-currency";
 import { formatToTwoDecimals } from "~/utils/formatTwoDecimals";
 import { invalidateUserQueries } from "~/utils/query-invalidation";
 import {
@@ -60,7 +61,8 @@ export function UserProfileForm({
       [userFormNames.name]: user?.name ?? "",
       [userFormNames.totalBalance]: defaultTotalBalance,
       [userFormNames.preferredCurrency]:
-        (user?.preferredCurrency as SupportedCurrency | undefined) ?? "MXN",
+        (user?.preferredCurrency as SupportedCurrency | undefined) ??
+        DEFAULT_CURRENCY,
       [userFormNames.marketingOptIn]: user?.marketingOptIn ?? false,
       [userFormNames.productUpdatesOptIn]: user?.productUpdatesOptIn ?? true,
       [userFormNames.acceptTerms]: !!user?.acceptedTermsAt,

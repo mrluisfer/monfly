@@ -14,6 +14,7 @@ import {
 import { format } from "date-fns";
 import * as React from "react";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-transactions-by-id";
 import { sileo } from "~/lib/toaster";
@@ -42,6 +43,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
   const [globalFilter, setGlobalFilter] = React.useState("");
 
   const userEmail = useRouteUser();
+  const currency = usePreferredCurrency();
   const queryClient = useQueryClient();
 
   // TanStack Table returns functions the React Compiler can't safely memoize;
@@ -81,6 +83,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       rowSelection,
       globalFilter,
     },
+    meta: { currency },
   });
 
   const deleteTransactionsByIdMutation = useMutation({
@@ -198,19 +201,19 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
     },
     {
       label: "Income",
-      value: formatCurrency(filteredIncome, "USD"),
+      value: formatCurrency(filteredIncome, currency),
       valueClassName: "text-primary",
       description: "Sum of visible income rows",
     },
     {
       label: "Expenses",
-      value: formatCurrency(filteredExpenses, "USD"),
+      value: formatCurrency(filteredExpenses, currency),
       valueClassName: "text-destructive",
       description: "Sum of visible expense rows",
     },
     {
       label: "Net",
-      value: `${filteredNet >= 0 ? "+" : ""}${formatCurrency(filteredNet, "USD")}`,
+      value: `${filteredNet >= 0 ? "+" : ""}${formatCurrency(filteredNet, currency)}`,
       valueClassName: filteredNet >= 0 ? "text-primary" : "text-destructive",
       description: latestTransactionDate
         ? `Latest: ${format(new Date(latestTransactionDate), "MMM d, yyyy")}`

@@ -1,9 +1,14 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
+import {
+  formatCurrency,
+  type SupportedCurrency,
+} from "~/utils/format-currency";
 import { queryDictionary } from "~/queries/dictionary";
 import { queryKeys } from "~/utils/query-keys";
 import {
@@ -36,12 +41,6 @@ type SpendingStatus =
   | "loading"
   | "error";
 
-const currencyFormatter = new Intl.NumberFormat("es-MX", {
-  style: "currency",
-  currency: "MXN",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
 
 const statusConfig = {
   safe: {
@@ -132,8 +131,6 @@ const toSafeNumber = (value: unknown) => {
   return parsed;
 };
 
-const formatCurrency = (amount: number) => currencyFormatter.format(amount);
-
 export function SpendingAlertBadge({
   showIcon = true,
   showPercentage = true,
@@ -144,6 +141,7 @@ export function SpendingAlertBadge({
   className = "",
 }: SpendingAlertBadgeProps) {
   const userEmail = useRouteUser();
+  const currency = usePreferredCurrency();
 
   const isQueryEnabled = Boolean(userEmail && isActive);
 
@@ -260,6 +258,7 @@ export function SpendingAlertBadge({
           percent={percent}
           spentError={spentError}
           userError={userError}
+          currency={currency}
         />
       }
     >
@@ -298,6 +297,7 @@ function SpendingTooltip({
   percent,
   spentError,
   userError,
+  currency,
 }: {
   config: (typeof statusConfig)[keyof typeof statusConfig];
   canShowDetails: boolean;
@@ -307,6 +307,7 @@ function SpendingTooltip({
   percent: number;
   spentError: Error | null;
   userError: Error | null;
+  currency: SupportedCurrency;
 }) {
   return (
     <div className="space-y-1">
@@ -323,7 +324,7 @@ function SpendingTooltip({
           <div className="flex items-center justify-between gap-4 text-[10px]">
             <span>Total budget:</span>
             <span className="font-mono font-semibold">
-              {formatCurrency(balance)}
+              {formatCurrency(balance, currency)}
             </span>
           </div>
           <div className="flex items-center justify-between gap-4 text-[10px]">
@@ -334,7 +335,7 @@ function SpendingTooltip({
                 percent >= 80 && "text-destructive",
               )}
             >
-              {formatCurrency(spent)}
+              {formatCurrency(spent, currency)}
             </span>
           </div>
           <div className="flex items-center justify-between gap-4 text-[10px]">
@@ -345,7 +346,7 @@ function SpendingTooltip({
                 remaining > 0 ? "text-foreground" : "text-destructive",
               )}
             >
-              {formatCurrency(remaining)}
+              {formatCurrency(remaining, currency)}
             </span>
           </div>
           <div className="border-border flex items-center justify-between gap-4 border-t pt-1 text-[10px]">

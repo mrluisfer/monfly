@@ -1,8 +1,8 @@
 import { CalendarRangeIcon } from "lucide-react";
 
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { formatCurrency } from "~/utils/format-currency";
 
-import { BALANCE_CURRENCY } from "./constants";
 import type { IncomeExpensePoint } from "./types";
 
 type RangeStripProps = {
@@ -11,6 +11,7 @@ type RangeStripProps = {
 };
 
 export function RangeStrip({ best, worst }: RangeStripProps) {
+  const currency = usePreferredCurrency();
   if (best.label === worst.label) return null;
   return (
     <div className="border-border/60 bg-card/60 flex flex-col gap-2 rounded-2xl border p-3 text-xs sm:flex-row sm:items-center sm:justify-between">
@@ -29,7 +30,7 @@ export function RangeStrip({ best, worst }: RangeStripProps) {
             {best.label}
           </span>
           <span className="text-primary tabular-nums">
-            {formatCurrency(best.net, BALANCE_CURRENCY)}
+            {formatCurrency(best.net, currency)}
           </span>
         </span>
         <span className="inline-flex items-center gap-1.5">
@@ -42,7 +43,7 @@ export function RangeStrip({ best, worst }: RangeStripProps) {
             {worst.label}
           </span>
           <span className="text-destructive tabular-nums">
-            {formatCurrency(worst.net, BALANCE_CURRENCY)}
+            {formatCurrency(worst.net, currency)}
           </span>
         </span>
       </span>

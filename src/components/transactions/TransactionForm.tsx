@@ -32,6 +32,7 @@ import {
   type LoanDirection,
 } from "~/constants/loan-status";
 import { useCards } from "~/hooks/cards";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
 import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { useActiveLoans } from "~/hooks/loans/useActiveLoans";
@@ -61,6 +62,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -624,15 +626,56 @@ function CardField<FormValues extends FieldValues>({
                   <SelectTrigger
                     className={cn(inputClassName, "w-full justify-between")}
                   >
-                    <SelectValue placeholder="No card" />
+                    <SelectValue placeholder="No card">
+                      {(selected: unknown) => {
+                        const id =
+                          typeof selected === "string" ? selected : "";
+                        const card =
+                          id && id !== NO_CARD
+                            ? cards.find((c) => c.id === id)
+                            : undefined;
+                        if (!card) {
+                          return (
+                            <span className="text-muted-foreground flex items-center gap-2">
+                              <CreditCardIcon className="size-4" />
+                              No card
+                            </span>
+                          );
+                        }
+                        return (
+                          <span className="flex items-center gap-2">
+                            <CreditCardIcon className="text-sky-500 size-4" />
+                            <span className="truncate">{card.name}</span>
+                            {card.last4 ? (
+                              <span className="text-muted-foreground text-xs tabular-nums">
+                                •••• {card.last4}
+                              </span>
+                            ) : null}
+                          </span>
+                        );
+                      }}
+                    </SelectValue>
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value={NO_CARD}>No card</SelectItem>
+                  <SelectContent alignItemWithTrigger={false} className="w-full">
+                    <SelectItem value={NO_CARD}>
+                      <CreditCardIcon className="text-muted-foreground size-4" />
+                      <span className="text-muted-foreground">No card</span>
+                    </SelectItem>
+                    <SelectSeparator />
                     <SelectGroup>
                       {cards.map((card) => (
                         <SelectItem key={card.id} value={card.id}>
-                          {card.name}
-                          {card.last4 ? ` •••• ${card.last4}` : ""}
+                          <CreditCardIcon className="text-sky-500 size-4" />
+                          <span className="flex w-full items-center justify-between gap-3">
+                            <span className="truncate capitalize">
+                              {card.name}
+                            </span>
+                            {card.last4 ? (
+                              <span className="text-muted-foreground text-xs tabular-nums">
+                                •••• {card.last4}
+                              </span>
+                            ) : null}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectGroup>
@@ -657,6 +700,7 @@ function LoanSection<FormValues extends FieldValues>({
 }: {
   form: UseFormReturn<FormValues>;
 }) {
+  const currency = usePreferredCurrency();
   const mode = (form.watch(transactionFormNames.loanMode as Path<FormValues>) ??
     "none") as LoanMode;
 
@@ -923,7 +967,7 @@ function LoanSection<FormValues extends FieldValues>({
                                         : "text-red-600 dark:text-red-400",
                                     )}
                                   >
-                                    {formatCurrency(loan.amount, "USD")} ·{" "}
+                                    {formatCurrency(loan.amount, currency)} ·{" "}
                                     {
                                       LOAN_DIRECTION_LABEL[
                                         loan.direction as LoanDirection
@@ -991,6 +1035,7 @@ function LoanOption({
   loan: { id: string; debtor: string; amount: number; amountPaid: number };
   direction: LoanDirection;
 }) {
+  const currency = usePreferredCurrency();
   const remaining = loan.amount - loan.amountPaid;
   return (
     <SelectItem value={loan.id}>
@@ -1004,7 +1049,7 @@ function LoanOption({
               : "text-red-600 dark:text-red-400",
           )}
         >
-          {formatCurrency(remaining, "USD")} left
+          {formatCurrency(remaining, currency)} left
         </span>
       </span>
     </SelectItem>

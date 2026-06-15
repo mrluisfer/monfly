@@ -27,7 +27,7 @@ export const useAddTransaction = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(TransactionFormSchema),
     defaultValues: {
-      [transactionFormNames.type]: "income",
+      [transactionFormNames.type]: "expense",
       [transactionFormNames.date]: new Date(),
       [transactionFormNames.category]: "",
       [transactionFormNames.amount]: "",

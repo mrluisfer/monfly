@@ -15,13 +15,20 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
+import {
+  formatCurrency,
+  type SupportedCurrency,
+} from "~/utils/format-currency";
 
 import { TransactionActionsCell } from "./TransactionActionsCell";
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
+// Lets the table pass the user's preferred currency down to cell renderers.
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface TableMeta<TData> {
+    currency?: SupportedCurrency;
+  }
+}
 
 function formatRelativeTransactionDay(date: Date) {
   if (isToday(date)) return "Today";
@@ -187,11 +194,14 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         </Button>
       </div>
     ),
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const amount = parseFloat(row.getValue("amount"));
       const type = String(row.getValue("type") || "").toLowerCase();
       const isIncome = type === "income";
-      const formatted = currencyFormatter.format(amount);
+      const formatted = formatCurrency(
+        amount,
+        table.options.meta?.currency ?? "USD",
+      );
 
       return (
         <div className="space-y-0.5 text-right">

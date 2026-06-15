@@ -3,9 +3,6 @@ import type { AccentTone, BalanceSummary } from "./types";
 /** Placeholder shown in place of monetary values when the balance is hidden. */
 export const HIDDEN_VALUE = "$••••";
 
-/** Currency used across the balance details surface. */
-export const BALANCE_CURRENCY = "MXN";
-
 export const EMPTY_SUMMARY: BalanceSummary = {
   latestPoint: null,
   recentPoints: [],
