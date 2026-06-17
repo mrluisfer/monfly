@@ -15,6 +15,7 @@ import { TransactionRow } from "./TransactionRow";
 type TransactionCardListProps = {
   data: Transaction[];
   cardsById?: Map<string, CardSummary>;
+  categoryIconsByName?: Map<string, string>;
 };
 
 function formatRelativeDate(date: Date): string {
@@ -38,6 +39,7 @@ function groupTransactionsByDate(
 export function TransactionCardList({
   data,
   cardsById,
+  categoryIconsByName,
 }: TransactionCardListProps) {
   const shouldReduceMotion = useReducedMotion();
 
@@ -98,6 +100,9 @@ export function TransactionCardList({
                           ? cardsById?.get(transaction.cardId)
                           : undefined
                       }
+                      categoryIconName={categoryIconsByName?.get(
+                        String(transaction.category).trim().toLowerCase(),
+                      )}
                     />
                   ))}
                 </div>

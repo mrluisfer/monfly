@@ -42,11 +42,11 @@ export function CardBadge({ card, className }: CardBadgeProps) {
           aria-hidden="true"
         />
       ) : (
-        <CreditCardIcon aria-hidden="true" />
+        <CreditCardIcon className="text-primary" aria-hidden="true" />
       )}
       <span className="min-w-0 truncate font-medium">{card.name}</span>
       {card.last4 ? (
-        <span className="text-muted-foreground/70 shrink-0 tabular-nums">
+        <span className="text-primary shrink-0 tabular-nums">
           ·{card.last4}
         </span>
       ) : null}

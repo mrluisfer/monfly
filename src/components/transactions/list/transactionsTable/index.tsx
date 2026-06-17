@@ -32,9 +32,14 @@ import { DataTableToolbar } from "./DataTableToolbar";
 interface DataTableDemoProps {
   data: TransactionWithUser[];
   cardsById?: Map<string, CardSummary>;
+  categoryIconsByName?: Map<string, string>;
 }
 
-export function DataTableDemo({ data, cardsById }: DataTableDemoProps) {
+export function DataTableDemo({
+  data,
+  cardsById,
+  categoryIconsByName,
+}: DataTableDemoProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -85,7 +90,7 @@ export function DataTableDemo({ data, cardsById }: DataTableDemoProps) {
       rowSelection,
       globalFilter,
     },
-    meta: { currency, cardsById },
+    meta: { currency, cardsById, categoryIconsByName },
   });
 
   const deleteTransactionsByIdMutation = useMutation({

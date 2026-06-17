@@ -7,6 +7,7 @@ import { Card, CardContent } from "~/components/ui/card";
 import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useActiveCard, useCards } from "~/hooks/cards";
+import { useGetCategoriesByEmail } from "~/hooks/categories";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { useIsMounted } from "~/hooks/ui/useIsMounted";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -84,6 +85,18 @@ export default function TransactionsList() {
 
   const activeCardSummary = activeCard ? cardsById.get(activeCard) : undefined;
 
+  // Map each category name to the icon the user picked for it, so a transaction
+  // row can show the same icon the Categories view uses. Shares the cached
+  // categories query — no extra request.
+  const { data: categories } = useGetCategoriesByEmail();
+  const categoryIconsByName = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const category of categories) {
+      map.set(category.name.trim().toLowerCase(), category.icon);
+    }
+    return map;
+  }, [categories]);
+
   // The CSS classes (hidden md:block / md:hidden) keep SSR + the hydration
   // frame consistent on any viewport; after mount we stop mounting the hidden
   // variant entirely so mobile doesn't pay for the desktop table (and vice
@@ -144,6 +157,7 @@ export default function TransactionsList() {
                 transactions={transactions}
                 refetch={refetch}
                 cardsById={cardsById}
+                categoryIconsByName={categoryIconsByName}
               />
             </CardContent>
           </Card>
@@ -170,6 +184,7 @@ export default function TransactionsList() {
               transactions={transactions}
               refetch={refetch}
               cardsById={cardsById}
+              categoryIconsByName={categoryIconsByName}
             />
           </section>
         </div>

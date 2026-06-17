@@ -4,8 +4,9 @@ import {
   ArrowUpDownIcon,
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
-  HandCoinsIcon,
+  TagIcon,
 } from "lucide-react";
+import { getCategoryIconByName } from "@/constants/categories/categories-icon";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -16,16 +17,20 @@ import {
 } from "~/utils/format-currency";
 
 import { CardBadge, type CardSummary } from "../CardBadge";
+import { LoanBadge } from "../LoanBadge";
 import { RelativeTime } from "../RelativeTime";
 import { TransactionActionsCell } from "./TransactionActionsCell";
 
-// Lets the table pass per-render context (preferred currency, the user's cards)
-// down to cell renderers without prop-drilling through TanStack Table.
+// Lets the table pass per-render context (preferred currency, the user's cards,
+// each category's chosen icon) down to cell renderers without prop-drilling
+// through TanStack Table.
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData> {
     currency?: SupportedCurrency;
     cardsById?: Map<string, CardSummary>;
+    /** Lowercased category name → the icon name the user picked for it. */
+    categoryIconsByName?: Map<string, string>;
   }
 }
 
@@ -127,19 +132,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
             <div className="text-foreground leading-5 font-medium break-words whitespace-normal capitalize">
               {description || "No description"}
             </div>
-            {isLoan && (
-              <span
-                className="border-warning/30 bg-warning/10 text-warning-foreground dark:text-warning inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase"
-                title={
-                  isLoanPayment
-                    ? "This transaction was applied as a payment to a loan"
-                    : "This transaction is tracked as a loan"
-                }
-              >
-                <HandCoinsIcon className="size-3" aria-hidden="true" />
-                {isLoanPayment ? "Loan payment" : "Loan"}
-              </span>
-            )}
+            {isLoan && <LoanBadge isPayment={isLoanPayment} />}
           </div>
           {/* Keep this row light — the Activity column already carries the
               timestamps, so here we only surface which card it belongs to. */}
@@ -156,21 +149,42 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
     accessorKey: "category",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Category
-          <ArrowUpDownIcon />
-        </Button>
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Category
+            <ArrowUpDownIcon />
+          </Button>
+        </div>
       );
     },
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const category = row.getValue("category") as string;
+      // Mirror the icon the user assigned to this category in the Categories
+      // view; fall back to a generic tag when the name doesn't resolve to one.
+      const iconName = table.options.meta?.categoryIconsByName?.get(
+        category.trim().toLowerCase(),
+      );
+
       return (
-        <Badge variant="default" className="max-w-[160px] truncate capitalize">
-          {category}
-        </Badge>
+        <div className="flex justify-center">
+          <Badge
+            variant="secondary"
+            className="border-border/60 text-foreground max-w-[170px] gap-1.5 border px-2.5 font-medium capitalize"
+          >
+            {iconName ? (
+              getCategoryIconByName(iconName, {
+                className: "text-primary",
+                "aria-hidden": true,
+              })
+            ) : (
+              <TagIcon className="text-primary" aria-hidden="true" />
+            )}
+            <span className="min-w-0 truncate">{category}</span>
+          </Badge>
+        </div>
       );
     },
     filterFn: (row, id, value) => {

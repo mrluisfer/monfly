@@ -13,6 +13,7 @@ export function DesktopContent({
   transactions,
   refetch,
   cardsById,
+  categoryIconsByName,
 }: {
   userEmail: string;
   isPending: boolean;
@@ -20,6 +21,7 @@ export function DesktopContent({
   transactions: TransactionWithUser[];
   refetch: () => void;
   cardsById?: Map<string, CardSummary>;
+  categoryIconsByName?: Map<string, string>;
 }) {
   if (!userEmail) {
     return <LoadingState message="Loading user information..." />;
@@ -43,7 +45,11 @@ export function DesktopContent({
 
   return (
     <div className="space-y-6">
-      <DataTableDemo data={transactions} cardsById={cardsById} />
+      <DataTableDemo
+        data={transactions}
+        cardsById={cardsById}
+        categoryIconsByName={categoryIconsByName}
+      />
     </div>
   );
 }

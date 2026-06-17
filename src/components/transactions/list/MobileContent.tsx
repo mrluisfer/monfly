@@ -20,6 +20,7 @@ export function MobileContent({
   transactions,
   refetch,
   cardsById,
+  categoryIconsByName,
 }: {
   userEmail: string;
   isPending: boolean;
@@ -27,6 +28,7 @@ export function MobileContent({
   transactions: TransactionWithUser[];
   refetch: () => void;
   cardsById?: Map<string, CardSummary>;
+  categoryIconsByName?: Map<string, string>;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<MobileFilter>("all");
@@ -125,6 +127,7 @@ export function MobileContent({
           <TransactionCardList
             data={filteredTransactions}
             cardsById={cardsById}
+            categoryIconsByName={categoryIconsByName}
           />
           {isTransactionsPage ? null : (
             <div className="flex w-full items-center justify-center md:justify-start">

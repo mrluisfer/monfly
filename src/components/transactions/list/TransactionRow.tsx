@@ -4,11 +4,11 @@ import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
   EditIcon,
-  HandCoinsIcon,
   TagIcon,
   TrashIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { getCategoryIconByName } from "@/constants/categories/categories-icon";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -31,6 +31,7 @@ import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import EditTransaction from "../EditTransaction";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
 import { CardBadge, type CardSummary } from "./CardBadge";
+import { LoanBadge } from "./LoanBadge";
 import { RelativeTime } from "./RelativeTime";
 import TransactionItemActions from "./TransactionItemActions";
 
@@ -40,12 +41,14 @@ export function TransactionRow({
   groupDelay,
   reduceMotion,
   card,
+  categoryIconName,
 }: {
   transaction: Transaction;
   index: number;
   groupDelay: number;
   reduceMotion: boolean;
   card?: CardSummary | null;
+  categoryIconName?: string;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const queryClient = useQueryClient();
@@ -110,29 +113,46 @@ export function TransactionRow({
                 ease: "easeOut",
               }}
               className={cn(
-                "group relative flex items-center gap-3 overflow-hidden rounded-2xl py-3 pr-2.5 pl-4 select-none",
-                "bg-muted/40 hover:bg-muted",
-                "transition-colors duration-200",
+                "group relative flex items-center gap-3 rounded-2xl px-3 py-3 select-none",
+                "bg-card ring-border/60 ring-1 ring-inset",
+                "transition-[background-color,box-shadow] duration-200",
+                "hover:bg-accent/40 hover:ring-border hover:shadow-sm",
                 "active:scale-[0.98] active:transition-transform active:duration-100",
               )}
             >
-              {/* Type accent: a slim colored rail is the at-a-glance income vs
-                  expense signal down the list, far lighter than a boxed icon. */}
-              <span
-                aria-hidden="true"
+              {/* Direction is read at a glance from a compact circular badge —
+                  tinted fill + soft ring + arrow — so the row stays scannable
+                  without the heavier squared icon it used to carry. */}
+              <div
                 className={cn(
-                  "absolute inset-y-2.5 left-0 w-1 rounded-full",
-                  isIncome ? "bg-primary" : "bg-destructive",
+                  "flex size-9 shrink-0 items-center justify-center rounded-full ring-1 transition-colors",
+                  isIncome
+                    ? "bg-primary/10 text-primary ring-primary/20"
+                    : "bg-destructive/10 text-destructive ring-destructive/20",
                 )}
-              />
+                aria-hidden="true"
+              >
+                {isIncome ? (
+                  <ArrowUpRightIcon className="size-4" strokeWidth={2.4} />
+                ) : (
+                  <ArrowDownLeftIcon className="size-4" strokeWidth={2.4} />
+                )}
+              </div>
 
               <div className="min-w-0 flex-1">
                 <p className="text-foreground truncate text-sm leading-tight font-semibold tracking-tight">
                   {transaction.description || "No description"}
                 </p>
                 <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                  <span className="text-muted-foreground/78 inline-flex items-center gap-1.5 text-xs capitalize">
-                    <TagIcon className="text-muted-foreground/50 size-3" />
+                  <span className="text-muted-foreground/78 inline-flex items-center gap-1.5 text-xs capitalize [&>svg]:size-3 [&>svg]:shrink-0">
+                    {categoryIconName ? (
+                      getCategoryIconByName(categoryIconName, {
+                        className: "text-primary",
+                        "aria-hidden": true,
+                      })
+                    ) : (
+                      <TagIcon className="text-primary size-3" />
+                    )}
                     {category}
                   </span>
                   <span className="bg-border/80 h-1 w-1 rounded-full" />
@@ -153,38 +173,24 @@ export function TransactionRow({
                     transaction.appliedToLoanId) && (
                     <>
                       <span className="bg-border/80 h-1 w-1 rounded-full" />
-                      <span
-                        className="border-warning/30 bg-warning/10 text-warning-foreground dark:text-warning inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase"
-                        title={
-                          transaction.appliedToLoanId
-                            ? "This transaction was applied as a payment to a loan"
-                            : "This transaction is tracked as a loan"
-                        }
-                      >
-                        <HandCoinsIcon className="size-3" aria-hidden="true" />
-                        {transaction.appliedToLoanId ? "Loan payment" : "Loan"}
-                      </span>
+                      <LoanBadge
+                        isPayment={Boolean(transaction.appliedToLoanId)}
+                      />
                     </>
                   )}
                 </div>
               </div>
 
+              {/* Amount stays plain text — the colored badge already signals
+                  direction, so sign + color here is enough and reads cleaner
+                  than another pill. */}
               <div className="flex shrink-0 items-center gap-1">
-                {/* Amount carries the direction three ways — arrow, sign and
-                    color — so it reads even without the accent rail. */}
                 <span
                   className={cn(
-                    "inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-sm font-semibold tabular-nums",
-                    isIncome
-                      ? "bg-primary/10 text-primary"
-                      : "bg-destructive/10 text-destructive",
+                    "text-sm font-semibold tabular-nums",
+                    isIncome ? "text-primary" : "text-destructive",
                   )}
                 >
-                  {isIncome ? (
-                    <ArrowUpRightIcon className="size-3.5" strokeWidth={2.4} />
-                  ) : (
-                    <ArrowDownLeftIcon className="size-3.5" strokeWidth={2.4} />
-                  )}
                   {isIncome ? "+" : "-"}
                   {formatCurrency(transaction.amount, currency)}
                 </span>
