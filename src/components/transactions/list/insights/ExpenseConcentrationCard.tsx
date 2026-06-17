@@ -1,6 +1,8 @@
+import { useAtomValue } from "jotai";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
-import { formatCurrency } from "~/utils/format-currency";
+import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
+import { maskCurrency } from "~/utils/format-currency";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 
 type TopCategory = {
@@ -23,6 +25,7 @@ export function ExpenseConcentrationCard({
   totalIncome,
 }: ExpenseConcentrationCardProps) {
   const currency = usePreferredCurrency();
+  const hideBalance = useAtomValue(hideBalanceAtom);
   const TrendIcon = isPositiveLast30 ? TrendingUpIcon : TrendingDownIcon;
 
   return (
@@ -60,7 +63,7 @@ export function ExpenseConcentrationCard({
                 />
               </div>
               <div className="text-muted-foreground text-xs">
-                {formatCurrency(category.amount, currency)}
+                {maskCurrency(category.amount, currency, hideBalance)}
               </div>
             </div>
           ))
@@ -72,8 +75,8 @@ export function ExpenseConcentrationCard({
       </div>
 
       <div className="border-border/60 text-muted-foreground mt-4 border-t pt-3 text-xs">
-        Total tracked: {formatCurrency(totalIncome, currency)} in •{" "}
-        {formatCurrency(totalExpense, currency)} out
+        Total tracked: {maskCurrency(totalIncome, currency, hideBalance)} in •{" "}
+        {maskCurrency(totalExpense, currency, hideBalance)} out
       </div>
     </article>
   );

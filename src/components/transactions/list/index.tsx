@@ -26,6 +26,7 @@ import { DesktopContent } from "./DesktopContent";
 import { MobileContent } from "./MobileContent";
 import { MobileHeader } from "./MobileHeader";
 import { TransactionsInsights } from "./TransactionsInsights";
+import { BackToTop } from "@/components/shared";
 
 type TransactionsResponse = {
   data?: TransactionWithUser[];
@@ -168,8 +169,8 @@ export default function TransactionsList() {
       )}
 
       {showMobile && (
-        <div className="space-y-4 md:hidden">
-          <section className="bg-card rounded-2xl px-2 py-4 lg:p-4">
+        <div className="min-w-0 space-y-4 md:hidden">
+          <section className="bg-card min-w-0 rounded-2xl px-1 py-4 sm:px-2 lg:p-4">
             <MobileHeader
               total={total}
               isPending={isPending}
@@ -187,6 +188,10 @@ export default function TransactionsList() {
               categoryIconsByName={categoryIconsByName}
             />
           </section>
+          {transactions.length > 0 && <BackToTop variant="inline" />}
+          {transactions.length > 0 && (
+            <TransactionsInsights transactions={transactions} />
+          )}
         </div>
       )}
     </TransactionHoverProvider>

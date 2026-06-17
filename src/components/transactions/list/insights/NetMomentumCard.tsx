@@ -1,7 +1,9 @@
+import { useAtomValue } from "jotai";
 import { useId } from "react";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
-import { formatCurrency } from "~/utils/format-currency";
+import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
+import { maskCurrency } from "~/utils/format-currency";
 
 import IncomeExpenseChart from "@/components/charts/IncomeExpenseChart";
 
@@ -37,6 +39,7 @@ export function NetMomentumCard({
   sparkline,
 }: NetMomentumCardProps) {
   const currency = usePreferredCurrency();
+  const hideBalance = useAtomValue(hideBalanceAtom);
   const gradientId = useId().replace(/:/g, "");
   const isPositiveLast30 = netLast30 >= 0;
   const trendColor = isPositiveLast30 ? "var(--primary)" : "var(--destructive)";
@@ -44,12 +47,12 @@ export function NetMomentumCard({
   const last30Stats = [
     {
       label: "Income (30d)",
-      value: formatCurrency(incomeLast30, currency),
+      value: maskCurrency(incomeLast30, currency, hideBalance),
       valueClassName: "text-primary",
     },
     {
       label: "Expenses (30d)",
-      value: formatCurrency(expenseLast30, currency),
+      value: maskCurrency(expenseLast30, currency, hideBalance),
       valueClassName: "text-destructive",
     },
   ] as const;
@@ -63,7 +66,7 @@ export function NetMomentumCard({
               Net momentum (last 6 months)
             </p>
             <h4 className="text-foreground mt-1 text-lg font-semibold tracking-tight">
-              {formatCurrency(netLast30, currency)} in last 30 days
+              {maskCurrency(netLast30, currency, hideBalance)} in last 30 days
             </h4>
           </div>
           <span className="bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-xs">

@@ -12,7 +12,7 @@ import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import {
-  formatCurrency,
+  maskCurrency,
   type SupportedCurrency,
 } from "~/utils/format-currency";
 
@@ -31,6 +31,8 @@ declare module "@tanstack/react-table" {
     cardsById?: Map<string, CardSummary>;
     /** Lowercased category name → the icon name the user picked for it. */
     categoryIconsByName?: Map<string, string>;
+    /** When true, monetary figures are masked (the "hide balances" toggle). */
+    hideBalance?: boolean;
   }
 }
 
@@ -210,9 +212,10 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       const amount = parseFloat(row.getValue("amount"));
       const type = String(row.getValue("type") || "").toLowerCase();
       const isIncome = type === "income";
-      const formatted = formatCurrency(
+      const formatted = maskCurrency(
         amount,
         table.options.meta?.currency ?? "USD",
+        table.options.meta?.hideBalance,
       );
 
       return (

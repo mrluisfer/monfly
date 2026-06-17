@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
 import { m } from "motion/react";
 import {
   ArrowDownLeftIcon,
@@ -24,8 +25,9 @@ import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
+import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
-import { formatCurrency } from "~/utils/format-currency";
+import { maskCurrency } from "~/utils/format-currency";
 import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 
 import EditTransaction from "../EditTransaction";
@@ -53,6 +55,7 @@ export function TransactionRow({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const currency = usePreferredCurrency();
+  const hideBalance = useAtomValue(hideBalanceAtom);
   const isIncome = transaction.type.toLowerCase() === "income";
   const category =
     typeof transaction.category === "string"
@@ -125,7 +128,7 @@ export function TransactionRow({
                   without the heavier squared icon it used to carry. */}
               <div
                 className={cn(
-                  "flex size-9 shrink-0 items-center justify-center rounded-full ring-1 transition-colors",
+                  "flex size-6 shrink-0 items-center justify-center rounded-full ring-1 transition-colors",
                   isIncome
                     ? "bg-primary/10 text-primary ring-primary/20"
                     : "bg-destructive/10 text-destructive ring-destructive/20",
@@ -144,7 +147,7 @@ export function TransactionRow({
                   {transaction.description || "No description"}
                 </p>
                 <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                  <span className="text-muted-foreground/78 inline-flex items-center gap-1.5 text-xs capitalize [&>svg]:size-3 [&>svg]:shrink-0">
+                  <span className="text-muted-foreground/78 inline-flex max-w-full min-w-0 items-center gap-1.5 text-xs capitalize [&>svg]:size-3 [&>svg]:shrink-0">
                     {categoryIconName ? (
                       getCategoryIconByName(categoryIconName, {
                         className: "text-primary",
@@ -153,7 +156,7 @@ export function TransactionRow({
                     ) : (
                       <TagIcon className="text-primary size-3" />
                     )}
-                    {category}
+                    <span className="truncate">{category}</span>
                   </span>
                   <span className="bg-border/80 h-1 w-1 rounded-full" />
                   <RelativeTime
@@ -192,7 +195,7 @@ export function TransactionRow({
                   )}
                 >
                   {isIncome ? "+" : "-"}
-                  {formatCurrency(transaction.amount, currency)}
+                  {maskCurrency(transaction.amount, currency, hideBalance)}
                 </span>
                 <TransactionItemActions
                   transaction={transaction}

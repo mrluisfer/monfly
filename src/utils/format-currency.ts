@@ -29,6 +29,21 @@ export function getCurrencySymbol(currency: SupportedCurrency = "USD"): string {
   return CURRENCY_SYMBOLS[currency] ?? "$";
 }
 
+/**
+ * Like {@link formatCurrency}, but renders a masked placeholder (e.g. `$••••`)
+ * when `hidden` is true — used to honor the "hide balances" toggle without each
+ * caller re-implementing the masking. The sign is preserved so income/expense
+ * direction still reads while the figure is concealed.
+ */
+export function maskCurrency(
+  value: number,
+  currency: SupportedCurrency = DEFAULT_CURRENCY,
+  hidden = false,
+): string {
+  if (!hidden) return formatCurrency(value, currency);
+  return `${getCurrencySymbol(currency)}••••`;
+}
+
 function getLocaleFromCurrency(currency: SupportedCurrency): string {
   switch (currency) {
     case "USD":

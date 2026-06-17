@@ -1,3 +1,4 @@
+export { BackToTop } from "./BackToTop";
 export { default as Card } from "./Card";
 export { ClientOnly } from "./ClientOnly";
 export { DataNotFoundPlaceholder } from "./DataNotFoundPlaceholder";
