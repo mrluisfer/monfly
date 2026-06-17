@@ -132,7 +132,12 @@ export default function ChartByCategoryRadar({
               <PolarGrid />
               <PolarAngleAxis dataKey="category" />
               <Radar
-                dataKey={type}
+                // Use the function form of `dataKey`: passing the nominal
+                // `transactionTypes` enum value confuses recharts' generic
+                // inference (it builds a bogus "INCOME" | "EXPENSE" key union
+                // from the enum member names). Reading the field ourselves keeps
+                // it type-safe and avoids that.
+                dataKey={(entry: Record<TransactionType, number>) => entry[type]}
                 fill={color}
                 fillOpacity={0.6}
                 stroke="var(--primary)"
