@@ -57,7 +57,7 @@ export function DataTableToolbar({
         id="desktop-transaction-search"
         value={globalFilter ?? ""}
         onValueChange={setGlobalFilter}
-        className="xl:max-w-sm"
+        className="w-full lg:max-w-sm xl:max-w-md"
       />
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
