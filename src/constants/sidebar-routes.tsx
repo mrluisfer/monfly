@@ -1,11 +1,11 @@
 import {
   BarChart,
   Calculator,
-  CreditCard,
-  Home,
-  List,
+  FolderTree,
+  HandCoins,
+  LayoutDashboard,
   LucideProps,
-  Wallet,
+  Receipt,
   WalletCards,
 } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
@@ -30,10 +30,10 @@ export enum SidebarRouteUrl {
 }
 
 export const sidebarRoutes: SidebarItemType[] = [
-  { title: "Home", icon: Home, url: SidebarRouteUrl.HOME },
+  { title: "Home", icon: LayoutDashboard, url: SidebarRouteUrl.HOME },
   {
     title: "Transactions",
-    icon: CreditCard,
+    icon: Receipt,
     url: SidebarRouteUrl.TRANSACTIONS,
   },
   {
@@ -43,12 +43,12 @@ export const sidebarRoutes: SidebarItemType[] = [
   },
   {
     title: "Loans",
-    icon: Wallet,
+    icon: HandCoins,
     url: SidebarRouteUrl.LOANS,
     disabled: false,
   },
   { title: "Reports", icon: BarChart, url: SidebarRouteUrl.REPORTS },
-  { title: "Categories", icon: List, url: SidebarRouteUrl.CATEGORIES },
+  { title: "Categories", icon: FolderTree, url: SidebarRouteUrl.CATEGORIES },
   {
     title: "Calculator",
     icon: Calculator,

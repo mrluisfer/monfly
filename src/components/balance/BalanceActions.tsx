@@ -3,9 +3,9 @@ import AddTransactionButton from "~/components/transactions/list/AddTransactionB
 import {
   BarChart3Icon,
   CalculatorIcon,
-  ListIcon,
+  FolderTreeIcon,
+  HandCoinsIcon,
   PlusIcon,
-  WalletIcon,
 } from "lucide-react";
 
 import { ActionButton } from "./ActionButton";
@@ -20,25 +20,28 @@ export function BalanceActions() {
         label="Reports"
         onClick={() => navigate({ to: "/home/reports" })}
         variant={"outline"}
-        description="View detailed reports and insights about your finances, including spending patterns, income sources, and financial trends over time."
+        description="Spending patterns, income sources and financial trends over time."
       />
       <ActionButton
-        icon={<ListIcon />}
+        icon={<FolderTreeIcon />}
         label="Categories"
         onClick={() => navigate({ to: "/home/categories" })}
         variant={"outline"}
+        description="Organize spending with custom categories and icons."
       />
       <ActionButton
         icon={<CalculatorIcon />}
         label="Calculator"
         onClick={() => navigate({ to: "/home/balance-calculator" })}
         variant={"outline"}
+        description="Quickly total balances and test what-if amounts."
       />
       <ActionButton
-        icon={<WalletIcon />}
+        icon={<HandCoinsIcon />}
         label="Loans"
         onClick={() => navigate({ to: "/home/loans" })}
         variant={"outline"}
+        description="Track money others owe you and what you owe to others."
       />
       <AddTransactionButton
         customTrigger={
