@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { m } from "motion/react";
 import {
@@ -8,7 +7,7 @@ import {
   TagIcon,
   TrashIcon,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getCategoryIconByName } from "@/constants/categories/categories-icon";
 import {
   ContextMenu,
@@ -20,15 +19,12 @@ import {
   ContextMenuTrigger,
 } from "~/components/ui/context-menu";
 import { Dialog } from "~/components/ui/dialog";
+import { useDeleteTransaction } from "~/hooks/transactions";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { isErrorPayload, useMutation } from "~/hooks/useMutation";
-import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
-import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
 import { maskCurrency } from "~/utils/format-currency";
-import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 
 import EditTransaction from "../EditTransaction";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
@@ -36,6 +32,7 @@ import { CardBadge, type CardSummary } from "./CardBadge";
 import { LoanBadge } from "./LoanBadge";
 import { RelativeTime } from "./RelativeTime";
 import TransactionItemActions from "./TransactionItemActions";
+import { transactionTypes } from "@/constants/transaction-types";
 
 export function TransactionRow({
   transaction,
@@ -53,52 +50,18 @@ export function TransactionRow({
   categoryIconName?: string;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const queryClient = useQueryClient();
   const currency = usePreferredCurrency();
   const hideBalance = useAtomValue(hideBalanceAtom);
-  const isIncome = transaction.type.toLowerCase() === "income";
+  const isIncome = transaction.type.toLowerCase() === transactionTypes.INCOME;
   const category =
     typeof transaction.category === "string"
       ? transaction.category
       : ((transaction.category as { name?: string } | null)?.name ??
         "Uncategorized");
 
-  const deleteTransactionByIdMutation = useMutation({
-    fn: deleteTransactionByIdServer,
-    onSuccess: async ({ data }) => {
-      if (isErrorPayload(data)) {
-        const response = data as { message?: string };
-        sileo.error({
-          title: response.message ?? "Failed to delete transaction",
-        });
-        return;
-      }
-
-      sileo.success({ title: "Transaction deleted successfully" });
-      await invalidateTransactionQueries(queryClient, transaction.userEmail);
-    },
-    idempotency: {
-      getKey: (variables) => variables.data.id,
-      onDuplicatePending: {
-        title: "Transaction is already being deleted",
-      },
-      onDuplicateRecentSuccess: {
-        title: "Transaction already deleted",
-      },
-    },
-  });
-
-  useEffect(() => {
-    if (
-      deleteTransactionByIdMutation.status === "error" &&
-      deleteTransactionByIdMutation.error
-    ) {
-      sileo.error({ title: "Failed to delete transaction" });
-    }
-  }, [
-    deleteTransactionByIdMutation.status,
-    deleteTransactionByIdMutation.error,
-  ]);
+  const deleteTransactionByIdMutation = useDeleteTransaction(
+    transaction.userEmail,
+  );
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

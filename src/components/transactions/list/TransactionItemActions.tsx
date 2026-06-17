@@ -1,4 +1,3 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -9,11 +8,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { isErrorPayload, useMutation } from "~/hooks/useMutation";
-import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
-import { sileo } from "~/lib/toaster";
+import { useDeleteTransaction } from "~/hooks/transactions";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { invalidateTransactionQueries } from "~/utils/query-invalidation";
 import { Edit, Ellipsis, Trash } from "lucide-react";
 
 const TransactionItemActions = ({
@@ -23,34 +19,9 @@ const TransactionItemActions = ({
   transaction: TransactionWithUser;
   setIsOpenDialog: (isOpen: boolean) => void;
 }) => {
-  const queryClient = useQueryClient();
-
-  const deleteTransactionByIdMutation = useMutation({
-    fn: deleteTransactionByIdServer,
-    onSuccess: async ({ data }) => {
-      if (isErrorPayload(data)) {
-        const response = data as { message?: string };
-        sileo.error({
-          title: response.message ?? "Failed to delete transaction",
-        });
-        return;
-      }
-
-      sileo.success({ title: "Transaction deleted successfully" });
-
-      // Invalidate all queries that depend on transaction data
-      await invalidateTransactionQueries(queryClient, transaction.userEmail);
-    },
-    idempotency: {
-      getKey: (variables) => variables.data.id,
-      onDuplicatePending: {
-        title: "Transaction is already being deleted",
-      },
-      onDuplicateRecentSuccess: {
-        title: "Transaction already deleted",
-      },
-    },
-  });
+  const deleteTransactionByIdMutation = useDeleteTransaction(
+    transaction.userEmail,
+  );
 
   return (
     <div className="inline-flex">

@@ -2,14 +2,14 @@ import { useMemo, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { ExternalLinkIcon, SearchIcon } from "lucide-react";
+import { ExternalLinkIcon } from "lucide-react";
 
 import { CardSummary } from "./CardBadge";
 import { ErrorState } from "./ErrorState";
 import { LoadingState } from "./LoadingState";
 import { TransactionCardList } from "./TransactionCardList";
+import { TransactionSearchInput } from "./TransactionSearchInput";
 
 type MobileFilter = "all" | "income" | "expense";
 
@@ -77,21 +77,11 @@ export function MobileContent({
   return (
     <div className="space-y-4">
       <div className="space-y-3">
-        <label className="sr-only" htmlFor="mobile-transaction-search">
-          Search transactions
-        </label>
-        <div className="relative">
-          <Input
-            id="mobile-transaction-search"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-            placeholder="Search description or category"
-            className="border-border/70 bg-background/70 h-11 rounded-full pl-10"
-            type="search"
-            inputMode="search"
-          />
-          <SearchIcon className="text-muted-foreground absolute top-1/2 left-3.5 size-4 -translate-y-1/2" />
-        </div>
+        <TransactionSearchInput
+          id="mobile-transaction-search"
+          value={searchTerm}
+          onValueChange={setSearchTerm}
+        />
 
         <div
           className="flex flex-wrap gap-2"

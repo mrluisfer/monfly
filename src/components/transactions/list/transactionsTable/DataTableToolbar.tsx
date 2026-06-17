@@ -26,8 +26,9 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { Input } from "~/components/ui/input";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
+
+import { TransactionSearchInput } from "../TransactionSearchInput";
 
 interface DataTableToolbarProps {
   table: TanstackTable<TransactionWithUser>;
@@ -52,11 +53,11 @@ export function DataTableToolbar({
 }: DataTableToolbarProps) {
   return (
     <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
-      <Input
-        placeholder="Search transactions..."
+      <TransactionSearchInput
+        id="desktop-transaction-search"
         value={globalFilter ?? ""}
-        onChange={(event) => setGlobalFilter(event.target.value)}
-        className="border-border/70 bg-background/70 h-11 rounded-full px-4 xl:max-w-sm"
+        onValueChange={setGlobalFilter}
+        className="xl:max-w-sm"
       />
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
