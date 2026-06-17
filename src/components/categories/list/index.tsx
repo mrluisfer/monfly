@@ -34,11 +34,15 @@ import CategoryItem from "./CategoryItem";
 import { CategoryToolbar } from "./CategoryToolbar";
 import { DeleteCategoryDialog } from "./DeleteCategoryDialog";
 
+export enum EViewMode {
+  GRID = "grid",
+  LIST = "list",
+}
 type ViewMode = "grid" | "list";
 
 export const CategoriesList = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>(EViewMode.LIST);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -194,7 +198,7 @@ export const CategoriesList = () => {
         </Empty>
       )}
 
-      {filteredCategories.length > 0 && viewMode === "grid" && (
+      {filteredCategories.length > 0 && viewMode === EViewMode.GRID && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {filteredCategories.map((category) => (
             <CategoryCard
@@ -209,7 +213,7 @@ export const CategoriesList = () => {
         </div>
       )}
 
-      {filteredCategories.length > 0 && viewMode === "list" && (
+      {filteredCategories.length > 0 && viewMode === EViewMode.LIST && (
         <ul
           role="list"
           className="bg-card border-border/60 divide-border/60 divide-y overflow-hidden rounded-2xl border"
@@ -232,7 +236,7 @@ export const CategoriesList = () => {
                 className={cn(
                   "group flex items-center gap-3 px-4 py-3 transition-colors sm:gap-4 sm:px-5 sm:py-4",
                   "hover:bg-accent/40",
-                  isSelected && "bg-primary/[0.04]",
+                  isSelected && "bg-primary/4",
                 )}
               >
                 <Checkbox
