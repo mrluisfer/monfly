@@ -23,6 +23,7 @@ import { queryDictionary } from "~/queries/dictionary";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
 
+import { CardSummary } from "../CardBadge";
 import { Columns } from "./Columns";
 import { DataTableContent } from "./DataTableContent";
 import { DataTablePagination } from "./DataTablePagination";
@@ -30,9 +31,10 @@ import { DataTableToolbar } from "./DataTableToolbar";
 
 interface DataTableDemoProps {
   data: TransactionWithUser[];
+  cardsById?: Map<string, CardSummary>;
 }
 
-export function DataTableDemo({ data }: DataTableDemoProps) {
+export function DataTableDemo({ data, cardsById }: DataTableDemoProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -83,7 +85,7 @@ export function DataTableDemo({ data }: DataTableDemoProps) {
       rowSelection,
       globalFilter,
     },
-    meta: { currency },
+    meta: { currency, cardsById },
   });
 
   const deleteTransactionsByIdMutation = useMutation({

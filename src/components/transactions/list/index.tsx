@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "@tanstack/react-router";
 import { BalanceStatusBadge } from "~/components/header/badges/BalanceStatusBadge";
@@ -5,7 +6,7 @@ import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
 import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
-import { useActiveCard } from "~/hooks/cards";
+import { useActiveCard, useCards } from "~/hooks/cards";
 import { useIsMobile } from "~/hooks/use-mobile";
 import { useIsMounted } from "~/hooks/ui/useIsMounted";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -19,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/layout/PageHeader";
 
 import AddTransactionButton from "./AddTransactionButton";
+import { CardBadge, type CardSummary } from "./CardBadge";
 import { DesktopContent } from "./DesktopContent";
 import { MobileContent } from "./MobileContent";
 import { MobileHeader } from "./MobileHeader";
@@ -27,6 +29,13 @@ import { TransactionsInsights } from "./TransactionsInsights";
 type TransactionsResponse = {
   data?: TransactionWithUser[];
   total?: number;
+};
+
+type CardRecord = {
+  id: string;
+  name: string;
+  last4?: string | null;
+  color?: string | null;
 };
 
 export default function TransactionsList() {
@@ -55,6 +64,26 @@ export default function TransactionsList() {
   const transactions = (data as TransactionsResponse)?.data ?? [];
   const total = (data as TransactionsResponse)?.total ?? 0;
 
+  // Resolve each transaction's `cardId` to a card so rows can show which card
+  // they belong to now that the app is multi-card. Shares the cached cards
+  // query, so this adds no extra request.
+  const { data: cardsData } = useCards();
+  const cardsById = useMemo(() => {
+    const map = new Map<string, CardSummary>();
+    const cards = (cardsData?.data as CardRecord[] | undefined) ?? [];
+    for (const card of cards) {
+      map.set(card.id, {
+        id: card.id,
+        name: card.name,
+        last4: card.last4,
+        color: card.color,
+      });
+    }
+    return map;
+  }, [cardsData]);
+
+  const activeCardSummary = activeCard ? cardsById.get(activeCard) : undefined;
+
   // The CSS classes (hidden md:block / md:hidden) keep SSR + the hydration
   // frame consistent on any viewport; after mount we stop mounting the hidden
   // variant entirely so mobile doesn't pay for the desktop table (and vice
@@ -77,6 +106,7 @@ export default function TransactionsList() {
                 <Badge variant={"default"}>
                   {total} {total === 1 ? "record" : "records"}
                 </Badge>
+                {activeCardSummary && <CardBadge card={activeCardSummary} />}
                 <BalanceStatusBadge className="rounded-full" />
                 <Button
                   onClick={() => refetch()}
@@ -113,6 +143,7 @@ export default function TransactionsList() {
                 error={error}
                 transactions={transactions}
                 refetch={refetch}
+                cardsById={cardsById}
               />
             </CardContent>
           </Card>
@@ -130,6 +161,7 @@ export default function TransactionsList() {
               isPending={isPending}
               transactionsCount={transactions.length}
               refetch={refetch}
+              activeCard={activeCardSummary}
             />
             <MobileContent
               userEmail={userEmail}
@@ -137,6 +169,7 @@ export default function TransactionsList() {
               error={error}
               transactions={transactions}
               refetch={refetch}
+              cardsById={cardsById}
             />
           </section>
         </div>

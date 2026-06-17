@@ -4,6 +4,7 @@ export { useInView } from "./useInView";
 export { useIsMac } from "./useIsMac";
 export { useIsMounted } from "./useIsMounted";
 export { useIsMobile } from "./useMobile";
+export { useNow } from "./useNow";
 export { useNumberFormat } from "./useNumberFormat";
 export { useSonnerPosition } from "./useSonnerPosition";
 export { useThemeConfig } from "./useThemeConfig";

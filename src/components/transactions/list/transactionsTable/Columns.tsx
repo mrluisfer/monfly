@@ -1,10 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import {
-  format,
-  formatDistanceToNowStrict,
-  isToday,
-  isYesterday,
-} from "date-fns";
+import { format, isToday, isYesterday } from "date-fns";
 import {
   ArrowUpDownIcon,
   BanknoteArrowDownIcon,
@@ -20,13 +15,17 @@ import {
   type SupportedCurrency,
 } from "~/utils/format-currency";
 
+import { CardBadge, type CardSummary } from "../CardBadge";
+import { RelativeTime } from "../RelativeTime";
 import { TransactionActionsCell } from "./TransactionActionsCell";
 
-// Lets the table pass the user's preferred currency down to cell renderers.
+// Lets the table pass per-render context (preferred currency, the user's cards)
+// down to cell renderers without prop-drilling through TanStack Table.
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData> {
     currency?: SupportedCurrency;
+    cardsById?: Map<string, CardSummary>;
   }
 }
 
@@ -112,16 +111,18 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
       const description = row.getValue("description") as string;
       const transaction = row.original;
-      const createdAt = new Date(transaction.createdAt);
       const isLoanOrigin = (transaction.loanCount ?? 0) > 0;
       const isLoanPayment = Boolean(transaction.appliedToLoanId);
       const isLoan = isLoanOrigin || isLoanPayment;
+      const card = transaction.cardId
+        ? table.options.meta?.cardsById?.get(transaction.cardId)
+        : undefined;
 
       return (
-        <div className="max-w-[340px] space-y-1">
+        <div className="flex max-w-[340px] flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
             <div className="text-foreground leading-5 font-medium break-words whitespace-normal capitalize">
               {description || "No description"}
@@ -140,12 +141,9 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
               </span>
             )}
           </div>
-          <div className="text-muted-foreground flex flex-wrap items-center gap-2 text-xs">
-            <span>
-              Recorded{" "}
-              {formatDistanceToNowStrict(createdAt, { addSuffix: true })}
-            </span>
-          </div>
+          {/* Keep this row light — the Activity column already carries the
+              timestamps, so here we only surface which card it belongs to. */}
+          {card ? <CardBadge card={card} /> : null}
         </div>
       );
     },
@@ -271,16 +269,19 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
 
       return (
         <div className="space-y-0.5">
-          <div className="text-foreground text-sm font-medium">
-            {formatDistanceToNowStrict(createdAt, { addSuffix: true })}
-          </div>
-          <div className="text-muted-foreground text-xs">
-            {wasEdited
-              ? `Updated ${formatDistanceToNowStrict(updatedAt, {
-                  addSuffix: true,
-                })}`
-              : "Not edited"}
-          </div>
+          <RelativeTime
+            date={createdAt}
+            className="text-foreground block text-sm font-medium"
+          />
+          {wasEdited ? (
+            <RelativeTime
+              date={updatedAt}
+              prefix="Updated"
+              className="text-muted-foreground inline-flex items-center gap-1 text-xs"
+            />
+          ) : (
+            <div className="text-muted-foreground text-xs">Not edited</div>
+          )}
         </div>
       );
     },

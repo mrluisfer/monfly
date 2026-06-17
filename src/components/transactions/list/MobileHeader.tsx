@@ -2,16 +2,20 @@ import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 
+import { CardBadge, type CardSummary } from "./CardBadge";
+
 export function MobileHeader({
   total,
   isPending,
   transactionsCount,
   refetch,
+  activeCard,
 }: {
   total: number;
   isPending: boolean;
   transactionsCount: number;
   refetch: () => void;
+  activeCard?: CardSummary | null;
 }) {
   return (
     <div className="mb-4 flex items-center justify-between gap-3">
@@ -26,6 +30,7 @@ export function MobileHeader({
         <p className="text-muted-foreground text-sm">
           {total} {total === 1 ? "transaction" : "transactions"} total.
         </p>
+        {activeCard ? <CardBadge card={activeCard} className="mt-1" /> : null}
       </div>
       <Button
         onClick={() => refetch()}

@@ -1,6 +1,7 @@
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 
+import { CardSummary } from "./CardBadge";
 import { ErrorState } from "./ErrorState";
 import { LoadingState } from "./LoadingState";
 import { DataTableDemo } from "./transactionsTable";
@@ -11,12 +12,14 @@ export function DesktopContent({
   error,
   transactions,
   refetch,
+  cardsById,
 }: {
   userEmail: string;
   isPending: boolean;
   error: Error | null;
   transactions: TransactionWithUser[];
   refetch: () => void;
+  cardsById?: Map<string, CardSummary>;
 }) {
   if (!userEmail) {
     return <LoadingState message="Loading user information..." />;
@@ -40,7 +43,7 @@ export function DesktopContent({
 
   return (
     <div className="space-y-6">
-      <DataTableDemo data={transactions} />
+      <DataTableDemo data={transactions} cardsById={cardsById} />
     </div>
   );
 }

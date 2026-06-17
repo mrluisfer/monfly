@@ -6,6 +6,7 @@ import { Input } from "~/components/ui/input";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
 import { ExternalLinkIcon, SearchIcon } from "lucide-react";
 
+import { CardSummary } from "./CardBadge";
 import { ErrorState } from "./ErrorState";
 import { LoadingState } from "./LoadingState";
 import { TransactionCardList } from "./TransactionCardList";
@@ -18,12 +19,14 @@ export function MobileContent({
   error,
   transactions,
   refetch,
+  cardsById,
 }: {
   userEmail: string;
   isPending: boolean;
   error: Error | null;
   transactions: TransactionWithUser[];
   refetch: () => void;
+  cardsById?: Map<string, CardSummary>;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<MobileFilter>("all");
@@ -119,7 +122,10 @@ export function MobileContent({
 
       {filteredTransactions.length ? (
         <>
-          <TransactionCardList data={filteredTransactions} />
+          <TransactionCardList
+            data={filteredTransactions}
+            cardsById={cardsById}
+          />
           {isTransactionsPage ? null : (
             <div className="flex w-full items-center justify-center md:justify-start">
               <Button

@@ -9,10 +9,12 @@ import {
 } from "motion/react";
 import { ArrowDownLeftIcon, CalendarIcon } from "lucide-react";
 
+import { CardSummary } from "./CardBadge";
 import { TransactionRow } from "./TransactionRow";
 
 type TransactionCardListProps = {
   data: Transaction[];
+  cardsById?: Map<string, CardSummary>;
 };
 
 function formatRelativeDate(date: Date): string {
@@ -33,7 +35,10 @@ function groupTransactionsByDate(
   return groups;
 }
 
-export function TransactionCardList({ data }: TransactionCardListProps) {
+export function TransactionCardList({
+  data,
+  cardsById,
+}: TransactionCardListProps) {
   const shouldReduceMotion = useReducedMotion();
 
   if (!data.length) {
@@ -88,6 +93,11 @@ export function TransactionCardList({ data }: TransactionCardListProps) {
                       index={index}
                       groupDelay={groupIdx * 0.05}
                       reduceMotion={Boolean(shouldReduceMotion)}
+                      card={
+                        transaction.cardId
+                          ? cardsById?.get(transaction.cardId)
+                          : undefined
+                      }
                     />
                   ))}
                 </div>
