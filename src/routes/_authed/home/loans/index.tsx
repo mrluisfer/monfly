@@ -66,10 +66,7 @@ import { useUpdateLoan } from "~/hooks/loans/useUpdateLoan";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
-import {
-  formatCurrency,
-  getCurrencySymbol,
-} from "~/utils/format-currency";
+import { formatCurrency, getCurrencySymbol } from "~/utils/format-currency";
 
 import { PageHeader } from "@/components/layout/PageHeader";
 import {
@@ -110,7 +107,7 @@ function AddLoanCard() {
 
   return (
     <Collapsible
-      className="bg-card border-border/60 flex flex-col gap-5 rounded-2xl border p-2 sm:p-3 lg:px-0 lg:pt-2"
+      className="flex flex-col gap-5"
       aria-labelledby="add-loan-heading"
       open={openCollapsible}
       onOpenChange={setOpenCollapsible}
@@ -119,7 +116,7 @@ function AddLoanCard() {
         render={
           <Button
             variant={"ghost"}
-            className="group flex h-16 items-center gap-3 p-3"
+            className="group bg-card border-border/60 flex h-16 items-center gap-3 p-3"
             size={"lg"}
           />
         }
@@ -149,7 +146,7 @@ function AddLoanCard() {
         />
       </CollapsibleTrigger>
 
-      <CollapsibleContent>
+      <CollapsibleContent className={"bg-card rounded-2xl border-2 py-3"}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 px-1 md:px-2"
