@@ -123,7 +123,7 @@ function HelpRoute() {
         title="Help & support"
         description="Quick guides, common questions, and shortcuts to get the most out of Monfly."
         actions={
-          <Badge variant="outline" className="gap-1.5">
+          <Badge variant="default" className="gap-1.5">
             <SparklesIcon className="size-3" aria-hidden="true" />
             We&apos;re listening
           </Badge>
@@ -173,7 +173,7 @@ function HelpRoute() {
               <AccordionTrigger className="text-left text-sm font-medium">
                 <span className="flex items-center gap-2">
                   <MessageCircleQuestionIcon
-                    className="text-muted-foreground size-4 shrink-0"
+                    className="text-muted-foreground group-aria-expanded/accordion-trigger:text-primary size-4 shrink-0 transition-colors"
                     aria-hidden="true"
                   />
                   {faq.q}
