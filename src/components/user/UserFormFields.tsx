@@ -3,6 +3,7 @@ import {
   BellRingIcon,
   CheckIcon,
   LoaderIcon,
+  LockKeyholeIcon,
   MailIcon,
   ScaleIcon,
   UserIcon,
@@ -30,6 +31,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
+import { ChangePasswordRow } from "~/components/settings/ChangePasswordRow";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { cn } from "~/lib/utils";
 import { DEFAULT_CURRENCY } from "~/utils/format-currency";
@@ -187,7 +189,7 @@ export function UserFormFields({
                 {onUpdateBalance && (
                   <Button
                     type="button"
-                    variant="outline"
+                    variant="default"
                     onClick={onUpdateBalance}
                     disabled={updatingBalance}
                     className="h-11 shrink-0"
@@ -212,6 +214,16 @@ export function UserFormFields({
             </FormItem>
           )}
         />
+      </FormSection>
+
+      <FormSection
+        icon={LockKeyholeIcon}
+        title="Security"
+        description="Manage your account password from a dedicated, secure page."
+      >
+        <ul className="divide-border/50 divide-y">
+          <ChangePasswordRow />
+        </ul>
       </FormSection>
 
       <FormSection

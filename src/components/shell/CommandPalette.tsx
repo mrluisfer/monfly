@@ -307,7 +307,9 @@ export function CommandPaletteProvider({
               <CommandItem
                 value="change password security"
                 keywords={["security", "credentials", "update password"]}
-                onSelect={() => runCommand(go("/user/change-password"))}
+                onSelect={() =>
+                  runCommand(go("/user/settings/change-password"))
+                }
               >
                 <KeyRoundIcon />
                 <span>Change password</span>

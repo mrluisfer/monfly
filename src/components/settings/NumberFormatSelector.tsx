@@ -40,7 +40,14 @@ export const NumberFormatSelector = () => {
         }}
       >
         <SelectTrigger className="w-full sm:w-72">
-          <SelectValue placeholder="Select a format" />
+          {/* Render only the label in the trigger — the items carry the rich
+              description/example, which would otherwise clutter the trigger. */}
+          <SelectValue placeholder="Select a format">
+            {(value: NumberFormatId) =>
+              NUMBER_FORMAT_OPTIONS.find((option) => option.id === value)
+                ?.label ?? "Select a format"
+            }
+          </SelectValue>
         </SelectTrigger>
         <SelectContent
           alignItemWithTrigger={false}

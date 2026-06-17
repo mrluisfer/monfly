@@ -6,14 +6,18 @@ import {
   hideBalanceAtom,
   hideMetricsAtom,
 } from "~/state";
-import { useAtom } from "jotai";
+import { type PrimitiveAtom, useAtom } from "jotai";
 import {
   ArrowUpRight,
   BellRingIcon,
   EyeIcon,
   EyeOffIcon,
+  FileTextIcon,
   GlobeIcon,
   KeyboardIcon,
+  LockKeyholeIcon,
+  type LucideIcon,
+  MailIcon,
   PaletteIcon,
   ScaleIcon,
   ShieldIcon,
@@ -24,10 +28,9 @@ import {
 
 import { cn } from "@/lib/utils";
 
-import FontDisplaySelect from "./FontDisplaySelect";
+import { ChangePasswordRow } from "./ChangePasswordRow";
 import { NumberFormatSelector } from "./NumberFormatSelector";
 import { SonnerPositionSelector } from "./SonnerPositionSelector";
-import { ThemeSelector } from "./ThemeSelector";
 import ToggleDarkMode from "./ToggleDarkMode";
 
 export function SettingsPage() {
@@ -42,7 +45,7 @@ export function SettingsPage() {
         className="pointer-events-none absolute top-40 right-0 -z-10 size-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-15 blur-3xl dark:opacity-20"
       />
 
-      <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-8 sm:py-14 lg:max-w-6xl lg:py-16">
+      <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-8 sm:py-14 lg:max-w-6xl lg:pt-0 lg:pb-16">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-start gap-3">
             <span
@@ -71,38 +74,29 @@ export function SettingsPage() {
           <SettingsSection
             icon={PaletteIcon}
             title="Appearance"
-            description="Theme color, dark mode, and display font."
+            description="Switch between light and dark surfaces."
           >
-            <SettingsRow
-              title="Color theme"
-              description="Pick the accent palette for buttons, charts, and highlights."
-              control={<ThemeSelector />}
-            />
             <SettingsRow
               title="Dark mode"
               description="Switch between light and dark surfaces. Saved per device."
               control={<ToggleDarkMode size="default" />}
             />
             <SettingsRow
-              title="Display font"
-              description="Used across headings and dashboard panels."
-              control={
-                <div className="w-full sm:w-60">
-                  <FontDisplaySelect />
-                </div>
-              }
-            />
-            <SettingsRow
               title="Theme gallery"
               description="Preview every available theme side-by-side."
               control={
-                <Link
-                  to="/user/theme"
-                  className="bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
+                <button
+                  type="button"
+                  disabled
+                  aria-disabled="true"
+                  title="Coming soon"
+                  className="bg-foreground/5 text-muted-foreground inline-flex cursor-not-allowed items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium opacity-70"
                 >
                   Open gallery
-                  <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                </Link>
+                  <span className="bg-muted-foreground/15 rounded-full px-1.5 py-0.5 text-[0.6rem] font-semibold tracking-wide uppercase">
+                    Soon
+                  </span>
+                </button>
               }
             />
           </SettingsSection>
@@ -165,6 +159,14 @@ export function SettingsPage() {
           </SettingsSection>
 
           <SettingsSection
+            icon={LockKeyholeIcon}
+            title="Security"
+            description="Keep your account protected with a strong password."
+          >
+            <ChangePasswordRow />
+          </SettingsSection>
+
+          <SettingsSection
             icon={ScaleIcon}
             title="Account & legal"
             description="Quick links to your profile, terms, and privacy policy."
@@ -179,17 +181,23 @@ export function SettingsPage() {
             <SettingsRow
               title="Privacy Policy"
               description="How Monfly handles the data you store with us."
-              control={<NavLink to="/privacy" label="Read policy" />}
+              control={
+                <NavLink to="/privacy" label="Read policy" icon={ShieldIcon} />
+              }
             />
             <SettingsRow
               title="Terms & Conditions"
               description="The rules that govern your use of the service."
-              control={<NavLink to="/terms" label="Read terms" />}
+              control={
+                <NavLink to="/terms" label="Read terms" icon={FileTextIcon} />
+              }
             />
             <SettingsRow
               title="Contact"
               description="Talk to the team or request data deletion."
-              control={<NavLink to="/contact" label="Open contact" />}
+              control={
+                <NavLink to="/contact" label="Open contact" icon={MailIcon} />
+              }
             />
           </SettingsSection>
         </div>
@@ -216,12 +224,12 @@ function SettingsSection({
       <header className="flex items-start gap-3 md:sticky md:top-24 md:self-start">
         <span
           aria-hidden="true"
-          className="from-primary/15 to-primary/0 text-primary ring-primary/15 after:to-foreground/5 relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ring-1 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent"
+          className="from-primary/15 to-primary/0 text-primary ring-primary/15 after:to-foreground/5 relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ring-1 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent"
         >
           <Icon className="size-4" aria-hidden={true} />
         </span>
         <div className="min-w-0 space-y-1">
-          <h2 className="text-foreground font-[family-name:var(--font-syne)] text-sm font-semibold tracking-tight sm:text-base">
+          <h2 className="text-foreground font-(family-name:--font-syne) text-sm font-semibold tracking-tight sm:text-base">
             {title}
           </h2>
           <p className="text-muted-foreground text-xs leading-relaxed sm:text-[0.8rem]">
@@ -266,7 +274,7 @@ function SettingsRow({
 }
 
 type PrivacyToggleRowProps = {
-  atom: Parameters<typeof useAtom<boolean>>[0];
+  atom: PrimitiveAtom<boolean>;
   title: string;
   description: string;
 };
@@ -307,9 +315,10 @@ type NavLinkProps = {
   to: string;
   label: string;
   hint?: string;
+  icon?: LucideIcon;
 };
 
-function NavLink({ to, label, hint }: NavLinkProps) {
+function NavLink({ to, label, hint, icon: Icon = UserIcon }: NavLinkProps) {
   return (
     <Link
       to={to}
@@ -318,10 +327,7 @@ function NavLink({ to, label, hint }: NavLinkProps) {
       {hint ? (
         <span className="text-muted-foreground text-xs">{hint}</span>
       ) : (
-        <UserIcon
-          className="text-muted-foreground size-3.5"
-          aria-hidden="true"
-        />
+        <Icon className="text-muted-foreground size-3.5" aria-hidden="true" />
       )}
       {label}
       <ArrowUpRight

@@ -25,7 +25,7 @@ import {
   HELP_PATH,
   SETTINGS_PATH,
 } from "./sidebar-constants";
-import { isRouteActive } from "./utils";
+import { getActivePath, resolveRoutePath } from "./utils";
 
 type SecondaryItem = {
   key: string;
@@ -109,6 +109,15 @@ export function NavSecondary() {
     },
   ];
 
+  // Resolve the single most-specific active item across all groups, so nested
+  // routes don't light up both the leaf and its ancestor.
+  const activePath = getActivePath(
+    location.pathname,
+    groups.flatMap((group) =>
+      group.items.map((item) => resolveRoutePath(item.to, item.params)),
+    ),
+  );
+
   return (
     <SidebarGroup className="mt-auto">
       {groups.map((group) => (
@@ -119,11 +128,8 @@ export function NavSecondary() {
           <SidebarMenu>
             {group.items.map((item) => {
               const Icon = item.icon;
-              const active = isRouteActive(
-                location.pathname,
-                item.to,
-                item.params,
-              );
+              const active =
+                resolveRoutePath(item.to, item.params) === activePath;
               const isDestructive = item.variant === "destructive";
               return (
                 <SidebarMenuItem key={item.key}>

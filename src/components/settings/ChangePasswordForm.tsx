@@ -7,7 +7,7 @@ import {
   KeyRoundIcon,
   XIcon,
 } from "lucide-react";
-import { useId, useMemo, useState } from "react";
+import { type ReactNode, useId, useMemo, useState } from "react";
 import type {
   ControllerRenderProps,
   FieldPath,
@@ -97,6 +97,34 @@ function PasswordField<
   );
 }
 
+/** A single check/✗ line, shared by the password requirements and the match hint. */
+function RequirementRow({
+  met,
+  children,
+}: {
+  met: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <li className="flex items-center gap-2">
+      {met ? (
+        <CheckIcon size={16} className="text-success" aria-hidden="true" />
+      ) : (
+        <XIcon
+          size={16}
+          className="text-muted-foreground/80"
+          aria-hidden="true"
+        />
+      )}
+      <span
+        className={`text-xs transition-colors ${met ? "text-success" : "text-muted-foreground"}`}
+      >
+        {children}
+      </span>
+    </li>
+  );
+}
+
 export function ChangePasswordForm() {
   const navigate = useNavigate();
 
@@ -113,6 +141,14 @@ export function ChangePasswordForm() {
     control: form.control,
     name: changePasswordFormNames.newPassword,
   });
+
+  const confirmPassword = useWatch({
+    control: form.control,
+    name: changePasswordFormNames.confirmNewPassword,
+  });
+
+  const hasConfirmInput = (confirmPassword?.length ?? 0) > 0;
+  const passwordsMatch = hasConfirmInput && confirmPassword === newPassword;
 
   const requirements = useMemo(
     () =>
@@ -183,26 +219,9 @@ export function ChangePasswordForm() {
 
         <ul className="space-y-1.5" aria-label="Password requirements">
           {requirements.map((req) => (
-            <li key={req.text} className="flex items-center gap-2">
-              {req.met ? (
-                <CheckIcon
-                  size={16}
-                  className="text-emerald-500"
-                  aria-hidden="true"
-                />
-              ) : (
-                <XIcon
-                  size={16}
-                  className="text-muted-foreground/80"
-                  aria-hidden="true"
-                />
-              )}
-              <span
-                className={`text-xs ${req.met ? "text-emerald-600" : "text-muted-foreground"}`}
-              >
-                {req.text}
-              </span>
-            </li>
+            <RequirementRow key={req.text} met={req.met}>
+              {req.text}
+            </RequirementRow>
           ))}
         </ul>
 
@@ -219,14 +238,24 @@ export function ChangePasswordForm() {
           )}
         />
 
+        <ul
+          className="space-y-1.5"
+          aria-label="Password confirmation"
+          aria-live="polite"
+        >
+          <RequirementRow met={passwordsMatch}>
+            {passwordsMatch ? "Passwords match" : "Passwords don't match yet"}
+          </RequirementRow>
+        </ul>
+
         <Button
           type="submit"
           size="lg"
           disabled={isPending}
-          className="w-full font-semibold tracking-[0.04em] uppercase sm:w-auto"
+          className="w-full font-semibold tracking-[0.04em] sm:w-auto"
         >
           <KeyRoundIcon aria-hidden="true" />
-          {isPending ? "Updating..." : "Update password"}
+          {isPending ? "Updating..." : "Update Password"}
         </Button>
       </form>
     </Form>

@@ -3,7 +3,7 @@ export { CountBadge } from "./CountBadge";
 export { DeleteLoanButton } from "./DeleteLoanButton";
 export { DirectionBadge } from "./DirectionBadge";
 export { EditLoanButton } from "./EditLoanButton";
-export { LoanDirectionIcon } from "./LoanDirectionIcon";
+export { LoanDirectionIcon, LoanDirectionLabel } from "./LoanDirectionIcon";
 export { LoanField } from "./LoanField";
 export { LoanListItem } from "./LoanListItem";
 export { LoansList } from "./LoansList";

@@ -24,13 +24,13 @@ import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$use
 import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
 import { Route as AuthedUserSettingsIndexRouteImport } from './routes/_authed/user/settings.index'
 import { Route as AuthedUserHelpIndexRouteImport } from './routes/_authed/user/help.index'
-import { Route as AuthedUserChangePasswordIndexRouteImport } from './routes/_authed/user/change-password.index'
 import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authed/home/transactions.index'
 import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
 import { Route as AuthedHomeLoansIndexRouteImport } from './routes/_authed/home/loans/index'
 import { Route as AuthedHomeCategoriesIndexRouteImport } from './routes/_authed/home/categories.index'
 import { Route as AuthedHomeCardsIndexRouteImport } from './routes/_authed/home/cards.index'
 import { Route as AuthedHomeBalanceCalculatorIndexRouteImport } from './routes/_authed/home/balance-calculator.index'
+import { Route as AuthedUserSettingsChangePasswordIndexRouteImport } from './routes/_authed/user/settings.change-password.index'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -106,12 +106,6 @@ const AuthedUserHelpIndexRoute = AuthedUserHelpIndexRouteImport.update({
   path: '/user/help/',
   getParentRoute: () => AuthedRoute,
 } as any)
-const AuthedUserChangePasswordIndexRoute =
-  AuthedUserChangePasswordIndexRouteImport.update({
-    id: '/user/change-password/',
-    path: '/user/change-password/',
-    getParentRoute: () => AuthedRoute,
-  } as any)
 const AuthedHomeTransactionsIndexRoute =
   AuthedHomeTransactionsIndexRouteImport.update({
     id: '/home/transactions/',
@@ -145,6 +139,12 @@ const AuthedHomeBalanceCalculatorIndexRoute =
     path: '/home/balance-calculator/',
     getParentRoute: () => AuthedRoute,
   } as any)
+const AuthedUserSettingsChangePasswordIndexRoute =
+  AuthedUserSettingsChangePasswordIndexRouteImport.update({
+    id: '/user/settings/change-password/',
+    path: '/user/settings/change-password/',
+    getParentRoute: () => AuthedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -164,10 +164,10 @@ export interface FileRoutesByFullPath {
   '/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/home/reports/': typeof AuthedHomeReportsIndexRoute
   '/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
-  '/user/change-password/': typeof AuthedUserChangePasswordIndexRoute
   '/user/help/': typeof AuthedUserHelpIndexRoute
   '/user/settings/': typeof AuthedUserSettingsIndexRoute
   '/user/theme/': typeof AuthedUserThemeIndexRoute
+  '/user/settings/change-password/': typeof AuthedUserSettingsChangePasswordIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -187,10 +187,10 @@ export interface FileRoutesByTo {
   '/home/loans': typeof AuthedHomeLoansIndexRoute
   '/home/reports': typeof AuthedHomeReportsIndexRoute
   '/home/transactions': typeof AuthedHomeTransactionsIndexRoute
-  '/user/change-password': typeof AuthedUserChangePasswordIndexRoute
   '/user/help': typeof AuthedUserHelpIndexRoute
   '/user/settings': typeof AuthedUserSettingsIndexRoute
   '/user/theme': typeof AuthedUserThemeIndexRoute
+  '/user/settings/change-password': typeof AuthedUserSettingsChangePasswordIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -212,10 +212,10 @@ export interface FileRoutesById {
   '/_authed/home/loans/': typeof AuthedHomeLoansIndexRoute
   '/_authed/home/reports/': typeof AuthedHomeReportsIndexRoute
   '/_authed/home/transactions/': typeof AuthedHomeTransactionsIndexRoute
-  '/_authed/user/change-password/': typeof AuthedUserChangePasswordIndexRoute
   '/_authed/user/help/': typeof AuthedUserHelpIndexRoute
   '/_authed/user/settings/': typeof AuthedUserSettingsIndexRoute
   '/_authed/user/theme/': typeof AuthedUserThemeIndexRoute
+  '/_authed/user/settings/change-password/': typeof AuthedUserSettingsChangePasswordIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -237,10 +237,10 @@ export interface FileRouteTypes {
     | '/home/loans/'
     | '/home/reports/'
     | '/home/transactions/'
-    | '/user/change-password/'
     | '/user/help/'
     | '/user/settings/'
     | '/user/theme/'
+    | '/user/settings/change-password/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -260,10 +260,10 @@ export interface FileRouteTypes {
     | '/home/loans'
     | '/home/reports'
     | '/home/transactions'
-    | '/user/change-password'
     | '/user/help'
     | '/user/settings'
     | '/user/theme'
+    | '/user/settings/change-password'
   id:
     | '__root__'
     | '/'
@@ -284,10 +284,10 @@ export interface FileRouteTypes {
     | '/_authed/home/loans/'
     | '/_authed/home/reports/'
     | '/_authed/home/transactions/'
-    | '/_authed/user/change-password/'
     | '/_authed/user/help/'
     | '/_authed/user/settings/'
     | '/_authed/user/theme/'
+    | '/_authed/user/settings/change-password/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -410,13 +410,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedUserHelpIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
-    '/_authed/user/change-password/': {
-      id: '/_authed/user/change-password/'
-      path: '/user/change-password'
-      fullPath: '/user/change-password/'
-      preLoaderRoute: typeof AuthedUserChangePasswordIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
     '/_authed/home/transactions/': {
       id: '/_authed/home/transactions/'
       path: '/home/transactions'
@@ -459,6 +452,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedHomeBalanceCalculatorIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/user/settings/change-password/': {
+      id: '/_authed/user/settings/change-password/'
+      path: '/user/settings/change-password'
+      fullPath: '/user/settings/change-password/'
+      preLoaderRoute: typeof AuthedUserSettingsChangePasswordIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
   }
 }
 
@@ -471,10 +471,10 @@ interface AuthedRouteChildren {
   AuthedHomeLoansIndexRoute: typeof AuthedHomeLoansIndexRoute
   AuthedHomeReportsIndexRoute: typeof AuthedHomeReportsIndexRoute
   AuthedHomeTransactionsIndexRoute: typeof AuthedHomeTransactionsIndexRoute
-  AuthedUserChangePasswordIndexRoute: typeof AuthedUserChangePasswordIndexRoute
   AuthedUserHelpIndexRoute: typeof AuthedUserHelpIndexRoute
   AuthedUserSettingsIndexRoute: typeof AuthedUserSettingsIndexRoute
   AuthedUserThemeIndexRoute: typeof AuthedUserThemeIndexRoute
+  AuthedUserSettingsChangePasswordIndexRoute: typeof AuthedUserSettingsChangePasswordIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
@@ -486,10 +486,11 @@ const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedHomeLoansIndexRoute: AuthedHomeLoansIndexRoute,
   AuthedHomeReportsIndexRoute: AuthedHomeReportsIndexRoute,
   AuthedHomeTransactionsIndexRoute: AuthedHomeTransactionsIndexRoute,
-  AuthedUserChangePasswordIndexRoute: AuthedUserChangePasswordIndexRoute,
   AuthedUserHelpIndexRoute: AuthedUserHelpIndexRoute,
   AuthedUserSettingsIndexRoute: AuthedUserSettingsIndexRoute,
   AuthedUserThemeIndexRoute: AuthedUserThemeIndexRoute,
+  AuthedUserSettingsChangePasswordIndexRoute:
+    AuthedUserSettingsChangePasswordIndexRoute,
 }
 
 const AuthedRouteWithChildren =

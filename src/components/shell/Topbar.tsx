@@ -29,6 +29,15 @@ import { useCommandPalette } from "./CommandPalette";
 
 type Crumb = { title: string; url?: string };
 
+// Friendly labels for the `/user/*` path segments. Anything not listed (e.g. a
+// dynamic `$userId`) falls back to the profile page.
+const USER_SEGMENT_TITLE: Record<string, string> = {
+  settings: "Settings",
+  "change-password": "Change password",
+  theme: "Theme",
+  help: "Help",
+};
+
 function buildBreadcrumbs(pathname: string): Crumb[] {
   const segments = pathname.split("/").filter(Boolean);
   const crumbs: Crumb[] = [];
@@ -46,7 +55,24 @@ function buildBreadcrumbs(pathname: string): Crumb[] {
   }
 
   if (segments[0] === "user") {
-    crumbs.push({ title: "Profile" });
+    const userSegments = segments.slice(1);
+
+    // Profile (`/user/$userId`) or a bare `/user` — no further crumbs to add.
+    if (userSegments.length === 0 || !(userSegments[0] in USER_SEGMENT_TITLE)) {
+      crumbs.push({ title: "Profile" });
+    } else {
+      // Mirror the path so nested account pages read as a real hierarchy, e.g.
+      // /user/settings/change-password → Home › Settings › Change password.
+      userSegments.forEach((segment, index) => {
+        const isLast = index === userSegments.length - 1;
+        crumbs.push({
+          title: USER_SEGMENT_TITLE[segment] ?? prettify(segment),
+          url: isLast
+            ? undefined
+            : "/user/" + userSegments.slice(0, index + 1).join("/"),
+        });
+      });
+    }
   }
 
   return crumbs;

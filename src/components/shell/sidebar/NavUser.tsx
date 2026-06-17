@@ -68,6 +68,9 @@ export function NavUser() {
   const user = data?.data;
   const name = user?.name ?? "Guest";
   const email = user?.email ?? userEmail ?? "";
+  // Mirror the saved avatar seed so reshuffling on the profile also updates the
+  // sidebar avatar (it previously always fell back to the name-derived one).
+  const seed = user?.avatarSeed ?? undefined;
 
   if (isPending) {
     return (
@@ -98,7 +101,7 @@ export function NavUser() {
                 />
               }
             >
-              <UserAvatar alt={name} name={name} />
+              <UserAvatar alt={name} name={name} seed={seed} />
               <div className="grid flex-1 text-left leading-tight">
                 <span className="truncate text-sm font-medium">{name}</span>
                 <span className="text-sidebar-foreground/60 truncate text-xs">
@@ -118,7 +121,7 @@ export function NavUser() {
             >
               <DropdownMenuGroup>
                 <DropdownMenuLabel className="flex items-center gap-2 p-2">
-                  <UserAvatar alt={name} name={name} />
+                  <UserAvatar alt={name} name={name} seed={seed} />
                   <div className="grid leading-tight">
                     <span className="truncate text-sm font-medium">{name}</span>
                     <span className="text-muted-foreground truncate text-xs">

@@ -4,7 +4,10 @@ import {
   type LucideIcon,
   type LucideProps,
 } from "lucide-react";
-import { type LoanDirection } from "~/constants/loan-status";
+import {
+  LOAN_DIRECTION_LABEL,
+  type LoanDirection,
+} from "~/constants/loan-status";
 import { cn } from "~/lib/utils";
 
 /**
@@ -49,5 +52,38 @@ export function LoanDirectionIcon({
       className={cn(colored && DIRECTION_COLOR[direction], className)}
       {...props}
     />
+  );
+}
+
+type LoanDirectionLabelProps = {
+  direction: LoanDirection;
+  /** Set false to inherit the surrounding text color instead of the loan color. */
+  colored?: boolean;
+  /** Classes for the wrapper (e.g. text size/weight). */
+  className?: string;
+  /** Classes for the arrow alone (defaults to `size-3.5`). */
+  iconClassName?: string;
+};
+
+/**
+ * The arrow paired with its perspective label ("Owed to me" / "I owe"). Use it
+ * wherever that icon+text pair would otherwise be repeated. By default only the
+ * arrow is colored; the label inherits the surrounding text color.
+ */
+export function LoanDirectionLabel({
+  direction,
+  colored = true,
+  className,
+  iconClassName,
+}: LoanDirectionLabelProps) {
+  return (
+    <span className={cn("inline-flex items-center gap-1.5", className)}>
+      <LoanDirectionIcon
+        direction={direction}
+        colored={colored}
+        className={cn("size-3.5", iconClassName)}
+      />
+      {LOAN_DIRECTION_LABEL[direction]}
+    </span>
   );
 }
