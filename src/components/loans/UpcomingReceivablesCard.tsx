@@ -1,12 +1,6 @@
 import type { Loan } from "@prisma/client";
 import { Link } from "@tanstack/react-router";
-import {
-  ArrowDownLeftIcon,
-  ArrowRightIcon,
-  ArrowUpRightIcon,
-  ClockIcon,
-  HandCoinsIcon,
-} from "lucide-react";
+import { ArrowRightIcon, ClockIcon, HandCoinsIcon } from "lucide-react";
 
 import type { LoanDirection } from "~/constants/loan-status";
 
@@ -17,6 +11,8 @@ import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 import { ScrollArea } from "../ui/scroll-area";
+
+import { LoanDirectionIcon } from "./LoanDirectionIcon";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const MAX_VISIBLE = 5;
@@ -224,11 +220,11 @@ function UpcomingBody({
                   )}
                   title={isBorrowed ? "I owe" : "Owed to me"}
                 >
-                  {isBorrowed ? (
-                    <ArrowUpRightIcon className="size-3.5" />
-                  ) : (
-                    <ArrowDownLeftIcon className="size-3.5" />
-                  )}
+                  <LoanDirectionIcon
+                    direction={isBorrowed ? "borrowed" : "lent"}
+                    colored={false}
+                    className="size-3.5"
+                  />
                 </span>
                 <div className="min-w-0">
                   <p className="text-foreground truncate text-sm font-medium capitalize">
