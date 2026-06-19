@@ -1,15 +1,15 @@
-import { CheckCheck, FileTextIcon, RotateCcwIcon } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { type LoanDirection, type LoanStatus } from "~/constants/loan-status";
-import { cn } from "~/lib/utils";
+import {CheckCheck, CheckIcon, FileTextIcon, RotateCcwIcon} from "lucide-react";
+import {Button} from "~/components/ui/button";
+import {type LoanDirection, type LoanStatus} from "~/constants/loan-status";
+import {cn} from "~/lib/utils";
 
-import { DeleteLoanButton } from "./DeleteLoanButton";
-import { DirectionBadge } from "./DirectionBadge";
-import { EditLoanButton } from "./EditLoanButton";
-import { PartialPaymentControl } from "./PartialPaymentControl";
-import { StatusBadge } from "./StatusBadge";
-import type { EditLoanPatch, LoanRow } from "./types";
-import { useMaskedAmount } from "./use-masked-amount";
+import {DeleteLoanButton} from "./DeleteLoanButton";
+import {DirectionBadge} from "./DirectionBadge";
+import {EditLoanButton} from "./EditLoanButton";
+import {PartialPaymentControl} from "./PartialPaymentControl";
+import {StatusBadge} from "./StatusBadge";
+import type {EditLoanPatch, LoanRow} from "./types";
+import {useMaskedAmount} from "./use-masked-amount";
 
 /** A single loan: identity, progress and per-row actions. */
 export function LoanListItem({
@@ -123,7 +123,7 @@ export function LoanListItem({
                 onClick={onMarkPaid}
                 className="hidden flex-1 sm:inline-flex sm:flex-initial"
               >
-                <CheckCheck aria-hidden="true" />
+                <CheckIcon aria-hidden="true" />
                 Mark paid
               </Button>
 

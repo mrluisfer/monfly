@@ -1,11 +1,12 @@
-import { BanknoteArrowUpIcon } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
+import {BanknoteArrowUpIcon} from "lucide-react";
+import {Button} from "~/components/ui/button";
+import {Input} from "~/components/ui/input";
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 
 /** Inline form to record a partial payment against a loan. */
 export function PartialPaymentControl({
-  onSubmit,
-}: {
+                                        onSubmit,
+                                      }: {
   onSubmit: (amount: number) => void;
 }) {
   return (
@@ -31,15 +32,20 @@ export function PartialPaymentControl({
         className="min-w-0 flex-1"
         aria-label="Partial payment amount"
       />
-      <Button
-        type="submit"
-        variant="default"
-        aria-label="Add partial payment"
-        className="shrink-0"
-        size={"icon"}
-      >
-        <BanknoteArrowUpIcon aria-hidden="true" />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger render={<Button
+          type="submit"
+          variant="default"
+          aria-label="Add partial payment"
+          className="shrink-0"
+          size={"icon"}
+        />}>
+          <BanknoteArrowUpIcon aria-hidden="true"/>
+        </TooltipTrigger>
+        <TooltipContent>
+          Add a partial payment to the loan.
+        </TooltipContent>
+      </Tooltip>
     </form>
   );
 }

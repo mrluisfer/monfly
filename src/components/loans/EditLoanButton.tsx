@@ -20,6 +20,7 @@ import {
 import { type LoanDirection } from "~/constants/loan-status";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 
+import { DebtorCombobox } from "./DebtorCombobox";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanField } from "./LoanField";
 import type { EditLoanPatch, LoanRow } from "./types";
@@ -118,11 +119,7 @@ export function EditLoanButton({
             label={direction === "borrowed" ? "Creditor" : "Debtor"}
             icon={<UserIcon className="size-3.5" />}
           >
-            <Input
-              value={debtor}
-              onChange={(e) => setDebtor(e.target.value)}
-              autoComplete="off"
-            />
+            <DebtorCombobox value={debtor} onChange={setDebtor} />
           </LoanField>
 
           <LoanField

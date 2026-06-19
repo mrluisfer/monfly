@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Spinner } from "@/components/ui/spinner";
 
+import { DebtorCombobox } from "./DebtorCombobox";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanField } from "./LoanField";
 import { fromDateInputValue, toDateInputValue } from "./date-input";
@@ -111,7 +112,7 @@ export function AddLoanCard() {
           />
 
           {/* Main inputs: stack on mobile, 4-column grid on md+ so debtor/amount/dates fit a single row. */}
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 2xl:grid-cols-4">
             <LoanField
               label={
                 form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"
@@ -123,10 +124,12 @@ export function AddLoanCard() {
                 control={form.control}
                 name="debtor"
                 render={({ field }) => (
-                  <Input
-                    {...field}
+                  <DebtorCombobox
+                    name={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
                     placeholder="e.g. Juan, SAT, Insurance Co."
-                    autoComplete="off"
                   />
                 )}
               />

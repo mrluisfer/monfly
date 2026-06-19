@@ -30,7 +30,13 @@ export function MobileHeader({
         <p className="text-muted-foreground text-sm">
           {total} {total === 1 ? "transaction" : "transactions"} total.
         </p>
-        {activeCard ? <CardBadge card={activeCard} className="mt-1" /> : null}
+        {activeCard ? (
+          <CardBadge
+            card={activeCard}
+            className="mt-1"
+            hint="Showing transactions for this card"
+          />
+        ) : null}
       </div>
       <Button
         onClick={() => refetch()}

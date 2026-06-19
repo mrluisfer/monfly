@@ -1,6 +1,7 @@
 export { useDarkMode } from "./useDarkMode";
 export { useFontDisplay } from "./useFontDisplay";
 export { useInView } from "./useInView";
+export { useIsDesktop } from "./useIsDesktop";
 export { useIsMac } from "./useIsMac";
 export { useIsMounted } from "./useIsMounted";
 export { useIsMobile } from "./useMobile";

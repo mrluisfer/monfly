@@ -45,6 +45,15 @@ export const queryKeys = {
     byEmail: (email: string) => [queryDictionary.categories, email] as const,
   },
 
+  // Loan queries. Suggestion lists live under the [loans, email] prefix so
+  // invalidateLoanQueries (which invalidates that prefix) also refreshes the
+  // debtor autocomplete right after a new loan is created.
+  loans: {
+    all: (email: string) => [queryDictionary.loans, email] as const,
+    debtors: (email: string) =>
+      [queryDictionary.loans, email, queryDictionary.loanDebtors] as const,
+  },
+
   // Card queries
   cards: {
     all: (email: string) => [queryDictionary.cards, email] as const,

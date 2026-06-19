@@ -44,7 +44,14 @@
       "Bash(node -e \"console.log\\(JSON.stringify\\(require\\('recharts/package.json'\\).dependencies\\)\\)\")",
       "Bash(pnpm remove *)",
       "Bash(pnpm build *)",
-      "Bash(node --input-type=module -e ' *)"
+      "Bash(node --input-type=module -e ' *)",
+      "PowerShell(pnpm exec eslint src/components/transactions/list/CardBadge.tsx src/components/transactions/list/index.tsx src/components/transactions/list/MobileHeader.tsx)",
+      "PowerShell(pnpm exec tsc --noEmit --ignoreDeprecations 6.0 2>&1 | Select-String -Pattern \"CardBadge|transactions/list\" | Select-Object -First 20; \"exit: $LASTEXITCODE\")",
+      "Bash(node -e \"console.log\\(require.resolve\\('@base-ui/react'\\)\\)\")",
+      "Bash(grep -rn fillInputOnItemPress __TRACKED_VAR__/esm/combobox/root/)",
+      "Bash(sed -n 1,60p __TRACKED_VAR__/combobox/collection/ComboboxCollection.d.ts)",
+      "Bash(sed -n 1,40p __TRACKED_VAR__/combobox/list/ComboboxList.d.ts)",
+      "Bash(grep -n 'focusOut\\\\|focusout\\\\|onBlur\\\\|resetInput\\\\|commitValue\\\\|inputInsidePopup\\\\|setInputValue\\\\|clearInput\\\\|selectedValue' __TRACKED_VAR__/esm/combobox/root/AriaCombobox.js)"
     ]
   },
   "enabledMcpjsonServers": [
