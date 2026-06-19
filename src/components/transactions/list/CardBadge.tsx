@@ -33,13 +33,13 @@ type CardBadgeProps = {
  * neutral outline styles when a card has no color set. `color-mix` keeps the
  * tints theme-aware (they sit on top of the design tokens, not hardcoded).
  */
-function accentStyles(color?: string | null) {
-  if (!color) return undefined;
-  return {
-    borderColor: `color-mix(in oklab, ${color} 38%, var(--border))`,
-    backgroundColor: `color-mix(in oklab, ${color} 8%, transparent)`,
-  } satisfies React.CSSProperties;
-}
+// function accentStyles(color?: string | null) {
+//   if (!color) return undefined;
+//   return {
+//     borderColor: `color-mix(in oklab, ${color} 38%, var(--border))`,
+//     backgroundColor: `color-mix(in oklab, ${color} 8%, transparent)`,
+//   } satisfies React.CSSProperties;
+// }
 
 /**
  * A compact chip identifying which card a transaction belongs to. Built on the
@@ -61,14 +61,13 @@ export function CardBadge({
 }: CardBadgeProps) {
   if (!card) return null;
 
-  const accent = accentStyles(card.color);
+  // const accent = accentStyles(card.color);
   const titleText = `${card.name}${card.last4 ? ` •••• ${card.last4}` : ""}`;
 
   const badge = (
     <Badge
       variant="outline"
       tabIndex={withTooltip ? 0 : undefined}
-      style={accent}
       className={cn(
         "text-muted-foreground max-w-[180px] cursor-default gap-1.5 font-normal",
         withTooltip &&
