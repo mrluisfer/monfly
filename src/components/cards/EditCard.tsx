@@ -42,7 +42,7 @@ export function EditCard({ card }: { card: Card }) {
               render={
                 <Button
                   type="button"
-                  variant="ghost"
+                  variant="outline"
                   size="icon"
                   aria-label={`Edit ${card.name}`}
                 >
