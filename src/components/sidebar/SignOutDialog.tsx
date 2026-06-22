@@ -1,5 +1,5 @@
 import { ReactElement, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { logoutFn } from "~/server/auth/logoutfn";
 import { CircleAlertIcon } from "lucide-react";
 
@@ -27,6 +27,7 @@ export const SignOutDialog = ({
   onOpenChange,
 }: SignOutDialogProps) => {
   const navigate = useNavigate();
+  const router = useRouter();
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleLogOut = async () => {
@@ -37,6 +38,9 @@ export const SignOutDialog = ({
       await logoutFn({
         data: { destination: "/login", manualRedirect: true },
       });
+      // Clear the cached session context so the header/sidebar re-evaluate as
+      // logged out, then navigate to the login screen.
+      await router.invalidate();
       await navigate({
         to: "/login",
       });

@@ -4,6 +4,7 @@ import {
   Link,
   redirect,
   useNavigate,
+  useRouter,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Auth, authActions } from "~/components/auth";
@@ -12,7 +13,6 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/useMutation";
 import { signupFn } from "~/server/auth/signupfn";
-import { getUserSession } from "~/server/db/users/get-user-session";
 import {
   BadgeCheck,
   ChartNoAxesCombined,
@@ -47,10 +47,8 @@ const signupHighlights = [
 ];
 
 export const Route = createFileRoute("/signup")({
-  beforeLoad: async () => {
-    const { data: userEmail } = await getUserSession();
-
-    if (userEmail) {
+  beforeLoad: ({ context }) => {
+    if (context.userEmail) {
       throw redirect({
         to: "/home",
       });
@@ -75,6 +73,7 @@ export const Route = createFileRoute("/signup")({
 
 function Signup() {
   const navigate = useNavigate();
+  const router = useRouter();
   const signupServerFn = useServerFn(signupFn);
 
   const signupMutation = useMutation({
@@ -92,6 +91,9 @@ function Signup() {
     });
 
     if (signupMutationData?.success) {
+      // Re-read the new session cookie into the router context before landing
+      // on a protected route.
+      await router.invalidate();
       await navigate({
         to: "/home",
       });

@@ -4,13 +4,13 @@ import {
   Link,
   redirect,
   useNavigate,
+  useRouter,
 } from "@tanstack/react-router";
 import { Auth, authActions } from "~/components/auth";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useMutation } from "~/hooks/useMutation";
 import { loginFn } from "~/server/auth/loginfn";
-import { getUserSession } from "~/server/db/users/get-user-session";
 import {
   BadgeCheck,
   ChartNoAxesCombined,
@@ -25,7 +25,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { SharedHeader } from "@/components/auth/SharedHeader";
 
 const loginSchema = z.object({
-  email: z.string().email("Enter a valid email address."),
+  email: z.email("Enter a valid email address."),
   password: z.string().min(8, "Password must be at least 8 characters."),
 });
 
@@ -44,10 +44,8 @@ const loginHighlights = [
 ];
 
 export const Route = createFileRoute("/login")({
-  beforeLoad: async () => {
-    const { data: userEmail } = await getUserSession();
-
-    if (userEmail) {
+  beforeLoad: ({ context }) => {
+    if (context.userEmail) {
       throw redirect({
         to: "/home",
       });
@@ -72,11 +70,16 @@ export const Route = createFileRoute("/login")({
 
 function Login() {
   const navigate = useNavigate();
+  const router = useRouter();
 
   const loginMutation = useMutation({
     fn: loginFn,
     onSuccess: async ({ data }) => {
       if (!data?.error) {
+        // Refresh the router so the root beforeLoad re-reads the freshly-set
+        // session cookie before we land on a protected route (otherwise the
+        // stale `userEmail: null` context would bounce us back to /login).
+        await router.invalidate();
         await navigate({
           to: "/home",
         });

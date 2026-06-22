@@ -7,6 +7,7 @@ import {
   FileTextIcon,
   HandCoinsIcon,
   PlusIcon,
+  SaveIcon,
   SparklesIcon,
   TagIcon,
   TrendingDownIcon,
@@ -573,7 +574,7 @@ export function TransactionForm<FormValues extends FieldValues>({
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <SparklesIcon className="size-4" />
+                <SaveIcon className="size-4" />
                 {buttonText}
               </div>
             )}
@@ -628,8 +629,7 @@ function CardField<FormValues extends FieldValues>({
                   >
                     <SelectValue placeholder="No card">
                       {(selected: unknown) => {
-                        const id =
-                          typeof selected === "string" ? selected : "";
+                        const id = typeof selected === "string" ? selected : "";
                         const card =
                           id && id !== NO_CARD
                             ? cards.find((c) => c.id === id)
@@ -644,7 +644,7 @@ function CardField<FormValues extends FieldValues>({
                         }
                         return (
                           <span className="flex items-center gap-2">
-                            <CreditCardIcon className="text-sky-500 size-4" />
+                            <CreditCardIcon className="size-4 text-sky-500" />
                             <span className="truncate">{card.name}</span>
                             {card.last4 ? (
                               <span className="text-muted-foreground text-xs tabular-nums">
@@ -656,7 +656,10 @@ function CardField<FormValues extends FieldValues>({
                       }}
                     </SelectValue>
                   </SelectTrigger>
-                  <SelectContent alignItemWithTrigger={false} className="w-full">
+                  <SelectContent
+                    alignItemWithTrigger={false}
+                    className="w-full"
+                  >
                     <SelectItem value={NO_CARD}>
                       <CreditCardIcon className="text-muted-foreground size-4" />
                       <span className="text-muted-foreground">No card</span>
@@ -665,7 +668,7 @@ function CardField<FormValues extends FieldValues>({
                     <SelectGroup>
                       {cards.map((card) => (
                         <SelectItem key={card.id} value={card.id}>
-                          <CreditCardIcon className="text-sky-500 size-4" />
+                          <CreditCardIcon className="size-4 text-sky-500" />
                           <span className="flex w-full items-center justify-between gap-3">
                             <span className="truncate capitalize">
                               {card.name}

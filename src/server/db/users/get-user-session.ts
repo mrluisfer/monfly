@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { useAppSession } from "~/server/auth/session";
+import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getUserSession = createServerFn({ method: "GET" }).handler(
@@ -18,8 +19,29 @@ export const getUserSession = createServerFn({ method: "GET" }).handler(
         } as ApiResponse<string | null>;
       }
 
+      // The cookie alone isn't proof the account still exists. A stale/orphaned
+      // cookie (user deleted, DB reset, etc.) would otherwise pass every auth
+      // gate and then fail on real data fetches — the "Guest + failed requests"
+      // symptom. Validate against the DB and clear the cookie if it's invalid,
+      // so the session is wrong only once.
+      const user = await prismaClient.user.findUnique({
+        where: { email: session.data.email },
+        select: { email: true },
+      });
+
+      if (!user) {
+        await session.clear();
+        return {
+          error: true,
+          message: "User session is no longer valid",
+          data: null,
+          success: false,
+          statusCode: 401,
+        } as ApiResponse<string | null>;
+      }
+
       return {
-        data: session.data.email,
+        data: user.email,
         error: false,
         success: true,
         statusCode: 200,

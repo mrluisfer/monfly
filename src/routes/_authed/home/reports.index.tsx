@@ -1,13 +1,24 @@
-import { Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { ClientOnly } from "~/components/shared/ClientOnly";
 import { Skeleton } from "~/components/ui/skeleton";
 import { transactionTypes } from "~/constants/transaction-types";
 import { BarChartIcon } from "lucide-react";
-import IncomeExpenseChart from "@/components/charts/IncomeExpenseChart";
-import ChartTransactionsByMonth from "@/components/charts/ChartTransactionsByMonth";
-import ChartByCategoryRadar from "@/components/charts/ChartByCategoryRadar";
+
+// Charts must stay lazy: a static import pulls recharts into the route module,
+// which is evaluated during SSR/production bundling and crashes ("a is not a
+// function"). lazy() keeps recharts in a client-only async chunk loaded after
+// ClientOnly mounts. (See CLAUDE.md — charts are React.lazy + Suspense.)
+const IncomeExpenseChart = lazy(
+  () => import("~/components/charts/IncomeExpenseChart"),
+);
+const ChartTransactionsByMonth = lazy(
+  () => import("~/components/charts/ChartTransactionsByMonth"),
+);
+const ChartByCategoryRadar = lazy(
+  () => import("~/components/charts/ChartByCategoryRadar"),
+);
 
 export const Route = createFileRoute("/_authed/home/reports/")({
   component: RouteComponent,

@@ -1,14 +1,12 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { logoutFn } from "~/server/auth/logoutfn";
-import { queryDictionary } from "~/queries/dictionary";
-import { getUserSession } from "~/server/db/users/get-user-session";
 
 export const Route = createFileRoute("/signout")({
   preload: false,
   loader: async ({ context }) => {
-    const session = await getUserSession();
-
-    if (!session.success || !session.data) {
+    // Already logged out (e.g. stale cookie cleared by the root session check)?
+    // Just bounce to the landing page.
+    if (!context.userEmail) {
       throw redirect({ to: "/" });
     }
 
@@ -19,15 +17,9 @@ export const Route = createFileRoute("/signout")({
       },
     });
 
-    // Drop any cached auth state so the header (and other session-aware UI)
-    // re-evaluates as logged out after the redirect.
-    await context.queryClient.invalidateQueries({
-      queryKey: [queryDictionary.session],
-    });
-    context.queryClient.removeQueries({
-      queryKey: [queryDictionary.user],
-    });
-
-    throw redirect({ to: "/" });
+    // Redirect with a full document reload so the root `beforeLoad` re-runs with
+    // the cleared cookie. A plain SPA redirect would reuse the root match and
+    // keep the stale `userEmail` context, leaving the header "logged in".
+    throw redirect({ to: "/", reloadDocument: true });
   },
 });

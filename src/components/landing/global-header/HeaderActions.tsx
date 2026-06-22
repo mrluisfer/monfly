@@ -1,30 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouteContext } from "@tanstack/react-router";
 import { ChevronRight, LayoutDashboardIcon, LogOutIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { Skeleton } from "~/components/ui/skeleton";
-import { queryDictionary } from "~/queries/dictionary";
-import { getUserSession } from "~/server/db/users/get-user-session";
 
 export function HeaderActions() {
-  const { data, isPending } = useQuery({
-    queryKey: [queryDictionary.session],
-    queryFn: () => getUserSession(),
-    staleTime: 1000 * 60 * 5,
-    gcTime: 1000 * 60 * 10,
-    retry: false,
-  });
-
-  const isAuthenticated = Boolean(data?.success && data?.data);
-
-  if (isPending) {
-    return (
-      <div className="flex items-center gap-1.5 sm:gap-2">
-        <Skeleton className="h-11 w-24 rounded-full" />
-        <Skeleton className="h-11 w-32 rounded-full" />
-      </div>
-    );
-  }
+  // Read the session straight from the router context (resolved in the root
+  // beforeLoad). It's always settled by the time this renders, so there's no
+  // loading flash and no separate, drift-prone session query.
+  const { userEmail } = useRouteContext({ from: "__root__" });
+  const isAuthenticated = Boolean(userEmail);
 
   if (isAuthenticated) {
     return (

@@ -1,11 +1,18 @@
 import { useAtomValue } from "jotai";
-import { useId } from "react";
+import { lazy, Suspense, useId } from "react";
+import { ClientOnly } from "~/components/shared/ClientOnly";
+import { Skeleton } from "~/components/ui/skeleton";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import { maskCurrency } from "~/utils/format-currency";
 
-import IncomeExpenseChart from "@/components/charts/IncomeExpenseChart";
+// Lazy + client-only: a static import would pull recharts into this card's
+// (server-rendered) module graph and crash the production build with
+// "a is not a function". Keep recharts in a client-only async chunk.
+const IncomeExpenseChart = lazy(
+  () => import("@/components/charts/IncomeExpenseChart"),
+);
 
 type MonthlyPoint = {
   count: number;
@@ -148,7 +155,13 @@ export function NetMomentumCard({
         </div>
       </article>
 
-      <IncomeExpenseChart />
+      <ClientOnly
+        fallback={<Skeleton className="h-72 w-full rounded-2xl" />}
+      >
+        <Suspense fallback={<Skeleton className="h-72 w-full rounded-2xl" />}>
+          <IncomeExpenseChart />
+        </Suspense>
+      </ClientOnly>
     </div>
   );
 }

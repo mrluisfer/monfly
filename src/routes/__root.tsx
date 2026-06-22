@@ -16,6 +16,7 @@ import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { useSonnerPosition } from "~/hooks/ui/useSonnerPosition";
 import { SileoToaster } from "~/lib/toaster";
 import { UiStateEffects } from "~/state/effects";
+import { getUserSession } from "~/server/db/users/get-user-session";
 import appCss from "~/styles/globals.css?url";
 import { seo } from "~/utils/seo.js";
 // import appCss from "~/styles/output.css?url";
@@ -35,6 +36,16 @@ const TanStackRouterDevtools = import.meta.env.PROD
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
+  // Resolve the session once per navigation and expose it on the router context
+  // as the single source of truth. Every route (and session-aware UI like the
+  // header) reads `userEmail` from here instead of running its own query, so a
+  // single `router.invalidate()` after login/logout refreshes the whole app.
+  beforeLoad: async () => {
+    const session = await getUserSession();
+    return {
+      userEmail: session.success && session.data ? session.data : null,
+    };
+  },
   head: () => ({
     title: "Monfly | Track your Expenses & Income | TanStack + shadcn",
     meta: [
