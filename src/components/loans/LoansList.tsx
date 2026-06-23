@@ -1,26 +1,26 @@
-import {AlertCircleIcon, HandCoinsIcon, TrendingUpIcon} from "lucide-react";
-import {useState} from "react";
-import {MetricCard} from "~/components/ui/metric-card";
-import {Skeleton} from "~/components/ui/skeleton";
-import {Tabs, TabsList, TabsTrigger} from "~/components/ui/tabs";
-import {type LoanDirection, type LoanStatus} from "~/constants/loan-status";
-import {useDeleteLoan} from "~/hooks/loans/useDeleteLoan";
-import {useLoanPayment} from "~/hooks/loans/useLoanPayment";
-import {useLoans} from "~/hooks/loans/useLoans";
-import {useUpdateLoan} from "~/hooks/loans/useUpdateLoan";
+import { AlertCircleIcon, HandCoinsIcon, TrendingUpIcon } from "lucide-react";
+import { useState } from "react";
+import { MetricCard } from "~/components/ui/metric-card";
+import { Skeleton } from "~/components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { type LoanDirection, type LoanStatus } from "~/constants/loan-status";
+import { useDeleteLoan } from "~/hooks/loans/useDeleteLoan";
+import { useLoanPayment } from "~/hooks/loans/useLoanPayment";
+import { useLoans } from "~/hooks/loans/useLoans";
+import { useUpdateLoan } from "~/hooks/loans/useUpdateLoan";
 
-import {CountBadge} from "./CountBadge";
-import {LoanDirectionIcon} from "./LoanDirectionIcon";
-import {LoanListItem} from "./LoanListItem";
-import type {DirectionFilter, StatusFilter} from "./types";
-import {useMaskedAmount} from "./use-masked-amount";
+import { CountBadge } from "./CountBadge";
+import { LoanDirectionIcon } from "./LoanDirectionIcon";
+import { LoanListItem } from "./LoanListItem";
+import type { DirectionFilter, StatusFilter } from "./types";
+import { useMaskedAmount } from "./use-masked-amount";
 
 /** The full loans dashboard: summary metrics, filters, and the loan list. */
 export function LoansList() {
   const [filter, setFilter] = useState<StatusFilter>("all");
   const [directionFilter, setDirectionFilter] =
     useState<DirectionFilter>("all");
-  const {data, isPending, error} = useLoans();
+  const { data, isPending, error } = useLoans();
   const update = useUpdateLoan();
   const payment = useLoanPayment();
   const del = useDeleteLoan();
@@ -30,13 +30,13 @@ export function LoansList() {
     return (
       <div className="space-y-3">
         <div className="grid grid-cols-3 gap-3">
-          {Array.from({length: 3}).map((_, i) => (
-            <Skeleton key={i} className="h-24 w-full rounded-2xl"/>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Skeleton key={i} className="h-24 w-full rounded-2xl" />
           ))}
         </div>
-        <Skeleton className="h-10 w-64 rounded-2xl"/>
-        {Array.from({length: 3}).map((_, i) => (
-          <Skeleton key={i} className="h-28 w-full rounded-2xl"/>
+        <Skeleton className="h-10 w-64 rounded-2xl" />
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Skeleton key={i} className="h-28 w-full rounded-2xl" />
         ))}
       </div>
     );
@@ -44,9 +44,8 @@ export function LoansList() {
 
   if (error || !data || data.error || !data.data) {
     return (
-      <div
-        className="bg-destructive/5 border-destructive/20 text-destructive flex items-center gap-3 rounded-2xl border p-5 text-sm">
-        <AlertCircleIcon className="size-5 shrink-0" aria-hidden="true"/>
+      <div className="bg-destructive/5 border-destructive/20 text-destructive flex items-center gap-3 rounded-2xl border p-5 text-sm">
+        <AlertCircleIcon className="size-5 shrink-0" aria-hidden="true" />
         <span>Failed to load loans. Please try again later.</span>
       </div>
     );
@@ -56,13 +55,12 @@ export function LoansList() {
 
   if (allLoans.length === 0) {
     return (
-      <div
-        className="bg-card border-border/60 flex h-fit flex-col items-center gap-3 rounded-2xl border p-12 text-center">
+      <div className="bg-card border-border/60 flex h-fit flex-col items-center gap-3 rounded-2xl border p-12 text-center">
         <span
           aria-hidden="true"
           className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-2xl"
         >
-          <HandCoinsIcon className="size-6"/>
+          <HandCoinsIcon className="size-6" />
         </span>
         <div className="space-y-1">
           <p className="text-foreground text-sm font-medium">No loans yet</p>
@@ -80,7 +78,7 @@ export function LoansList() {
       acc[l.status as LoanStatus] = (acc[l.status as LoanStatus] ?? 0) + 1;
       return acc;
     },
-    {all: 0, pending: 0, partial: 0, paid: 0} as Record<StatusFilter, number>,
+    { all: 0, pending: 0, partial: 0, paid: 0 } as Record<StatusFilter, number>,
   );
 
   const loans = allLoans.filter((l) => {
@@ -96,7 +94,7 @@ export function LoansList() {
       acc[dir] += 1;
       return acc;
     },
-    {lent: 0, borrowed: 0} as Record<LoanDirection, number>,
+    { lent: 0, borrowed: 0 } as Record<LoanDirection, number>,
   );
 
   const totals = allLoans.reduce(
@@ -130,13 +128,13 @@ export function LoansList() {
           label="Owed to me"
           value={maskAmount(totals.lentOutstanding)}
           accent="success"
-          icon={<LoanDirectionIcon direction="lent" colored={false}/>}
+          icon={<LoanDirectionIcon direction="lent" colored={false} />}
         />
         <MetricCard
           label="I owe"
           value={maskAmount(totals.borrowedOutstanding)}
           accent="destructive"
-          icon={<LoanDirectionIcon direction="borrowed" colored={false}/>}
+          icon={<LoanDirectionIcon direction="borrowed" colored={false} />}
         />
         <MetricCard
           label="Net balance"
@@ -145,16 +143,15 @@ export function LoansList() {
           accent={netBalance >= 0 ? "primary" : "destructive"}
           icon={
             netBalance >= 0 ? (
-              <TrendingUpIcon className="size-4" aria-hidden="true"/>
+              <TrendingUpIcon className="size-4" aria-hidden="true" />
             ) : (
-              <AlertCircleIcon className="size-4" aria-hidden="true"/>
+              <AlertCircleIcon className="size-4" aria-hidden="true" />
             )
           }
         />
       </div>
 
-      <div
-        className="flex w-full flex-wrap items-center justify-between gap-4 sm:gap-6 lg:grid lg:grid-cols-2 lg:gap-4 xl:gap-6">
+      <div className="flex w-full flex-wrap items-center justify-between gap-4 sm:gap-6 lg:grid lg:grid-cols-2 lg:gap-4 xl:gap-6">
         {/* Direction filter — quick toggle between perspectives */}
         <Tabs
           value={directionFilter}
@@ -171,17 +168,17 @@ export function LoansList() {
               value="lent"
               className="flex-1 gap-1.5 sm:flex-initial"
             >
-              <LoanDirectionIcon direction="lent" className="size-3.5"/>
+              <LoanDirectionIcon direction="lent" className="size-3.5" />
               Owed to me
-              <CountBadge n={directionCounts.lent}/>
+              <CountBadge n={directionCounts.lent} />
             </TabsTrigger>
             <TabsTrigger
               value="borrowed"
               className="flex-1 gap-1.5 sm:flex-initial"
             >
-              <LoanDirectionIcon direction="borrowed" className="size-3.5"/>
+              <LoanDirectionIcon direction="borrowed" className="size-3.5" />
               I owe
-              <CountBadge n={directionCounts.borrowed}/>
+              <CountBadge n={directionCounts.borrowed} />
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -195,19 +192,19 @@ export function LoansList() {
           <TabsList className="ml-auto w-full sm:w-fit">
             <TabsTrigger value="all" className="flex-1 sm:flex-initial">
               All
-              <CountBadge n={counts.all}/>
+              <CountBadge n={counts.all} />
             </TabsTrigger>
             <TabsTrigger value="pending" className="flex-1 sm:flex-initial">
               Pending
-              <CountBadge n={counts.pending}/>
+              <CountBadge n={counts.pending} />
             </TabsTrigger>
             <TabsTrigger value="partial" className="flex-1 sm:flex-initial">
               Partial
-              <CountBadge n={counts.partial}/>
+              <CountBadge n={counts.partial} />
             </TabsTrigger>
             <TabsTrigger value="paid" className="flex-1 sm:flex-initial">
               Paid
-              <CountBadge n={counts.paid}/>
+              <CountBadge n={counts.paid} />
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -231,7 +228,7 @@ export function LoansList() {
               onMarkPaid={() => payment.markPaid(loan)}
               onMarkPending={() => payment.markPending(loan)}
               onRecordPayment={(amount) => payment.recordPayment(loan, amount)}
-              onEdit={(patch) => update.update({id: loan.id, ...patch})}
+              onEdit={(patch) => update.update({ id: loan.id, ...patch })}
               onDelete={() => del.remove(loan.id)}
             />
           ))}

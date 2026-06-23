@@ -1,143 +1,143 @@
 - generic [ref=e2]:
-  - link "Skip to content" [ref=e3] [cursor=pointer]:
-    - /url: "#main-content"
-  - generic [ref=e6]:
-    - list [ref=e8]:
-      - listitem [ref=e9]:
-        - link "Monfly Personal finance" [ref=e10] [cursor=pointer]:
-          - /url: /home
-          - img [ref=e11]
-          - generic [ref=e12]:
-            - generic [ref=e13]: Monfly
-            - generic [ref=e14]: Personal finance
-    - generic [ref=e15]:
-      - generic [ref=e16]:
-        - generic [ref=e17]: Workspace
-        - list [ref=e19]:
-          - listitem [ref=e20]:
-            - link "Home" [ref=e21] [cursor=pointer]:
-              - /url: /home
-              - img [ref=e22]
-              - generic [ref=e25]: Home
-          - listitem [ref=e26]:
-            - link "Transactions" [ref=e27] [cursor=pointer]:
-              - /url: /home/transactions
-              - img [ref=e28]
-              - generic [ref=e30]: Transactions
-          - listitem [ref=e31]:
-            - link "Loans" [ref=e32] [cursor=pointer]:
-              - /url: /home/loans
-              - img [ref=e33]
-              - generic [ref=e36]: Loans
-          - listitem [ref=e37]:
-            - link "Reports" [ref=e38] [cursor=pointer]:
-              - /url: /home/reports
-              - img [ref=e39]
-              - generic [ref=e40]: Reports
-          - listitem [ref=e41]:
-            - link "Categories" [ref=e42] [cursor=pointer]:
-              - /url: /home/categories
-              - img [ref=e43]
-              - generic [ref=e44]: Categories
-          - listitem [ref=e45]:
-            - link "Calculator" [ref=e46] [cursor=pointer]:
-              - /url: /home/balance-calculator
-              - img [ref=e47]
-              - generic [ref=e49]: Calculator
-      - list [ref=e52]:
-        - listitem [ref=e53]:
-          - link "Settings" [ref=e54] [cursor=pointer]:
-            - /url: /user/settings
-            - img [ref=e55]
-            - generic [ref=e58]: Settings
-        - listitem [ref=e59]:
-          - link "Help" [ref=e60] [cursor=pointer]:
-            - /url: /user/help
-            - img [ref=e61]
-            - generic [ref=e68]: Help
-    - list [ref=e70]:
-      - listitem [ref=e71]:
-        - button [ref=e72] [cursor=pointer]
-    - button "Toggle Sidebar" [ref=e77]
-  - main [ref=e78]:
-    - generic [ref=e79]:
-      - button "Toggle navigation" [ref=e80] [cursor=pointer]:
-        - img
-        - generic [ref=e81]: Toggle Sidebar
-      - separator [ref=e82]
-      - navigation "breadcrumb" [ref=e83]:
-        - list [ref=e84]:
-          - listitem [ref=e85]:
-            - link "Home" [ref=e86] [cursor=pointer]:
-              - /url: /home
-          - listitem [ref=e87]:
-            - img [ref=e88]
-          - listitem [ref=e90]:
-            - link "Reports" [disabled] [ref=e91]
-      - generic [ref=e92]:
-        - button "Search or run a command" [ref=e93] [cursor=pointer]:
-          - img
-          - generic [ref=e94]: Search…
-          - generic:
-            - generic: Ctrl
-            - text: K
-        - generic [ref=e99]: Operational
-        - button "Hide information" [ref=e100] [cursor=pointer]:
-          - img
-        - button "Switch to dark mode" [ref=e101] [cursor=pointer]:
-          - img
-    - main [ref=e102]:
-      - generic [ref=e104]:
-        - generic [ref=e106]:
-          - img [ref=e108]
-          - generic [ref=e109]:
-            - heading "Reports & Analytics" [level=1] [ref=e110]
-            - paragraph [ref=e111]: Visualize your financial trends and category breakdowns.
-        - generic [ref=e112]:
-          - generic [ref=e115]:
-            - text: Income vs Expenses
-            - generic [ref=e116]: Track your monthly financial flow
-          - generic [ref=e131]:
-            - generic [ref=e132]:
-              - img [ref=e133]
-              - text: Monthly Activity
-            - generic [ref=e135]: Track your transaction activity over time
-          - generic [ref=e149]:
-            - generic [ref=e150]:
-              - generic [ref=e151]: Expense by Category
-              - generic [ref=e152]: Visualize your expense distribution across categories
-            - generic [ref=e154]: Loading chart...
-          - generic [ref=e155]:
-            - generic [ref=e156]:
-              - generic [ref=e157]: Income by Category
-              - generic [ref=e158]: Visualize your income distribution across categories
-            - generic [ref=e160]: Loading chart...
-      - generic [ref=e162]:
-        - separator [ref=e163]
-        - generic [ref=e164]:
-          - paragraph [ref=e165]:
-            - generic [ref=e166]: Monfly
-            - generic [ref=e167]: ·
-            - generic [ref=e168]: © 2026
-            - generic [ref=e169]: ·
-            - generic [ref=e170]: All rights reserved
-          - navigation "Legal" [ref=e171]:
-            - link "Privacy" [ref=e172] [cursor=pointer]:
-              - /url: /privacy
-              - img [ref=e173]
-              - generic [ref=e175]: Privacy
-            - link "Terms" [ref=e176] [cursor=pointer]:
-              - /url: /terms
-              - img [ref=e177]
-              - generic [ref=e180]: Terms
-            - link "Contact" [ref=e181] [cursor=pointer]:
-              - /url: /contact
-              - img [ref=e182]
-              - generic [ref=e185]: Contact
-            - separator [ref=e186]
-            - link "View source on GitHub" [ref=e187] [cursor=pointer]:
-              - /url: https://github.com/mrluisfer/monfly
-              - img [ref=e188]
-  - generic [ref=e192]:
-    - heading "Command Palette" [level=2] [ref=e193]
-    - paragraph [ref=e194]: Search for a command to run...
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+        - /url: "#main-content"
+    - generic [ref=e6]:
+        - list [ref=e8]:
+            - listitem [ref=e9]:
+                - link "Monfly Personal finance" [ref=e10] [cursor=pointer]:
+                    - /url: /home
+                    - img [ref=e11]
+                    - generic [ref=e12]:
+                        - generic [ref=e13]: Monfly
+                        - generic [ref=e14]: Personal finance
+        - generic [ref=e15]:
+            - generic [ref=e16]:
+                - generic [ref=e17]: Workspace
+                - list [ref=e19]:
+                    - listitem [ref=e20]:
+                        - link "Home" [ref=e21] [cursor=pointer]:
+                            - /url: /home
+                            - img [ref=e22]
+                            - generic [ref=e25]: Home
+                    - listitem [ref=e26]:
+                        - link "Transactions" [ref=e27] [cursor=pointer]:
+                            - /url: /home/transactions
+                            - img [ref=e28]
+                            - generic [ref=e30]: Transactions
+                    - listitem [ref=e31]:
+                        - link "Loans" [ref=e32] [cursor=pointer]:
+                            - /url: /home/loans
+                            - img [ref=e33]
+                            - generic [ref=e36]: Loans
+                    - listitem [ref=e37]:
+                        - link "Reports" [ref=e38] [cursor=pointer]:
+                            - /url: /home/reports
+                            - img [ref=e39]
+                            - generic [ref=e40]: Reports
+                    - listitem [ref=e41]:
+                        - link "Categories" [ref=e42] [cursor=pointer]:
+                            - /url: /home/categories
+                            - img [ref=e43]
+                            - generic [ref=e44]: Categories
+                    - listitem [ref=e45]:
+                        - link "Calculator" [ref=e46] [cursor=pointer]:
+                            - /url: /home/balance-calculator
+                            - img [ref=e47]
+                            - generic [ref=e49]: Calculator
+            - list [ref=e52]:
+                - listitem [ref=e53]:
+                    - link "Settings" [ref=e54] [cursor=pointer]:
+                        - /url: /user/settings
+                        - img [ref=e55]
+                        - generic [ref=e58]: Settings
+                - listitem [ref=e59]:
+                    - link "Help" [ref=e60] [cursor=pointer]:
+                        - /url: /user/help
+                        - img [ref=e61]
+                        - generic [ref=e68]: Help
+        - list [ref=e70]:
+            - listitem [ref=e71]:
+                - button [ref=e72] [cursor=pointer]
+        - button "Toggle Sidebar" [ref=e77]
+    - main [ref=e78]:
+        - generic [ref=e79]:
+            - button "Toggle navigation" [ref=e80] [cursor=pointer]:
+                - img
+                - generic [ref=e81]: Toggle Sidebar
+            - separator [ref=e82]
+            - navigation "breadcrumb" [ref=e83]:
+                - list [ref=e84]:
+                    - listitem [ref=e85]:
+                        - link "Home" [ref=e86] [cursor=pointer]:
+                            - /url: /home
+                    - listitem [ref=e87]:
+                        - img [ref=e88]
+                    - listitem [ref=e90]:
+                        - link "Reports" [disabled] [ref=e91]
+            - generic [ref=e92]:
+                - button "Search or run a command" [ref=e93] [cursor=pointer]:
+                    - img
+                    - generic [ref=e94]: Search…
+                    - generic:
+                        - generic: Ctrl
+                        - text: K
+                - generic [ref=e99]: Operational
+                - button "Hide information" [ref=e100] [cursor=pointer]:
+                    - img
+                - button "Switch to dark mode" [ref=e101] [cursor=pointer]:
+                    - img
+        - main [ref=e102]:
+            - generic [ref=e104]:
+                - generic [ref=e106]:
+                    - img [ref=e108]
+                    - generic [ref=e109]:
+                        - heading "Reports & Analytics" [level=1] [ref=e110]
+                        - paragraph [ref=e111]: Visualize your financial trends and category breakdowns.
+                - generic [ref=e112]:
+                    - generic [ref=e115]:
+                        - text: Income vs Expenses
+                        - generic [ref=e116]: Track your monthly financial flow
+                    - generic [ref=e131]:
+                        - generic [ref=e132]:
+                            - img [ref=e133]
+                            - text: Monthly Activity
+                        - generic [ref=e135]: Track your transaction activity over time
+                    - generic [ref=e149]:
+                        - generic [ref=e150]:
+                            - generic [ref=e151]: Expense by Category
+                            - generic [ref=e152]: Visualize your expense distribution across categories
+                        - generic [ref=e154]: Loading chart...
+                    - generic [ref=e155]:
+                        - generic [ref=e156]:
+                            - generic [ref=e157]: Income by Category
+                            - generic [ref=e158]: Visualize your income distribution across categories
+                        - generic [ref=e160]: Loading chart...
+            - generic [ref=e162]:
+                - separator [ref=e163]
+                - generic [ref=e164]:
+                    - paragraph [ref=e165]:
+                        - generic [ref=e166]: Monfly
+                        - generic [ref=e167]: ·
+                        - generic [ref=e168]: © 2026
+                        - generic [ref=e169]: ·
+                        - generic [ref=e170]: All rights reserved
+                    - navigation "Legal" [ref=e171]:
+                        - link "Privacy" [ref=e172] [cursor=pointer]:
+                            - /url: /privacy
+                            - img [ref=e173]
+                            - generic [ref=e175]: Privacy
+                        - link "Terms" [ref=e176] [cursor=pointer]:
+                            - /url: /terms
+                            - img [ref=e177]
+                            - generic [ref=e180]: Terms
+                        - link "Contact" [ref=e181] [cursor=pointer]:
+                            - /url: /contact
+                            - img [ref=e182]
+                            - generic [ref=e185]: Contact
+                        - separator [ref=e186]
+                        - link "View source on GitHub" [ref=e187] [cursor=pointer]:
+                            - /url: https://github.com/mrluisfer/monfly
+                            - img [ref=e188]
+    - generic [ref=e192]:
+        - heading "Command Palette" [level=2] [ref=e193]
+        - paragraph [ref=e194]: Search for a command to run...

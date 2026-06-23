@@ -13,14 +13,7 @@ import {
   type SupportedCurrency,
 } from "~/utils/format-currency";
 import { DollarSign } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Legend,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
 
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
@@ -177,98 +170,92 @@ export default function IncomeExpenseChart() {
                 bottom: 20,
               }}
             >
-                <ChartTooltip
-                  content={<IncomeExpenseTooltip currency={currency} />}
-                />
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  className="stroke-border/30"
-                  vertical={false}
-                />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  axisLine={false}
-                  className="fill-muted-foreground text-xs"
-                  tick={{ fontSize: 12 }}
-                  tickMargin={8}
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  className="fill-muted-foreground text-xs"
-                  tick={{ fontSize: 10 }}
-                  tickFormatter={(value) =>
-                    `${getCurrencySymbol(currency)}${(value / 1000).toFixed(0)}k`
-                  }
-                />
-                <defs>
-                  <linearGradient
-                    id="incomeGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="5%"
-                      stopColor="var(--primary)"
-                      stopOpacity={0.2}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--primary)"
-                      stopOpacity={0.01}
-                    />
-                  </linearGradient>
-                  <linearGradient
-                    id="expenseGradient"
-                    x1="0"
-                    y1="0"
-                    x2="0"
-                    y2="1"
-                  >
-                    <stop
-                      offset="5%"
-                      stopColor="var(--destructive)"
-                      stopOpacity={0.2}
-                    />
-                    <stop
-                      offset="95%"
-                      stopColor="var(--destructive)"
-                      stopOpacity={0.01}
-                    />
-                  </linearGradient>
-                </defs>
-                <Area
-                  type="monotone"
-                  dataKey="income"
-                  stroke="var(--primary)"
-                  fill="url(#incomeGradient)"
-                  strokeWidth={2}
-                  name="Income"
-                  animationDuration={1000}
-                  animationEasing="ease-out"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="expense"
-                  stroke="var(--destructive)"
-                  fill="url(#expenseGradient)"
-                  strokeWidth={2}
-                  name="Expenses"
-                  animationDuration={1000}
-                  animationEasing="ease-out"
-                />
-                <Legend
-                  verticalAlign="top"
-                  height={36}
-                  iconType="circle"
-                  wrapperStyle={{
-                    paddingBottom: "20px",
-                    fontSize: "14px",
-                  }}
-                />
+              <ChartTooltip
+                content={<IncomeExpenseTooltip currency={currency} />}
+              />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                className="stroke-border/30"
+                vertical={false}
+              />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+                className="fill-muted-foreground text-xs"
+                tick={{ fontSize: 12 }}
+                tickMargin={8}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                className="fill-muted-foreground text-xs"
+                tick={{ fontSize: 10 }}
+                tickFormatter={(value) =>
+                  `${getCurrencySymbol(currency)}${(value / 1000).toFixed(0)}k`
+                }
+              />
+              <defs>
+                <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--primary)"
+                    stopOpacity={0.2}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--primary)"
+                    stopOpacity={0.01}
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="expenseGradient"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="5%"
+                    stopColor="var(--destructive)"
+                    stopOpacity={0.2}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--destructive)"
+                    stopOpacity={0.01}
+                  />
+                </linearGradient>
+              </defs>
+              <Area
+                type="monotone"
+                dataKey="income"
+                stroke="var(--primary)"
+                fill="url(#incomeGradient)"
+                strokeWidth={2}
+                name="Income"
+                animationDuration={1000}
+                animationEasing="ease-out"
+              />
+              <Area
+                type="monotone"
+                dataKey="expense"
+                stroke="var(--destructive)"
+                fill="url(#expenseGradient)"
+                strokeWidth={2}
+                name="Expenses"
+                animationDuration={1000}
+                animationEasing="ease-out"
+              />
+              <Legend
+                verticalAlign="top"
+                height={36}
+                iconType="circle"
+                wrapperStyle={{
+                  paddingBottom: "20px",
+                  fontSize: "14px",
+                }}
+              />
             </AreaChart>
           </ChartContainer>
 

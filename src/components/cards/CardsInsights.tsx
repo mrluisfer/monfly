@@ -31,9 +31,7 @@ export function CardsInsights() {
   const total = activeCards.reduce((sum, c) => sum + (c.balance ?? 0), 0);
   const topCard = activeCards.reduce<(typeof activeCards)[number] | null>(
     (best, c) =>
-      (c.balance ?? 0) > (best?.balance ?? Number.NEGATIVE_INFINITY)
-        ? c
-        : best,
+      (c.balance ?? 0) > (best?.balance ?? Number.NEGATIVE_INFINITY) ? c : best,
     null,
   );
 
@@ -45,8 +43,7 @@ export function CardsInsights() {
       id: c.id,
       name: c.name,
       balance: c.balance ?? 0,
-      color:
-        c.color ?? CARD_FALLBACK_COLORS[i % CARD_FALLBACK_COLORS.length],
+      color: c.color ?? CARD_FALLBACK_COLORS[i % CARD_FALLBACK_COLORS.length],
     }));
   const positiveTotal = positiveCards.reduce((sum, c) => sum + c.balance, 0);
 

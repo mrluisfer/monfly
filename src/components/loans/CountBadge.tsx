@@ -1,7 +1,13 @@
 import { Badge } from "~/components/ui/badge";
 
 /** Small numeric pill shown next to filter tabs; renders nothing when zero. */
-export function CountBadge({ n, variant }: { n: number; variant?: "default" | "secondary" }) {
+export function CountBadge({
+  n,
+  variant,
+}: {
+  n: number;
+  variant?: "default" | "secondary";
+}) {
   if (!n) return null;
   return (
     <Badge

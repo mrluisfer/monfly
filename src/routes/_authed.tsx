@@ -33,7 +33,7 @@ function AuthPending() {
       aria-label="Verifying your session"
       className="flex min-h-dvh w-full flex-col items-center justify-center gap-3"
     >
-      <Spinner className="size-7 text-muted-foreground" />
+      <Spinner className="text-muted-foreground size-7" />
       <p className="text-muted-foreground text-sm">Verifying your session…</p>
     </div>
   );

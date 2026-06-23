@@ -1,210 +1,210 @@
 - generic [active] [ref=e1]:
-  - generic [ref=e191]:
-    - link "Skip to content" [ref=e192] [cursor=pointer]:
-      - /url: "#main-content"
-    - generic [ref=e195]:
-      - list [ref=e197]:
-        - listitem [ref=e198]:
-          - link "Monfly Personal finance" [ref=e199] [cursor=pointer]:
-            - /url: /home
-            - img [ref=e200]
-            - generic [ref=e201]:
-              - generic [ref=e202]: Monfly
-              - generic [ref=e203]: Personal finance
-      - generic [ref=e204]:
-        - generic [ref=e205]:
-          - generic [ref=e206]: Workspace
-          - list [ref=e208]:
-            - listitem [ref=e209]:
-              - link "Home" [ref=e210] [cursor=pointer]:
-                - /url: /home
-                - img [ref=e211]
-                - generic [ref=e214]: Home
-            - listitem [ref=e215]:
-              - link "Transactions" [ref=e216] [cursor=pointer]:
-                - /url: /home/transactions
-                - img [ref=e217]
-                - generic [ref=e219]: Transactions
-            - listitem [ref=e220]:
-              - link "Loans" [ref=e221] [cursor=pointer]:
-                - /url: /home/loans
-                - img [ref=e222]
-                - generic [ref=e225]: Loans
-            - listitem [ref=e226]:
-              - link "Reports" [ref=e227] [cursor=pointer]:
-                - /url: /home/reports
-                - img [ref=e228]
-                - generic [ref=e229]: Reports
-            - listitem [ref=e230]:
-              - link "Categories" [ref=e231] [cursor=pointer]:
-                - /url: /home/categories
-                - img [ref=e232]
-                - generic [ref=e233]: Categories
-            - listitem [ref=e234]:
-              - link "Calculator" [ref=e235] [cursor=pointer]:
-                - /url: /home/balance-calculator
-                - img [ref=e236]
-                - generic [ref=e238]: Calculator
-        - list [ref=e241]:
-          - listitem [ref=e242]:
-            - link "Profile" [ref=e243] [cursor=pointer]:
-              - /url: /user/53610fbc-5306-453e-b9ce-03f6295ccb05
-              - img [ref=e244]
-              - generic [ref=e247]: Profile
-          - listitem [ref=e248]:
-            - link "Settings" [ref=e249] [cursor=pointer]:
-              - /url: /user/settings
-              - img [ref=e250]
-              - generic [ref=e253]: Settings
-          - listitem [ref=e254]:
-            - link "Help" [ref=e255] [cursor=pointer]:
-              - /url: /user/help
-              - img [ref=e256]
-              - generic [ref=e263]: Help
-      - list [ref=e265]:
-        - listitem [ref=e266]:
-          - button "Debug Tester debug.reports@example.com" [ref=e267] [cursor=pointer]:
-            - img [ref=e268]
-            - generic [ref=e276]:
-              - generic [ref=e277]: Debug Tester
-              - generic [ref=e278]: debug.reports@example.com
-            - img [ref=e279]
-      - button "Toggle Sidebar" [ref=e282]
-    - main [ref=e283]:
-      - generic [ref=e284]:
-        - button "Toggle navigation" [ref=e285] [cursor=pointer]:
-          - img
-          - generic [ref=e286]: Toggle Sidebar
-        - separator [ref=e287]
-        - navigation "breadcrumb" [ref=e288]:
-          - list [ref=e289]:
-            - listitem [ref=e290]:
-              - link "Home" [disabled] [ref=e291]
-        - generic [ref=e292]:
-          - button "Search or run a command" [ref=e293] [cursor=pointer]:
-            - img
-            - generic [ref=e294]: Search…
-            - generic:
-              - generic: Ctrl
-              - text: K
-          - generic [ref=e299]: Operational
-          - button "Hide information" [ref=e300] [cursor=pointer]:
-            - img
-          - button "Switch to dark mode" [ref=e301] [cursor=pointer]:
-            - img
-      - main [ref=e302]:
-        - generic [ref=e304]:
-          - generic [ref=e305]:
-            - generic [ref=e306]:
-              - img [ref=e308]
-              - generic [ref=e313]:
-                - heading "Overview" [level=1] [ref=e314]
-                - paragraph [ref=e315]: Track balance, cashflow, and recent activity in one place.
-            - generic [ref=e317]:
-              - img [ref=e319]
-              - text: Monday, June 1
-          - generic [ref=e321]:
-            - generic [ref=e322]:
-              - generic [ref=e324]:
-                - generic [ref=e326]:
-                  - generic [ref=e327]:
-                    - generic [ref=e329]:
-                      - paragraph [ref=e330]: Net total
-                      - generic [ref=e331]: No activity yet
-                    - generic [ref=e332]:
-                      - button "Copy" [ref=e333] [cursor=pointer]:
-                        - generic [ref=e334]:
-                          - img
-                      - generic [ref=e335]: 0 recorded periods
-                  - generic [ref=e339]: $0.00
-                - generic [ref=e340]:
-                  - button "Reports" [ref=e341] [cursor=pointer]:
+    - generic [ref=e191]:
+        - link "Skip to content" [ref=e192] [cursor=pointer]:
+            - /url: "#main-content"
+        - generic [ref=e195]:
+            - list [ref=e197]:
+                - listitem [ref=e198]:
+                    - link "Monfly Personal finance" [ref=e199] [cursor=pointer]:
+                        - /url: /home
+                        - img [ref=e200]
+                        - generic [ref=e201]:
+                            - generic [ref=e202]: Monfly
+                            - generic [ref=e203]: Personal finance
+            - generic [ref=e204]:
+                - generic [ref=e205]:
+                    - generic [ref=e206]: Workspace
+                    - list [ref=e208]:
+                        - listitem [ref=e209]:
+                            - link "Home" [ref=e210] [cursor=pointer]:
+                                - /url: /home
+                                - img [ref=e211]
+                                - generic [ref=e214]: Home
+                        - listitem [ref=e215]:
+                            - link "Transactions" [ref=e216] [cursor=pointer]:
+                                - /url: /home/transactions
+                                - img [ref=e217]
+                                - generic [ref=e219]: Transactions
+                        - listitem [ref=e220]:
+                            - link "Loans" [ref=e221] [cursor=pointer]:
+                                - /url: /home/loans
+                                - img [ref=e222]
+                                - generic [ref=e225]: Loans
+                        - listitem [ref=e226]:
+                            - link "Reports" [ref=e227] [cursor=pointer]:
+                                - /url: /home/reports
+                                - img [ref=e228]
+                                - generic [ref=e229]: Reports
+                        - listitem [ref=e230]:
+                            - link "Categories" [ref=e231] [cursor=pointer]:
+                                - /url: /home/categories
+                                - img [ref=e232]
+                                - generic [ref=e233]: Categories
+                        - listitem [ref=e234]:
+                            - link "Calculator" [ref=e235] [cursor=pointer]:
+                                - /url: /home/balance-calculator
+                                - img [ref=e236]
+                                - generic [ref=e238]: Calculator
+                - list [ref=e241]:
+                    - listitem [ref=e242]:
+                        - link "Profile" [ref=e243] [cursor=pointer]:
+                            - /url: /user/53610fbc-5306-453e-b9ce-03f6295ccb05
+                            - img [ref=e244]
+                            - generic [ref=e247]: Profile
+                    - listitem [ref=e248]:
+                        - link "Settings" [ref=e249] [cursor=pointer]:
+                            - /url: /user/settings
+                            - img [ref=e250]
+                            - generic [ref=e253]: Settings
+                    - listitem [ref=e254]:
+                        - link "Help" [ref=e255] [cursor=pointer]:
+                            - /url: /user/help
+                            - img [ref=e256]
+                            - generic [ref=e263]: Help
+            - list [ref=e265]:
+                - listitem [ref=e266]:
+                    - button "Debug Tester debug.reports@example.com" [ref=e267] [cursor=pointer]:
+                        - img [ref=e268]
+                        - generic [ref=e276]:
+                            - generic [ref=e277]: Debug Tester
+                            - generic [ref=e278]: debug.reports@example.com
+                        - img [ref=e279]
+            - button "Toggle Sidebar" [ref=e282]
+        - main [ref=e283]:
+            - generic [ref=e284]:
+                - button "Toggle navigation" [ref=e285] [cursor=pointer]:
                     - img
-                    - generic [ref=e342]: Reports
-                  - button "Categories" [ref=e343] [cursor=pointer]:
-                    - img
-                    - generic [ref=e344]: Categories
-                  - button "Calculator" [ref=e345] [cursor=pointer]:
-                    - img
-                    - generic [ref=e346]: Calculator
-                  - button "Loans" [ref=e347] [cursor=pointer]:
-                    - img
-                    - generic [ref=e348]: Loans
-                  - button "Add transaction" [ref=e349] [cursor=pointer]:
-                    - img
-                    - generic [ref=e350]: Add transaction
-              - generic [ref=e361]:
-                - generic [ref=e362]:
-                  - generic [ref=e364]:
-                    - paragraph [ref=e365]: Income
-                    - img [ref=e367]
-                  - generic [ref=e373]:
-                    - paragraph [ref=e374]: Expenses
-                    - img [ref=e376]
-                  - generic [ref=e382]:
-                    - paragraph [ref=e383]: Net flow
-                    - img [ref=e385]
-                - generic [ref=e391]:
-                  - generic [ref=e392]:
-                    - img [ref=e394]
-                    - generic [ref=e400]:
-                      - heading "Upcoming receivables" [level=3] [ref=e401]
-                      - paragraph [ref=e402]: Loans not yet collected
-                  - button "View all" [ref=e403] [cursor=pointer]:
-                    - text: View all
-                    - img
-            - generic [ref=e410]:
-              - generic [ref=e411]:
-                - generic [ref=e412]:
-                  - img [ref=e414]
-                  - generic [ref=e417]:
-                    - heading "Transactions" [level=1] [ref=e418]
-                    - paragraph [ref=e419]: Search, filter, edit, or add transactions from one place.
-                - generic [ref=e421]:
-                  - generic [ref=e422]: 0 records
-                  - generic [ref=e423]:
-                    - img
-                    - generic [ref=e425]: Balanced
-                  - button "Loading Loading..." [disabled]:
-                    - status "Loading"
-                    - generic: Loading...
-              - generic [ref=e429]:
-                - status "Loading" [ref=e430]
-                - text: Loading transactions...
-        - generic [ref=e433]:
-          - separator [ref=e434]
-          - generic [ref=e435]:
-            - paragraph [ref=e436]:
-              - generic [ref=e437]: Monfly
-              - generic [ref=e438]: ·
-              - generic [ref=e439]: © 2026
-              - generic [ref=e440]: ·
-              - generic [ref=e441]: All rights reserved
-            - navigation "Legal" [ref=e442]:
-              - link "Privacy" [ref=e443] [cursor=pointer]:
-                - /url: /privacy
-                - img [ref=e444]
-                - generic [ref=e446]: Privacy
-              - link "Terms" [ref=e447] [cursor=pointer]:
-                - /url: /terms
-                - img [ref=e448]
-                - generic [ref=e451]: Terms
-              - link "Contact" [ref=e452] [cursor=pointer]:
-                - /url: /contact
-                - img [ref=e453]
-                - generic [ref=e456]: Contact
-              - separator [ref=e457]
-              - link "View source on GitHub" [ref=e458] [cursor=pointer]:
-                - /url: https://github.com/mrluisfer/monfly
-                - img [ref=e459]
-    - generic [ref=e463]:
-      - heading "Command Palette" [level=2] [ref=e464]
-      - paragraph [ref=e465]: Search for a command to run...
-  - generic:
-    - contentinfo:
-      - button "Open TanStack Router Devtools" [ref=e108] [cursor=pointer]:
-        - generic [ref=e109]:
-          - img [ref=e111]
-          - img [ref=e146]
-        - generic [ref=e180]: "-"
-        - generic [ref=e181]: TanStack Router
+                    - generic [ref=e286]: Toggle Sidebar
+                - separator [ref=e287]
+                - navigation "breadcrumb" [ref=e288]:
+                    - list [ref=e289]:
+                        - listitem [ref=e290]:
+                            - link "Home" [disabled] [ref=e291]
+                - generic [ref=e292]:
+                    - button "Search or run a command" [ref=e293] [cursor=pointer]:
+                        - img
+                        - generic [ref=e294]: Search…
+                        - generic:
+                            - generic: Ctrl
+                            - text: K
+                    - generic [ref=e299]: Operational
+                    - button "Hide information" [ref=e300] [cursor=pointer]:
+                        - img
+                    - button "Switch to dark mode" [ref=e301] [cursor=pointer]:
+                        - img
+            - main [ref=e302]:
+                - generic [ref=e304]:
+                    - generic [ref=e305]:
+                        - generic [ref=e306]:
+                            - img [ref=e308]
+                            - generic [ref=e313]:
+                                - heading "Overview" [level=1] [ref=e314]
+                                - paragraph [ref=e315]: Track balance, cashflow, and recent activity in one place.
+                        - generic [ref=e317]:
+                            - img [ref=e319]
+                            - text: Monday, June 1
+                    - generic [ref=e321]:
+                        - generic [ref=e322]:
+                            - generic [ref=e324]:
+                                - generic [ref=e326]:
+                                    - generic [ref=e327]:
+                                        - generic [ref=e329]:
+                                            - paragraph [ref=e330]: Net total
+                                            - generic [ref=e331]: No activity yet
+                                        - generic [ref=e332]:
+                                            - button "Copy" [ref=e333] [cursor=pointer]:
+                                                - generic [ref=e334]:
+                                                    - img
+                                            - generic [ref=e335]: 0 recorded periods
+                                    - generic [ref=e339]: $0.00
+                                - generic [ref=e340]:
+                                    - button "Reports" [ref=e341] [cursor=pointer]:
+                                        - img
+                                        - generic [ref=e342]: Reports
+                                    - button "Categories" [ref=e343] [cursor=pointer]:
+                                        - img
+                                        - generic [ref=e344]: Categories
+                                    - button "Calculator" [ref=e345] [cursor=pointer]:
+                                        - img
+                                        - generic [ref=e346]: Calculator
+                                    - button "Loans" [ref=e347] [cursor=pointer]:
+                                        - img
+                                        - generic [ref=e348]: Loans
+                                    - button "Add transaction" [ref=e349] [cursor=pointer]:
+                                        - img
+                                        - generic [ref=e350]: Add transaction
+                            - generic [ref=e361]:
+                                - generic [ref=e362]:
+                                    - generic [ref=e364]:
+                                        - paragraph [ref=e365]: Income
+                                        - img [ref=e367]
+                                    - generic [ref=e373]:
+                                        - paragraph [ref=e374]: Expenses
+                                        - img [ref=e376]
+                                    - generic [ref=e382]:
+                                        - paragraph [ref=e383]: Net flow
+                                        - img [ref=e385]
+                                - generic [ref=e391]:
+                                    - generic [ref=e392]:
+                                        - img [ref=e394]
+                                        - generic [ref=e400]:
+                                            - heading "Upcoming receivables" [level=3] [ref=e401]
+                                            - paragraph [ref=e402]: Loans not yet collected
+                                    - button "View all" [ref=e403] [cursor=pointer]:
+                                        - text: View all
+                                        - img
+                        - generic [ref=e410]:
+                            - generic [ref=e411]:
+                                - generic [ref=e412]:
+                                    - img [ref=e414]
+                                    - generic [ref=e417]:
+                                        - heading "Transactions" [level=1] [ref=e418]
+                                        - paragraph [ref=e419]: Search, filter, edit, or add transactions from one place.
+                                - generic [ref=e421]:
+                                    - generic [ref=e422]: 0 records
+                                    - generic [ref=e423]:
+                                        - img
+                                        - generic [ref=e425]: Balanced
+                                    - button "Loading Loading..." [disabled]:
+                                        - status "Loading"
+                                        - generic: Loading...
+                            - generic [ref=e429]:
+                                - status "Loading" [ref=e430]
+                                - text: Loading transactions...
+                - generic [ref=e433]:
+                    - separator [ref=e434]
+                    - generic [ref=e435]:
+                        - paragraph [ref=e436]:
+                            - generic [ref=e437]: Monfly
+                            - generic [ref=e438]: ·
+                            - generic [ref=e439]: © 2026
+                            - generic [ref=e440]: ·
+                            - generic [ref=e441]: All rights reserved
+                        - navigation "Legal" [ref=e442]:
+                            - link "Privacy" [ref=e443] [cursor=pointer]:
+                                - /url: /privacy
+                                - img [ref=e444]
+                                - generic [ref=e446]: Privacy
+                            - link "Terms" [ref=e447] [cursor=pointer]:
+                                - /url: /terms
+                                - img [ref=e448]
+                                - generic [ref=e451]: Terms
+                            - link "Contact" [ref=e452] [cursor=pointer]:
+                                - /url: /contact
+                                - img [ref=e453]
+                                - generic [ref=e456]: Contact
+                            - separator [ref=e457]
+                            - link "View source on GitHub" [ref=e458] [cursor=pointer]:
+                                - /url: https://github.com/mrluisfer/monfly
+                                - img [ref=e459]
+        - generic [ref=e463]:
+            - heading "Command Palette" [level=2] [ref=e464]
+            - paragraph [ref=e465]: Search for a command to run...
+    - generic:
+        - contentinfo:
+            - button "Open TanStack Router Devtools" [ref=e108] [cursor=pointer]:
+                - generic [ref=e109]:
+                    - img [ref=e111]
+                    - img [ref=e146]
+                - generic [ref=e180]: "-"
+                - generic [ref=e181]: TanStack Router

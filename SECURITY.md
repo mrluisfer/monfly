@@ -10,10 +10,10 @@ reported responsibly so it can be fixed before it is disclosed publicly.
 Security fixes are applied to the latest released version on the `main` branch.
 Older snapshots are not maintained.
 
-| Version        | Supported          |
-| -------------- | ------------------ |
-| `main` (latest)| :white_check_mark: |
-| Older tags     | :x:                |
+| Version         | Supported          |
+| --------------- | ------------------ |
+| `main` (latest) | :white_check_mark: |
+| Older tags      | :x:                |
 
 ## Reporting a Vulnerability
 
@@ -37,12 +37,12 @@ When reporting, please include as much of the following as possible:
 
 ### What to expect
 
-| Stage                     | Target time frame              |
-| ------------------------- | ------------------------------ |
-| Initial acknowledgement   | Within **72 hours**            |
-| Triage & severity rating  | Within **7 days**              |
-| Fix or mitigation plan    | Depends on severity & scope    |
-| Public disclosure         | Coordinated, **after** a fix   |
+| Stage                    | Target time frame            |
+| ------------------------ | ---------------------------- |
+| Initial acknowledgement  | Within **72 hours**          |
+| Triage & severity rating | Within **7 days**            |
+| Fix or mitigation plan   | Depends on severity & scope  |
+| Public disclosure        | Coordinated, **after** a fix |
 
 We will keep you informed throughout the process and credit you in the release
 notes / advisory unless you prefer to remain anonymous.

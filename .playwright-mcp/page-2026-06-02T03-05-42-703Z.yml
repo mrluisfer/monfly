@@ -1,114 +1,114 @@
 - generic [ref=e1]:
-  - main [ref=e3]:
-    - generic [ref=e4]:
-      - link "Back to home" [ref=e5] [cursor=pointer]:
-        - /url: /
-        - img
-        - text: Back to home
-      - link "Already have an account" [ref=e6] [cursor=pointer]:
-        - /url: /login
-        - img
-        - text: Already have an account
-    - generic [ref=e7]:
-      - generic [ref=e9]:
-        - generic [ref=e10]:
-          - paragraph [ref=e11]:
-            - img [ref=e12]
-            - text: Build Your Money System
-          - heading "Start with a faster onboarding flow that works on every screen." [level=2] [ref=e15]
-          - paragraph [ref=e16]: Create your account and move from scattered expenses to a single operating dashboard.
-        - generic [ref=e17]:
-          - generic [ref=e18]:
-            - generic [ref=e19]:
-              - term [ref=e20]: Time to start
-              - definition [ref=e21]: < 60s
-            - generic [ref=e22]:
-              - term [ref=e23]: Setup flow
-              - definition [ref=e24]: Guided
-            - generic [ref=e25]:
-              - term [ref=e26]: Mobile ready
-              - definition [ref=e27]: 100%
-          - list [ref=e28]:
-            - listitem [ref=e29]:
-              - img [ref=e30]
-              - generic [ref=e32]: Create personalized budgets aligned with your goals
-            - listitem [ref=e33]:
-              - img [ref=e34]
-              - generic [ref=e36]: Monitor spending behavior with clean visual analytics
-            - listitem [ref=e37]:
-              - img [ref=e38]
-              - generic [ref=e40]: Keep all your core money workflows in one dashboard
-          - generic [ref=e41]:
-            - img
-            - text: Built for personal and educational finance planning
-      - generic [ref=e43]:
-        - paragraph [ref=e44]:
-          - img [ref=e45]
-          - text: Create Account
-        - heading "Launch your personal finance workspace" [level=1] [ref=e48]
-        - paragraph [ref=e49]: It takes less than a minute to set up your account and start tracking.
-        - generic [ref=e51]:
-          - button "Sign up with Google" [disabled]:
-            - img
-            - text: Sign up with Google
-          - paragraph [ref=e52]: This feature is coming soon.
-        - generic [ref=e55]: or continue with email
-        - generic [ref=e58]:
-          - generic [ref=e60]:
-            - generic [ref=e61]: Full name
-            - generic [ref=e62]:
-              - textbox "Full name" [active] [ref=e63]:
-                - /placeholder: Enter your full name...
-                - text: Debug Tester
-              - status: 12/25
-          - generic [ref=e65]:
-            - generic [ref=e66]: Email
-            - generic [ref=e67]:
-              - textbox "Email" [ref=e68]:
-                - /placeholder: you@example.com
-              - generic:
+    - main [ref=e3]:
+        - generic [ref=e4]:
+            - link "Back to home" [ref=e5] [cursor=pointer]:
+                - /url: /
                 - img
-          - generic [ref=e69]:
-            - generic [ref=e70]:
-              - generic [ref=e71]: Password
-              - generic [ref=e72]:
-                - textbox "Password" [ref=e73]:
-                  - /placeholder: Enter your password...
-                - button "Show password" [ref=e74] [cursor=pointer]:
-                  - img [ref=e75]
-            - progressbar "Password strength" [ref=e78]
-            - paragraph [ref=e79]: "Enter a password. Must contain:"
-            - list "Password requirements" [ref=e80]:
-              - listitem [ref=e81]:
-                - img [ref=e82]
-                - generic [ref=e85]:
-                  - text: At least 8 characters
-                  - generic [ref=e86]: "- Requirement not met"
-              - listitem [ref=e87]:
-                - img [ref=e88]
-                - generic [ref=e91]:
-                  - text: At least 1 number
-                  - generic [ref=e92]: "- Requirement not met"
-              - listitem [ref=e93]:
-                - img [ref=e94]
-                - generic [ref=e97]:
-                  - text: At least 1 lowercase letter
-                  - generic [ref=e98]: "- Requirement not met"
-              - listitem [ref=e99]:
-                - img [ref=e100]
-                - generic [ref=e103]:
-                  - text: At least 1 uppercase letter
-                  - generic [ref=e104]: "- Requirement not met"
-          - button "Sign Up" [ref=e105] [cursor=pointer]
-          - paragraph [ref=e106]:
-            - text: Already have an account?
-            - link "Log in" [ref=e107] [cursor=pointer]:
-              - /url: /login
-  - generic:
-    - contentinfo:
-      - button "Open TanStack Router Devtools" [ref=e108] [cursor=pointer]:
-        - generic [ref=e109]:
-          - img [ref=e111]
-          - img [ref=e146]
-        - generic [ref=e180]: "-"
-        - generic [ref=e181]: TanStack Router
+                - text: Back to home
+            - link "Already have an account" [ref=e6] [cursor=pointer]:
+                - /url: /login
+                - img
+                - text: Already have an account
+        - generic [ref=e7]:
+            - generic [ref=e9]:
+                - generic [ref=e10]:
+                    - paragraph [ref=e11]:
+                        - img [ref=e12]
+                        - text: Build Your Money System
+                    - heading "Start with a faster onboarding flow that works on every screen." [level=2] [ref=e15]
+                    - paragraph [ref=e16]: Create your account and move from scattered expenses to a single operating dashboard.
+                - generic [ref=e17]:
+                    - generic [ref=e18]:
+                        - generic [ref=e19]:
+                            - term [ref=e20]: Time to start
+                            - definition [ref=e21]: < 60s
+                        - generic [ref=e22]:
+                            - term [ref=e23]: Setup flow
+                            - definition [ref=e24]: Guided
+                        - generic [ref=e25]:
+                            - term [ref=e26]: Mobile ready
+                            - definition [ref=e27]: 100%
+                    - list [ref=e28]:
+                        - listitem [ref=e29]:
+                            - img [ref=e30]
+                            - generic [ref=e32]: Create personalized budgets aligned with your goals
+                        - listitem [ref=e33]:
+                            - img [ref=e34]
+                            - generic [ref=e36]: Monitor spending behavior with clean visual analytics
+                        - listitem [ref=e37]:
+                            - img [ref=e38]
+                            - generic [ref=e40]: Keep all your core money workflows in one dashboard
+                    - generic [ref=e41]:
+                        - img
+                        - text: Built for personal and educational finance planning
+            - generic [ref=e43]:
+                - paragraph [ref=e44]:
+                    - img [ref=e45]
+                    - text: Create Account
+                - heading "Launch your personal finance workspace" [level=1] [ref=e48]
+                - paragraph [ref=e49]: It takes less than a minute to set up your account and start tracking.
+                - generic [ref=e51]:
+                    - button "Sign up with Google" [disabled]:
+                        - img
+                        - text: Sign up with Google
+                    - paragraph [ref=e52]: This feature is coming soon.
+                - generic [ref=e55]: or continue with email
+                - generic [ref=e58]:
+                    - generic [ref=e60]:
+                        - generic [ref=e61]: Full name
+                        - generic [ref=e62]:
+                            - textbox "Full name" [active] [ref=e63]:
+                                - /placeholder: Enter your full name...
+                                - text: Debug Tester
+                            - status: 12/25
+                    - generic [ref=e65]:
+                        - generic [ref=e66]: Email
+                        - generic [ref=e67]:
+                            - textbox "Email" [ref=e68]:
+                                - /placeholder: you@example.com
+                            - generic:
+                                - img
+                    - generic [ref=e69]:
+                        - generic [ref=e70]:
+                            - generic [ref=e71]: Password
+                            - generic [ref=e72]:
+                                - textbox "Password" [ref=e73]:
+                                    - /placeholder: Enter your password...
+                                - button "Show password" [ref=e74] [cursor=pointer]:
+                                    - img [ref=e75]
+                        - progressbar "Password strength" [ref=e78]
+                        - paragraph [ref=e79]: "Enter a password. Must contain:"
+                        - list "Password requirements" [ref=e80]:
+                            - listitem [ref=e81]:
+                                - img [ref=e82]
+                                - generic [ref=e85]:
+                                    - text: At least 8 characters
+                                    - generic [ref=e86]: "- Requirement not met"
+                            - listitem [ref=e87]:
+                                - img [ref=e88]
+                                - generic [ref=e91]:
+                                    - text: At least 1 number
+                                    - generic [ref=e92]: "- Requirement not met"
+                            - listitem [ref=e93]:
+                                - img [ref=e94]
+                                - generic [ref=e97]:
+                                    - text: At least 1 lowercase letter
+                                    - generic [ref=e98]: "- Requirement not met"
+                            - listitem [ref=e99]:
+                                - img [ref=e100]
+                                - generic [ref=e103]:
+                                    - text: At least 1 uppercase letter
+                                    - generic [ref=e104]: "- Requirement not met"
+                    - button "Sign Up" [ref=e105] [cursor=pointer]
+                    - paragraph [ref=e106]:
+                        - text: Already have an account?
+                        - link "Log in" [ref=e107] [cursor=pointer]:
+                            - /url: /login
+    - generic:
+        - contentinfo:
+            - button "Open TanStack Router Devtools" [ref=e108] [cursor=pointer]:
+                - generic [ref=e109]:
+                    - img [ref=e111]
+                    - img [ref=e146]
+                - generic [ref=e180]: "-"
+                - generic [ref=e181]: TanStack Router

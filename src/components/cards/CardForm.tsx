@@ -47,7 +47,10 @@ export function CardForm({
   } = form;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 sm:grid-cols-2">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid gap-4 sm:grid-cols-2"
+    >
       <div className="space-y-1.5 sm:col-span-2">
         <label className="text-sm font-medium" htmlFor={`${uid}-name`}>
           Name

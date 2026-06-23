@@ -124,10 +124,7 @@ export function BalanceMetricsGrid({
                   ? `~ ${
                       isBalanceHidden
                         ? HIDDEN_VALUE
-                        : formatCurrency(
-                            summary.expenseBurnRate,
-                            currency,
-                          )
+                        : formatCurrency(summary.expenseBurnRate, currency)
                     } / period`
                   : "Recent recorded periods"}
               </span>

@@ -1,39 +1,49 @@
-import {Card as CardType} from "@prisma/client";
-import {Card} from "@/components/ui/card";
-import {cn} from "@/lib/utils";
-import {CARD_TYPE_LABEL} from "@/constants/card-status";
-import {ArchiveIcon, ArchiveRestoreIcon, CreditCardIcon, Trash2Icon} from "lucide-react";
-import {Badge} from "@/components/ui/badge";
-import {EditCard} from "@/components/cards/EditCard";
-import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
-import {Button} from "@/components/ui/button";
-import {useDeleteCard, usePreferredCurrency, useUpdateCard} from "@/hooks";
+import { Card as CardType } from "@prisma/client";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { CARD_TYPE_LABEL } from "@/constants/card-status";
+import {
+  ArchiveIcon,
+  ArchiveRestoreIcon,
+  CreditCardIcon,
+  Trash2Icon,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { EditCard } from "@/components/cards/EditCard";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { useDeleteCard, usePreferredCurrency, useUpdateCard } from "@/hooks";
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
-  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {formatCurrency} from "@/utils/format-currency";
+import { formatCurrency } from "@/utils/format-currency";
 
-export function SingleCard({card}: { card: CardType }) {
+export function SingleCard({ card }: { card: CardType }) {
   const isArchived = card.status === "archived";
   const accent = card.color ?? "var(--primary)";
   const typeLabel = card.type
-    ? (CARD_TYPE_LABEL[card.type as keyof typeof CARD_TYPE_LABEL] ??
-      card.type)
+    ? (CARD_TYPE_LABEL[card.type as keyof typeof CARD_TYPE_LABEL] ?? card.type)
     : null;
   const meta =
     [card.provider, card.last4 ? `•••• ${card.last4}` : null]
       .filter(Boolean)
       .join(" · ") || "—";
 
-  const {archive, restore} = useUpdateCard();
+  const { archive, restore } = useUpdateCard();
   const currency = usePreferredCurrency();
-  const {remove} = useDeleteCard();
+  const { remove } = useDeleteCard();
 
   return (
     <Card
@@ -46,22 +56,22 @@ export function SingleCard({card}: { card: CardType }) {
       <span
         aria-hidden="true"
         className="pointer-events-none absolute -top-12 -right-12 size-32 rounded-full opacity-15 blur-2xl"
-        style={{backgroundColor: accent}}
+        style={{ backgroundColor: accent }}
       />
 
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
-                <span
-                  aria-hidden="true"
-                  className="flex size-11 shrink-0 items-center justify-center rounded-xl ring-1"
-                  style={{
-                    backgroundColor: `color-mix(in oklch, ${accent} 14%, transparent)`,
-                    color: accent,
-                    boxShadow: `inset 0 0 0 1px color-mix(in oklch, ${accent} 22%, transparent)`,
-                  }}
-                >
-                  <CreditCardIcon className="size-5"/>
-                </span>
+          <span
+            aria-hidden="true"
+            className="flex size-11 shrink-0 items-center justify-center rounded-xl ring-1"
+            style={{
+              backgroundColor: `color-mix(in oklch, ${accent} 14%, transparent)`,
+              color: accent,
+              boxShadow: `inset 0 0 0 1px color-mix(in oklch, ${accent} 22%, transparent)`,
+            }}
+          >
+            <CreditCardIcon className="size-5" />
+          </span>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <p className="truncate font-semibold">{card.name}</p>
@@ -83,9 +93,8 @@ export function SingleCard({card}: { card: CardType }) {
         </div>
 
         {/* Actions: subtle by default, emphasized on hover/focus. */}
-        <div
-          className="flex shrink-0 items-center gap-1 opacity-70 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
-          <EditCard card={card}/>
+        <div className="flex shrink-0 items-center gap-1 opacity-70 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+          <EditCard card={card} />
 
           <Tooltip>
             <TooltipTrigger
@@ -100,9 +109,9 @@ export function SingleCard({card}: { card: CardType }) {
                   }
                 >
                   {isArchived ? (
-                    <ArchiveRestoreIcon className="size-4"/>
+                    <ArchiveRestoreIcon className="size-4" />
                   ) : (
-                    <ArchiveIcon className="size-4"/>
+                    <ArchiveIcon className="size-4" />
                   )}
                 </Button>
               }
@@ -124,7 +133,7 @@ export function SingleCard({card}: { card: CardType }) {
                         size="icon"
                         aria-label="Delete card"
                       >
-                        <Trash2Icon className="size-4" aria-hidden="true"/>
+                        <Trash2Icon className="size-4" aria-hidden="true" />
                       </Button>
                     }
                   />

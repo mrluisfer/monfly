@@ -155,9 +155,7 @@ export function NetMomentumCard({
         </div>
       </article>
 
-      <ClientOnly
-        fallback={<Skeleton className="h-72 w-full rounded-2xl" />}
-      >
+      <ClientOnly fallback={<Skeleton className="h-72 w-full rounded-2xl" />}>
         <Suspense fallback={<Skeleton className="h-72 w-full rounded-2xl" />}>
           <IncomeExpenseChart />
         </Suspense>

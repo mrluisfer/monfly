@@ -137,7 +137,9 @@ export default function ChartByCategoryRadar({
                 // inference (it builds a bogus "INCOME" | "EXPENSE" key union
                 // from the enum member names). Reading the field ourselves keeps
                 // it type-safe and avoids that.
-                dataKey={(entry: Record<TransactionType, number>) => entry[type]}
+                dataKey={(entry: Record<TransactionType, number>) =>
+                  entry[type]
+                }
                 fill={color}
                 fillOpacity={0.6}
                 stroke="var(--primary)"

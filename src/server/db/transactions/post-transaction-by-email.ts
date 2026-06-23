@@ -32,8 +32,7 @@ export const postTransactionByEmail = async (
         });
       }
 
-      const signedDelta =
-        data.type === "income" ? data.amount : -data.amount;
+      const signedDelta = data.type === "income" ? data.amount : -data.amount;
 
       await tx.user.update({
         where: { email },

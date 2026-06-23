@@ -18,10 +18,7 @@ import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-c
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import { queryKeys } from "~/utils/query-keys";
-import {
-  formatCurrency,
-  getCurrencySymbol,
-} from "~/utils/format-currency";
+import { formatCurrency, getCurrencySymbol } from "~/utils/format-currency";
 
 import { CopyButton } from "../copy-button/copy-button";
 import { Badge } from "../ui/badge";

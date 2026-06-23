@@ -1,6 +1,6 @@
-import type {Loan} from "@prisma/client";
-import {prismaClient} from "~/server/prisma";
-import type {ApiResponse} from "~/types/ApiResponse";
+import type { Loan } from "@prisma/client";
+import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 type GetLoansParams = {
   email: string;
@@ -12,9 +12,9 @@ interface LoansResponse<T> extends ApiResponse<T> {
 }
 
 export const getLoansByEmail = async ({
-                                        email,
-                                        status,
-                                      }: GetLoansParams): Promise<LoansResponse<Loan[] | null>> => {
+  email,
+  status,
+}: GetLoansParams): Promise<LoansResponse<Loan[] | null>> => {
   if (!email) {
     return {
       error: true,
@@ -29,7 +29,7 @@ export const getLoansByEmail = async ({
   try {
     const where = {
       userEmail: email,
-      ...(status ? {status} : {}),
+      ...(status ? { status } : {}),
     };
 
     const [loans, total] = await Promise.all([
@@ -38,9 +38,9 @@ export const getLoansByEmail = async ({
         // ponytail: status desc happens to order pending→partial→paid
         // alphabetically, so paid loans sink to the bottom; within each group,
         // newest first. Switch to an explicit ordinal if statuses ever change.
-        orderBy: [{status: "desc"}, {createdAt: "desc"}],
+        orderBy: [{ status: "desc" }, { createdAt: "desc" }],
       }),
-      prismaClient.loan.count({where}),
+      prismaClient.loan.count({ where }),
     ]);
 
     return {

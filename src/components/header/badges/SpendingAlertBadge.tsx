@@ -41,7 +41,6 @@ type SpendingStatus =
   | "loading"
   | "error";
 
-
 const statusConfig = {
   safe: {
     label: "Budget Safe",

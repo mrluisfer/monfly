@@ -71,14 +71,14 @@ export function CardBadge({
       className={cn(
         "text-muted-foreground max-w-[180px] cursor-default gap-1.5 font-normal",
         withTooltip &&
-          "transition-colors hover:brightness-105 focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:outline-none",
+          "focus-visible:ring-ring/40 transition-colors hover:brightness-105 focus-visible:ring-2 focus-visible:outline-none",
         className,
       )}
       title={withTooltip ? undefined : titleText}
     >
       {card.color ? (
         <span
-          className="size-2 shrink-0 rounded-full ring-2 ring-inset ring-white/10"
+          className="size-2 shrink-0 rounded-full ring-2 ring-white/10 ring-inset"
           style={{
             backgroundColor: card.color,
             boxShadow: `0 0 0 2px color-mix(in oklab, ${card.color} 22%, transparent)`,
@@ -109,7 +109,7 @@ export function CardBadge({
             style={{ backgroundColor: card.color ?? "currentColor" }}
             aria-hidden="true"
           />
-          <span className="text-[13px] capitalize leading-none font-semibold">
+          <span className="text-[13px] leading-none font-semibold capitalize">
             {card.name}
           </span>
         </div>

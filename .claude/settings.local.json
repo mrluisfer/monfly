@@ -54,9 +54,5 @@
       "Bash(grep -n 'focusOut\\\\|focusout\\\\|onBlur\\\\|resetInput\\\\|commitValue\\\\|inputInsidePopup\\\\|setInputValue\\\\|clearInput\\\\|selectedValue' __TRACKED_VAR__/esm/combobox/root/AriaCombobox.js)"
     ]
   },
-  "enabledMcpjsonServers": [
-    "shadcn",
-    "magicuidesign-mcp",
-    "playwright"
-  ]
+  "enabledMcpjsonServers": ["shadcn", "magicuidesign-mcp", "playwright"]
 }

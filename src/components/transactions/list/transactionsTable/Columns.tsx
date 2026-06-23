@@ -11,10 +11,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import {
-  maskCurrency,
-  type SupportedCurrency,
-} from "~/utils/format-currency";
+import { maskCurrency, type SupportedCurrency } from "~/utils/format-currency";
 
 import { CardBadge, type CardSummary } from "../CardBadge";
 import { LoanBadge } from "../LoanBadge";

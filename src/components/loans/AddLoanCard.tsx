@@ -7,31 +7,31 @@ import {
   PlusIcon,
   UserIcon,
 } from "lucide-react";
-import {useState} from "react";
-import {Controller} from "react-hook-form";
-import {Button} from "~/components/ui/button";
-import {Input} from "~/components/ui/input";
-import {Tabs, TabsList, TabsTrigger} from "~/components/ui/tabs";
-import {type LoanDirection} from "~/constants/loan-status";
-import {useAddLoan} from "~/hooks/loans/useAddLoan";
-import {usePreferredCurrency} from "~/hooks/usePreferredCurrency";
-import {cn} from "~/lib/utils";
+import { useState } from "react";
+import { Controller } from "react-hook-form";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import { type LoanDirection } from "~/constants/loan-status";
+import { useAddLoan } from "~/hooks/loans/useAddLoan";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { cn } from "~/lib/utils";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {Spinner} from "@/components/ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
-import {DebtorCombobox} from "./DebtorCombobox";
-import {LoanDirectionIcon} from "./LoanDirectionIcon";
-import {LoanField} from "./LoanField";
-import {fromDateInputValue, toDateInputValue} from "./date-input";
+import { DebtorCombobox } from "./DebtorCombobox";
+import { LoanDirectionIcon } from "./LoanDirectionIcon";
+import { LoanField } from "./LoanField";
+import { fromDateInputValue, toDateInputValue } from "./date-input";
 
 /** Collapsible form to register a new loan (money owed to or by the user). */
 export function AddLoanCard() {
-  const {form, onSubmit, mutation} = useAddLoan();
+  const { form, onSubmit, mutation } = useAddLoan();
   const isLoading = mutation.status === "pending";
   const errors = form.formState.errors;
   const currency = usePreferredCurrency();
@@ -57,7 +57,7 @@ export function AddLoanCard() {
           aria-hidden="true"
           className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-xl"
         >
-          <PlusCircleIcon className="size-4"/>
+          <PlusCircleIcon className="size-4" />
         </span>
         <div>
           <h2
@@ -87,7 +87,7 @@ export function AddLoanCard() {
           <Controller
             control={form.control}
             name="direction"
-            render={({field}) => (
+            render={({ field }) => (
               <Tabs
                 value={field.value}
                 onValueChange={(v) => field.onChange(v as LoanDirection)}
@@ -95,7 +95,7 @@ export function AddLoanCard() {
               >
                 <TabsList className="w-full md:w-fit">
                   <TabsTrigger value="lent" className="flex-1 gap-1.5">
-                    <LoanDirectionIcon direction="lent" className="size-3.5"/>
+                    <LoanDirectionIcon direction="lent" className="size-3.5" />
                     Owed to me
                   </TabsTrigger>
                   <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
@@ -117,12 +117,12 @@ export function AddLoanCard() {
                 form.watch("direction") === "borrowed" ? "Creditor" : "Debtor"
               }
               error={errors.debtor?.message}
-              icon={<UserIcon className="size-3.5"/>}
+              icon={<UserIcon className="size-3.5" />}
             >
               <Controller
                 control={form.control}
                 name="debtor"
-                render={({field}) => (
+                render={({ field }) => (
                   <DebtorCombobox
                     name={field.name}
                     value={field.value}
@@ -137,12 +137,12 @@ export function AddLoanCard() {
             <LoanField
               label={`Amount (${currency})`}
               error={errors.amount?.message}
-              icon={<CircleDollarSignIcon className="size-3.5"/>}
+              icon={<CircleDollarSignIcon className="size-3.5" />}
             >
               <Controller
                 control={form.control}
                 name="amount"
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     {...field}
                     type="number"
@@ -157,12 +157,12 @@ export function AddLoanCard() {
 
             <LoanField
               label="Issued at"
-              icon={<CalendarIcon className="size-3.5"/>}
+              icon={<CalendarIcon className="size-3.5" />}
             >
               <Controller
                 control={form.control}
                 name="issuedAt"
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     type="date"
                     value={toDateInputValue(field.value)}
@@ -176,12 +176,12 @@ export function AddLoanCard() {
 
             <LoanField
               label="Due (optional)"
-              icon={<CalendarIcon className="size-3.5"/>}
+              icon={<CalendarIcon className="size-3.5" />}
             >
               <Controller
                 control={form.control}
                 name="dueAt"
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     type="date"
                     value={toDateInputValue(field.value ?? null)}
@@ -200,12 +200,12 @@ export function AddLoanCard() {
             <div className="md:flex-1">
               <LoanField
                 label="Notes (optional)"
-                icon={<FileTextIcon className="size-3.5"/>}
+                icon={<FileTextIcon className="size-3.5" />}
               >
                 <Controller
                   control={form.control}
                   name="notes"
-                  render={({field}) => (
+                  render={({ field }) => (
                     <Input
                       {...field}
                       value={field.value ?? ""}
@@ -222,12 +222,12 @@ export function AddLoanCard() {
             >
               {isLoading ? (
                 <>
-                  <Spinner className="animate-spin"/>
+                  <Spinner className="animate-spin" />
                   Saving…
                 </>
               ) : (
                 <>
-                  <PlusIcon/>
+                  <PlusIcon />
                   Create loan
                 </>
               )}

@@ -10,7 +10,10 @@ import { sileo } from "~/lib/toaster";
 import { invalidateCardQueries } from "~/utils/query-invalidation";
 import { CardFormSchema, type CardFormValues } from "~/zod-schemas/card-schema";
 
-export const useEditCard = (card: Card, options?: { onSuccess?: () => void }) => {
+export const useEditCard = (
+  card: Card,
+  options?: { onSuccess?: () => void },
+) => {
   const queryClient = useQueryClient();
   const userEmail = useRouteUser();
 

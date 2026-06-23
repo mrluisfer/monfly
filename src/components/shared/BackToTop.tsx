@@ -50,7 +50,9 @@ function resolveExplicitTarget(target?: ScrollTarget): HTMLElement | null {
 function isScrollable(element: HTMLElement): boolean {
   if (element.scrollHeight <= element.clientHeight) return false;
   const overflowY = getComputedStyle(element).overflowY;
-  return overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay";
+  return (
+    overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay"
+  );
 }
 
 /** Walks up from `node` to the first ancestor that actually scrolls its overflow. */

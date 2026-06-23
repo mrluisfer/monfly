@@ -16,23 +16,25 @@ import { Section } from "~/components/layout/Section";
 import { ChangePasswordForm } from "~/components/settings/ChangePasswordForm";
 import { Button } from "~/components/ui/button";
 
-export const Route = createFileRoute("/_authed/user/settings/change-password/")({
-  head: () => ({
-    title: "Change password | Monfly",
-    meta: [
-      {
-        name: "description",
-        content:
-          "Update your Monfly account password. Verify your current password and choose a new, stronger one.",
-      },
-      {
-        name: "robots",
-        content: "noindex, nofollow",
-      },
-    ],
-  }),
-  component: ChangePasswordRoute,
-});
+export const Route = createFileRoute("/_authed/user/settings/change-password/")(
+  {
+    head: () => ({
+      title: "Change password | Monfly",
+      meta: [
+        {
+          name: "description",
+          content:
+            "Update your Monfly account password. Verify your current password and choose a new, stronger one.",
+        },
+        {
+          name: "robots",
+          content: "noindex, nofollow",
+        },
+      ],
+    }),
+    component: ChangePasswordRoute,
+  },
+);
 
 type PasswordTip = {
   icon: LucideIcon;

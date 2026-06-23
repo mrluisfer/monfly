@@ -11,7 +11,11 @@ export const getTotalExpensesByEmail = async ({
 }) => {
   const totalExpenses = await withDatabaseTimeout(() =>
     prismaClient.transaction.aggregate({
-      where: { userEmail: email, type: "expense", ...(cardId ? { cardId } : {}) },
+      where: {
+        userEmail: email,
+        type: "expense",
+        ...(cardId ? { cardId } : {}),
+      },
       _sum: { amount: true },
     }),
   );

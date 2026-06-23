@@ -195,7 +195,9 @@ function HeatmapCell({
             <p>
               {cell.count} {cell.count === 1 ? "transaction" : "transactions"}
             </p>
-            {cell.income > 0 && <p>In: {formatCurrency(cell.income, currency)}</p>}
+            {cell.income > 0 && (
+              <p>In: {formatCurrency(cell.income, currency)}</p>
+            )}
             {cell.expense > 0 && (
               <p>Out: {formatCurrency(cell.expense, currency)}</p>
             )}

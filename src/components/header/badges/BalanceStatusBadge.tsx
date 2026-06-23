@@ -150,7 +150,9 @@ export function BalanceStatusBadge({
       <span className="text-xs font-medium">
         {config.label}
         {showAmount && status !== "loading" && status !== "error" && (
-          <span className="ml-1.5 font-mono">{formatCurrency(balance, currency)}</span>
+          <span className="ml-1.5 font-mono">
+            {formatCurrency(balance, currency)}
+          </span>
         )}
       </span>
     </HeaderBadge>

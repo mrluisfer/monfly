@@ -1,13 +1,13 @@
-import {useQueryClient} from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
-import type {LoanRow} from "~/components/loans/types";
-import {type LoanDirection} from "~/constants/loan-status";
-import {isErrorPayload, useMutation} from "~/hooks/useMutation";
-import {useRouteUser} from "~/hooks/useRouteUser";
-import {reverseLoanPaymentsByIdServer} from "~/lib/api/loan/reverse-loan-payments-by-id";
-import {postTransactionByEmailServer} from "~/lib/api/transaction/post-transaction-by-email";
-import {sileo} from "~/lib/toaster";
-import {getUserSession} from "~/server/db/users/get-user-session";
+import type { LoanRow } from "~/components/loans/types";
+import { type LoanDirection } from "~/constants/loan-status";
+import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { reverseLoanPaymentsByIdServer } from "~/lib/api/loan/reverse-loan-payments-by-id";
+import { postTransactionByEmailServer } from "~/lib/api/transaction/post-transaction-by-email";
+import { sileo } from "~/lib/toaster";
+import { getUserSession } from "~/server/db/users/get-user-session";
 import {
   invalidateLoanQueries,
   invalidateTransactionQueries,
@@ -34,22 +34,23 @@ export const useLoanPayment = () => {
 
   const pay = useMutation({
     fn: postTransactionByEmailServer,
-    onSuccess: async ({data}) => {
+    onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         sileo.error({
           title:
-            (data as { message?: string }).message ?? "Failed to record payment",
+            (data as { message?: string }).message ??
+            "Failed to record payment",
         });
         return;
       }
-      sileo.success({title: "Payment recorded"});
+      sileo.success({ title: "Payment recorded" });
       await invalidateTransactionQueries(queryClient, userEmail);
     },
   });
 
   const reopen = useMutation({
     fn: reverseLoanPaymentsByIdServer,
-    onSuccess: async ({data}) => {
+    onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         sileo.error({
           title:
@@ -57,7 +58,7 @@ export const useLoanPayment = () => {
         });
         return;
       }
-      sileo.success({title: "Loan reopened"});
+      sileo.success({ title: "Loan reopened" });
       await Promise.all([
         invalidateTransactionQueries(queryClient, userEmail),
         invalidateLoanQueries(queryClient, userEmail),
@@ -67,7 +68,7 @@ export const useLoanPayment = () => {
 
   const recordPayment = async (loan: LoanRow, amount: number) => {
     if (!Number.isFinite(amount) || amount <= 0) return;
-    const {data: sessionEmail} = await getUserSession();
+    const { data: sessionEmail } = await getUserSession();
     if (!sessionEmail) return;
     const direction = (loan.direction ?? "lent") as LoanDirection;
 
@@ -95,7 +96,7 @@ export const useLoanPayment = () => {
     recordPayment(loan, Math.max(loan.amount - loan.amountPaid, 0));
 
   const markPending = (loan: LoanRow) =>
-    reopen.mutate({data: {loanId: loan.id}});
+    reopen.mutate({ data: { loanId: loan.id } });
 
-  return {recordPayment, markPaid, markPending};
+  return { recordPayment, markPaid, markPending };
 };

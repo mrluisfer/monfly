@@ -43,19 +43,19 @@ align on the approach and avoid duplicated effort.
 
 ## Tech Stack
 
-| Area              | Technology                                                  |
-| ----------------- | ----------------------------------------------------------- |
-| Framework         | TanStack Start (React 19), file-based routing               |
-| Language          | TypeScript (strict)                                         |
-| Build tooling     | Vite (`vite.config.mjs`) + Nitro                            |
-| Server / RPC      | TanStack Start server functions (`createServerFn`)          |
-| Database / ORM    | Prisma — PostgreSQL (prod) / SQLite (dev)                   |
-| Server state      | TanStack Query                                              |
-| UI state          | Jotai                                                       |
-| Styling           | Tailwind CSS 4 + shadcn/ui (Radix)                          |
-| Forms             | React Hook Form + Zod                                       |
-| Testing           | Jest + React Testing Library                                |
-| Package manager   | **pnpm**                                                    |
+| Area            | Technology                                         |
+| --------------- | -------------------------------------------------- |
+| Framework       | TanStack Start (React 19), file-based routing      |
+| Language        | TypeScript (strict)                                |
+| Build tooling   | Vite (`vite.config.mjs`) + Nitro                   |
+| Server / RPC    | TanStack Start server functions (`createServerFn`) |
+| Database / ORM  | Prisma — PostgreSQL (prod) / SQLite (dev)          |
+| Server state    | TanStack Query                                     |
+| UI state        | Jotai                                              |
+| Styling         | Tailwind CSS 4 + shadcn/ui (Radix)                 |
+| Forms           | React Hook Form + Zod                              |
+| Testing         | Jest + React Testing Library                       |
+| Package manager | **pnpm**                                           |
 
 For a deeper architecture overview, see [CLAUDE.md](./CLAUDE.md).
 

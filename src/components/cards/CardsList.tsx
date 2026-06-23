@@ -1,10 +1,10 @@
-import {DataNotFoundPlaceholder} from "~/components/shared/DataNotFoundPlaceholder";
-import {Skeleton} from "~/components/ui/skeleton";
-import {useCards} from "~/hooks/cards";
-import {SingleCard} from "@/components/cards/SingleCard";
+import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
+import { Skeleton } from "~/components/ui/skeleton";
+import { useCards } from "~/hooks/cards";
+import { SingleCard } from "@/components/cards/SingleCard";
 
 export function CardsList() {
-  const {data, isPending} = useCards();
+  const { data, isPending } = useCards();
 
   const cards = data?.data ?? [];
 
@@ -12,7 +12,7 @@ export function CardsList() {
     return (
       <div className="grid gap-4 sm:grid-cols-2">
         {[1, 2].map((i) => (
-          <Skeleton key={i} className="h-40 rounded-2xl"/>
+          <Skeleton key={i} className="h-40 rounded-2xl" />
         ))}
       </div>
     );
@@ -28,7 +28,9 @@ export function CardsList() {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      {cards.map((card) => <SingleCard card={card}/>)}
+      {cards.map((card) => (
+        <SingleCard card={card} />
+      ))}
     </div>
   );
 }
