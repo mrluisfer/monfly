@@ -26,14 +26,5 @@ export const useUpdateLoan = () => {
 
   const update = (input: UpdateLoanInput) => mutation.mutate({ data: input });
 
-  /**
-   * Convenience helpers for the most common state transitions.
-   */
-  const markPaid = (id: string) => update({ id, status: "paid" });
-  const markPending = (id: string) =>
-    update({ id, status: "pending", amountPaid: 0 });
-  const recordPayment = (id: string, amountPaid: number) =>
-    update({ id, amountPaid });
-
-  return { mutation, update, markPaid, markPending, recordPayment };
+  return { mutation, update };
 };

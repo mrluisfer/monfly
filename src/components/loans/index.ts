@@ -8,6 +8,7 @@ export { LoanField } from "./LoanField";
 export { LoanListItem } from "./LoanListItem";
 export { LoansList } from "./LoansList";
 export { PartialPaymentControl } from "./PartialPaymentControl";
+export { ReopenLoanButton } from "./ReopenLoanButton";
 export { StatusBadge } from "./StatusBadge";
 export { UpcomingReceivablesCard } from "./UpcomingReceivablesCard";
 export { useMaskedAmount } from "./use-masked-amount";

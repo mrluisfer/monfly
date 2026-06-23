@@ -26,7 +26,10 @@ export const getLoansByEmail = async ({
     const [loans, total] = await Promise.all([
       prismaClient.loan.findMany({
         where,
-        orderBy: [{ status: "desc" }, { dueAt: "asc" }, { createdAt: "desc" }],
+        // ponytail: status desc happens to order pending→partial→paid
+        // alphabetically, so paid loans sink to the bottom; within each group,
+        // newest first. Switch to an explicit ordinal if statuses ever change.
+        orderBy: [{ status: "desc" }, { createdAt: "desc" }],
       }),
       prismaClient.loan.count({ where }),
     ]);

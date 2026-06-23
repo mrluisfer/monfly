@@ -1,4 +1,4 @@
-import {CheckCheck, CheckIcon, FileTextIcon, RotateCcwIcon} from "lucide-react";
+import {CheckIcon, FileTextIcon} from "lucide-react";
 import {Button} from "~/components/ui/button";
 import {type LoanDirection, type LoanStatus} from "~/constants/loan-status";
 import {cn} from "~/lib/utils";
@@ -7,19 +7,21 @@ import {DeleteLoanButton} from "./DeleteLoanButton";
 import {DirectionBadge} from "./DirectionBadge";
 import {EditLoanButton} from "./EditLoanButton";
 import {PartialPaymentControl} from "./PartialPaymentControl";
+import {ReopenLoanButton} from "./ReopenLoanButton";
 import {StatusBadge} from "./StatusBadge";
 import type {EditLoanPatch, LoanRow} from "./types";
 import {useMaskedAmount} from "./use-masked-amount";
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
 
 /** A single loan: identity, progress and per-row actions. */
 export function LoanListItem({
-  loan,
-  onMarkPaid,
-  onMarkPending,
-  onRecordPayment,
-  onEdit,
-  onDelete,
-}: {
+                               loan,
+                               onMarkPaid,
+                               onMarkPending,
+                               onRecordPayment,
+                               onEdit,
+                               onDelete,
+                             }: {
   loan: LoanRow;
   onMarkPaid: () => void;
   onMarkPending: () => void;
@@ -37,30 +39,61 @@ export function LoanListItem({
   const maskAmount = useMaskedAmount();
 
   return (
-    <li className="flex flex-col gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:gap-5 lg:px-7 lg:py-6">
+    <li
+      className="group bg-card border-border/60 relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-4 shadow-xs transition-shadow hover:shadow-md sm:px-6 sm:py-5 lg:gap-5 lg:px-7 lg:py-6">
+      {/* Status fades: green when paid, red while there's still a balance. */}
+      <div
+        aria-hidden="true"
+        className={cn(
+          "pointer-events-none absolute -top-8 -right-8 size-32 rounded-full bg-gradient-to-br opacity-60 blur-2xl transition-opacity group-hover:opacity-90",
+          isPaid ? "from-success/15 to-transparent" : "from-destructive/15 to-transparent",
+        )}
+      />
       {/* Top row: debtor info + remaining */}
-      <div className="flex items-start justify-between gap-3">
+      <div className="relative flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1 space-y-3">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="text-foreground truncate text-sm font-semibold capitalize sm:text-base">
               {loan.debtor}
             </span>
-            <DirectionBadge direction={direction} />
-            <StatusBadge status={status} />
+            <DirectionBadge direction={direction}/>
+            <StatusBadge status={status}/>
+            {status === "partial" && (
+              <span className="text-warning text-xs font-medium tabular-nums">
+                {progressPct}%
+              </span>
+            )}
           </div>
-          <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-xs tabular-nums">
-            <span>{maskAmount(loan.amount)} total</span>
+          <p
+            className="text-muted-foreground flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-xs tabular-nums sm:text-sm">
+            <span>
+              <span className="text-foreground font-medium">
+                {maskAmount(loan.amount)}
+              </span>{" "}
+              total
+            </span>
             {loan.amountPaid > 0 && (
               <span className="before:text-muted-foreground/50 before:mr-1.5 before:content-['·']">
-                <span className="text-foreground">
+                <span className="text-foreground font-medium">
                   {maskAmount(loan.amountPaid)}
                 </span>{" "}
                 paid
               </span>
             )}
+            {loan.issuedAt && (
+              <span className="before:text-muted-foreground/50 before:mr-1.5 before:content-['·']">
+                issued{" "}
+                <span className="text-foreground">
+                  {new Date(loan.issuedAt).toLocaleDateString()}
+                </span>
+              </span>
+            )}
             {loan.dueAt && (
               <span className="before:text-muted-foreground/50 before:mr-1.5 before:content-['·']">
-                due {new Date(loan.dueAt).toLocaleDateString()}
+                due{" "}
+                <span className="text-foreground">
+                  {new Date(loan.dueAt).toLocaleDateString()}
+                </span>
               </span>
             )}
           </p>
@@ -87,69 +120,33 @@ export function LoanListItem({
         )}
       </div>
 
-      {/* Payment progress bar */}
-      {loan.amountPaid > 0 && (
-        <div
-          role="progressbar"
-          aria-label={`${progressPct}% paid`}
-          aria-valuenow={progressPct}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          className="bg-muted h-1.5 w-full overflow-hidden rounded-full"
-        >
-          <div
-            className={cn(
-              "h-full rounded-full transition-all duration-500",
-              isPaid ? "bg-success" : "bg-primary",
-            )}
-            style={{ width: `${progressPct}%` }}
-          />
-        </div>
-      )}
-
       {/* Action row — stacks on mobile, inline on sm+ */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+      <div className="relative flex flex-col gap-2 sm:flex-row sm:items-center">
         {!isPaid && (
           <div className="w-full sm:w-auto sm:max-w-[260px] sm:flex-1">
-            <PartialPaymentControl onSubmit={onRecordPayment} />
+            <PartialPaymentControl onSubmit={onRecordPayment}/>
           </div>
         )}
         <div className="flex items-center gap-2 sm:ml-auto">
           {!isPaid ? (
-            <>
-              <Button
+            <Tooltip>
+              <TooltipTrigger render={<Button
                 type="button"
                 variant="default"
                 onClick={onMarkPaid}
-                className="hidden flex-1 sm:inline-flex sm:flex-initial"
-              >
-                <CheckIcon aria-hidden="true" />
+                size={'icon'}
+              ></Button>}>
+                <CheckIcon aria-hidden="true"/>
+              </TooltipTrigger>
+              <TooltipContent>
                 Mark paid
-              </Button>
-
-              <Button
-                type="button"
-                variant={"default"}
-                onClick={onMarkPaid}
-                className={"sm:hidden"}
-                title="Mark paid"
-              >
-                <CheckCheck aria-hidden="true" />
-              </Button>
-            </>
+              </TooltipContent>
+            </Tooltip>
           ) : (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onMarkPending}
-              className="flex-initial"
-            >
-              <RotateCcwIcon aria-hidden="true" />
-              Reopen
-            </Button>
+            <ReopenLoanButton debtor={loan.debtor} onConfirm={onMarkPending} />
           )}
-          <EditLoanButton loan={loan} onSubmit={onEdit} />
-          <DeleteLoanButton debtor={loan.debtor} onConfirm={onDelete} />
+          <EditLoanButton loan={loan} onSubmit={onEdit}/>
+          <DeleteLoanButton debtor={loan.debtor} onConfirm={onDelete}/>
         </div>
       </div>
     </li>
