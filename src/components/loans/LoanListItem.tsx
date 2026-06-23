@@ -40,7 +40,7 @@ export function LoanListItem({
 
   return (
     <li
-      className="group bg-card border-border/60 relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-4 shadow-xs transition-shadow hover:shadow-md sm:px-6 sm:py-5 lg:gap-5 lg:px-7 lg:py-6">
+      className="group bg-card border-border/60 relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-4 shadow-xs transition-shadow hover:shadow-md sm:px-6 sm:py-5 lg:px-4 lg:py-4 xl:gap-5 xl:px-7 xl:py-6">
       {/* Status fades: green when paid, red while there's still a balance. */}
       <div
         aria-hidden="true"
@@ -120,8 +120,9 @@ export function LoanListItem({
         )}
       </div>
 
-      {/* Action row — stacks on mobile, inline on sm+ */}
-      <div className="relative flex flex-col gap-2 sm:flex-row sm:items-center">
+      {/* Action row — stacks on mobile, inline on sm+; sticks to the card bottom
+          so grid rows with uneven content stay aligned. */}
+      <div className="relative mt-auto flex flex-col gap-2 sm:flex-row sm:items-center">
         {!isPaid && (
           <div className="w-full sm:w-auto sm:max-w-[260px] sm:flex-1">
             <PartialPaymentControl onSubmit={onRecordPayment}/>

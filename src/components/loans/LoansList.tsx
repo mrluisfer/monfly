@@ -125,7 +125,7 @@ export function LoansList() {
   return (
     <div className="space-y-5 sm:space-y-6 lg:space-y-8">
       {/* Summary metrics — Owed to me / I owe / Net */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 lg:gap-5">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
         <MetricCard
           label="Owed to me"
           value={maskAmount(totals.lentOutstanding)}
@@ -140,6 +140,7 @@ export function LoansList() {
         />
         <MetricCard
           label="Net balance"
+          className="sm:col-span-2 lg:col-span-1"
           value={maskAmount(netBalance)}
           accent={netBalance >= 0 ? "primary" : "destructive"}
           icon={
@@ -221,7 +222,7 @@ export function LoansList() {
         <ul
           role="list"
           aria-label="Loans"
-          className="flex flex-col gap-3"
+          className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-4 xl:grid-cols-3 xl:gap-5"
         >
           {loans.map((loan) => (
             <LoanListItem
