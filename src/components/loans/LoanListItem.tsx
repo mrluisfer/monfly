@@ -45,7 +45,7 @@ export function LoanListItem({
       <div
         aria-hidden="true"
         className={cn(
-          "pointer-events-none absolute -top-8 -right-8 size-32 rounded-full bg-gradient-to-br opacity-60 blur-2xl transition-opacity group-hover:opacity-90",
+          "pointer-events-none absolute -top-8 -right-8 size-32 rounded-full bg-linear-to-br opacity-60 blur-2xl transition-opacity group-hover:opacity-90",
           isPaid ? "from-success/15 to-transparent" : "from-destructive/15 to-transparent",
         )}
       />
