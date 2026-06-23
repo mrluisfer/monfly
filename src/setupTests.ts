@@ -1,24 +1,25 @@
 import "@testing-library/jest-dom";
+import { afterAll, beforeAll, vi } from "vitest";
 
 // Mock TanStack Query
-jest.mock("@tanstack/react-query", () => ({
-  useQuery: jest.fn(() => ({ data: undefined, isLoading: false, error: null })),
-  useMutation: jest.fn(() => ({ mutate: jest.fn(), isLoading: false })),
-  useQueryClient: jest.fn(),
+vi.mock("@tanstack/react-query", () => ({
+  useQuery: vi.fn(() => ({ data: undefined, isLoading: false, error: null })),
+  useMutation: vi.fn(() => ({ mutate: vi.fn(), isLoading: false })),
+  useQueryClient: vi.fn(),
 }));
 
 // Mock window.matchMedia
 Object.defineProperty(window, "matchMedia", {
   writable: true,
-  value: jest.fn().mockImplementation((query: string) => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
   })),
 });
 

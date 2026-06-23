@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "jest.config.cjs"],
+  "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
@@ -21,6 +21,6 @@
       "~/*": ["./src/*"]
     },
     "noEmit": true,
-    "types": ["vite/client"]
+    "types": ["vite/client", "vitest/globals", "@testing-library/jest-dom"]
   }
 }

@@ -24,6 +24,6 @@ export function formatToTwoDecimalsWithCurrency(
   value: number | string,
   currencySymbol: string = "$",
 ): string {
-  const formattedValue = formatToTwoDecimals(value);
-  return formattedValue ? `${currencySymbol}${formattedValue}` : "";
+  const { stringValue } = formatToTwoDecimals(value);
+  return stringValue ? `${currencySymbol}${stringValue}` : "";
 }

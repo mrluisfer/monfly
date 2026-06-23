@@ -1,5 +1,6 @@
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { FlameIcon } from "lucide-react";
+import { useMemo } from "react";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -12,13 +13,12 @@ import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getDailyActivityServer } from "~/lib/api/chart/get-daily-activity";
 import { cn } from "~/lib/utils";
+import type { DailyActivityRow } from "~/server/db/charts/get-daily-activity";
 import {
   formatCurrency,
   type SupportedCurrency,
 } from "~/utils/format-currency";
 import { queryKeys } from "~/utils/query-keys";
-import type { DailyActivityRow } from "~/server/db/charts/get-daily-activity";
-import { FlameIcon } from "lucide-react";
 
 import Card from "../shared/Card";
 import { ChartError, ChartLoading } from "./ChartLoading";
@@ -238,7 +238,7 @@ export default function SpendingHeatmap() {
 
   return (
     <Card
-      className="rounded-2xl border-0 shadow-none"
+      className="w-fit min-w-[500px] rounded-2xl border-0 shadow-none"
       title="Daily activity"
       subtitle={
         hasActivity
