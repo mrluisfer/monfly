@@ -31,6 +31,45 @@ Monfly enables users to:
 
 This document provides a high-level overview of the Monfly architecture, technology stack, features, and project structure.
 
+## 🏁 Getting Started
+
+After forking and cloning, you need **Node 18+**, **pnpm**, and a database (PostgreSQL, or SQLite for local dev).
+
+```bash
+pnpm install                 # Install dependencies
+
+cp .env.example .env         # Then fill in the values (see below)
+
+pnpm prisma migrate dev      # Create the schema in your database
+pnpm prisma-generate         # Generate the Prisma client
+
+pnpm dev                     # Start the dev server → http://localhost:3000
+```
+
+### Environment variables
+
+Edit `.env` (already gitignored). The required ones:
+
+| Variable           | Description                                                            |
+| ------------------ | --------------------------------------------------------------------- |
+| `DATABASE_URL`     | Connection string. PostgreSQL in prod, or `file:./prisma/dev.db` for SQLite locally. |
+| `SESSION_PASSWORD` | Cookie encryption secret, **≥32 characters**.                         |
+
+Optional: `SESSION_COOKIE_SECURE`, `BUILD_SOURCEMAP` (see comments in `.env.example`).
+
+> Using SQLite locally? Set `provider = "sqlite"` in `prisma/schema.prisma` before running the migration.
+
+### Common scripts
+
+```bash
+pnpm dev        # Dev server (port 3000)
+pnpm build      # Production build
+pnpm test       # Run tests (Vitest)
+pnpm lint       # ESLint
+pnpm format     # Prettier
+pnpm prisma studio   # Browse the DB in a GUI
+```
+
 ### 🛠️ Technology Stack
 
 Frameworks:

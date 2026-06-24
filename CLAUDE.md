@@ -14,8 +14,8 @@ pnpm build                  # Production build
 pnpm lint                   # ESLint check
 pnpm lint:fix               # Auto-fix lint issues
 pnpm format                 # Prettier format
-pnpm test                   # Run Jest tests
-pnpm test -- --testPathPattern=path/to/test  # Run a single test
+pnpm test                   # Run Vitest tests
+pnpm test src/path/to.test  # Run a single test file
 pnpm prisma migrate dev     # Run database migrations
 pnpm prisma-generate        # Regenerate Prisma client
 pnpm prisma studio          # Open Prisma database GUI
@@ -110,6 +110,6 @@ Required in `.env`:
 
 ## Testing
 
-- Jest with ts-jest and jsdom environment
+- Vitest with jsdom environment (`vitest.config.ts`); `@testing-library/jest-dom` provides the DOM matchers
 - Test files colocated with components (`*.test.tsx`)
 - TanStack Query and `window.matchMedia` are mocked in `src/setupTests.ts`
