@@ -1319,7 +1319,7 @@ function SimulationAlert() {
       </AlertDescription>
       <AlertAction>
         <Button
-          variant="outline"
+          variant="default"
           size="icon"
           onClick={() => setDismissed(true)}
           aria-label="Dismiss simulation information"

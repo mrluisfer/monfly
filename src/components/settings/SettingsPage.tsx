@@ -45,7 +45,7 @@ export function SettingsPage() {
         className="pointer-events-none absolute top-40 right-0 -z-10 size-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-15 blur-3xl dark:opacity-20"
       />
 
-      <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-8 sm:py-14 lg:max-w-6xl lg:pt-0 lg:pb-16">
+      <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-8 sm:py-14 md:max-w-6xl lg:container lg:max-w-none lg:pt-0 lg:pb-16">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-start gap-3">
             <span

@@ -15,6 +15,7 @@ import { PageHeader } from "~/components/layout/PageHeader";
 import { Section } from "~/components/layout/Section";
 import { ChangePasswordForm } from "~/components/settings/ChangePasswordForm";
 import { Button } from "~/components/ui/button";
+import { SectionTitle } from "@/components/user/settings/SectionTitle";
 
 export const Route = createFileRoute("/_authed/user/settings/change-password/")(
   {
@@ -60,22 +61,6 @@ const PASSWORD_TIPS: PasswordTip[] = [
   },
 ];
 
-/** Title with a leading accent icon, shared by both columns for a consistent header rhythm. */
-function SectionTitle({
-  icon: Icon,
-  children,
-}: {
-  icon: LucideIcon;
-  children: React.ReactNode;
-}) {
-  return (
-    <span className="flex items-center gap-2">
-      <Icon className="text-primary size-4 shrink-0" aria-hidden="true" />
-      {children}
-    </span>
-  );
-}
-
 function ChangePasswordRoute() {
   const reduceMotion = useReducedMotion();
 
@@ -111,14 +96,14 @@ function ChangePasswordRoute() {
       };
 
   return (
-    <div className="space-y-8 sm:space-y-10">
+    <div className="container space-y-8 sm:space-y-10">
       <PageHeader
         icon={<KeyRoundIcon className="size-5" aria-hidden="true" />}
         title="Change password"
         description="Keep your account secure by updating your password regularly."
         actions={
           <Button
-            variant="outline"
+            variant="secondary"
             render={
               <Link to="/user/settings">
                 <ArrowLeftIcon aria-hidden="true" className={"text-primary"} />
