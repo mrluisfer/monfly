@@ -4,6 +4,8 @@ import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
 import { cn } from "~/lib/utils";
 
 import { Skeleton } from "./skeleton";
+import { useAtomValue } from "jotai";
+import { hideBalanceAtom } from "@/state";
 
 const trendVariants = cva(
   "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-xs font-medium",
@@ -70,6 +72,8 @@ export function MetricCard({
   className,
   ...props
 }: MetricCardProps) {
+  const hideBalance = useAtomValue(hideBalanceAtom);
+
   return (
     <div
       className={cn(
@@ -104,7 +108,7 @@ export function MetricCard({
           <Skeleton className="h-8 w-24" />
         ) : (
           <p className="text-foreground text-2xl font-semibold tracking-tight tabular-nums sm:text-3xl">
-            {value}
+            {hideBalance ? "****" : value}
           </p>
         )}
         {trend && !loading && (
