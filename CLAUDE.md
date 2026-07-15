@@ -29,7 +29,7 @@ pnpm prisma studio          # Open Prisma database GUI
 - Router created in `src/router.tsx` (`getRouter()`); it instantiates a **per-request `QueryClient`** and passes it through router context (`createRootRouteWithContext`) — never create a module-scope QueryClient (it would share cache across SSR requests)
 - Public routes: `/`, `/login`, `/signup`, `/logout`
 - Protected routes live under `/_authed/` — the `_authed.tsx` layout checks session via `getUserSession()` and redirects unauthenticated users to `/login`
-- Active build config is `vite.config.mjs` (Vite + `tanstackStart()` + nitro plugins); `app.config.ts` is a legacy vinxi leftover
+- Build config is `vite.config.mjs` (Vite + `tanstackStart()` + nitro plugins). It also carries the `preventSensitiveClientEnvLeak` plugin, which fails the build if any `VITE_*` env var name matches `KEY|SECRET|TOKEN|PASSWORD`
 
 ### Server Functions (`src/lib/api/`)
 

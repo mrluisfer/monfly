@@ -14,7 +14,7 @@ Monfly provides an integrated solution for personal financial management. You ca
 .gitignore
 .prettierignore
 README.md
-app.config.ts
+vite.config.mjs
 package.json
 pnpm-lock.yaml
 src/components/ui/popover.tsx
@@ -138,7 +138,7 @@ src/
 │ ├─ schema.prisma
 │ ├─ migrations/
 │ └─ seed.js
-├─ app.config.ts # TanStack config
+├─ vite.config.mjs # Vite + TanStack Start + nitro config
 ├─ tailwind.config.js # Styling config
 └─ tsconfig.json # TypeScript config
 ```

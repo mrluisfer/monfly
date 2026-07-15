@@ -13,7 +13,6 @@ const config = [
       "build/",
       ".next/",
       ".output/",
-      ".vinxi/",
       ".vercel/",
       ".tanstack/",
       "coverage/",
