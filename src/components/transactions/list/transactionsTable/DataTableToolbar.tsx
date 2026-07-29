@@ -62,9 +62,7 @@ export function DataTableToolbar({
       <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <Button
-            size="lg"
             variant={typeFilterValue === "income" ? "default" : "outline"}
-            className="rounded-full"
             onClick={() => {
               const column = table.getColumn("type");
               const currentFilter = column?.getFilterValue();
@@ -80,9 +78,7 @@ export function DataTableToolbar({
             <span className="hidden sm:inline">Income</span>
           </Button>
           <Button
-            size="lg"
             variant={typeFilterValue === "expense" ? "default" : "outline"}
-            className="rounded-full"
             onClick={() => {
               const column = table.getColumn("type");
               const currentFilter = column?.getFilterValue();

@@ -1,8 +1,4 @@
-export type AccentTone = "primary" | "destructive" | "emerald" | "amber";
-
-export type FlowTone = "emerald" | "amber";
-
-export type RingTone = "emerald" | "amber" | "destructive";
+export type { Tone } from "~/components/shared/tone";
 
 export type IncomeExpensePoint = {
   expense: number;

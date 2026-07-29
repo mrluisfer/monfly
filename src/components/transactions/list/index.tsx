@@ -1,6 +1,7 @@
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
+import { RefreshCcwIcon, WalletIcon } from "lucide-react";
+import { useMemo } from "react";
 import { BalanceStatusBadge } from "~/components/header/badges/BalanceStatusBadge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -8,25 +9,24 @@ import { Spinner } from "~/components/ui/spinner";
 import { TransactionHoverProvider } from "~/context/transaction-hover-provider";
 import { useActiveCard, useCards } from "~/hooks/cards";
 import { useGetCategoriesByEmail } from "~/hooks/categories";
-import { useIsMobile } from "~/hooks/use-mobile";
 import { useIsMounted } from "~/hooks/ui/useIsMounted";
+import { useIsMobile } from "~/hooks/use-mobile";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
-import { queryKeys } from "~/utils/query-keys";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { RefreshCcwIcon, WalletIcon } from "lucide-react";
+import { queryKeys } from "~/utils/query-keys";
 
-import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { Badge } from "@/components/ui/badge";
 
+import { BackToTop } from "@/components/shared";
 import AddTransactionButton from "./AddTransactionButton";
 import { CardBadge, type CardSummary } from "./CardBadge";
 import { DesktopContent } from "./DesktopContent";
 import { MobileContent } from "./MobileContent";
 import { MobileHeader } from "./MobileHeader";
 import { TransactionsInsights } from "./TransactionsInsights";
-import { BackToTop } from "@/components/shared";
 
 type TransactionsResponse = {
   data?: TransactionWithUser[];
@@ -126,13 +126,17 @@ export default function TransactionsList() {
                     hint="Showing transactions for this card"
                   />
                 )}
-                <BalanceStatusBadge className="rounded-full" />
+                <BalanceStatusBadge />
+                {isTransactionsRoute ? null : (
+                  <Button render={<Link to="/home/transactions" />}>
+                    All transactions
+                  </Button>
+                )}
                 <Button
                   onClick={() => refetch()}
                   disabled={isPending || transactions.length === 0}
                   title="Refresh transactions"
                   variant={isRefetching ? "default" : "outline"}
-                  size="sm"
                 >
                   {isPending || isRefetching ? (
                     <>

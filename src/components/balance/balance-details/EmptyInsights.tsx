@@ -2,7 +2,7 @@ import { PiggyBankIcon } from "lucide-react";
 
 export function EmptyInsights() {
   return (
-    <div className="border-border/60 bg-card/40 rounded-2xl border border-dashed p-6 text-center">
+    <div className="border-border/60 bg-card/40 rounded-xl border border-dashed p-6 text-center">
       <PiggyBankIcon
         className="text-muted-foreground mx-auto size-6"
         aria-hidden={true}

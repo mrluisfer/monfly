@@ -1,5 +1,7 @@
 import { hideBalanceAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
+import { useAtomValue } from "jotai";
+import { CalendarIcon } from "lucide-react";
 import {
   AnimatePresence,
   domAnimation,
@@ -7,9 +9,16 @@ import {
   m,
   useReducedMotion,
 } from "motion/react";
-import { useAtomValue } from "jotai";
-import { CalendarIcon } from "lucide-react";
 import { useMemo } from "react";
+import { Alert, AlertTitle } from "~/components/ui/alert";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useActiveCard, useCards } from "~/hooks/cards";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
@@ -17,20 +26,13 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
-import { queryKeys } from "~/utils/query-keys";
 import { formatCurrency, getCurrencySymbol } from "~/utils/format-currency";
+import { queryKeys } from "~/utils/query-keys";
 
 import { CopyButton } from "../copy-button/copy-button";
 import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { BalanceActions } from "./BalanceActions";
-
-export type MonthlyPoint = {
-  expense: number;
-  income: number;
-  label: string;
-  net: number;
-};
 
 type IncomeExpensePoint = {
   month: string;
@@ -44,19 +46,6 @@ const LONG_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
   month: "long",
   year: "numeric",
 });
-
-function formatLongDate(date: Date): string {
-  return LONG_DATE_FORMATTER.format(date);
-}
-
-export type TotalBalanceSummary = {
-  latestPoint: MonthlyPoint | null;
-  peakPoint: MonthlyPoint | null;
-  recentPoints: MonthlyPoint[];
-  totalExpenses: number;
-  totalIncome: number;
-  trendDelta: number | null;
-};
 
 const TotalBalance = () => {
   const isBalanceHidden = useAtomValue(hideBalanceAtom);
@@ -105,190 +94,131 @@ const TotalBalance = () => {
     currency,
   );
 
-  const summary = useMemo<TotalBalanceSummary>(() => {
-    const normalizedData: MonthlyPoint[] =
-      incomeExpenseData?.data?.map((item: IncomeExpensePoint) => {
-        const income = Number.isFinite(item.income) ? item.income : 0;
-        const expense = Number.isFinite(item.expense) ? item.expense : 0;
-
-        return {
-          label: String(item.month || "Period"),
-          income,
-          expense,
-          net: income - expense,
-        };
-      }) ?? [];
-
-    const recentPoints = normalizedData.slice(-6);
-    const latestPoint = recentPoints.at(-1) ?? null;
-    const previousPoint = recentPoints.at(-2) ?? null;
-    const totalIncome = recentPoints.reduce(
-      (sum, item) => sum + item.income,
-      0,
-    );
-    const totalExpenses = recentPoints.reduce(
-      (sum, item) => sum + item.expense,
-      0,
-    );
-    const trendDelta =
-      latestPoint && previousPoint ? latestPoint.net - previousPoint.net : null;
-    const peakPoint =
-      recentPoints.length > 0
-        ? recentPoints.reduce((best, current) =>
-            current.net > best.net ? current : best,
-          )
-        : null;
+  // ponytail: only the last period label + period count are rendered, so we
+  // derive just those instead of the full income/expense/trend summary.
+  const { latestLabel, periodCount } = useMemo(() => {
+    const points = (incomeExpenseData?.data ?? []).slice(
+      -6,
+    ) as IncomeExpensePoint[];
 
     return {
-      latestPoint,
-      peakPoint,
-      recentPoints,
-      totalExpenses,
-      totalIncome,
-      trendDelta,
+      latestLabel: points.at(-1)?.month || null,
+      periodCount: points.length,
     };
   }, [incomeExpenseData?.data]);
 
   if (error) {
     return (
-      <section className="bg-card rounded-2xl p-5">
-        <p className="text-destructive text-sm font-medium">
-          Failed to load balance
-        </p>
-      </section>
+      <Alert variant="destructive">
+        <AlertTitle>Failed to load balance</AlertTitle>
+      </Alert>
     );
   }
 
   if (isPending) {
     return (
-      <section className="bg-card rounded-2xl p-5 sm:p-6">
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.18fr)_minmax(320px,0.82fr)]">
-          <div className="space-y-4">
-            <Skeleton className="h-6 w-32 rounded-full" />
-            <Skeleton className="h-14 w-3/4" />
-            <Skeleton className="h-5 w-2/3" />
-            <div className="grid gap-3 sm:grid-cols-3">
-              {[1, 2, 3].map((item) => (
-                <Skeleton key={item} className="h-24 rounded-xl" />
-              ))}
-            </div>
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-6 w-32 rounded-full" />
+          <CardAction>
+            <Skeleton className="h-9 w-24" />
+          </CardAction>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Skeleton className="h-14 w-3/4" />
+          <div className="grid gap-3 sm:grid-cols-3">
+            {[1, 2, 3].map((item) => (
+              <Skeleton key={item} className="h-24 rounded-xl" />
+            ))}
           </div>
-          <Skeleton className="h-72 rounded-2xl" />
-        </div>
-      </section>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <section className="bg-card rounded-2xl px-1 py-3 sm:p-3 lg:p-7">
-      <div className="relative grid gap-6">
-        <div className="space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-row items-center gap-4">
-              <div className="flex items-center justify-start gap-2">
-                <p className="text-muted-foreground text-sm font-medium">
-                  Net total
-                </p>
-                <Tooltip>
-                  <TooltipTrigger render={<Badge className="capitalize" />}>
-                    {summary.latestPoint?.label ? <CalendarIcon /> : null}
-                    {summary.latestPoint?.label ?? "No activity yet"}
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {summary.latestPoint ? (
-                      <p className="text-sm">{formatLongDate(new Date())}</p>
-                    ) : (
-                      <p className="text-sm">No recorded activity yet.</p>
-                    )}
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-            </div>
-            <div className="flex items-center justify-end gap-2">
-              <Tooltip>
-                <TooltipTrigger
-                  render={
-                    <CopyButton
-                      text={displayBalance}
-                      variant={"secondary"}
-                      size={"default"}
-                    />
-                  }
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex flex-wrap items-center gap-2">
+          <span className="text-muted-foreground text-sm font-medium">
+            Net total
+          </span>
+          <Tooltip>
+            <TooltipTrigger render={<Badge className="capitalize" />}>
+              {latestLabel ? <CalendarIcon /> : null}
+              {latestLabel ?? "No activity yet"}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-sm">
+                {latestLabel
+                  ? LONG_DATE_FORMATTER.format(new Date())
+                  : "No recorded activity yet."}
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </CardTitle>
+        <CardAction className="flex items-center gap-2">
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <CopyButton
+                  text={displayBalance}
+                  variant="outline"
+                  size="default"
                 />
-                <TooltipContent>
-                  <p>Copy total balance</p>
-                </TooltipContent>
-              </Tooltip>
+              }
+            />
+            <TooltipContent>
+              <p>Copy total balance</p>
+            </TooltipContent>
+          </Tooltip>
+          <span className="text-muted-foreground text-sm">
+            {periodCount}
+            <span className="hidden md:inline"> recorded periods</span>
+            <span className="md:hidden"> records</span>
+          </span>
+        </CardAction>
+      </CardHeader>
 
-              <span className="text-muted-foreground hidden text-sm md:block">
-                {summary.recentPoints.length} recorded periods
-              </span>
-              <span className="text-muted-foreground text-sm md:hidden">
-                {summary.recentPoints.length} records
-              </span>
-            </div>
+      <CardContent>
+        <LazyMotion features={domAnimation}>
+          <div className="flex min-h-18 items-center">
+            <AnimatePresence mode="wait" initial={false}>
+              <m.span
+                key={isBalanceHidden ? "hidden-balance" : "visible-balance"}
+                initial={
+                  shouldReduceMotion
+                    ? false
+                    : { opacity: 0, y: 8, filter: "blur(4px)" }
+                }
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                exit={
+                  shouldReduceMotion
+                    ? { opacity: 0 }
+                    : { opacity: 0, y: -8, filter: "blur(4px)" }
+                }
+                transition={{
+                  duration: shouldReduceMotion ? 0 : 0.22,
+                  ease: "easeOut",
+                }}
+                className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
+                aria-label={
+                  isBalanceHidden ? "Total balance hidden" : undefined
+                }
+              >
+                {isBalanceHidden
+                  ? `${getCurrencySymbol(currency)}••••••`
+                  : displayBalance}
+              </m.span>
+            </AnimatePresence>
           </div>
+        </LazyMotion>
+      </CardContent>
 
-          <div className="space-y-3">
-            <LazyMotion features={domAnimation}>
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex min-h-18 items-center">
-                  <AnimatePresence mode="wait" initial={false}>
-                    {isBalanceHidden ? (
-                      <m.span
-                        key="hidden-balance"
-                        initial={
-                          shouldReduceMotion
-                            ? false
-                            : { opacity: 0, y: 8, filter: "blur(4px)" }
-                        }
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={
-                          shouldReduceMotion
-                            ? { opacity: 0 }
-                            : { opacity: 0, y: -8, filter: "blur(4px)" }
-                        }
-                        transition={{
-                          duration: shouldReduceMotion ? 0 : 0.22,
-                          ease: "easeOut",
-                        }}
-                        className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
-                        aria-label="Total balance hidden"
-                      >
-                        {getCurrencySymbol(currency)}••••••
-                      </m.span>
-                    ) : (
-                      <m.span
-                        key="visible-balance"
-                        initial={
-                          shouldReduceMotion
-                            ? false
-                            : { opacity: 0, y: 8, filter: "blur(4px)" }
-                        }
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={
-                          shouldReduceMotion
-                            ? { opacity: 0 }
-                            : { opacity: 0, y: -8, filter: "blur(4px)" }
-                        }
-                        transition={{
-                          duration: shouldReduceMotion ? 0 : 0.22,
-                          ease: "easeOut",
-                        }}
-                        className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
-                      >
-                        {displayBalance}
-                      </m.span>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            </LazyMotion>
-          </div>
-        </div>
-      </div>
-      <BalanceActions />
-    </section>
+      <CardFooter>
+        <BalanceActions />
+      </CardFooter>
+    </Card>
   );
 };
 

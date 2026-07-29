@@ -39,8 +39,8 @@ export function Sparkline({ points, max }: SparklineProps) {
                   className={cn(
                     "flex-1 cursor-default rounded-sm transition-all duration-300",
                     isPositive
-                      ? "bg-primary/30 group-hover/balance-card:bg-primary/60"
-                      : "bg-destructive/30 group-hover/balance-card:bg-destructive/60",
+                      ? "bg-primary/30 group-hover/card:bg-primary/60"
+                      : "bg-destructive/30 group-hover/card:bg-destructive/60",
                   )}
                   style={{ height: `${heightPct}%` }}
                   aria-label={`${point.label} net ${point.net}`}

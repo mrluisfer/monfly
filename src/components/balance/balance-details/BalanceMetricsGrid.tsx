@@ -6,12 +6,12 @@ import {
 } from "lucide-react";
 
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { cn } from "~/lib/utils";
 import { formatCurrency } from "~/utils/format-currency";
 
-import { BalanceCard } from "./BalanceCard";
 import { HIDDEN_VALUE } from "./constants";
-import { FlowBar } from "./FlowBar";
+import { FlowBar } from "~/components/shared/FlowBar";
+import { MetricsGrid } from "~/components/shared/MetricsGrid";
+import { MetricTile } from "~/components/shared/MetricTile";
 import { Sparkline } from "./Sparkline";
 import { TrendBadge } from "./TrendBadge";
 import type { BalanceSummary } from "./types";
@@ -28,10 +28,7 @@ export function BalanceMetricsGrid({
   const currency = usePreferredCurrency();
   const hasData = summary.recentPoints.length > 0;
   const isLatestPositive = (summary.latestPoint?.net ?? 0) >= 0;
-  const TrendIcon = isLatestPositive ? ArrowUpRightIcon : ArrowDownRightIcon;
-  const balanceToneClass = isLatestPositive
-    ? "text-primary"
-    : "text-destructive";
+  const latestTone = isLatestPositive ? "primary" : "destructive";
 
   const totalFlow = summary.totalIncome + summary.totalExpenses;
   const incomeRatio = totalFlow > 0 ? summary.totalIncome / totalFlow : 0;
@@ -43,45 +40,43 @@ export function BalanceMetricsGrid({
   );
 
   return (
-    <dl className="grid gap-3 sm:grid-cols-3">
-      <BalanceCard
-        accent={isLatestPositive ? "primary" : "destructive"}
+    <MetricsGrid>
+      <MetricTile
         label="Latest net"
         value={
           isBalanceHidden
             ? HIDDEN_VALUE
             : formatCurrency(summary.latestPoint?.net ?? 0, currency)
         }
-        valueClassName={cn("tabular-nums", balanceToneClass)}
-        leadingIcon={<TrendIcon className={cn("size-4", balanceToneClass)} />}
+        valueTone={latestTone}
+        icon={isLatestPositive ? ArrowUpRightIcon : ArrowDownRightIcon}
+        iconTone={latestTone}
+        aside={
+          summary.trendPercent !== null && !isBalanceHidden ? (
+            <TrendBadge percent={summary.trendPercent} />
+          ) : null
+        }
         footer={
-          <div className="flex items-end justify-between gap-3">
+          <div className="space-y-1.5">
             <p className="text-muted-foreground text-xs">
               {summary.latestPoint?.label ?? "Latest period"}
             </p>
-            {summary.trendPercent !== null && !isBalanceHidden ? (
-              <TrendBadge percent={summary.trendPercent} />
+            {summary.recentPoints.length > 1 && !isBalanceHidden ? (
+              <Sparkline points={summary.recentPoints} max={sparkMax} />
             ) : null}
           </div>
         }
-        tail={
-          summary.recentPoints.length > 1 && !isBalanceHidden ? (
-            <Sparkline points={summary.recentPoints} max={sparkMax} />
-          ) : null
-        }
       />
 
-      <BalanceCard
-        accent="emerald"
+      <MetricTile
         label="Income tracked"
         value={
           isBalanceHidden
             ? HIDDEN_VALUE
             : formatCurrency(summary.totalIncome, currency)
         }
-        leadingIcon={
-          <TrendingUpIcon className="size-4 text-emerald-600 dark:text-emerald-300" />
-        }
+        icon={TrendingUpIcon}
+        iconTone="success"
         footer={
           <div className="space-y-1.5">
             <p className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
@@ -91,31 +86,29 @@ export function BalanceMetricsGrid({
                   : "Recent recorded periods"}
               </span>
               {hasData && !isBalanceHidden ? (
-                <span className="font-medium text-emerald-700 tabular-nums dark:text-emerald-300">
+                <span className="text-success font-medium tabular-nums">
                   {(incomeRatio * 100).toFixed(0)}%
                 </span>
               ) : null}
             </p>
             <FlowBar
               ratio={incomeRatio}
-              tone="emerald"
+              tone="success"
               ariaLabel="Income share of total flow"
             />
           </div>
         }
       />
 
-      <BalanceCard
-        accent="amber"
+      <MetricTile
         label="Expenses tracked"
         value={
           isBalanceHidden
             ? HIDDEN_VALUE
             : formatCurrency(summary.totalExpenses, currency)
         }
-        leadingIcon={
-          <TrendingDownIcon className="size-4 text-amber-600 dark:text-amber-300" />
-        }
+        icon={TrendingDownIcon}
+        iconTone="warning"
         footer={
           <div className="space-y-1.5">
             <p className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
@@ -129,19 +122,19 @@ export function BalanceMetricsGrid({
                   : "Recent recorded periods"}
               </span>
               {hasData && !isBalanceHidden ? (
-                <span className="font-medium text-amber-700 tabular-nums dark:text-amber-300">
+                <span className="text-warning font-medium tabular-nums">
                   {(expenseRatio * 100).toFixed(0)}%
                 </span>
               ) : null}
             </p>
             <FlowBar
               ratio={expenseRatio}
-              tone="amber"
+              tone="warning"
               ariaLabel="Expense share of total flow"
             />
           </div>
         }
       />
-    </dl>
+    </MetricsGrid>
   );
 }

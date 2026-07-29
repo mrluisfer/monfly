@@ -121,7 +121,7 @@ export default function ChartTransactionsByMonth() {
   const shownPlaceholder = !isLoading && !error && chartData.length === 0;
 
   return (
-    <Card className="h-fit w-full max-w-5xl rounded-2xl border-0 shadow-none">
+    <Card className="h-fit w-full max-w-5xl border-0 shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
           <BarChart3Icon className="text-primary size-5" />

@@ -1,51 +1,34 @@
-import { useId } from "react";
-
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+
+type ButtonVariant = React.ComponentProps<typeof Button>["variant"];
 
 export function ActionButton({
   icon,
   label,
   description,
-  onClick,
   variant = "default",
-}: {
+  ...props
+}: Omit<React.ComponentProps<typeof TooltipTrigger>, "render" | "children"> & {
   icon: React.ReactNode;
   label: string;
   description?: string;
-  onClick?: () => void;
-  variant?:
-    | "default"
-    | "link"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "ghost"
-    | null;
+  variant?: ButtonVariant;
 }) {
-  const id = useId();
-  const labelId = `${id}-label`;
-
   return (
     <Tooltip>
+      {/* ponytail: extra props (and `ref`) go on TooltipTrigger, not on the
+          `render` element — that's what lets this compose as another popup's
+          trigger (e.g. DialogTrigger render={<ActionButton/>}), which needs its
+          ref + aria-haspopup/aria-expanded to reach this same DOM node.
+          Putting `id` on the `render` element instead silently kills hover:
+          Base UI matches the open popup against the trigger's DOM id. */}
       <TooltipTrigger
-        render={
-          <Button
-            size={"lg"}
-            onClick={onClick}
-            variant={variant}
-            id={id}
-            name={label}
-            aria-labelledby={labelId}
-            className={"flex-1"}
-          />
-        }
+        {...props}
+        render={<Button size={"lg"} variant={variant} className={"flex-1"} />}
       >
         {icon}
-        <span
-          id={labelId}
-          className="block truncate text-sm font-semibold tracking-tight"
-        >
+        <span className="block truncate text-sm font-semibold tracking-tight">
           {label}
         </span>
       </TooltipTrigger>

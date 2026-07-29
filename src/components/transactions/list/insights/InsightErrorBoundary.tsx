@@ -1,5 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 
+import { Card } from "~/components/ui/card";
+
 type Props = {
   children: ReactNode;
   label?: string;
@@ -30,13 +32,13 @@ export class InsightErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <article className="bg-muted border-border/70 flex min-h-24 items-center justify-center rounded-2xl border p-4 sm:p-5">
+        <Card className="flex min-h-24 items-center justify-center">
           <p className="text-muted-foreground text-sm">
             {this.props.label
               ? `Could not load "${this.props.label}".`
               : "This section could not be loaded."}
           </p>
-        </article>
+        </Card>
       );
     }
 

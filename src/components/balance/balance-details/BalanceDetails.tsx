@@ -1,6 +1,8 @@
 import { useAtomValue } from "jotai";
 import { memo } from "react";
 
+import { Alert, AlertTitle } from "~/components/ui/alert";
+
 import { hideBalanceAtom } from "@/state";
 
 import { BalanceDetailsSkeleton } from "./BalanceDetailsSkeleton";
@@ -16,9 +18,9 @@ function BalanceDetailsComponent() {
 
   if (error) {
     return (
-      <p className="text-destructive text-sm font-medium" role="alert">
-        Failed to load balance details
-      </p>
+      <Alert variant="destructive">
+        <AlertTitle>Failed to load balance details</AlertTitle>
+      </Alert>
     );
   }
 

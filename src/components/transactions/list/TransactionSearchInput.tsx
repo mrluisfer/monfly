@@ -44,7 +44,7 @@ export function TransactionSearchInput({
         value={value}
         onChange={(event) => onValueChange(event.target.value)}
         placeholder={placeholder}
-        className="border-border/70 bg-background/70 h-11 rounded-full pl-10"
+        className="border-border/70 bg-background/70 pl-10"
       />
     </div>
   );

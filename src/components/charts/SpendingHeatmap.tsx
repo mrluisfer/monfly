@@ -1,7 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { FlameIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
+import {
+  DAILY_ACTIVITY_DAYS,
+  DAILY_ACTIVITY_WEEKS,
+} from "~/constants/daily-activity";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
@@ -23,7 +27,6 @@ import { queryKeys } from "~/utils/query-keys";
 import Card from "../shared/Card";
 import { ChartError, ChartLoading } from "./ChartLoading";
 
-const WEEKS_TO_SHOW = 13;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 type DayCell = {
@@ -69,7 +72,7 @@ function buildCalendar(rows: DailyActivityRow[]) {
   const today = utcToday();
   // Last cell is today; first column starts on the Sunday of the earliest week.
   const windowStart = new Date(
-    today.getTime() - (WEEKS_TO_SHOW * 7 - 1) * DAY_MS,
+    today.getTime() - (DAILY_ACTIVITY_DAYS - 1) * DAY_MS,
   );
   const gridStart = new Date(
     windowStart.getTime() - windowStart.getUTCDay() * DAY_MS,
@@ -84,7 +87,7 @@ function buildCalendar(rows: DailyActivityRow[]) {
   const monthLabels: { weekIndex: number; label: string }[] = [];
   let lastMonth = -1;
 
-  for (let day = new Date(gridStart); day <= today; ) {
+  for (let day = new Date(gridStart); day <= today;) {
     const weekIndex = Math.floor(
       (day.getTime() - gridStart.getTime()) / (7 * DAY_MS),
     );
@@ -236,14 +239,23 @@ export default function SpendingHeatmap() {
 
   const hasActivity = activeDays > 0;
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const node = scrollRef.current;
+    if (node) node.scrollLeft = node.scrollWidth;
+  }, [weeks]);
+
+  // ponytail: no width floor on the card — the old `min-w-[500px]` pushed the
+  // whole card (and its grid column) past narrow viewports, so the *page*
+  // scrolled sideways. Only the grid below scrolls now.
   return (
     <Card
-      className="w-fit min-w-[500px] rounded-2xl border-0 shadow-none"
+      className="border-0 shadow-none"
       title="Daily activity"
       subtitle={
         hasActivity
-          ? `${activeDays} active ${activeDays === 1 ? "day" : "days"} in the last ${WEEKS_TO_SHOW} weeks`
-          : "Your last 13 weeks at a glance"
+          ? `${activeDays} active ${activeDays === 1 ? "day" : "days"} in the last 12 months`
+          : "Your last 12 months at a glance"
       }
     >
       {isLoading && <ChartLoading message="Loading daily activity..." />}
@@ -276,7 +288,15 @@ export default function SpendingHeatmap() {
             </Badge>
           )}
 
-          <div className="overflow-x-auto pb-1">
+          {/* Scrolls to the right edge on mount so today is what you see
+              first; `tabIndex` keeps it scrollable with the keyboard. */}
+          <div
+            ref={scrollRef}
+            tabIndex={0}
+            role="group"
+            aria-label={`Daily activity for the last ${DAILY_ACTIVITY_WEEKS} weeks`}
+            className="focus-visible:ring-ring/50 overflow-x-auto rounded-sm pb-1 focus-visible:ring-2 focus-visible:outline-none"
+          >
             <div className="w-max min-w-full">
               <div className="text-muted-foreground mb-1 flex gap-1 text-[10px]">
                 {weeks.map((_, weekIndex) => {

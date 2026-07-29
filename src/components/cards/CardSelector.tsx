@@ -1,4 +1,6 @@
+import { hideBalanceAtom } from "@/state";
 import { useNavigate } from "@tanstack/react-router";
+import { useAtomValue } from "jotai";
 import { CreditCardIcon, LayersIcon } from "lucide-react";
 
 import {
@@ -25,6 +27,7 @@ export function CardSelector({ className }: { className?: string }) {
   const activeCard = useActiveCard();
   const currency = usePreferredCurrency();
   const { data, isPending } = useCards({ status: "active" });
+  const hideBalance = useAtomValue(hideBalanceAtom);
 
   const cards = data?.data ?? [];
 
@@ -90,7 +93,9 @@ export function CardSelector({ className }: { className?: string }) {
                 ) : null}
               </span>
               <span className="text-muted-foreground shrink-0 text-xs font-medium tabular-nums">
-                {formatCurrency(card.balance ?? 0, currency)}
+                {hideBalance
+                  ? "$••••"
+                  : formatCurrency(card.balance ?? 0, currency)}
               </span>
             </span>
           </SelectItem>
