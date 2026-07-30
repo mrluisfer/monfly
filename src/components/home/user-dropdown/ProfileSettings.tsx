@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
 import type { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { UserProfileForm } from "~/components/user/UserProfileForm";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -114,7 +114,7 @@ export default function ProfileSettings({
   const user = data.data;
 
   // Type guard to ensure user is not null and has required fields
-  if (!user || !user.id || !user.email) {
+  if (!user?.id || !user.email) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
         <div className="text-destructive text-sm">

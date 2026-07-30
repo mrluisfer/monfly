@@ -45,7 +45,7 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
     },
   });
 
-  if (!user || !user.name) {
+  if (!user?.name) {
     return (
       <header className="border-border/60 bg-card/40 flex items-center gap-3 rounded-2xl border border-dashed p-4">
         <CircleUserIcon

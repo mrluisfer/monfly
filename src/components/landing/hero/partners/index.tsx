@@ -60,7 +60,7 @@ export const Partners = () => {
             partner.icon
           ) : (
             <img
-              src={partner.image!}
+              src={partner?.image}
               alt={partner.name}
               className="h-4 object-contain"
               loading="lazy"

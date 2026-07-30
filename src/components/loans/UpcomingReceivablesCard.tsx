@@ -1,11 +1,9 @@
 import type { Loan } from "@prisma/client";
 import { Link } from "@tanstack/react-router";
 import { ArrowRightIcon, ClockIcon, HandCoinsIcon } from "lucide-react";
-
-import type { LoanDirection } from "~/constants/loan-status";
-
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
+import type { LoanDirection } from "~/constants/loan-status";
 import { useLoans } from "~/hooks/loans/useLoans";
 import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
@@ -127,6 +125,10 @@ export function UpcomingReceivablesCard() {
   );
 }
 
+/** Stable keys for the loading placeholders — a fixed list that never reorders,
+ *  so it needs identities of its own rather than array indexes. */
+const SKELETON_ROWS = ["first", "second", "third"];
+
 function UpcomingBody({
   isPending,
   error,
@@ -143,8 +145,8 @@ function UpcomingBody({
   if (isPending) {
     return (
       <div className="space-y-2">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-10 w-full rounded-xl" />
+        {SKELETON_ROWS.map((row) => (
+          <Skeleton key={row} className="h-10 w-full rounded-xl" />
         ))}
       </div>
     );

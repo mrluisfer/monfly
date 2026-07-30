@@ -21,7 +21,7 @@ export function ApiDebugComponent() {
         return result;
       } catch (error) {
         const duration = Date.now() - start;
-        console.error("❌ Transaction query failed in", duration + "ms", error);
+        console.error(`❌ Transaction query failed in ${duration}ms`, error);
         throw error;
       }
     },
@@ -40,7 +40,7 @@ export function ApiDebugComponent() {
         return result;
       } catch (error) {
         const duration = Date.now() - start;
-        console.error("❌ User query failed in", duration + "ms", error);
+        console.error(`❌ User query failed in ${duration}ms`, error);
         throw error;
       }
     },
@@ -59,7 +59,7 @@ export function ApiDebugComponent() {
         return result;
       } catch (error) {
         const duration = Date.now() - start;
-        console.error("❌ Expense query failed in", duration + "ms", error);
+        console.error(`❌ Expense query failed in ${duration}ms`, error);
         throw error;
       }
     },

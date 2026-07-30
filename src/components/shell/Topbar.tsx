@@ -47,7 +47,7 @@ function buildBreadcrumbs(pathname: string): Crumb[] {
   }
 
   if (segments[0] === "home" && segments.length > 1) {
-    const sub = "/" + segments.slice(0, 2).join("/");
+    const sub = `/${segments.slice(0, 2).join("/")}`;
     const match = sidebarRoutes.find((r) => r.url === sub);
     crumbs.push({
       title: match?.title ?? prettify(segments[1]),
@@ -69,7 +69,7 @@ function buildBreadcrumbs(pathname: string): Crumb[] {
           title: USER_SEGMENT_TITLE[segment] ?? prettify(segment),
           url: isLast
             ? undefined
-            : "/user/" + userSegments.slice(0, index + 1).join("/"),
+            : `/user/${userSegments.slice(0, index + 1).join("/")}`,
         });
       });
     }
@@ -122,7 +122,7 @@ export function Topbar() {
           {crumbs.map((crumb, idx) => {
             const isLast = idx === crumbs.length - 1;
             return (
-              <Fragment key={`${crumb.title}-${idx}`}>
+              <Fragment key={`${crumb.title}-${crumb?.url}`}>
                 {idx > 0 && <BreadcrumbSeparator />}
                 <BreadcrumbItem className="min-w-0">
                   {isLast || !crumb.url ? (

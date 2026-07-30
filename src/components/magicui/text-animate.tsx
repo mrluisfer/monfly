@@ -1,8 +1,13 @@
 "use client";
 
-import { type ElementType, memo } from "react";
+import {
+  AnimatePresence,
+  type MotionProps,
+  motion,
+  type Variants,
+} from "motion/react";
+import { type ElementType, memo, useId } from "react";
 import { cn } from "~/lib/utils";
-import { AnimatePresence, motion, type MotionProps, type Variants } from "motion/react";
 
 type AnimationType = "text" | "word" | "character" | "line";
 type AnimationVariant =
@@ -312,6 +317,7 @@ const TextAnimateBase = ({
   ...props
 }: TextAnimateProps) => {
   const MotionComponent = motion.create(Component);
+  const id = useId();
 
   let segments: string[] = [];
   switch (by) {
@@ -324,7 +330,7 @@ const TextAnimateBase = ({
     case "line":
       segments = children.split("\n");
       break;
-    case "text":
+    // case "text":
     default:
       segments = [children];
       break;
@@ -392,7 +398,7 @@ const TextAnimateBase = ({
       >
         {segments.map((segment, i) => (
           <motion.span
-            key={`${by}-${segment}-${i}`}
+            key={`${by}-${segment}-${id}`}
             variants={finalVariants.item}
             custom={i * staggerTimings[by]}
             className={cn(

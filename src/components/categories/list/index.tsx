@@ -325,6 +325,8 @@ export const CategoriesList = () => {
   );
 };
 
+const SKELETON_ROWS = ["first", "second", "third", "fourth", "fifth", "sixth"];
+
 function CategoriesSkeleton() {
   return (
     <div className="space-y-4">
@@ -338,8 +340,8 @@ function CategoriesSkeleton() {
       </div>
       <Skeleton className="h-12 w-full rounded-2xl" />
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-36 w-full rounded-2xl" />
+        {SKELETON_ROWS.map((row) => (
+          <Skeleton key={row} className="h-36 w-full rounded-2xl" />
         ))}
       </div>
       <span className="sr-only" role="status">

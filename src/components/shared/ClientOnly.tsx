@@ -16,5 +16,5 @@ type ClientOnlyProps = {
  * client render both show `fallback`, so hydration stays consistent.
  */
 export function ClientOnly({ children, fallback = null }: ClientOnlyProps) {
-  return useIsMounted() ? <>{children}</> : <>{fallback}</>;
+  return useIsMounted() ? children : fallback;
 }
