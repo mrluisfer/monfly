@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { BarChartIcon } from "lucide-react";
 import { lazy, Suspense } from "react";
+import { DailyActivity } from "@/components/charts/DailyActivity";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { ClientOnly } from "~/components/shared/ClientOnly";
 import { Skeleton } from "~/components/ui/skeleton";
@@ -52,6 +53,8 @@ function RouteComponent() {
           </Suspense>
         </div>
       </ClientOnly>
+
+      <DailyActivity />
     </div>
   );
 }

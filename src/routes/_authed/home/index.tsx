@@ -1,28 +1,18 @@
-import { hideMetricsAtom } from "@/state";
 import { createFileRoute } from "@tanstack/react-router";
 import { useAtomValue } from "jotai";
-import {
-  CalendarDaysIcon,
-  LayoutDashboardIcon,
-  SquareActivityIcon,
-} from "lucide-react";
-import { lazy, Suspense } from "react";
+import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 import { z } from "zod";
+import { BalanceDetails } from "@/components/balance/balance-details";
+import { CardSelector } from "@/components/cards/CardSelector";
+import { DailyActivity } from "@/components/charts/DailyActivity";
+import { hideMetricsAtom } from "@/state";
 import TotalBalance from "~/components/balance/TotalBalance";
 import { DashboardMetrics } from "~/components/home/DashboardMetrics";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { UpcomingReceivablesCard } from "~/components/loans/UpcomingReceivablesCard";
 import TransactionsList from "~/components/transactions/list";
-import { Skeleton } from "~/components/ui/skeleton";
 import { StatusBadge } from "~/components/ui/status-badge";
 import { cn } from "~/lib/utils";
-
-import { BalanceDetails } from "@/components/balance/balance-details";
-import { CardSelector } from "@/components/cards/CardSelector";
-
-const SpendingHeatmap = lazy(
-  () => import("~/components/charts/SpendingHeatmap"),
-);
 
 /**
  * `card` is an optional filter: undefined = aggregate "all cards" view (the
@@ -111,20 +101,7 @@ function RouteComponent() {
             <TransactionsList />
           </div>
 
-          <div className="space-y-6">
-            <PageHeader
-              icon={
-                <SquareActivityIcon className="size-5" aria-hidden="true" />
-              }
-              title="Daily activity"
-              description="Spot your cashflow rhythm day by day."
-            />
-            <Suspense
-              fallback={<Skeleton className="h-56 w-full rounded-2xl" />}
-            >
-              <SpendingHeatmap />
-            </Suspense>
-          </div>
+          <DailyActivity />
         </div>
       </div>
     </div>
