@@ -7,7 +7,7 @@ import {
   ShieldCheckIcon,
 } from "lucide-react";
 
-import { HeaderIconName } from "./NavigationLinks";
+import type { HeaderIconName } from "./NavigationLinks";
 
 const iconMap: Record<HeaderIconName, typeof BookOpenIcon> = {
   BookOpenIcon,

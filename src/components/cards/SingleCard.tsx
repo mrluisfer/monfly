@@ -21,7 +21,7 @@ import {
 import { CARD_TYPE_LABEL } from "@/constants/card-status";
 import { useCurrency, useDeleteCard, useUpdateCard } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { Card as CardType } from "@prisma/client";
+import type { Card as CardType } from "@prisma/client";
 import {
   ArchiveIcon,
   ArchiveRestoreIcon,

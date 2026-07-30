@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { DAILY_ACTIVITY_DAYS } from "~/constants/daily-activity";
-import { ApiResponse } from "~/types/ApiResponse";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
 

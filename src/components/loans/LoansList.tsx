@@ -3,12 +3,12 @@ import { useState } from "react";
 import { MetricCard } from "~/components/ui/metric-card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { type LoanDirection, type LoanStatus } from "~/constants/loan-status";
+import type { LoanDirection, LoanStatus } from "~/constants/loan-status";
 import { useDeleteLoan } from "~/hooks/loans/useDeleteLoan";
 import { useLoanPayment } from "~/hooks/loans/useLoanPayment";
-import { useCurrency } from "~/hooks/useCurrency";
 import { useLoans } from "~/hooks/loans/useLoans";
 import { useUpdateLoan } from "~/hooks/loans/useUpdateLoan";
+import { useCurrency } from "~/hooks/useCurrency";
 
 import { CountBadge } from "./CountBadge";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
@@ -176,8 +176,8 @@ export function LoansList() {
               value="borrowed"
               className="flex-1 gap-1.5 sm:flex-initial"
             >
-              <LoanDirectionIcon direction="borrowed" className="size-3.5" />
-              I owe
+              <LoanDirectionIcon direction="borrowed" className="size-3.5" />I
+              owe
               <CountBadge n={directionCounts.borrowed} />
             </TabsTrigger>
           </TabsList>

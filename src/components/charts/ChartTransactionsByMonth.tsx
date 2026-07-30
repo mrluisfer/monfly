@@ -202,7 +202,7 @@ export default function ChartTransactionsByMonth() {
                 />
                 <Bar
                   dataKey="count"
-                  fill="var(--primary)"
+                  fill="var(--chart-1)"
                   name="Transactions"
                   radius={[4, 4, 0, 0]}
                   animationDuration={800}
@@ -284,7 +284,7 @@ export default function ChartTransactionsByMonth() {
                     return (
                       <div
                         key={item.month}
-                        className="bg-primary flex-1 rounded-sm transition-opacity hover:opacity-80"
+                        className="bg-chart-1 flex-1 rounded-sm transition-opacity hover:opacity-80"
                         style={{
                           opacity: Math.max(0.3, percentage / 100),
                           minWidth: "4px",

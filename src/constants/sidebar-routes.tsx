@@ -4,7 +4,7 @@ import {
   FolderTree,
   HandCoins,
   LayoutDashboard,
-  LucideProps,
+  type LucideProps,
   Receipt,
   WalletCards,
 } from "lucide-react";

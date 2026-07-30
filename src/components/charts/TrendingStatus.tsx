@@ -1,5 +1,5 @@
 import { TrendingDown, TrendingUp, TrendingUpDown } from "lucide-react";
-import { TransactionType } from "~/constants/transaction-types";
+import type { TransactionType } from "~/constants/transaction-types";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { formatCurrency } from "~/utils/format-currency";
 

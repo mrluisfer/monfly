@@ -1,9 +1,8 @@
+import { PageHeader } from "@/components/layout/PageHeader";
 import { createFileRoute } from "@tanstack/react-router";
 import { HandCoinsIcon } from "lucide-react";
 import { AddLoanCard } from "~/components/loans/AddLoanCard";
 import { LoansList } from "~/components/loans/LoansList";
-
-import { PageHeader } from "@/components/layout/PageHeader";
 
 export const Route = createFileRoute("/_authed/home/loans/")({
   component: RouteComponent,

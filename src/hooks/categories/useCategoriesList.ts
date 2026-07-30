@@ -61,7 +61,7 @@ export const useCategoriesList = () => {
 
     setSelectedCategories((prev) => {
       const mergedSelection = new Set(prev);
-      categoryIds.forEach((id) => mergedSelection.add(id));
+      for (const id of categoryIds) mergedSelection.add(id);
       return Array.from(mergedSelection);
     });
   };

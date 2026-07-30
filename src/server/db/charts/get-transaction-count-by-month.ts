@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { ApiResponse } from "~/types/ApiResponse";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
 

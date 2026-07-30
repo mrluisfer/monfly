@@ -1,4 +1,4 @@
-import { ReactNode, useMemo } from "react";
+import { type ReactNode, useMemo } from "react";
 import { CalendarDaysIcon } from "lucide-react";
 
 import { Badge } from "../ui/badge";

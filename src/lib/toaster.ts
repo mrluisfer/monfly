@@ -34,7 +34,7 @@ const flushPendingCalls = () => {
   if (!pendingCalls.length) return;
   const calls = [...pendingCalls];
   pendingCalls.length = 0;
-  calls.forEach((call) => call());
+  for (const call of calls) call();
 };
 
 const ensureSileoBrowserApis = () => {

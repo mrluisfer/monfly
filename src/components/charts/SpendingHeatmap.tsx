@@ -42,14 +42,14 @@ type DayCell = {
   positive: boolean;
 };
 
-// Net-positive days tint primary, net-negative days tint destructive, so the
-// graph reads cash direction at a glance — not just activity volume.
+// Net-positive days ramp the chart-1 slot, net-negative days keep destructive,
+// so the graph reads cash direction at a glance — not just activity volume.
 const POSITIVE_LEVELS = [
   "bg-muted",
-  "bg-primary/25",
-  "bg-primary/45",
-  "bg-primary/70",
-  "bg-primary",
+  "bg-chart-1/25",
+  "bg-chart-1/45",
+  "bg-chart-1/70",
+  "bg-chart-1",
 ] as const;
 const NEGATIVE_LEVELS = [
   "bg-muted",
@@ -87,7 +87,7 @@ function buildCalendar(rows: DailyActivityRow[]) {
   const monthLabels: { weekIndex: number; label: string }[] = [];
   let lastMonth = -1;
 
-  for (let day = new Date(gridStart); day <= today;) {
+  for (let day = new Date(gridStart); day <= today; ) {
     const weekIndex = Math.floor(
       (day.getTime() - gridStart.getTime()) / (7 * DAY_MS),
     );
@@ -331,7 +331,7 @@ export default function SpendingHeatmap() {
 
           <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
             <span className="flex items-center gap-1.5">
-              <span className="bg-primary size-2.5 rounded-[2px]" />
+              <span className="bg-chart-1 size-2.5 rounded-[2px]" />
               Net positive day
             </span>
             <span className="flex items-center gap-1.5">

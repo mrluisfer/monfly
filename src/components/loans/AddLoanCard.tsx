@@ -12,7 +12,7 @@ import { Controller } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { type LoanDirection } from "~/constants/loan-status";
+import type { LoanDirection } from "~/constants/loan-status";
 import { useAddLoan } from "~/hooks/loans/useAddLoan";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";

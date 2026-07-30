@@ -5,7 +5,7 @@ import {
   ShieldCheck,
   Star,
 } from "lucide-react";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import demoImg from "../../assets/demo.png";
 import { Safari } from "../magicui/safari";

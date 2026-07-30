@@ -138,7 +138,7 @@ export function BalanceStatusBadge({
           icon={config.icon}
           className={config.iconColor}
           fullWidth={fullWidth}
-          animate={status === "loading"}
+          animate={animate && status === "loading"}
         />
       )}
 

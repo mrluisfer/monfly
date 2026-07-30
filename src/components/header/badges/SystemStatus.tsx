@@ -16,7 +16,11 @@ import { cn } from "~/lib/utils";
 import { BadgeIcon, HeaderBadge, StatusDot } from "./HeaderBadge";
 
 type SystemStatus =
-  "operational" | "degraded" | "partial" | "outage" | "maintenance";
+  | "operational"
+  | "degraded"
+  | "partial"
+  | "outage"
+  | "maintenance";
 
 interface SystemStatusBadgeProps {
   status?: SystemStatus;
@@ -133,6 +137,7 @@ export function SystemStatusBadgeCompact({
         <TooltipTrigger
           render={
             <button
+              type="button"
               className={cn(
                 "relative inline-flex size-3 cursor-pointer rounded-full transition-transform hover:scale-125",
                 config.color,

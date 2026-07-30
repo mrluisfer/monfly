@@ -1,6 +1,6 @@
-import { Table as TanstackTable } from "@tanstack/react-table";
+import type { Table as TanstackTable } from "@tanstack/react-table";
 import { Button } from "~/components/ui/button";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";

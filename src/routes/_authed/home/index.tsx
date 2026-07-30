@@ -20,10 +20,6 @@ import { cn } from "~/lib/utils";
 import { BalanceDetails } from "@/components/balance/balance-details";
 import { CardSelector } from "@/components/cards/CardSelector";
 
-const IncomeExpenseChart = lazy(
-  () => import("~/components/charts/IncomeExpenseChart"),
-);
-
 const SpendingHeatmap = lazy(
   () => import("~/components/charts/SpendingHeatmap"),
 );

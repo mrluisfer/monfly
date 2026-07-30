@@ -300,7 +300,7 @@ function computeBinaryResult(
       }
       return normalizeNumber(leftValue / rightValue);
     case "^":
-      return normalizeNumber(Math.pow(leftValue, rightValue));
+      return normalizeNumber(leftValue ** rightValue);
     default:
       return null;
   }

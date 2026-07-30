@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
 
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
@@ -25,7 +25,7 @@ export const SidebarItem = ({
       {children}
     </Link>
   ) : (
-    <button onClick={onClick} disabled={disabled}>
+    <button type="button" onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );

@@ -2,7 +2,7 @@ import { ShieldCheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
 
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -48,6 +48,7 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 function safeText(input: string | null | undefined, maxLength = 56): string {
   if (!input) return "Unlabeled";
   const normalized = input
+    // biome-ignore lint/suspicious/noControlCharactersInRegex: stripping them is the point
     .replace(/[\u0000-\u001F\u007F]/g, " ")
     .replace(/\s+/g, " ")
     .trim();

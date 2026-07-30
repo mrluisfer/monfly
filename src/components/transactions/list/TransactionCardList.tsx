@@ -1,4 +1,4 @@
-import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
+import type { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
 import { format, isToday, isYesterday } from "date-fns";
 import {
   AnimatePresence,
@@ -9,7 +9,7 @@ import {
 } from "motion/react";
 import { ArrowDownLeftIcon, CalendarIcon } from "lucide-react";
 
-import { CardSummary } from "./CardBadge";
+import type { CardSummary } from "./CardBadge";
 import { TransactionRow } from "./TransactionRow";
 
 type TransactionCardListProps = {

@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 /** Title with a leading accent icon, shared by both columns for a consistent header rhythm. */
 export function SectionTitle({

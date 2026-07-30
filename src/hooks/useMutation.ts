@@ -223,12 +223,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
     // Granular deps are intentional to keep `mutate` referentially stable even
     // when callers pass inline option objects.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      opts.allowConcurrent,
-      resolvedIdempotency,
-      opts.fn,
-      opts.onSuccess,
-    ],
+    [opts.allowConcurrent, resolvedIdempotency, opts.fn, opts.onSuccess],
   );
 
   return {
