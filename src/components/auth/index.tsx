@@ -4,6 +4,7 @@ import type { Path, UseFormReturn } from "react-hook-form";
 import { cn } from "~/lib/utils";
 
 import Card from "../shared/Card";
+import { ConsentRow } from "../shared/ConsentRow";
 import { Button } from "../ui/button";
 import { Form, FormField } from "../ui/form";
 import ComplexPasswordInput from "./ComplexPasswordInput";
@@ -22,6 +23,8 @@ type BaseAuthValues = {
   email: string;
   password: string;
   name?: string;
+  acceptTerms?: boolean;
+  acceptPrivacy?: boolean;
 };
 
 type AuthProps<TFormValues extends BaseAuthValues> = {
@@ -85,6 +88,61 @@ export function Auth<TFormValues extends BaseAuthValues>({
               )
             }
           />
+
+          {shouldShowSignupFields && (
+            <ul className="divide-border/50 space-y-2 divide-y">
+              <FormField
+                control={form.control}
+                name={"acceptTerms" as Path<TFormValues>}
+                render={({ field, fieldState }) => (
+                  <ConsentRow
+                    checked={!!field.value}
+                    onCheckedChange={field.onChange}
+                    error={fieldState.error?.message}
+                    title={
+                      <>
+                        I accept the{" "}
+                        <Link
+                          to="/terms"
+                          target="_blank"
+                          className="text-primary font-medium underline-offset-4 hover:underline"
+                        >
+                          Terms &amp; Conditions
+                        </Link>
+                        .
+                      </>
+                    }
+                    description="You agree to abide by the rules that govern the service."
+                  />
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={"acceptPrivacy" as Path<TFormValues>}
+                render={({ field, fieldState }) => (
+                  <ConsentRow
+                    checked={!!field.value}
+                    onCheckedChange={field.onChange}
+                    error={fieldState.error?.message}
+                    title={
+                      <>
+                        I have read the{" "}
+                        <Link
+                          to="/privacy"
+                          target="_blank"
+                          className="text-primary font-medium underline-offset-4 hover:underline"
+                        >
+                          Privacy Policy
+                        </Link>
+                        .
+                      </>
+                    }
+                    description="You acknowledge how Monfly handles your personal data."
+                  />
+                )}
+              />
+            </ul>
+          )}
 
           <Button
             type="submit"

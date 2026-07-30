@@ -120,13 +120,13 @@ export function LandingHero() {
                 <p className="text-muted-foreground text-xs font-semibold tracking-[0.13em] uppercase">
                   Live Decision Feed
                 </p>
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-1 text-[0.72rem] font-semibold text-emerald-700 dark:text-emerald-300">
+                <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-[0.72rem] font-semibold text-emerald-700 dark:text-emerald-300">
                   <ShieldCheck className="size-3.5" />
                   Encrypted
                 </span>
               </div>
 
-              <div className="border-border/65 bg-background/80 rounded-4xl border p-4">
+              <div className="border-border/65 bg-background/80 rounded-md border p-4">
                 <p className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
                   Available Cash
                 </p>
@@ -142,7 +142,7 @@ export function LandingHero() {
                 {decisionFeed.map((item) => (
                   <li
                     key={item.title}
-                    className="border-border/60 bg-background/72 rounded-4xl border px-3 py-2.5"
+                    className="border-border/60 bg-background/72 rounded-md border px-3 py-2.5"
                   >
                     <div className="flex items-start gap-2.5 lg:items-center">
                       <item.icon className={`mt-0.5 size-4 ${item.tone}`} />
