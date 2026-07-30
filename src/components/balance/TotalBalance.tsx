@@ -45,7 +45,7 @@ const LONG_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
   year: "numeric",
 });
 
-const TotalBalance = () => {
+export const TotalBalance = () => {
   const { currency, isHidden: isBalanceHidden } = useCurrency();
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
@@ -218,5 +218,3 @@ const TotalBalance = () => {
     </Card>
   );
 };
-
-export default TotalBalance;

@@ -6,7 +6,7 @@ import { BalanceDetails } from "@/components/balance/balance-details";
 import { CardSelector } from "@/components/cards/CardSelector";
 import { DailyActivity } from "@/components/charts/DailyActivity";
 import { hideMetricsAtom } from "@/state";
-import TotalBalance from "~/components/balance/TotalBalance";
+import { TotalBalance } from "~/components/balance/TotalBalance";
 import { DashboardMetrics } from "~/components/home/DashboardMetrics";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { UpcomingReceivablesCard } from "~/components/loans/UpcomingReceivablesCard";
