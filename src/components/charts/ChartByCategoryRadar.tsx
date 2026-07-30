@@ -76,7 +76,8 @@ export default function ChartByCategoryRadar({
   const isIncome = type === transactionTypes.INCOME;
 
   const chartLabel = isIncome ? "Income" : "Expense";
-  const color = isIncome ? "var(--chart-1)" : "var(--chart-3)";
+  // Expenses keep the destructive tone; every other series uses a chart slot.
+  const color = isIncome ? "var(--chart-1)" : "var(--destructive)";
 
   const chartConfig = {
     [type]: {
@@ -142,7 +143,7 @@ export default function ChartByCategoryRadar({
                 }
                 fill={color}
                 fillOpacity={0.6}
-                stroke="var(--primary)"
+                stroke={color}
                 dot={{ r: 5, fillOpacity: 1 }}
                 strokeWidth={2}
                 name={chartLabel}
@@ -213,8 +214,9 @@ export default function ChartByCategoryRadar({
                   return (
                     <div
                       key={item.category}
-                      className="bg-primary h-2 flex-1 rounded-sm"
+                      className="h-2 flex-1 rounded-sm"
                       style={{
+                        backgroundColor: color,
                         opacity: Math.max(0.2, percentage / 100),
                         minWidth: "2px",
                       }}

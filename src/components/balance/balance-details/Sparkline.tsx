@@ -39,7 +39,7 @@ export function Sparkline({ points, max }: SparklineProps) {
                   className={cn(
                     "flex-1 cursor-default rounded-sm transition-all duration-300",
                     isPositive
-                      ? "bg-primary/30 group-hover/card:bg-primary/60"
+                      ? "bg-chart-1/30 group-hover/card:bg-chart-1/60"
                       : "bg-destructive/30 group-hover/card:bg-destructive/60",
                   )}
                   style={{ height: `${heightPct}%` }}

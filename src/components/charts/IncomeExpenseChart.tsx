@@ -49,10 +49,10 @@ function IncomeExpenseTooltip({
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="bg-primary size-3 rounded-full" />
+            <div className="bg-chart-1 size-3 rounded-full" />
             <span className="text-muted-foreground text-sm">Income:</span>
           </div>
-          <span className="text-primary font-semibold">
+          <span className="text-chart-1 font-semibold">
             {formatCurrency(income, currency)}
           </span>
         </div>
@@ -71,7 +71,7 @@ function IncomeExpenseTooltip({
               Net:
             </span>
             <span
-              className={`font-bold ${net >= 0 ? "text-primary" : "text-destructive"}`}
+              className={`font-bold ${net >= 0 ? "text-chart-1" : "text-destructive"}`}
             >
               {net >= 0 ? "+" : ""}
               {formatCurrency(net, currency)}
@@ -154,7 +154,7 @@ export default function IncomeExpenseChart() {
             config={{
               income: {
                 label: "Income",
-                color: "var(--primary)",
+                color: "var(--chart-1)",
               },
               expense: {
                 label: "Expenses",
@@ -201,12 +201,12 @@ export default function IncomeExpenseChart() {
                 <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop
                     offset="5%"
-                    stopColor="var(--primary)"
+                    stopColor="var(--chart-1)"
                     stopOpacity={0.2}
                   />
                   <stop
                     offset="95%"
-                    stopColor="var(--primary)"
+                    stopColor="var(--chart-1)"
                     stopOpacity={0.01}
                   />
                 </linearGradient>
@@ -232,7 +232,7 @@ export default function IncomeExpenseChart() {
               <Area
                 type="monotone"
                 dataKey="income"
-                stroke="var(--primary)"
+                stroke="var(--chart-1)"
                 fill="url(#incomeGradient)"
                 strokeWidth={2}
                 name="Income"

@@ -28,12 +28,12 @@ export function RangeStrip({ best, worst }: RangeStripProps) {
       </span>
       <span className="flex flex-wrap items-center gap-3">
         <span className="inline-flex items-center gap-1.5">
-          <span className="bg-primary size-2 rounded-full" aria-hidden={true} />
+          <span className="bg-chart-1 size-2 rounded-full" aria-hidden={true} />
           <span className="text-muted-foreground">Best</span>
           <span className="text-foreground font-medium tabular-nums">
             {best.label}
           </span>
-          <span className="text-primary tabular-nums">
+          <span className="text-chart-1 tabular-nums">
             {formatCurrency(best.net, currency)}
           </span>
         </span>

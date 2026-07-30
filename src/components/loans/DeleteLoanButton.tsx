@@ -35,9 +35,8 @@ export function DeleteLoanButton({
                 <Button
                   type="button"
                   size="icon"
-                  variant="outline"
+                  variant="destructive"
                   aria-label={`Delete loan from ${debtor}`}
-                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive shrink-0"
                 >
                   <Trash2Icon className="size-4" aria-hidden="true" />
                 </Button>
@@ -45,7 +44,9 @@ export function DeleteLoanButton({
             />
           }
         />
-        <TooltipContent side="top">Delete loan</TooltipContent>
+        <TooltipContent side="top">
+          <p>Delete loan from {debtor}</p>
+        </TooltipContent>
       </Tooltip>
       <AlertDialogContent>
         <AlertDialogHeader>
