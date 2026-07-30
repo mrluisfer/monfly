@@ -1,5 +1,4 @@
 import type { ComponentProps } from "react";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { useIsMounted } from "~/hooks/ui/useIsMounted";
 import { cn } from "~/lib/utils";
@@ -18,7 +17,6 @@ export default function ToggleDarkMode({
   size = "icon-lg",
 }: ToggleDarkModeProps) {
   const { theme, setTheme } = useDarkMode();
-  const { selection } = useAppHaptics();
   const isMounted = useIsMounted();
 
   // Until mounted, render with the SSR default theme so the first client
@@ -37,7 +35,6 @@ export default function ToggleDarkMode({
             onClick={() => {
               const newTheme = theme === "dark" ? "light" : "dark";
               setTheme(newTheme);
-              selection();
             }}
             aria-label={`Switch to ${displayTheme === "dark" ? "light" : "dark"} mode`}
           />

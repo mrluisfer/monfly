@@ -1,25 +1,21 @@
-import { lazy, Suspense } from "react";
 import { hideMetricsAtom } from "@/state";
 import { createFileRoute } from "@tanstack/react-router";
+import { useAtomValue } from "jotai";
+import {
+  CalendarDaysIcon,
+  LayoutDashboardIcon,
+  SquareActivityIcon,
+} from "lucide-react";
+import { lazy, Suspense } from "react";
 import { z } from "zod";
 import TotalBalance from "~/components/balance/TotalBalance";
 import { DashboardMetrics } from "~/components/home/DashboardMetrics";
 import { PageHeader } from "~/components/layout/PageHeader";
-import { Section } from "~/components/layout/Section";
 import { UpcomingReceivablesCard } from "~/components/loans/UpcomingReceivablesCard";
 import TransactionsList from "~/components/transactions/list";
 import { Skeleton } from "~/components/ui/skeleton";
 import { StatusBadge } from "~/components/ui/status-badge";
 import { cn } from "~/lib/utils";
-import {
-  AnimatePresence,
-  domAnimation,
-  LazyMotion,
-  m,
-  useReducedMotion,
-} from "motion/react";
-import { useAtomValue } from "jotai";
-import { CalendarDaysIcon, LayoutDashboardIcon } from "lucide-react";
 
 import { BalanceDetails } from "@/components/balance/balance-details";
 import { CardSelector } from "@/components/cards/CardSelector";
@@ -55,7 +51,6 @@ function todayLabel() {
 }
 
 function RouteComponent() {
-  const shouldReduceMotion = useReducedMotion();
   const hideMetrics = useAtomValue(hideMetricsAtom);
 
   // No gating query here: each widget (TotalBalance, BalanceDetails,
@@ -70,7 +65,6 @@ function RouteComponent() {
         description="Track balance, cashflow, and recent activity in one place."
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <CardSelector className="w-44" />
             <StatusBadge
               variant="primary"
               size="md"
@@ -78,130 +72,65 @@ function RouteComponent() {
             >
               {todayLabel()}
             </StatusBadge>
+            <CardSelector className="w-44" />
           </div>
         }
       />
 
-      <LazyMotion features={domAnimation}>
-        <AnimatePresence mode="wait">
-          <m.div
-            key="home-content"
-            initial={shouldReduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{
-              duration: shouldReduceMotion ? 0 : 0.4,
-              ease: "easeOut",
-            }}
-            className="space-y-6 sm:space-y-8"
-          >
-            <m.div
-              layout
-              className={cn(
-                "grid grid-cols-1 gap-6",
-                hideMetrics
-                  ? "xl:grid-cols-1"
-                  : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]",
-              )}
-            >
-              <m.div
-                layout
-                initial={
-                  shouldReduceMotion
-                    ? false
-                    : { opacity: 0, y: 16, scale: 0.98 }
-                }
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{
-                  duration: shouldReduceMotion ? 0 : 0.45,
-                }}
-                className="space-y-4"
-              >
-                <TotalBalance />
-                <BalanceDetails />
-              </m.div>
+      {/* ponytail: no motion here — the entry animations were JS-driven on the
+          whole dashboard subtree. Widgets stream in on their own skeletons, so
+          a single CSS fade is enough (and respects prefers-reduced-motion via
+          tw-animate-css). */}
+      <div className="motion-safe:animate-in motion-safe:fade-in space-y-6 duration-300 sm:space-y-8">
+        <div
+          className={cn(
+            "grid grid-cols-1 gap-6",
+            hideMetrics
+              ? "xl:grid-cols-1"
+              : "xl:grid-cols-[minmax(0,1.5fr)_minmax(320px,0.9fr)]",
+          )}
+        >
+          <div className="space-y-4">
+            <TotalBalance />
+            <BalanceDetails />
+          </div>
 
-              <AnimatePresence initial={false}>
-                {!hideMetrics && (
-                  <m.div
-                    key="dashboard-metrics"
-                    layout
-                    initial={
-                      shouldReduceMotion
-                        ? false
-                        : { opacity: 0, y: 12, scale: 0.98 }
-                    }
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={
-                      shouldReduceMotion
-                        ? { opacity: 0 }
-                        : { opacity: 0, y: -10, scale: 0.98 }
-                    }
-                    transition={{
-                      duration: shouldReduceMotion ? 0 : 0.3,
-                      ease: "easeOut",
-                    }}
-                    className="space-y-4"
-                  >
-                    <DashboardMetrics />
-                    <UpcomingReceivablesCard />
-                  </m.div>
-                )}
-              </AnimatePresence>
-            </m.div>
-
-            <div
-              className={cn(
-                "grid grid-cols-1 gap-6",
-                "3xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]",
-              )}
-            >
-              <m.div
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: shouldReduceMotion ? 0 : 0.4,
-                  delay: shouldReduceMotion ? 0 : 0.15,
-                }}
-              >
-                <TransactionsList />
-              </m.div>
-
-              <m.div
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: shouldReduceMotion ? 0 : 0.4,
-                  delay: shouldReduceMotion ? 0 : 0.2,
-                }}
-                className="space-y-6"
-              >
-                <Section
-                  title="Daily activity"
-                  description="Spot your cashflow rhythm day by day."
-                >
-                  <Suspense
-                    fallback={<Skeleton className="h-56 w-full rounded-2xl" />}
-                  >
-                    <SpendingHeatmap />
-                  </Suspense>
-                </Section>
-
-                <Section
-                  className="xl:hidden"
-                  title="Income vs expenses"
-                  description="Monthly comparison of inflow and outflow."
-                >
-                  <Suspense
-                    fallback={<Skeleton className="h-72 w-full rounded-2xl" />}
-                  >
-                    <IncomeExpenseChart />
-                  </Suspense>
-                </Section>
-              </m.div>
+          {!hideMetrics && (
+            <div className="space-y-4">
+              <DashboardMetrics />
+              <UpcomingReceivablesCard />
             </div>
-          </m.div>
-        </AnimatePresence>
-      </LazyMotion>
+          )}
+        </div>
+
+        <div
+          className={cn(
+            "grid grid-cols-1 gap-6",
+            "3xl:grid-cols-[minmax(0,1.32fr)_minmax(0,0.92fr)]",
+          )}
+        >
+          {/* wrapper kept on purpose: TransactionsList renders several root
+              nodes, so without it they'd each become separate grid items. */}
+          <div>
+            <TransactionsList />
+          </div>
+
+          <div className="space-y-6">
+            <PageHeader
+              icon={
+                <SquareActivityIcon className="size-5" aria-hidden="true" />
+              }
+              title="Daily activity"
+              description="Spot your cashflow rhythm day by day."
+            />
+            <Suspense
+              fallback={<Skeleton className="h-56 w-full rounded-2xl" />}
+            >
+              <SpendingHeatmap />
+            </Suspense>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

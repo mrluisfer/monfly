@@ -1,5 +1,6 @@
 import { CalendarRangeIcon } from "lucide-react";
 
+import { Card } from "~/components/ui/card";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { formatCurrency } from "~/utils/format-currency";
 
@@ -14,7 +15,10 @@ export function RangeStrip({ best, worst }: RangeStripProps) {
   const currency = usePreferredCurrency();
   if (best.label === worst.label) return null;
   return (
-    <div className="border-border/60 bg-card/60 flex flex-col gap-2 rounded-2xl border p-3 text-xs sm:flex-row sm:items-center sm:justify-between">
+    <Card
+      size="sm"
+      className="px-(--card-spacing) text-xs sm:flex-row sm:items-center sm:justify-between"
+    >
       <span className="text-muted-foreground flex items-center gap-2">
         <CalendarRangeIcon
           className="text-muted-foreground size-3.5"
@@ -47,6 +51,6 @@ export function RangeStrip({ best, worst }: RangeStripProps) {
           </span>
         </span>
       </span>
-    </div>
+    </Card>
   );
 }

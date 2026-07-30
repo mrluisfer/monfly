@@ -1,10 +1,8 @@
 import { Prisma } from "@prisma/client";
+import { DAILY_ACTIVITY_DAYS } from "~/constants/daily-activity";
 import { ApiResponse } from "~/types/ApiResponse";
 
 import { prismaClient } from "~/server/prisma";
-
-// 13 full weeks, GitHub-contribution-graph style.
-const DAYS_TO_SHOW = 91;
 
 export type DailyActivityRow = {
   /** UTC calendar day in YYYY-MM-DD format. */
@@ -15,9 +13,10 @@ export type DailyActivityRow = {
 };
 
 /**
- * Daily income/expense totals for the last 13 weeks, aggregated in the
- * database (O(days) transfer size regardless of history length). Buckets are
- * UTC calendar days, matching the month bucketing of the other chart queries.
+ * Daily income/expense totals for the last `DAILY_ACTIVITY_DAYS` days,
+ * aggregated in the database (O(days) transfer size regardless of history
+ * length). Buckets are UTC calendar days, matching the month bucketing of the
+ * other chart queries.
  */
 export const getDailyActivity = async ({
   email,
@@ -32,31 +31,41 @@ export const getDailyActivity = async ({
       Date.UTC(
         now.getUTCFullYear(),
         now.getUTCMonth(),
-        now.getUTCDate() - (DAYS_TO_SHOW - 1),
+        now.getUTCDate() - (DAILY_ACTIVITY_DAYS - 1),
       ),
+    );
+    // Exclusive upper bound at tomorrow 00:00 UTC: the grid stops at today, so
+    // future-dated rows would otherwise inflate the active-day count and could
+    // win "busiest day" without ever being drawn.
+    const windowEnd = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1),
     );
 
     const cardFilter = cardId
       ? Prisma.sql`AND "cardId" = ${cardId}`
       : Prisma.empty;
 
+    // `day` comes back as text, not a timestamp: the pg driver reads
+    // `timestamp without time zone` as a *local* Date, so on a server running
+    // ahead of UTC `toISOString()` would shift every bucket a day earlier.
     const rows = await prismaClient.$queryRaw<
-      { day: Date; income: number; expense: number; count: number }[]
+      { day: string; income: number; expense: number; count: number }[]
     >`
-      SELECT date_trunc('day', "date") AS day,
+      SELECT to_char(date_trunc('day', "date"), 'YYYY-MM-DD') AS day,
              COALESCE(SUM(CASE WHEN "type" = 'income' THEN "amount" END), 0)::float AS income,
              COALESCE(SUM(CASE WHEN "type" = 'expense' THEN "amount" END), 0)::float AS expense,
              COUNT(*)::int AS count
       FROM "Transaction"
       WHERE "userEmail" = ${email}
         AND "date" >= ${windowStart}
+        AND "date" < ${windowEnd}
         ${cardFilter}
       GROUP BY 1
       ORDER BY 1 ASC
     `;
 
     const data: DailyActivityRow[] = rows.map((row) => ({
-      date: row.day.toISOString().slice(0, 10),
+      date: row.day,
       income: row.income,
       expense: row.expense,
       count: row.count,

@@ -1,7 +1,6 @@
 import type { Category } from "@prisma/client";
 import { Grid2X2Icon, LayoutListIcon, SearchIcon, XIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import {
   InputGroup,
   InputGroupAddon,
@@ -14,6 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 import { SelectionBar } from "./SelectionBar";
 

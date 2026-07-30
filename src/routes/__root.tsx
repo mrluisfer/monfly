@@ -11,7 +11,6 @@ import * as React from "react";
 import { DefaultCatchBoundary } from "~/components/shared/DefaultCatchBoundary";
 import { NotFound } from "~/components/shared/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
-import { useGlobalHapticFeedback } from "~/hooks/haptics/useGlobalHapticFeedback";
 import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { useSonnerPosition } from "~/hooks/ui/useSonnerPosition";
 import { SileoToaster } from "~/lib/toaster";
@@ -220,7 +219,6 @@ function RootDocument({
 // Variant used in the normal app flow: reads user preferences (requires
 // providers above it in the tree).
 function AppDocument({ children }: { children: React.ReactNode }) {
-  useGlobalHapticFeedback();
   const { position } = useSonnerPosition();
   const { theme } = useDarkMode();
 

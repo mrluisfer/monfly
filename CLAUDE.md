@@ -82,7 +82,6 @@ pnpm prisma studio          # Open Prisma database GUI
 
 - **Core hooks** (root level): `useMutation`, `useRouteUser`, `use-mobile`, `use-copy-to-clipboard`
 - **`hooks/ui/`** — UI/preference hooks: `useDarkMode`, `useFontDisplay`, `useSonnerPosition`, `useThemeConfig`, `useIsMac`, `useInView`, `useMobile`
-- **`hooks/haptics/`** — Haptic feedback: `useAppHaptics`, `useGlobalHapticFeedback`
 - **`hooks/transactions/`** — `useAddTransaction`, `useEditTransaction`, `useTransactionHoverContext`
 - **`hooks/categories/`** — `useCategoriesList`, `useGetCategoriesByEmail`
 - **`hooks/charts/`** — `useChart`

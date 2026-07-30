@@ -12,8 +12,9 @@ import {
 import { useId } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
+import { ConsentRow } from "~/components/shared/ConsentRow";
+import { ChangePasswordRow } from "~/components/settings/ChangePasswordRow";
 import { Button } from "~/components/ui/button";
-import { Checkbox } from "~/components/ui/checkbox";
 import {
   FormControl,
   FormDescription,
@@ -31,7 +32,6 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
-import { ChangePasswordRow } from "~/components/settings/ChangePasswordRow";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { cn } from "~/lib/utils";
 import { DEFAULT_CURRENCY } from "~/utils/format-currency";
@@ -282,7 +282,6 @@ export function UserFormFields({
                     >
                       Terms &amp; Conditions
                     </Link>
-                    .
                   </>
                 }
                 description="You agree to abide by the rules that govern the service."
@@ -306,7 +305,6 @@ export function UserFormFields({
                     >
                       Privacy Policy
                     </Link>
-                    .
                   </>
                 }
                 description="You acknowledge how Monfly handles your personal data."
@@ -380,55 +378,6 @@ function SwitchRow({
       <FormControl>
         <Switch id={id} checked={checked} onCheckedChange={onCheckedChange} />
       </FormControl>
-    </FormItem>
-  );
-}
-
-type ConsentRowProps = {
-  checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-  title: React.ReactNode;
-  description: string;
-  error?: string;
-};
-
-function ConsentRow({
-  checked,
-  onCheckedChange,
-  title,
-  description,
-  error,
-}: ConsentRowProps) {
-  const id = useId();
-  return (
-    <FormItem
-      className={cn(
-        "flex flex-row items-start gap-3 px-0 py-3 transition-colors first:pt-0 last:pb-0",
-        error && "bg-destructive/5 rounded-lg px-3",
-      )}
-    >
-      <FormControl>
-        <Checkbox
-          id={id}
-          checked={checked}
-          onCheckedChange={(value) => onCheckedChange(value === true)}
-          aria-describedby={`${id}-desc`}
-          className="mt-0.5"
-        />
-      </FormControl>
-      <div className="min-w-0 space-y-0.5">
-        <FormLabel htmlFor={id} className="text-sm font-medium">
-          {title}
-        </FormLabel>
-        <p id={`${id}-desc`} className="text-muted-foreground text-xs">
-          {description}
-        </p>
-        {error ? (
-          <p className="text-destructive text-xs font-medium" role="alert">
-            {error}
-          </p>
-        ) : null}
-      </div>
     </FormItem>
   );
 }

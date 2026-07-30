@@ -9,51 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SignupRouteImport } from './routes/signup'
-import { Route as SignoutRouteImport } from './routes/signout'
-import { Route as LogoutRouteImport } from './routes/logout'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AuthedRouteImport } from './routes/_authed'
-import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TermsIndexRouteImport } from './routes/terms.index'
-import { Route as PrivacyIndexRouteImport } from './routes/privacy.index'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as AuthedRouteImport } from './routes/_authed'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as LogoutRouteImport } from './routes/logout'
+import { Route as SignoutRouteImport } from './routes/signout'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ContactIndexRouteImport } from './routes/contact.index'
+import { Route as PrivacyIndexRouteImport } from './routes/privacy.index'
+import { Route as TermsIndexRouteImport } from './routes/terms.index'
 import { Route as AuthedHomeIndexRouteImport } from './routes/_authed/home/index'
 import { Route as AuthedUserUserIdRouteImport } from './routes/_authed/user.$userId'
-import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
-import { Route as AuthedUserSettingsIndexRouteImport } from './routes/_authed/user/settings.index'
-import { Route as AuthedUserHelpIndexRouteImport } from './routes/_authed/user/help.index'
-import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authed/home/transactions.index'
-import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
-import { Route as AuthedHomeLoansIndexRouteImport } from './routes/_authed/home/loans/index'
-import { Route as AuthedHomeCategoriesIndexRouteImport } from './routes/_authed/home/categories.index'
-import { Route as AuthedHomeCardsIndexRouteImport } from './routes/_authed/home/cards.index'
 import { Route as AuthedHomeBalanceCalculatorIndexRouteImport } from './routes/_authed/home/balance-calculator.index'
+import { Route as AuthedHomeCardsIndexRouteImport } from './routes/_authed/home/cards.index'
+import { Route as AuthedHomeCategoriesIndexRouteImport } from './routes/_authed/home/categories.index'
+import { Route as AuthedHomeLoansIndexRouteImport } from './routes/_authed/home/loans/index'
+import { Route as AuthedHomeReportsIndexRouteImport } from './routes/_authed/home/reports.index'
+import { Route as AuthedHomeTransactionsIndexRouteImport } from './routes/_authed/home/transactions.index'
+import { Route as AuthedUserHelpIndexRouteImport } from './routes/_authed/user/help.index'
+import { Route as AuthedUserSettingsIndexRouteImport } from './routes/_authed/user/settings.index'
+import { Route as AuthedUserThemeIndexRouteImport } from './routes/_authed/user/theme.index'
 import { Route as AuthedUserSettingsChangePasswordIndexRouteImport } from './routes/_authed/user/settings.change-password.index'
 
-const SignupRoute = SignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SignoutRoute = SignoutRouteImport.update({
-  id: '/signout',
-  path: '/signout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LogoutRoute = LogoutRouteImport.update({
-  id: '/logout',
-  path: '/logout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthedRoute = AuthedRouteImport.update({
-  id: '/_authed',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SplatRoute = SplatRouteImport.update({
@@ -61,14 +42,33 @@ const SplatRoute = SplatRouteImport.update({
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthedRoute = AuthedRouteImport.update({
+  id: '/_authed',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TermsIndexRoute = TermsIndexRouteImport.update({
-  id: '/terms/',
-  path: '/terms/',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LogoutRoute = LogoutRouteImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignoutRoute = SignoutRouteImport.update({
+  id: '/signout',
+  path: '/signout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactIndexRoute = ContactIndexRouteImport.update({
+  id: '/contact/',
+  path: '/contact/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyIndexRoute = PrivacyIndexRouteImport.update({
@@ -76,9 +76,9 @@ const PrivacyIndexRoute = PrivacyIndexRouteImport.update({
   path: '/privacy/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ContactIndexRoute = ContactIndexRouteImport.update({
-  id: '/contact/',
-  path: '/contact/',
+const TermsIndexRoute = TermsIndexRouteImport.update({
+  id: '/terms/',
+  path: '/terms/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthedHomeIndexRoute = AuthedHomeIndexRouteImport.update({
@@ -91,35 +91,15 @@ const AuthedUserUserIdRoute = AuthedUserUserIdRouteImport.update({
   path: '/user/$userId',
   getParentRoute: () => AuthedRoute,
 } as any)
-const AuthedUserThemeIndexRoute = AuthedUserThemeIndexRouteImport.update({
-  id: '/user/theme/',
-  path: '/user/theme/',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedUserSettingsIndexRoute = AuthedUserSettingsIndexRouteImport.update({
-  id: '/user/settings/',
-  path: '/user/settings/',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedUserHelpIndexRoute = AuthedUserHelpIndexRouteImport.update({
-  id: '/user/help/',
-  path: '/user/help/',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedHomeTransactionsIndexRoute =
-  AuthedHomeTransactionsIndexRouteImport.update({
-    id: '/home/transactions/',
-    path: '/home/transactions/',
+const AuthedHomeBalanceCalculatorIndexRoute =
+  AuthedHomeBalanceCalculatorIndexRouteImport.update({
+    id: '/home/balance-calculator/',
+    path: '/home/balance-calculator/',
     getParentRoute: () => AuthedRoute,
   } as any)
-const AuthedHomeReportsIndexRoute = AuthedHomeReportsIndexRouteImport.update({
-  id: '/home/reports/',
-  path: '/home/reports/',
-  getParentRoute: () => AuthedRoute,
-} as any)
-const AuthedHomeLoansIndexRoute = AuthedHomeLoansIndexRouteImport.update({
-  id: '/home/loans/',
-  path: '/home/loans/',
+const AuthedHomeCardsIndexRoute = AuthedHomeCardsIndexRouteImport.update({
+  id: '/home/cards/',
+  path: '/home/cards/',
   getParentRoute: () => AuthedRoute,
 } as any)
 const AuthedHomeCategoriesIndexRoute =
@@ -128,17 +108,37 @@ const AuthedHomeCategoriesIndexRoute =
     path: '/home/categories/',
     getParentRoute: () => AuthedRoute,
   } as any)
-const AuthedHomeCardsIndexRoute = AuthedHomeCardsIndexRouteImport.update({
-  id: '/home/cards/',
-  path: '/home/cards/',
+const AuthedHomeLoansIndexRoute = AuthedHomeLoansIndexRouteImport.update({
+  id: '/home/loans/',
+  path: '/home/loans/',
   getParentRoute: () => AuthedRoute,
 } as any)
-const AuthedHomeBalanceCalculatorIndexRoute =
-  AuthedHomeBalanceCalculatorIndexRouteImport.update({
-    id: '/home/balance-calculator/',
-    path: '/home/balance-calculator/',
+const AuthedHomeReportsIndexRoute = AuthedHomeReportsIndexRouteImport.update({
+  id: '/home/reports/',
+  path: '/home/reports/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedHomeTransactionsIndexRoute =
+  AuthedHomeTransactionsIndexRouteImport.update({
+    id: '/home/transactions/',
+    path: '/home/transactions/',
     getParentRoute: () => AuthedRoute,
   } as any)
+const AuthedUserHelpIndexRoute = AuthedUserHelpIndexRouteImport.update({
+  id: '/user/help/',
+  path: '/user/help/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedUserSettingsIndexRoute = AuthedUserSettingsIndexRouteImport.update({
+  id: '/user/settings/',
+  path: '/user/settings/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedUserThemeIndexRoute = AuthedUserThemeIndexRouteImport.update({
+  id: '/user/theme/',
+  path: '/user/theme/',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const AuthedUserSettingsChangePasswordIndexRoute =
   AuthedUserSettingsChangePasswordIndexRouteImport.update({
     id: '/user/settings/change-password/',
@@ -305,39 +305,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/signup': {
-      id: '/signup'
-      path: '/signup'
-      fullPath: '/signup'
-      preLoaderRoute: typeof SignupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/signout': {
-      id: '/signout'
-      path: '/signout'
-      fullPath: '/signout'
-      preLoaderRoute: typeof SignoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/logout': {
-      id: '/logout'
-      path: '/logout'
-      fullPath: '/logout'
-      preLoaderRoute: typeof LogoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_authed': {
-      id: '/_authed'
-      path: ''
+    '/': {
+      id: '/'
+      path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthedRouteImport
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$': {
@@ -347,18 +319,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_authed': {
+      id: '/_authed'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof AuthedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/terms/': {
-      id: '/terms/'
-      path: '/terms'
-      fullPath: '/terms/'
-      preLoaderRoute: typeof TermsIndexRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signout': {
+      id: '/signout'
+      path: '/signout'
+      fullPath: '/signout'
+      preLoaderRoute: typeof SignoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact/': {
+      id: '/contact/'
+      path: '/contact'
+      fullPath: '/contact/'
+      preLoaderRoute: typeof ContactIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy/': {
@@ -368,11 +368,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/contact/': {
-      id: '/contact/'
-      path: '/contact'
-      fullPath: '/contact/'
-      preLoaderRoute: typeof ContactIndexRouteImport
+    '/terms/': {
+      id: '/terms/'
+      path: '/terms'
+      fullPath: '/terms/'
+      preLoaderRoute: typeof TermsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authed/home/': {
@@ -389,53 +389,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedUserUserIdRouteImport
       parentRoute: typeof AuthedRoute
     }
-    '/_authed/user/theme/': {
-      id: '/_authed/user/theme/'
-      path: '/user/theme'
-      fullPath: '/user/theme/'
-      preLoaderRoute: typeof AuthedUserThemeIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/user/settings/': {
-      id: '/_authed/user/settings/'
-      path: '/user/settings'
-      fullPath: '/user/settings/'
-      preLoaderRoute: typeof AuthedUserSettingsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/user/help/': {
-      id: '/_authed/user/help/'
-      path: '/user/help'
-      fullPath: '/user/help/'
-      preLoaderRoute: typeof AuthedUserHelpIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/transactions/': {
-      id: '/_authed/home/transactions/'
-      path: '/home/transactions'
-      fullPath: '/home/transactions/'
-      preLoaderRoute: typeof AuthedHomeTransactionsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/reports/': {
-      id: '/_authed/home/reports/'
-      path: '/home/reports'
-      fullPath: '/home/reports/'
-      preLoaderRoute: typeof AuthedHomeReportsIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/loans/': {
-      id: '/_authed/home/loans/'
-      path: '/home/loans'
-      fullPath: '/home/loans/'
-      preLoaderRoute: typeof AuthedHomeLoansIndexRouteImport
-      parentRoute: typeof AuthedRoute
-    }
-    '/_authed/home/categories/': {
-      id: '/_authed/home/categories/'
-      path: '/home/categories'
-      fullPath: '/home/categories/'
-      preLoaderRoute: typeof AuthedHomeCategoriesIndexRouteImport
+    '/_authed/home/balance-calculator/': {
+      id: '/_authed/home/balance-calculator/'
+      path: '/home/balance-calculator'
+      fullPath: '/home/balance-calculator/'
+      preLoaderRoute: typeof AuthedHomeBalanceCalculatorIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/home/cards/': {
@@ -445,11 +403,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedHomeCardsIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
-    '/_authed/home/balance-calculator/': {
-      id: '/_authed/home/balance-calculator/'
-      path: '/home/balance-calculator'
-      fullPath: '/home/balance-calculator/'
-      preLoaderRoute: typeof AuthedHomeBalanceCalculatorIndexRouteImport
+    '/_authed/home/categories/': {
+      id: '/_authed/home/categories/'
+      path: '/home/categories'
+      fullPath: '/home/categories/'
+      preLoaderRoute: typeof AuthedHomeCategoriesIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/home/loans/': {
+      id: '/_authed/home/loans/'
+      path: '/home/loans'
+      fullPath: '/home/loans/'
+      preLoaderRoute: typeof AuthedHomeLoansIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/home/reports/': {
+      id: '/_authed/home/reports/'
+      path: '/home/reports'
+      fullPath: '/home/reports/'
+      preLoaderRoute: typeof AuthedHomeReportsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/home/transactions/': {
+      id: '/_authed/home/transactions/'
+      path: '/home/transactions'
+      fullPath: '/home/transactions/'
+      preLoaderRoute: typeof AuthedHomeTransactionsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/user/help/': {
+      id: '/_authed/user/help/'
+      path: '/user/help'
+      fullPath: '/user/help/'
+      preLoaderRoute: typeof AuthedUserHelpIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/user/settings/': {
+      id: '/_authed/user/settings/'
+      path: '/user/settings'
+      fullPath: '/user/settings/'
+      preLoaderRoute: typeof AuthedUserSettingsIndexRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/user/theme/': {
+      id: '/_authed/user/theme/'
+      path: '/user/theme'
+      fullPath: '/user/theme/'
+      preLoaderRoute: typeof AuthedUserThemeIndexRouteImport
       parentRoute: typeof AuthedRoute
     }
     '/_authed/user/settings/change-password/': {

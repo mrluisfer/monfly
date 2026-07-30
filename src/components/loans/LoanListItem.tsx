@@ -1,6 +1,7 @@
 import { CheckIcon, FileTextIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { type LoanDirection, type LoanStatus } from "~/constants/loan-status";
+import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
 
 import { DeleteLoanButton } from "./DeleteLoanButton";
@@ -10,7 +11,6 @@ import { PartialPaymentControl } from "./PartialPaymentControl";
 import { ReopenLoanButton } from "./ReopenLoanButton";
 import { StatusBadge } from "./StatusBadge";
 import type { EditLoanPatch, LoanRow } from "./types";
-import { useMaskedAmount } from "./use-masked-amount";
 import {
   Tooltip,
   TooltipContent,
@@ -40,7 +40,7 @@ export function LoanListItem({
   const remaining = Math.max(loan.amount - loan.amountPaid, 0);
   const progressPct =
     loan.amount > 0 ? Math.round((loan.amountPaid / loan.amount) * 100) : 0;
-  const maskAmount = useMaskedAmount();
+  const { format: formatAmount } = useCurrency();
 
   return (
     <li className="group bg-card border-border/60 relative flex flex-col gap-4 overflow-hidden rounded-2xl border p-4 shadow-xs transition-shadow hover:shadow-md sm:px-6 sm:py-5 lg:px-4 lg:py-4 xl:gap-5 xl:px-7 xl:py-6">
@@ -72,14 +72,14 @@ export function LoanListItem({
           <p className="text-muted-foreground flex flex-wrap items-baseline gap-x-1.5 gap-y-0.5 text-xs tabular-nums sm:text-sm">
             <span>
               <span className="text-foreground font-medium">
-                {maskAmount(loan.amount)}
+                {formatAmount(loan.amount)}
               </span>{" "}
               total
             </span>
             {loan.amountPaid > 0 && (
               <span className="before:text-muted-foreground/50 before:mr-1.5 before:content-['·']">
                 <span className="text-foreground font-medium">
-                  {maskAmount(loan.amountPaid)}
+                  {formatAmount(loan.amountPaid)}
                 </span>{" "}
                 paid
               </span>
@@ -115,7 +115,7 @@ export function LoanListItem({
         {!isPaid && remaining > 0 && (
           <div className="shrink-0 text-right">
             <p className="text-foreground text-sm font-semibold tabular-nums sm:text-base">
-              {maskAmount(remaining)}
+              {formatAmount(remaining)}
             </p>
             <p className="text-muted-foreground text-[10px] sm:text-xs">
               {isBorrowed ? "to pay" : "remaining"}

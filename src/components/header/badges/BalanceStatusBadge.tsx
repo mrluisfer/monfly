@@ -1,15 +1,5 @@
 import type { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { cn } from "~/lib/utils";
-import {
-  formatCurrency,
-  type SupportedCurrency,
-} from "~/utils/format-currency";
-import { queryDictionary } from "~/queries/dictionary";
-import type { ApiResponse } from "~/types/ApiResponse";
 import {
   AlertCircle,
   Loader2,
@@ -17,8 +7,18 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
+import { cn } from "~/lib/utils";
+import { queryDictionary } from "~/queries/dictionary";
+import type { ApiResponse } from "~/types/ApiResponse";
+import {
+  formatCurrency,
+  type SupportedCurrency,
+} from "~/utils/format-currency";
 
-import { BadgeIcon, HeaderBadge, StatusDot } from "./HeaderBadge";
+import { BadgeIcon, HeaderBadge } from "./HeaderBadge";
 
 interface BalanceStatusBadgeProps {
   showIcon?: boolean;
@@ -133,11 +133,6 @@ export function BalanceStatusBadge({
         />
       }
     >
-      <StatusDot
-        color={config.color}
-        animate={animate && status === "surplus"}
-      />
-
       {showIcon && (
         <BadgeIcon
           icon={config.icon}

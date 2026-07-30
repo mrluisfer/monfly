@@ -18,6 +18,8 @@ import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
 import Card from "../shared/Card";
+import { MetricsGrid } from "../shared/MetricsGrid";
+import { MetricTile } from "../shared/MetricTile";
 import { ChartError, ChartLoading } from "./ChartLoading";
 
 type IncomeExpenseTooltipProps = {
@@ -128,7 +130,7 @@ export default function IncomeExpenseChart() {
 
   return (
     <Card
-      className="rounded-2xl border-0 shadow-none"
+      className="border-0 shadow-none"
       title="Income vs Expenses"
       subtitle={
         totalIncome > 0 || totalExpenses > 0
@@ -259,35 +261,23 @@ export default function IncomeExpenseChart() {
             </AreaChart>
           </ChartContainer>
 
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="bg-muted rounded-xl p-3.5">
-              <p className="text-muted-foreground text-xs font-medium tracking-[0.18em] uppercase">
-                Income
-              </p>
-              <p className="text-primary mt-2 text-base font-semibold">
-                {formatCurrency(totalIncome, currency)}
-              </p>
-            </div>
-            <div className="bg-muted rounded-xl p-3.5">
-              <p className="text-muted-foreground text-xs font-medium tracking-[0.18em] uppercase">
-                Expenses
-              </p>
-              <p className="text-destructive mt-2 text-base font-semibold">
-                {formatCurrency(totalExpenses, currency)}
-              </p>
-            </div>
-            <div className="bg-muted rounded-xl p-3.5">
-              <p className="text-muted-foreground text-xs font-medium tracking-[0.18em] uppercase">
-                Net
-              </p>
-              <p
-                className={`mt-2 text-base font-semibold ${netTotal >= 0 ? "text-primary" : "text-destructive"}`}
-              >
-                {netTotal >= 0 ? "+" : ""}
-                {formatCurrency(netTotal, currency)}
-              </p>
-            </div>
-          </div>
+          <MetricsGrid>
+            <MetricTile
+              label="Income"
+              value={formatCurrency(totalIncome, currency)}
+              valueTone="primary"
+            />
+            <MetricTile
+              label="Expenses"
+              value={formatCurrency(totalExpenses, currency)}
+              valueTone="destructive"
+            />
+            <MetricTile
+              label="Net"
+              value={`${netTotal >= 0 ? "+" : ""}${formatCurrency(netTotal, currency)}`}
+              valueTone={netTotal >= 0 ? "primary" : "destructive"}
+            />
+          </MetricsGrid>
         </div>
       )}
 

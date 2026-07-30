@@ -1,7 +1,8 @@
-import { useAtomValue } from "jotai";
 import { memo } from "react";
 
-import { hideBalanceAtom } from "@/state";
+import { Alert, AlertTitle } from "~/components/ui/alert";
+
+import { useCurrency } from "~/hooks/useCurrency";
 
 import { BalanceDetailsSkeleton } from "./BalanceDetailsSkeleton";
 import { BalanceInsights } from "./BalanceInsights";
@@ -11,14 +12,14 @@ import { RangeStrip } from "./RangeStrip";
 import { useBalanceDetails } from "./use-balance-details";
 
 function BalanceDetailsComponent() {
-  const isBalanceHidden = useAtomValue(hideBalanceAtom);
+  const { isHidden: isBalanceHidden } = useCurrency();
   const { summary, isPending, error } = useBalanceDetails();
 
   if (error) {
     return (
-      <p className="text-destructive text-sm font-medium" role="alert">
-        Failed to load balance details
-      </p>
+      <Alert variant="destructive">
+        <AlertTitle>Failed to load balance details</AlertTitle>
+      </Alert>
     );
   }
 
@@ -32,13 +33,9 @@ function BalanceDetailsComponent() {
 
   return (
     <section className="space-y-3" aria-label="Balance details and insights">
-      <BalanceMetricsGrid summary={summary} isBalanceHidden={isBalanceHidden} />
+      <BalanceMetricsGrid summary={summary} />
 
-      {hasData ? (
-        <BalanceInsights summary={summary} isBalanceHidden={isBalanceHidden} />
-      ) : (
-        <EmptyInsights />
-      )}
+      {hasData ? <BalanceInsights summary={summary} /> : <EmptyInsights />}
 
       {canShowRange ? <RangeStrip best={bestPoint} worst={worstPoint} /> : null}
     </section>

@@ -1,22 +1,4 @@
-import { Card as CardType } from "@prisma/client";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import { CARD_TYPE_LABEL } from "@/constants/card-status";
-import {
-  ArchiveIcon,
-  ArchiveRestoreIcon,
-  CreditCardIcon,
-  Trash2Icon,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { EditCard } from "@/components/cards/EditCard";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Button } from "@/components/ui/button";
-import { useDeleteCard, usePreferredCurrency, useUpdateCard } from "@/hooks";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,7 +10,24 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { formatCurrency } from "@/utils/format-currency";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { CARD_TYPE_LABEL } from "@/constants/card-status";
+import { useCurrency, useDeleteCard, useUpdateCard } from "@/hooks";
+import { cn } from "@/lib/utils";
+import { Card as CardType } from "@prisma/client";
+import {
+  ArchiveIcon,
+  ArchiveRestoreIcon,
+  CreditCardIcon,
+  Trash2Icon,
+} from "lucide-react";
 
 export function SingleCard({ card }: { card: CardType }) {
   const isArchived = card.status === "archived";
@@ -42,7 +41,7 @@ export function SingleCard({ card }: { card: CardType }) {
       .join(" · ") || "—";
 
   const { archive, restore } = useUpdateCard();
-  const currency = usePreferredCurrency();
+  const { format: formatAmount } = useCurrency();
   const { remove } = useDeleteCard();
 
   return (
@@ -166,7 +165,7 @@ export function SingleCard({ card }: { card: CardType }) {
           Balance
         </p>
         <p className="mt-0.5 text-2xl font-semibold tracking-tight tabular-nums">
-          {formatCurrency(card.balance ?? 0, currency)}
+          {formatAmount(card.balance ?? 0)}
         </p>
       </div>
     </Card>

@@ -1,91 +1,84 @@
 import { FlameIcon, GaugeIcon, TimerIcon, TrophyIcon } from "lucide-react";
 
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { formatCurrency } from "~/utils/format-currency";
-
-import { HIDDEN_VALUE } from "./constants";
-import { InsightCard } from "./InsightCard";
-import { InsightsGrid } from "./InsightsGrid";
-import { SavingsRateCard } from "./SavingsRateCard";
+import { useCurrency } from "~/hooks/useCurrency";
+import { MetricsGrid } from "~/components/shared/MetricsGrid";
+import { MetricTile } from "~/components/shared/MetricTile";
+import { SavingsRateTile } from "./SavingsRateTile";
 import type { BalanceSummary } from "./types";
 
 type BalanceInsightsProps = {
   summary: BalanceSummary;
-  isBalanceHidden: boolean;
 };
 
-export function BalanceInsights({
-  summary,
-  isBalanceHidden,
-}: BalanceInsightsProps) {
-  const currency = usePreferredCurrency();
+export function BalanceInsights({ summary }: BalanceInsightsProps) {
+  const { format: formatAmount, isHidden } = useCurrency();
   const periodCount = summary.recentPoints.length;
 
   return (
-    <InsightsGrid>
-      <SavingsRateCard rate={summary.savingsRate} hidden={isBalanceHidden} />
+    <MetricsGrid>
+      <SavingsRateTile rate={summary.savingsRate} hidden={isHidden} />
 
-      <InsightCard
-        icon={GaugeIcon}
-        iconTone="text-sky-600 dark:text-sky-300"
+      <MetricTile
         label="Avg net / period"
-        value={
-          isBalanceHidden
-            ? HIDDEN_VALUE
-            : formatCurrency(summary.avgNet, currency)
+        value={formatAmount(summary.avgNet)}
+        valueTone={summary.avgNet >= 0 ? "primary" : "destructive"}
+        icon={GaugeIcon}
+        iconTone="info"
+        footer={
+          <p className="text-muted-foreground text-xs">
+            {`across ${periodCount} period${periodCount === 1 ? "" : "s"}`}
+          </p>
         }
-        valueTone={summary.avgNet >= 0 ? "text-primary" : "text-destructive"}
-        hint={`across ${periodCount} period${periodCount === 1 ? "" : "s"}`}
       />
 
-      <InsightCard
-        icon={TrophyIcon}
-        iconTone="text-amber-600 dark:text-amber-300"
+      <MetricTile
         label="Best period"
-        value={
-          isBalanceHidden
-            ? HIDDEN_VALUE
-            : summary.bestPoint
-              ? formatCurrency(summary.bestPoint.net, currency)
-              : "—"
-        }
+        value={summary.bestPoint ? formatAmount(summary.bestPoint.net) : "—"}
         valueTone={
           summary.bestPoint && summary.bestPoint.net >= 0
-            ? "text-primary"
-            : "text-foreground"
+            ? "primary"
+            : "neutral"
         }
-        hint={summary.bestPoint?.label ?? "—"}
+        icon={TrophyIcon}
+        iconTone="warning"
+        footer={
+          <p className="text-muted-foreground text-xs">
+            {summary.bestPoint?.label ?? "—"}
+          </p>
+        }
       />
 
       {summary.runwayMonths !== null ? (
-        <InsightCard
-          icon={TimerIcon}
-          iconTone="text-destructive"
+        <MetricTile
           label="Estimated runway"
           value={`${summary.runwayMonths.toFixed(1)} mo`}
-          valueTone="text-destructive"
-          hint="at current burn rate"
+          valueTone="destructive"
+          icon={TimerIcon}
+          iconTone="destructive"
+          footer={
+            <p className="text-muted-foreground text-xs">
+              at current burn rate
+            </p>
+          }
         />
       ) : (
-        <InsightCard
-          icon={FlameIcon}
-          iconTone="text-emerald-600 dark:text-emerald-300"
+        <MetricTile
           label="Positive streak"
           value={`${summary.positiveStreak} ${
             summary.positiveStreak === 1 ? "month" : "months"
           }`}
-          valueTone={
-            summary.positiveStreak > 0
-              ? "text-primary"
-              : "text-muted-foreground"
-          }
-          hint={
-            summary.positiveStreak > 0
-              ? "consecutive positive net"
-              : "no streak yet"
+          valueTone={summary.positiveStreak > 0 ? "primary" : "neutral"}
+          icon={FlameIcon}
+          iconTone="success"
+          footer={
+            <p className="text-muted-foreground text-xs">
+              {summary.positiveStreak > 0
+                ? "consecutive positive net"
+                : "no streak yet"}
+            </p>
           }
         />
       )}
-    </InsightsGrid>
+    </MetricsGrid>
   );
 }

@@ -1,10 +1,10 @@
-import { lazy, Suspense } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { BarChartIcon } from "lucide-react";
+import { lazy, Suspense } from "react";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { ClientOnly } from "~/components/shared/ClientOnly";
 import { Skeleton } from "~/components/ui/skeleton";
 import { transactionTypes } from "~/constants/transaction-types";
-import { BarChartIcon } from "lucide-react";
 
 // Charts must stay lazy: a static import pulls recharts into the route module,
 // which is evaluated during SSR/production bundling and crashes ("a is not a
@@ -57,7 +57,7 @@ function RouteComponent() {
 }
 
 function ChartFallback() {
-  return <Skeleton className="h-72 w-full rounded-2xl" />;
+  return <Skeleton className="h-72 w-full rounded-md" />;
 }
 
 function ChartsFallback() {

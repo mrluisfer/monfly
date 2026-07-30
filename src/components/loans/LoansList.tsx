@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { type LoanDirection, type LoanStatus } from "~/constants/loan-status";
 import { useDeleteLoan } from "~/hooks/loans/useDeleteLoan";
 import { useLoanPayment } from "~/hooks/loans/useLoanPayment";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useLoans } from "~/hooks/loans/useLoans";
 import { useUpdateLoan } from "~/hooks/loans/useUpdateLoan";
 
@@ -13,7 +14,6 @@ import { CountBadge } from "./CountBadge";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanListItem } from "./LoanListItem";
 import type { DirectionFilter, StatusFilter } from "./types";
-import { useMaskedAmount } from "./use-masked-amount";
 
 /** The full loans dashboard: summary metrics, filters, and the loan list. */
 export function LoansList() {
@@ -24,7 +24,7 @@ export function LoansList() {
   const update = useUpdateLoan();
   const payment = useLoanPayment();
   const del = useDeleteLoan();
-  const maskAmount = useMaskedAmount();
+  const { format: formatAmount } = useCurrency();
 
   if (isPending) {
     return (
@@ -44,7 +44,7 @@ export function LoansList() {
 
   if (error || !data || data.error || !data.data) {
     return (
-      <div className="bg-destructive/5 border-destructive/20 text-destructive flex items-center gap-3 rounded-2xl border p-5 text-sm">
+      <div className="bg-destructive/5 border-destructive/20 text-destructive flex items-center gap-3 rounded-xl border p-5 text-sm">
         <AlertCircleIcon className="size-5 shrink-0" aria-hidden="true" />
         <span>Failed to load loans. Please try again later.</span>
       </div>
@@ -126,20 +126,20 @@ export function LoansList() {
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
         <MetricCard
           label="Owed to me"
-          value={maskAmount(totals.lentOutstanding)}
+          value={formatAmount(totals.lentOutstanding)}
           accent="success"
           icon={<LoanDirectionIcon direction="lent" colored={false} />}
         />
         <MetricCard
           label="I owe"
-          value={maskAmount(totals.borrowedOutstanding)}
+          value={formatAmount(totals.borrowedOutstanding)}
           accent="destructive"
           icon={<LoanDirectionIcon direction="borrowed" colored={false} />}
         />
         <MetricCard
           label="Net balance"
           className="sm:col-span-2 lg:col-span-1"
-          value={maskAmount(netBalance)}
+          value={formatAmount(netBalance)}
           accent={netBalance >= 0 ? "primary" : "destructive"}
           icon={
             netBalance >= 0 ? (

@@ -106,7 +106,7 @@ export default function ChartByCategoryRadar({
   const stats = calculateStats();
 
   return (
-    <Card className="rounded-2xl border-0 shadow-none">
+    <Card className="border-0 shadow-none">
       <CardHeader>
         <CardTitle>{`${chartLabel} by Category`}</CardTitle>
         <CardDescription>

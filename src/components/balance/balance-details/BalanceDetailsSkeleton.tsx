@@ -1,6 +1,6 @@
 import { Skeleton } from "~/components/ui/skeleton";
 
-import { InsightsGrid } from "./InsightsGrid";
+import { MetricsGrid } from "~/components/shared/MetricsGrid";
 
 const METRIC_PLACEHOLDERS = [0, 1, 2];
 const INSIGHT_PLACEHOLDERS = [0, 1, 2, 3];
@@ -8,16 +8,16 @@ const INSIGHT_PLACEHOLDERS = [0, 1, 2, 3];
 export function BalanceDetailsSkeleton() {
   return (
     <div className="space-y-3" aria-busy="true" aria-live="polite">
-      <dl className="grid gap-3 sm:grid-cols-3">
+      <MetricsGrid>
         {METRIC_PLACEHOLDERS.map((item) => (
-          <Skeleton key={item} className="h-32 rounded-2xl" />
+          <Skeleton key={item} className="h-32 rounded-xl" />
         ))}
-      </dl>
-      <InsightsGrid>
+      </MetricsGrid>
+      <MetricsGrid>
         {INSIGHT_PLACEHOLDERS.map((item) => (
-          <Skeleton key={item} className="h-24 rounded-2xl" />
+          <Skeleton key={item} className="h-24 rounded-xl" />
         ))}
-      </InsightsGrid>
+      </MetricsGrid>
     </div>
   );
 }

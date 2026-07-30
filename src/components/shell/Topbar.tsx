@@ -143,39 +143,6 @@ export function Topbar() {
       </Breadcrumb>
 
       <div className="flex items-center gap-1.5 sm:gap-2">
-        <Tooltip>
-          <TooltipTrigger
-            render={
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setOpen(true)}
-                aria-label="Search or run a command"
-                aria-keyshortcuts={`${isMac ? "Meta" : "Control"}+K`}
-                className="border-border/70 text-muted-foreground hover:text-foreground hidden h-9 min-w-44 gap-2 rounded-full px-3 sm:inline-flex"
-              />
-            }
-          >
-            <SearchIcon className="size-4" aria-hidden="true" />
-            <span className="text-xs">Search…</span>
-            <Kbd className="ml-auto">
-              <span aria-hidden="true">{modKey}</span>K
-            </Kbd>
-          </TooltipTrigger>
-          <TooltipContent side="bottom">Command palette</TooltipContent>
-        </Tooltip>
-
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setOpen(true)}
-          aria-label="Open command palette"
-          aria-keyshortcuts={`${isMac ? "Meta" : "Control"}+K`}
-          className="rounded-full sm:hidden"
-        >
-          <SearchIcon className="size-4" aria-hidden="true" />
-        </Button>
-
         <div className="hidden items-center gap-2 lg:flex">
           <SystemStatusBadge
             compact
@@ -185,6 +152,39 @@ export function Topbar() {
             showIcon={false}
           />
         </div>
+
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="outline"
+                size={"lg"}
+                onClick={() => setOpen(true)}
+                aria-label="Search or run a command"
+                aria-keyshortcuts={`${isMac ? "Meta" : "Control"}+K`}
+                className="border-border/70 text-muted-foreground hover:text-foreground hidden min-w-44 gap-2 sm:inline-flex"
+              />
+            }
+          >
+            <SearchIcon className="size-4" aria-hidden="true" />
+            <span className="text-xs">Search...</span>
+            <Kbd className="ml-auto">
+              <span aria-hidden="true">{modKey}</span>K
+            </Kbd>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">Command palette</TooltipContent>
+        </Tooltip>
+
+        <Button
+          variant="outline"
+          size="icon-lg"
+          onClick={() => setOpen(true)}
+          aria-label="Open command palette"
+          aria-keyshortcuts={`${isMac ? "Meta" : "Control"}+K`}
+          className="sm:hidden"
+        >
+          <SearchIcon className="size-4" aria-hidden="true" />
+        </Button>
 
         <HideData />
         <ToggleDarkMode />

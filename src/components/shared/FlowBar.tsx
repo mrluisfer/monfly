@@ -1,18 +1,23 @@
 import { cn } from "~/lib/utils";
 
-import type { FlowTone } from "./types";
+import { TONE_FILL, type Tone } from "./tone";
 
 type FlowBarProps = {
   ratio: number;
-  tone: FlowTone;
+  tone: Tone;
   ariaLabel: string;
+  /** Bar thickness; defaults to the compact 1.5 used inside metric tiles. */
+  className?: string;
 };
 
-export function FlowBar({ ratio, tone, ariaLabel }: FlowBarProps) {
+export function FlowBar({ ratio, tone, ariaLabel, className }: FlowBarProps) {
   const pct = Math.max(0, Math.min(1, ratio)) * 100;
   return (
     <div
-      className="bg-foreground/5 h-1.5 overflow-hidden rounded-full"
+      className={cn(
+        "bg-foreground/5 h-1.5 overflow-hidden rounded-full",
+        className,
+      )}
       role="progressbar"
       aria-valuemin={0}
       aria-valuemax={100}
@@ -22,9 +27,7 @@ export function FlowBar({ ratio, tone, ariaLabel }: FlowBarProps) {
       <div
         className={cn(
           "h-full rounded-full transition-[width] duration-500 ease-out motion-reduce:transition-none",
-          tone === "emerald"
-            ? "bg-gradient-to-r from-emerald-400 to-emerald-600"
-            : "bg-gradient-to-r from-amber-400 to-amber-600",
+          TONE_FILL[tone],
         )}
         style={{ width: `${pct}%` }}
       />

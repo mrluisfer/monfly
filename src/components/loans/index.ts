@@ -11,7 +11,6 @@ export { PartialPaymentControl } from "./PartialPaymentControl";
 export { ReopenLoanButton } from "./ReopenLoanButton";
 export { StatusBadge } from "./StatusBadge";
 export { UpcomingReceivablesCard } from "./UpcomingReceivablesCard";
-export { useMaskedAmount } from "./use-masked-amount";
 export type {
   DirectionFilter,
   EditLoanPatch,

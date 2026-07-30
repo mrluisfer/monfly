@@ -10,8 +10,7 @@ import {
   SelectValue,
 } from "~/components/ui/select";
 import { useActiveCard, useCards } from "~/hooks/cards";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { formatCurrency } from "~/utils/format-currency";
+import { useCurrency } from "~/hooks/useCurrency";
 
 const ALL_CARDS = "all";
 
@@ -23,7 +22,7 @@ const ALL_CARDS = "all";
 export function CardSelector({ className }: { className?: string }) {
   const navigate = useNavigate();
   const activeCard = useActiveCard();
-  const currency = usePreferredCurrency();
+  const { format: formatAmount } = useCurrency();
   const { data, isPending } = useCards({ status: "active" });
 
   const cards = data?.data ?? [];
@@ -90,7 +89,7 @@ export function CardSelector({ className }: { className?: string }) {
                 ) : null}
               </span>
               <span className="text-muted-foreground shrink-0 text-xs font-medium tabular-nums">
-                {formatCurrency(card.balance ?? 0, currency)}
+                {formatAmount(card.balance ?? 0)}
               </span>
             </span>
           </SelectItem>

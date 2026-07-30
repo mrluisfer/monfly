@@ -16,13 +16,12 @@ import {
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { useIsMac } from "~/hooks/ui/useIsMac";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email";
 import { cn } from "~/lib/utils";
 import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-import { maskCurrency } from "~/utils/format-currency";
 import { queryKeys } from "~/utils/query-keys";
 import {
   ArrowDownLeftIcon,
@@ -82,7 +81,7 @@ export function CommandPaletteProvider({
   const [hideBalance, setHideBalance] = useAtom(hideBalanceAtom);
   const isMac = useIsMac();
   const userEmail = useRouteUser();
-  const currency = usePreferredCurrency();
+  const { format: formatAmount } = useCurrency();
 
   // Pull the latest few transactions, but only while the palette is open so we
   // don't fire a request on every page load. Shares the cached `[transactions,
@@ -272,11 +271,7 @@ export function CommandPaletteProvider({
                           )}
                         >
                           {isIncome ? "+" : "-"}
-                          {maskCurrency(
-                            transaction.amount,
-                            currency,
-                            hideBalance,
-                          )}
+                          {formatAmount(transaction.amount)}
                         </CommandShortcut>
                       </CommandItem>
                     );

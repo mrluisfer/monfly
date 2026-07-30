@@ -15,12 +15,28 @@ export const signupFn = createServerFn({ method: "POST" })
       password: string;
       redirectUrl?: string;
       name: string;
+      acceptTerms: boolean;
+      acceptPrivacy: boolean;
     }) => d,
   )
   .handler(async ({ data }) => {
     try {
       const inputEmail = data.email.trim();
       const normalizedEmail = inputEmail.toLowerCase();
+
+      // Consent is a legal record: never take the client's word for the
+      // checkbox being rendered, re-check it here before creating anything.
+      if (!data.acceptTerms || !data.acceptPrivacy) {
+        return {
+          error: true,
+          message:
+            "You must accept the Terms & Conditions and the Privacy Policy",
+          data: null,
+          success: false,
+          statusCode: 400,
+        } as ApiResponse<string | null>;
+      }
+
       enforceRateLimit({
         scope: "auth:signup",
         limit: 4,
@@ -67,12 +83,16 @@ export const signupFn = createServerFn({ method: "POST" })
         } as ApiResponse<string | null>;
       }
 
-      // Create the user
+      // Create the user. The consent checkboxes are stored as the moment of
+      // acceptance, the same shape the account settings form reads back.
+      const acceptedAt = new Date();
       const user = await prismaClient.user.create({
         data: {
           email: normalizedEmail,
           password,
           name: data.name,
+          acceptedTermsAt: acceptedAt,
+          acceptedPrivacyAt: acceptedAt,
         },
       });
 

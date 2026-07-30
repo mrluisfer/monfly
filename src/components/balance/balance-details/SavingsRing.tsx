@@ -1,12 +1,10 @@
-import { PiggyBankIcon } from "lucide-react";
-
 import { cn } from "~/lib/utils";
 
-import type { RingTone } from "./types";
+import { TONE_STROKE, type Tone } from "~/components/shared/tone";
 
 type SavingsRingProps = {
   value: number;
-  tone: RingTone;
+  tone: Tone;
   dimmed: boolean;
 };
 
@@ -15,25 +13,18 @@ const RADIUS = 16;
 export function SavingsRing({ value, tone, dimmed }: SavingsRingProps) {
   const circumference = 2 * Math.PI * RADIUS;
   const dashOffset = circumference * (1 - value);
-
-  const stroke =
-    tone === "emerald"
-      ? "stroke-emerald-500 dark:stroke-emerald-400"
-      : tone === "amber"
-        ? "stroke-amber-500 dark:stroke-amber-400"
-        : "stroke-destructive";
+  const stroke = TONE_STROKE[tone];
 
   return (
     <svg
       viewBox="0 0 40 40"
       className={cn(
-        "size-12 shrink-0 -rotate-90 transition-opacity",
+        "size-10 shrink-0 -rotate-90 transition-opacity",
         dimmed ? "opacity-40" : "opacity-100",
       )}
       role="img"
       aria-label={`Savings ratio ${(value * 100).toFixed(0)} percent`}
     >
-      <PiggyBankIcon className="hidden" />
       <circle
         cx="20"
         cy="20"

@@ -172,9 +172,6 @@ dist
 
 # Optional stylelint cache
 
-# SvelteKit build / generate output
-.svelte-kit
-
 ### react ###
 .DS_*
 **/*.backup.*

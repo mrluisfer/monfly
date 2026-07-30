@@ -9,7 +9,9 @@ import { sileo } from "~/lib/toaster";
 import { invalidateCardQueries } from "~/utils/query-invalidation";
 import { CardFormSchema, type CardFormValues } from "~/zod-schemas/card-schema";
 
-export const useAddCard = () => {
+/** `onCreated` fires only after a card is actually persisted — the card page
+ *  uses it to collapse the form. */
+export const useAddCard = (onCreated?: () => void) => {
   const queryClient = useQueryClient();
   const userEmail = useRouteUser();
 
@@ -35,6 +37,7 @@ export const useAddCard = () => {
       }
       sileo.success({ title: "Card created" });
       form.reset();
+      onCreated?.();
       await invalidateCardQueries(queryClient, userEmail);
     },
     idempotency: {

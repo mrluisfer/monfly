@@ -124,8 +124,7 @@ function PrivacyRoute() {
               </li>
               <li>
                 <strong className="text-foreground">Preferences:</strong>{" "}
-                interface preferences such as theme, locale, font display, and
-                haptic feedback.
+                interface preferences such as theme, locale, and font display.
               </li>
               <li>
                 <strong className="text-foreground">Operational data:</strong>{" "}

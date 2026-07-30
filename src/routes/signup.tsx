@@ -21,18 +21,13 @@ import {
   UserIcon,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import {
+  signupSchema,
+  type SignupFormValues,
+} from "~/zod-schemas/signup-schema";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { SharedHeader } from "@/components/auth/SharedHeader";
-
-const signupSchema = z.object({
-  email: z.string().email("Enter a valid email address."),
-  password: z.string().min(8, "Password must be at least 8 characters."),
-  name: z.string().min(3, "Name must be at least 3 characters."),
-});
-
-type SignupFormValues = z.infer<typeof signupSchema>;
 
 const signupStats = [
   { label: "Time to start", value: "< 60s" },
@@ -86,6 +81,8 @@ function Signup() {
         email: data.email,
         password: data.password,
         name: data.name,
+        acceptTerms: data.acceptTerms,
+        acceptPrivacy: data.acceptPrivacy,
         redirectUrl: "/home",
       },
     });
@@ -106,6 +103,8 @@ function Signup() {
       email: "",
       password: "",
       name: "",
+      acceptTerms: false,
+      acceptPrivacy: false,
     },
   });
 

@@ -352,22 +352,22 @@ function getButtonVariant(role: ButtonRole) {
 
 function getButtonClassName(role: ButtonRole) {
   if (role === "number") {
-    return "h-13 rounded-2xl text-lg font-semibold";
+    return "h-13 rounded-md text-lg font-semibold";
   }
 
   if (role === "utility") {
-    return "h-13 rounded-2xl text-base font-medium";
+    return "h-13 rounded-md text-base font-medium";
   }
 
   if (role === "science") {
-    return "h-11 rounded-xl text-sm font-medium";
+    return "h-11 rounded-md text-sm font-medium";
   }
 
   if (role === "equal") {
-    return "h-13 rounded-2xl text-lg font-bold col-span-4 sm:col-span-3";
+    return "h-13 rounded-md text-lg font-bold col-span-4 sm:col-span-3";
   }
 
-  return "h-13 rounded-2xl text-lg font-semibold";
+  return "h-13 rounded-md text-lg font-semibold";
 }
 
 function parseClipboardNumber(
@@ -1053,11 +1053,11 @@ export function BalanceCalculator() {
   if (isPending && !hasInitializedBalanceRef.current) {
     return (
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
-        <Skeleton className="h-152 w-full rounded-2xl" />
+        <Skeleton className="h-152 w-full rounded-md" />
         <div className="space-y-4">
-          <Skeleton className="h-44 w-full rounded-2xl" />
-          <Skeleton className="h-52 w-full rounded-2xl" />
-          <Skeleton className="h-36 w-full rounded-2xl" />
+          <Skeleton className="h-44 w-full rounded-md" />
+          <Skeleton className="h-52 w-full rounded-md" />
+          <Skeleton className="h-36 w-full rounded-md" />
         </div>
       </div>
     );
@@ -1119,7 +1119,7 @@ export function BalanceCalculator() {
           <CardContent className="relative space-y-4">
             <div
               className={cn(
-                "border-border/70 bg-background/85 rounded-2xl border p-4 text-right shadow-inner",
+                "border-border/70 bg-background/85 rounded-md border p-4 text-right shadow-inner",
                 display === "Error" && "border-destructive/50 text-destructive",
               )}
               role="status"
@@ -1244,7 +1244,7 @@ export function BalanceCalculator() {
             </CardHeader>
             <CardContent>
               {history.length === 0 ? (
-                <div className="text-muted-foreground rounded-xl border border-dashed p-4 text-center text-sm">
+                <div className="text-muted-foreground rounded-md border border-dashed p-4 text-center text-sm">
                   No operations registered yet.
                 </div>
               ) : (
@@ -1252,7 +1252,7 @@ export function BalanceCalculator() {
                   {history.map((entry) => (
                     <li
                       key={entry.id}
-                      className="bg-muted/40 rounded-xl border px-3 py-2"
+                      className="bg-muted/40 rounded-md border px-3 py-2"
                     >
                       <p className="text-muted-foreground text-xs">
                         {entry.statement}

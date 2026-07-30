@@ -35,7 +35,6 @@ import {
 import { useCards } from "~/hooks/cards";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { useActiveLoans } from "~/hooks/loans/useActiveLoans";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -108,7 +107,6 @@ export function TransactionForm<FormValues extends FieldValues>({
   const userEmail = useRouteUser();
 
   const queryClient = useQueryClient();
-  const { warning } = useAppHaptics();
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
@@ -219,9 +217,7 @@ export function TransactionForm<FormValues extends FieldValues>({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit, () => {
-          void warning();
-        })}
+        onSubmit={form.handleSubmit(onSubmit)}
         ref={formRef}
         className="space-y-4 pb-[calc(env(safe-area-inset-bottom)+0.25rem)] sm:space-y-5 sm:pb-0"
         autoComplete="off"
