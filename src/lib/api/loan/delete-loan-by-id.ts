@@ -10,7 +10,7 @@ import {
 import type { ApiResponse } from "~/types/ApiResponse";
 
 export const deleteLoanByIdServer = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ id: z.string().uuid() }))
+  .inputValidator(z.object({ id: z.uuid() }))
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail();

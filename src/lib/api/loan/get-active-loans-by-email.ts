@@ -13,7 +13,7 @@ export const getActiveLoansByEmailServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
-      includeId: z.string().uuid().nullable().optional(),
+      includeId: z.uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {

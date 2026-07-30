@@ -1,16 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
+import z from "zod";
+import { getTotalExpensesByEmail } from "~/server/db/transactions/get-total-expenses-by-email";
 import {
   enforceRateLimit,
   resolveSessionEmail,
 } from "~/server/security/request-protection";
-import { getTotalExpensesByEmail } from "~/server/db/transactions/get-total-expenses-by-email";
-import z from "zod";
 
 export const getTotalExpensesByEmailServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
-      cardId: z.string().uuid().nullable().optional(),
+      cardId: z.uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {

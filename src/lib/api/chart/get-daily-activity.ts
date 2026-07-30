@@ -1,16 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { getDailyActivity } from "~/server/db/charts/get-daily-activity";
 import {
   enforceRateLimit,
   resolveSessionEmail,
 } from "~/server/security/request-protection";
-import { getDailyActivity } from "~/server/db/charts/get-daily-activity";
-import { z } from "zod";
 
 export const getDailyActivityServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
-      cardId: z.string().uuid().nullable().optional(),
+      cardId: z.uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {

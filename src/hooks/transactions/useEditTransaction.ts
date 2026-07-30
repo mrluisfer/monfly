@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Loan, Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { deleteLoanByIdServer } from "~/lib/api/loan/delete-loan-by-id";
@@ -14,9 +15,10 @@ import {
   invalidateLoanQueries,
   invalidateTransactionQueries,
 } from "~/utils/query-invalidation";
-import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
-import { useForm, type Resolver } from "react-hook-form";
-import type { z } from "zod";
+import {
+  TransactionFormSchema,
+  type TransactionFormValues,
+} from "~/zod-schemas/transaction-schema";
 
 export const useEditTransaction = (
   transaction: Transaction,
@@ -33,10 +35,8 @@ export const useEditTransaction = (
     (transaction as Transaction & { appliedToLoanId?: string | null })
       .appliedToLoanId ?? null;
 
-  const form = useForm<z.infer<typeof TransactionFormSchema>>({
-    resolver: zodResolver(TransactionFormSchema) as Resolver<
-      z.infer<typeof TransactionFormSchema>
-    >,
+  const form = useForm<TransactionFormValues>({
+    resolver: zodResolver(TransactionFormSchema),
     defaultValues: {
       [transactionFormNames.amount]: transaction.amount.toString(),
       [transactionFormNames.type]: transaction.type as "income" | "expense",
@@ -125,9 +125,7 @@ export const useEditTransaction = (
     },
   });
 
-  const onSubmitEditedTransaction = async (
-    data: z.infer<typeof TransactionFormSchema>,
-  ) => {
+  const onSubmitEditedTransaction = async (data: TransactionFormValues) => {
     try {
       const mode = data.loanMode ?? "none";
       const nextAppliedToLoanId =

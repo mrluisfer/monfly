@@ -8,9 +8,8 @@ import {
   ShieldCheck,
   UserCheck,
 } from "lucide-react";
-
-import { Card, CardContent } from "@/components/ui/card";
 import { LegalLayout, LegalSection } from "@/components/legal/LegalLayout";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const Route = createFileRoute("/privacy/")({
   head: () => ({

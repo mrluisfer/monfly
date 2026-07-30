@@ -1,16 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { getChartTypeByCategory } from "~/server/db/charts/get-chart-type-by-category";
 import {
   enforceRateLimit,
   resolveSessionEmail,
 } from "~/server/security/request-protection";
-import { getChartTypeByCategory } from "~/server/db/charts/get-chart-type-by-category";
-import { z } from "zod";
 
 export const getChartTypeByCategoryServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
-      cardId: z.string().uuid().nullable().optional(),
+      cardId: z.uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {

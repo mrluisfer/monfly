@@ -17,7 +17,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
  * return to where they were before the payments were recorded.
  */
 export const reverseLoanPaymentsByIdServer = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ loanId: z.string().uuid() }))
+  .inputValidator(z.object({ loanId: z.uuid() }))
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail();

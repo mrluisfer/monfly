@@ -1,14 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { z } from "zod";
+import { putTransactionById as putTransactionByIdUtils } from "~/server/db/transactions/put-transaction-by-id";
 import { prismaClient } from "~/server/prisma";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { z } from "zod";
-
-import { putTransactionById as putTransactionByIdUtils } from "~/server/db/transactions/put-transaction-by-id";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const putTransactionByIdServer = createServerFn({ method: "POST" })
   .inputValidator(
@@ -20,8 +19,8 @@ export const putTransactionByIdServer = createServerFn({ method: "POST" })
         category: z.string(),
         description: z.string(),
         date: z.date(),
-        appliedToLoanId: z.string().uuid().nullable().optional(),
-        cardId: z.string().uuid().nullable().optional(),
+        appliedToLoanId: z.uuid().nullable().optional(),
+        cardId: z.uuid().nullable().optional(),
       }),
     }),
   )

@@ -17,23 +17,19 @@ export const TransactionFormSchema = z
         message: "Amount must be less than 1,000,000",
       }),
     [transactionFormNames.type]: z.enum(["income", "expense"], {
-      errorMap: () => ({ message: "Type must be either income or expense" }),
+      error: "Type must be either income or expense",
     }),
     [transactionFormNames.category]: z
       .string()
       .min(1, { message: "Category is required" }),
     [transactionFormNames.description]: z.string().optional(),
     [transactionFormNames.date]: z.date().optional(),
-    [transactionFormNames.cardId]: z.string().uuid().nullable().optional(),
+    [transactionFormNames.cardId]: z.uuid().nullable().optional(),
     // Loan section ─ tri-state mode + per-mode optional fields.
     [transactionFormNames.loanMode]: z.enum(LOAN_MODES).default("none"),
     [transactionFormNames.loanDebtor]: z.string().optional(),
     [transactionFormNames.loanDueAt]: z.date().nullable().optional(),
-    [transactionFormNames.appliedToLoanId]: z
-      .string()
-      .uuid()
-      .nullable()
-      .optional(),
+    [transactionFormNames.appliedToLoanId]: z.uuid().nullable().optional(),
     // Legacy alias kept so older callers don't break; the form derives this
     // from `loanMode === "create"` before submitting.
     [transactionFormNames.markAsLoan]: z.boolean().optional(),
@@ -63,3 +59,10 @@ export const TransactionFormSchema = z
       }
     }
   });
+
+/**
+ * What the form holds. `loanMode` has a `.default()`, so it is optional going
+ * in and guaranteed coming out — these are the two sides of that.
+ */
+export type TransactionFormValues = z.input<typeof TransactionFormSchema>;
+export type ParsedTransactionForm = z.output<typeof TransactionFormSchema>;

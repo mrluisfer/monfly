@@ -20,7 +20,7 @@ import { cn } from "~/lib/utils";
  * dashboard to that card.
  */
 const homeSearchSchema = z.object({
-  card: z.string().uuid().optional(),
+  card: z.uuid().optional(),
 });
 
 export const Route = createFileRoute("/_authed/home/")({

@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
 import { getLoanByTransactionId } from "~/server/db/loans/get-loan-by-transaction-id";
 import {
   enforceRateLimit,
@@ -6,12 +7,11 @@ import {
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
 import type { ApiResponse } from "~/types/ApiResponse";
-import { z } from "zod";
 
 export const getLoanByTransactionIdServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
-      transactionId: z.string().uuid(),
+      transactionId: z.uuid(),
     }),
   )
   .handler(async ({ data }) => {

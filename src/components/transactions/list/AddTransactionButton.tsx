@@ -1,15 +1,12 @@
 import { PlusIcon } from "lucide-react";
 import { type ReactElement, useState } from "react";
-import type { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";
 import { useAddTransaction } from "~/hooks/transactions/useAddTransaction";
-import type { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
+import type { TransactionFormValues } from "~/zod-schemas/transaction-schema";
 
 import { TransactionForm } from "../TransactionForm";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
-
-type TransactionFormValues = z.infer<typeof TransactionFormSchema>;
 
 const AddTransactionButton = ({
   customTrigger = null,

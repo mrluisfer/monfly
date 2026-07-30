@@ -21,7 +21,7 @@ export const LoanFormSchema = z.object({
   issuedAt: z.date().optional(),
   dueAt: z.date().optional().nullable(),
   notes: z.string().max(500).optional().nullable(),
-  transactionId: z.string().uuid().optional().nullable(),
+  transactionId: z.uuid().optional().nullable(),
   direction: z.enum(LOAN_DIRECTIONS),
 });
 
@@ -36,7 +36,7 @@ export const CreateLoanInputSchema = z.object({
   issuedAt: z.date().optional(),
   dueAt: z.date().nullable().optional(),
   notes: z.string().max(500).nullable().optional(),
-  transactionId: z.string().uuid().nullable().optional(),
+  transactionId: z.uuid().nullable().optional(),
   direction: z.enum(LOAN_DIRECTIONS).optional(),
 });
 
@@ -46,7 +46,7 @@ export type CreateLoanInput = z.infer<typeof CreateLoanInputSchema>;
  * Server-level schema for updating a loan. All fields optional except id.
  */
 export const UpdateLoanInputSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   debtor: z.string().trim().min(1).max(120).optional(),
   amount: z.number().positive().optional(),
   amountPaid: z.number().min(0).optional(),

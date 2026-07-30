@@ -1,10 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { getTrendingMonthly } from "~/server/db/charts/get-trending-monthly";
 import {
   enforceRateLimit,
   resolveSessionEmail,
 } from "~/server/security/request-protection";
-import { getTrendingMonthly } from "~/server/db/charts/get-trending-monthly";
-import { z } from "zod";
 
 export const getTrendingMonthlyServer = createServerFn({
   method: "GET",
@@ -13,7 +13,7 @@ export const getTrendingMonthlyServer = createServerFn({
     z.object({
       email: z.string(),
       type: z.enum(["income", "expense"]),
-      cardId: z.string().uuid().nullable().optional(),
+      cardId: z.uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {

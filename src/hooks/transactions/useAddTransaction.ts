@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import type { z } from "zod";
 
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { useActiveCard } from "~/hooks/cards";
@@ -15,9 +14,12 @@ import {
   invalidateLoanQueries,
   invalidateTransactionQueries,
 } from "~/utils/query-invalidation";
-import { TransactionFormSchema } from "~/zod-schemas/transaction-schema";
+import {
+  TransactionFormSchema,
+  type TransactionFormValues,
+} from "~/zod-schemas/transaction-schema";
 
-type FormValues = z.infer<typeof TransactionFormSchema>;
+type FormValues = TransactionFormValues;
 
 export const useAddTransaction = () => {
   const queryClient = useQueryClient();

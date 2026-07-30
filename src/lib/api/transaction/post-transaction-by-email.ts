@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import z from "zod";
+import { postTransactionByEmail } from "~/server/db/transactions/post-transaction-by-email";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { postTransactionByEmail } from "~/server/db/transactions/post-transaction-by-email";
-import z from "zod";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const postTransactionByEmailServer = createServerFn({ method: "POST" })
   .inputValidator(
@@ -18,8 +18,8 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
         amount: z.number(),
         category: z.string(),
         description: z.string().nullable().optional(),
-        appliedToLoanId: z.string().uuid().nullable().optional(),
-        cardId: z.string().uuid().nullable().optional(),
+        appliedToLoanId: z.uuid().nullable().optional(),
+        cardId: z.uuid().nullable().optional(),
       }),
     }),
   )

@@ -1,16 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
+import { z } from "zod";
+import { getIncomeExpenseData } from "~/server/db/charts/get-income-expense-chart";
 import {
   enforceRateLimit,
   resolveSessionEmail,
 } from "~/server/security/request-protection";
-import { getIncomeExpenseData } from "~/server/db/charts/get-income-expense-chart";
-import { z } from "zod";
 
 export const getIncomeExpenseDataServer = createServerFn({ method: "GET" })
   .inputValidator(
     z.object({
       email: z.string(),
-      cardId: z.string().uuid().nullable().optional(),
+      cardId: z.uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {

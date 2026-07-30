@@ -54,7 +54,7 @@ export type CreateCardInput = z.infer<typeof CreateCardInputSchema>;
  * Server-level schema for updating a card. All fields optional except id.
  */
 export const UpdateCardInputSchema = z.object({
-  id: z.string().uuid(),
+  id: z.uuid(),
   name: z.string().trim().min(1).max(60).optional(),
   type: z.string().max(40).nullable().optional(),
   last4: z
