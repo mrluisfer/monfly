@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance";
 import { updateUserProfileServer } from "~/lib/api/user/update-user-profile";
@@ -49,7 +48,6 @@ export function UserProfileForm({
   onExport,
   onDelete,
 }: UserProfileFormProps) {
-  const { warning } = useAppHaptics();
   const queryClient = useQueryClient();
   const defaultTotalBalance = formatToTwoDecimals(
     user?.totalBalance ?? 0,
@@ -189,9 +187,7 @@ export function UserProfileForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit, () => {
-          void warning();
-        })}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="relative space-y-10"
         noValidate
       >

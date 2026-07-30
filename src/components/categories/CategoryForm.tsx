@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CATEGORY_ICONS } from "@/constants/categories/icons";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { CategoryFormSchema } from "~/zod-schemas/category-schema";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
@@ -42,7 +41,6 @@ export function CategoryForm({
   loading = false,
   onSubmit,
 }: CategoryFormProps) {
-  const { warning } = useAppHaptics();
   const form = useForm<FormValues>({
     resolver: zodResolver(CategoryFormSchema),
     defaultValues: {
@@ -54,9 +52,7 @@ export function CategoryForm({
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit, () => {
-          void warning();
-        })}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-3 md:flex-row md:items-start md:gap-3"
       >
         <FormField

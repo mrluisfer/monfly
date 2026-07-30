@@ -1,5 +1,4 @@
 import type { JSX } from "react";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { cn } from "~/lib/utils";
 import type { DarkModeTheme } from "~/state/atoms/ui/preferencesAtoms";
@@ -57,7 +56,6 @@ const THEME_OPTIONS: { icon: JSX.Element; value: DarkModeTheme }[] = [
 
 function ThemeSwitcher() {
   const { theme, setTheme } = useDarkMode();
-  const { selection } = useAppHaptics();
 
   return (
     <motion.div
@@ -76,7 +74,6 @@ function ThemeSwitcher() {
           isActive={theme === option.value}
           onClick={(value) => {
             setTheme(value);
-            selection();
           }}
         />
       ))}

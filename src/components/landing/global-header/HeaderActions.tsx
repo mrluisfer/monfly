@@ -1,5 +1,5 @@
 import { Link, useRouteContext } from "@tanstack/react-router";
-import { ChevronRight, LayoutDashboardIcon, LogOutIcon } from "lucide-react";
+import { ChevronRight, LogOutIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 
 export function HeaderActions() {
@@ -17,8 +17,8 @@ export function HeaderActions() {
           size="lg"
           render={
             <Link to="/signout" className="inline-flex items-center gap-1.5">
-              <LogOutIcon />
               <span className="hidden sm:inline">Sign Out</span>
+              <LogOutIcon />
             </Link>
           }
         />
@@ -26,7 +26,6 @@ export function HeaderActions() {
           size="lg"
           render={
             <Link to="/home" className="inline-flex items-center gap-1.5">
-              <LayoutDashboardIcon />
               <span className="hidden sm:inline">Go to Dashboard</span>
               <span className="sm:hidden">Dashboard</span>
               <ChevronRight />

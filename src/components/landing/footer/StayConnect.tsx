@@ -9,7 +9,6 @@ import {
   FormItem,
   FormMessage,
 } from "~/components/ui/form";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { sileo } from "~/lib/toaster";
 import { AtSignIcon, SendIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -31,7 +30,6 @@ function getEmailUsername(email: string) {
 
 export function StayConnect() {
   const id = useId();
-  const { success, warning } = useAppHaptics();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,10 +44,8 @@ export function StayConnect() {
         title: "Subscribed successfully!",
         description: `Thank you ${emailUsername} for subscribing to our newsletter!`,
       });
-      void success();
       form.reset();
     } catch {
-      void warning();
       sileo.error({ title: "Failed to subscribe. Please try again." });
     }
   };

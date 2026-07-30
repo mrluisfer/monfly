@@ -20,7 +20,7 @@ export function DesktopNavMenu() {
           <NavigationMenuItem key={link.label}>
             {link.submenu ? (
               <>
-                <NavigationMenuTrigger className="text-foreground/78 hover:border-border/75 hover:bg-background/85 hover:text-foreground rounded-full border border-transparent bg-transparent px-3 py-1.5 text-sm font-medium tracking-[0.01em] transition-colors *:[svg]:-me-0.5 *:[svg]:size-3.5">
+                <NavigationMenuTrigger className="text-foreground/78 hover:border-border/75 hover:bg-background/85 hover:text-foreground rounded-xl border border-transparent bg-transparent px-3 py-1.5 text-sm font-medium tracking-[0.01em] transition-colors *:[svg]:-me-0.5 *:[svg]:size-3.5">
                   {link.label}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="border-border/70 bg-background/97 z-50 rounded-2xl border p-1.5 shadow-[0_24px_38px_-28px_rgba(2,6,23,0.85)] backdrop-blur-md">
@@ -63,7 +63,7 @@ export function DesktopNavMenu() {
               </>
             ) : (
               <NavigationMenuLink
-                className="text-foreground/78 hover:bg-background/85 hover:text-foreground rounded-full px-3 py-1.5 text-sm font-medium tracking-[0.01em] transition-colors"
+                className="text-foreground/78 hover:bg-background/85 hover:text-foreground rounded-xl px-3 py-1.5 text-sm font-medium tracking-[0.01em] transition-colors"
                 render={<Link to={link.href} />}
               >
                 {link.label}

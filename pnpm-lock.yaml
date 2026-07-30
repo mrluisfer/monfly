@@ -125,9 +125,6 @@ importers:
       vaul:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      web-haptics:
-        specifier: 0.0.6
-        version: 0.0.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(svelte@5.56.8(@typescript-eslint/types@8.65.0))
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -6757,23 +6754,6 @@ packages:
   w3c-xmlserializer@5.0.0:
     resolution: {integrity: sha512-o8qghlI8NZHU1lLPrpi2+Uq7abh4GGPpYANlalzWxyWteJOCsr/P+oPBA49TOLu5FTZO4d3F9MnWJfiMo4BkmA==}
     engines: {node: '>=18'}
-
-  web-haptics@0.0.6:
-    resolution: {integrity: sha512-eCzcf1LDi20+Fr0x9V3OkX92k0gxEQXaHajmhXHitsnk6SxPeshv8TBtBRqxyst8HI1uf2FyFVE7QS3jo1gkrw==}
-    peerDependencies:
-      react: '>=18'
-      react-dom: '>=18'
-      svelte: '>=4'
-      vue: '>=3'
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      svelte:
-        optional: true
-      vue:
-        optional: true
 
   webidl-conversions@8.0.1:
     resolution: {integrity: sha512-BMhLD/Sw+GbJC21C/UgyaZX41nPt8bUTg+jWyDeg7e7YN4xOM05YPSIXceACnXVtqyEw/LMClUQMtMZ+PGGpqQ==}
@@ -13439,12 +13419,6 @@ snapshots:
   w3c-xmlserializer@5.0.0:
     dependencies:
       xml-name-validator: 5.0.0
-
-  web-haptics@0.0.6(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(svelte@5.56.8(@typescript-eslint/types@8.65.0)):
-    optionalDependencies:
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
-      svelte: 5.56.8(@typescript-eslint/types@8.65.0)
 
   webidl-conversions@8.0.1: {}
 

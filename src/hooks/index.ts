@@ -8,8 +8,6 @@ export { useRouteUser } from "./useRouteUser";
 // UI hooks
 export * from "./ui";
 
-// Haptics hooks
-export * from "./haptics";
 
 // Domain: transactions
 export * from "./transactions";

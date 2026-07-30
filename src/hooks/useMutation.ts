@@ -1,17 +1,5 @@
 import * as React from "react";
-import {
-  defaultMutationHaptics,
-  type AppHapticPreset,
-} from "~/constants/haptics";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { sileo, type SileoOptions } from "~/lib/toaster";
-
-type MutationHapticsConfig = {
-  enabled?: boolean;
-  onMutate?: AppHapticPreset | null;
-  onSuccess?: AppHapticPreset | null;
-  onError?: AppHapticPreset | null;
-};
 
 type ToastInput = string | SileoOptions;
 
@@ -88,7 +76,6 @@ export function isErrorPayload(data: unknown) {
 export function useMutation<TVariables, TData, TError = Error>(opts: {
   fn: (variables: TVariables) => Promise<TData>;
   onSuccess?: (ctx: { data: TData }) => void | Promise<void>;
-  haptics?: MutationHapticsConfig;
   allowConcurrent?: boolean;
   idempotency?: MutationIdempotencyConfig<TVariables, TData>;
 }) {
@@ -104,25 +91,6 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
   const recentSuccessRef = React.useRef<
     Map<string, RecentSuccessfulMutation<TData>>
   >(new Map());
-  const { triggerPreset } = useAppHaptics();
-
-  const resolvedHaptics = React.useMemo(() => {
-    if (opts.haptics?.enabled === false) {
-      return null;
-    }
-
-    return {
-      onMutate: opts.haptics?.onMutate ?? defaultMutationHaptics.onMutate,
-      onSuccess: opts.haptics?.onSuccess ?? defaultMutationHaptics.onSuccess,
-      onError: opts.haptics?.onError ?? defaultMutationHaptics.onError,
-    };
-  }, [
-    opts.haptics?.enabled,
-    opts.haptics?.onError,
-    opts.haptics?.onMutate,
-    opts.haptics?.onSuccess,
-  ]);
-
   const resolvedIdempotency = React.useMemo(() => {
     if (!opts.idempotency || opts.idempotency.enabled === false) {
       return null;
@@ -225,38 +193,23 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
         setStatus("pending");
         setSubmittedAt(now);
         setVariables(variables);
-        if (resolvedHaptics?.onMutate) {
-          void triggerPreset(resolvedHaptics.onMutate);
-        }
-        //
+
         try {
           const data = await opts.fn(variables);
           await opts.onSuccess?.({ data });
           setStatus("success");
           setError(undefined);
           setData(data);
-          if (isErrorPayload(data)) {
-            if (resolvedHaptics?.onError) {
-              void triggerPreset(resolvedHaptics.onError);
-            }
-          } else {
-            if (mutationKey && resolvedIdempotency) {
-              recentSuccessRef.current.set(mutationKey, {
-                data,
-                expiresAt: Date.now() + resolvedIdempotency.windowMs,
-              });
-            }
-            if (resolvedHaptics?.onSuccess) {
-              void triggerPreset(resolvedHaptics.onSuccess);
-            }
+          if (!isErrorPayload(data) && mutationKey && resolvedIdempotency) {
+            recentSuccessRef.current.set(mutationKey, {
+              data,
+              expiresAt: Date.now() + resolvedIdempotency.windowMs,
+            });
           }
           return data;
         } catch (err) {
           setStatus("error");
           setError(err as TError);
-          if (resolvedHaptics?.onError) {
-            void triggerPreset(resolvedHaptics.onError);
-          }
         } finally {
           inFlightRef.current = null;
           inFlightKeyRef.current = null;
@@ -275,8 +228,6 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
       resolvedIdempotency,
       opts.fn,
       opts.onSuccess,
-      resolvedHaptics,
-      triggerPreset,
     ],
   );
 

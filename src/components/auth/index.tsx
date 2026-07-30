@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { type ReactNode } from "react";
 import type { Path, UseFormReturn } from "react-hook-form";
-import { useAppHaptics } from "~/hooks/haptics/useAppHaptics";
 import { cn } from "~/lib/utils";
 
 import Card from "../shared/Card";
@@ -47,7 +46,6 @@ export function Auth<TFormValues extends BaseAuthValues>({
   className,
 }: AuthProps<TFormValues>) {
   const shouldShowSignupFields = actionText === authActions.signup;
-  const { warning } = useAppHaptics();
 
   const formBody = (
     <>
@@ -58,9 +56,7 @@ export function Auth<TFormValues extends BaseAuthValues>({
       ) : null}
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(onSubmit, () => {
-            void warning();
-          })}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4"
           noValidate
         >
