@@ -1,5 +1,4 @@
 import type { Category } from "@prisma/client";
-import { useMemo, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import {
   ClockIcon,
@@ -9,13 +8,12 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import {
   getCategoryIconByName,
   getCategoryIconLabelByName,
 } from "@/constants/categories/categories-icon";
-import { useCategoriesList } from "~/hooks/categories/useCategoriesList";
-import { cn } from "~/lib/utils";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
@@ -28,6 +26,8 @@ import {
 } from "~/components/ui/empty";
 import { Skeleton } from "~/components/ui/skeleton";
 import { StatusBadge } from "~/components/ui/status-badge";
+import { useCategoriesList } from "~/hooks/categories/useCategoriesList";
+import { cn } from "~/lib/utils";
 
 import { CategoryCard } from "./CategoryCard";
 import CategoryItem from "./CategoryItem";
@@ -199,7 +199,7 @@ export const CategoriesList = () => {
       )}
 
       {filteredCategories.length > 0 && viewMode === EViewMode.GRID && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-5">
           {filteredCategories.map((category) => (
             <CategoryCard
               key={category.id}

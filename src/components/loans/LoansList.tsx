@@ -44,7 +44,7 @@ export function LoansList() {
 
   if (error || !data || data.error || !data.data) {
     return (
-      <div className="bg-destructive/5 border-destructive/20 text-destructive flex items-center gap-3 rounded-2xl border p-5 text-sm">
+      <div className="bg-destructive/5 border-destructive/20 text-destructive flex items-center gap-3 rounded-xl border p-5 text-sm">
         <AlertCircleIcon className="size-5 shrink-0" aria-hidden="true" />
         <span>Failed to load loans. Please try again later.</span>
       </div>

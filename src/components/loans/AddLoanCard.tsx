@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/collapsible";
 import { Spinner } from "@/components/ui/spinner";
 
+import { Card } from "../ui/card";
 import { DebtorCombobox } from "./DebtorCombobox";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanField } from "./LoanField";
@@ -78,7 +79,7 @@ export function AddLoanCard() {
         />
       </CollapsibleTrigger>
 
-      <CollapsibleContent className={"bg-card rounded-4xl border py-3"}>
+      <CollapsibleContent render={<Card />}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 px-1 md:px-2"

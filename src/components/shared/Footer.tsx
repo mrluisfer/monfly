@@ -1,7 +1,14 @@
 import { Link } from "@tanstack/react-router";
+import {
+  ArrowUpIcon,
+  FileText,
+  GitBranchIcon,
+  Mail,
+  Shield,
+} from "lucide-react";
 import { motion } from "motion/react";
-import { FileText, GitBranchIcon, Mail, Shield } from "lucide-react";
 
+import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
@@ -13,6 +20,9 @@ const legalLinks = [
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth", left: 0 });
+  };
 
   return (
     <motion.footer
@@ -68,6 +78,15 @@ const Footer = () => {
             orientation="vertical"
             className="bg-border/60 dark:bg-border/40 mx-1 hidden h-4 sm:block"
           />
+
+          <Tooltip>
+            <TooltipTrigger
+              render={<Button size={"icon"} onClick={scrollToTop} />}
+            >
+              <ArrowUpIcon />
+            </TooltipTrigger>
+            <TooltipContent side="top">Back to top</TooltipContent>
+          </Tooltip>
 
           <Tooltip>
             <TooltipTrigger
