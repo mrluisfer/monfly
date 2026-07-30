@@ -10,5 +10,4 @@ export { default as Layout } from "./Layout";
 export { NotFound } from "./NotFound";
 export { RouteStatusCard } from "./RouteStatusCard";
 export { TONE_FILL, TONE_STROKE, TONE_TEXT, type Tone } from "./tone";
-export { Typography } from "./Typography";
 export { default as UserAvatar } from "./UserAvatar";
