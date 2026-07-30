@@ -57,12 +57,14 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { NativeSelect, NativeSelectOption } from "../ui/native-select";
+// The loan picker keeps the rich Select: its options render amounts and colour
+// per direction, which native <option> can't do.
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -80,6 +82,10 @@ const sectionClassName =
   "rounded-2xl border border-border/60 bg-background/75 backdrop-blur-sm p-4 shadow-sm sm:p-5";
 const inputClassName =
   "h-12 rounded-xl border-border/60 bg-input/40 text-base shadow-none transition-colors sm:text-base";
+// `NativeSelect` styles its wrapper, so the control itself is reached through
+// the child selector to keep it the same height/shape as the text inputs.
+const nativeSelectClassName =
+  "w-full [&>select]:h-12 [&>select]:rounded-xl [&>select]:border-border/60 [&>select]:bg-input/40 [&>select]:pl-3 [&>select]:text-base";
 
 export function TransactionForm<FormValues extends FieldValues>({
   form,
@@ -240,7 +246,9 @@ export function TransactionForm<FormValues extends FieldValues>({
           )}
           layout
         >
-          <div className="flex flex-col gap-5">
+          {/* Amount and type sit side by side from sm up; stacked on mobile,
+              where the segmented control needs the full width to breathe. */}
+          <div className="grid gap-5 sm:grid-cols-2 sm:items-start sm:gap-4">
             <FormField
               control={form.control}
               name={transactionFormNames.amount as Path<FormValues>}
@@ -392,27 +400,27 @@ export function TransactionForm<FormValues extends FieldValues>({
                     <FormControl>
                       <div className="w-full space-y-3">
                         {categoryOptions.length > 0 ? (
-                          <Select
+                          <NativeSelect
+                            className={nativeSelectClassName}
+                            id={transactionFormNames.category}
                             value={value ?? ""}
-                            onValueChange={(val) => field.onChange(val)}
+                            onChange={(event) =>
+                              field.onChange(event.target.value)
+                            }
                           >
-                            <SelectTrigger className="border-border/60 bg-input/40 h-12 w-full rounded-xl">
-                              <SelectValue placeholder="Select a category" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                {categoryOptions.map((option) => (
-                                  <SelectItem
-                                    key={option.value}
-                                    value={option.value}
-                                    className={"capitalize"}
-                                  >
-                                    {option.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
+                            <NativeSelectOption value="" disabled>
+                              Select a category
+                            </NativeSelectOption>
+                            {categoryOptions.map((option) => (
+                              <NativeSelectOption
+                                key={option.value}
+                                value={option.value}
+                                className="capitalize"
+                              >
+                                {option.label}
+                              </NativeSelectOption>
+                            ))}
+                          </NativeSelect>
                         ) : (
                           <p className="text-muted-foreground py-3 text-center text-sm">
                             No categories yet
@@ -614,72 +622,32 @@ function CardField<FormValues extends FieldValues>({
                 </span>
               </FormLabel>
               <FormControl>
-                <Select
+                <NativeSelect
+                  className={nativeSelectClassName}
                   value={value ?? NO_CARD}
-                  onValueChange={(val) =>
-                    field.onChange(!val || val === NO_CARD ? null : val)
+                  onChange={(event) =>
+                    field.onChange(
+                      event.target.value === NO_CARD
+                        ? null
+                        : event.target.value,
+                    )
                   }
                 >
-                  <SelectTrigger
-                    className={cn(inputClassName, "w-full justify-between")}
-                  >
-                    <SelectValue placeholder="No card">
-                      {(selected: unknown) => {
-                        const id = typeof selected === "string" ? selected : "";
-                        const card =
-                          id && id !== NO_CARD
-                            ? cards.find((c) => c.id === id)
-                            : undefined;
-                        if (!card) {
-                          return (
-                            <span className="text-muted-foreground flex items-center gap-2">
-                              <CreditCardIcon className="size-4" />
-                              No card
-                            </span>
-                          );
-                        }
-                        return (
-                          <span className="flex items-center gap-2">
-                            <CreditCardIcon className="size-4 text-sky-500" />
-                            <span className="truncate">{card.name}</span>
-                            {card.last4 ? (
-                              <span className="text-muted-foreground text-xs tabular-nums">
-                                •••• {card.last4}
-                              </span>
-                            ) : null}
-                          </span>
-                        );
-                      }}
-                    </SelectValue>
-                  </SelectTrigger>
-                  <SelectContent
-                    alignItemWithTrigger={false}
-                    className="w-full"
-                  >
-                    <SelectItem value={NO_CARD}>
-                      <CreditCardIcon className="text-muted-foreground size-4" />
-                      <span className="text-muted-foreground">No card</span>
-                    </SelectItem>
-                    <SelectSeparator />
-                    <SelectGroup>
-                      {cards.map((card) => (
-                        <SelectItem key={card.id} value={card.id}>
-                          <CreditCardIcon className="size-4 text-sky-500" />
-                          <span className="flex w-full items-center justify-between gap-3">
-                            <span className="truncate capitalize">
-                              {card.name}
-                            </span>
-                            {card.last4 ? (
-                              <span className="text-muted-foreground text-xs tabular-nums">
-                                •••• {card.last4}
-                              </span>
-                            ) : null}
-                          </span>
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                  <NativeSelectOption value={NO_CARD}>
+                    No card
+                  </NativeSelectOption>
+                  {cards.map((card) => (
+                    <NativeSelectOption
+                      key={card.id}
+                      value={card.id}
+                      className="capitalize"
+                    >
+                      {card.last4
+                        ? `${card.name} ···· ${card.last4}`
+                        : card.name}
+                    </NativeSelectOption>
+                  ))}
+                </NativeSelect>
               </FormControl>
               <FormDescription className="text-xs">
                 Assign this transaction to a card to track its balance
@@ -876,7 +844,9 @@ function LoanSection<FormValues extends FieldValues>({
                         type="date"
                         className={cn(
                           inputClassName,
-                          "cursor-pointer lg:w-full",
+                          // Safari/iOS give date inputs an intrinsic width that
+                          // ignores the grid cell, so pin it explicitly.
+                          "block w-full min-w-0 cursor-pointer",
                         )}
                         value={
                           (field.value as unknown) instanceof Date
