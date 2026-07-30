@@ -1,4 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { format, isToday, isYesterday } from "date-fns";
 import {
   ArrowUpDownIcon,
@@ -10,7 +10,7 @@ import { getCategoryIconByName } from "@/constants/categories/categories-icon";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import { CardBadge, type CardSummary } from "../CardBadge";
 import { LoanBadge } from "../LoanBadge";

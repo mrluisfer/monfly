@@ -4,7 +4,12 @@
  * globals.css, so no consumer needs its own `dark:` colour pair.
  */
 export type Tone =
-  "primary" | "destructive" | "success" | "warning" | "info" | "neutral";
+  | "primary"
+  | "destructive"
+  | "success"
+  | "warning"
+  | "info"
+  | "neutral";
 
 /** Text colour per tone. */
 export const TONE_TEXT: Record<Tone, string> = {

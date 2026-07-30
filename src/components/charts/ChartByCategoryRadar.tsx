@@ -13,7 +13,7 @@ import {
 } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import {
-  TransactionType,
+  type TransactionType,
   transactionTypes,
 } from "~/constants/transaction-types";
 import { useActiveCard } from "~/hooks/cards";
@@ -24,7 +24,7 @@ import { queryKeys } from "~/utils/query-keys";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,

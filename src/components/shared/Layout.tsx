@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { sidebarOpenAtom } from "~/state/atoms/ui/sidebarAtoms";
 
 import { CommandPaletteProvider } from "../shell/CommandPalette";

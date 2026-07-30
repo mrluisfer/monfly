@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 
 import type { LoanRow } from "~/components/loans/types";
-import { type LoanDirection } from "~/constants/loan-status";
+import type { LoanDirection } from "~/constants/loan-status";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { reverseLoanPaymentsByIdServer } from "~/lib/api/loan/reverse-loan-payments-by-id";

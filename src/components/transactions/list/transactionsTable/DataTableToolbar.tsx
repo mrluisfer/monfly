@@ -1,4 +1,4 @@
-import { Table as TanstackTable } from "@tanstack/react-table";
+import type { Table as TanstackTable } from "@tanstack/react-table";
 import {
   BanknoteArrowDownIcon,
   BanknoteArrowUpIcon,
@@ -7,7 +7,7 @@ import {
   TrashIcon,
   XIcon,
 } from "lucide-react";
-import * as React from "react";
+import type * as React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +26,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import { TransactionSearchInput } from "../TransactionSearchInput";
 

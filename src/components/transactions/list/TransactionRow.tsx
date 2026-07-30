@@ -21,7 +21,7 @@ import { Dialog } from "~/components/ui/dialog";
 import { useDeleteTransaction } from "~/hooks/transactions";
 import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
-import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
+import type { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
 
 import EditTransaction from "../EditTransaction";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";

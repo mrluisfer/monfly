@@ -1,4 +1,4 @@
-import { flexRender, Table as TanstackTable } from "@tanstack/react-table";
+import { flexRender, type Table as TanstackTable } from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
 export function DataTableContent({
   table,

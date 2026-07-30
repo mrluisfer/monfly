@@ -10,8 +10,8 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { useId } from "react";
-import { UseFormReturn } from "react-hook-form";
-import { z } from "zod";
+import type { UseFormReturn } from "react-hook-form";
+import type { z } from "zod";
 import { ConsentRow } from "~/components/shared/ConsentRow";
 import { ChangePasswordRow } from "~/components/settings/ChangePasswordRow";
 import { Button } from "~/components/ui/button";
@@ -34,7 +34,7 @@ import {
 import { Switch } from "~/components/ui/switch";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { DEFAULT_CURRENCY } from "~/utils/format-currency";
-import { supportedCurrencies, userFormSchema } from "~/zod-schemas/user-schema";
+import { supportedCurrencies, type userFormSchema } from "~/zod-schemas/user-schema";
 
 type UserFormValues = z.infer<typeof userFormSchema>;
 

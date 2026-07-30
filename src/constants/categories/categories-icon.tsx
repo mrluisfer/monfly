@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
-import { ComponentProps } from "react";
-import { CATEGORY_ICONS, CategoryIconDef } from "./icons";
+import type { ComponentProps } from "react";
+import { CATEGORY_ICONS, type CategoryIconDef } from "./icons";
 
 const normalizeCategoryIconKey = (value: string) =>
   value.trim().toLowerCase().replaceAll("_", "-").replace(/\s+/g, "-");

@@ -151,7 +151,7 @@ select,
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --font-sans: 'Inter Variable', sans-serif;
+  --font-sans: "Inter Variable", sans-serif;
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
 
@@ -184,7 +184,7 @@ select,
   --animate-fade-in: fade-in 0.4s ease-out;
   --animate-slide-up: slide-up 0.4s ease-out;
   --animate-shimmer: shimmer 2s linear infinite;
-  --font-heading: 'Noto Serif Variable', serif;
+  --font-heading: "Noto Serif Variable", serif;
 }
 
 @keyframes fade-in {

@@ -11,9 +11,11 @@ Monfly is a full-stack personal finance dashboard built with **TanStack Start** 
 ```bash
 pnpm dev                    # Start dev server (port 3000)
 pnpm build                  # Production build
-pnpm lint                   # ESLint check
+pnpm lint                   # Biome lint check
 pnpm lint:fix               # Auto-fix lint issues
-pnpm format                 # Prettier format
+pnpm format                 # Biome format
+pnpm check                  # Biome lint + format + organize imports, writes fixes
+pnpm typecheck              # tsc --noEmit
 pnpm test                   # Run Vitest tests
 pnpm test src/path/to.test  # Run a single test file
 pnpm prisma migrate dev     # Run database migrations

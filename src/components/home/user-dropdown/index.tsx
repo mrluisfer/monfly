@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import UserAvatar from "~/components/shared/UserAvatar";
 import { SignOutDialog } from "~/components/sidebar/SignOutDialog";
@@ -85,7 +85,7 @@ export default function UserDropdown() {
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger
           render={
-            <button className="shrink-0 rounded-full">
+            <button type="button" className="shrink-0 rounded-full">
               <UserAvatar alt={userName} name={userName} />
               <span className="sr-only">{userName}</span>
             </button>

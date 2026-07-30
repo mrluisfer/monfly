@@ -1,6 +1,6 @@
 import { CheckIcon, FileTextIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
-import { type LoanDirection, type LoanStatus } from "~/constants/loan-status";
+import type { LoanDirection, LoanStatus } from "~/constants/loan-status";
 import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
 

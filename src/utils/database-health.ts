@@ -44,7 +44,7 @@ export async function gracefulDatabaseOperation<T>(
 
       // Wait before retry with exponential backoff
       await new Promise((resolve) =>
-        setTimeout(resolve, 1000 * Math.pow(2, i)),
+        setTimeout(resolve, 1000 * 2 ** i),
       );
     }
   }

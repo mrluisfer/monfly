@@ -38,7 +38,9 @@ describe("resolveSessionEmail", () => {
   });
 
   it("trims the session email", async () => {
-    useAppSession.mockResolvedValue({ data: { email: "  user@example.com  " } });
+    useAppSession.mockResolvedValue({
+      data: { email: "  user@example.com  " },
+    });
     await expect(resolveSessionEmail()).resolves.toBe("user@example.com");
   });
 
@@ -120,7 +122,9 @@ describe("enforceRateLimit", () => {
 
 describe("toSecurityErrorResponse", () => {
   it("maps a SecurityError to a standard failed ApiResponse", () => {
-    const response = toSecurityErrorResponse(new SecurityError("Forbidden", 403));
+    const response = toSecurityErrorResponse(
+      new SecurityError("Forbidden", 403),
+    );
     expect(response).toEqual({
       error: true,
       success: false,

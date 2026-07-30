@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ShieldCheckIcon, SparklesIcon } from "lucide-react";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";

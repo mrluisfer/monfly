@@ -14,7 +14,7 @@ import { useIsMobile } from "~/hooks/use-mobile";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transaction-by-email";
 import { createSafeQuery } from "~/lib/stream-utils";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { queryKeys } from "~/utils/query-keys";
 
 import { PageHeader } from "@/components/layout/PageHeader";

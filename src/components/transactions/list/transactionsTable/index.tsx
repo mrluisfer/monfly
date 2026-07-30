@@ -2,14 +2,14 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import {
-  ColumnFiltersState,
+  type ColumnFiltersState,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  SortingState,
+  type SortingState,
   useReactTable,
-  VisibilityState,
+  type VisibilityState,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
 import * as React from "react";
@@ -20,9 +20,9 @@ import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-trans
 import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
-import { CardSummary } from "../CardBadge";
+import type { CardSummary } from "../CardBadge";
 import { Columns } from "./Columns";
 import { DataTableContent } from "./DataTableContent";
 import { DataTablePagination } from "./DataTablePagination";

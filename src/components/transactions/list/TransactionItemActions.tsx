@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { useDeleteTransaction } from "~/hooks/transactions";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { Edit, Ellipsis, Trash } from "lucide-react";
 
 const TransactionItemActions = ({

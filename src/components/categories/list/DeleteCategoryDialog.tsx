@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import type { Category } from "@prisma/client";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
 
 import {

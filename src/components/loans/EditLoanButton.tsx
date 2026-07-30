@@ -17,7 +17,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { type LoanDirection } from "~/constants/loan-status";
+import type { LoanDirection } from "~/constants/loan-status";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 
 import { DebtorCombobox } from "./DebtorCombobox";

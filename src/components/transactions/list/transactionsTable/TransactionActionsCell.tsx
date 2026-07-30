@@ -26,7 +26,7 @@ import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transaction-by-id";
 import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
 import EditTransaction from "../../EditTransaction";
 import { TransactionFormDialogContent } from "../../TransactionFormDialogContent";

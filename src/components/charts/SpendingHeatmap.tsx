@@ -87,7 +87,7 @@ function buildCalendar(rows: DailyActivityRow[]) {
   const monthLabels: { weekIndex: number; label: string }[] = [];
   let lastMonth = -1;
 
-  for (let day = new Date(gridStart); day <= today;) {
+  for (let day = new Date(gridStart); day <= today; ) {
     const weekIndex = Math.floor(
       (day.getTime() - gridStart.getTime()) / (7 * DAY_MS),
     );

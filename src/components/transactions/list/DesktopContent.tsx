@@ -1,7 +1,7 @@
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
-import { TransactionWithUser } from "~/types/TransactionWithUser";
+import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
-import { CardSummary } from "./CardBadge";
+import type { CardSummary } from "./CardBadge";
 import { ErrorState } from "./ErrorState";
 import { LoadingState } from "./LoadingState";
 import { DataTableDemo } from "./transactionsTable";

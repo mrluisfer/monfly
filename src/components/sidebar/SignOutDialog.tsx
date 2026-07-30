@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { type ReactElement, useState } from "react";
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { logoutFn } from "~/server/auth/logoutfn";
 import { CircleAlertIcon } from "lucide-react";

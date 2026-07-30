@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { User } from "@prisma/client";
+import type { ReactNode } from "react";
+import type { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
 import { UserProfileForm } from "~/components/user/UserProfileForm";

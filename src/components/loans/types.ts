@@ -1,5 +1,5 @@
 import type { LoanDirection, LoanStatus } from "~/constants/loan-status";
-import { Loan } from "@prisma/client";
+import type { Loan } from "@prisma/client";
 
 export type StatusFilter = "all" | LoanStatus;
 export type DirectionFilter = "all" | LoanDirection;
