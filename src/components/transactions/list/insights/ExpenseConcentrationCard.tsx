@@ -1,11 +1,8 @@
-import { useAtomValue } from "jotai";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import Card from "~/components/shared/Card";
 import { FlowBar } from "~/components/shared/FlowBar";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
-import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
-import { maskCurrency } from "~/utils/format-currency";
 
 type TopCategory = {
   amount: number;
@@ -26,8 +23,7 @@ export function ExpenseConcentrationCard({
   totalExpense,
   totalIncome,
 }: ExpenseConcentrationCardProps) {
-  const currency = usePreferredCurrency();
-  const hideBalance = useAtomValue(hideBalanceAtom);
+  const { format: formatAmount } = useCurrency();
   const TrendIcon = isPositiveLast30 ? TrendingUpIcon : TrendingDownIcon;
 
   return (
@@ -47,8 +43,8 @@ export function ExpenseConcentrationCard({
       subtitle="Share of total expenses by category."
       Footer={
         <p className="text-muted-foreground text-xs">
-          Total tracked: {maskCurrency(totalIncome, currency, hideBalance)} in •{" "}
-          {maskCurrency(totalExpense, currency, hideBalance)} out
+          Total tracked: {formatAmount(totalIncome)} in •{" "}
+          {formatAmount(totalExpense)} out
         </p>
       }
     >
@@ -72,7 +68,7 @@ export function ExpenseConcentrationCard({
                 ariaLabel={`${category.category} share of total expenses`}
               />
               <p className="text-muted-foreground text-xs">
-                {maskCurrency(category.amount, currency, hideBalance)}
+                {formatAmount(category.amount)}
               </p>
             </div>
           ))

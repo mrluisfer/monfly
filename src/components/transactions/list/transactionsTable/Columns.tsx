@@ -11,7 +11,6 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { maskCurrency, type SupportedCurrency } from "~/utils/format-currency";
 
 import { CardBadge, type CardSummary } from "../CardBadge";
 import { LoanBadge } from "../LoanBadge";
@@ -24,12 +23,11 @@ import { TransactionActionsCell } from "./TransactionActionsCell";
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData> {
-    currency?: SupportedCurrency;
+    /** Currency formatter from `useCurrency`, already honoring "hide balances". */
+    formatAmount?: (amount: number) => string;
     cardsById?: Map<string, CardSummary>;
     /** Lowercased category name → the icon name the user picked for it. */
     categoryIconsByName?: Map<string, string>;
-    /** When true, monetary figures are masked (the "hide balances" toggle). */
-    hideBalance?: boolean;
   }
 }
 
@@ -209,11 +207,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       const amount = parseFloat(row.getValue("amount"));
       const type = String(row.getValue("type") || "").toLowerCase();
       const isIncome = type === "income";
-      const formatted = maskCurrency(
-        amount,
-        table.options.meta?.currency ?? "USD",
-        table.options.meta?.hideBalance,
-      );
+      const formatted = table.options.meta?.formatAmount?.(amount) ?? "";
 
       return (
         <div className="space-y-0.5 text-right">

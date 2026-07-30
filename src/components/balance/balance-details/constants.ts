@@ -1,8 +1,5 @@
 import type { BalanceSummary } from "./types";
 
-/** Placeholder shown in place of monetary values when the balance is hidden. */
-export const HIDDEN_VALUE = "$••••";
-
 export const EMPTY_SUMMARY: BalanceSummary = {
   latestPoint: null,
   recentPoints: [],

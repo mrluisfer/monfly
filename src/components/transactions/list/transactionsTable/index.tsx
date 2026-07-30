@@ -12,18 +12,15 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { useAtomValue } from "jotai";
 import * as React from "react";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { deleteTransactionsByIdServer } from "~/lib/api/transaction/delete-transactions-by-id";
 import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
-import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import { TransactionWithUser } from "~/types/TransactionWithUser";
-import { maskCurrency } from "~/utils/format-currency";
 
 import { CardSummary } from "../CardBadge";
 import { Columns } from "./Columns";
@@ -52,8 +49,7 @@ export function DataTableDemo({
   const [globalFilter, setGlobalFilter] = React.useState("");
 
   const userEmail = useRouteUser();
-  const currency = usePreferredCurrency();
-  const hideBalance = useAtomValue(hideBalanceAtom);
+  const { format: formatAmount } = useCurrency();
   const queryClient = useQueryClient();
 
   // TanStack Table returns functions the React Compiler can't safely memoize;
@@ -93,7 +89,7 @@ export function DataTableDemo({
       rowSelection,
       globalFilter,
     },
-    meta: { currency, cardsById, categoryIconsByName, hideBalance },
+    meta: { formatAmount, cardsById, categoryIconsByName },
   });
 
   const deleteTransactionsByIdMutation = useMutation({
@@ -211,19 +207,19 @@ export function DataTableDemo({
     },
     {
       label: "Income",
-      value: maskCurrency(filteredIncome, currency, hideBalance),
+      value: formatAmount(filteredIncome),
       valueClassName: "text-primary",
       description: "Sum of visible income rows",
     },
     {
       label: "Expenses",
-      value: maskCurrency(filteredExpenses, currency, hideBalance),
+      value: formatAmount(filteredExpenses),
       valueClassName: "text-destructive",
       description: "Sum of visible expense rows",
     },
     {
       label: "Net",
-      value: `${filteredNet >= 0 ? "+" : ""}${maskCurrency(filteredNet, currency, hideBalance)}`,
+      value: `${filteredNet >= 0 ? "+" : ""}${formatAmount(filteredNet)}`,
       valueClassName: filteredNet >= 0 ? "text-primary" : "text-destructive",
       description: latestTransactionDate
         ? `Latest: ${format(new Date(latestTransactionDate), "MMM d, yyyy")}`

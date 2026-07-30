@@ -1,9 +1,6 @@
 import { FlameIcon, GaugeIcon, TimerIcon, TrophyIcon } from "lucide-react";
 
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { formatCurrency } from "~/utils/format-currency";
-
-import { HIDDEN_VALUE } from "./constants";
+import { useCurrency } from "~/hooks/useCurrency";
 import { MetricsGrid } from "~/components/shared/MetricsGrid";
 import { MetricTile } from "~/components/shared/MetricTile";
 import { SavingsRateTile } from "./SavingsRateTile";
@@ -11,27 +8,19 @@ import type { BalanceSummary } from "./types";
 
 type BalanceInsightsProps = {
   summary: BalanceSummary;
-  isBalanceHidden: boolean;
 };
 
-export function BalanceInsights({
-  summary,
-  isBalanceHidden,
-}: BalanceInsightsProps) {
-  const currency = usePreferredCurrency();
+export function BalanceInsights({ summary }: BalanceInsightsProps) {
+  const { format: formatAmount, isHidden } = useCurrency();
   const periodCount = summary.recentPoints.length;
 
   return (
     <MetricsGrid>
-      <SavingsRateTile rate={summary.savingsRate} hidden={isBalanceHidden} />
+      <SavingsRateTile rate={summary.savingsRate} hidden={isHidden} />
 
       <MetricTile
         label="Avg net / period"
-        value={
-          isBalanceHidden
-            ? HIDDEN_VALUE
-            : formatCurrency(summary.avgNet, currency)
-        }
+        value={formatAmount(summary.avgNet)}
         valueTone={summary.avgNet >= 0 ? "primary" : "destructive"}
         icon={GaugeIcon}
         iconTone="info"
@@ -44,13 +33,7 @@ export function BalanceInsights({
 
       <MetricTile
         label="Best period"
-        value={
-          isBalanceHidden
-            ? HIDDEN_VALUE
-            : summary.bestPoint
-              ? formatCurrency(summary.bestPoint.net, currency)
-              : "—"
-        }
+        value={summary.bestPoint ? formatAmount(summary.bestPoint.net) : "—"}
         valueTone={
           summary.bestPoint && summary.bestPoint.net >= 0
             ? "primary"

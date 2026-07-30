@@ -7,15 +7,11 @@ import type { LoanDirection } from "~/constants/loan-status";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useLoans } from "~/hooks/loans/useLoans";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
-import { formatCurrency } from "~/utils/format-currency";
 import { ScrollArea } from "../ui/scroll-area";
 
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
-import { hideBalanceAtom } from "@/state";
-import { useAtomValue } from "jotai";
-import { hide } from "node_modules/@base-ui/react/esm/floating-ui-react";
 
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const MAX_VISIBLE = 5;
@@ -142,8 +138,7 @@ function UpcomingBody({
   loans: Loan[];
   now: Date;
 }) {
-  const currency = usePreferredCurrency();
-  const hideBalance = useAtomValue(hideBalanceAtom);
+  const { format: formatAmount, isHidden } = useCurrency();
 
   if (isPending) {
     return (
@@ -186,7 +181,7 @@ function UpcomingBody({
     <div className="space-y-3">
       <div className="text-foreground flex items-baseline justify-between px-4">
         <span className="text-success text-2xl font-semibold tracking-tight tabular-nums">
-          {hideBalance ? "****" : formatCurrency(totalOutstanding, currency)}
+          {formatAmount(totalOutstanding)}
         </span>
         <span className="text-muted-foreground text-xs">
           {lentCount} to collect
@@ -252,10 +247,8 @@ function UpcomingBody({
                   isBorrowed ? "text-destructive" : "text-success",
                 )}
               >
-                {isBorrowed && !hideBalance ? "−" : ""}
-                {hideBalance
-                  ? "****"
-                  : formatCurrency(entry.remaining, currency)}
+                {isBorrowed && !isHidden ? "−" : ""}
+                {formatAmount(entry.remaining)}
               </span>
             </li>
           );

@@ -2,6 +2,7 @@
 export { useCopyToClipboard } from "./use-copy-to-clipboard";
 export { useIsMobile } from "./use-mobile";
 export { isErrorPayload, useMutation } from "./useMutation";
+export { useCurrency } from "./useCurrency";
 export { usePreferredCurrency } from "./usePreferredCurrency";
 export { useRouteUser } from "./useRouteUser";
 

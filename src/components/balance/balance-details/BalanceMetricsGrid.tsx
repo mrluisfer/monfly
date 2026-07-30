@@ -5,10 +5,7 @@ import {
   TrendingUpIcon,
 } from "lucide-react";
 
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { formatCurrency } from "~/utils/format-currency";
-
-import { HIDDEN_VALUE } from "./constants";
+import { useCurrency } from "~/hooks/useCurrency";
 import { FlowBar } from "~/components/shared/FlowBar";
 import { MetricsGrid } from "~/components/shared/MetricsGrid";
 import { MetricTile } from "~/components/shared/MetricTile";
@@ -18,14 +15,10 @@ import type { BalanceSummary } from "./types";
 
 type BalanceMetricsGridProps = {
   summary: BalanceSummary;
-  isBalanceHidden: boolean;
 };
 
-export function BalanceMetricsGrid({
-  summary,
-  isBalanceHidden,
-}: BalanceMetricsGridProps) {
-  const currency = usePreferredCurrency();
+export function BalanceMetricsGrid({ summary }: BalanceMetricsGridProps) {
+  const { format: formatAmount, isHidden } = useCurrency();
   const hasData = summary.recentPoints.length > 0;
   const isLatestPositive = (summary.latestPoint?.net ?? 0) >= 0;
   const latestTone = isLatestPositive ? "primary" : "destructive";
@@ -43,16 +36,12 @@ export function BalanceMetricsGrid({
     <MetricsGrid>
       <MetricTile
         label="Latest net"
-        value={
-          isBalanceHidden
-            ? HIDDEN_VALUE
-            : formatCurrency(summary.latestPoint?.net ?? 0, currency)
-        }
+        value={formatAmount(summary.latestPoint?.net ?? 0)}
         valueTone={latestTone}
         icon={isLatestPositive ? ArrowUpRightIcon : ArrowDownRightIcon}
         iconTone={latestTone}
         aside={
-          summary.trendPercent !== null && !isBalanceHidden ? (
+          summary.trendPercent !== null && !isHidden ? (
             <TrendBadge percent={summary.trendPercent} />
           ) : null
         }
@@ -61,7 +50,7 @@ export function BalanceMetricsGrid({
             <p className="text-muted-foreground text-xs">
               {summary.latestPoint?.label ?? "Latest period"}
             </p>
-            {summary.recentPoints.length > 1 && !isBalanceHidden ? (
+            {summary.recentPoints.length > 1 && !isHidden ? (
               <Sparkline points={summary.recentPoints} max={sparkMax} />
             ) : null}
           </div>
@@ -70,11 +59,7 @@ export function BalanceMetricsGrid({
 
       <MetricTile
         label="Income tracked"
-        value={
-          isBalanceHidden
-            ? HIDDEN_VALUE
-            : formatCurrency(summary.totalIncome, currency)
-        }
+        value={formatAmount(summary.totalIncome)}
         icon={TrendingUpIcon}
         iconTone="success"
         footer={
@@ -85,7 +70,7 @@ export function BalanceMetricsGrid({
                   ? `${summary.recentPoints.length} recorded periods`
                   : "Recent recorded periods"}
               </span>
-              {hasData && !isBalanceHidden ? (
+              {hasData && !isHidden ? (
                 <span className="text-success font-medium tabular-nums">
                   {(incomeRatio * 100).toFixed(0)}%
                 </span>
@@ -102,11 +87,7 @@ export function BalanceMetricsGrid({
 
       <MetricTile
         label="Expenses tracked"
-        value={
-          isBalanceHidden
-            ? HIDDEN_VALUE
-            : formatCurrency(summary.totalExpenses, currency)
-        }
+        value={formatAmount(summary.totalExpenses)}
         icon={TrendingDownIcon}
         iconTone="warning"
         footer={
@@ -114,14 +95,10 @@ export function BalanceMetricsGrid({
             <p className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
               <span>
                 {hasData
-                  ? `~ ${
-                      isBalanceHidden
-                        ? HIDDEN_VALUE
-                        : formatCurrency(summary.expenseBurnRate, currency)
-                    } / period`
+                  ? `~ ${formatAmount(summary.expenseBurnRate)} / period`
                   : "Recent recorded periods"}
               </span>
-              {hasData && !isBalanceHidden ? (
+              {hasData && !isHidden ? (
                 <span className="text-warning font-medium tabular-nums">
                   {(expenseRatio * 100).toFixed(0)}%
                 </span>

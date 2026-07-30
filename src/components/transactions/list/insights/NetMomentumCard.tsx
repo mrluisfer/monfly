@@ -1,4 +1,3 @@
-import { useAtomValue } from "jotai";
 import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { lazy, Suspense, useId } from "react";
 import Card from "~/components/shared/Card";
@@ -6,9 +5,7 @@ import { ClientOnly } from "~/components/shared/ClientOnly";
 import { MetricsGrid } from "~/components/shared/MetricsGrid";
 import { MetricTile } from "~/components/shared/MetricTile";
 import { Skeleton } from "~/components/ui/skeleton";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
-import { maskCurrency } from "~/utils/format-currency";
+import { useCurrency } from "~/hooks/useCurrency";
 
 // Lazy + client-only: a static import would pull recharts into this card's
 // (server-rendered) module graph and crash the production build with
@@ -48,8 +45,7 @@ export function NetMomentumCard({
   netLast30,
   sparkline,
 }: NetMomentumCardProps) {
-  const currency = usePreferredCurrency();
-  const hideBalance = useAtomValue(hideBalanceAtom);
+  const { format: formatAmount } = useCurrency();
   const gradientId = useId().replace(/:/g, "");
   const isPositiveLast30 = netLast30 >= 0;
   const trendColor = isPositiveLast30 ? "var(--primary)" : "var(--destructive)";
@@ -58,7 +54,7 @@ export function NetMomentumCard({
     <div className="grid gap-4 xl:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
       <Card
         title="Net momentum"
-        subtitle={`${maskCurrency(netLast30, currency, hideBalance)} in the last 30 days · 6-month trend`}
+        subtitle={`${formatAmount(netLast30)} in the last 30 days · 6-month trend`}
         cardContentProps={{ className: "space-y-4" }}
       >
         {/* ponytail: the trend sits directly on the card — the extra bordered
@@ -112,14 +108,14 @@ export function NetMomentumCard({
         <MetricsGrid>
           <MetricTile
             label="Income (30d)"
-            value={maskCurrency(incomeLast30, currency, hideBalance)}
+            value={formatAmount(incomeLast30)}
             valueTone="primary"
             icon={TrendingUpIcon}
             iconTone="success"
           />
           <MetricTile
             label="Expenses (30d)"
-            value={maskCurrency(expenseLast30, currency, hideBalance)}
+            value={formatAmount(expenseLast30)}
             valueTone="destructive"
             icon={TrendingDownIcon}
             iconTone="warning"

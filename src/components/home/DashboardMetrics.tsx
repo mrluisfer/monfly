@@ -6,12 +6,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { ArrowUpRightIcon, TrendingDown, TrendingUp } from "lucide-react";
 import { useActiveCard } from "~/hooks/cards";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { cn } from "~/lib/utils";
 import { queryKeys } from "~/utils/query-keys";
-import { formatCurrency } from "~/utils/format-currency";
 
 import { MetricCard } from "@/components/ui/metric-card";
 
@@ -33,7 +32,7 @@ function pctDelta(current: number, previous: number) {
 export function DashboardMetrics({ className }: { className?: string }) {
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
-  const currency = usePreferredCurrency();
+  const { format: formatAmount } = useCurrency();
   const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { data, isLoading, error } = useQuery({
@@ -102,7 +101,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
     <div className={cn("grid gap-3 sm:grid-cols-2 xl:grid-cols-1", className)}>
       <MetricCard
         label="Income"
-        value={formatCurrency(summary.totalIncome, currency)}
+        value={formatAmount(summary.totalIncome)}
         icon={<TrendingUp />}
         accent="success"
         trend={trend(summary.incomeDelta)}
@@ -111,7 +110,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
       />
       <MetricCard
         label="Expenses"
-        value={formatCurrency(summary.totalExpenses, currency)}
+        value={formatAmount(summary.totalExpenses)}
         icon={<TrendingDown />}
         accent="destructive"
         trend={trend(
@@ -122,7 +121,7 @@ export function DashboardMetrics({ className }: { className?: string }) {
       />
       <MetricCard
         label="Net flow"
-        value={`${summary.netTotal >= 0 ? "+" : ""}${formatCurrency(summary.netTotal, currency)}`}
+        value={`${summary.netTotal >= 0 ? "+" : ""}${formatAmount(summary.netTotal)}`}
         icon={<ArrowUpRightIcon />}
         accent={summary.netTotal >= 0 ? "primary" : "destructive"}
         trend={trend(summary.netDelta)}

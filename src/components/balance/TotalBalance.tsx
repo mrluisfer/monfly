@@ -1,6 +1,4 @@
-import { hideBalanceAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
-import { useAtomValue } from "jotai";
 import { CalendarIcon } from "lucide-react";
 import {
   AnimatePresence,
@@ -21,7 +19,7 @@ import {
 } from "~/components/ui/card";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useActiveCard, useCards } from "~/hooks/cards";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
@@ -48,11 +46,10 @@ const LONG_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
 });
 
 const TotalBalance = () => {
-  const isBalanceHidden = useAtomValue(hideBalanceAtom);
+  const { currency, isHidden: isBalanceHidden } = useCurrency();
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
-  const currency = usePreferredCurrency();
 
   const { error, isPending, data } = useQuery({
     queryKey: [queryDictionary.user, userEmail],

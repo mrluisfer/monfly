@@ -1,4 +1,3 @@
-import { useAtomValue } from "jotai";
 import { m } from "motion/react";
 import {
   ArrowDownLeftIcon,
@@ -20,11 +19,9 @@ import {
 } from "~/components/ui/context-menu";
 import { Dialog } from "~/components/ui/dialog";
 import { useDeleteTransaction } from "~/hooks/transactions";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
-import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
-import { maskCurrency } from "~/utils/format-currency";
 
 import EditTransaction from "../EditTransaction";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
@@ -50,8 +47,7 @@ export function TransactionRow({
   categoryIconName?: string;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const currency = usePreferredCurrency();
-  const hideBalance = useAtomValue(hideBalanceAtom);
+  const { format: formatAmount } = useCurrency();
   const isIncome = transaction.type.toLowerCase() === transactionTypes.INCOME;
   const category =
     typeof transaction.category === "string"
@@ -158,7 +154,7 @@ export function TransactionRow({
                   )}
                 >
                   {isIncome ? "+" : "-"}
-                  {maskCurrency(transaction.amount, currency, hideBalance)}
+                  {formatAmount(transaction.amount)}
                 </span>
                 <TransactionItemActions
                   transaction={transaction}

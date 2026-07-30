@@ -1,16 +1,15 @@
 import { LayersIcon, TrendingUpIcon, WalletIcon } from "lucide-react";
 
-import { CARD_FALLBACK_COLORS } from "~/constants/card-status";
 import { Card, CardContent } from "~/components/ui/card";
 import { MetricCard } from "~/components/ui/metric-card";
 import { Skeleton } from "~/components/ui/skeleton";
+import { CARD_FALLBACK_COLORS } from "~/constants/card-status";
 import { useCards } from "~/hooks/cards";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { formatCurrency } from "~/utils/format-currency";
+import { useCurrency } from "~/hooks/useCurrency";
 
 export function CardsInsights() {
   const { data, isPending } = useCards();
-  const currency = usePreferredCurrency();
+  const { format: formatAmount } = useCurrency();
   const cards = data?.data ?? [];
 
   if (isPending) {
@@ -52,7 +51,7 @@ export function CardsInsights() {
       <div className="grid gap-3 sm:grid-cols-3">
         <MetricCard
           label="Total across cards"
-          value={formatCurrency(total, currency)}
+          value={formatAmount(total)}
           icon={<WalletIcon className="size-4" />}
           accent="primary"
           helper={`${activeCards.length} active ${
@@ -70,7 +69,7 @@ export function CardsInsights() {
         />
         <MetricCard
           label="Top balance"
-          value={formatCurrency(topCard?.balance ?? 0, currency)}
+          value={formatAmount(topCard?.balance ?? 0)}
           icon={<TrendingUpIcon className="size-4" />}
           accent="success"
           helper={topCard?.name ?? "—"}
@@ -99,7 +98,7 @@ export function CardsInsights() {
                     width: `${(c.balance / positiveTotal) * 100}%`,
                     backgroundColor: c.color,
                   }}
-                  title={`${c.name}: ${formatCurrency(c.balance, currency)}`}
+                  title={`${c.name}: ${formatAmount(c.balance)}`}
                 />
               ))}
             </div>
@@ -121,7 +120,7 @@ export function CardsInsights() {
                       <span className="truncate capitalize">{c.name}</span>
                     </span>
                     <span className="text-muted-foreground shrink-0 tabular-nums">
-                      {formatCurrency(c.balance, currency)}
+                      {formatAmount(c.balance)}
                       <span className="ml-1.5 text-xs">{pct.toFixed(0)}%</span>
                     </span>
                   </li>
