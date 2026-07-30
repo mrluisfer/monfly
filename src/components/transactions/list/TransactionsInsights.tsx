@@ -48,6 +48,7 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 function safeText(input: string | null | undefined, maxLength = 56): string {
   if (!input) return "Unlabeled";
   const normalized = input
+    // oxlint-disable-next-line no-control-regex -- stripping them is the point
     .replace(/[\u0000-\u001F\u007F]/g, " ")
     .replace(/\s+/g, " ")
     .trim();

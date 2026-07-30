@@ -1,0 +1,48 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "import", "jsx-a11y", "typescript", "vitest"],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "browser": true,
+    "es2024": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "19.0"
+    }
+  },
+  "rules": {
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/no-explicit-any": "error",
+    "react/react-in-jsx-scope": "off",
+    "unicorn/filename-case": "off",
+    "vitest/require-mock-type-parameters": "off",
+    "import/no-unassigned-import": "off",
+    "vitest/no-conditional-expect": "off",
+    "jsx-a11y/anchor-has-content": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/no-redundant-roles": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off",
+    "jsx-a11y/prefer-tag-over-role": "off"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    "dist/",
+    "build/",
+    ".output/",
+    ".vercel/",
+    ".tanstack/",
+    "coverage/",
+    "src/routeTree.gen.ts",
+    "src/components/ui/**"
+  ]
+}

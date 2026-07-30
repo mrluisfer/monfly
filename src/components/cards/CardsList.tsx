@@ -29,7 +29,7 @@ export function CardsList() {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       {cards.map((card) => (
-        <SingleCard card={card} />
+        <SingleCard key={card.id} card={card} />
       ))}
     </div>
   );

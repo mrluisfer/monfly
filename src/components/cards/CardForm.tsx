@@ -174,7 +174,7 @@ export function CardForm({
       </div>
 
       <div className="space-y-1.5 sm:col-span-2">
-        <label className="text-sm font-medium">Accent color</label>
+        <span className="text-sm font-medium">Accent color</span>
         <Controller
           control={control}
           name="color"

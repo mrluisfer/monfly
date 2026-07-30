@@ -33,7 +33,6 @@ import {
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
 import { userFormNames } from "~/constants/forms/user-form-names";
-import { cn } from "~/lib/utils";
 import { DEFAULT_CURRENCY } from "~/utils/format-currency";
 import { supportedCurrencies, userFormSchema } from "~/zod-schemas/user-schema";
 
