@@ -34,7 +34,10 @@ import {
 import { Switch } from "~/components/ui/switch";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { DEFAULT_CURRENCY } from "~/utils/format-currency";
-import { supportedCurrencies, type userFormSchema } from "~/zod-schemas/user-schema";
+import {
+  supportedCurrencies,
+  type userFormSchema,
+} from "~/zod-schemas/user-schema";
 
 type UserFormValues = z.infer<typeof userFormSchema>;
 

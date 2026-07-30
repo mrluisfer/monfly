@@ -97,9 +97,7 @@
   },
   "overrides": [
     {
-      "includes": [
-        "**/src/server/**"
-      ],
+      "includes": ["**/src/server/**"],
       "linter": {
         "rules": {
           "correctness": {
