@@ -2,6 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
 import { RefreshCcwIcon, WalletIcon } from "lucide-react";
 import { useMemo } from "react";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { BackToTop } from "@/components/shared";
+import { Badge } from "@/components/ui/badge";
 import { BalanceStatusBadge } from "~/components/header/badges/BalanceStatusBadge";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent } from "~/components/ui/card";
@@ -16,11 +19,6 @@ import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transacti
 import { createSafeQuery } from "~/lib/stream-utils";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { queryKeys } from "~/utils/query-keys";
-
-import { PageHeader } from "@/components/layout/PageHeader";
-import { Badge } from "@/components/ui/badge";
-
-import { BackToTop } from "@/components/shared";
 import AddTransactionButton from "./AddTransactionButton";
 import { CardBadge, type CardSummary } from "./CardBadge";
 import { DesktopContent } from "./DesktopContent";
