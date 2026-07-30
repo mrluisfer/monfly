@@ -91,37 +91,46 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
   const recentSuccessRef = React.useRef<
     Map<string, RecentSuccessfulMutation<TData>>
   >(new Map());
+  // Pulled apart before the memo on purpose: callers pass `idempotency` as an
+  // inline object literal, so depending on it directly would recompute (and
+  // destabilize `mutate`) on every render. Reading the fields out here means the
+  // memo captures only these values, and its dependency list can match exactly.
+  const hasIdempotency = opts.idempotency !== undefined;
+  const {
+    enabled: idempotencyEnabled,
+    getKey: idempotencyGetKey,
+    windowMs: idempotencyWindowMs,
+    onBlockedConcurrent,
+    onDuplicatePending,
+    onDuplicateRecentSuccess,
+  } = opts.idempotency ?? {};
+
   const resolvedIdempotency = React.useMemo(() => {
-    if (!opts.idempotency || opts.idempotency.enabled === false) {
+    if (!hasIdempotency || idempotencyEnabled === false) {
       return null;
     }
 
     return {
       getKey:
-        opts.idempotency?.getKey ??
+        idempotencyGetKey ??
         ((variables: TVariables) => stableSerialize(variables)),
-      windowMs: opts.idempotency?.windowMs ?? DEFAULT_IDEMPOTENCY_WINDOW_MS,
+      windowMs: idempotencyWindowMs ?? DEFAULT_IDEMPOTENCY_WINDOW_MS,
       onBlockedConcurrent:
-        opts.idempotency?.onBlockedConcurrent ??
-        "Please wait for the current action to finish.",
+        onBlockedConcurrent ?? "Please wait for the current action to finish.",
       onDuplicatePending:
-        opts.idempotency?.onDuplicatePending ??
-        "This action is already in progress.",
+        onDuplicatePending ?? "This action is already in progress.",
       onDuplicateRecentSuccess:
-        opts.idempotency?.onDuplicateRecentSuccess ??
+        onDuplicateRecentSuccess ??
         "This action was already applied a moment ago.",
     };
-    // Granular primitive deps are intentional: they keep `resolvedIdempotency`
-    // (and therefore `mutate`) referentially stable when callers pass an inline
-    // idempotency object.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    opts.idempotency?.enabled,
-    opts.idempotency?.getKey,
-    opts.idempotency?.onBlockedConcurrent,
-    opts.idempotency?.onDuplicatePending,
-    opts.idempotency?.onDuplicateRecentSuccess,
-    opts.idempotency?.windowMs,
+    hasIdempotency,
+    idempotencyEnabled,
+    idempotencyGetKey,
+    idempotencyWindowMs,
+    onBlockedConcurrent,
+    onDuplicatePending,
+    onDuplicateRecentSuccess,
   ]);
 
   const mutate = React.useCallback(
@@ -222,7 +231,6 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
     },
     // Granular deps are intentional to keep `mutate` referentially stable even
     // when callers pass inline option objects.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [opts.allowConcurrent, resolvedIdempotency, opts.fn, opts.onSuccess],
   );
 

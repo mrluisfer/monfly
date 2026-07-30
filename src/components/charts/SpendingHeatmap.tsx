@@ -2,16 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { FlameIcon } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
-import {
-  DAILY_ACTIVITY_DAYS,
-  DAILY_ACTIVITY_WEEKS,
-} from "~/constants/daily-activity";
 import { Badge } from "~/components/ui/badge";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
+import {
+  DAILY_ACTIVITY_DAYS,
+  DAILY_ACTIVITY_WEEKS,
+} from "~/constants/daily-activity";
 import { useActiveCard } from "~/hooks/cards";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -30,8 +30,10 @@ import { ChartError, ChartLoading } from "./ChartLoading";
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 type DayCell = {
-  /** YYYY-MM-DD, or null for leading pad cells before the window starts. */
-  date: string | null;
+  /** YYYY-MM-DD. Always set — it doubles as the cell's React key. */
+  date: string;
+  /** Leading cells before the window starts: rendered blank, no tooltip. */
+  padding: boolean;
   label: string;
   income: number;
   expense: number;
@@ -40,6 +42,13 @@ type DayCell = {
   level: 0 | 1 | 2 | 3 | 4;
   /** Whether the day netted positive (income ≥ expense). */
   positive: boolean;
+};
+
+/** A grid column, identified by the ISO date of its Sunday so the column keeps
+ *  its identity when the window shifts or the data reloads. */
+type Week = {
+  id: string;
+  days: DayCell[];
 };
 
 // Net-positive days ramp the chart-1 slot, net-negative days keep destructive,
@@ -83,20 +92,26 @@ function buildCalendar(rows: DailyActivityRow[]) {
     ...rows.map((row) => Math.abs(row.income - row.expense)),
   );
 
-  const weeks: DayCell[][] = [];
-  const monthLabels: { weekIndex: number; label: string }[] = [];
+  const weeks: Week[] = [];
+  const monthLabels: { weekId: string; label: string }[] = [];
   let lastMonth = -1;
 
   for (let day = new Date(gridStart); day <= today; ) {
     const weekIndex = Math.floor(
       (day.getTime() - gridStart.getTime()) / (7 * DAY_MS),
     );
+    const iso = day.toISOString().slice(0, 10);
+
     if (!weeks[weekIndex]) {
-      weeks[weekIndex] = [];
+      const weekStart = new Date(gridStart.getTime() + weekIndex * 7 * DAY_MS);
+      weeks[weekIndex] = {
+        id: weekStart.toISOString().slice(0, 10),
+        days: [],
+      };
       const month = day.getUTCMonth();
       if (month !== lastMonth) {
         monthLabels.push({
-          weekIndex,
+          weekId: weeks[weekIndex].id,
           label: day.toLocaleString("en-US", {
             month: "short",
             timeZone: "UTC",
@@ -107,8 +122,9 @@ function buildCalendar(rows: DailyActivityRow[]) {
     }
 
     if (day < windowStart) {
-      weeks[weekIndex].push({
-        date: null,
+      weeks[weekIndex].days.push({
+        date: iso,
+        padding: true,
         label: "",
         income: 0,
         expense: 0,
@@ -117,7 +133,6 @@ function buildCalendar(rows: DailyActivityRow[]) {
         positive: true,
       });
     } else {
-      const iso = day.toISOString().slice(0, 10);
       const row = byDate.get(iso);
       const income = row?.income ?? 0;
       const expense = row?.expense ?? 0;
@@ -129,8 +144,9 @@ function buildCalendar(rows: DailyActivityRow[]) {
           : ((Math.min(4, Math.ceil((Math.abs(net) / maxAbsNet) * 4)) ||
               1) as DayCell["level"]);
 
-      weeks[weekIndex].push({
+      weeks[weekIndex].days.push({
         date: iso,
+        padding: false,
         label: day.toLocaleDateString("en-US", {
           weekday: "short",
           month: "short",
@@ -171,7 +187,7 @@ function HeatmapCell({
   cell: DayCell;
   currency: SupportedCurrency;
 }) {
-  if (!cell.date) {
+  if (cell.padding) {
     return <div aria-hidden="true" className="size-3.5 rounded-[3px]" />;
   }
 
@@ -240,7 +256,10 @@ export default function SpendingHeatmap() {
   const hasActivity = activeDays > 0;
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Re-scroll to today once the columns exist — on the first render `weeks` is
+  // still empty and there is nothing to scroll.
   useEffect(() => {
+    if (weeks.length === 0) return;
     const node = scrollRef.current;
     if (node) node.scrollLeft = node.scrollWidth;
   }, [weeks]);
@@ -299,13 +318,11 @@ export default function SpendingHeatmap() {
           >
             <div className="w-max min-w-full">
               <div className="text-muted-foreground mb-1 flex gap-1 text-[10px]">
-                {weeks.map((_, weekIndex) => {
-                  const label = monthLabels.find(
-                    (m) => m.weekIndex === weekIndex,
-                  );
+                {weeks.map((week) => {
+                  const label = monthLabels.find((m) => m.weekId === week.id);
                   return (
                     <span
-                      key={weekIndex}
+                      key={week.id}
                       className="block w-3.5 overflow-visible whitespace-nowrap"
                     >
                       {label?.label ?? ""}
@@ -314,11 +331,11 @@ export default function SpendingHeatmap() {
                 })}
               </div>
               <div className="flex gap-1">
-                {weeks.map((week, weekIndex) => (
-                  <div key={weekIndex} className="flex flex-col gap-1">
-                    {week.map((cell, dayIndex) => (
+                {weeks.map((week) => (
+                  <div key={week.id} className="flex flex-col gap-1">
+                    {week.days.map((cell) => (
                       <HeatmapCell
-                        key={cell.date ?? dayIndex}
+                        key={cell.date}
                         cell={cell}
                         currency={currency}
                       />

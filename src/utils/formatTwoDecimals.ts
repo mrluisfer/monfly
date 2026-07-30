@@ -8,7 +8,7 @@ export function formatToTwoDecimals(value: number | string): {
       numberValue: 0,
     };
   const num = typeof value === "string" ? parseFloat(value) : value;
-  if (isNaN(num))
+  if (Number.isNaN(num))
     return {
       stringValue: "",
       numberValue: 0,

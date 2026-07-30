@@ -60,12 +60,6 @@
       },
       "complexity": {
         "noImportantStyles": "off"
-      },
-      "suspicious": {
-        "noArrayIndexKey": "warn"
-      },
-      "correctness": {
-        "useExhaustiveDependencies": "warn"
       }
     }
   },
@@ -103,7 +97,9 @@
   },
   "overrides": [
     {
-      "includes": ["**/src/server/**"],
+      "includes": [
+        "**/src/server/**"
+      ],
       "linter": {
         "rules": {
           "correctness": {

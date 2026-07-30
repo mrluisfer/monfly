@@ -16,27 +16,27 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import {
+  type FocusEvent,
   useEffect,
   useId,
   useMemo,
   useRef,
   useState,
-  type FocusEvent,
 } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 import {
-  transactionFormNames,
   type LoanMode,
+  transactionFormNames,
 } from "~/constants/forms/transaction-form-names";
 import {
   LOAN_DIRECTION_LABEL,
   type LoanDirection,
 } from "~/constants/loan-status";
 import { useCards } from "~/hooks/cards";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
 import { useActiveLoans } from "~/hooks/loans/useActiveLoans";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { sileo } from "~/lib/toaster";
@@ -523,7 +523,7 @@ export function TransactionForm<FormValues extends FieldValues>({
                           }
                           onChange={(e) => {
                             const date = e.target.value
-                              ? new Date(e.target.value + "T00:00:00")
+                              ? new Date(`${e.target.value}T00:00:00`)
                               : undefined;
                             field.onChange(date);
                           }}
@@ -885,7 +885,7 @@ function LoanSection<FormValues extends FieldValues>({
                         }
                         onChange={(e) => {
                           const date = e.target.value
-                            ? new Date(e.target.value + "T00:00:00")
+                            ? new Date(`${e.target.value}T00:00:00`)
                             : null;
                           field.onChange(date);
                         }}

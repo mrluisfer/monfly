@@ -26,12 +26,14 @@ export function Sparkline({ points, max }: SparklineProps) {
       role="img"
       aria-label={`Recent net trend across ${points.length} periods`}
     >
-      {points.map((point, index) => {
+      {points.map((point) => {
         const ratio = Math.abs(point.net) / max;
         const heightPct = Math.max(ratio * 100, MIN_BAR_HEIGHT_PCT);
         const isPositive = point.net >= 0;
         return (
-          <Tooltip key={`${point.label}-${index}`}>
+          <Tooltip
+            key={`${point.label}-${point.net}-${point.income}-${point.expense}`}
+          >
             <TooltipTrigger
               render={
                 <button

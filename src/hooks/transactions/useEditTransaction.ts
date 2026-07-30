@@ -87,9 +87,9 @@ export const useEditTransaction = (
         );
       }
     });
-    // Only run once when the dialog opens.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transaction.id]);
+    // `setValue` is stable across renders and `initialAppliedToLoanId` only
+    // changes with the transaction itself, so this still runs once per dialog.
+  }, [transaction.id, initialAppliedToLoanId, form.setValue]);
 
   const putTransactionByIdMutation = useMutation({
     fn: putTransactionByIdServer,

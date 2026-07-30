@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
-import type { ApiResponse } from "~/types/ApiResponse";
-
 import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 const monthsToShow = 6;
 
@@ -52,8 +51,9 @@ export const getIncomeExpenseData = async ({
     for (const row of rows) {
       const date = new Date(row.month);
       const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
-      if (!summaryMap.has(key)) {
-        summaryMap.set(key, {
+      let entry = summaryMap.get(key);
+      if (!entry) {
+        entry = {
           // Fixed locale so labels are deterministic across environments
           // ("default" yields e.g. "enero" on a Spanish-locale machine).
           month: date.toLocaleString("en-US", {
@@ -63,9 +63,9 @@ export const getIncomeExpenseData = async ({
           year: date.getUTCFullYear(),
           income: 0,
           expense: 0,
-        });
+        };
+        summaryMap.set(key, entry);
       }
-      const entry = summaryMap.get(key)!;
       if (row.type === "income") entry.income = row.total;
       if (row.type === "expense") entry.expense = row.total;
     }

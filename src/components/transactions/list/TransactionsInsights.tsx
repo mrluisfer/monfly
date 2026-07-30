@@ -48,8 +48,9 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 function safeText(input: string | null | undefined, maxLength = 56): string {
   if (!input) return "Unlabeled";
   const normalized = input
-    // biome-ignore lint/suspicious/noControlCharactersInRegex: stripping them is the point
-    .replace(/[\u0000-\u001F\u007F]/g, " ")
+    // Every Unicode control character; this also covers the C1 block
+    // (U+0080-U+009F) that the old explicit range missed.
+    .replace(/\p{Cc}/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
   if (!normalized) return "Unlabeled";

@@ -15,6 +15,10 @@ import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanListItem } from "./LoanListItem";
 import type { DirectionFilter, StatusFilter } from "./types";
 
+/** Stable keys for the loading placeholders — a fixed list that never reorders,
+ *  so it needs identities of its own rather than array indexes. */
+const SKELETON_ROWS = ["first", "second", "third"];
+
 /** The full loans dashboard: summary metrics, filters, and the loan list. */
 export function LoansList() {
   const [filter, setFilter] = useState<StatusFilter>("all");
@@ -30,13 +34,13 @@ export function LoansList() {
     return (
       <div className="space-y-3">
         <div className="grid grid-cols-3 gap-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-24 w-full rounded-2xl" />
+          {SKELETON_ROWS.map((row) => (
+            <Skeleton key={row} className="h-24 w-full rounded-2xl" />
           ))}
         </div>
         <Skeleton className="h-10 w-64 rounded-2xl" />
-        {Array.from({ length: 3 }).map((_, i) => (
-          <Skeleton key={i} className="h-28 w-full rounded-2xl" />
+        {SKELETON_ROWS.map((row) => (
+          <Skeleton key={row} className="h-28 w-full rounded-2xl" />
         ))}
       </div>
     );

@@ -1,9 +1,6 @@
-import { useMemo, useState } from "react";
 import { SearchIcon, SparklesIcon } from "lucide-react";
-
-import { CATEGORY_ICONS } from "~/constants/categories/icons";
+import { useMemo, useState } from "react";
 import { PageHeader } from "~/components/layout/PageHeader";
-import { Input } from "~/components/ui/input";
 import {
   Empty,
   EmptyDescription,
@@ -11,6 +8,8 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "~/components/ui/empty";
+import { Input } from "~/components/ui/input";
+import { CATEGORY_ICONS } from "~/constants/categories/icons";
 import { Badge } from "../ui/badge";
 
 export function AvailableIconsGallery() {
@@ -96,16 +95,11 @@ export function AvailableIconsGallery() {
               <p className="w-full truncate text-sm font-medium">{label}</p>
               <div className="flex flex-wrap items-center justify-center gap-1">
                 <Badge variant={"default"}>{name}</Badge>
-                {aliases &&
-                  aliases.map((alias) => (
-                    <Badge
-                      key={alias}
-                      variant={"secondary"}
-                      className="text-xs"
-                    >
-                      {alias}
-                    </Badge>
-                  ))}
+                {aliases?.map((alias) => (
+                  <Badge key={alias} variant={"secondary"} className="text-xs">
+                    {alias}
+                  </Badge>
+                ))}
               </div>
             </li>
           ))}
