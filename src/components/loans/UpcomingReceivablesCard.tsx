@@ -198,10 +198,7 @@ function UpcomingBody({
 
       <ScrollArea
         render={
-          <ul
-            role="list"
-            className="divide-border/60 h-40 divide-y px-2 pb-4"
-          />
+          <ul role="list" className="divide-border/60 h-40 divide-y px-2" />
         }
       >
         {visible.map((entry) => {
