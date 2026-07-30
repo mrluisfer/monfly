@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import type { LucideIcon } from "lucide-react";
 import {
   BookOpenIcon,
   FolderTreeIcon,
@@ -12,7 +13,6 @@ import {
   ReceiptIcon,
   SparklesIcon,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
 import { PageHeader } from "~/components/layout/PageHeader";
 import { Section } from "~/components/layout/Section";
@@ -169,7 +169,7 @@ function HelpRoute() {
       >
         <Accordion className="bg-card border-border/60 divide-border/60 divide-y">
           {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={String(index)}>
+            <AccordionItem key={index} value={String(index)} className={"px-2"}>
               <AccordionTrigger className="text-left text-sm font-medium">
                 <span className="flex items-center gap-2">
                   <MessageCircleQuestionIcon
