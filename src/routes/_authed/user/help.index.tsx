@@ -168,8 +168,8 @@ function HelpRoute() {
         description="Short answers to the most common questions about how Monfly works."
       >
         <Accordion className="bg-card border-border/60 divide-border/60 divide-y">
-          {faqs.map((faq, index) => (
-            <AccordionItem key={index} value={String(index)} className={"px-2"}>
+          {faqs.map((faq) => (
+            <AccordionItem key={faq.q} value={faq.q} className={"px-2"}>
               <AccordionTrigger className="text-left text-sm font-medium">
                 <span className="flex items-center gap-2">
                   <MessageCircleQuestionIcon

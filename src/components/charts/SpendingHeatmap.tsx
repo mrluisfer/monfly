@@ -256,10 +256,10 @@ export default function SpendingHeatmap() {
   const hasActivity = activeDays > 0;
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  // `weeks` is the trigger, not a read: the grid has to re-scroll to today once
-  // the data lands and the columns actually exist.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional trigger
+  // Re-scroll to today once the columns exist — on the first render `weeks` is
+  // still empty and there is nothing to scroll.
   useEffect(() => {
+    if (weeks.length === 0) return;
     const node = scrollRef.current;
     if (node) node.scrollLeft = node.scrollWidth;
   }, [weeks]);

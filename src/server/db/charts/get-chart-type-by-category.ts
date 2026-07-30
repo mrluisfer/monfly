@@ -22,14 +22,11 @@ export const getChartTypeByCategory = async ({
     >();
 
     for (const row of result) {
-      if (!categoryMap.has(row.category)) {
-        categoryMap.set(row.category, {
-          category: row.category,
-          income: 0,
-          expense: 0,
-        });
+      let entry = categoryMap.get(row.category);
+      if (!entry) {
+        entry = { category: row.category, income: 0, expense: 0 };
+        categoryMap.set(row.category, entry);
       }
-      const entry = categoryMap.get(row.category)!;
       if (row.type === "income") {
         entry.income = row._sum.amount ?? 0;
       } else if (row.type === "expense") {
