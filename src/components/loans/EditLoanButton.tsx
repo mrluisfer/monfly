@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Input } from "~/components/ui/input";
+import { AmountInput } from "~/components/shared/AmountInput";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Tooltip,
@@ -126,14 +126,7 @@ export function EditLoanButton({
             label={`Amount (${currency})`}
             icon={<CircleDollarSignIcon className="size-3.5" />}
           >
-            <Input
-              type="number"
-              inputMode="decimal"
-              step="0.01"
-              min="0"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
+            <AmountInput value={amount} onChange={setAmount} />
           </LoanField>
 
           <DialogFooter>

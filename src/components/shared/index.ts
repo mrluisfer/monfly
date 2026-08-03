@@ -1,3 +1,4 @@
+export { AmountInput, evalAmount } from "./AmountInput";
 export { BackToTop } from "./BackToTop";
 export { default as Card } from "./Card";
 export { ClientOnly } from "./ClientOnly";

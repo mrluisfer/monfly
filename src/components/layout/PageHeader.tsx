@@ -3,7 +3,7 @@ import { cn } from "~/lib/utils";
 
 type PageHeaderProps = {
   title: ReactNode;
-  description?: ReactNode;
+  description?: ReactNode | string;
   icon?: ReactNode;
   actions?: ReactNode;
   className?: string;

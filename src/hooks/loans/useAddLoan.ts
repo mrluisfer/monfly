@@ -22,7 +22,7 @@ export const useAddLoan = () => {
       dueAt: null,
       notes: "",
       transactionId: null,
-      direction: "lent",
+      direction: "borrowed",
     },
   });
 
@@ -66,7 +66,7 @@ export const useAddLoan = () => {
             dueAt: values.dueAt ?? null,
             notes: values.notes ?? null,
             transactionId: values.transactionId ?? null,
-            direction: values.direction ?? "lent",
+            direction: values.direction ?? "borroed",
           },
         },
       });

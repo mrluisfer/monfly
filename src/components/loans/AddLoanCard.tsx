@@ -93,6 +93,7 @@ export function AddLoanCard() {
                 value={field.value}
                 onValueChange={(v) => field.onChange(v as LoanDirection)}
                 className="w-full"
+                defaultValue={"borrowed"}
               >
                 <TabsList className="w-full md:w-fit">
                   <TabsTrigger value="lent" className="flex-1 gap-1.5">
