@@ -29,6 +29,7 @@ import { DebtorCombobox } from "./DebtorCombobox";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanField } from "./LoanField";
 import { fromDateInputValue, toDateInputValue } from "./date-input";
+import { AmountInput } from "../shared";
 
 /** Collapsible form to register a new loan (money owed to or by the user). */
 export function AddLoanCard() {
@@ -79,7 +80,7 @@ export function AddLoanCard() {
         />
       </CollapsibleTrigger>
 
-      <CollapsibleContent render={<Card />}>
+      <CollapsibleContent render={<Card />} className={'rounded-md'}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 px-1 md:px-2"
@@ -145,14 +146,7 @@ export function AddLoanCard() {
                 control={form.control}
                 name="amount"
                 render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="number"
-                    inputMode="decimal"
-                    step="0.01"
-                    min="0"
-                    placeholder="0.00"
-                  />
+                  <AmountInput  {...field} placeholder="0.00" />
                 )}
               />
             </LoanField>

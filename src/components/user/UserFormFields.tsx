@@ -165,7 +165,7 @@ export function UserFormFields({
               <FormLabel>Total balance</FormLabel>
               <div className="flex items-center gap-2">
                 <FormControl>
-                  <div className="border-input bg-background focus-within:border-ring focus-within:ring-ring/30 flex h-11 w-full overflow-hidden rounded-3xl border shadow-xs focus-within:ring-3">
+                  <div className="border-input bg-background focus-within:border-ring focus-within:ring-ring/30 flex h-11 w-full overflow-hidden rounded-md border shadow-xs focus-within:ring-3">
                     <span className="border-input text-muted-foreground inline-flex w-10 shrink-0 items-center justify-center border-e text-sm">
                       $
                     </span>

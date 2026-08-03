@@ -7,6 +7,7 @@ import type { z } from "zod";
 import { Form } from "~/components/ui/form";
 import { userFormNames } from "~/constants/forms/user-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
+import { exportUserDataServer } from "~/lib/api/user/export-user-data";
 import { putUserTotalBalanceServer } from "~/lib/api/user/put-user-total-balance";
 import { updateUserProfileServer } from "~/lib/api/user/update-user-profile";
 import { sileo } from "~/lib/toaster";
@@ -180,6 +181,26 @@ export function UserProfileForm({
     }
   };
 
+  const handleExport = async () => {
+    const res = await exportUserDataServer();
+    if (!res?.success || !res.data) {
+      sileo.error({ title: res?.message ?? "Failed to export your data" });
+      return;
+    }
+    // ponytail: object URL + anchor click, the platform's own download path.
+    const url = URL.createObjectURL(
+      new Blob([JSON.stringify(res.data, null, 2)], {
+        type: "application/json",
+      }),
+    );
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `monfly-export-${res.data.exportedAt.slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    sileo.success({ title: "Export downloaded" });
+  };
+
   const submitting = form.formState.isSubmitting;
   const hasChanges = form.formState.isDirty;
   const updatingBalance = balanceMutation.status === "pending";
@@ -234,7 +255,7 @@ export function UserProfileForm({
         <UserFormActions
           submitting={submitting}
           hasChanges={hasChanges}
-          onExport={onExport}
+          onExport={onExport ?? handleExport}
           onDelete={onDelete}
         />
       </form>
