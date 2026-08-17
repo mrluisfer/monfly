@@ -22,10 +22,15 @@ export default function AddCard() {
   const isLoading = mutation.status === "pending";
 
   return (
-    <Collapsible open={open} onOpenChange={setOpen} render={<Card />}>
+    <Collapsible
+      open={open}
+      onOpenChange={setOpen}
+      render={<Card />}
+      className={"p-0"}
+    >
       {/* Default Trigger render is a <button>, so aria-expanded and keyboard
           activation come for free — hence the card header styles live here. */}
-      <CollapsibleTrigger className="group focus-visible:ring-ring/50 mx-(--card-spacing) flex items-center gap-2.5 rounded-md text-left outline-none focus-visible:ring-3">
+      <CollapsibleTrigger className="group focus-visible:ring-ring/50 mx-(--card-spacing) flex items-center gap-2.5 rounded-md text-left outline-none focus-visible:ring-3 py-[24px]">
         <span
           aria-hidden="true"
           className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-4xl"
