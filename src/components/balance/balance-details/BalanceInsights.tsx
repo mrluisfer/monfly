@@ -1,8 +1,7 @@
 import { FlameIcon, GaugeIcon, TimerIcon, TrophyIcon } from "lucide-react";
-
-import { useCurrency } from "~/hooks/useCurrency";
 import { MetricsGrid } from "~/components/shared/MetricsGrid";
 import { MetricTile } from "~/components/shared/MetricTile";
+import { useCurrency } from "~/hooks/useCurrency";
 import { SavingsRateTile } from "./SavingsRateTile";
 import type { BalanceSummary } from "./types";
 

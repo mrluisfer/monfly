@@ -198,7 +198,10 @@ function UpcomingBody({
 
       <ScrollArea
         render={
-          <ul role="list" className="divide-border/60 h-40 divide-y px-2" />
+          <ul
+            role="list"
+            className="divide-border/60 h-40 lg:h-56 divide-y px-2"
+          />
         }
       >
         {visible.map((entry) => {
@@ -255,10 +258,10 @@ function UpcomingBody({
       </ScrollArea>
 
       {hidden > 0 && (
-        <p className="text-muted-foreground text-xs">
+        <p className="text-muted-foreground text-xs pl-4 pb-2">
           + {hidden} more —{" "}
           <Link to="/home/loans" className="text-primary hover:underline">
-            see all
+            see all <ArrowRightIcon className="size-3 inline-flex" />
           </Link>
         </p>
       )}

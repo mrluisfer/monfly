@@ -1,18 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
-import { hideMetricsAtom } from "@/state";
 import { useQuery } from "@tanstack/react-query";
 import { useAtomValue } from "jotai";
 import { ArrowUpRightIcon, TrendingDown, TrendingUp } from "lucide-react";
+import { useMemo } from "react";
+import { MetricCard } from "@/components/ui/metric-card";
+import { hideMetricsAtom } from "@/state";
 import { useActiveCard } from "~/hooks/cards";
 import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { cn } from "~/lib/utils";
 import { queryKeys } from "~/utils/query-keys";
-
-import { MetricCard } from "@/components/ui/metric-card";
 
 type ChartPoint = {
   income?: number;
