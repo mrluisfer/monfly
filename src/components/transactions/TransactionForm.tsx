@@ -373,103 +373,106 @@ export function TransactionForm<FormValues extends FieldValues>({
         </motion.div>
 
         <div className="grid gap-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
-          <div className={sectionClassName}>
-            <FormField
-              control={form.control}
-              name={transactionFormNames.category as Path<FormValues>}
-              render={({ field }) => {
-                const value = field.value as string | undefined;
+          <div className="space-y-4">
+            <div className={sectionClassName}>
+              <FormField
+                control={form.control}
+                name={transactionFormNames.category as Path<FormValues>}
+                render={({ field }) => {
+                  const value = field.value as string | undefined;
 
-                const showAddNew =
-                  categoryInputValue.length > 1 &&
-                  !categories?.some(
-                    (cat) =>
-                      cat.name.toLowerCase() ===
-                      categoryInputValue.toLowerCase(),
-                  );
+                  const showAddNew =
+                    categoryInputValue.length > 1 &&
+                    !categories?.some(
+                      (cat) =>
+                        cat.name.toLowerCase() ===
+                        categoryInputValue.toLowerCase(),
+                    );
 
-                return (
-                  <FormItem className="space-y-2">
-                    <FormLabel
-                      htmlFor={transactionFormNames.category}
-                      className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
-                    >
-                      <TagIcon className="size-3 text-blue-500" />
-                      Category
-                    </FormLabel>
-                    <FormControl>
-                      <div className="w-full space-y-3">
-                        {categoryOptions.length > 0 ? (
-                          <NativeSelect
-                            className={nativeSelectClassName}
-                            id={transactionFormNames.category}
-                            value={value ?? ""}
-                            onChange={(event) =>
-                              field.onChange(event.target.value)
-                            }
-                          >
-                            <NativeSelectOption value="" disabled>
-                              Select a category
-                            </NativeSelectOption>
-                            {categoryOptions.map((option) => (
-                              <NativeSelectOption
-                                key={option.value}
-                                value={option.value}
-                                className="capitalize"
-                              >
-                                {option.label}
+                  return (
+                    <FormItem className="space-y-2">
+                      <FormLabel
+                        htmlFor={transactionFormNames.category}
+                        className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
+                      >
+                        <TagIcon className="size-3 text-blue-500" />
+                        Category
+                      </FormLabel>
+                      <FormControl>
+                        <div className="w-full space-y-3">
+                          {categoryOptions.length > 0 ? (
+                            <NativeSelect
+                              className={nativeSelectClassName}
+                              id={transactionFormNames.category}
+                              value={value ?? ""}
+                              onChange={(event) =>
+                                field.onChange(event.target.value)
+                              }
+                            >
+                              <NativeSelectOption value="" disabled>
+                                Select a category
                               </NativeSelectOption>
-                            ))}
-                          </NativeSelect>
-                        ) : (
-                          <p className="text-muted-foreground py-3 text-center text-sm">
-                            No categories yet
-                          </p>
-                        )}
-                        <div className="flex items-center gap-2">
-                          <Input
-                            value={categoryInputValue}
-                            onChange={(e) =>
-                              setCategoryInputValue(e.target.value)
-                            }
-                            placeholder="New category name..."
-                            className="border-border/60 bg-input/40 h-10 flex-1 rounded-xl text-sm shadow-none"
-                          />
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="default"
-                            className="h-10 rounded-xl"
-                            onClick={async () => {
-                              const inputVal = categoryInputValue;
-                              field.onChange(inputVal);
-                              setCategoryInputValue("");
-                              await postCategoryByEmail.mutate({
-                                data: {
-                                  email: userEmail,
-                                  category: {
-                                    name: inputVal,
-                                    icon: "other",
+                              {categoryOptions.map((option) => (
+                                <NativeSelectOption
+                                  key={option.value}
+                                  value={option.value}
+                                  className="capitalize"
+                                >
+                                  {option.label}
+                                </NativeSelectOption>
+                              ))}
+                            </NativeSelect>
+                          ) : (
+                            <p className="text-muted-foreground py-3 text-center text-sm">
+                              No categories yet
+                            </p>
+                          )}
+                          <div className="flex items-center gap-2">
+                            <Input
+                              value={categoryInputValue}
+                              onChange={(e) =>
+                                setCategoryInputValue(e.target.value)
+                              }
+                              placeholder="New category name..."
+                              className="border-border/60 bg-input/40 h-10 flex-1 rounded-xl text-sm shadow-none"
+                            />
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="default"
+                              className="h-10 rounded-xl"
+                              onClick={async () => {
+                                const inputVal = categoryInputValue;
+                                field.onChange(inputVal);
+                                setCategoryInputValue("");
+                                await postCategoryByEmail.mutate({
+                                  data: {
+                                    email: userEmail,
+                                    category: {
+                                      name: inputVal,
+                                      icon: "other",
+                                    },
                                   },
-                                },
-                              });
-                            }}
-                            disabled={
-                              !showAddNew ||
-                              postCategoryByEmail.status === "pending"
-                            }
-                          >
-                            <PlusIcon size={14} />
-                            Add
-                          </Button>
+                                });
+                              }}
+                              disabled={
+                                !showAddNew ||
+                                postCategoryByEmail.status === "pending"
+                              }
+                            >
+                              <PlusIcon size={14} />
+                              Add
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+            </div>
+            <CardField form={form} />
           </div>
 
           <div className={sectionClassName}>
@@ -552,8 +555,6 @@ export function TransactionForm<FormValues extends FieldValues>({
           </div>
         </div>
 
-        <CardField form={form} />
-
         <LoanSection form={form} />
 
         <div className="flex items-center justify-between pt-1 sm:pt-2">
@@ -599,6 +600,8 @@ function CardField<FormValues extends FieldValues>({
   const { data, isPending } = useCards({ status: "active" });
   const cards = useMemo(() => data?.data ?? [], [data?.data]);
 
+  const firstCard = cards[0]?.id;
+
   // Nothing to assign until the user has created at least one card. Hiding the
   // field keeps the form unchanged for users who don't use cards.
   if (!isPending && cards.length === 0) {
@@ -623,8 +626,9 @@ function CardField<FormValues extends FieldValues>({
               </FormLabel>
               <FormControl>
                 <NativeSelect
+                  defaultValue={firstCard}
                   className={nativeSelectClassName}
-                  value={value ?? NO_CARD}
+                  value={value ?? firstCard ?? NO_CARD}
                   onChange={(event) =>
                     field.onChange(
                       event.target.value === NO_CARD

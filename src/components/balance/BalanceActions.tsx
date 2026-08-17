@@ -1,5 +1,4 @@
 import { useNavigate } from "@tanstack/react-router";
-import AddTransactionButton from "~/components/transactions/list/AddTransactionButton";
 import {
   BarChart3Icon,
   CalculatorIcon,
@@ -7,6 +6,7 @@ import {
   HandCoinsIcon,
   PlusIcon,
 } from "lucide-react";
+import AddTransactionButton from "~/components/transactions/list/AddTransactionButton";
 
 import { ActionButton } from "./ActionButton";
 
