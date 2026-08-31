@@ -19,7 +19,7 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import type { LoanDirection } from "~/constants/loan-status";
-import { useAddLoan } from "~/hooks/loans/useAddLoan";
+import { buildLoanFormDefaults, useAddLoan } from "~/hooks/loans/useAddLoan";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import { AmountInput } from "../shared";
@@ -78,7 +78,7 @@ export function AddLoanCard() {
         />
       </CollapsibleTrigger>
 
-      <CollapsibleContent render={<Card />} className={"rounded-md"}>
+      <CollapsibleContent render={<Card />}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 px-1 md:px-2"
@@ -209,6 +209,21 @@ export function AddLoanCard() {
                 />
               </LoanField>
             </div>
+          </div>
+          <div className="flex items-center gap-4 flex-wrap justify-end">
+            <Button
+              type="button"
+              onClick={() => {
+                // `reset`, not `resetDefaultValues` — the latter only moves the
+                // baseline used for `isDirty`/`dirtyFields` and leaves whatever
+                // the user typed on screen.
+                form.reset(buildLoanFormDefaults());
+                setOpenCollapsible(false);
+              }}
+              variant={"secondary"}
+            >
+              Cancel
+            </Button>
             <Button
               type="submit"
               disabled={isLoading}
