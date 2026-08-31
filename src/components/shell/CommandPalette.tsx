@@ -1,7 +1,26 @@
-import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useAtom } from "jotai";
+import {
+  ArrowDownLeftIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  CornerDownLeftIcon,
+  CreditCardIcon,
+  EyeIcon,
+  EyeOffIcon,
+  HandCoinsIcon,
+  KeyRoundIcon,
+  LifeBuoyIcon,
+  ListPlusIcon,
+  LogOutIcon,
+  MoonIcon,
+  PaletteIcon,
+  PlusCircleIcon,
+  SettingsIcon,
+  SunIcon,
+} from "lucide-react";
+import * as React from "react";
 import {
   Command,
   CommandDialog,
@@ -23,43 +42,8 @@ import { cn } from "~/lib/utils";
 import { hideBalanceAtom } from "~/state/atoms/ui/preferencesAtoms";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { queryKeys } from "~/utils/query-keys";
-import {
-  ArrowDownLeftIcon,
-  ArrowRightIcon,
-  ArrowUpRightIcon,
-  CornerDownLeftIcon,
-  CreditCardIcon,
-  EyeIcon,
-  EyeOffIcon,
-  HandCoinsIcon,
-  KeyRoundIcon,
-  LifeBuoyIcon,
-  ListPlusIcon,
-  LogOutIcon,
-  MoonIcon,
-  PaletteIcon,
-  PlusCircleIcon,
-  SettingsIcon,
-  SunIcon,
-} from "lucide-react";
-
-type CommandPaletteContextValue = {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  toggle: () => void;
-};
-
-const CommandPaletteContext =
-  React.createContext<CommandPaletteContextValue | null>(null);
-
-export function useCommandPalette() {
-  const ctx = React.useContext(CommandPaletteContext);
-  if (!ctx)
-    throw new Error(
-      "useCommandPalette must be used inside CommandPaletteProvider",
-    );
-  return ctx;
-}
+import { getTransactionTitle } from "~/utils/transaction-title";
+import { CommandPaletteContext } from "./command-palette-context";
 
 type ProviderProps = {
   children: React.ReactNode;
@@ -244,17 +228,19 @@ export function CommandPaletteProvider({
                   {recentTransactions.map((transaction) => {
                     const isIncome =
                       transaction.type.toLowerCase() === "income";
-                    const description =
-                      transaction.description || "No description";
+                    const title = getTransactionTitle(
+                      transaction.description,
+                      transaction.category,
+                    );
                     return (
                       <CommandItem
                         key={transaction.id}
-                        value={`recent ${description} ${transaction.category} ${transaction.id}`}
+                        value={`recent ${title} ${transaction.category} ${transaction.id}`}
                         keywords={[
                           "recent",
                           "latest",
                           transaction.category,
-                          description,
+                          title,
                         ]}
                         onSelect={() => runCommand(go("/home/transactions"))}
                       >
@@ -263,7 +249,7 @@ export function CommandPaletteProvider({
                         ) : (
                           <ArrowDownLeftIcon className="text-destructive" />
                         )}
-                        <span className="truncate">{description}</span>
+                        <span className="truncate">{title}</span>
                         <CommandShortcut
                           className={cn(
                             "tabular-nums",

@@ -1,11 +1,11 @@
-import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
+import { useMemo } from "react";
 import {
+  type DarkModeTheme,
   darkModeThemeAtom,
   isDarkModeAtom,
   setDarkModeThemeAtom,
   toggleDarkModeThemeAtom,
-  type DarkModeTheme,
 } from "~/state/atoms";
 
 export const useDarkMode = () => {

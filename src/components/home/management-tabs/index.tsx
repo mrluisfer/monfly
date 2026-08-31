@@ -1,6 +1,6 @@
+import { FolderIcon, FolderOpenIcon } from "lucide-react";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import { FolderIcon, FolderOpenIcon } from "lucide-react";
 
 import { TabsCategories } from "./categories";
 

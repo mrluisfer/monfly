@@ -1,9 +1,13 @@
 import { CheckIcon, FileTextIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Button } from "~/components/ui/button";
 import type { LoanDirection, LoanStatus } from "~/constants/loan-status";
 import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
-
 import { DeleteLoanButton } from "./DeleteLoanButton";
 import { DirectionBadge } from "./DirectionBadge";
 import { EditLoanButton } from "./EditLoanButton";
@@ -11,11 +15,6 @@ import { PartialPaymentControl } from "./PartialPaymentControl";
 import { ReopenLoanButton } from "./ReopenLoanButton";
 import { StatusBadge } from "./StatusBadge";
 import type { EditLoanPatch, LoanRow } from "./types";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 /** A single loan: identity, progress and per-row actions. */
 export function LoanListItem({

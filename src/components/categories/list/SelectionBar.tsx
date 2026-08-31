@@ -1,10 +1,9 @@
-import { useMemo } from "react";
 import type { Category } from "@prisma/client";
 import { CheckCheckIcon, XIcon } from "lucide-react";
-
-import { cn } from "@/lib/utils";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 
 type SelectionBarProps = {
   filteredCategories: Category[];

@@ -1,7 +1,3 @@
-import { fontsDisplay } from "~/constants/fonts-display";
-import { useFontDisplay } from "~/hooks/ui/useFontDisplay";
-
-import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -11,6 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
+import { fontsDisplay } from "~/constants/fonts-display";
+import { useFontDisplay } from "~/hooks/ui/useFontDisplay";
 
 const Square = ({
   className,

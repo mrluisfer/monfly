@@ -1,7 +1,7 @@
-import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
-import type { SonnerPosition } from "~/types/SonnerPosition";
+import { useMemo } from "react";
 import { setSonnerPositionAtom, sonnerPositionAtom } from "~/state/atoms";
+import type { SonnerPosition } from "~/types/SonnerPosition";
 
 export const useSonnerPosition = () => {
   const position = useAtomValue(sonnerPositionAtom);

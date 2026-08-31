@@ -1,8 +1,5 @@
 "use client";
 
-import { DEFAULT_THEMES, SCALED_THEMES } from "~/constants/themes";
-import { useThemeConfig } from "~/hooks/ui/useThemeConfig";
-
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -14,6 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DEFAULT_THEMES, SCALED_THEMES } from "~/constants/themes";
+import { useThemeConfig } from "~/hooks/ui/useThemeConfig";
 
 export function ThemeSelector() {
   const { activeTheme, setActiveTheme } = useThemeConfig();

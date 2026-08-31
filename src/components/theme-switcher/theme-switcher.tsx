@@ -1,9 +1,9 @@
+import { MoonStarIcon, SunIcon } from "lucide-react";
+import { motion } from "motion/react";
 import type { JSX } from "react";
 import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { cn } from "~/lib/utils";
 import type { DarkModeTheme } from "~/state/atoms/ui/preferencesAtoms";
-import { MoonStarIcon, SunIcon } from "lucide-react";
-import { motion } from "motion/react";
 
 function ThemeOption({
   icon,

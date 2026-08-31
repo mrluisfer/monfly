@@ -12,8 +12,8 @@ import {
 import { useId } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
-import { ConsentRow } from "~/components/shared/ConsentRow";
 import { ChangePasswordRow } from "~/components/settings/ChangePasswordRow";
+import { ConsentRow } from "~/components/shared/ConsentRow";
 import { Button } from "~/components/ui/button";
 import {
   FormControl,

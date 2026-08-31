@@ -11,7 +11,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-
+import { getTransactionTitle } from "~/utils/transaction-title";
 import { CardBadge, type CardSummary } from "../CardBadge";
 import { LoanBadge } from "../LoanBadge";
 import { RelativeTime } from "../RelativeTime";
@@ -127,7 +127,7 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         <div className="flex max-w-[340px] flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
             <div className="text-foreground leading-5 font-medium break-words whitespace-normal capitalize">
-              {description || "No description"}
+              {getTransactionTitle(description, transaction.category)}
             </div>
             {isLoan && <LoanBadge isPayment={isLoanPayment} />}
           </div>
@@ -297,6 +297,11 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => <TransactionActionsCell transaction={row.original} />,
+    cell: ({ row, table }) => (
+      <TransactionActionsCell
+        transaction={row.original}
+        disabled={table.getSelectedRowModel().rows.length > 1}
+      />
+    ),
   },
 ];

@@ -9,27 +9,25 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import type { LoanDirection } from "~/constants/loan-status";
-import { useAddLoan } from "~/hooks/loans/useAddLoan";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { cn } from "~/lib/utils";
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Spinner } from "@/components/ui/spinner";
-
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import type { LoanDirection } from "~/constants/loan-status";
+import { buildLoanFormDefaults, useAddLoan } from "~/hooks/loans/useAddLoan";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { cn } from "~/lib/utils";
+import { AmountInput } from "../shared";
 import { Card } from "../ui/card";
 import { DebtorCombobox } from "./DebtorCombobox";
+import { fromDateInputValue, toDateInputValue } from "./date-input";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanField } from "./LoanField";
-import { fromDateInputValue, toDateInputValue } from "./date-input";
-import { AmountInput } from "../shared";
 
 /** Collapsible form to register a new loan (money owed to or by the user). */
 export function AddLoanCard() {
@@ -80,7 +78,7 @@ export function AddLoanCard() {
         />
       </CollapsibleTrigger>
 
-      <CollapsibleContent render={<Card />} className={'rounded-md'}>
+      <CollapsibleContent render={<Card />}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 px-1 md:px-2"
@@ -146,7 +144,7 @@ export function AddLoanCard() {
                 control={form.control}
                 name="amount"
                 render={({ field }) => (
-                  <AmountInput  {...field} placeholder="0.00" />
+                  <AmountInput {...field} placeholder="0.00" />
                 )}
               />
             </LoanField>
@@ -211,6 +209,21 @@ export function AddLoanCard() {
                 />
               </LoanField>
             </div>
+          </div>
+          <div className="flex items-center gap-4 flex-wrap justify-end">
+            <Button
+              type="button"
+              onClick={() => {
+                // `reset`, not `resetDefaultValues` — the latter only moves the
+                // baseline used for `isDirty`/`dirtyFields` and leaves whatever
+                // the user typed on screen.
+                form.reset(buildLoanFormDefaults());
+                setOpenCollapsible(false);
+              }}
+              variant={"secondary"}
+            >
+              Cancel
+            </Button>
             <Button
               type="submit"
               disabled={isLoading}

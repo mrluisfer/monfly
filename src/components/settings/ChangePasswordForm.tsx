@@ -1,6 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "@tanstack/react-router";
 import {
+  Link,
+  useCanGoBack,
+  useNavigate,
+  useRouter,
+  useSearch,
+} from "@tanstack/react-router";
+import {
+  ArrowLeftIcon,
   CheckIcon,
   EyeIcon,
   EyeOffIcon,
@@ -30,8 +37,8 @@ import { useMutation } from "@/hooks/useMutation";
 import { changePasswordServer } from "@/lib/api/user/change-password";
 import { sileo } from "@/lib/toaster";
 import {
-  changePasswordSchema,
   type ChangePasswordFormValues,
+  changePasswordSchema,
 } from "@/zod-schemas/user-schema";
 
 const passwordRequirements = [
@@ -127,6 +134,8 @@ function RequirementRow({
 
 export function ChangePasswordForm() {
   const navigate = useNavigate();
+  const router = useRouter();
+  const canGoBack = useCanGoBack();
 
   const form = useForm<ChangePasswordFormValues>({
     resolver: zodResolver(changePasswordSchema),
@@ -248,15 +257,31 @@ export function ChangePasswordForm() {
           </RequirementRow>
         </ul>
 
-        <Button
-          type="submit"
-          size="lg"
-          disabled={isPending}
-          className="w-full font-semibold tracking-[0.04em] sm:w-auto"
-        >
-          <KeyRoundIcon aria-hidden="true" />
-          {isPending ? "Updating..." : "Update Password"}
-        </Button>
+        <div className="flex items-center gap-4 justify-between flex-wrap">
+          <Button
+            variant={"secondary"}
+            type="button"
+            render={
+              canGoBack ? (
+                <Button onClick={() => router.history.back()} type="button" />
+              ) : (
+                <Link to={"/home"} />
+              )
+            }
+          >
+            <ArrowLeftIcon />
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            size="lg"
+            disabled={isPending}
+            className="w-full font-semibold tracking-[0.04em] sm:w-auto"
+          >
+            <KeyRoundIcon aria-hidden="true" />
+            {isPending ? "Updating..." : "Update Password"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

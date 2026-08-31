@@ -6,11 +6,6 @@ import {
   useNavigate,
   useRouter,
 } from "@tanstack/react-router";
-import { Auth, authActions } from "~/components/auth";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { useMutation } from "~/hooks/useMutation";
-import { loginFn } from "~/server/auth/loginfn";
 import {
   BadgeCheck,
   ChartNoAxesCombined,
@@ -20,9 +15,13 @@ import {
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-import { Card, CardContent } from "@/components/ui/card";
 import { SharedHeader } from "@/components/auth/SharedHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Auth, authActions } from "~/components/auth";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { useMutation } from "~/hooks/useMutation";
+import { loginFn } from "~/server/auth/loginfn";
 
 const loginSchema = z.object({
   email: z.email("Enter a valid email address."),

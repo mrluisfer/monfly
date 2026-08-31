@@ -4,11 +4,10 @@ import {
   TrendingDownIcon,
   TrendingUpIcon,
 } from "lucide-react";
-
-import { useCurrency } from "~/hooks/useCurrency";
 import { FlowBar } from "~/components/shared/FlowBar";
 import { MetricsGrid } from "~/components/shared/MetricsGrid";
 import { MetricTile } from "~/components/shared/MetricTile";
+import { useCurrency } from "~/hooks/useCurrency";
 import { Sparkline } from "./Sparkline";
 import { TrendBadge } from "./TrendBadge";
 import type { BalanceSummary } from "./types";

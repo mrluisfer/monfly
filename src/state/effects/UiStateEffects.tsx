@@ -1,5 +1,5 @@
-import { useEffect } from "react";
 import { useAtom, useAtomValue } from "jotai";
+import { useEffect } from "react";
 import {
   activeThemeAtom,
   darkModeThemeAtom,

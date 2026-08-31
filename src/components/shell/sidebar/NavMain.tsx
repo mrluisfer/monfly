@@ -1,3 +1,4 @@
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -9,7 +10,6 @@ import {
 } from "@/components/ui/sidebar";
 import { sidebarRoutes } from "@/constants/sidebar-routes";
 import { cn } from "@/lib/utils";
-import { Link, useLocation } from "@tanstack/react-router";
 import { isRouteActive } from "./utils";
 
 export function NavMain() {

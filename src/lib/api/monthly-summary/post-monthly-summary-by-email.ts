@@ -1,12 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { postMonthlySummaryByEmail as postMonthlySummaryByEmailUtils } from "~/server/db/monthly-summary/post-monthly-summary-by-email";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-
-import { postMonthlySummaryByEmail as postMonthlySummaryByEmailUtils } from "~/server/db/monthly-summary/post-monthly-summary-by-email";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const postMonthlySummaryByEmailServer = createServerFn({
   method: "POST",

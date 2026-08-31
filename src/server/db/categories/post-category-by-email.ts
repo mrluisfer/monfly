@@ -1,7 +1,6 @@
 import type { Category } from "@prisma/client";
-import type { ApiResponse } from "~/types/ApiResponse";
-
 import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const postCategoryByEmail = async (
   category: { name: string; icon: string },

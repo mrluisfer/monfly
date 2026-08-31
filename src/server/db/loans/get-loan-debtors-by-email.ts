@@ -1,5 +1,5 @@
-import type { ApiResponse } from "~/types/ApiResponse";
 import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 /**
  * Distinct counterparty names (the `debtor` column, used for both debtors and

@@ -1,6 +1,5 @@
-import { cn } from "~/lib/utils";
-
 import { TONE_STROKE, type Tone } from "~/components/shared/tone";
+import { cn } from "~/lib/utils";
 
 type SavingsRingProps = {
   value: number;

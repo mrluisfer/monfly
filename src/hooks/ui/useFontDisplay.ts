@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
+import { useMemo } from "react";
 import { fontDisplayAtom, setFontDisplayAtom } from "~/state/atoms";
 
 export const useFontDisplay = () => {

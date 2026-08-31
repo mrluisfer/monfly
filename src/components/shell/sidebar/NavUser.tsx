@@ -1,3 +1,12 @@
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import {
+  ChevronsUpDownIcon,
+  LogOutIcon,
+  SettingsIcon,
+  UserIcon,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { UserAvatar } from "@/components/shared";
 import { SignOutDialog } from "@/components/sidebar/SignOutDialog";
 import {
@@ -19,15 +28,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRouteUser } from "@/hooks";
 import { getUserByEmailServer } from "@/lib/api/user/get-user-by-email";
 import { queryDictionary } from "@/queries/dictionary";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
-import {
-  ChevronsUpDownIcon,
-  LogOutIcon,
-  SettingsIcon,
-  UserIcon,
-} from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { SETTINGS_PATH } from "./sidebar-constants";
 
 export function NavUser() {

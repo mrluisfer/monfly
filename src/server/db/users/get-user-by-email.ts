@@ -1,8 +1,7 @@
 import type { User } from "@prisma/client";
+import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 import { withDatabaseTimeout } from "~/utils/timeout";
-
-import { prismaClient } from "~/server/prisma";
 
 export const getUserByEmail = async (email: string) => {
   try {

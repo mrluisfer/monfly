@@ -1,12 +1,12 @@
-import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { deleteCategoriesByIdServer } from "~/lib/api/category/delete-categories-by-id";
 import { getCategoryByEmailServer } from "~/lib/api/category/get-category-by-email";
 import { sileo } from "~/lib/toaster";
-import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 import { queryDictionary } from "~/queries/dictionary";
+import { invalidateCategoryQueries } from "~/utils/query-invalidation";
 
 export const useCategoriesList = () => {
   const userEmail = useRouteUser();

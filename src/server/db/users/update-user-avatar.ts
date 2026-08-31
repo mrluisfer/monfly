@@ -1,6 +1,5 @@
-import type { ApiResponse } from "~/types/ApiResponse";
-
 import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const updateUserAvatar = async (data: {
   email: string;

@@ -10,10 +10,10 @@ export { LoansList } from "./LoansList";
 export { PartialPaymentControl } from "./PartialPaymentControl";
 export { ReopenLoanButton } from "./ReopenLoanButton";
 export { StatusBadge } from "./StatusBadge";
-export { UpcomingReceivablesCard } from "./UpcomingReceivablesCard";
 export type {
   DirectionFilter,
   EditLoanPatch,
   LoanRow,
   StatusFilter,
 } from "./types";
+export { UpcomingReceivablesCard } from "./UpcomingReceivablesCard";

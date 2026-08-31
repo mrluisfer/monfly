@@ -1,8 +1,7 @@
-import { hideMetricsAtom } from "@/state";
 import { useAtom } from "jotai";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
+import { hideMetricsAtom } from "@/state";
 
 import { Card, CardContent } from "../ui/card";
 import { Label } from "../ui/label";

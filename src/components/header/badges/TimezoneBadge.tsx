@@ -1,8 +1,8 @@
+import { format } from "date-fns";
+import { Clock, ZapIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
-import { format } from "date-fns";
-import { Clock, ZapIcon } from "lucide-react";
 import { HeaderBadge } from "./HeaderBadge";
 
 interface TimezoneBadgeProps {

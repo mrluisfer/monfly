@@ -9,21 +9,27 @@ import { sileo } from "~/lib/toaster";
 import { invalidateLoanQueries } from "~/utils/query-invalidation";
 import { LoanFormSchema, type LoanFormValues } from "~/zod-schemas/loan-schema";
 
+/**
+ * A blank loan form. Built fresh on each call so `issuedAt` is today's date
+ * rather than whenever the page happened to mount.
+ */
+export const buildLoanFormDefaults = (): LoanFormValues => ({
+  debtor: "",
+  amount: "",
+  issuedAt: new Date(),
+  dueAt: null,
+  notes: "",
+  transactionId: null,
+  direction: "borrowed",
+});
+
 export const useAddLoan = () => {
   const queryClient = useQueryClient();
   const userEmail = useRouteUser();
 
   const form = useForm<LoanFormValues>({
     resolver: zodResolver(LoanFormSchema),
-    defaultValues: {
-      debtor: "",
-      amount: "",
-      issuedAt: new Date(),
-      dueAt: null,
-      notes: "",
-      transactionId: null,
-      direction: "borrowed",
-    },
+    defaultValues: buildLoanFormDefaults(),
   });
 
   const mutation = useMutation({
@@ -35,7 +41,7 @@ export const useAddLoan = () => {
         return;
       }
       sileo.success({ title: "Loan created" });
-      form.reset();
+      form.reset(buildLoanFormDefaults());
       await invalidateLoanQueries(queryClient, userEmail);
     },
     idempotency: {

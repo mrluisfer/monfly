@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Button } from "~/components/ui/button";
 import {
   ChartLine,
   CircleCheckBig,
@@ -8,6 +7,7 @@ import {
   Layers,
   Network,
 } from "lucide-react";
+import { Button } from "~/components/ui/button";
 
 import { planOptions } from ".";
 import { PricingCard } from "./PricingCard";

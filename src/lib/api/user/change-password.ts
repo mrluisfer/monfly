@@ -1,13 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { z } from "zod";
+import { updateUserPassword } from "~/server/db/users/update-user-password";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { z } from "zod";
-
-import { updateUserPassword } from "~/server/db/users/update-user-password";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const changePasswordServer = createServerFn({ method: "POST" })
   .validator(

@@ -1,8 +1,8 @@
+import { MoonIcon, SunIcon } from "lucide-react";
 import type { ComponentProps } from "react";
 import { useDarkMode } from "~/hooks/ui/useDarkMode";
 import { useIsMounted } from "~/hooks/ui/useIsMounted";
 import { cn } from "~/lib/utils";
-import { MoonIcon, SunIcon } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";

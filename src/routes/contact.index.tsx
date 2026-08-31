@@ -7,11 +7,10 @@ import {
   MessageSquareHeart,
   ShieldCheck,
 } from "lucide-react";
-
+import { LegalLayout } from "@/components/legal/LegalLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { LegalLayout } from "@/components/legal/LegalLayout";
 
 export const Route = createFileRoute("/contact/")({
   head: () => ({

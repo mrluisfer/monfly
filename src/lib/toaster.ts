@@ -1,7 +1,7 @@
-import { createElement, useEffect, type ComponentProps } from "react";
+import { type ComponentProps, createElement, useEffect } from "react";
 import {
-  sileo as baseSileo,
   Toaster as BaseSileoToaster,
+  sileo as baseSileo,
   type SileoOptions,
   type SileoPosition,
 } from "sileo";

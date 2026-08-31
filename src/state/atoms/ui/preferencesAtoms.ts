@@ -1,3 +1,5 @@
+import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 import {
   BALANCE_SIMULATION_ALERT_DISMISSED_KEY,
   TOTAL_BALANCE_VISIBILITY_STORAGE_KEY,
@@ -8,8 +10,6 @@ import {
   type NumberFormatId,
 } from "~/constants/number-formats";
 import type { SonnerPosition } from "~/types/SonnerPosition";
-import { atom } from "jotai";
-import { atomWithStorage } from "jotai/utils";
 
 export type DarkModeTheme = "light" | "dark";
 

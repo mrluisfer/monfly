@@ -1,3 +1,10 @@
+import type { Card as CardType } from "@prisma/client";
+import {
+  ArchiveIcon,
+  ArchiveRestoreIcon,
+  CreditCardIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { EditCard } from "@/components/cards/EditCard";
 import {
   AlertDialog,
@@ -21,13 +28,6 @@ import {
 import { CARD_TYPE_LABEL } from "@/constants/card-status";
 import { useCurrency, useDeleteCard, useUpdateCard } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { Card as CardType } from "@prisma/client";
-import {
-  ArchiveIcon,
-  ArchiveRestoreIcon,
-  CreditCardIcon,
-  Trash2Icon,
-} from "lucide-react";
 
 export function SingleCard({ card }: { card: CardType }) {
   const isArchived = card.status === "archived";

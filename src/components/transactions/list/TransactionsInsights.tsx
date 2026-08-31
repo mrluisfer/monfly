@@ -1,12 +1,11 @@
 import { ShieldCheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { Badge } from "@/components/ui/badge";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { formatCurrency } from "~/utils/format-currency";
-
-import { PageHeader } from "@/components/layout/PageHeader";
-import { Badge } from "@/components/ui/badge";
 
 import { ExpenseConcentrationCard } from "./insights/ExpenseConcentrationCard";
 import { ImprovementIdeasCard } from "./insights/ImprovementIdeasCard";

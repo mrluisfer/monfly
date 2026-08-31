@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowLeftIcon,
   BanIcon,
@@ -10,12 +9,12 @@ import {
   ShieldCheckIcon,
   ShuffleIcon,
 } from "lucide-react";
-
+import { motion, useReducedMotion } from "motion/react";
+import { SectionTitle } from "@/components/user/settings/SectionTitle";
 import { PageHeader } from "~/components/layout/PageHeader";
 import { Section } from "~/components/layout/Section";
 import { ChangePasswordForm } from "~/components/settings/ChangePasswordForm";
 import { Button } from "~/components/ui/button";
-import { SectionTitle } from "@/components/user/settings/SectionTitle";
 
 export const Route = createFileRoute("/_authed/user/settings/change-password/")(
   {

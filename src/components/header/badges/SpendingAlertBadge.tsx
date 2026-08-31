@@ -1,16 +1,4 @@
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { useRouteUser } from "~/hooks/useRouteUser";
-import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email";
-import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { cn } from "~/lib/utils";
-import {
-  formatCurrency,
-  type SupportedCurrency,
-} from "~/utils/format-currency";
-import { queryDictionary } from "~/queries/dictionary";
-import { queryKeys } from "~/utils/query-keys";
 import {
   AlertCircle,
   AlertTriangle,
@@ -19,6 +7,18 @@ import {
   Loader2,
   TrendingUp,
 } from "lucide-react";
+import { useMemo } from "react";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useRouteUser } from "~/hooks/useRouteUser";
+import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email";
+import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
+import { cn } from "~/lib/utils";
+import { queryDictionary } from "~/queries/dictionary";
+import {
+  formatCurrency,
+  type SupportedCurrency,
+} from "~/utils/format-currency";
+import { queryKeys } from "~/utils/query-keys";
 import { BadgeIcon, HeaderBadge, StatusDot } from "./HeaderBadge";
 
 interface SpendingAlertBadgeProps {

@@ -1,13 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { z } from "zod";
+import { putUserTotalBalance as putUserTotalBalanceUtils } from "~/server/db/users/put-user-total-balance";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { z } from "zod";
-
-import { putUserTotalBalance as putUserTotalBalanceUtils } from "~/server/db/users/put-user-total-balance";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const putUserTotalBalanceServer = createServerFn({ method: "POST" })
   .validator(

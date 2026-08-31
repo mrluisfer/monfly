@@ -1,8 +1,4 @@
 import { TrendingDown, TrendingUp, TrendingUpDown } from "lucide-react";
-import type { TransactionType } from "~/constants/transaction-types";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { formatCurrency } from "~/utils/format-currency";
-
 import { Badge } from "@/components/ui/badge";
 import {
   Tooltip,
@@ -10,6 +6,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import type { TransactionType } from "~/constants/transaction-types";
+import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { formatCurrency } from "~/utils/format-currency";
 
 const getTrendingIcon = (percentChange: number) => {
   if (percentChange > 0) return <TrendingUp className="text-primary size-4" />;

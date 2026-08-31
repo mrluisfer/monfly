@@ -1,11 +1,4 @@
-import { useId } from "react";
 import { Link } from "@tanstack/react-router";
-import { Switch } from "~/components/ui/switch";
-import {
-  disableTransactionHoverAtom,
-  hideBalanceAtom,
-  hideMetricsAtom,
-} from "~/state";
 import { type PrimitiveAtom, useAtom } from "jotai";
 import {
   ArrowUpRight,
@@ -25,8 +18,14 @@ import {
   Sparkles,
   UserIcon,
 } from "lucide-react";
-
+import { useId } from "react";
 import { cn } from "@/lib/utils";
+import { Switch } from "~/components/ui/switch";
+import {
+  disableTransactionHoverAtom,
+  hideBalanceAtom,
+  hideMetricsAtom,
+} from "~/state";
 
 import { ChangePasswordRow } from "./ChangePasswordRow";
 import { NumberFormatSelector } from "./NumberFormatSelector";

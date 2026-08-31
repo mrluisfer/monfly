@@ -600,8 +600,6 @@ function CardField<FormValues extends FieldValues>({
   const { data, isPending } = useCards({ status: "active" });
   const cards = useMemo(() => data?.data ?? [], [data?.data]);
 
-  const firstCard = cards[0]?.id;
-
   // Nothing to assign until the user has created at least one card. Hiding the
   // field keeps the form unchanged for users who don't use cards.
   if (!isPending && cards.length === 0) {
@@ -615,6 +613,12 @@ function CardField<FormValues extends FieldValues>({
         name={transactionFormNames.cardId as Path<FormValues>}
         render={({ field }) => {
           const value = (field.value as string | null | undefined) ?? null;
+          // A transaction can still point at a card that dropped out of the
+          // active list (archived, for instance). Keep an option for it so the
+          // select shows the real value instead of silently rendering the first
+          // entry while the form holds something else.
+          const isUnlisted =
+            value !== null && !cards.some((card) => card.id === value);
           return (
             <FormItem className="space-y-2">
               <FormLabel className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
@@ -626,9 +630,8 @@ function CardField<FormValues extends FieldValues>({
               </FormLabel>
               <FormControl>
                 <NativeSelect
-                  defaultValue={firstCard}
                   className={nativeSelectClassName}
-                  value={value ?? firstCard ?? NO_CARD}
+                  value={value ?? NO_CARD}
                   onChange={(event) =>
                     field.onChange(
                       event.target.value === NO_CARD
@@ -640,6 +643,11 @@ function CardField<FormValues extends FieldValues>({
                   <NativeSelectOption value={NO_CARD}>
                     No card
                   </NativeSelectOption>
+                  {isUnlisted && (
+                    <NativeSelectOption value={value}>
+                      Assigned card (inactive)
+                    </NativeSelectOption>
+                  )}
                   {cards.map((card) => (
                     <NativeSelectOption
                       key={card.id}

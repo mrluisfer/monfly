@@ -3,10 +3,10 @@ import {
   getRequestIP,
   setResponseHeader,
 } from "@tanstack/react-start/server";
-import type { ApiResponse } from "~/types/ApiResponse";
 // Aliased: this is a server-side session helper, not a React hook (the `use`
 // prefix would otherwise trip react-hooks/rules-of-hooks).
 import { useAppSession as getAppSession } from "~/server/auth/session";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 type RateLimitBucket = {
   count: number;

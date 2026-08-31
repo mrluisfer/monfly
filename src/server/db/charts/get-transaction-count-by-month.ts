@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
-import type { ApiResponse } from "~/types/ApiResponse";
-
 import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 /**
  * @returns [{ month: "January", year: 2024, count: 5 }, ...]

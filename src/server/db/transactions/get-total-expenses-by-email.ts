@@ -1,6 +1,5 @@
-import { withDatabaseTimeout } from "~/utils/timeout";
-
 import { prismaClient } from "~/server/prisma";
+import { withDatabaseTimeout } from "~/utils/timeout";
 
 export const getTotalExpensesByEmail = async ({
   email,
