@@ -8,7 +8,7 @@ import {
 import { getUserByEmail } from "~/server/db/users/get-user-by-email";
 
 export const getUserByEmailServer = createServerFn({ method: "GET" })
-  .inputValidator((d: { email: string }) => d)
+  .validator((d: { email: string }) => d)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);

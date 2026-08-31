@@ -23,7 +23,7 @@ const GetTransactionsInputSchema = z.object({
 });
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
-  .inputValidator(GetTransactionsInputSchema)
+  .validator(GetTransactionsInputSchema)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);

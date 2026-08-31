@@ -10,7 +10,7 @@ import {
 import type { ApiResponse } from "~/types/ApiResponse";
 
 export const updateUserAvatarServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       avatarSeed: z.string().max(120).nullable(),
     }),

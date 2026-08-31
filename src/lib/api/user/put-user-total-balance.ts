@@ -10,7 +10,7 @@ import { z } from "zod";
 import { putUserTotalBalance as putUserTotalBalanceUtils } from "~/server/db/users/put-user-total-balance";
 
 export const putUserTotalBalanceServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       totalBalance: z.number(),
       email: z.string().email(),

@@ -11,7 +11,7 @@ import { z } from "zod";
 import { deleteTransactionById as deleteTransactionByIdUtils } from "~/server/db/transactions/delete-transaction-by-id";
 
 export const deleteTransactionByIdServer = createServerFn({ method: "POST" })
-  .inputValidator(z.object({ id: z.string() }))
+  .validator(z.object({ id: z.string() }))
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail();

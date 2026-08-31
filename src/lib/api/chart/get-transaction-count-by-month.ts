@@ -9,7 +9,7 @@ import { z } from "zod";
 export const getTransactionsCountByMonthServer = createServerFn({
   method: "GET",
 })
-  .inputValidator(z.object({ email: z.string() }))
+  .validator(z.object({ email: z.string() }))
   .handler(async ({ data }) => {
     const sessionEmail = await resolveSessionEmail(data.email);
     enforceRateLimit({

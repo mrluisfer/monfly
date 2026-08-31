@@ -10,7 +10,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { UpdateCardInputSchema } from "~/zod-schemas/card-schema";
 
 export const putCardByIdServer = createServerFn({ method: "POST" })
-  .inputValidator(UpdateCardInputSchema)
+  .validator(UpdateCardInputSchema)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail();

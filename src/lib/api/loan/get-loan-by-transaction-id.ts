@@ -9,7 +9,7 @@ import {
 import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getLoanByTransactionIdServer = createServerFn({ method: "GET" })
-  .inputValidator(
+  .validator(
     z.object({
       transactionId: z.uuid(),
     }),

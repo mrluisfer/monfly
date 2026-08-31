@@ -11,7 +11,7 @@ import { postMonthlySummaryByEmail as postMonthlySummaryByEmailUtils } from "~/s
 export const postMonthlySummaryByEmailServer = createServerFn({
   method: "POST",
 })
-  .inputValidator((d: { email: string }) => d)
+  .validator((d: { email: string }) => d)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);

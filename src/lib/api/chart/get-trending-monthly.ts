@@ -9,7 +9,7 @@ import {
 export const getTrendingMonthlyServer = createServerFn({
   method: "GET",
 })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string(),
       type: z.enum(["income", "expense"]),

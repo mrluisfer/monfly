@@ -11,7 +11,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { CreateCardInputSchema } from "~/zod-schemas/card-schema";
 
 export const postCardByEmailServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string(),
       card: CreateCardInputSchema,

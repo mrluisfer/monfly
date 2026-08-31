@@ -7,7 +7,7 @@ import {
 } from "~/server/security/request-protection";
 
 export const getIncomeExpenseDataServer = createServerFn({ method: "GET" })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string(),
       cardId: z.uuid().nullable().optional(),

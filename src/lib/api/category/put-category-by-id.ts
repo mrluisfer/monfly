@@ -10,7 +10,7 @@ import { putCategoryById } from "~/server/db/categories/put-category-by-id";
 import z from "zod";
 
 export const putCategoryByIdServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       categoryId: z.string(),
       name: z.string(),

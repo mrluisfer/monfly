@@ -10,7 +10,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { UpdateLoanInputSchema } from "~/zod-schemas/loan-schema";
 
 export const putLoanByIdServer = createServerFn({ method: "POST" })
-  .inputValidator(UpdateLoanInputSchema)
+  .validator(UpdateLoanInputSchema)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail();

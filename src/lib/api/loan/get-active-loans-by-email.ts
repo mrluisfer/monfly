@@ -10,7 +10,7 @@ import {
 import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getActiveLoansByEmailServer = createServerFn({ method: "GET" })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string(),
       includeId: z.uuid().nullable().optional(),

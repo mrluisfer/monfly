@@ -9,7 +9,7 @@ import {
 import { getUserById } from "~/server/db/users/get-user-by-id";
 
 export const getUserByIdServer = createServerFn({ method: "GET" })
-  .inputValidator((d: { userId: string }) => d)
+  .validator((d: { userId: string }) => d)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail();

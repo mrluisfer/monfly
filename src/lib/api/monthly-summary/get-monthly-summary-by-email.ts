@@ -9,7 +9,7 @@ import {
 import { getMonthlySummaryByEmail as getMonthlySummaryByEmailUtils } from "~/server/db/monthly-summary/get-monthly-summary-by-email";
 
 export const getMonthlySummaryByEmailServer = createServerFn({ method: "GET" })
-  .inputValidator((d: { email: string }) => d)
+  .validator((d: { email: string }) => d)
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);

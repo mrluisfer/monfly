@@ -11,7 +11,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { supportedCurrencies } from "~/zod-schemas/user-schema";
 
 export const updateUserProfileServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string().email(),
       name: z.string().trim().min(1).max(80),

@@ -9,7 +9,7 @@ import {
 import type { ApiResponse } from "~/types/ApiResponse";
 
 export const postTransactionByEmailServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string(),
       transaction: z.object({

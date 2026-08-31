@@ -114,3 +114,17 @@ Required in `.env`:
 - Vitest with jsdom environment (`vitest.config.ts`); `@testing-library/jest-dom` provides the DOM matchers
 - Test files colocated with components (`*.test.tsx`)
 - TanStack Query and `window.matchMedia` are mocked in `src/setupTests.ts`
+
+## Agent skills
+
+### Issue tracker
+
+Issues live in GitHub Issues on `mrluisfer/monfly`, managed with the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical triage roles, used verbatim as label strings. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.

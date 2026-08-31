@@ -10,7 +10,7 @@ import {
 import type { ApiResponse } from "~/types/ApiResponse";
 
 export const putTransactionByIdServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       id: z.string(),
       data: z.object({

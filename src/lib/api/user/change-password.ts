@@ -10,7 +10,7 @@ import { z } from "zod";
 import { updateUserPassword } from "~/server/db/users/update-user-password";
 
 export const changePasswordServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       currentPassword: z.string().min(1),
       newPassword: z.string().min(8),

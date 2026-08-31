@@ -11,7 +11,7 @@ import type { ApiResponse } from "~/types/ApiResponse";
 import { CreateLoanInputSchema } from "~/zod-schemas/loan-schema";
 
 export const postLoanByEmailServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string(),
       loan: CreateLoanInputSchema,

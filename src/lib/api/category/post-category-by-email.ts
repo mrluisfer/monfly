@@ -9,7 +9,7 @@ import { postCategoryByEmail } from "~/server/db/categories/post-category-by-ema
 import z from "zod";
 
 export const postCategoryByEmailServer = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     z.object({
       email: z.string(),
       category: z.object({

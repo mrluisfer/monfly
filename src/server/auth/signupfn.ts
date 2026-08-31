@@ -9,7 +9,7 @@ import { hashPassword, prismaClient } from "../prisma";
 import { useAppSession } from "./session";
 
 export const signupFn = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (d: {
       email: string;
       password: string;
