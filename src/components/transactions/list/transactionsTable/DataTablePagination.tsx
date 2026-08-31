@@ -1,9 +1,8 @@
 import type { Table as TanstackTable } from "@tanstack/react-table";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-
-import { Badge } from "@/components/ui/badge";
 
 export function DataTablePagination({
   table,

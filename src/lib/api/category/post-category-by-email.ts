@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import z from "zod";
+import { postCategoryByEmail } from "~/server/db/categories/post-category-by-email";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { postCategoryByEmail } from "~/server/db/categories/post-category-by-email";
-import z from "zod";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const postCategoryByEmailServer = createServerFn({ method: "POST" })
   .validator(

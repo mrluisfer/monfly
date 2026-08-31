@@ -1,6 +1,5 @@
-import { Skeleton } from "~/components/ui/skeleton";
-
 import { MetricsGrid } from "~/components/shared/MetricsGrid";
+import { Skeleton } from "~/components/ui/skeleton";
 
 const METRIC_PLACEHOLDERS = [0, 1, 2];
 const INSIGHT_PLACEHOLDERS = [0, 1, 2, 3];

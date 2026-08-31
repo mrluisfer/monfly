@@ -30,8 +30,8 @@ import { useMutation } from "@/hooks/useMutation";
 import { changePasswordServer } from "@/lib/api/user/change-password";
 import { sileo } from "@/lib/toaster";
 import {
-  changePasswordSchema,
   type ChangePasswordFormValues,
+  changePasswordSchema,
 } from "@/zod-schemas/user-schema";
 
 const passwordRequirements = [

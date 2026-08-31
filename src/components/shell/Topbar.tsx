@@ -25,7 +25,7 @@ import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useIsMac } from "~/hooks/ui/useIsMac";
 import { cn } from "~/lib/utils";
 
-import { useCommandPalette } from "./CommandPalette";
+import { useCommandPalette } from "./command-palette-context";
 
 type Crumb = { title: string; url?: string };
 

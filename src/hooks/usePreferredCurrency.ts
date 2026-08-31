@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
-import { queryKeys } from "~/utils/query-keys";
 import {
   DEFAULT_CURRENCY,
   type SupportedCurrency,
 } from "~/utils/format-currency";
+import { queryKeys } from "~/utils/query-keys";
 
 /**
  * The user's persisted display currency, falling back to USD when unset.

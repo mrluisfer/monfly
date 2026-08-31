@@ -1,8 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { DAILY_ACTIVITY_DAYS } from "~/constants/daily-activity";
-import type { ApiResponse } from "~/types/ApiResponse";
-
 import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export type DailyActivityRow = {
   /** UTC calendar day in YYYY-MM-DD format. */

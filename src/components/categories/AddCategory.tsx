@@ -1,7 +1,7 @@
-import { getCanonicalCategoryIconName } from "@/constants/categories/categories-icon";
 import { useQueryClient } from "@tanstack/react-query";
 import { ChevronDownIcon, PlusCircleIcon } from "lucide-react";
 import { useState } from "react";
+import { getCanonicalCategoryIconName } from "@/constants/categories/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";

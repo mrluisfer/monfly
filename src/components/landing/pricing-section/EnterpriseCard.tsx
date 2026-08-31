@@ -1,5 +1,4 @@
 import { Link } from "@tanstack/react-router";
-import { Button } from "~/components/ui/button";
 import {
   ArrowUpRight,
   ChartNoAxesGantt,
@@ -7,6 +6,7 @@ import {
   Globe,
   ReplaceAll,
 } from "lucide-react";
+import { Button } from "~/components/ui/button";
 
 import { PricingCard } from "./PricingCard";
 

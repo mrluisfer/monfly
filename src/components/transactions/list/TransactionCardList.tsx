@@ -1,5 +1,5 @@
-import type { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
 import { format, isToday, isYesterday } from "date-fns";
+import { ArrowDownLeftIcon, CalendarIcon } from "lucide-react";
 import {
   AnimatePresence,
   domAnimation,
@@ -7,7 +7,7 @@ import {
   m,
   useReducedMotion,
 } from "motion/react";
-import { ArrowDownLeftIcon, CalendarIcon } from "lucide-react";
+import type { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
 
 import type { CardSummary } from "./CardBadge";
 import { TransactionRow } from "./TransactionRow";

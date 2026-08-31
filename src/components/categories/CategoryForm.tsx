@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PlusIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
 import { CATEGORY_ICONS } from "@/constants/categories/icons";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { CategoryFormSchema } from "~/zod-schemas/category-schema";
-import { useForm } from "react-hook-form";
-import type { z } from "zod";
-
 import { Button } from "../ui/button";
 import {
   Form,
@@ -24,7 +24,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { PlusIcon } from "lucide-react";
 
 type FormValues = z.infer<typeof CategoryFormSchema>;
 

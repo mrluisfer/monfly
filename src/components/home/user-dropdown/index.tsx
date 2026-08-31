@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
 import type { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
+import { LogOutIcon, UserIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import UserAvatar from "~/components/shared/UserAvatar";
 import { SignOutDialog } from "~/components/sidebar/SignOutDialog";
 import { Button } from "~/components/ui/button";
@@ -17,7 +18,6 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 import type { ApiResponse } from "~/types/ApiResponse";
-import { LogOutIcon, UserIcon } from "lucide-react";
 
 import ProfileSettings from "./ProfileSettings";
 

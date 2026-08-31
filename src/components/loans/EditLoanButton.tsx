@@ -1,5 +1,6 @@
 import { CircleDollarSignIcon, PencilIcon, UserIcon } from "lucide-react";
 import { useState } from "react";
+import { AmountInput } from "~/components/shared/AmountInput";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -10,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { AmountInput } from "~/components/shared/AmountInput";
 import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Tooltip,

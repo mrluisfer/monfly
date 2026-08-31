@@ -1,8 +1,8 @@
+import { z } from "zod";
 import {
   changePasswordFormNames,
   userFormNames,
 } from "~/constants/forms/user-form-names";
-import { z } from "zod";
 
 export const supportedCurrencies = ["MXN", "USD", "EUR", "GBP"] as const;
 export type SupportedCurrency = (typeof supportedCurrencies)[number];

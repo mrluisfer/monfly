@@ -1,5 +1,5 @@
-import type { ComponentProps, ReactNode } from "react";
 import clsx from "clsx";
+import type { ComponentProps, ReactNode } from "react";
 
 import {
   CardContent,

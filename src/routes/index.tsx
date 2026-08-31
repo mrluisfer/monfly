@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { GlobeIcon } from "lucide-react";
+import { PricingSection } from "@/components/landing/pricing-section";
+import { UserStatsSection } from "@/components/landing/UserStats";
+import { Button } from "@/components/ui/button";
 import { Footer } from "~/components/landing/footer";
 import { GlobalHeader } from "~/components/landing/global-header";
 import { LandingHero } from "~/components/landing/hero/Hero";
-import { GlobeIcon } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { PricingSection } from "@/components/landing/pricing-section";
-import { UserStatsSection } from "@/components/landing/UserStats";
 
 export const Route = createFileRoute("/")({
   head: () => ({

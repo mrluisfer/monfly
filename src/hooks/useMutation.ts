@@ -1,5 +1,5 @@
 import * as React from "react";
-import { sileo, type SileoOptions } from "~/lib/toaster";
+import { type SileoOptions, sileo } from "~/lib/toaster";
 
 type ToastInput = string | SileoOptions;
 

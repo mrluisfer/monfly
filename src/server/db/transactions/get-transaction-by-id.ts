@@ -1,7 +1,6 @@
 import type { Transaction } from "@prisma/client";
-import type { ApiResponse } from "~/types/ApiResponse";
-
 import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getTransactionById = async (data: { id: string }) => {
   try {

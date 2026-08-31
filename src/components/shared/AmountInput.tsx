@@ -13,7 +13,9 @@ export function evalAmount(expression: string): number | null {
   if (!SAFE.test(expression)) return null;
   try {
     const result = Function(`"use strict";return(${expression})`)();
-    return typeof result === "number" && Number.isFinite(result) ? result : null;
+    return typeof result === "number" && Number.isFinite(result)
+      ? result
+      : null;
   } catch {
     return null;
   }

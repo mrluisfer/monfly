@@ -27,14 +27,21 @@ import { deleteTransactionByIdServer } from "~/lib/api/transaction/delete-transa
 import { sileo } from "~/lib/toaster";
 import { queryDictionary } from "~/queries/dictionary";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-
+import { getTransactionTitle } from "~/utils/transaction-title";
 import EditTransaction from "../../EditTransaction";
 import { TransactionFormDialogContent } from "../../TransactionFormDialogContent";
 
 export function TransactionActionsCell({
   transaction,
+  disabled = false,
 }: {
   transaction: TransactionWithUser;
+  /**
+   * Every action in this menu targets one transaction. While a multi-row
+   * selection is active the toolbar owns the operation, so the menu is closed
+   * off rather than quietly acting on this single row.
+   */
+  disabled?: boolean;
 }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
@@ -92,9 +99,14 @@ export function TransactionActionsCell({
             <Button
               variant="outline"
               size="icon-lg"
+              disabled={disabled}
               className="hover:border-primary/20 dark:hover:shadow-primary/10 rounded-full transition-all duration-200 ease-out hover:scale-105 hover:shadow-sm focus-visible:scale-105 active:scale-95 data-[state=open]:scale-105 data-[state=open]:shadow-sm"
             >
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">
+                {disabled
+                  ? "Row actions unavailable while several transactions are selected"
+                  : "Open menu"}
+              </span>
               <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
             </Button>
           }
@@ -151,8 +163,12 @@ export function TransactionActionsCell({
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. This will permanently delete the
-              transaction &quot;{transaction.description}&quot; with amount $
-              {Math.abs(transaction.amount).toFixed(2)}.
+              transaction &quot;
+              {getTransactionTitle(
+                transaction.description,
+                transaction.category,
+              )}
+              &quot; with amount ${Math.abs(transaction.amount).toFixed(2)}.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -1,5 +1,5 @@
-import { transactionTypes } from "~/constants/transaction-types";
 import { BanknoteArrowDownIcon, BanknoteArrowUpIcon } from "lucide-react";
+import { transactionTypes } from "~/constants/transaction-types";
 
 import ChartByCategoryRadar from "../charts/ChartByCategoryRadar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";

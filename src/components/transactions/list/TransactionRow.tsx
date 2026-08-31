@@ -1,4 +1,3 @@
-import { m } from "motion/react";
 import {
   ArrowDownLeftIcon,
   ArrowUpRightIcon,
@@ -6,8 +5,10 @@ import {
   TagIcon,
   TrashIcon,
 } from "lucide-react";
+import { m } from "motion/react";
 import { useState } from "react";
 import { getCategoryIconByName } from "@/constants/categories/categories-icon";
+import { transactionTypes } from "@/constants/transaction-types";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -22,14 +23,13 @@ import { useDeleteTransaction } from "~/hooks/transactions";
 import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
 import type { TransactionWithUser as Transaction } from "~/types/TransactionWithUser";
-
+import { getTransactionTitle } from "~/utils/transaction-title";
 import EditTransaction from "../EditTransaction";
 import { TransactionFormDialogContent } from "../TransactionFormDialogContent";
 import { CardBadge, type CardSummary } from "./CardBadge";
 import { LoanBadge } from "./LoanBadge";
 import { RelativeTime } from "./RelativeTime";
 import TransactionItemActions from "./TransactionItemActions";
-import { transactionTypes } from "@/constants/transaction-types";
 
 export function TransactionRow({
   transaction,
@@ -103,7 +103,7 @@ export function TransactionRow({
 
               <div className="min-w-0 flex-1">
                 <p className="text-foreground truncate text-sm leading-tight font-semibold tracking-tight">
-                  {transaction.description || "No description"}
+                  {getTransactionTitle(transaction.description, category)}
                 </p>
                 <div className="mt-1.5 flex flex-wrap items-center gap-2">
                   <span className="text-muted-foreground/78 inline-flex max-w-full min-w-0 items-center gap-1.5 text-xs capitalize [&>svg]:size-3 [&>svg]:shrink-0">

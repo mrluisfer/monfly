@@ -1,4 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
+import {
+  Activity,
+  ArrowUpIcon,
+  BarChart3Icon,
+  Calendar,
+  TargetIcon,
+  TrendingDownIcon,
+  TrendingUpIcon,
+} from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import {
   Card,
@@ -10,18 +21,6 @@ import {
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTransactionsCountByMonthServer } from "~/lib/api/chart/get-transaction-count-by-month";
 import { queryKeys } from "~/utils/query-keys";
-import {
-  Activity,
-  ArrowUpIcon,
-  BarChart3Icon,
-  Calendar,
-  TargetIcon,
-  TrendingDownIcon,
-  TrendingUpIcon,
-} from "lucide-react";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";

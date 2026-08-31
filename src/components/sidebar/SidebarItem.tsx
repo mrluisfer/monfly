@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 

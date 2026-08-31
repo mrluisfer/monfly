@@ -1,9 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
 import {
   enforceRateLimit,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 import { hashPassword, prismaClient } from "../prisma";
 import { useAppSession } from "./session";

@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { getUserById } from "~/server/db/users/get-user-by-id";
 import { prismaClient } from "~/server/prisma";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { getUserById } from "~/server/db/users/get-user-by-id";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getUserByIdServer = createServerFn({ method: "GET" })
   .validator((d: { userId: string }) => d)

@@ -1,11 +1,10 @@
-import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Footer } from "~/components/landing/footer";
-import { GlobalHeader } from "~/components/landing/global-header";
 import { ChevronRight, GlobeIcon } from "lucide-react";
-
+import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Footer } from "~/components/landing/footer";
+import { GlobalHeader } from "~/components/landing/global-header";
 
 type LegalLayoutProps = {
   eyebrow: string;

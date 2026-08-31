@@ -1,6 +1,6 @@
-import { hideBalanceAtom } from "@/state";
 import { useAtom } from "jotai";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { hideBalanceAtom } from "@/state";
 
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";

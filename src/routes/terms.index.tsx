@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, FileText, Gavel, ShieldAlert } from "lucide-react";
-
-import { Card, CardContent } from "@/components/ui/card";
 import { LegalLayout, LegalSection } from "@/components/legal/LegalLayout";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const Route = createFileRoute("/terms/")({
   head: () => ({

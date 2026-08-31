@@ -1,4 +1,9 @@
 import { Link } from "@tanstack/react-router";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "~/components/ui/button";
 import {
   NavigationMenu,
@@ -6,12 +11,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "~/components/ui/navigation-menu";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 
 import { navigationLinks } from "./NavigationLinks";
 

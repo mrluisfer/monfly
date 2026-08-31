@@ -7,12 +7,6 @@ import {
   useRouter,
 } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Auth, authActions } from "~/components/auth";
-import { ExternalLogin } from "~/components/auth/ExternalLogin";
-import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
-import { useMutation } from "~/hooks/useMutation";
-import { signupFn } from "~/server/auth/signupfn";
 import {
   BadgeCheck,
   ChartNoAxesCombined,
@@ -21,13 +15,18 @@ import {
   UserIcon,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
-import {
-  signupSchema,
-  type SignupFormValues,
-} from "~/zod-schemas/signup-schema";
-
-import { Card, CardContent } from "@/components/ui/card";
 import { SharedHeader } from "@/components/auth/SharedHeader";
+import { Card, CardContent } from "@/components/ui/card";
+import { Auth, authActions } from "~/components/auth";
+import { ExternalLogin } from "~/components/auth/ExternalLogin";
+import { Badge } from "~/components/ui/badge";
+import { Button } from "~/components/ui/button";
+import { useMutation } from "~/hooks/useMutation";
+import { signupFn } from "~/server/auth/signupfn";
+import {
+  type SignupFormValues,
+  signupSchema,
+} from "~/zod-schemas/signup-schema";
 
 const signupStats = [
   { label: "Time to start", value: "< 60s" },

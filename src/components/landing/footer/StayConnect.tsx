@@ -1,5 +1,10 @@
-import { useId } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AtSignIcon, SendIcon } from "lucide-react";
+import { useId } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "~/components/ui/button";
 import {
   Form,
@@ -10,12 +15,6 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { sileo } from "~/lib/toaster";
-import { AtSignIcon, SendIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
   email: z

@@ -1,11 +1,11 @@
 import type { Transaction } from "@prisma/client";
-import type { ApiResponse } from "~/types/ApiResponse";
-
-import { prismaClient } from "~/server/prisma";
 import {
   applyLoanPaymentDelta,
   LoanPaymentError,
 } from "~/server/db/loans/apply-loan-payment";
+
+import { prismaClient } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 type PutTransactionInput = {
   id: string;

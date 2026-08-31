@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
+import { useMemo } from "react";
 import type { NumberFormatId } from "~/constants/number-formats";
 import { numberFormatAtom, setNumberFormatAtom } from "~/state/atoms";
 

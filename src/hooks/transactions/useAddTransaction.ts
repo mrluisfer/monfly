@@ -1,9 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
-import { useActiveCard } from "~/hooks/cards";
+import { useActiveCard, useCards } from "~/hooks/cards";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postLoanByEmailServer } from "~/lib/api/loan/post-loan-by-email";
@@ -21,28 +22,46 @@ import {
 
 type FormValues = TransactionFormValues;
 
+const buildDefaultValues = (cardId: string | null): FormValues => ({
+  [transactionFormNames.type]: "expense",
+  [transactionFormNames.date]: new Date(),
+  [transactionFormNames.category]: "",
+  [transactionFormNames.amount]: "",
+  [transactionFormNames.description]: "",
+  [transactionFormNames.cardId]: cardId,
+  [transactionFormNames.loanMode]: "none",
+  [transactionFormNames.markAsLoan]: false,
+  [transactionFormNames.loanDebtor]: "",
+  [transactionFormNames.loanDueAt]: null,
+  [transactionFormNames.appliedToLoanId]: null,
+});
+
 export const useAddTransaction = () => {
   const queryClient = useQueryClient();
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
+  const { data: cardsResponse } = useCards({ status: "active" });
+
+  // Pre-select the card the dashboard is filtered by; with no filter, fall back
+  // to the user's first card so the form state matches what the select shows.
+  const defaultCardId = activeCard ?? cardsResponse?.data?.[0]?.id ?? null;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(TransactionFormSchema),
-    defaultValues: {
-      [transactionFormNames.type]: "expense",
-      [transactionFormNames.date]: new Date(),
-      [transactionFormNames.category]: "",
-      [transactionFormNames.amount]: "",
-      [transactionFormNames.description]: "",
-      // Pre-select the card currently in focus on the dashboard, if any.
-      [transactionFormNames.cardId]: activeCard ?? null,
-      [transactionFormNames.loanMode]: "none",
-      [transactionFormNames.markAsLoan]: false,
-      [transactionFormNames.loanDebtor]: "",
-      [transactionFormNames.loanDueAt]: null,
-      [transactionFormNames.appliedToLoanId]: null,
-    },
+    defaultValues: buildDefaultValues(defaultCardId),
   });
+
+  // The cards query usually resolves after the first render, so `defaultCardId`
+  // can start out null. Seed it once the list lands, unless the user already
+  // touched the field themselves.
+  const seededCardRef = useRef(false);
+  useEffect(() => {
+    if (seededCardRef.current || !defaultCardId) return;
+    if (form.getValues(transactionFormNames.cardId) != null) return;
+    if (form.formState.dirtyFields[transactionFormNames.cardId]) return;
+    seededCardRef.current = true;
+    form.setValue(transactionFormNames.cardId, defaultCardId);
+  }, [defaultCardId, form]);
 
   const postTransactionByEmail = useMutation({
     fn: postTransactionByEmailServer,
@@ -143,7 +162,9 @@ export const useAddTransaction = () => {
       // Reset only after the whole flow finished so the user sees what they typed
       // until everything is persisted.
       if (txResult && !isErrorPayload(txResult)) {
-        form.reset();
+        // Reset through the same builder so the card default is re-applied
+        // instead of falling back to whatever was known at mount time.
+        form.reset(buildDefaultValues(defaultCardId));
       }
     } catch {
       sileo.error({ title: "Failed to create transaction" });

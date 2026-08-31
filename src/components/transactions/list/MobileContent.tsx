@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
+import { ExternalLinkIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Button } from "~/components/ui/button";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-import { ExternalLinkIcon } from "lucide-react";
 
 import type { CardSummary } from "./CardBadge";
 import { ErrorState } from "./ErrorState";

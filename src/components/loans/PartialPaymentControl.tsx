@@ -1,11 +1,11 @@
 import { BanknoteArrowUpIcon } from "lucide-react";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 /** Inline form to record a partial payment against a loan. */
 export function PartialPaymentControl({

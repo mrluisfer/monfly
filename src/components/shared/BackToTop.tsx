@@ -1,5 +1,5 @@
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpIcon } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   type RefObject,
   useCallback,

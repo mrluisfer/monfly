@@ -1,6 +1,13 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -21,14 +28,6 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getChartTypeByCategoryServer } from "~/lib/api/chart/get-chart-type-by-category";
 import { getTrendingMonthlyServer } from "~/lib/api/chart/get-trending-monthly";
 import { queryKeys } from "~/utils/query-keys";
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
-
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 
 import { TrendingStatus } from "./TrendingStatus";
 

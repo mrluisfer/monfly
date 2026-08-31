@@ -1,6 +1,6 @@
-import { useState } from "react";
 import type { Category } from "@prisma/client";
 import { PencilIcon } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogTrigger } from "~/components/ui/dialog";

@@ -1,12 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { ApiResponse } from "~/types/ApiResponse";
+import { z } from "zod";
+import { getCategoryByEmail } from "~/server/db/categories/get-category-by-email";
 import {
   enforceRateLimit,
   resolveSessionEmail,
   toSecurityErrorResponse,
 } from "~/server/security/request-protection";
-import { getCategoryByEmail } from "~/server/db/categories/get-category-by-email";
-import { z } from "zod";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const getCategoryByEmailServer = createServerFn({
   method: "GET",

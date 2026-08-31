@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CheckIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 import Card from "~/components/shared/Card";
 import { DEFAULT_THEMES, SCALED_THEMES } from "~/constants/themes";
 import { useThemeConfig } from "~/hooks/ui/useThemeConfig";
-import { CheckIcon } from "lucide-react";
-
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authed/user/theme/")({
   component: ThemePage,

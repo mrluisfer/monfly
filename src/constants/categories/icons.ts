@@ -1,3 +1,4 @@
+import type { LucideIcon } from "lucide-react";
 import {
   ArrowDown,
   ArrowUp,
@@ -82,7 +83,6 @@ import {
   Wrench,
   Zap,
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
 export type CategoryIconDef = {
   name: string;

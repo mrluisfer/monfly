@@ -1,3 +1,12 @@
+import { useQuery } from "@tanstack/react-query";
+import { Link, useLocation } from "@tanstack/react-router";
+import {
+  KeyRoundIcon,
+  LifeBuoyIcon,
+  LogOutIcon,
+  SettingsIcon,
+  UserIcon,
+} from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -11,15 +20,6 @@ import { useRouteUser } from "@/hooks";
 import { getUserByEmailServer } from "@/lib/api/user/get-user-by-email";
 import { cn } from "@/lib/utils";
 import { queryDictionary } from "@/queries/dictionary";
-import { useQuery } from "@tanstack/react-query";
-import { Link, useLocation } from "@tanstack/react-router";
-import {
-  KeyRoundIcon,
-  LifeBuoyIcon,
-  LogOutIcon,
-  SettingsIcon,
-  UserIcon,
-} from "lucide-react";
 import {
   CHANGE_PASSWORD_PATH,
   HELP_PATH,

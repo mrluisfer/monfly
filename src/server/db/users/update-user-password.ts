@@ -1,6 +1,5 @@
-import type { ApiResponse } from "~/types/ApiResponse";
-
 import { hashPassword, prismaClient, verifyPassword } from "~/server/prisma";
+import type { ApiResponse } from "~/types/ApiResponse";
 
 export const updateUserPassword = async (data: {
   email: string;

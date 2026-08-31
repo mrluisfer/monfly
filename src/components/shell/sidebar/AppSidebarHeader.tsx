@@ -1,10 +1,10 @@
+import { Link } from "@tanstack/react-router";
 import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link } from "@tanstack/react-router";
 import LogoSvg from "~/assets/logo.svg";
 
 export function AppSidebarHeader() {

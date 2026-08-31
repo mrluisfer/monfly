@@ -1,7 +1,7 @@
+import { SingleCard } from "@/components/cards/SingleCard";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Skeleton } from "~/components/ui/skeleton";
 import { useCards } from "~/hooks/cards";
-import { SingleCard } from "@/components/cards/SingleCard";
 
 export function CardsList() {
   const { data, isPending } = useCards();

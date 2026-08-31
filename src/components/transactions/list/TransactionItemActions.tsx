@@ -1,3 +1,4 @@
+import { Edit, Ellipsis, Trash } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -10,7 +11,6 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { useDeleteTransaction } from "~/hooks/transactions";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-import { Edit, Ellipsis, Trash } from "lucide-react";
 
 const TransactionItemActions = ({
   transaction,

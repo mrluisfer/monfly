@@ -1,21 +1,20 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { DollarSign } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { useActiveCard } from "~/hooks/cards";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
-import { queryKeys } from "~/utils/query-keys";
 import {
   formatCurrency,
   getCurrencySymbol,
   type SupportedCurrency,
 } from "~/utils/format-currency";
-import { DollarSign } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
-
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { queryKeys } from "~/utils/query-keys";
 
 import Card from "../shared/Card";
 import { MetricsGrid } from "../shared/MetricsGrid";

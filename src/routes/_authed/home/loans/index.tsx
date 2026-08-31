@@ -1,6 +1,6 @@
-import { PageHeader } from "@/components/layout/PageHeader";
 import { createFileRoute } from "@tanstack/react-router";
 import { HandCoinsIcon } from "lucide-react";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { AddLoanCard } from "~/components/loans/AddLoanCard";
 import { LoansList } from "~/components/loans/LoansList";
 
