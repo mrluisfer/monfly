@@ -10,6 +10,8 @@ import AddTransactionButton from "~/components/transactions/list/AddTransactionB
 
 import { ActionButton } from "./ActionButton";
 
+const actionVariant = "secondary" as const;
+
 export function BalanceActions() {
   const navigate = useNavigate();
 
@@ -19,28 +21,28 @@ export function BalanceActions() {
         icon={<BarChart3Icon />}
         label="Reports"
         onClick={() => navigate({ to: "/home/reports" })}
-        variant={"outline"}
+        variant={actionVariant}
         description="Spending patterns, income sources and financial trends over time."
       />
       <ActionButton
         icon={<FolderTreeIcon />}
         label="Categories"
         onClick={() => navigate({ to: "/home/categories" })}
-        variant={"outline"}
+        variant={actionVariant}
         description="Organize spending with custom categories and icons."
       />
       <ActionButton
         icon={<CalculatorIcon />}
         label="Calculator"
         onClick={() => navigate({ to: "/home/balance-calculator" })}
-        variant={"outline"}
+        variant={actionVariant}
         description="Quickly total balances and test what-if amounts."
       />
       <ActionButton
         icon={<HandCoinsIcon />}
         label="Loans"
         onClick={() => navigate({ to: "/home/loans" })}
-        variant={"outline"}
+        variant={actionVariant}
         description="Track money others owe you and what you owe to others."
       />
       <AddTransactionButton
