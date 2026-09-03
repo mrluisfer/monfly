@@ -14,10 +14,10 @@ export const exportUserDataServer = createServerFn({ method: "GET" }).handler(
       const sessionEmail = await resolveSessionEmail();
       // Heavy query: a few exports a minute is plenty.
       enforceRateLimit({
-        scope: "user:export",
-        limit: 5,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 5,
+        scope: "user:export",
+        windowMs: 60_000,
       });
 
       const where = { userEmail: sessionEmail };
@@ -33,44 +33,44 @@ export const exportUserDataServer = createServerFn({ method: "GET" }).handler(
         monthlySummaries,
       ] = await prismaClient.$transaction([
         prismaClient.user.findUniqueOrThrow({
-          where: { email: sessionEmail },
           // Never export the password hash.
           omit: { password: true },
+          where: { email: sessionEmail },
         }),
-        prismaClient.transaction.findMany({ where, orderBy: { date: "desc" } }),
-        prismaClient.loan.findMany({ where, orderBy: { issuedAt: "desc" } }),
-        prismaClient.category.findMany({ where, orderBy: { name: "asc" } }),
-        prismaClient.card.findMany({ where, orderBy: { createdAt: "asc" } }),
-        prismaClient.budget.findMany({ where, orderBy: { startDate: "desc" } }),
-        prismaClient.pot.findMany({ where, orderBy: { createdAt: "asc" } }),
+        prismaClient.transaction.findMany({ orderBy: { date: "desc" }, where }),
+        prismaClient.loan.findMany({ orderBy: { issuedAt: "desc" }, where }),
+        prismaClient.category.findMany({ orderBy: { name: "asc" }, where }),
+        prismaClient.card.findMany({ orderBy: { createdAt: "asc" }, where }),
+        prismaClient.budget.findMany({ orderBy: { startDate: "desc" }, where }),
+        prismaClient.pot.findMany({ orderBy: { createdAt: "asc" }, where }),
         prismaClient.recurringBill.findMany({
-          where,
           orderBy: { nextDueDate: "asc" },
+          where,
         }),
         prismaClient.monthlySummary.findMany({
-          where,
           orderBy: [{ year: "desc" }, { month: "desc" }],
+          where,
         }),
       ]);
 
       return {
-        error: false,
-        message: "Export ready",
-        success: true,
-        statusCode: 200,
         data: {
+          budgets,
+          cards,
+          categories,
           // ponytail: no version field until the shape actually changes.
           exportedAt: new Date().toISOString(),
-          user,
-          transactions,
           loans,
-          categories,
-          cards,
-          budgets,
+          monthlySummaries,
           pots,
           recurringBills,
-          monthlySummaries,
+          transactions,
+          user,
         },
+        error: false,
+        message: "Export ready",
+        statusCode: 200,
+        success: true,
       };
     } catch (error) {
       const securityErrorResponse = toSecurityErrorResponse(error);
@@ -79,11 +79,11 @@ export const exportUserDataServer = createServerFn({ method: "GET" }).handler(
       }
 
       return {
+        data: null,
         error: true,
         message: "Error exporting your data",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   },

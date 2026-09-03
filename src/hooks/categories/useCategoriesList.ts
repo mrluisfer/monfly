@@ -14,26 +14,17 @@ export const useCategoriesList = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const { data, isPending, error } = useQuery({
-    queryKey: [queryDictionary.categories, userEmail],
-    queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5, // 5 minutes cache
     gcTime: 1000 * 60 * 10, // 10 minutes garbage collection
+    queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.categories, userEmail],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
   });
 
   const deleteCategoriesByIdMutation = useMutation({
     fn: deleteCategoriesByIdServer,
-    onSuccess: async (ctx) => {
-      if (ctx.data?.error) {
-        sileo.error({ title: ctx.data.message });
-        return;
-      }
-      sileo.success({ title: ctx.data.message });
-      setSelectedCategories([]);
-      await invalidateCategoryQueries(queryClient, userEmail);
-    },
     idempotency: {
       getKey: (variables) =>
         JSON.stringify(
@@ -48,6 +39,15 @@ export const useCategoriesList = () => {
         title: "Categories already deleted",
       },
     },
+    onSuccess: async (ctx) => {
+      if (ctx.data?.error) {
+        sileo.error({ title: ctx.data.message });
+        return;
+      }
+      sileo.success({ title: ctx.data.message });
+      setSelectedCategories([]);
+      await invalidateCategoryQueries(queryClient, userEmail);
+    },
   });
 
   const handleCheckboxChange = (categoryId: string, checked: boolean) => {
@@ -57,24 +57,32 @@ export const useCategoriesList = () => {
   };
 
   const handleSelectCategories = (categoryIds: string[]) => {
-    if (categoryIds.length === 0) return;
+    if (categoryIds.length === 0) {
+      return;
+    }
 
     setSelectedCategories((prev) => {
       const mergedSelection = new Set(prev);
-      for (const id of categoryIds) mergedSelection.add(id);
+      for (const id of categoryIds) {
+        mergedSelection.add(id);
+      }
       return Array.from(mergedSelection);
     });
   };
 
   const handleDeselectCategories = (categoryIds: string[]) => {
-    if (categoryIds.length === 0) return;
+    if (categoryIds.length === 0) {
+      return;
+    }
 
     const idsToRemove = new Set(categoryIds);
     setSelectedCategories((prev) => prev.filter((id) => !idsToRemove.has(id)));
   };
 
   const handleSelectAll = () => {
-    if (!data?.data?.length) return;
+    if (!data?.data?.length) {
+      return;
+    }
     handleSelectCategories(data.data.map((category) => category.id));
   };
 
@@ -102,7 +110,9 @@ export const useCategoriesList = () => {
   };
 
   const handleDeleteCategories = async () => {
-    if (selectedCategories.length === 0) return;
+    if (selectedCategories.length === 0) {
+      return;
+    }
     try {
       await deleteCategoriesByIdMutation.mutate({
         data: { ids: selectedCategories },
@@ -122,26 +132,26 @@ export const useCategoriesList = () => {
 
   return {
     data,
-    isPending,
     error,
-    selectedCategories,
-    handleCheckboxChange,
-    handleDeleteCategories,
-    handleSelectAll,
-    handleDeselectAll,
-    handleSelectCategories,
-    handleDeselectCategories,
-    handleToggleSelectAll,
-    // Selection state helpers
-    totalCategories,
-    selectedCount,
-    isAllSelected,
-    isPartiallySelected,
-    hasAnySelected,
-    selectionPercentage,
-    // Additional helper functions
-    isSelected,
     getSelectedCategories,
     getUnselectedCategories,
+    handleCheckboxChange,
+    handleDeleteCategories,
+    handleDeselectAll,
+    handleDeselectCategories,
+    handleSelectAll,
+    handleSelectCategories,
+    handleToggleSelectAll,
+    hasAnySelected,
+    isAllSelected,
+    isPartiallySelected,
+    isPending,
+    // Additional helper functions
+    isSelected,
+    selectedCategories,
+    selectedCount,
+    selectionPercentage,
+    // Selection state helpers
+    totalCategories,
   };
 };

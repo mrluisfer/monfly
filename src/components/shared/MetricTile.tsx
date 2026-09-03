@@ -5,18 +5,18 @@ import { cn } from "~/lib/utils";
 
 import { TONE_TEXT, type Tone } from "./tone";
 
-type MetricTileProps = {
-  label: string;
-  value: ReactNode;
-  /** Tint for the value; defaults to plain foreground. */
-  valueTone?: Tone;
-  icon?: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
-  iconTone?: Tone;
+interface MetricTileProps {
   /** Rendered to the right of the value (trend badge, savings ring…). */
   aside?: ReactNode;
   /** Rendered under the value (hint text, flow bar, sparkline…). */
   footer?: ReactNode;
-};
+  icon?: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  iconTone?: Tone;
+  label: string;
+  value: ReactNode;
+  /** Tint for the value; defaults to plain foreground. */
+  valueTone?: Tone;
+}
 
 /**
  * The single stat tile used across the app (balance metrics, insights, chart
@@ -38,7 +38,7 @@ export function MetricTile({
       size="sm"
       className="px-(--card-spacing) transition-shadow hover:shadow-sm"
     >
-      <dt className="text-muted-foreground flex items-center justify-between gap-2 text-[0.7rem] font-medium tracking-[0.12em] uppercase">
+      <dt className="flex items-center justify-between gap-2 font-medium text-[0.7rem] text-muted-foreground uppercase tracking-[0.12em]">
         <span className="truncate">{label}</span>
         {Icon ? (
           <Icon
@@ -51,7 +51,7 @@ export function MetricTile({
         <div className="flex items-end justify-between gap-3">
           <span
             className={cn(
-              "block text-lg font-semibold tracking-tight tabular-nums sm:text-xl",
+              "block font-semibold text-lg tabular-nums tracking-tight sm:text-xl",
               valueTone === "neutral"
                 ? "text-foreground"
                 : TONE_TEXT[valueTone],

@@ -160,14 +160,14 @@ export const invalidateAllUserQueries = async (
  * Invalidates queries by pattern. Useful for more granular control.
  *
  * @param queryClient - The TanStack Query client instance
- * @param queryKeys - Array of query key patterns to invalidate
+ * @param patterns - Array of query key patterns to invalidate
  */
 export const invalidateQueriesByPattern = async (
   queryClient: QueryClient,
-  queryKeys: (string | unknown[])[],
+  patterns: (string | unknown[])[],
 ): Promise<void> => {
   await Promise.all(
-    queryKeys.map((queryKey) =>
+    patterns.map((queryKey) =>
       queryClient.invalidateQueries({
         queryKey: Array.isArray(queryKey) ? queryKey : [queryKey],
       }),

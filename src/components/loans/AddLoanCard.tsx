@@ -7,8 +7,8 @@ import {
   PlusIcon,
   UserIcon,
 } from "lucide-react";
-import { useState } from "react";
-import { Controller } from "react-hook-form";
+import { useCallback, useState } from "react";
+import { Controller, type ControllerProps } from "react-hook-form";
 import {
   Collapsible,
   CollapsibleContent,
@@ -22,20 +22,86 @@ import type { LoanDirection } from "~/constants/loan-status";
 import { buildLoanFormDefaults, useAddLoan } from "~/hooks/loans/useAddLoan";
 import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { cn } from "~/lib/utils";
+import type { LoanFormValues } from "~/zod-schemas/loan-schema";
 import { AmountInput } from "../shared";
 import { Card } from "../ui/card";
 import { DebtorCombobox } from "./DebtorCombobox";
-import { fromDateInputValue, toDateInputValue } from "./date-input";
+import { LoanDateInput } from "./LoanDateInput";
 import { LoanDirectionIcon } from "./LoanDirectionIcon";
 import { LoanField } from "./LoanField";
+
+type LoanFieldRender = ControllerProps<LoanFormValues>["render"];
+
+const renderDirection: LoanFieldRender = ({ field }) => (
+  <Tabs
+    value={field.value as LoanDirection}
+    onValueChange={field.onChange}
+    className="w-full"
+    defaultValue="borrowed"
+  >
+    <TabsList className="w-full md:w-fit">
+      <TabsTrigger value="lent" className="flex-1 gap-1.5">
+        <LoanDirectionIcon direction="lent" className="size-3.5" />
+        Owed to me
+      </TabsTrigger>
+      <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
+        <LoanDirectionIcon direction="borrowed" className="size-3.5" />I owe
+      </TabsTrigger>
+    </TabsList>
+  </Tabs>
+);
+
+const renderDebtor: LoanFieldRender = ({ field }) => (
+  <DebtorCombobox
+    name={field.name}
+    value={field.value as string}
+    onChange={field.onChange}
+    onBlur={field.onBlur}
+    placeholder="e.g. Juan, SAT, Insurance Co."
+  />
+);
+
+const renderAmount: LoanFieldRender = ({ field }) => (
+  <AmountInput {...field} value={field.value as string} placeholder="0.00" />
+);
+
+const renderIssuedAt: LoanFieldRender = ({ field }) => (
+  <LoanDateInput
+    value={field.value as Date | null}
+    onValueChange={field.onChange}
+  />
+);
+
+const renderDueAt: LoanFieldRender = ({ field }) => (
+  <LoanDateInput
+    value={(field.value as Date | null) ?? null}
+    onValueChange={field.onChange}
+  />
+);
+
+const renderNotes: LoanFieldRender = ({ field }) => (
+  <Input
+    {...field}
+    value={(field.value as string | null) ?? ""}
+    placeholder="Context, agreement, etc."
+  />
+);
 
 /** Collapsible form to register a new loan (money owed to or by the user). */
 export function AddLoanCard() {
   const { form, onSubmit, mutation } = useAddLoan();
   const isLoading = mutation.status === "pending";
-  const errors = form.formState.errors;
+  const { errors } = form.formState;
   const currency = usePreferredCurrency();
   const [openCollapsible, setOpenCollapsible] = useState(false);
+
+  const handleCancel = useCallback(() => {
+    // `reset`, not `resetDefaultValues` — the latter only moves the baseline
+    // used for `isDirty`/`dirtyFields` and leaves whatever the user typed on
+    // screen.
+    form.reset(buildLoanFormDefaults());
+    setOpenCollapsible(false);
+  }, [form]);
 
   return (
     <Collapsible
@@ -48,25 +114,25 @@ export function AddLoanCard() {
         render={
           <Button
             variant={"ghost"}
-            className="group bg-card border-border/60 flex h-16 items-center gap-3 p-3"
+            className="group flex h-16 items-center gap-3 border-border/60 bg-card p-3"
             size={"lg"}
           />
         }
       >
         <span
           aria-hidden="true"
-          className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-xl"
+          className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"
         >
           <PlusCircleIcon className="size-4" />
         </span>
         <div>
           <h2
             id="add-loan-heading"
-            className="text-left text-sm font-semibold tracking-tight select-none"
+            className="select-none text-left font-semibold text-sm tracking-tight"
           >
             New loan
           </h2>
-          <p className="text-muted-foreground text-xs select-none">
+          <p className="select-none text-muted-foreground text-xs">
             Register a debt someone owes you.
           </p>
         </div>
@@ -87,28 +153,7 @@ export function AddLoanCard() {
           <Controller
             control={form.control}
             name="direction"
-            render={({ field }) => (
-              <Tabs
-                value={field.value}
-                onValueChange={(v) => field.onChange(v as LoanDirection)}
-                className="w-full"
-                defaultValue={"borrowed"}
-              >
-                <TabsList className="w-full md:w-fit">
-                  <TabsTrigger value="lent" className="flex-1 gap-1.5">
-                    <LoanDirectionIcon direction="lent" className="size-3.5" />
-                    Owed to me
-                  </TabsTrigger>
-                  <TabsTrigger value="borrowed" className="flex-1 gap-1.5">
-                    <LoanDirectionIcon
-                      direction="borrowed"
-                      className="size-3.5"
-                    />
-                    I owe
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            )}
+            render={renderDirection}
           />
 
           {/* Main inputs: stack on mobile, 4-column grid on md+ so debtor/amount/dates fit a single row. */}
@@ -123,15 +168,7 @@ export function AddLoanCard() {
               <Controller
                 control={form.control}
                 name="debtor"
-                render={({ field }) => (
-                  <DebtorCombobox
-                    name={field.name}
-                    value={field.value}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    placeholder="e.g. Juan, SAT, Insurance Co."
-                  />
-                )}
+                render={renderDebtor}
               />
             </LoanField>
 
@@ -143,9 +180,7 @@ export function AddLoanCard() {
               <Controller
                 control={form.control}
                 name="amount"
-                render={({ field }) => (
-                  <AmountInput {...field} placeholder="0.00" />
-                )}
+                render={renderAmount}
               />
             </LoanField>
 
@@ -156,15 +191,7 @@ export function AddLoanCard() {
               <Controller
                 control={form.control}
                 name="issuedAt"
-                render={({ field }) => (
-                  <Input
-                    type="date"
-                    value={toDateInputValue(field.value)}
-                    onChange={(e) =>
-                      field.onChange(fromDateInputValue(e.target.value))
-                    }
-                  />
-                )}
+                render={renderIssuedAt}
               />
             </LoanField>
 
@@ -175,15 +202,7 @@ export function AddLoanCard() {
               <Controller
                 control={form.control}
                 name="dueAt"
-                render={({ field }) => (
-                  <Input
-                    type="date"
-                    value={toDateInputValue(field.value ?? null)}
-                    onChange={(e) =>
-                      field.onChange(fromDateInputValue(e.target.value))
-                    }
-                  />
-                )}
+                render={renderDueAt}
               />
             </LoanField>
           </div>
@@ -199,29 +218,13 @@ export function AddLoanCard() {
                 <Controller
                   control={form.control}
                   name="notes"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      value={field.value ?? ""}
-                      placeholder="Context, agreement, etc."
-                    />
-                  )}
+                  render={renderNotes}
                 />
               </LoanField>
             </div>
           </div>
-          <div className="flex items-center gap-4 flex-wrap justify-end">
-            <Button
-              type="button"
-              onClick={() => {
-                // `reset`, not `resetDefaultValues` — the latter only moves the
-                // baseline used for `isDirty`/`dirtyFields` and leaves whatever
-                // the user typed on screen.
-                form.reset(buildLoanFormDefaults());
-                setOpenCollapsible(false);
-              }}
-              variant={"secondary"}
-            >
+          <div className="flex flex-wrap items-center justify-end gap-4">
+            <Button type="button" onClick={handleCancel} variant={"secondary"}>
               Cancel
             </Button>
             <Button

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { FlameIcon } from "lucide-react";
-import { useEffect, useMemo, useRef } from "react";
+import { type RefObject, useEffect, useMemo, useRef } from "react";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { Badge } from "~/components/ui/badge";
 import {
@@ -13,15 +13,11 @@ import {
   DAILY_ACTIVITY_WEEKS,
 } from "~/constants/daily-activity";
 import { useActiveCard } from "~/hooks/cards";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getDailyActivityServer } from "~/lib/api/chart/get-daily-activity";
 import { cn } from "~/lib/utils";
 import type { DailyActivityRow } from "~/server/db/charts/get-daily-activity";
-import {
-  formatCurrency,
-  type SupportedCurrency,
-} from "~/utils/format-currency";
 import { queryKeys } from "~/utils/query-keys";
 
 import Card from "../shared/Card";
@@ -29,27 +25,27 @@ import { ChartError, ChartLoading } from "./ChartLoading";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-type DayCell = {
+interface DayCell {
+  count: number;
   /** YYYY-MM-DD. Always set — it doubles as the cell's React key. */
   date: string;
-  /** Leading cells before the window starts: rendered blank, no tooltip. */
-  padding: boolean;
-  label: string;
-  income: number;
   expense: number;
-  count: number;
+  income: number;
+  label: string;
   /** 0 = no activity, 1–4 = |net| intensity quartile. */
   level: 0 | 1 | 2 | 3 | 4;
+  /** Leading cells before the window starts: rendered blank, no tooltip. */
+  padding: boolean;
   /** Whether the day netted positive (income ≥ expense). */
   positive: boolean;
-};
+}
 
 /** A grid column, identified by the ISO date of its Sunday so the column keeps
  *  its identity when the window shifts or the data reloads. */
-type Week = {
-  id: string;
+interface Week {
   days: DayCell[];
-};
+  id: string;
+}
 
 // Net-positive days ramp the chart-1 slot, net-negative days keep destructive,
 // so the graph reads cash direction at a glance — not just activity volume.
@@ -105,17 +101,17 @@ function buildCalendar(rows: DailyActivityRow[]) {
     if (!weeks[weekIndex]) {
       const weekStart = new Date(gridStart.getTime() + weekIndex * 7 * DAY_MS);
       weeks[weekIndex] = {
-        id: weekStart.toISOString().slice(0, 10),
         days: [],
+        id: weekStart.toISOString().slice(0, 10),
       };
       const month = day.getUTCMonth();
       if (month !== lastMonth) {
         monthLabels.push({
-          weekId: weeks[weekIndex].id,
           label: day.toLocaleString("en-US", {
             month: "short",
             timeZone: "UTC",
           }),
+          weekId: weeks[weekIndex].id,
         });
         lastMonth = month;
       }
@@ -123,13 +119,13 @@ function buildCalendar(rows: DailyActivityRow[]) {
 
     if (day < windowStart) {
       weeks[weekIndex].days.push({
-        date: iso,
-        padding: true,
-        label: "",
-        income: 0,
-        expense: 0,
         count: 0,
+        date: iso,
+        expense: 0,
+        income: 0,
+        label: "",
         level: 0,
+        padding: true,
         positive: true,
       });
     } else {
@@ -145,18 +141,18 @@ function buildCalendar(rows: DailyActivityRow[]) {
               1) as DayCell["level"]);
 
       weeks[weekIndex].days.push({
-        date: iso,
-        padding: false,
-        label: day.toLocaleDateString("en-US", {
-          weekday: "short",
-          month: "short",
-          day: "numeric",
-          timeZone: "UTC",
-        }),
-        income,
-        expense,
         count,
+        date: iso,
+        expense,
+        income,
+        label: day.toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "short",
+          timeZone: "UTC",
+          weekday: "short",
+        }),
         level,
+        padding: false,
         positive: net >= 0,
       });
     }
@@ -164,15 +160,19 @@ function buildCalendar(rows: DailyActivityRow[]) {
     day = new Date(day.getTime() + DAY_MS);
   }
 
-  return { weeks, monthLabels };
+  return { monthLabels, weeks };
 }
 
 function summarize(rows: DailyActivityRow[]) {
   let activeDays = 0;
   let busiest: DailyActivityRow | null = null;
   for (const row of rows) {
-    if (row.count > 0) activeDays += 1;
-    if (!busiest || row.expense > busiest.expense) busiest = row;
+    if (row.count > 0) {
+      activeDays += 1;
+    }
+    if (!busiest || row.expense > busiest.expense) {
+      busiest = row;
+    }
   }
   return {
     activeDays,
@@ -182,10 +182,10 @@ function summarize(rows: DailyActivityRow[]) {
 
 function HeatmapCell({
   cell,
-  currency,
+  formatAmount,
 }: {
   cell: DayCell;
-  currency: SupportedCurrency;
+  formatAmount: (value: number) => string;
 }) {
   if (cell.padding) {
     return <div aria-hidden="true" className="size-3.5 rounded-[3px]" />;
@@ -214,15 +214,11 @@ function HeatmapCell({
             <p>
               {cell.count} {cell.count === 1 ? "transaction" : "transactions"}
             </p>
-            {cell.income > 0 && (
-              <p>In: {formatCurrency(cell.income, currency)}</p>
-            )}
-            {cell.expense > 0 && (
-              <p>Out: {formatCurrency(cell.expense, currency)}</p>
-            )}
+            {cell.income > 0 && <p>In: {formatAmount(cell.income)}</p>}
+            {cell.expense > 0 && <p>Out: {formatAmount(cell.expense)}</p>}
             <p className="font-medium">
               Net: {net >= 0 ? "+" : ""}
-              {formatCurrency(net, currency)}
+              {formatAmount(net)}
             </p>
           </div>
         )}
@@ -234,19 +230,19 @@ function HeatmapCell({
 export default function SpendingHeatmap() {
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
-  const currency = usePreferredCurrency();
+  const { formatPlain } = useCurrency();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: queryKeys.charts.dailyActivity(userEmail, activeCard),
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5,
     queryFn: () =>
       getDailyActivityServer({
-        data: { email: userEmail, cardId: activeCard },
+        data: { cardId: activeCard, email: userEmail },
       }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 3,
-    gcTime: 1000 * 60 * 5,
+    queryKey: queryKeys.charts.dailyActivity(userEmail, activeCard),
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 3,
   });
 
   const rows = useMemo(() => data?.data ?? [], [data?.data]);
@@ -255,13 +251,17 @@ export default function SpendingHeatmap() {
 
   const hasActivity = activeDays > 0;
 
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef: RefObject<HTMLDivElement | null> = useRef(null);
   // Re-scroll to today once the columns exist — on the first render `weeks` is
   // still empty and there is nothing to scroll.
   useEffect(() => {
-    if (weeks.length === 0) return;
+    if (weeks.length === 0) {
+      return;
+    }
     const node = scrollRef.current;
-    if (node) node.scrollLeft = node.scrollWidth;
+    if (node) {
+      node.scrollLeft = node.scrollWidth;
+    }
   }, [weeks]);
 
   // ponytail: no width floor on the card — the old `min-w-[500px]` pushed the
@@ -277,35 +277,35 @@ export default function SpendingHeatmap() {
           : "Your last 12 months at a glance"
       }
     >
-      {isLoading && <ChartLoading message="Loading daily activity..." />}
+      {isLoading ? <ChartLoading message="Loading daily activity..." /> : null}
 
-      {error && (
+      {error ? (
         <ChartError
           title="Failed to load daily activity"
           message={error.message}
           onRetry={() => refetch()}
         />
-      )}
+      ) : null}
 
-      {!isLoading && !error && !hasActivity && (
+      {!(isLoading || error || hasActivity) && (
         <DataNotFoundPlaceholder>
           No activity yet. Add transactions to light up the graph!
         </DataNotFoundPlaceholder>
       )}
 
-      {!isLoading && !error && hasActivity && (
+      {!(isLoading || error) && hasActivity && (
         <div className="space-y-4">
-          {busiest && (
+          {busiest ? (
             <Badge variant="outline" className="gap-1.5">
-              <FlameIcon className="text-destructive size-3.5" />
+              <FlameIcon className="size-3.5 text-destructive" />
               Busiest day:{" "}
               {new Date(`${busiest.date}T00:00:00Z`).toLocaleDateString(
                 "en-US",
-                { month: "short", day: "numeric", timeZone: "UTC" },
+                { day: "numeric", month: "short", timeZone: "UTC" },
               )}{" "}
-              · {formatCurrency(busiest.expense, currency)} out
+              · {formatPlain(busiest.expense)} out
             </Badge>
-          )}
+          ) : null}
 
           {/* Scrolls to the right edge on mount so today is what you see
               first; `tabIndex` keeps it scrollable with the keyboard. */}
@@ -314,10 +314,10 @@ export default function SpendingHeatmap() {
             tabIndex={0}
             role="group"
             aria-label={`Daily activity for the last ${DAILY_ACTIVITY_WEEKS} weeks`}
-            className="focus-visible:ring-ring/50 overflow-x-auto rounded-sm pb-1 focus-visible:ring-2 focus-visible:outline-none"
+            className="overflow-x-auto rounded-sm pb-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
           >
             <div className="w-max min-w-full">
-              <div className="text-muted-foreground mb-1 flex gap-1 text-[10px]">
+              <div className="mb-1 flex gap-1 text-[10px] text-muted-foreground">
                 {weeks.map((week) => {
                   const label = monthLabels.find((m) => m.weekId === week.id);
                   return (
@@ -337,7 +337,7 @@ export default function SpendingHeatmap() {
                       <HeatmapCell
                         key={cell.date}
                         cell={cell}
-                        currency={currency}
+                        formatAmount={formatPlain}
                       />
                     ))}
                   </div>
@@ -346,13 +346,13 @@ export default function SpendingHeatmap() {
             </div>
           </div>
 
-          <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-muted-foreground text-xs">
             <span className="flex items-center gap-1.5">
-              <span className="bg-chart-1 size-2.5 rounded-[2px]" />
+              <span className="size-2.5 rounded-[2px] bg-chart-1" />
               Net positive day
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="bg-destructive size-2.5 rounded-[2px]" />
+              <span className="size-2.5 rounded-[2px] bg-destructive" />
               Net negative day
             </span>
             <span className="ml-auto flex items-center gap-1">

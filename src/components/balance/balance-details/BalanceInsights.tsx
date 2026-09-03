@@ -5,9 +5,9 @@ import { useCurrency } from "~/hooks/useCurrency";
 import { SavingsRateTile } from "./SavingsRateTile";
 import type { BalanceSummary } from "./types";
 
-type BalanceInsightsProps = {
+interface BalanceInsightsProps {
   summary: BalanceSummary;
-};
+}
 
 export function BalanceInsights({ summary }: BalanceInsightsProps) {
   const { format: formatAmount, isHidden } = useCurrency();
@@ -47,20 +47,7 @@ export function BalanceInsights({ summary }: BalanceInsightsProps) {
         }
       />
 
-      {summary.runwayMonths !== null ? (
-        <MetricTile
-          label="Estimated runway"
-          value={`${summary.runwayMonths.toFixed(1)} mo`}
-          valueTone="destructive"
-          icon={TimerIcon}
-          iconTone="destructive"
-          footer={
-            <p className="text-muted-foreground text-xs">
-              at current burn rate
-            </p>
-          }
-        />
-      ) : (
+      {summary.runwayMonths === null ? (
         <MetricTile
           label="Positive streak"
           value={`${summary.positiveStreak} ${
@@ -74,6 +61,19 @@ export function BalanceInsights({ summary }: BalanceInsightsProps) {
               {summary.positiveStreak > 0
                 ? "consecutive positive net"
                 : "no streak yet"}
+            </p>
+          }
+        />
+      ) : (
+        <MetricTile
+          label="Estimated runway"
+          value={`${summary.runwayMonths.toFixed(1)} mo`}
+          valueTone="destructive"
+          icon={TimerIcon}
+          iconTone="destructive"
+          footer={
+            <p className="text-muted-foreground text-xs">
+              at current burn rate
             </p>
           }
         />

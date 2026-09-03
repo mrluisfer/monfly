@@ -16,10 +16,10 @@ export const getCategoryByEmailServer = createServerFn({
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "category:list",
-        limit: 120,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 120,
+        scope: "category:list",
+        windowMs: 60_000,
       });
 
       return await getCategoryByEmail(sessionEmail);
@@ -30,11 +30,11 @@ export const getCategoryByEmailServer = createServerFn({
       }
 
       return {
-        success: false,
-        message: "Failed to get categories",
         data: null,
         error: true,
+        message: "Failed to get categories",
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

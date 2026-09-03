@@ -19,8 +19,8 @@ import {
  * - `borrowed` → you pay the creditor → expense.
  */
 const PAYMENT_TYPE: Record<LoanDirection, "income" | "expense"> = {
-  lent: "income",
   borrowed: "expense",
+  lent: "income",
 };
 
 /**
@@ -67,9 +67,13 @@ export const useLoanPayment = () => {
   });
 
   const recordPayment = async (loan: LoanRow, amount: number) => {
-    if (!Number.isFinite(amount) || amount <= 0) return;
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return;
+    }
     const { data: sessionEmail } = await getUserSession();
-    if (!sessionEmail) return;
+    if (!sessionEmail) {
+      return;
+    }
     const direction = (loan.direction ?? "lent") as LoanDirection;
 
     await pay.mutate({
@@ -77,15 +81,15 @@ export const useLoanPayment = () => {
         email: sessionEmail,
         transaction: {
           amount,
-          type: PAYMENT_TYPE[direction],
-          category: "debt",
-          // Reuse the loan's notes as the description when present; otherwise
-          // leave it empty (the loan link still carries the context).
-          description: loan.notes?.trim() || null,
-          date: new Date(),
           appliedToLoanId: loan.id,
           // No card by default; the user can assign one later by editing the tx.
           cardId: null,
+          category: "debt",
+          date: new Date(),
+          // Reuse the loan's notes as the description when present; otherwise
+          // leave it empty (the loan link still carries the context).
+          description: loan.notes?.trim() || null,
+          type: PAYMENT_TYPE[direction],
         },
       },
     });
@@ -98,5 +102,5 @@ export const useLoanPayment = () => {
   const markPending = (loan: LoanRow) =>
     reopen.mutate({ data: { loanId: loan.id } });
 
-  return { recordPayment, markPaid, markPending };
+  return { markPaid, markPending, recordPayment };
 };

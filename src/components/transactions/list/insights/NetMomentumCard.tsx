@@ -14,13 +14,13 @@ const IncomeExpenseChart = lazy(
   () => import("@/components/charts/IncomeExpenseChart"),
 );
 
-type MonthlyPoint = {
+interface MonthlyPoint {
   count: number;
   expense: number;
   income: number;
   label: string;
   net: number;
-};
+}
 
 type SparklineData = {
   height: number;
@@ -30,13 +30,13 @@ type SparklineData = {
   width: number;
 } | null;
 
-type NetMomentumCardProps = {
+interface NetMomentumCardProps {
   expenseLast30: number;
   incomeLast30: number;
   monthlyPoints: MonthlyPoint[];
   netLast30: number;
   sparkline: SparklineData;
-};
+}
 
 export function NetMomentumCard({
   expenseLast30,
@@ -94,13 +94,13 @@ export function NetMomentumCard({
               />
             </svg>
 
-            <div className="text-muted-foreground flex items-center justify-between text-xs">
+            <div className="flex items-center justify-between text-muted-foreground text-xs">
               <span>{monthlyPoints[0]?.label}</span>
               <span>{monthlyPoints.at(-1)?.label}</span>
             </div>
           </div>
         ) : (
-          <p className="text-muted-foreground py-6 text-center text-sm">
+          <p className="py-6 text-center text-muted-foreground text-sm">
             Add more transactions to render momentum insights.
           </p>
         )}

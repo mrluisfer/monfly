@@ -131,14 +131,14 @@ function Login() {
           <Card className="order-2 hidden lg:flex lg:flex-col">
             <CardContent className="flex flex-1 flex-col justify-between">
               <div>
-                <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.12em] uppercase">
+                <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 font-semibold text-primary text-xs uppercase tracking-[0.12em]">
                   <Sparkles className="size-3.5" />
                   Smart Money Control
                 </p>
-                <h2 className="mt-5 font-[family-name:var(--font-syne)] text-3xl leading-tight font-semibold text-balance xl:text-4xl">
+                <h2 className="mt-5 text-balance font-[family-name:var(--font-syne)] font-semibold text-3xl leading-tight xl:text-4xl">
                   Keep your financial workflow focused and secure.
                 </h2>
-                <p className="text-muted-foreground mt-3 max-w-lg text-sm sm:text-base">
+                <p className="mt-3 max-w-lg text-muted-foreground text-sm sm:text-base">
                   Log in to continue tracking your expenses, income, and budget
                   health with real-time clarity.
                 </p>
@@ -149,12 +149,12 @@ function Login() {
                   {loginStats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="border-border/65 bg-background/80 rounded-2xl border p-3"
+                      className="rounded-2xl border border-border/65 bg-background/80 p-3"
                     >
-                      <dt className="text-muted-foreground text-[0.68rem] tracking-[0.12em] uppercase">
+                      <dt className="text-[0.68rem] text-muted-foreground uppercase tracking-[0.12em]">
                         {stat.label}
                       </dt>
-                      <dd className="text-foreground mt-1 text-lg font-semibold">
+                      <dd className="mt-1 font-semibold text-foreground text-lg">
                         {stat.value}
                       </dd>
                     </div>
@@ -165,9 +165,9 @@ function Login() {
                   {loginHighlights.map((item) => (
                     <li
                       key={item}
-                      className="text-muted-foreground flex items-start gap-2 text-sm"
+                      className="flex items-start gap-2 text-muted-foreground text-sm"
                     >
-                      <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
+                      <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -182,15 +182,15 @@ function Login() {
           </Card>
 
           <section className="order-1 flex items-start sm:items-center">
-            <div className="landing-glass-panel border-border/70 w-full rounded-3xl border p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
-              <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.1em] uppercase">
+            <div className="landing-glass-panel w-full rounded-3xl border border-border/70 p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
+              <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 font-semibold text-primary text-xs uppercase tracking-[0.1em]">
                 <BadgeCheck className="size-3.5" />
                 Sign In
               </p>
-              <h1 className="mt-4 font-[family-name:var(--font-syne)] text-2xl leading-tight font-bold text-balance sm:text-3xl">
+              <h1 className="mt-4 text-balance font-[family-name:var(--font-syne)] font-bold text-2xl leading-tight sm:text-3xl">
                 Access your Monfly workspace
               </h1>
-              <p className="text-muted-foreground mt-2 text-sm sm:text-base">
+              <p className="mt-2 text-muted-foreground text-sm sm:text-base">
                 Continue where you left off and keep your finances under
                 control.
               </p>
@@ -223,14 +223,14 @@ function Login() {
             </div>
           </section>
 
-          <section className="landing-glass-panel border-border/65 order-3 rounded-2xl border p-4 lg:hidden">
-            <h2 className="text-primary text-sm font-semibold tracking-[0.08em] uppercase">
+          <section className="landing-glass-panel order-3 rounded-2xl border border-border/65 p-4 lg:hidden">
+            <h2 className="font-semibold text-primary text-sm uppercase tracking-[0.08em]">
               Why Monfly
             </h2>
-            <ul className="text-muted-foreground mt-3 space-y-2 text-sm">
+            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
               {loginHighlights.slice(0, 2).map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
+                  <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
                   <span>{item}</span>
                 </li>
               ))}

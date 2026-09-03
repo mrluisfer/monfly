@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "lucide-react";
+import { LoaderIcon, PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { CATEGORY_ICONS } from "@/constants/categories/icons";
@@ -27,12 +27,12 @@ import {
 
 type FormValues = z.infer<typeof CategoryFormSchema>;
 
-type CategoryFormProps = {
+interface CategoryFormProps {
   initialValues?: Partial<FormValues>;
-  submitText?: string;
   loading?: boolean;
   onSubmit: (values: FormValues) => void | Promise<void>;
-};
+  submitText?: string;
+}
 
 export function CategoryForm({
   initialValues,
@@ -41,11 +41,11 @@ export function CategoryForm({
   onSubmit,
 }: CategoryFormProps) {
   const form = useForm<FormValues>({
-    resolver: zodResolver(CategoryFormSchema),
     defaultValues: {
       [categoryFormNames.name]: initialValues?.[categoryFormNames.name] ?? "",
       [categoryFormNames.icon]: initialValues?.[categoryFormNames.icon] ?? "",
     },
+    resolver: zodResolver(CategoryFormSchema),
   });
 
   return (
@@ -98,7 +98,7 @@ export function CategoryForm({
                           <span className="flex items-center gap-2">
                             <span
                               aria-hidden="true"
-                              className="bg-primary/10 text-primary flex size-6 items-center justify-center rounded-md"
+                              className="flex size-6 items-center justify-center rounded-md bg-primary/10 text-primary"
                             >
                               <Icon className="size-3.5" />
                             </span>
@@ -134,9 +134,12 @@ export function CategoryForm({
         {/* Spacer matches the label height so the button aligns with the inputs on md+ */}
         <div className="flex flex-col md:shrink-0">
           <span aria-hidden="true" className="hidden h-[1.125rem] md:block" />
-          <Button type="submit" className="w-full md:w-auto" disabled={loading}>
+          <Button type="submit" className="w-[150px]" disabled={loading}>
             {loading ? (
-              "Saving..."
+              <>
+                <LoaderIcon className="animate-spin" />
+                Saving...
+              </>
             ) : (
               <>
                 <PlusIcon />

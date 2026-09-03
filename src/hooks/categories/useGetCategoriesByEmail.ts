@@ -8,14 +8,14 @@ export const useGetCategoriesByEmail = () => {
   const userEmail = useRouteUser();
 
   const { data, isPending, error } = useQuery({
-    queryKey: [queryDictionary.categories, userEmail],
-    queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getCategoryByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.categories, userEmail],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 5,
   });
 
-  return { data: (data?.data ?? []) as Category[], isPending, error };
+  return { data: (data?.data ?? []) as Category[], error, isPending };
 };

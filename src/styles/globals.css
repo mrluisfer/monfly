@@ -73,14 +73,14 @@ body {
 
 body {
   min-height: 100dvh;
-  font-feature-settings: "cv11", "ss01", "ss03";
-  font-synthesis-weight: none;
-  text-rendering: optimizeLegibility;
   /* Respect device notch / home indicator safe areas */
   padding-top: env(safe-area-inset-top);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
+  font-feature-settings: "cv11", "ss01", "ss03";
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
 }
 
 /* Re-enable text selection for inputs and content areas
@@ -396,9 +396,9 @@ select,
   }
 
   * {
-    @apply border-border outline-ring/50;
-    scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
+    scrollbar-width: thin;
+    @apply border-border outline-ring/50;
   }
 
   body {

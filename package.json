@@ -1,27 +1,29 @@
 {
   "name": "monfly",
+  "version": "1.0.1",
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "version": "1.0.1",
   "scripts": {
-    "dev": "vite dev",
     "build": "vite build",
-    "start": "node .output/server/index.mjs",
-    "prisma-generate": "prisma generate",
-    "prisma-studio": "prisma studio",
-    "prisma-migrate": "prisma migrate dev",
-    "migrate:prod": "prisma migrate deploy",
-    "install:legacy": "pnpm install --no-strict-peer-dependencies",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "typecheck": "tsc --noEmit",
-    "lint": "biome lint",
-    "lint:fix": "biome lint --write",
+    "check": "biome check --write",
+    "dev": "vite dev",
     "format": "biome format --write",
     "postinstall": "prisma generate",
-    "check": "biome check --write"
+    "install:legacy": "pnpm install --no-strict-peer-dependencies",
+    "lint": "biome lint",
+    "lint:debt": "biome lint --reporter=summary",
+    "lint:fix": "biome lint --write",
+    "lint:strict": "biome lint --error-on-warnings",
+    "migrate:prod": "prisma migrate deploy",
+    "prisma-generate": "prisma generate",
+    "prisma-migrate": "prisma migrate dev",
+    "prisma-studio": "prisma studio",
+    "start": "node .output/server/index.mjs",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -53,7 +55,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.6",
+    "@biomejs/biome": "^2.5.11",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-router-devtools": "^1.167.0",
     "@testing-library/jest-dom": "^7.0.0",
@@ -73,6 +75,7 @@
     "tailwindcss": "^4.3.3",
     "tw-animate-css": "^1.4.0",
     "typescript": "^7.0.2",
+    "ultracite": "^7.10.7",
     "vite": "8.1.5",
     "vitest": "^4.1.10"
   }

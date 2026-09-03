@@ -14,12 +14,12 @@ export const useLoanDebtors = () => {
   const userEmail = useRouteUser();
 
   return useQuery({
-    queryKey: queryKeys.loans.debtors(userEmail),
-    queryFn: () => getLoanDebtorsByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getLoanDebtorsByEmailServer({ data: { email: userEmail } }),
+    queryKey: queryKeys.loans.debtors(userEmail),
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 5,
   });
 };

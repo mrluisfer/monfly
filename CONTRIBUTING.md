@@ -20,6 +20,7 @@ you agree to abide by our [Code of Conduct](./CODE_OF_CONDUCT.md).
 - [Project Structure](#project-structure)
 - [Development Workflow](#development-workflow)
 - [Coding Standards](#coding-standards)
+- [Linting & Formatting](#linting--formatting)
 - [Commit Convention](#commit-convention)
 - [Database & Migrations](#database--migrations)
 - [Testing](#testing)
@@ -54,7 +55,8 @@ align on the approach and avoid duplicated effort.
 | UI state        | Jotai                                              |
 | Styling         | Tailwind CSS 4 + shadcn/ui (Radix)                 |
 | Forms           | React Hook Form + Zod                              |
-| Testing         | Jest + React Testing Library                       |
+| Testing         | Vitest + React Testing Library (jsdom)             |
+| Lint / format   | Biome + Ultracite (`biome.jsonc`)                  |
 | Package manager | **pnpm**                                           |
 
 For a deeper architecture overview, see [CLAUDE.md](./CLAUDE.md).
@@ -143,9 +145,10 @@ prisma/
 3. Before pushing, run the full local check:
 
    ```bash
-   pnpm lint        # ESLint
-   pnpm format      # Prettier
-   pnpm test        # Jest
+   pnpm lint        # Biome + Ultracite (lint only)
+   pnpm check       # Biome: lint + format + organize imports, writes fixes
+   pnpm typecheck   # tsc --noEmit
+   pnpm test        # Vitest
    pnpm build       # Production build
    ```
 
@@ -157,7 +160,7 @@ prisma/
 
 - **TypeScript strict** — no `any`. Type everything; let inference help where it can.
 - **Naming:** `kebab-case` for files and folders, `PascalCase` for components and types, `camelCase` for variables and functions.
-- **No unused** imports, variables, or dead code (enforced by ESLint).
+- **No unused** imports, variables, or dead code (enforced by Biome).
 - **Server vs. client:** all server-only logic lives under `src/server/`; `src/utils/` must stay client-safe and side-effect free.
 - **Imports:** use the `@/*` (or `~/*`) path alias instead of long relative paths.
 - **State & data:** use the `queryKeys` factory for query keys; never hand-assemble key arrays. Use existing cache-invalidation helpers.
@@ -166,6 +169,38 @@ prisma/
 - **Animations:** import from `motion/react` — never from `framer-motion`.
 
 When in doubt, match the surrounding code's conventions.
+
+---
+
+## Linting & Formatting
+
+Formatting and linting are handled by **[Biome](https://biomejs.dev/) with the [Ultracite](https://www.ultracite.ai/) presets** (`core`, `react`, `tanstack`, `vitest`). There is no ESLint and no Prettier — don't add them back. The config is `biome.jsonc` at the repo root.
+
+```bash
+pnpm check        # lint + format + organize imports, writes the fixes — run this before committing
+pnpm lint         # check only
+pnpm lint:debt    # what tech debt is left, ranked by rule
+pnpm lint:strict  # like pnpm lint, but fails on warnings too
+```
+
+Editor setup is already committed for VS Code and Zed: install the Biome extension and format-on-save handles the rest.
+
+### Warnings are tech debt, not suggestions
+
+Adopting Ultracite surfaced ~1400 violations in code that predates it. Rather than freeze the repo or silently disable the rules, they're demoted to `"warn"` in the last `overrides` block of `biome.jsonc`, each annotated with its violation count.
+
+That means `pnpm lint` passes today, but:
+
+- **Don't add new violations.** A warning in code you just wrote is a bug in your PR, even though CI won't catch it.
+- **If you clean up a rule entirely, delete its line** from the override block so it reverts to `error`. That's how the debt gets retired for good.
+- Use `pnpm lint:strict src/some/path` to prove an area is clean.
+
+### Two things never to do
+
+- **Don't run `biome check --write --unsafe`.** The `useAtIndex` fix rewrites `arr[i]` into `arr.at(i)` and breaks the typecheck. Plain `pnpm check` is safe.
+- **Don't enable `assist.source.useSortedAttributes`.** Biome 2.5.x duplicates multi-line JSX expression attributes and drops their siblings — it deletes code.
+
+Agents working in this repo: the full rationale lives in `docs/agents/linting.md`.
 
 ---
 
@@ -211,14 +246,15 @@ pnpm prisma-generate                             # regenerate the client
 
 ## Testing
 
-- Tests use **Jest** + **React Testing Library** in a jsdom environment.
+- Tests use **Vitest** + **React Testing Library** in a jsdom environment (`vitest.config.ts`).
 - Colocate test files with the code they cover (`Button.test.tsx`).
 - Run the suite, watch mode, or a single file:
 
   ```bash
   pnpm test
   pnpm test:watch
-  pnpm test -- --testPathPattern=path/to/test
+  pnpm test src/path/to/file.test.tsx
+  pnpm test:coverage
   ```
 
 - Add or update tests for business logic and reusable components. PRs that change

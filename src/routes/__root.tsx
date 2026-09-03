@@ -7,7 +7,8 @@ import {
   Outlet,
   Scripts,
 } from "@tanstack/react-router";
-import * as React from "react";
+import type { ComponentProps, ReactNode } from "react";
+import { lazy, Suspense } from "react";
 import { DefaultCatchBoundary } from "~/components/shared/DefaultCatchBoundary";
 import { NotFound } from "~/components/shared/NotFound";
 import { TooltipProvider } from "~/components/ui/tooltip";
@@ -26,7 +27,7 @@ import { Provider as JotaiProvider } from "jotai";
 // bundle.
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null
-  : React.lazy(() =>
+  : lazy(() =>
       import("@tanstack/react-router-devtools").then((m) => ({
         default: m.TanStackRouterDevtools,
       })),
@@ -154,13 +155,11 @@ export const Route = createRootRouteWithContext<{
       { rel: "manifest", href: "/site.webmanifest", color: "#000000" },
     ],
   }),
-  errorComponent: (props) => {
-    return (
-      <RootDocument>
-        <DefaultCatchBoundary {...props} />
-      </RootDocument>
-    );
-  },
+  errorComponent: (props) => (
+    <RootDocument>
+      <DefaultCatchBoundary {...props} />
+    </RootDocument>
+  ),
   notFoundComponent: () => <NotFound />,
   component: RootComponent,
 });
@@ -182,7 +181,7 @@ function RootComponent() {
   );
 }
 
-type ToasterProps = React.ComponentProps<typeof SileoToaster>;
+type ToasterProps = ComponentProps<typeof SileoToaster>;
 
 // Shared document shell. Safe to render outside providers (error boundaries)
 // with the default toaster settings.
@@ -191,7 +190,7 @@ function RootDocument({
   toasterPosition = "bottom-right",
   toasterTheme = "system",
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   toasterPosition?: ToasterProps["position"];
   toasterTheme?: ToasterProps["theme"];
 }) {
@@ -204,11 +203,11 @@ function RootDocument({
         <TooltipProvider>
           <SileoToaster position={toasterPosition} theme={toasterTheme} />
           {children}
-          {import.meta.env.DEV && (
-            <React.Suspense fallback={null}>
+          {import.meta.env.DEV ? (
+            <Suspense fallback={null}>
               <TanStackRouterDevtools position="bottom-right" />
-            </React.Suspense>
-          )}
+            </Suspense>
+          ) : null}
           <Scripts />
         </TooltipProvider>
       </body>
@@ -218,7 +217,7 @@ function RootDocument({
 
 // Variant used in the normal app flow: reads user preferences (requires
 // providers above it in the tree).
-function AppDocument({ children }: { children: React.ReactNode }) {
+function AppDocument({ children }: { children: ReactNode }) {
   const { position } = useSonnerPosition();
   const { theme } = useDarkMode();
 

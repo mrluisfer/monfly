@@ -8,27 +8,27 @@ import type { ApiResponse } from "~/types/ApiResponse";
 
 export const deleteTransactionsById = async (transactionIds: string[]) => {
   try {
-    if (!transactionIds || transactionIds.length === 0) {
+    if (transactionIds.length === 0) {
       return {
-        success: false,
-        message: "No transaction IDs provided",
         data: null,
         error: true,
+        message: "No transaction IDs provided",
         statusCode: 400,
+        success: false,
       } as ApiResponse<null>;
     }
 
     const result = await prismaClient.$transaction(async (tx) => {
       // Read transactions before deleting to calculate balance impact
       const transactions = await tx.transaction.findMany({
-        where: { id: { in: transactionIds } },
         select: {
-          id: true,
           amount: true,
+          appliedToLoanId: true,
+          id: true,
           type: true,
           userEmail: true,
-          appliedToLoanId: true,
         },
+        where: { id: { in: transactionIds } },
       });
 
       if (transactions.length === 0) {
@@ -41,10 +41,10 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
       for (const t of transactions) {
         if (t.appliedToLoanId) {
           await applyLoanPaymentDelta(tx, {
-            loanId: t.appliedToLoanId,
             delta: -t.amount,
-            userEmail: t.userEmail,
+            loanId: t.appliedToLoanId,
             transactionType: t.type,
+            userEmail: t.userEmail,
           });
         }
       }
@@ -68,10 +68,10 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
       for (const [email, delta] of balanceByUser) {
         if (delta !== 0) {
           await tx.user.update({
-            where: { email },
             data: {
               totalBalance: { increment: delta },
             },
+            where: { email },
           });
         }
       }
@@ -81,11 +81,11 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
 
     if (result.count === 0) {
       return {
-        success: false,
-        message: "No transactions found with the provided IDs",
         data: null,
         error: true,
+        message: "No transactions found with the provided IDs",
         statusCode: 404,
+        success: false,
       } as ApiResponse<null>;
     }
 
@@ -95,28 +95,28 @@ export const deleteTransactionsById = async (transactionIds: string[]) => {
         : `${result.count} transactions deleted successfully`;
 
     return {
-      success: true,
-      message,
       data: { count: result.count, deletedIds: transactionIds },
       error: false,
+      message,
       statusCode: 200,
+      success: true,
     } as ApiResponse<{ count: number; deletedIds: string[] }>;
   } catch (error) {
     if (error instanceof LoanPaymentError) {
       return {
-        success: false,
-        message: error.message,
         data: null,
         error: true,
+        message: error.message,
         statusCode: error.statusCode,
+        success: false,
       } as ApiResponse<null>;
     }
     return {
-      success: false,
-      message: "Error deleting transactions",
       data: null,
       error: true,
+      message: "Error deleting transactions",
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

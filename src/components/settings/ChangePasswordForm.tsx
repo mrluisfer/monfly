@@ -4,7 +4,6 @@ import {
   useCanGoBack,
   useNavigate,
   useRouter,
-  useSearch,
 } from "@tanstack/react-router";
 import {
   ArrowLeftIcon,
@@ -48,15 +47,15 @@ const passwordRequirements = [
   { regex: /[A-Z]/, text: "At least 1 uppercase letter" },
 ];
 
-type PasswordFieldProps<
+interface PasswordFieldProps<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-> = {
+> {
+  autoComplete: string;
   field: ControllerRenderProps<TFieldValues, TName>;
   label: string;
   placeholder: string;
-  autoComplete: string;
-};
+}
 
 function PasswordField<
   TFieldValues extends FieldValues = FieldValues,
@@ -89,7 +88,7 @@ function PasswordField<
             aria-label={isVisible ? "Hide password" : "Show password"}
             aria-pressed={isVisible}
             aria-controls={id}
-            className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px]"
+            className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
           >
             {isVisible ? (
               <EyeOffIcon size={16} aria-hidden="true" />
@@ -138,12 +137,12 @@ export function ChangePasswordForm() {
   const canGoBack = useCanGoBack();
 
   const form = useForm<ChangePasswordFormValues>({
-    resolver: zodResolver(changePasswordSchema),
     defaultValues: {
       [changePasswordFormNames.currentPassword]: "",
       [changePasswordFormNames.newPassword]: "",
       [changePasswordFormNames.confirmNewPassword]: "",
     },
+    resolver: zodResolver(changePasswordSchema),
   });
 
   const newPassword = useWatch({
@@ -257,7 +256,7 @@ export function ChangePasswordForm() {
           </RequirementRow>
         </ul>
 
-        <div className="flex items-center gap-4 justify-between flex-wrap">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <Button
             variant={"secondary"}
             type="button"

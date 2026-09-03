@@ -3,13 +3,13 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { FormControl, FormItem, FormLabel } from "~/components/ui/form";
 import { cn } from "~/lib/utils";
 
-type ConsentRowProps = {
+interface ConsentRowProps {
   checked: boolean;
-  onCheckedChange: (checked: boolean) => void;
-  title: React.ReactNode;
   description: string;
   error?: string;
-};
+  onCheckedChange: (checked: boolean) => void;
+  title: React.ReactNode;
+}
 
 /** Legal acknowledgement checkbox. Shared by signup and account settings so
  *  both surfaces show the exact same wording. */
@@ -25,7 +25,7 @@ export function ConsentRow({
     <FormItem
       className={cn(
         "flex flex-row items-start gap-3 px-0 py-3 transition-colors first:pt-0 last:pb-0",
-        error && "bg-destructive/5 rounded-lg px-3",
+        error && "rounded-lg bg-destructive/5 px-3",
       )}
     >
       <FormControl>
@@ -38,14 +38,14 @@ export function ConsentRow({
         />
       </FormControl>
       <div className="min-w-0 space-y-0.5">
-        <FormLabel htmlFor={id} className="text-sm font-medium">
+        <FormLabel htmlFor={id} className="font-medium text-sm">
           {title}
         </FormLabel>
         <p id={`${id}-desc`} className="text-muted-foreground text-xs">
           {description}
         </p>
         {error ? (
-          <p className="text-destructive text-xs font-medium" role="alert">
+          <p className="font-medium text-destructive text-xs" role="alert">
             {error}
           </p>
         ) : null}

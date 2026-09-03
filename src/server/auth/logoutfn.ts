@@ -13,21 +13,21 @@ export const logoutFn = createServerFn({ method: "POST" })
       await session.clear();
     } catch {
       return {
+        data: null,
         error: true,
         message: "Error logging out",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<string | null>;
     }
 
     if (manualRedirect) {
       return {
+        data: null,
         error: false,
         message: "Logout successful",
-        data: null,
-        success: true,
         statusCode: 200,
+        success: true,
       } as ApiResponse<string | null>;
     }
 

@@ -6,20 +6,22 @@ export const deleteLoanById = async (
   id: string,
 ): Promise<ApiResponse<{ id: string } | null>> => {
   try {
-    if (!email) throw new Error("Email is required");
+    if (!email) {
+      throw new Error("Email is required");
+    }
 
     const existing = await prismaClient.loan.findFirst({
-      where: { id, userEmail: email },
       select: { id: true },
+      where: { id, userEmail: email },
     });
 
     if (!existing) {
       return {
+        data: null,
         error: true,
         message: "Loan not found",
-        data: null,
-        success: false,
         statusCode: 404,
+        success: false,
       };
     }
 
@@ -32,31 +34,31 @@ export const deleteLoanById = async (
     });
     if (linkedPayments > 0) {
       return {
+        data: null,
         error: true,
         message: "Cannot delete loan with linked payment transactions",
-        data: null,
-        success: false,
         statusCode: 409,
+        success: false,
       };
     }
 
     await prismaClient.loan.delete({ where: { id } });
 
     return {
+      data: { id },
       error: false,
       message: "Loan deleted successfully",
-      data: { id },
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error deleting loan: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

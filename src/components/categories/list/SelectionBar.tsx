@@ -5,17 +5,17 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
-type SelectionBarProps = {
+interface SelectionBarProps {
   filteredCategories: Category[];
-  isFiltering: boolean;
-  selectedSet: Set<string>;
-  handleSelectAll: () => void;
   handleDeselectAll: () => void;
-  handleSelectCategories: (ids: string[]) => void;
   handleDeselectCategories: (ids: string[]) => void;
-  totalCategories: number;
+  handleSelectAll: () => void;
+  handleSelectCategories: (ids: string[]) => void;
+  isFiltering: boolean;
   selectedCount: number;
-};
+  selectedSet: Set<string>;
+  totalCategories: number;
+}
 
 export const SelectionBar = ({
   filteredCategories,
@@ -43,27 +43,36 @@ export const SelectionBar = ({
   const isPartial = selected > 0 && selected < total;
   const hasAny = selected > 0;
 
-  if (total === 0) return null;
+  if (total === 0) {
+    return null;
+  }
 
   const toggleAll = () => {
     if (isAllSelected) {
-      if (isFiltering) handleDeselectCategories(filteredCategoryIds);
-      else handleDeselectAll();
+      if (isFiltering) {
+        handleDeselectCategories(filteredCategoryIds);
+      } else {
+        handleDeselectAll();
+      }
+    } else if (isFiltering) {
+      handleSelectCategories(filteredCategoryIds);
     } else {
-      if (isFiltering) handleSelectCategories(filteredCategoryIds);
-      else handleSelectAll();
+      handleSelectAll();
     }
   };
 
   const clearSelection = () => {
-    if (isFiltering) handleDeselectCategories(filteredCategoryIds);
-    else handleDeselectAll();
+    if (isFiltering) {
+      handleDeselectCategories(filteredCategoryIds);
+    } else {
+      handleDeselectAll();
+    }
   };
 
   return (
     <div
       className={cn(
-        "bg-card flex items-center justify-between gap-3 rounded-2xl border px-3 py-2 transition-colors",
+        "flex items-center justify-between gap-3 rounded-2xl border bg-card px-3 py-2 transition-colors",
         hasAny
           ? "border-primary/30 bg-primary/[0.04]"
           : "border-border/60 bg-muted/30",
@@ -81,7 +90,7 @@ export const SelectionBar = ({
         />
         <label
           htmlFor="select-all-categories"
-          className="cursor-pointer text-sm font-medium select-none"
+          className="cursor-pointer select-none font-medium text-sm"
         >
           {hasAny ? (
             <span className="text-foreground">

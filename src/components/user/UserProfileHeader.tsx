@@ -17,9 +17,9 @@ import { sileo } from "~/lib/toaster";
 import { invalidateUserQueries } from "~/utils/query-invalidation";
 
 interface User {
-  name?: string | null;
-  email?: string | null;
   avatarSeed?: string | null;
+  email?: string | null;
+  name?: string | null;
 }
 
 interface UserProfileHeaderProps {
@@ -45,11 +45,11 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
     },
   });
 
-  if (!user?.name) {
+  if (!user.name) {
     return (
-      <header className="border-border/60 bg-card/40 flex items-center gap-3 rounded-2xl border border-dashed p-4">
+      <header className="flex items-center gap-3 rounded-2xl border border-border/60 border-dashed bg-card/40 p-4">
         <CircleUserIcon
-          className="text-muted-foreground size-5"
+          className="size-5 text-muted-foreground"
           aria-hidden="true"
         />
         <p className="text-muted-foreground text-sm">
@@ -59,12 +59,12 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
     );
   }
 
-  const reshuffle = () => {
+  const reshuffle = async () => {
     const next = `${user.name}-${Date.now()}-${Math.random()
       .toString(36)
       .slice(2)}`;
     setSeed(next);
-    void avatarMutation.mutate({ data: { avatarSeed: next } });
+    await avatarMutation.mutate({ data: { avatarSeed: next } });
   };
 
   return (
@@ -72,7 +72,7 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
       <div className="flex items-center gap-3">
         <span
           aria-hidden="true"
-          className="ring-foreground/10 ring-offset-background relative inline-flex shrink-0 rounded-full ring-1 ring-offset-2"
+          className="relative inline-flex shrink-0 rounded-full ring-1 ring-foreground/10 ring-offset-2 ring-offset-background"
         >
           <UserAvatar
             alt={user.name}
@@ -80,7 +80,7 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
             seed={seed ?? undefined}
             size={56}
           />
-          <span className="border-background absolute -right-0.5 -bottom-0.5 inline-flex size-3.5 items-center justify-center rounded-full border-2 bg-emerald-500" />
+          <span className="absolute -right-0.5 -bottom-0.5 inline-flex size-3.5 items-center justify-center rounded-full border-2 border-background bg-emerald-500" />
         </span>
 
         <Tooltip>
@@ -93,7 +93,7 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
                 onClick={reshuffle}
                 disabled={avatarMutation.status === "pending"}
                 aria-label="Shuffle profile picture"
-                className="text-muted-foreground hover:text-foreground size-8 shrink-0 rounded-full"
+                className="size-8 shrink-0 rounded-full text-muted-foreground hover:text-foreground"
               >
                 <RefreshCwIcon
                   className={
@@ -112,14 +112,14 @@ export function UserProfileHeader({ user }: UserProfileHeaderProps) {
         </Tooltip>
 
         <div className="min-w-0 space-y-1">
-          <p className="text-muted-foreground text-[0.7rem] font-semibold tracking-[0.13em] uppercase">
+          <p className="font-semibold text-[0.7rem] text-muted-foreground uppercase tracking-[0.13em]">
             Welcome back
           </p>
-          <h1 className="text-foreground font-[family-name:var(--font-syne)] text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h1 className="font-[family-name:var(--font-syne)] font-semibold text-2xl text-foreground tracking-tight sm:text-3xl">
             {user.name}
           </h1>
           {user.email ? (
-            <p className="text-muted-foreground flex items-center gap-1.5 text-sm">
+            <p className="flex items-center gap-1.5 text-muted-foreground text-sm">
               <MailIcon className="size-3.5" aria-hidden="true" />
               <span className="truncate">{user.email}</span>
             </p>

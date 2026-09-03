@@ -26,12 +26,12 @@ import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { ChartError, ChartLoading } from "./ChartLoading";
 
-type MonthlyActivityTooltipProps = {
+interface MonthlyActivityTooltipProps {
   active?: boolean;
-  payload?: Array<{ value?: number }>;
   label?: string;
+  payload?: Array<{ value?: number }>;
   totalTransactions: number;
-};
+}
 
 function MonthlyActivityTooltip({
   active,
@@ -39,7 +39,7 @@ function MonthlyActivityTooltip({
   label,
   totalTransactions,
 }: MonthlyActivityTooltipProps) {
-  if (!active || !payload?.length) {
+  if (!(active && payload?.length)) {
     return null;
   }
 
@@ -50,14 +50,14 @@ function MonthlyActivityTooltip({
       : "0";
 
   return (
-    <div className="bg-background/95 border-border rounded-lg border p-3 shadow-lg backdrop-blur-sm">
-      <p className="text-foreground font-semibold">{label}</p>
+    <div className="rounded-lg border border-border bg-background/95 p-3 shadow-lg backdrop-blur-sm">
+      <p className="font-semibold text-foreground">{label}</p>
       <div className="mt-1 flex items-center gap-2">
-        <Activity className="text-primary size-5" />
+        <Activity className="size-5 text-primary" />
         <span className="text-muted-foreground text-sm">Transactions:</span>
-        <span className="text-foreground font-bold">{value}</span>
+        <span className="font-bold text-foreground">{value}</span>
       </div>
-      <p className="text-muted-foreground mt-1 text-xs">
+      <p className="mt-1 text-muted-foreground text-xs">
         {percentage}% of total activity
       </p>
     </div>
@@ -67,14 +67,14 @@ function MonthlyActivityTooltip({
 export default function ChartTransactionsByMonth() {
   const userEmail = useRouteUser();
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.charts.byMonth(userEmail),
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
     queryFn: () =>
       getTransactionsCountByMonthServer({ data: { email: userEmail } }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 3, // 3 minutes cache
-    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    queryKey: queryKeys.charts.byMonth(userEmail),
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
   });
 
   // Process and validate chart data
@@ -83,8 +83,8 @@ export default function ChartTransactionsByMonth() {
     .map((item: { month?: unknown; count?: unknown }) => {
       const count = Number(item.count);
       return {
-        month: String(item.month || "Unknown"),
         count: Number.isFinite(count) ? Math.max(0, count) : 0,
+        month: String(item.month || "Unknown"),
       };
     })
     .filter((item) => item.count > 0);
@@ -105,25 +105,24 @@ export default function ChartTransactionsByMonth() {
     chartData.find((item) => item.count === minCount)?.month || "";
 
   // Calculate trend (simple comparison of last 2 months if available)
+  const latest = chartData.at(-1);
+  const previous = chartData.at(-2);
   const trendPercentage =
-    chartData.length >= 2 && chartData[chartData.length - 2]?.count > 0
-      ? ((chartData[chartData.length - 1]?.count -
-          chartData[chartData.length - 2]?.count) /
-          chartData[chartData.length - 2]?.count) *
-        100
+    latest && previous && previous.count > 0
+      ? ((latest.count - previous.count) / previous.count) * 100
       : 0;
 
   const isPositiveTrend = trendPercentage >= 0;
   const monthsWithData = chartData.length;
 
-  const shownChart = !isLoading && !error && chartData.length > 0;
-  const shownPlaceholder = !isLoading && !error && chartData.length === 0;
+  const shownChart = !(isLoading || error) && chartData.length > 0;
+  const shownPlaceholder = !(isLoading || error) && chartData.length === 0;
 
   return (
     <Card className="h-fit w-full max-w-5xl border-0 shadow-none">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-          <BarChart3Icon className="text-primary size-5" />
+          <BarChart3Icon className="size-5 text-primary" />
           Monthly Activity
         </CardTitle>
         <CardDescription>
@@ -134,25 +133,25 @@ export default function ChartTransactionsByMonth() {
       </CardHeader>
 
       <CardContent>
-        {isLoading && (
+        {isLoading ? (
           <ChartLoading message="Loading transaction activity..." />
-        )}
+        ) : null}
 
-        {error && (
+        {error ? (
           <ChartError
             title="Failed to load transaction data"
             message={error.message}
             onRetry={() => window.location.reload()}
           />
-        )}
+        ) : null}
 
-        {shownChart && (
+        {shownChart ? (
           <div className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
             <ChartContainer
               config={{
                 count: {
-                  label: "Transactions",
                   color: "hsl(221, 83%, 53%)", // Blue
+                  label: "Transactions",
                 },
               }}
               className="h-60 w-full min-w-0 sm:h-70 md:h-80"
@@ -160,10 +159,10 @@ export default function ChartTransactionsByMonth() {
               <BarChart
                 data={chartData}
                 margin={{
-                  top: 20,
-                  right: 10,
-                  left: 10,
                   bottom: 20,
+                  left: 10,
+                  right: 10,
+                  top: 20,
                 }}
               >
                 <ChartTooltip
@@ -187,9 +186,7 @@ export default function ChartTransactionsByMonth() {
                   tick={{ fontSize: 12 }}
                   minTickGap={14}
                   interval="preserveStartEnd"
-                  tickFormatter={(value) => {
-                    return value;
-                  }}
+                  tickFormatter={(value) => value}
                 />
                 <YAxis
                   allowDecimals={false}
@@ -213,11 +210,11 @@ export default function ChartTransactionsByMonth() {
               {/* Trend Information */}
               {chartData.length >= 2 && (
                 <>
-                  <div className="bg-muted flex flex-wrap items-center gap-2 rounded-xl p-3.5">
+                  <div className="flex flex-wrap items-center gap-2 rounded-xl bg-muted p-3.5">
                     {isPositiveTrend ? (
-                      <TrendingUpIcon className="text-primary size-4" />
+                      <TrendingUpIcon className="size-4 text-primary" />
                     ) : (
-                      <TrendingDownIcon className="text-destructive size-4" />
+                      <TrendingDownIcon className="size-4 text-destructive" />
                     )}
                     <span className="font-medium">
                       {isPositiveTrend ? "+" : ""}
@@ -236,9 +233,9 @@ export default function ChartTransactionsByMonth() {
 
               {/* Statistics Grid */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div className="bg-muted space-y-2 rounded-xl p-3.5">
+                <div className="space-y-2 rounded-xl bg-muted p-3.5">
                   <div className="flex items-center gap-2">
-                    <ArrowUpIcon className="text-primary size-5" />
+                    <ArrowUpIcon className="size-5 text-primary" />
                     <div>
                       <div className="text-muted-foreground text-xs">
                         Peak Month
@@ -251,9 +248,9 @@ export default function ChartTransactionsByMonth() {
                   </div>
                 </div>
 
-                <div className="bg-muted space-y-2 rounded-xl p-3.5">
+                <div className="space-y-2 rounded-xl bg-muted p-3.5">
                   <div className="flex items-center gap-2">
-                    <TargetIcon className="text-primary size-5" />
+                    <TargetIcon className="size-5 text-primary" />
                     <div>
                       <div className="text-muted-foreground text-xs">
                         Data Period
@@ -270,7 +267,7 @@ export default function ChartTransactionsByMonth() {
               </div>
 
               {/* Activity Distribution Bar */}
-              <div className="bg-muted space-y-2 rounded-xl p-3.5">
+              <div className="space-y-2 rounded-xl bg-muted p-3.5">
                 <div className="text-muted-foreground text-xs">
                   Monthly Distribution
                 </div>
@@ -283,17 +280,17 @@ export default function ChartTransactionsByMonth() {
                     return (
                       <div
                         key={item.month}
-                        className="bg-chart-1 flex-1 rounded-sm transition-opacity hover:opacity-80"
+                        className="flex-1 rounded-sm bg-chart-1 transition-opacity hover:opacity-80"
                         style={{
-                          opacity: Math.max(0.3, percentage / 100),
                           minWidth: "4px",
+                          opacity: Math.max(0.3, percentage / 100),
                         }}
                         title={`${item.month}: ${item.count} transactions (${percentage.toFixed(1)}%)`}
                       />
                     );
                   })}
                 </div>
-                <div className="text-muted-foreground flex justify-between gap-2 text-xs">
+                <div className="flex justify-between gap-2 text-muted-foreground text-xs">
                   <span className="truncate">
                     {minMonth} ({minCount})
                   </span>
@@ -304,18 +301,18 @@ export default function ChartTransactionsByMonth() {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
 
-        {shownPlaceholder && (
+        {shownPlaceholder ? (
           <DataNotFoundPlaceholder>
             No transaction data found.
             <br />
-            <span className="text-muted-foreground mt-2 block text-xs">
+            <span className="mt-2 block text-muted-foreground text-xs">
               <Calendar className="mr-1 inline size-4" />
               Start making transactions to see your monthly activity.
             </span>
           </DataNotFoundPlaceholder>
-        )}
+        ) : null}
       </CardContent>
     </Card>
   );

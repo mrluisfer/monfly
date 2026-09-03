@@ -20,10 +20,10 @@ export const getActiveLoansByEmailServer = createServerFn({ method: "GET" })
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "loan:active",
-        limit: 120,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 120,
+        scope: "loan:active",
+        windowMs: 60_000,
       });
 
       return await getActiveLoansByEmail(sessionEmail, {
@@ -35,11 +35,11 @@ export const getActiveLoansByEmailServer = createServerFn({ method: "GET" })
         return securityErrorResponse as ApiResponse<null>;
       }
       return {
+        data: null,
         error: true,
         message: "Error fetching active loans",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

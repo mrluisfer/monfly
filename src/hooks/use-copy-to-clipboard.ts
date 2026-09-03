@@ -2,11 +2,11 @@ import { useCallback, useRef, useState } from "react";
 
 export type CopyState = "idle" | "done" | "error";
 
-export type UseCopyToClipboardOptions = {
-  onCopySuccess?: (text: string) => void;
+export interface UseCopyToClipboardOptions {
   onCopyError?: (error: Error) => void;
+  onCopySuccess?: (text: string) => void;
   resetDelay?: number;
-};
+}
 
 export function useCopyToClipboard({
   onCopySuccess,
@@ -14,14 +14,14 @@ export function useCopyToClipboard({
   resetDelay = 1500,
 }: UseCopyToClipboardOptions = {}) {
   const [state, setState] = useState<CopyState>("idle");
-  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined,
+  );
 
   const copy = useCallback(
     async (text: string | (() => string)) => {
       // Clear any pending reset
-      if (resetTimeoutRef.current) {
-        clearTimeout(resetTimeoutRef.current);
-      }
+      clearTimeout(resetTimeoutRef.current);
 
       try {
         const finalText = typeof text === "function" ? text() : text;
@@ -43,5 +43,5 @@ export function useCopyToClipboard({
     [onCopyError, onCopySuccess, resetDelay],
   );
 
-  return { state, copy } as const;
+  return { copy, state } as const;
 }

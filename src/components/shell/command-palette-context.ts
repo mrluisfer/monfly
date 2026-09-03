@@ -1,13 +1,13 @@
-import * as React from "react";
+import { createContext, useContext } from "react";
 
-export type CommandPaletteContextValue = {
+export interface CommandPaletteContextValue {
   open: boolean;
   setOpen: (open: boolean) => void;
   toggle: () => void;
-};
+}
 
 export const CommandPaletteContext =
-  React.createContext<CommandPaletteContextValue | null>(null);
+  createContext<CommandPaletteContextValue | null>(null);
 
 /**
  * Lives apart from `CommandPalette.tsx` on purpose. A module that exports both
@@ -18,10 +18,11 @@ export const CommandPaletteContext =
  * in a component-free module makes Vite reload its importers instead.
  */
 export function useCommandPalette() {
-  const ctx = React.useContext(CommandPaletteContext);
-  if (!ctx)
+  const ctx = useContext(CommandPaletteContext);
+  if (!ctx) {
     throw new Error(
       "useCommandPalette must be used inside CommandPaletteProvider",
     );
+  }
   return ctx;
 }

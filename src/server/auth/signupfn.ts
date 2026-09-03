@@ -26,22 +26,22 @@ export const signupFn = createServerFn({ method: "POST" })
 
       // Consent is a legal record: never take the client's word for the
       // checkbox being rendered, re-check it here before creating anything.
-      if (!data.acceptTerms || !data.acceptPrivacy) {
+      if (!(data.acceptTerms && data.acceptPrivacy)) {
         return {
+          data: null,
           error: true,
           message:
             "You must accept the Terms & Conditions and the Privacy Policy",
-          data: null,
-          success: false,
           statusCode: 400,
+          success: false,
         } as ApiResponse<string | null>;
       }
 
       enforceRateLimit({
-        scope: "auth:signup",
-        limit: 4,
-        windowMs: 5 * 60_000,
         identifier: normalizedEmail,
+        limit: 4,
+        scope: "auth:signup",
+        windowMs: 5 * 60_000,
       });
 
       // Check if the user already exists
@@ -60,12 +60,12 @@ export const signupFn = createServerFn({ method: "POST" })
       if (found) {
         if (found.password !== password) {
           return {
-            error: true,
-            userExists: true,
-            message: "User already exists",
-            success: false,
-            statusCode: 400,
             data: null,
+            error: true,
+            message: "User already exists",
+            statusCode: 400,
+            success: false,
+            userExists: true,
           } as ApiResponse<string | null>;
         }
 
@@ -75,11 +75,11 @@ export const signupFn = createServerFn({ method: "POST" })
         });
 
         return {
+          data: found.email,
           error: false,
           message: "User already exists",
-          data: found.email,
-          success: true,
           statusCode: 200,
+          success: true,
         } as ApiResponse<string | null>;
       }
 
@@ -88,11 +88,11 @@ export const signupFn = createServerFn({ method: "POST" })
       const acceptedAt = new Date();
       const user = await prismaClient.user.create({
         data: {
-          email: normalizedEmail,
-          password,
-          name: data.name,
-          acceptedTermsAt: acceptedAt,
           acceptedPrivacyAt: acceptedAt,
+          acceptedTermsAt: acceptedAt,
+          email: normalizedEmail,
+          name: data.name,
+          password,
         },
       });
 
@@ -103,11 +103,11 @@ export const signupFn = createServerFn({ method: "POST" })
         });
 
         return {
+          data: user.email,
           error: false,
           message: "User created successfully",
-          data: user.email,
-          success: true,
           statusCode: 201,
+          success: true,
         } as ApiResponse<string | null>;
       }
     } catch (error) {
@@ -117,11 +117,11 @@ export const signupFn = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error signing up",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<string | null>;
     }
   });

@@ -14,13 +14,13 @@ import { LoanFormSchema, type LoanFormValues } from "~/zod-schemas/loan-schema";
  * rather than whenever the page happened to mount.
  */
 export const buildLoanFormDefaults = (): LoanFormValues => ({
-  debtor: "",
   amount: "",
-  issuedAt: new Date(),
+  debtor: "",
+  direction: "borrowed",
   dueAt: null,
+  issuedAt: new Date(),
   notes: "",
   transactionId: null,
-  direction: "borrowed",
 });
 
 export const useAddLoan = () => {
@@ -28,12 +28,22 @@ export const useAddLoan = () => {
   const userEmail = useRouteUser();
 
   const form = useForm<LoanFormValues>({
-    resolver: zodResolver(LoanFormSchema),
     defaultValues: buildLoanFormDefaults(),
+    resolver: zodResolver(LoanFormSchema),
   });
 
   const mutation = useMutation({
     fn: postLoanByEmailServer,
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          amount: variables.data.loan.amount,
+          debtor: variables.data.loan.debtor.trim().toLowerCase(),
+          issuedAt: variables.data.loan.issuedAt?.toISOString() ?? "",
+        }),
+      onDuplicatePending: { title: "Loan is already being saved" },
+      onDuplicateRecentSuccess: { title: "Loan already saved" },
+    },
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
@@ -43,16 +53,6 @@ export const useAddLoan = () => {
       sileo.success({ title: "Loan created" });
       form.reset(buildLoanFormDefaults());
       await invalidateLoanQueries(queryClient, userEmail);
-    },
-    idempotency: {
-      getKey: (variables) =>
-        JSON.stringify({
-          debtor: variables.data.loan.debtor.trim().toLowerCase(),
-          amount: variables.data.loan.amount,
-          issuedAt: variables.data.loan.issuedAt?.toISOString() ?? "",
-        }),
-      onDuplicatePending: { title: "Loan is already being saved" },
-      onDuplicateRecentSuccess: { title: "Loan already saved" },
     },
   });
 
@@ -66,13 +66,13 @@ export const useAddLoan = () => {
         data: {
           email: userEmail,
           loan: {
-            debtor: values.debtor.trim(),
             amount: Number(values.amount),
-            issuedAt: values.issuedAt ?? new Date(),
+            debtor: values.debtor.trim(),
+            direction: values.direction ?? "borroed",
             dueAt: values.dueAt ?? null,
+            issuedAt: values.issuedAt ?? new Date(),
             notes: values.notes ?? null,
             transactionId: values.transactionId ?? null,
-            direction: values.direction ?? "borroed",
           },
         },
       });
@@ -81,5 +81,5 @@ export const useAddLoan = () => {
     }
   };
 
-  return { form, onSubmit, mutation };
+  return { form, mutation, onSubmit };
 };

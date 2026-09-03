@@ -1,5 +1,6 @@
 import type { Category } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 import { getCanonicalCategoryIconName } from "@/constants/categories/categories-icon";
 import { categoryFormNames } from "~/constants/forms/category-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
@@ -7,7 +8,6 @@ import { putCategoryByIdServer } from "~/lib/api/category/put-category-by-id";
 import { sileo } from "~/lib/toaster";
 import { getUserSession } from "~/server/db/users/get-user-session";
 import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-
 import { CategoryForm } from "./CategoryForm";
 
 export function EditCategory({
@@ -21,20 +21,6 @@ export function EditCategory({
 
   const updateCategory = useMutation({
     fn: putCategoryByIdServer,
-    onSuccess: async ({ data }) => {
-      if (isErrorPayload(data)) {
-        const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to update category" });
-        return;
-      }
-
-      sileo.success({ title: "Category updated successfully" });
-      const { data: userEmail } = await getUserSession();
-      if (userEmail) {
-        await invalidateCategoryQueries(queryClient, userEmail);
-      }
-      onCloseDialog?.();
-    },
     idempotency: {
       getKey: (variables) =>
         JSON.stringify({
@@ -49,28 +35,46 @@ export function EditCategory({
         title: "Category changes already applied",
       },
     },
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to update category" });
+        return;
+      }
+
+      sileo.success({ title: "Category updated successfully" });
+      const { data: userEmail } = await getUserSession();
+      if (userEmail) {
+        await invalidateCategoryQueries(queryClient, userEmail);
+      }
+      onCloseDialog?.();
+    },
   });
-  const handleSubmit = async (data: Record<string, string>) => {
-    const name = data[categoryFormNames.name]?.trim();
-    const icon = data[categoryFormNames.icon]?.trim();
 
-    if (!name || !icon) {
-      sileo.error({ title: "Name and icon are required" });
-      return;
-    }
+  const handleSubmit = useCallback(
+    async (data: Record<string, string>) => {
+      const name = data[categoryFormNames.name]?.trim();
+      const icon = data[categoryFormNames.icon]?.trim();
 
-    try {
-      await updateCategory.mutate({
-        data: {
-          categoryId: category.id,
-          name,
-          icon: getCanonicalCategoryIconName(icon),
-        },
-      });
-    } catch {
-      sileo.error({ title: "Error updating category" });
-    }
-  };
+      if (!(name && icon)) {
+        sileo.error({ title: "Name and icon are required" });
+        return;
+      }
+
+      try {
+        await updateCategory.mutate({
+          data: {
+            categoryId: category.id,
+            icon: getCanonicalCategoryIconName(icon),
+            name,
+          },
+        });
+      } catch {
+        sileo.error({ title: "Error updating category" });
+      }
+    },
+    [category.id, updateCategory.mutate],
+  );
 
   return (
     <CategoryForm

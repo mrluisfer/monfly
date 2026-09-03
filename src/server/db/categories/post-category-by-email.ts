@@ -11,27 +11,27 @@ export const postCategoryByEmail = async (
 
     const categoryCreated = await prismaClient.category.create({
       data: {
-        name: category.name,
-        icon: category.icon,
-        userEmail,
         createdAt: currentDate,
+        icon: category.icon,
+        name: category.name,
+        userEmail,
       },
     });
 
     return {
-      success: true,
-      message: "Category created successfully",
       data: categoryCreated,
       error: false,
+      message: "Category created successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<Category>;
   } catch {
     return {
-      success: false,
-      message: "Error posting category",
       data: null,
       error: true,
+      message: "Error posting category",
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

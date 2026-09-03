@@ -13,18 +13,20 @@ import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-c
 import { cn } from "~/lib/utils";
 import { queryKeys } from "~/utils/query-keys";
 
-type ChartPoint = {
-  income?: number;
+interface ChartPoint {
   expense?: number;
+  income?: number;
   month?: string;
-};
+}
 
 function safe(n: unknown) {
   return Number.isFinite(n as number) ? Number(n) : 0;
 }
 
 function pctDelta(current: number, previous: number) {
-  if (!previous) return null;
+  if (!previous) {
+    return null;
+  }
   return ((current - previous) / Math.abs(previous)) * 100;
 }
 
@@ -35,16 +37,16 @@ export function DashboardMetrics({ className }: { className?: string }) {
   const hideMetrics = useAtomValue(hideMetricsAtom);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5,
     queryFn: () =>
       getIncomeExpenseDataServer({
-        data: { email: userEmail, cardId: activeCard },
+        data: { cardId: activeCard, email: userEmail },
       }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 3,
-    gcTime: 1000 * 60 * 5,
+    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 3,
   });
 
   const summary = useMemo(() => {
@@ -65,34 +67,40 @@ export function DashboardMetrics({ className }: { className?: string }) {
       totalIncome > 0 ? Math.round((netTotal / totalIncome) * 100) : 0;
 
     return {
-      totalIncome,
-      totalExpenses,
-      netTotal,
-      latestLabel: last?.month ?? "Latest",
-      incomeDelta,
       expenseDelta,
+      incomeDelta,
+      latestLabel: last?.month ?? "Latest",
       netDelta,
+      netTotal,
       savingsRate,
+      totalExpenses,
+      totalIncome,
     };
   }, [data?.data]);
 
-  if (hideMetrics) return null;
+  if (hideMetrics) {
+    return null;
+  }
 
   if (error) {
     return (
-      <div className="bg-card text-destructive border-destructive/20 rounded-2xl border p-4 text-sm">
+      <div className="rounded-2xl border border-destructive/20 bg-card p-4 text-destructive text-sm">
         Failed to load financial metrics.
       </div>
     );
   }
 
   const trend = (delta: number | null) => {
-    if (delta === null || !Number.isFinite(delta)) return undefined;
-    const direction =
-      Math.abs(delta) < 0.5 ? "flat" : delta > 0 ? "up" : "down";
+    if (delta === null || !Number.isFinite(delta)) {
+      return;
+    }
+    let direction: "up" | "down" | "flat" = "flat";
+    if (Math.abs(delta) >= 0.5) {
+      direction = delta > 0 ? "up" : "down";
+    }
     return {
-      value: `${Math.abs(delta).toFixed(1)}%`,
       direction: direction as "up" | "down" | "flat",
+      value: `${Math.abs(delta).toFixed(1)}%`,
     };
   };
 

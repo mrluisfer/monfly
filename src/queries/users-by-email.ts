@@ -4,9 +4,6 @@ import { queryDictionary } from "~/queries/dictionary";
 
 export const userByEmailQueryOptions = (email: string) =>
   queryOptions({
+    queryFn: () => getUserByEmailServer({ data: { email } }),
     queryKey: [queryDictionary.user, email] as const,
-    queryFn: ({ queryKey }) => {
-      const [, email] = queryKey;
-      return getUserByEmailServer({ data: { email } });
-    },
   });

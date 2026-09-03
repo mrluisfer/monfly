@@ -10,9 +10,9 @@ export const getChartTypeByCategory = async ({
 }) => {
   try {
     const result = await prismaClient.transaction.groupBy({
+      _sum: { amount: true },
       by: ["category", "type"],
       where: { userEmail: email, ...(cardId ? { cardId } : {}) },
-      _sum: { amount: true },
     });
 
     const categoryMap = new Map<
@@ -23,7 +23,7 @@ export const getChartTypeByCategory = async ({
     for (const row of result) {
       let entry = categoryMap.get(row.category);
       if (!entry) {
-        entry = { category: row.category, income: 0, expense: 0 };
+        entry = { category: row.category, expense: 0, income: 0 };
         categoryMap.set(row.category, entry);
       }
       if (row.type === "income") {
@@ -37,18 +37,18 @@ export const getChartTypeByCategory = async ({
 
     return {
       data,
-      message: "Income and expense by category retrieved successfully",
-      success: true,
       error: false,
+      message: "Income and expense by category retrieved successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<typeof data>;
   } catch {
     return {
       data: null,
-      message: "Failed to retrieve income/expense by category",
-      success: false,
       error: true,
+      message: "Failed to retrieve income/expense by category",
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

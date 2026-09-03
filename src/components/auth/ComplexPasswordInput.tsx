@@ -20,17 +20,31 @@ const passwordRequirements = [
 ];
 
 const getStrengthColor = (score: number) => {
-  if (score === 0) return "bg-border";
-  if (score <= 1) return "bg-red-500";
-  if (score <= 2) return "bg-orange-500";
-  if (score === 3) return "bg-amber-500";
+  if (score === 0) {
+    return "bg-border";
+  }
+  if (score <= 1) {
+    return "bg-red-500";
+  }
+  if (score <= 2) {
+    return "bg-orange-500";
+  }
+  if (score === 3) {
+    return "bg-amber-500";
+  }
   return "bg-emerald-500";
 };
 
 const getStrengthText = (score: number) => {
-  if (score === 0) return "Enter a password";
-  if (score <= 2) return "Weak password";
-  if (score === 3) return "Medium password";
+  if (score === 0) {
+    return "Enter a password";
+  }
+  if (score <= 2) {
+    return "Weak password";
+  }
+  if (score === 3) {
+    return "Medium password";
+  }
   return "Strong password";
 };
 
@@ -71,7 +85,7 @@ export default function ComplexPasswordInput<
               {...field}
             />
             <button
-              className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+              className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
               type="button"
               onClick={toggleVisibility}
               aria-label={isVisible ? "Hide password" : "Show password"}
@@ -91,7 +105,7 @@ export default function ComplexPasswordInput<
 
       {/* Password strength indicator */}
       <div
-        className="bg-border mt-3 mb-4 h-1 w-full overflow-hidden rounded-full"
+        className="mt-3 mb-4 h-1 w-full overflow-hidden rounded-full bg-border"
         role="progressbar"
         aria-valuenow={strengthScore}
         aria-valuemin={0}
@@ -101,13 +115,13 @@ export default function ComplexPasswordInput<
         <div
           className={`h-full ${getStrengthColor(strengthScore)} transition-all duration-500 ease-out`}
           style={{ width: `${(strengthScore / 4) * 100}%` }}
-        ></div>
+        />
       </div>
 
       {/* Password strength description */}
       <p
         id={`${id}-description`}
-        className="text-foreground mb-2 text-sm font-medium"
+        className="mb-2 font-medium text-foreground text-sm"
       >
         {getStrengthText(strengthScore)}. Must contain:
       </p>

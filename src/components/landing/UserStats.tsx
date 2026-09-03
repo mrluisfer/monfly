@@ -14,26 +14,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 const trustStats = [
   {
+    icon: <Star className="size-4 text-amber-500" />,
     label: "App rating",
     value: "4.9",
-    icon: <Star className="size-4 text-amber-500" />,
   },
   {
+    icon: <Clock3 className="size-4 text-cyan-600 dark:text-cyan-300" />,
     label: "Support response",
     value: "< 3m",
-    icon: <Clock3 className="size-4 text-cyan-600 dark:text-cyan-300" />,
   },
   {
-    label: "Protected funds",
-    value: "$900k",
     icon: (
       <DollarSign className="size-4 text-emerald-600 dark:text-emerald-300" />
     ),
+    label: "Protected funds",
+    value: "$900k",
   },
   {
+    icon: <ShieldCheck className="size-4 text-primary" />,
     label: "Data policy",
     value: "SOC aligned",
-    icon: <ShieldCheck className="text-primary size-4" />,
   },
 ];
 
@@ -59,11 +59,11 @@ export function UserStatsSection() {
             </Badge>
             <h2
               id="features-title"
-              className="font-[family-name:var(--font-syne)] text-3xl leading-[1.08] font-semibold text-balance sm:text-4xl"
+              className="text-balance font-[family-name:var(--font-syne)] font-semibold text-3xl leading-[1.08] sm:text-4xl"
             >
               Replace reactive tracking with live financial direction
             </h2>
-            <p className="text-muted-foreground text-sm text-pretty sm:text-base">
+            <p className="text-pretty text-muted-foreground text-sm sm:text-base">
               More than 200,000 users rely on Monfly to monitor spending, flag
               risk, and align day-to-day actions with long-term targets.
             </p>
@@ -89,7 +89,7 @@ export function UserStatsSection() {
         </div>
 
         <div
-          className={`relative mx-auto w-full max-w-5xl`}
+          className={"relative mx-auto w-full max-w-5xl"}
           style={{ animationDelay: "0.08s" }}
         >
           <div
@@ -110,13 +110,13 @@ export function UserStatsSection() {
               <Card key={label}>
                 <CardHeader>
                   <CardTitle>
-                    <p className="text-muted-foreground tracking-[0.12em] uppercase">
+                    <p className="text-muted-foreground uppercase tracking-[0.12em]">
                       {label}
                     </p>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-lg font-semibold">{value}</p>
+                  <p className="font-semibold text-lg">{value}</p>
                 </CardContent>
               </Card>
             ))}
@@ -139,13 +139,13 @@ function StatCard({
   return (
     <Card>
       <CardHeader>
-        <span className="text-muted-foreground inline-flex items-center gap-2 text-xs tracking-[0.12em] uppercase">
+        <span className="inline-flex items-center gap-2 text-muted-foreground text-xs uppercase tracking-[0.12em]">
           {children}
           <CardTitle>{label}</CardTitle>
         </span>
       </CardHeader>
       <CardContent>
-        <p className="text-foreground mt-2 text-xl font-semibold">{value}</p>
+        <p className="mt-2 font-semibold text-foreground text-xl">{value}</p>
       </CardContent>
     </Card>
   );

@@ -17,7 +17,7 @@ describe("queryKeys cardId handling", () => {
   it("appends cardId as the LAST segment when a card is active", () => {
     const key = queryKeys.transactions.byEmail(EMAIL, CARD);
     expect(key).toEqual([queryDictionary.transactions, EMAIL, CARD]);
-    expect(key[key.length - 1]).toBe(CARD);
+    expect(key.at(-1)).toBe(CARD);
   });
 
   it("treats null/empty cardId as 'no card' (aggregate key identity stays)", () => {

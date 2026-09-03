@@ -12,15 +12,15 @@ import {
 import { useLoanDebtors } from "~/hooks/loans";
 import { useIsDesktop } from "~/hooks/ui";
 
-type DebtorComboboxProps = {
-  value: string;
-  onChange: (value: string) => void;
-  onBlur?: () => void;
+interface DebtorComboboxProps {
+  disabled?: boolean;
   /** Field name, forwarded to the underlying input for RHF/autofill. */
   name?: string;
+  onBlur?: () => void;
+  onChange: (value: string) => void;
   placeholder?: string;
-  disabled?: boolean;
-};
+  value: string;
+}
 
 /**
  * Free-text name field for a loan's counterparty (debtor or creditor) that also
@@ -69,7 +69,9 @@ export function DebtorCombobox({
       onInputValueChange={(next) => onChange(next)}
       filter={(item, query) => {
         const q = query.trim().toLowerCase();
-        if (!q) return true;
+        if (!q) {
+          return true;
+        }
         return String(item).toLowerCase().includes(q);
       }}
       limit={limit}
@@ -92,7 +94,7 @@ export function DebtorCombobox({
           <ComboboxList>
             {(item: string) => (
               <ComboboxItem key={item} value={item}>
-                <UserRoundIcon className="text-muted-foreground size-4" />
+                <UserRoundIcon className="size-4 text-muted-foreground" />
                 <span className="truncate">{item}</span>
               </ComboboxItem>
             )}

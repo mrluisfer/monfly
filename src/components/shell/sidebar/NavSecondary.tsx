@@ -27,20 +27,20 @@ import {
 } from "./sidebar-constants";
 import { getActivePath, resolveRoutePath } from "./utils";
 
-type SecondaryItem = {
+interface SecondaryItem {
+  icon: typeof UserIcon;
   key: string;
   label: string;
-  icon: typeof UserIcon;
-  to: string;
   params?: Record<string, string>;
+  to: string;
   variant?: "default" | "destructive";
-};
+}
 
-type SecondaryGroup = {
+interface SecondaryGroup {
+  items: SecondaryItem[];
   key: string;
   label?: string;
-  items: SecondaryItem[];
-};
+}
 
 export function NavSecondary() {
   const location = useLocation();
@@ -48,64 +48,64 @@ export function NavSecondary() {
   const userEmail = useRouteUser();
 
   const { data } = useQuery({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
     retry: 1,
+    staleTime: 1000 * 60 * 5,
   });
 
   const userId = data?.data?.id;
 
   const groups: SecondaryGroup[] = [
     {
-      key: "account",
-      label: "Account",
       items: [
         ...(userId
           ? [
               {
+                icon: UserIcon,
                 key: "profile",
                 label: "Profile",
-                icon: UserIcon,
-                to: "/user/$userId",
                 params: { userId },
+                to: "/user/$userId",
               },
             ]
           : []),
         {
+          icon: KeyRoundIcon,
           key: "change-password",
           label: "Change Password",
-          icon: KeyRoundIcon,
           to: CHANGE_PASSWORD_PATH,
         },
         {
+          icon: SettingsIcon,
           key: "settings",
           label: "Settings",
-          icon: SettingsIcon,
           to: SETTINGS_PATH,
         },
       ],
+      key: "account",
+      label: "Account",
     },
     {
-      key: "support",
-      label: "Support",
       items: [
         {
+          icon: LifeBuoyIcon,
           key: "help",
           label: "Help",
-          icon: LifeBuoyIcon,
           to: HELP_PATH,
         },
         {
+          icon: LogOutIcon,
           key: "signout",
           label: "Sign Out",
-          icon: LogOutIcon,
           to: "/signout",
           variant: "destructive",
         },
       ],
+      key: "support",
+      label: "Support",
     },
   ];
 
@@ -138,7 +138,7 @@ export function NavSecondary() {
                     isActive={active}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium",
+                      "data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground",
                       "transition-colors",
                       isDestructive &&
                         "text-destructive hover:text-destructive focus-visible:text-destructive [&_svg]:text-destructive",

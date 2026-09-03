@@ -19,10 +19,10 @@ export const getCardsByEmailServer = createServerFn({ method: "GET" })
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "card:list",
-        limit: 120,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 120,
+        scope: "card:list",
+        windowMs: 60_000,
       });
 
       return await getCardsByEmail({
@@ -36,11 +36,11 @@ export const getCardsByEmailServer = createServerFn({ method: "GET" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error fetching cards",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

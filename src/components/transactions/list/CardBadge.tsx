@@ -8,14 +8,14 @@ import {
 import { cn } from "~/lib/utils";
 
 /** The slice of a card we need to render a chip — keeps callers decoupled from Prisma. */
-export type CardSummary = {
-  id: string;
-  name: string;
-  last4?: string | null;
+export interface CardSummary {
   color?: string | null;
-};
+  id: string;
+  last4?: string | null;
+  name: string;
+}
 
-type CardBadgeProps = {
+interface CardBadgeProps {
   card?: CardSummary | null;
   className?: string;
   /**
@@ -25,7 +25,7 @@ type CardBadgeProps = {
   hint?: string;
   /** Opt out of the tooltip (falls back to the native `title`). */
   withTooltip?: boolean;
-};
+}
 
 /**
  * Tint helpers — blend the card's own accent color into the chip's border, fill
@@ -59,7 +59,9 @@ export function CardBadge({
   hint = "Linked to this transaction",
   withTooltip = true,
 }: CardBadgeProps) {
-  if (!card) return null;
+  if (!card) {
+    return null;
+  }
 
   // const accent = accentStyles(card.color);
   const titleText = `${card.name}${card.last4 ? ` •••• ${card.last4}` : ""}`;
@@ -69,9 +71,9 @@ export function CardBadge({
       variant="outline"
       tabIndex={withTooltip ? 0 : undefined}
       className={cn(
-        "text-muted-foreground max-w-[180px] cursor-default gap-1.5 font-normal",
+        "max-w-[180px] cursor-default gap-1.5 font-normal text-muted-foreground",
         withTooltip &&
-          "focus-visible:ring-ring/40 transition-colors hover:brightness-105 focus-visible:ring-2 focus-visible:outline-none",
+          "transition-colors hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
         className,
       )}
       title={withTooltip ? undefined : titleText}
@@ -90,14 +92,16 @@ export function CardBadge({
       )}
       <span className="min-w-0 truncate font-medium">{card.name}</span>
       {card.last4 ? (
-        <span className="text-primary shrink-0 tabular-nums">
+        <span className="shrink-0 text-primary tabular-nums">
           ·{card.last4}
         </span>
       ) : null}
     </Badge>
   );
 
-  if (!withTooltip) return badge;
+  if (!withTooltip) {
+    return badge;
+  }
 
   return (
     <Tooltip>
@@ -109,7 +113,7 @@ export function CardBadge({
             style={{ backgroundColor: card.color ?? "currentColor" }}
             aria-hidden="true"
           />
-          <span className="text-[13px] leading-none font-semibold capitalize">
+          <span className="font-semibold text-[13px] capitalize leading-none">
             {card.name}
           </span>
         </div>

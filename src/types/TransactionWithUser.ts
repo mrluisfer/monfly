@@ -1,4 +1,17 @@
-export type TransactionWithUser = {
+export interface TransactionWithUser {
+  amount: number;
+  /** Loan this transaction is recorded as a payment of, if any. */
+  appliedToLoanId?: string | null;
+  cardId: string | null;
+  category: string;
+  createdAt: Date;
+  date: Date;
+  description: string | null;
+  id: string;
+  /** Number of Loan rows linked to this transaction (>= 0). */
+  loanCount?: number;
+  type: string;
+  updatedAt: Date;
   user?: {
     name: string | null;
     email: string;
@@ -8,20 +21,7 @@ export type TransactionWithUser = {
     totalBalance: number;
     updatedAt: Date;
   };
-  type: string;
-  amount: number;
-  createdAt: Date;
-  id: string;
   userEmail: string;
-  category: string;
-  description: string | null;
-  date: Date;
-  updatedAt: Date;
-  cardId: string | null;
-  /** Loan this transaction is recorded as a payment of, if any. */
-  appliedToLoanId?: string | null;
-  /** Number of Loan rows linked to this transaction (>= 0). */
-  loanCount?: number;
-};
+}
 
 export type TransactionsWithUser = TransactionWithUser[];

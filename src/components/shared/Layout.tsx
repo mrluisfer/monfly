@@ -16,12 +16,12 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <CommandPaletteProvider>
         <a
           href="#main-content"
-          className="bg-primary text-primary-foreground focus:ring-ring sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:px-3 focus:py-2 focus:shadow-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
+          className="sr-only bg-primary text-primary-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:px-3 focus:py-2 focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
         >
           Skip to content
         </a>
         <AppSidebar />
-        <SidebarInset className="bg-background min-h-dvh">
+        <SidebarInset className="min-h-dvh bg-background">
           <Topbar />
           <main
             id="main-content"

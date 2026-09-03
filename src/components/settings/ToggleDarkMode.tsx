@@ -7,10 +7,10 @@ import { cn } from "~/lib/utils";
 import { Button } from "../ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
-type ToggleDarkModeProps = {
+interface ToggleDarkModeProps {
   className?: string;
   size?: ComponentProps<typeof Button>["size"];
-};
+}
 
 export default function ToggleDarkMode({
   className,

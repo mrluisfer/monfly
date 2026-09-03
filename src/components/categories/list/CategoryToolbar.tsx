@@ -19,22 +19,22 @@ import { SelectionBar } from "./SelectionBar";
 
 type ViewMode = "grid" | "list";
 
-type CategoryToolbarProps = {
-  searchValue: string;
-  setSearchValue: (value: string) => void;
-  viewMode: ViewMode;
-  setViewMode: (mode: ViewMode) => void;
-  isFiltering: boolean;
-  filteredCategories: Category[];
+interface CategoryToolbarProps {
   categoriesCount: number;
-  selectedSet: Set<string>;
-  handleSelectAll: () => void;
+  filteredCategories: Category[];
   handleDeselectAll: () => void;
-  handleSelectCategories: (ids: string[]) => void;
   handleDeselectCategories: (ids: string[]) => void;
-  totalCategories: number;
+  handleSelectAll: () => void;
+  handleSelectCategories: (ids: string[]) => void;
+  isFiltering: boolean;
+  searchValue: string;
   selectedCount: number;
-};
+  selectedSet: Set<string>;
+  setSearchValue: (value: string) => void;
+  setViewMode: (mode: ViewMode) => void;
+  totalCategories: number;
+  viewMode: ViewMode;
+}
 
 export const CategoryToolbar = ({
   searchValue,
@@ -66,7 +66,7 @@ export const CategoryToolbar = ({
             placeholder="Search categories…"
             aria-label="Search categories"
           />
-          {isFiltering && (
+          {isFiltering ? (
             <InputGroupAddon align="inline-end">
               <InputGroupButton
                 size="icon-xs"
@@ -76,7 +76,7 @@ export const CategoryToolbar = ({
                 <XIcon aria-hidden="true" />
               </InputGroupButton>
             </InputGroupAddon>
-          )}
+          ) : null}
         </InputGroup>
 
         <div className="flex items-center gap-3">
@@ -96,7 +96,9 @@ export const CategoryToolbar = ({
             value={[viewMode]}
             onValueChange={(values) => {
               const next = values[0] as ViewMode | undefined;
-              if (next) setViewMode(next);
+              if (next) {
+                setViewMode(next);
+              }
             }}
             variant="outline"
             size="sm"

@@ -12,20 +12,20 @@ export const deleteCategoriesById = async (
     });
 
     return {
+      data: { count: deletedCategories.count },
       error: false,
       message: "Categories deleted successfully",
-      data: { count: deletedCategories.count },
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     return {
+      data: { count: 0 },
       error: true,
       message:
         error instanceof Error ? error.message : "Error deleting categories",
-      data: { count: 0 },
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<{ count: number }>;
   }
 };

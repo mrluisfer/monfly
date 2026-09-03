@@ -5,6 +5,7 @@ import {
   CreditCardIcon,
   Trash2Icon,
 } from "lucide-react";
+import { useCallback } from "react";
 import { EditCard } from "@/components/cards/EditCard";
 import {
   AlertDialog,
@@ -44,6 +45,12 @@ export function SingleCard({ card }: { card: CardType }) {
   const { format: formatAmount } = useCurrency();
   const { remove } = useDeleteCard();
 
+  const removeCard = useCallback(() => remove(card.id), [card.id, remove]);
+  const archiveRestoreCard = useCallback(
+    () => (isArchived ? restore(card.id) : archive(card.id)),
+    [isArchived, restore, archive, card.id],
+  );
+
   return (
     <Card
       key={card.id}
@@ -65,8 +72,8 @@ export function SingleCard({ card }: { card: CardType }) {
             className="flex size-11 shrink-0 items-center justify-center rounded-xl ring-1"
             style={{
               backgroundColor: `color-mix(in oklch, ${accent} 14%, transparent)`,
-              color: accent,
               boxShadow: `inset 0 0 0 1px color-mix(in oklch, ${accent} 22%, transparent)`,
+              color: accent,
             }}
           >
             <CreditCardIcon className="size-5" />
@@ -74,25 +81,25 @@ export function SingleCard({ card }: { card: CardType }) {
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <p className="truncate font-semibold">{card.name}</p>
-              {typeLabel && (
+              {typeLabel ? (
                 <Badge variant="secondary" className="shrink-0">
                   {typeLabel}
                 </Badge>
-              )}
+              ) : null}
               {isArchived && (
                 <Badge variant="outline" className="shrink-0">
                   Archived
                 </Badge>
               )}
             </div>
-            <p className="text-muted-foreground mt-0.5 truncate text-sm">
+            <p className="mt-0.5 truncate text-muted-foreground text-sm">
               {meta}
             </p>
           </div>
         </div>
 
         {/* Actions: subtle by default, emphasized on hover/focus. */}
-        <div className="flex shrink-0 items-center gap-1 opacity-70 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+        <div className="flex shrink-0 items-center gap-1 opacity-70 transition-opacity focus-within:opacity-100 group-hover:opacity-100">
           <EditCard card={card} />
 
           <Tooltip>
@@ -103,9 +110,7 @@ export function SingleCard({ card }: { card: CardType }) {
                   variant="outline"
                   size="icon"
                   aria-label={isArchived ? "Restore card" : "Archive card"}
-                  onClick={() =>
-                    isArchived ? restore(card.id) : archive(card.id)
-                  }
+                  onClick={archiveRestoreCard}
                 >
                   {isArchived ? (
                     <ArchiveRestoreIcon className="size-4" />
@@ -151,7 +156,7 @@ export function SingleCard({ card }: { card: CardType }) {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => remove(card.id)}>
+                <AlertDialogAction onClick={removeCard}>
                   Delete
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -161,10 +166,10 @@ export function SingleCard({ card }: { card: CardType }) {
       </div>
 
       <div className="mt-auto">
-        <p className="text-muted-foreground text-[0.7rem] font-semibold tracking-[0.13em] uppercase">
+        <p className="font-semibold text-[0.7rem] text-muted-foreground uppercase tracking-[0.13em]">
           Balance
         </p>
-        <p className="mt-0.5 text-2xl font-semibold tracking-tight tabular-nums">
+        <p className="mt-0.5 font-semibold text-2xl tabular-nums tracking-tight">
           {formatAmount(card.balance ?? 0)}
         </p>
       </div>

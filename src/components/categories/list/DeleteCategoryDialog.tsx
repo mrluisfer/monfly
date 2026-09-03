@@ -41,7 +41,7 @@ export function DeleteCategoryDialog({
         <Card className="sticky z-10">
           <CardContent className="flex items-center justify-between gap-3">
             <p className="text-muted-foreground text-sm">
-              <span className="text-foreground font-semibold">
+              <span className="font-semibold text-foreground">
                 {selectedCount}
               </span>{" "}
               {selectedCount === 1 ? "category" : "categories"} selected
@@ -64,19 +64,19 @@ export function DeleteCategoryDialog({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <Trash2Icon className="text-destructive size-5" />
+              <Trash2Icon className="size-5 text-destructive" />
               Delete Selected Categories
             </AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete{" "}
-              <span className="text-foreground font-semibold">
+              <span className="font-semibold text-foreground">
                 {selectedCount}{" "}
                 {selectedCount === 1 ? "category" : "categories"}
               </span>
               ? This action cannot be undone.
             </AlertDialogDescription>
             {selectedCount > 0 && (
-              <div className="border-destructive/20 w-full flex-1 rounded-4xl border p-3">
+              <div className="w-full flex-1 rounded-4xl border border-destructive/20 p-3">
                 <div className="flex max-h-32 w-full flex-1 flex-wrap gap-1 overflow-y-auto">
                   {categories
                     .filter((cat) => selectedCategories.includes(cat.id))

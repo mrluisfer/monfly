@@ -1,15 +1,15 @@
 import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 
-export type ActiveLoanRow = {
-  id: string;
-  debtor: string;
+export interface ActiveLoanRow {
   amount: number;
   amountPaid: number;
-  status: string;
+  debtor: string;
   direction: string;
   dueAt: Date | null;
-};
+  id: string;
+  status: string;
+}
 
 /**
  * Returns the user's loans that still have an outstanding balance
@@ -25,48 +25,50 @@ export const getActiveLoansByEmail = async (
   options: { includeId?: string | null } = {},
 ): Promise<ApiResponse<ActiveLoanRow[] | null>> => {
   try {
-    if (!email) throw new Error("Email is required");
+    if (!email) {
+      throw new Error("Email is required");
+    }
 
     const includeId = options.includeId ?? null;
     const where = includeId
       ? {
-          userEmail: email,
           OR: [{ status: { in: ["pending", "partial"] } }, { id: includeId }],
+          userEmail: email,
         }
       : {
-          userEmail: email,
           status: { in: ["pending", "partial"] },
+          userEmail: email,
         };
 
     const loans = await prismaClient.loan.findMany({
-      where,
+      orderBy: [{ dueAt: "asc" }, { createdAt: "desc" }],
       select: {
-        id: true,
-        debtor: true,
         amount: true,
         amountPaid: true,
-        status: true,
+        debtor: true,
         direction: true,
         dueAt: true,
+        id: true,
+        status: true,
       },
-      orderBy: [{ dueAt: "asc" }, { createdAt: "desc" }],
+      where,
     });
 
     return {
+      data: loans,
       error: false,
       message: "Active loans fetched successfully",
-      data: loans,
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error fetching active loans: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

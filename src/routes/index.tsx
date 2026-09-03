@@ -40,7 +40,7 @@ function Home() {
     <div className="landing-shell relative min-h-screen overflow-x-clip pb-8">
       <a
         href="#main-content"
-        className="focus:bg-foreground focus:text-background sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-70 focus:rounded-full focus:px-4 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-70 focus:rounded-full focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
       >
         Skip to main content
       </a>
@@ -72,8 +72,8 @@ function Home() {
               href="https://github.com/mrluisfer/monfly"
               target="_blank"
               rel="noopener"
-              className="tracking-[0.13em] uppercase"
-            ></a>
+              className="uppercase tracking-[0.13em]"
+            />
           }
         >
           <GlobeIcon className="size-4" />

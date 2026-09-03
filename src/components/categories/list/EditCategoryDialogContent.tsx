@@ -10,10 +10,10 @@ import { getCategoryIconByName } from "~/constants/categories/categories-icon";
 
 import { EditCategory } from "../EditCategory";
 
-type EditCategoryDialogContentProps = {
+interface EditCategoryDialogContentProps {
   category: Category;
   onClose: () => void;
-};
+}
 
 export function EditCategoryDialogContent({
   category,
@@ -23,7 +23,7 @@ export function EditCategoryDialogContent({
     <DialogContent className="sm:max-w-lg">
       <DialogHeader className="space-y-3">
         <DialogTitle className="flex items-center gap-2">
-          <div className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-xl">
+          <div className="flex size-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
             {getCategoryIconByName(category.icon, { className: "size-4" })}
           </div>
           Edit Category

@@ -21,6 +21,15 @@ export const useDeleteTransaction = (userEmail: string) => {
 
   const mutation = useMutation({
     fn: deleteTransactionByIdServer,
+    idempotency: {
+      getKey: (variables) => variables.data.id,
+      onDuplicatePending: {
+        title: "Transaction is already being deleted",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Transaction already deleted",
+      },
+    },
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
@@ -32,15 +41,6 @@ export const useDeleteTransaction = (userEmail: string) => {
 
       sileo.success({ title: "Transaction deleted successfully" });
       await invalidateTransactionQueries(queryClient, userEmail);
-    },
-    idempotency: {
-      getKey: (variables) => variables.data.id,
-      onDuplicatePending: {
-        title: "Transaction is already being deleted",
-      },
-      onDuplicateRecentSuccess: {
-        title: "Transaction already deleted",
-      },
     },
   });
 

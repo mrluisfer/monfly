@@ -6,11 +6,28 @@ import { getTransactionByEmailServer } from "~/lib/api/transaction/get-transacti
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 
+/** One-line status for a debug panel: pending, failed, empty or loaded. */
+function describeQuery<TData>(
+  query: { isPending: boolean; error: Error | null; data: TData },
+  describeSuccess: (data: NonNullable<TData>) => string,
+): string {
+  if (query.isPending) {
+    return " Loading...";
+  }
+  if (query.error) {
+    return ` Error: ${query.error.message}`;
+  }
+  if (query.data === undefined || query.data === null) {
+    return " Not loaded";
+  }
+  return describeSuccess(query.data as NonNullable<TData>);
+}
+
 export function ApiDebugComponent() {
   const userEmail = useRouteUser();
 
   const transactionQuery = useQuery({
-    queryKey: [queryDictionary.transactions, userEmail, "debug"],
+    enabled: false, // Manual trigger only
     queryFn: async () => {
       const start = Date.now();
 
@@ -25,11 +42,11 @@ export function ApiDebugComponent() {
         throw error;
       }
     },
-    enabled: false, // Manual trigger only
+    queryKey: [queryDictionary.transactions, userEmail, "debug"],
   });
 
   const userQuery = useQuery({
-    queryKey: [queryDictionary.user, userEmail, "debug"],
+    enabled: false, // Manual trigger only
     queryFn: async () => {
       const start = Date.now();
 
@@ -44,11 +61,11 @@ export function ApiDebugComponent() {
         throw error;
       }
     },
-    enabled: false, // Manual trigger only
+    queryKey: [queryDictionary.user, userEmail, "debug"],
   });
 
   const expenseQuery = useQuery({
-    queryKey: [queryDictionary.transactions, userEmail, "expenses", "debug"],
+    enabled: false, // Manual trigger only
     queryFn: async () => {
       const start = Date.now();
 
@@ -63,12 +80,12 @@ export function ApiDebugComponent() {
         throw error;
       }
     },
-    enabled: false, // Manual trigger only
+    queryKey: [queryDictionary.transactions, userEmail, "expenses", "debug"],
   });
 
   return (
-    <div className="bg-muted/50 space-y-4 rounded-lg border p-4">
-      <h3 className="text-lg font-bold">API Debug Panel</h3>
+    <div className="space-y-4 rounded-lg border bg-muted/50 p-4">
+      <h3 className="font-bold text-lg">API Debug Panel</h3>
       <p className="text-muted-foreground text-sm">User: {userEmail}</p>
 
       <div className="flex flex-wrap gap-2">
@@ -100,35 +117,20 @@ export function ApiDebugComponent() {
       <div className="space-y-2 text-sm">
         <div>
           <strong>Transactions:</strong>
-          {transactionQuery.isPending
-            ? " Loading..."
-            : transactionQuery.error
-              ? ` Error: ${transactionQuery.error.message}`
-              : transactionQuery.data
-                ? ` Success (${transactionQuery.data.data?.length || 0} items)`
-                : " Not loaded"}
+          {describeQuery(
+            transactionQuery,
+            (data) => ` Success (${data.data?.length || 0} items)`,
+          )}
         </div>
 
         <div>
           <strong>User:</strong>
-          {userQuery.isPending
-            ? " Loading..."
-            : userQuery.error
-              ? ` Error: ${userQuery.error.message}`
-              : userQuery.data
-                ? ` Success (${userQuery.data.data?.name})`
-                : " Not loaded"}
+          {describeQuery(userQuery, (data) => ` Success (${data.data?.name})`)}
         </div>
 
         <div>
           <strong>Expenses:</strong>
-          {expenseQuery.isPending
-            ? " Loading..."
-            : expenseQuery.error
-              ? ` Error: ${expenseQuery.error.message}`
-              : expenseQuery.data !== undefined
-                ? ` Success ($${expenseQuery.data})`
-                : " Not loaded"}
+          {describeQuery(expenseQuery, (data) => ` Success ($${data})`)}
         </div>
       </div>
     </div>

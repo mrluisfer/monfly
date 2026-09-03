@@ -9,7 +9,10 @@ export const Route = createFileRoute("/_authed/user/theme/")({
   component: ThemePage,
 });
 
-type ThemeColorSet = { primary: string; bg: string };
+interface ThemeColorSet {
+  bg: string;
+  primary: string;
+}
 
 const THEME_COLORS: Record<
   string,
@@ -210,7 +213,7 @@ function ThemeCard({
       onClick={onSelect}
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-xl border-2 transition-all",
-        "focus-visible:ring-ring hover:shadow-md focus-visible:ring-2 focus-visible:outline-none",
+        "hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         isActive
           ? "border-primary shadow-sm"
           : "border-border hover:border-primary/40",
@@ -242,13 +245,13 @@ function ThemeCard({
       </div>
 
       {/* Label */}
-      <div className="bg-card flex items-center justify-between px-3 py-2.5">
-        <span className="text-sm font-medium">{name}</span>
-        {isActive && (
-          <span className="bg-primary text-primary-foreground flex size-5 items-center justify-center rounded-full">
+      <div className="flex items-center justify-between bg-card px-3 py-2.5">
+        <span className="font-medium text-sm">{name}</span>
+        {isActive ? (
+          <span className="flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
             <CheckIcon className="size-3" />
           </span>
-        )}
+        ) : null}
       </div>
     </button>
   );
@@ -262,17 +265,17 @@ function ThemePage() {
     <Card className="app-panel">
       <div className="mx-auto w-full max-w-3xl space-y-8">
         <div>
-          <h1 className="text-primary text-2xl font-semibold tracking-tight">
+          <h1 className="font-semibold text-2xl text-primary tracking-tight">
             Theme
           </h1>
-          <p className="text-muted-foreground mt-1 text-sm">
+          <p className="mt-1 text-muted-foreground text-sm">
             Choose a theme for the app.
           </p>
         </div>
 
         <div className="space-y-6">
           <div className="space-y-3">
-            <h2 className="text-muted-foreground text-sm font-medium">
+            <h2 className="font-medium text-muted-foreground text-sm">
               Default
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
@@ -290,7 +293,7 @@ function ThemePage() {
           </div>
 
           <div className="space-y-3">
-            <h2 className="text-muted-foreground text-sm font-medium">
+            <h2 className="font-medium text-muted-foreground text-sm">
               Scaled
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">

@@ -2,20 +2,20 @@ import { cn } from "~/lib/utils";
 
 import { TONE_FILL, type Tone } from "./tone";
 
-type FlowBarProps = {
-  ratio: number;
-  tone: Tone;
+interface FlowBarProps {
   ariaLabel: string;
   /** Bar thickness; defaults to the compact 1.5 used inside metric tiles. */
   className?: string;
-};
+  ratio: number;
+  tone: Tone;
+}
 
 export function FlowBar({ ratio, tone, ariaLabel, className }: FlowBarProps) {
   const pct = Math.max(0, Math.min(1, ratio)) * 100;
   return (
     <div
       className={cn(
-        "bg-foreground/5 h-1.5 overflow-hidden rounded-full",
+        "h-1.5 overflow-hidden rounded-full bg-foreground/5",
         className,
       )}
       role="progressbar"

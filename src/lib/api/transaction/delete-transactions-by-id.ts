@@ -15,10 +15,10 @@ export const deleteTransactionsByIdServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "transaction:delete-many",
-        limit: 8,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 8,
+        scope: "transaction:delete-many",
+        windowMs: 20_000,
       });
 
       const ownedTransactionsCount = await prismaClient.transaction.count({
@@ -30,11 +30,11 @@ export const deleteTransactionsByIdServer = createServerFn({ method: "POST" })
 
       if (ownedTransactionsCount !== data.ids.length) {
         return {
-          success: false,
-          message: "Some transactions were not found",
           data: null,
           error: true,
+          message: "Some transactions were not found",
           statusCode: 404,
+          success: false,
         } as ApiResponse<null>;
       }
 
@@ -46,11 +46,11 @@ export const deleteTransactionsByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
-        success: false,
-        message: "Error deleting transactions",
         data: null,
         error: true,
+        message: "Error deleting transactions",
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

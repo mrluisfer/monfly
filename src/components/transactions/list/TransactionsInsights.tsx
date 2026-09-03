@@ -2,64 +2,69 @@ import { ShieldCheckIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Badge } from "@/components/ui/badge";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
-import { formatCurrency } from "~/utils/format-currency";
 
 import { ExpenseConcentrationCard } from "./insights/ExpenseConcentrationCard";
 import { ImprovementIdeasCard } from "./insights/ImprovementIdeasCard";
 import { InsightErrorBoundary } from "./insights/InsightErrorBoundary";
 import { NetMomentumCard } from "./insights/NetMomentumCard";
 
-type TransactionsInsightsProps = {
-  transactions: TransactionWithUser[];
+interface TransactionsInsightsProps {
   className?: string;
-};
+  transactions: TransactionWithUser[];
+}
 
 type InsightTone = "positive" | "warning" | "neutral";
 
-type InsightNote = {
-  id: string;
+interface InsightNote {
   detail: string;
+  id: string;
   title: string;
   tone: InsightTone;
-};
+}
 
-type NormalizedTransaction = {
+interface NormalizedTransaction {
   amount: number;
   category: string;
   description: string;
   timestamp: number;
   type: "expense" | "income";
-};
+}
 
-type MonthlyPoint = {
+interface MonthlyPoint {
   count: number;
   expense: number;
   income: number;
   label: string;
   net: number;
-};
+}
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 function safeText(input: string | null | undefined, maxLength = 56): string {
-  if (!input) return "Unlabeled";
+  if (!input) {
+    return "Unlabeled";
+  }
   const normalized = input
     // Every Unicode control character; this also covers the C1 block
     // (U+0080-U+009F) that the old explicit range missed.
     .replace(/\p{Cc}/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
-  if (!normalized) return "Unlabeled";
+  if (!normalized) {
+    return "Unlabeled";
+  }
   return normalized.length > maxLength
     ? `${normalized.slice(0, maxLength).trim()}...`
     : normalized;
 }
 
 function buildSparklinePoints(values: number[]) {
-  if (!values.length) return null;
+  if (!values.length) {
+    return null;
+  }
 
   const width = 430;
   const height = 150;
@@ -88,7 +93,7 @@ export function TransactionsInsights({
   transactions,
   className,
 }: TransactionsInsightsProps) {
-  const currency = usePreferredCurrency();
+  const { formatPlain } = useCurrency();
   const [now] = useState(() => Date.now());
   const insights = useMemo(() => {
     const last30Start = now - 30 * ONE_DAY_MS;
@@ -211,7 +216,9 @@ export function TransactionsInsights({
       const monthKey = `${monthDate.getFullYear()}-${monthDate.getMonth() + 1}`;
       const bucket = monthlyMap.get(monthKey);
 
-      if (!bucket) continue;
+      if (!bucket) {
+        continue;
+      }
 
       if (transaction.type === "income") {
         bucket.income += transaction.amount;
@@ -247,38 +254,38 @@ export function TransactionsInsights({
     const savingsRate =
       totalIncome > 0 ? (totalIncome - totalExpense) / totalIncome : null;
     const missingDescriptionRate = missingDescriptionCount / normalized.length;
-    const topCategory = topCategories[0];
+    const [topCategory] = topCategories;
     const netLast30 = incomeLast30 - expenseLast30;
 
     const notes: InsightNote[] = [];
 
     if (savingsRate === null && totalExpense > 0) {
       notes.push({
-        id: "no-income",
         detail:
           "You have expenses recorded but no income yet. Consider registering your income streams for better planning.",
+        id: "no-income",
         title: "Missing income baseline",
         tone: "warning",
       });
     } else if (savingsRate !== null) {
       if (savingsRate < 0) {
         notes.push({
+          detail: `Expenses are above income by ${formatPlain(Math.abs(totalIncome - totalExpense))}.`,
           id: "negative-savings",
-          detail: `Expenses are above income by ${formatCurrency(Math.abs(totalIncome - totalExpense), currency)}.`,
           title: "Negative savings trend",
           tone: "warning",
         });
       } else if (savingsRate < 0.15) {
         notes.push({
-          id: "low-savings",
           detail: `Savings rate is ${Math.round(savingsRate * 100)}%. You could target 20%+ for better buffer.`,
+          id: "low-savings",
           title: "Low savings buffer",
           tone: "neutral",
         });
       } else {
         notes.push({
-          id: "healthy-savings",
           detail: `Savings rate is ${Math.round(savingsRate * 100)}%, which is a healthy range.`,
+          id: "healthy-savings",
           title: "Solid savings behavior",
           tone: "positive",
         });
@@ -287,8 +294,8 @@ export function TransactionsInsights({
 
     if (topCategory && topCategory.share >= 0.4) {
       notes.push({
-        id: "category-concentration",
         detail: `${topCategory.category} represents ${Math.round(topCategory.share * 100)}% of total expenses.`,
+        id: "category-concentration",
         title: "High category concentration",
         tone: "neutral",
       });
@@ -296,8 +303,8 @@ export function TransactionsInsights({
 
     if (missingDescriptionRate >= 0.35) {
       notes.push({
-        id: "data-quality",
         detail: `${Math.round(missingDescriptionRate * 100)}% of transactions have generic or missing descriptions.`,
+        id: "data-quality",
         title: "Improve data quality",
         tone: "neutral",
       });
@@ -305,8 +312,8 @@ export function TransactionsInsights({
 
     if (repeatedDescription) {
       notes.push({
-        id: "recurring-clue",
         detail: `"${safeText(repeatedDescription[0], 42)}" appears ${repeatedDescription[1]} times. This may be recurring.`,
+        id: "recurring-clue",
         title: "Recurring payment clue",
         tone: "neutral",
       });
@@ -314,9 +321,9 @@ export function TransactionsInsights({
 
     if (!notes.length) {
       notes.push({
-        id: "stable-default",
         detail:
           "Your data is balanced and clean enough to continue with deeper tracking goals.",
+        id: "stable-default",
         title: "Stable baseline",
         tone: "positive",
       });
@@ -364,7 +371,7 @@ export function TransactionsInsights({
       totalExpense,
       totalIncome,
     };
-  }, [transactions, now, currency]);
+  }, [transactions, now, formatPlain]);
 
   if (!insights) {
     return null;
@@ -384,7 +391,7 @@ export function TransactionsInsights({
         title="Insights & Ideas"
         description="Actionable insights based on your transaction history. Updated in real-time as you add more data."
         icon={
-          <ShieldCheckIcon className="text-primary size-5" aria-hidden="true" />
+          <ShieldCheckIcon className="size-5 text-primary" aria-hidden="true" />
         }
         actions={
           <Badge variant="default">

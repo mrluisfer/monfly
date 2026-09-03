@@ -4,9 +4,9 @@ import { changePasswordSchema } from "@/zod-schemas/user-schema";
 
 describe("changePasswordSchema", () => {
   const valid = {
+    confirmNewPassword: "NewPass1",
     currentPassword: "oldpass1",
     newPassword: "NewPass1",
-    confirmNewPassword: "NewPass1",
   };
 
   it("accepts a strong, confirmed, different new password", () => {
@@ -18,8 +18,8 @@ describe("changePasswordSchema", () => {
     for (const newPassword of weak) {
       const result = changePasswordSchema.safeParse({
         ...valid,
-        newPassword,
         confirmNewPassword: newPassword,
+        newPassword,
       });
       expect(result.success).toBe(false);
     }
@@ -40,9 +40,9 @@ describe("changePasswordSchema", () => {
 
   it("rejects when the new password equals the current one", () => {
     const result = changePasswordSchema.safeParse({
+      confirmNewPassword: "SamePass1",
       currentPassword: "SamePass1",
       newPassword: "SamePass1",
-      confirmNewPassword: "SamePass1",
     });
     expect(result.success).toBe(false);
     if (!result.success) {

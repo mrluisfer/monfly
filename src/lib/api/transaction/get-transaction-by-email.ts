@@ -12,6 +12,7 @@ const MAX_TRANSACTION_LIMIT = 1000;
 const DEFAULT_TRANSACTION_LIMIT = 100;
 
 const GetTransactionsInputSchema = z.object({
+  cardId: z.uuid().nullable().optional(),
   email: z.string(),
   limit: z.coerce
     .number()
@@ -19,7 +20,6 @@ const GetTransactionsInputSchema = z.object({
     .positive()
     .max(MAX_TRANSACTION_LIMIT)
     .optional(),
-  cardId: z.uuid().nullable().optional(),
 });
 
 export const getTransactionByEmailServer = createServerFn({ method: "GET" })
@@ -28,16 +28,16 @@ export const getTransactionByEmailServer = createServerFn({ method: "GET" })
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "transaction:list",
-        limit: 120,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 120,
+        scope: "transaction:list",
+        windowMs: 60_000,
       });
 
       const result = await getTransactionsByEmail({
+        cardId: data.cardId,
         email: sessionEmail,
         limit: data.limit ?? DEFAULT_TRANSACTION_LIMIT,
-        cardId: data.cardId,
       });
       return result;
     } catch (error) {
@@ -47,11 +47,11 @@ export const getTransactionByEmailServer = createServerFn({ method: "GET" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Server function error",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

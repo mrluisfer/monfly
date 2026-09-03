@@ -31,7 +31,7 @@ export async function gracefulDatabaseOperation<T>(
   operation: () => Promise<T>,
   retries = 3,
 ): Promise<T> {
-  for (let i = 0; i < retries; i++) {
+  for (let i = 0; i < retries; i += 1) {
     try {
       await ensureDatabaseConnection();
       return await operation();

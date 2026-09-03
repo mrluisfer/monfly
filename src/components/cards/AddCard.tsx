@@ -30,12 +30,12 @@ export default function AddCard() {
     >
       {/* Default Trigger render is a <button>, so aria-expanded and keyboard
           activation come for free — hence the card header styles live here. */}
-      <CollapsibleTrigger className="group focus-visible:ring-ring/50 mx-(--card-spacing) flex items-center gap-2.5 rounded-md text-left outline-none focus-visible:ring-3 py-[24px]">
+      <CollapsibleTrigger className="group mx-(--card-spacing) flex items-center gap-2.5 rounded-md py-[24px] text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
         <span
           aria-hidden="true"
-          className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-4xl"
+          className="flex size-9 shrink-0 items-center justify-center rounded-4xl bg-primary/10"
         >
-          <PlusCircleIcon className="text-primary size-4.5" />
+          <PlusCircleIcon className="size-4.5 text-primary" />
         </span>
         <div className="min-w-0">
           <CardTitle>New card</CardTitle>
@@ -43,7 +43,7 @@ export default function AddCard() {
             Add a card or account to track its balance separately.
           </CardDescription>
         </div>
-        <ChevronDownIcon className="text-muted-foreground ml-auto size-4 shrink-0 transition-transform group-data-[panel-open]:rotate-180 motion-reduce:transition-none" />
+        <ChevronDownIcon className="ml-auto size-4 shrink-0 text-muted-foreground transition-transform group-data-[panel-open]:rotate-180 motion-reduce:transition-none" />
       </CollapsibleTrigger>
       {/* Height animation driven by Base UI's own CSS var, same as ui/accordion. */}
       <CollapsibleContent className="h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-250 ease-in-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none">

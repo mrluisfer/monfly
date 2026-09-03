@@ -15,7 +15,7 @@ export class StreamTimeoutError extends Error {
  */
 export function withTimeout<T>(
   promise: Promise<T>,
-  timeoutMs: number = 10000,
+  timeoutMs = 10_000,
   timeoutMessage?: string,
 ): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -59,7 +59,7 @@ export function debounce<T extends (...args: never[]) => unknown>(
  */
 export function createSafeQuery<TData = unknown>(
   queryFn: () => Promise<TData>,
-  timeoutMs: number = 8000,
+  timeoutMs = 8000,
 ) {
   return async () => {
     try {
@@ -83,7 +83,9 @@ export function createSafeQuery<TData = unknown>(
           "Stream controller error detected, preventing cascade:",
           error.message,
         );
-        throw new Error("Connection issue - please refresh the page");
+        throw new Error("Connection issue - please refresh the page", {
+          cause: error,
+        });
       }
 
       throw error;

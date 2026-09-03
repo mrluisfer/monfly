@@ -24,21 +24,19 @@ const Card = ({
   subtitle?: string | ReactNode;
   Footer?: ReactNode;
   cardContentProps?: ComponentProps<"div">;
-}) => {
-  return (
-    <CardUI className={clsx("h-fit", className)}>
-      {title && (
-        <CardHeader>
-          <CardTitle className="text-foreground">
-            {title}
-            <CardDescription>{subtitle}</CardDescription>
-          </CardTitle>
-        </CardHeader>
-      )}
-      <CardContent {...cardContentProps}>{children}</CardContent>
-      {Footer && <CardFooter>{Footer}</CardFooter>}
-    </CardUI>
-  );
-};
+}) => (
+  <CardUI className={clsx("h-fit", className)}>
+    {title ? (
+      <CardHeader>
+        <CardTitle className="text-foreground">
+          {title}
+          <CardDescription>{subtitle}</CardDescription>
+        </CardTitle>
+      </CardHeader>
+    ) : null}
+    <CardContent {...cardContentProps}>{children}</CardContent>
+    {Footer ? <CardFooter>{Footer}</CardFooter> : null}
+  </CardUI>
+);
 
 export default Card;

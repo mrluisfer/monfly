@@ -13,27 +13,27 @@ export const getMonthlySummaryByEmail = async (data: { email: string }) => {
 
     if (!monthlySummary) {
       return {
+        data: [],
         error: true,
         message: "No monthly summary found",
-        data: [],
-        success: false,
         statusCode: 404,
+        success: false,
       } as ApiResponse<MonthlySummary[]>;
     }
 
     return {
-      success: true,
-      message: "Monthly summary fetched successfully",
       data: monthlySummary,
       error: false,
+      message: "Monthly summary fetched successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<MonthlySummary[]>;
   } catch {
     return {
-      message: "Error fetching monthly summary",
-      error: true,
-      statusCode: 500,
       data: [],
+      error: true,
+      message: "Error fetching monthly summary",
+      statusCode: 500,
       success: false,
     } as ApiResponse<MonthlySummary[]>;
   }

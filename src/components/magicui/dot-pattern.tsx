@@ -2,15 +2,15 @@ import { useId } from "react";
 import { cn } from "~/lib/utils";
 
 interface DotPatternProps extends React.SVGProps<SVGSVGElement> {
-  width?: number;
-  height?: number;
-  x?: number;
-  y?: number;
+  className?: string;
+  cr?: number;
   cx?: number;
   cy?: number;
-  cr?: number;
-  className?: string;
   glow?: boolean;
+  height?: number;
+  width?: number;
+  x?: number;
+  y?: number;
 }
 
 export function DotPattern({
@@ -46,14 +46,14 @@ export function DotPattern({
           patternUnits="userSpaceOnUse"
         >
           <circle cx={cx} cy={cy} r={cr} className="fill-neutral-400/80">
-            {glow && (
+            {glow ? (
               <animate
                 attributeName="opacity"
                 values="0.4;1;0.4"
                 dur="3s"
                 repeatCount="indefinite"
               />
-            )}
+            ) : null}
           </circle>
         </pattern>
       </defs>

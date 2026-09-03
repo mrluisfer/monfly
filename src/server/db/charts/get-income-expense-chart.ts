@@ -40,12 +40,12 @@ export const getIncomeExpenseData = async ({
       GROUP BY 1, 2
     `;
 
-    type ChartRow = {
+    interface ChartRow {
+      expense: number;
+      income: number;
       month: string;
       year: number;
-      income: number;
-      expense: number;
-    };
+    }
 
     const summaryMap = new Map<string, ChartRow>();
     for (const row of rows) {
@@ -54,6 +54,8 @@ export const getIncomeExpenseData = async ({
       let entry = summaryMap.get(key);
       if (!entry) {
         entry = {
+          expense: 0,
+          income: 0,
           // Fixed locale so labels are deterministic across environments
           // ("default" yields e.g. "enero" on a Spanish-locale machine).
           month: date.toLocaleString("en-US", {
@@ -61,49 +63,51 @@ export const getIncomeExpenseData = async ({
             timeZone: "UTC",
           }),
           year: date.getUTCFullYear(),
-          income: 0,
-          expense: 0,
         };
         summaryMap.set(key, entry);
       }
-      if (row.type === "income") entry.income = row.total;
-      if (row.type === "expense") entry.expense = row.total;
+      if (row.type === "income") {
+        entry.income = row.total;
+      }
+      if (row.type === "expense") {
+        entry.expense = row.total;
+      }
     }
 
     // Fill the full window so months without transactions still chart as 0.
     const chartData: ChartRow[] = [];
-    for (let i = monthsToShow - 1; i >= 0; i--) {
+    for (let i = monthsToShow - 1; i >= 0; i -= 1) {
       const date = new Date(
         Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - i, 1),
       );
       const key = `${date.getUTCFullYear()}-${date.getUTCMonth()}`;
       chartData.push(
         summaryMap.get(key) ?? {
+          expense: 0,
+          income: 0,
           month: date.toLocaleString("en-US", {
             month: "long",
             timeZone: "UTC",
           }),
           year: date.getUTCFullYear(),
-          income: 0,
-          expense: 0,
         },
       );
     }
 
     return {
       data: chartData,
-      message: "Income and expense data retrieved successfully",
-      success: true,
       error: false,
+      message: "Income and expense data retrieved successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<typeof chartData>;
   } catch {
     return {
       data: null,
-      message: "Failed to retrieve income and expense data",
-      success: false,
       error: true,
+      message: "Failed to retrieve income and expense data",
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

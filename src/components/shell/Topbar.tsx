@@ -1,6 +1,10 @@
+import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
-import { SearchIcon } from "lucide-react";
-import { Fragment } from "react";
+import { LoaderIcon, SearchIcon, UserIcon } from "lucide-react";
+import { Fragment, useCallback } from "react";
+import { useRouteUser } from "@/hooks";
+import { getUserByEmailServer } from "@/lib/api/user/get-user-by-email";
+import { queryDictionary } from "@/queries/dictionary";
 import { SystemStatusBadge } from "~/components/header/badges/SystemStatus";
 import { HideData } from "~/components/header/HideData";
 import ToggleDarkMode from "~/components/settings/ToggleDarkMode";
@@ -24,18 +28,20 @@ import {
 import { sidebarRoutes } from "~/constants/sidebar-routes";
 import { useIsMac } from "~/hooks/ui/useIsMac";
 import { cn } from "~/lib/utils";
-
 import { useCommandPalette } from "./command-palette-context";
 
-type Crumb = { title: string; url?: string };
+interface Crumb {
+  title: string;
+  url?: string;
+}
 
 // Friendly labels for the `/user/*` path segments. Anything not listed (e.g. a
 // dynamic `$userId`) falls back to the profile page.
 const USER_SEGMENT_TITLE: Record<string, string> = {
-  settings: "Settings",
   "change-password": "Change password",
-  theme: "Theme",
   help: "Help",
+  settings: "Settings",
+  theme: "Theme",
 };
 
 function buildBreadcrumbs(pathname: string): Crumb[] {
@@ -89,10 +95,25 @@ export function Topbar() {
   const isMac = useIsMac();
   const modKey = isMac ? "⌘" : "Ctrl";
 
+  const userEmail = useRouteUser();
+  const { data, isPending } = useQuery({
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
+    retry: 1,
+    staleTime: 1000 * 60 * 5,
+  });
+  const user = data?.data;
+
+  const handleSetIsOpen = useCallback(() => {
+    setOpen(true);
+  }, [setOpen]);
+
   return (
     <header
       className={cn(
-        "bg-background/85 supports-[backdrop-filter]:bg-background/65 border-border/60 sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-b px-3 backdrop-blur",
+        "sticky top-0 z-30 flex h-14 shrink-0 items-center gap-2 border-border/60 border-b bg-background/85 px-3 backdrop-blur supports-[backdrop-filter]:bg-background/65",
         "md:px-4",
       )}
     >
@@ -126,7 +147,7 @@ export function Topbar() {
                 {idx > 0 && <BreadcrumbSeparator />}
                 <BreadcrumbItem className="min-w-0">
                   {isLast || !crumb.url ? (
-                    <BreadcrumbPage className="text-foreground truncate font-medium">
+                    <BreadcrumbPage className="truncate font-medium text-foreground">
                       {crumb.title}
                     </BreadcrumbPage>
                   ) : (
@@ -159,10 +180,10 @@ export function Topbar() {
               <Button
                 variant="outline"
                 size={"lg"}
-                onClick={() => setOpen(true)}
+                onClick={handleSetIsOpen}
                 aria-label="Search or run a command"
                 aria-keyshortcuts={`${isMac ? "Meta" : "Control"}+K`}
-                className="border-border/70 text-muted-foreground hover:text-foreground hidden min-w-44 gap-2 sm:inline-flex"
+                className="hidden min-w-44 gap-2 border-border/70 text-muted-foreground hover:text-foreground sm:inline-flex"
               />
             }
           >
@@ -178,7 +199,7 @@ export function Topbar() {
         <Button
           variant="outline"
           size="icon-lg"
-          onClick={() => setOpen(true)}
+          onClick={handleSetIsOpen}
           aria-label="Open command palette"
           aria-keyshortcuts={`${isMac ? "Meta" : "Control"}+K`}
           className="sm:hidden"
@@ -188,6 +209,16 @@ export function Topbar() {
 
         <HideData />
         <ToggleDarkMode />
+        <Button
+          size={"icon-lg"}
+          variant={"outline"}
+          disabled={isPending || !user?.id}
+          render={
+            <Link to="/user/$userId" params={{ userId: user?.id ?? "" }} />
+          }
+        >
+          {isPending ? <LoaderIcon className="animate-spin" /> : <UserIcon />}
+        </Button>
       </div>
     </header>
   );

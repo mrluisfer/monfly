@@ -15,10 +15,10 @@ export const putLoanByIdServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "loan:update",
-        limit: 30,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 30,
+        scope: "loan:update",
+        windowMs: 20_000,
       });
 
       return await putLoanById(sessionEmail, data);
@@ -29,11 +29,11 @@ export const putLoanByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error updating loan",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

@@ -10,8 +10,8 @@ import type { ApiResponse } from "~/types/ApiResponse";
 
 interface ProfileSettingsProps {
   children?: ReactNode;
-  open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  open?: boolean;
 }
 
 /**
@@ -36,9 +36,9 @@ export default function ProfileSettings({
   const isControlled = open !== undefined && onOpenChange !== undefined;
 
   const { data, isPending, error } = useQuery<ApiResponse<User | null>>({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: Boolean(userEmail), // Only run query if userEmail exists
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
   });
 
   // Helper function to render dialog with appropriate props
@@ -80,7 +80,7 @@ export default function ProfileSettings({
   if (isPending) {
     return renderDialog(
       <div className="flex items-center justify-center space-x-2 p-8">
-        <div className="border-primary size-4 animate-spin rounded-full border-b-2"></div>
+        <div className="size-4 animate-spin rounded-full border-primary border-b-2" />
         <div className="text-muted-foreground text-sm">
           Loading user profile...
         </div>
@@ -114,7 +114,7 @@ export default function ProfileSettings({
   const user = data.data;
 
   // Type guard to ensure user is not null and has required fields
-  if (!user?.id || !user.email) {
+  if (!(user?.id && user.email)) {
     return renderDialog(
       <div className="flex items-center justify-center p-8">
         <div className="text-destructive text-sm">
@@ -124,7 +124,5 @@ export default function ProfileSettings({
     );
   }
 
-  const userId = user.id;
-
-  return renderDialog(<UserProfileForm user={user} userId={userId} />);
+  return renderDialog(<UserProfileForm user={user} />);
 }

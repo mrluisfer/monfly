@@ -4,10 +4,7 @@ export const createCategory = async (data: {
   userEmail: string;
   name: string;
   icon: string;
-}) => {
-  return prisma.category.create({ data });
-};
+}) => prisma.category.create({ data });
 
-export const getCategoriesByUser = async (userEmail: string) => {
-  return prisma.category.findMany({ where: { userEmail } });
-};
+export const getCategoriesByUser = async (userEmail: string) =>
+  prisma.category.findMany({ where: { userEmail } });

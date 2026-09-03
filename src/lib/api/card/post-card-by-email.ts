@@ -13,18 +13,18 @@ import { CreateCardInputSchema } from "~/zod-schemas/card-schema";
 export const postCardByEmailServer = createServerFn({ method: "POST" })
   .validator(
     z.object({
-      email: z.string(),
       card: CreateCardInputSchema,
+      email: z.string(),
     }),
   )
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "card:create",
-        limit: 10,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 10,
+        scope: "card:create",
+        windowMs: 20_000,
       });
 
       return await postCardByEmail(sessionEmail, data.card);
@@ -35,11 +35,11 @@ export const postCardByEmailServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error creating card",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

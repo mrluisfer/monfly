@@ -11,7 +11,6 @@ const CLIENT_SENSITIVE_ENV_PATTERN = /^VITE_.*(KEY|SECRET|TOKEN|PASSWORD)/i;
 
 function preventSensitiveClientEnvLeak() {
   return {
-    name: "prevent-sensitive-client-env-leak",
     configResolved() {
       const leakedClientSecrets = Object.keys(process.env).filter((envName) =>
         CLIENT_SENSITIVE_ENV_PATTERN.test(envName),
@@ -25,27 +24,18 @@ function preventSensitiveClientEnvLeak() {
         `Sensitive env vars cannot use VITE_ prefix: ${leakedClientSecrets.join(", ")}`,
       );
     },
+    name: "prevent-sensitive-client-env-leak",
   };
 }
 
 export default defineConfig({
+  build: {
+    minify: "esbuild",
+    sourcemap: buildSourcemap,
+  },
+  nitro: {},
   optimizeDeps: {
     exclude: ["@prisma/client", "prisma"],
-  },
-  resolve: {
-    tsconfigPaths: true,
-  },
-  ssr: {
-    external: ["@prisma/client", "prisma"],
-    noExternal: ["recharts"],
-    target: "node",
-  },
-  server: {
-    port: 3000,
-  },
-  build: {
-    sourcemap: buildSourcemap,
-    minify: "esbuild",
   },
   plugins: [
     preventSensitiveClientEnvLeak(),
@@ -54,5 +44,15 @@ export default defineConfig({
     nitro({ preset }),
     viteReact(),
   ],
-  nitro: {},
+  resolve: {
+    tsconfigPaths: true,
+  },
+  server: {
+    port: 3000,
+  },
+  ssr: {
+    external: ["@prisma/client", "prisma"],
+    noExternal: ["recharts"],
+    target: "node",
+  },
 });

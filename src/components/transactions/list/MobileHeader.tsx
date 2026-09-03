@@ -20,11 +20,11 @@ export function MobileHeader({
   return (
     <div className="mb-4 flex items-center justify-between gap-3">
       <div className="space-y-1">
-        <p className="text-muted-foreground text-[0.7rem] font-medium tracking-[0.22em] uppercase">
+        <p className="font-medium text-[0.7rem] text-muted-foreground uppercase tracking-[0.22em]">
           Activity feed
         </p>
-        <h2 className="text-foreground flex items-center gap-2 text-lg font-semibold tracking-tight">
-          <WalletIcon className="text-primary size-4" />
+        <h2 className="flex items-center gap-2 font-semibold text-foreground text-lg tracking-tight">
+          <WalletIcon className="size-4 text-primary" />
           Transactions
         </h2>
         <p className="text-muted-foreground text-sm">
@@ -43,7 +43,7 @@ export function MobileHeader({
         disabled={isPending || transactionsCount === 0}
         variant="outline"
         size="icon"
-        className="bg-muted size-10 rounded-full"
+        className="size-10 rounded-full bg-muted"
       >
         <RefreshCcwIcon className={cn("size-4", isPending && "animate-spin")} />
       </Button>

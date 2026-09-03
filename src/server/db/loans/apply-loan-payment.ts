@@ -6,20 +6,20 @@ import type { Prisma } from "@prisma/client";
  * - A `borrowed` loan is paid by an `expense` transaction (you pay the creditor).
  */
 const COMPATIBLE_TYPE: Record<string, "income" | "expense"> = {
-  lent: "income",
   borrowed: "expense",
+  lent: "income",
 };
 
-export type LoanPaymentDelta = {
-  /** Loan being paid. */
-  loanId: string;
+export interface LoanPaymentDelta {
   /** Signed delta to apply to `Loan.amountPaid`. Can be negative when reversing. */
   delta: number;
-  /** Used to validate the loan/transaction belong to the same user. */
-  userEmail: string;
+  /** Loan being paid. */
+  loanId: string;
   /** Transaction type ("income" | "expense"); validated against loan direction. */
   transactionType: string;
-};
+  /** Used to validate the loan/transaction belong to the same user. */
+  userEmail: string;
+}
 
 export class LoanPaymentError extends Error {
   statusCode: number;
@@ -50,8 +50,8 @@ export const applyLoanPaymentDelta = async (
   { loanId, delta, userEmail, transactionType }: LoanPaymentDelta,
 ) => {
   const loan = await tx.loan.findFirst({
+    select: { amount: true, amountPaid: true, direction: true, id: true },
     where: { id: loanId, userEmail },
-    select: { id: true, amount: true, amountPaid: true, direction: true },
   });
 
   if (!loan) {
@@ -81,17 +81,21 @@ export const applyLoanPaymentDelta = async (
   }
 
   let nextStatus: "pending" | "partial" | "paid";
-  if (nextAmountPaid <= 0) nextStatus = "pending";
-  else if (nextAmountPaid >= loan.amount) nextStatus = "paid";
-  else nextStatus = "partial";
+  if (nextAmountPaid <= 0) {
+    nextStatus = "pending";
+  } else if (nextAmountPaid >= loan.amount) {
+    nextStatus = "paid";
+  } else {
+    nextStatus = "partial";
+  }
 
   await tx.loan.update({
-    where: { id: loan.id },
     data: {
       amountPaid: nextAmountPaid,
-      status: nextStatus,
       paidAt: nextStatus === "paid" ? new Date() : null,
+      status: nextStatus,
       updatedAt: new Date(),
     },
+    where: { id: loan.id },
   });
 };

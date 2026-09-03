@@ -32,89 +32,89 @@ import { EnterpriseCard } from "./EnterpriseCard";
 
 type PlanId = "starter" | "pro" | "enterprise";
 
-type PlanOption = {
-  id: PlanId;
-  name: string;
-  description: string;
-  monthly: string;
-  annual: string;
-  features: string[];
+interface PlanOption {
   accent: string;
-};
-
-type ValueTile = {
-  title: string;
+  annual: string;
   description: string;
-  meta: string;
+  features: string[];
+  id: PlanId;
+  monthly: string;
+  name: string;
+}
+
+interface ValueTile {
+  description: string;
   icon: ReactNode;
-};
+  meta: string;
+  title: string;
+}
 
 export const planOptions: PlanOption[] = [
   {
-    id: "starter",
-    name: "Starter",
-    description: "Perfect for personal use and daily financial tracking.",
-    monthly: "$2.99/mo",
+    accent: "from-emerald-500/25 to-teal-500/10",
     annual: "$35.99/year",
+    description: "Perfect for personal use and daily financial tracking.",
     features: [
       "Unlimited transactions and categories",
       "Basic budget alerts",
       "Mobile-optimized dashboard",
     ],
-    accent: "from-emerald-500/25 to-teal-500/10",
+    id: "starter",
+    monthly: "$2.99/mo",
+    name: "Starter",
   },
   {
-    id: "pro",
-    name: "Pro",
-    description: "Advanced planning for users with clear financial goals.",
-    monthly: "$12/mo",
+    accent: "from-orange-400/30 to-amber-400/10",
     annual: "$120/year",
+    description: "Advanced planning for users with clear financial goals.",
     features: [
       "Cash flow scenarios and projections",
       "Smart categorization rules",
       "Actionable reports by period",
     ],
-    accent: "from-orange-400/30 to-amber-400/10",
+    id: "pro",
+    monthly: "$12/mo",
+    name: "Pro",
   },
   {
-    id: "enterprise",
-    name: "Enterprise",
-    description: "Governance, security, and support for finance teams.",
-    monthly: "Custom",
+    accent: "from-sky-500/25 to-indigo-500/10",
     annual: "Contract",
+    description: "Governance, security, and support for finance teams.",
     features: [
       "Role-based permissions and audit trails",
       "Dedicated onboarding and migration",
       "Support and compliance agreements",
     ],
-    accent: "from-sky-500/25 to-indigo-500/10",
+    id: "enterprise",
+    monthly: "Custom",
+    name: "Enterprise",
   },
 ];
 
 const valueTiles: ValueTile[] = [
   {
-    title: "Setup rápido",
-    meta: "< 3 min",
     description: "Configura categorías, objetivos y límites sin fricción.",
-    icon: <Clock3 className="text-primary size-4" />,
+    icon: <Clock3 className="size-4 text-primary" />,
+    meta: "< 3 min",
+    title: "Setup rápido",
   },
   {
-    title: "Visión accionable",
-    meta: "Realtime",
     description: "Detecta desviaciones antes de que impacten tu mes.",
-    icon: <TrendingUp className="text-primary size-4" />,
+    icon: <TrendingUp className="size-4 text-primary" />,
+    meta: "Realtime",
+    title: "Visión accionable",
   },
   {
-    title: "Control granular",
-    meta: "Flexible",
     description: "Estructura gastos e ingresos por contexto real de uso.",
-    icon: <LayoutGrid className="text-primary size-4" />,
+    icon: <LayoutGrid className="size-4 text-primary" />,
+    meta: "Flexible",
+    title: "Control granular",
   },
   {
-    title: "Seguridad",
-    meta: "Protected",
     description: "Sesiones cifradas con flujos seguros por defecto.",
-    icon: <ShieldCheck className="text-primary size-4" />,
+    icon: <ShieldCheck className="size-4 text-primary" />,
+    meta: "Protected",
+    title: "Seguridad",
   },
 ];
 
@@ -133,26 +133,26 @@ export function PricingSection() {
       aria-labelledby="pricing-title"
       className="px-4 pt-10 pb-18 sm:px-6 md:pt-14 md:pb-24"
     >
-      <div className={`landing-fade-up-scroll in-view mx-auto max-w-6xl`}>
-        <div className="landing-glass-panel border-border/70 relative overflow-hidden rounded-[2rem] border px-4 py-8 sm:px-8 md:px-10 md:py-11">
+      <div className={"landing-fade-up-scroll in-view mx-auto max-w-6xl"}>
+        <div className="landing-glass-panel relative overflow-hidden rounded-[2rem] border border-border/70 px-4 py-8 sm:px-8 md:px-10 md:py-11">
           <DotPattern
-            className="[mask-image:radial-gradient(650px_circle_at_top,white,transparent)] opacity-35"
+            className="opacity-35 [mask-image:radial-gradient(650px_circle_at_top,white,transparent)]"
             glow
           />
 
           <div className="relative z-10 space-y-7">
             <div className="mx-auto max-w-3xl space-y-3 text-center">
-              <p className="border-primary/20 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.12em] uppercase">
+              <p className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/8 px-3 py-1 font-semibold text-primary text-xs uppercase tracking-[0.12em]">
                 <Sparkles className="size-3.5" />
                 Flexible Plans
               </p>
               <h2
                 id="pricing-title"
-                className="font-[family-name:var(--font-syne)] text-3xl font-semibold text-balance sm:text-4xl md:text-5xl"
+                className="text-balance font-[family-name:var(--font-syne)] font-semibold text-3xl sm:text-4xl md:text-5xl"
               >
                 Pricing designed for speed, clarity, and financial control
               </h2>
-              <p className="text-muted-foreground text-pretty md:text-lg">
+              <p className="text-pretty text-muted-foreground md:text-lg">
                 Start lean, upgrade as your planning workflow grows, and keep
                 one coherent money system across devices.
               </p>
@@ -160,7 +160,7 @@ export function PricingSection() {
 
             <div
               aria-label="Billing cycle switch"
-              className="border-border/70 bg-background/72 mx-auto flex w-fit items-center gap-3 rounded-full border px-3 py-2"
+              className="mx-auto flex w-fit items-center gap-3 rounded-full border border-border/70 bg-background/72 px-3 py-2"
             >
               <BillingLabel active={!isAnnual} className="justify-end">
                 Monthly
@@ -196,17 +196,17 @@ export function PricingSection() {
                 >
                   <CardContent>
                     <div className="flex items-center justify-between gap-2">
-                      <span className="border-border/65 bg-background/80 inline-flex size-7 items-center justify-center rounded-lg border">
+                      <span className="inline-flex size-7 items-center justify-center rounded-lg border border-border/65 bg-background/80">
                         {tile.icon}
                       </span>
-                      <span className="text-muted-foreground text-[0.68rem] font-semibold tracking-[0.1em] uppercase">
+                      <span className="font-semibold text-[0.68rem] text-muted-foreground uppercase tracking-[0.1em]">
                         {tile.meta}
                       </span>
                     </div>
-                    <h3 className="text-foreground mt-3 text-sm font-semibold">
+                    <h3 className="mt-3 font-semibold text-foreground text-sm">
                       {tile.title}
                     </h3>
-                    <p className="text-muted-foreground mt-1 text-xs">
+                    <p className="mt-1 text-muted-foreground text-xs">
                       {tile.description}
                     </p>
                   </CardContent>
@@ -214,7 +214,7 @@ export function PricingSection() {
               ))}
             </div>
 
-            <div className="border-border/70 bg-background/72 flex flex-col gap-3 rounded-4xl border p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 rounded-4xl border border-border/70 bg-background/72 p-4 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-muted-foreground text-sm">
                 Not sure which plan fits best? Compare features side by side and
                 choose the one matching your workflow.
@@ -229,7 +229,7 @@ export function PricingSection() {
                   }
                 />
 
-                <DialogContent className="border-border/75 bg-background/96 w-[min(34rem,calc(100vw-1.5rem))] rounded-2xl border p-4 sm:p-5">
+                <DialogContent className="w-[min(34rem,calc(100vw-1.5rem))] rounded-2xl border border-border/75 bg-background/96 p-4 sm:p-5">
                   <DialogHeader className="space-y-2">
                     <DialogTitle className="font-[family-name:var(--font-syne)] text-xl">
                       Choose your best plan
@@ -247,12 +247,11 @@ export function PricingSection() {
                   >
                     {planOptions.map((plan) => {
                       const active = selectedPlan === plan.id;
-                      const displayedPrice =
-                        plan.id === "enterprise"
-                          ? plan.monthly
-                          : isAnnual
-                            ? plan.annual
-                            : plan.monthly;
+                      const useAnnualPrice =
+                        isAnnual && plan.id !== "enterprise";
+                      const displayedPrice = useAnnualPrice
+                        ? plan.annual
+                        : plan.monthly;
 
                       return (
                         <label
@@ -281,14 +280,14 @@ export function PricingSection() {
                             <div className="min-w-0 flex-1">
                               <div className="flex flex-wrap items-start justify-between gap-2">
                                 <div>
-                                  <p className="text-foreground text-sm font-semibold">
+                                  <p className="font-semibold text-foreground text-sm">
                                     {plan.name}
                                   </p>
                                   <p className="text-muted-foreground text-xs">
                                     {plan.description}
                                   </p>
                                 </div>
-                                <p className="text-foreground text-sm font-semibold">
+                                <p className="font-semibold text-foreground text-sm">
                                   {displayedPrice}
                                 </p>
                               </div>
@@ -297,9 +296,9 @@ export function PricingSection() {
                                 {plan.features.map((feature) => (
                                   <li
                                     key={feature}
-                                    className="text-muted-foreground flex items-start gap-1.5 text-xs"
+                                    className="flex items-start gap-1.5 text-muted-foreground text-xs"
                                   >
-                                    <Check className="text-primary mt-0.5 size-3.5" />
+                                    <Check className="mt-0.5 size-3.5 text-primary" />
                                     <span>{feature}</span>
                                   </li>
                                 ))}

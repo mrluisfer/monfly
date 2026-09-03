@@ -2,9 +2,9 @@ import { ArrowDownRightIcon, ArrowUpRightIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 
-type TrendBadgeProps = {
+interface TrendBadgeProps {
   percent: number;
-};
+}
 
 export function TrendBadge({ percent }: TrendBadgeProps) {
   const isPositive = percent >= 0;
@@ -13,7 +13,7 @@ export function TrendBadge({ percent }: TrendBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[0.65rem] font-semibold tabular-nums",
+        "inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 font-semibold text-[0.65rem] tabular-nums",
         isPositive
           ? "bg-primary/10 text-primary"
           : "bg-destructive/10 text-destructive",

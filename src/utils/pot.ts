@@ -5,10 +5,7 @@ export const createPot = async (data: {
   title: string;
   goalAmount: number;
   category?: string;
-}) => {
-  return prisma.pot.create({ data });
-};
+}) => prisma.pot.create({ data });
 
-export const getPotsByUser = async (userEmail: string) => {
-  return prisma.pot.findMany({ where: { userEmail } });
-};
+export const getPotsByUser = async (userEmail: string) =>
+  prisma.pot.findMany({ where: { userEmail } });

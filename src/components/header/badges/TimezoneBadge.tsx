@@ -6,14 +6,14 @@ import { cn } from "~/lib/utils";
 import { HeaderBadge } from "./HeaderBadge";
 
 interface TimezoneBadgeProps {
-  variant?: "default" | "secondary" | "outline" | "destructive";
-  showIcon?: boolean;
-  showTimezone?: boolean;
   animate?: boolean;
+  className?: string;
   compact?: boolean;
   fullWidth?: boolean;
   isActive?: boolean;
-  className?: string;
+  showIcon?: boolean;
+  showTimezone?: boolean;
+  variant?: "default" | "secondary" | "outline" | "destructive";
 }
 
 export const TimezoneBadge = ({
@@ -30,7 +30,9 @@ export const TimezoneBadge = ({
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {
+      return;
+    }
 
     // Live clock: the initial value must come from the client at mount time to
     // avoid an SSR/client hydration mismatch; it can't be derived in render.
@@ -54,19 +56,19 @@ export const TimezoneBadge = ({
       <Badge
         variant={variant}
         className={cn(
-          "border-border/70 bg-background/85 text-foreground inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border px-3 py-1.5 shadow-xs backdrop-blur-[2px]",
+          "inline-flex min-w-0 max-w-full items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px]",
           fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
           compact && "h-8 px-2.5 py-1",
-          !compact && !fullWidth && "h-9",
+          !(compact || fullWidth) && "h-9",
           className,
         )}
       >
-        {showIcon && (
+        {showIcon ? (
           <Clock
             className="h-3.5 w-3.5 shrink-0 opacity-60"
             aria-hidden="true"
           />
-        )}
+        ) : null}
         <span className="truncate font-mono text-xs">Loading...</span>
       </Badge>
     );
@@ -91,16 +93,16 @@ export const TimezoneBadge = ({
       }
       tooltipClassName="font-mono text-xs"
     >
-      {showIcon && (
+      {showIcon ? (
         <ZapIcon
           className={cn(
-            "text-primary size-3.5 shrink-0",
+            "size-3.5 shrink-0 text-primary",
             fullWidth && "size-4",
             animate ? "animate-pulse" : "opacity-60",
           )}
           aria-hidden="true"
         />
-      )}
+      ) : null}
 
       <span
         className={cn(
@@ -109,24 +111,24 @@ export const TimezoneBadge = ({
           fullWidth && "flex-1",
         )}
       >
-        <span className="font-mono text-xs font-semibold tracking-tight tabular-nums">
+        <span className="font-mono font-semibold text-xs tabular-nums tracking-tight">
           {timeFormatted}
         </span>
 
         {!compact && (
           <span className="truncate text-[10px]">
             {dateFormatted}
-            {showTimezone && (
+            {showTimezone ? (
               <span className="ml-1 opacity-70">. {shortTimezone}</span>
-            )}
+            ) : null}
           </span>
         )}
 
-        {compact && showTimezone && (
+        {compact && showTimezone ? (
           <span className="truncate text-[10px] opacity-75">
             {shortTimezone}
           </span>
-        )}
+        ) : null}
       </span>
     </HeaderBadge>
   );

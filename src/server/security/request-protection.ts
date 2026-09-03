@@ -8,17 +8,17 @@ import {
 import { useAppSession as getAppSession } from "~/server/auth/session";
 import type { ApiResponse } from "~/types/ApiResponse";
 
-type RateLimitBucket = {
+interface RateLimitBucket {
   count: number;
   resetAt: number;
-};
+}
 
-type RateLimitConfig = {
-  scope: string;
-  limit: number;
-  windowMs: number;
+interface RateLimitConfig {
   identifier?: string;
-};
+  limit: number;
+  scope: string;
+  windowMs: number;
+}
 
 const RATE_LIMIT_BUCKETS_SYMBOL = Symbol.for("monfly.rate-limit-buckets");
 const RATE_LIMIT_MAX_BUCKETS = 10_000;
@@ -148,10 +148,10 @@ export function toSecurityErrorResponse(
   }
 
   return {
-    error: true,
-    success: false,
-    message: error.message || fallbackMessage,
     data: null,
+    error: true,
+    message: error.message || fallbackMessage,
     statusCode: error.statusCode,
+    success: false,
   } as ApiResponse<null>;
 }

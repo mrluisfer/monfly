@@ -3,13 +3,13 @@ import type { ReactNode } from "react";
 
 import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 
-type SidebarItemProps = {
+interface SidebarItemProps {
+  children?: ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
   title: string;
   url?: string;
-  disabled?: boolean;
-  children?: ReactNode;
-  onClick?: () => void;
-};
+}
 
 export const SidebarItem = ({
   title,

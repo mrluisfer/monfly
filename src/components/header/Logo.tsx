@@ -9,7 +9,7 @@ export function Logo({ withTitle = true }: { withTitle?: boolean }) {
     <Link
       to="/home"
       className={cn(
-        "flex w-fit items-center gap-2.5 text-xl font-bold md:text-2xl",
+        "flex w-fit items-center gap-2.5 font-bold text-xl md:text-2xl",
         withTitle ? "md:me-4" : "md:me-0",
       )}
     >
@@ -18,12 +18,14 @@ export function Logo({ withTitle = true }: { withTitle?: boolean }) {
         alt="Monfly Logo"
         className="size-6 md:size-8"
         title="Monfly"
+        width={24}
+        height={24}
       />
-      {withTitle && (
+      {withTitle ? (
         <span className="sidebar-title-text hidden font-[family-name:var(--font-syne)] md:block">
           Monfly
         </span>
-      )}
+      ) : null}
     </Link>
   );
 }

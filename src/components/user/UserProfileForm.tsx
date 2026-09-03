@@ -23,66 +23,64 @@ import { UserFormActions } from "./UserFormActions";
 import { UserFormFields } from "./UserFormFields";
 
 interface User {
-  id: string;
-  email: string;
-  name?: string | null;
-  totalBalance?: number | null;
-  preferredCurrency?: string | null;
-  marketingOptIn?: boolean | null;
-  productUpdatesOptIn?: boolean | null;
-  acceptedTermsAt?: string | Date | null;
   acceptedPrivacyAt?: string | Date | null;
+  acceptedTermsAt?: string | Date | null;
+  email: string;
+  id: string;
+  marketingOptIn?: boolean | null;
+  name?: string | null;
+  preferredCurrency?: string | null;
+  productUpdatesOptIn?: boolean | null;
+  totalBalance?: number | null;
 }
 
 interface UserProfileFormProps {
-  userId: string;
-  user: User;
-  onExport?: () => void | Promise<void>;
   onDelete?: () => void | Promise<void>;
+  onExport?: () => void | Promise<void>;
+  user: User;
 }
 
 type FormValues = z.infer<typeof userFormSchema>;
 
 export function UserProfileForm({
-  userId,
   user,
   onExport,
   onDelete,
 }: UserProfileFormProps) {
   const queryClient = useQueryClient();
   const defaultTotalBalance = formatToTwoDecimals(
-    user?.totalBalance ?? 0,
+    user.totalBalance ?? 0,
   ).numberValue;
 
   const buildDefaults = useCallback(
     (): FormValues => ({
-      [userFormNames.email]: user?.email ?? "",
-      [userFormNames.name]: user?.name ?? "",
+      [userFormNames.email]: user.email,
+      [userFormNames.name]: user.name ?? "",
       [userFormNames.totalBalance]: defaultTotalBalance,
       [userFormNames.preferredCurrency]:
-        (user?.preferredCurrency as SupportedCurrency | undefined) ??
+        (user.preferredCurrency as SupportedCurrency | undefined) ??
         DEFAULT_CURRENCY,
-      [userFormNames.marketingOptIn]: user?.marketingOptIn ?? false,
-      [userFormNames.productUpdatesOptIn]: user?.productUpdatesOptIn ?? true,
-      [userFormNames.acceptTerms]: !!user?.acceptedTermsAt,
-      [userFormNames.acceptPrivacy]: !!user?.acceptedPrivacyAt,
+      [userFormNames.marketingOptIn]: user.marketingOptIn ?? false,
+      [userFormNames.productUpdatesOptIn]: user.productUpdatesOptIn ?? true,
+      [userFormNames.acceptTerms]: !!user.acceptedTermsAt,
+      [userFormNames.acceptPrivacy]: !!user.acceptedPrivacyAt,
     }),
     [
-      user?.email,
-      user?.name,
+      user.email,
+      user.name,
       defaultTotalBalance,
-      user?.preferredCurrency,
-      user?.marketingOptIn,
-      user?.productUpdatesOptIn,
-      user?.acceptedTermsAt,
-      user?.acceptedPrivacyAt,
+      user.preferredCurrency,
+      user.marketingOptIn,
+      user.productUpdatesOptIn,
+      user.acceptedTermsAt,
+      user.acceptedPrivacyAt,
     ],
   );
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(userFormSchema),
     defaultValues: buildDefaults(),
     mode: "onBlur",
+    resolver: zodResolver(userFormSchema),
     reValidateMode: "onChange",
   });
 
@@ -113,28 +111,27 @@ export function UserProfileForm({
       sileo.success({ title: "Changes saved" });
       // Reset the dirty baseline to what we just persisted.
       form.reset(form.getValues());
-      if (user?.email) {
+      if (user.email) {
         await invalidateUserQueries(queryClient, user.email);
       }
     },
   });
 
   const onSubmit = async (values: FormValues) => {
-    void userId;
-    if (!user?.email) {
+    if (!user.email) {
       sileo.error({ title: "User session not found" });
       return;
     }
     try {
       await profileMutation.mutate({
         data: {
+          acceptPrivacy: values.acceptPrivacy,
+          acceptTerms: values.acceptTerms,
           email: user.email,
+          marketingOptIn: values.marketingOptIn,
           name: values.name,
           preferredCurrency: values.preferredCurrency ?? null,
-          marketingOptIn: values.marketingOptIn,
           productUpdatesOptIn: values.productUpdatesOptIn,
-          acceptTerms: values.acceptTerms,
-          acceptPrivacy: values.acceptPrivacy,
         },
       });
     } catch {
@@ -154,14 +151,14 @@ export function UserProfileForm({
       // Reset the field's dirty baseline to the value we just persisted.
       const persisted = form.getValues(userFormNames.totalBalance) ?? 0;
       form.resetField(userFormNames.totalBalance, { defaultValue: persisted });
-      if (user?.email) {
+      if (user.email) {
         await invalidateUserQueries(queryClient, user.email);
       }
     },
   });
 
   const handleUpdateBalance = async () => {
-    if (!user?.email) {
+    if (!user.email) {
       sileo.error({ title: "User session not found" });
       return;
     }
@@ -174,7 +171,7 @@ export function UserProfileForm({
     }
     try {
       await balanceMutation.mutate({
-        data: { totalBalance: numberValue, email: user.email },
+        data: { email: user.email, totalBalance: numberValue },
       });
     } catch {
       sileo.error({ title: "Failed to update balance" });
@@ -183,7 +180,7 @@ export function UserProfileForm({
 
   const handleExport = async () => {
     const res = await exportUserDataServer();
-    if (!res?.success || !res.data) {
+    if (!(res?.success && res.data)) {
       sileo.error({ title: res?.message ?? "Failed to export your data" });
       return;
     }
@@ -225,19 +222,19 @@ export function UserProfileForm({
           <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="from-primary/20 via-primary/10 text-primary ring-primary/20 relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br to-transparent ring-1"
+              className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent text-primary ring-1 ring-primary/20"
             >
               <ShieldCheckIcon className="size-5" />
             </span>
             <div className="space-y-1">
-              <span className="bg-foreground/5 text-muted-foreground inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.13em] uppercase">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/5 px-2 py-0.5 font-semibold text-[0.65rem] text-muted-foreground uppercase tracking-[0.13em]">
                 <SparklesIcon className="size-3" aria-hidden="true" />
                 Profile settings
               </span>
-              <h3 className="text-foreground font-[family-name:var(--font-syne)] text-xl font-semibold tracking-tight sm:text-2xl">
+              <h3 className="font-[family-name:var(--font-syne)] font-semibold text-foreground text-xl tracking-tight sm:text-2xl">
                 Account &amp; preferences
               </h3>
-              <p className="text-muted-foreground max-w-xl text-sm">
+              <p className="max-w-xl text-muted-foreground text-sm">
                 Update your profile, security, communication preferences and
                 legal acknowledgements.
               </p>

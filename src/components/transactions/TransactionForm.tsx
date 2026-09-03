@@ -1,22 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
-  CalendarIcon,
-  CreditCardIcon,
-  DollarSignIcon,
-  FileTextIcon,
-  HandCoinsIcon,
   PlusIcon,
   SaveIcon,
-  SparklesIcon,
-  TagIcon,
   TrendingDownIcon,
   TrendingUpIcon,
   XIcon,
 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
 import {
+  type ChangeEvent,
+  type ComponentProps,
   type FocusEvent,
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
+  useCallback,
   useEffect,
   useId,
   useMemo,
@@ -35,16 +33,16 @@ import {
 import { useCards } from "~/hooks/cards";
 import { useGetCategoriesByEmail } from "~/hooks/categories/useGetCategoriesByEmail";
 import { useActiveLoans } from "~/hooks/loans/useActiveLoans";
+import { useCurrency } from "~/hooks/useCurrency";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { postCategoryByEmailServer } from "~/lib/api/category/post-category-by-email";
 import { sileo } from "~/lib/toaster";
 import { cn } from "~/lib/utils";
-import { formatCurrency } from "~/utils/format-currency";
+import type { FieldRenderProps, RenderedField } from "~/types/form";
 import { invalidateCategoryQueries } from "~/utils/query-invalidation";
-import { validLimitNumber } from "~/utils/valid-limit-number";
 
+import { AmountInput } from "../shared/AmountInput";
 import { Button } from "../ui/button";
 import { DialogClose } from "../ui/dialog";
 import {
@@ -68,24 +66,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Spinner } from "../ui/spinner";
 
-type TransactionFormProps<FormValues extends FieldValues> = {
-  form: UseFormReturn<FormValues>;
-  onSubmit: (data: FormValues) => void;
+interface TransactionFormProps<FormValues extends FieldValues> {
   buttonText?: string;
   description?: string;
-  showDateDescription?: boolean;
+  form: UseFormReturn<FormValues>;
   isLoading?: boolean;
-};
+  onSubmit: (data: FormValues) => void;
+  showDateDescription?: boolean;
+}
 
-const sectionClassName =
-  "rounded-2xl border border-border/60 bg-background/75 backdrop-blur-sm p-4 shadow-sm sm:p-5";
-const inputClassName =
-  "h-12 rounded-xl border-border/60 bg-input/40 text-base shadow-none transition-colors sm:text-base";
-// `NativeSelect` styles its wrapper, so the control itself is reached through
-// the child selector to keep it the same height/shape as the text inputs.
+/** Field labels: one weight, one size, no decorative icons. */
+const labelClassName = "text-sm font-medium";
+/** 44px controls — the minimum comfortable touch target on phones. */
+const controlClassName = "h-11";
+// `NativeSelect` styles its wrapper, so the control is reached through the child
+// selector. `text-base` below md matches `Input` and stops iOS from zooming the
+// viewport when the select gets focus.
 const nativeSelectClassName =
-  "w-full [&>select]:h-12 [&>select]:rounded-xl [&>select]:border-border/60 [&>select]:bg-input/40 [&>select]:pl-3 [&>select]:text-base";
+  "w-full [&>select]:h-11 [&>select]:text-base md:[&>select]:text-sm";
+
+const optionalHint = (
+  <span className="font-normal text-muted-foreground">(optional)</span>
+);
 
 export function TransactionForm<FormValues extends FieldValues>({
   form,
@@ -95,38 +99,559 @@ export function TransactionForm<FormValues extends FieldValues>({
   showDateDescription = false,
   isLoading = false,
 }: TransactionFormProps<FormValues>) {
-  const [categoryInputValue, setCategoryInputValue] = useState("");
-  const [keyboardInset, setKeyboardInset] = useState(0);
-  const focusScrollTimeoutRef = useRef<number | null>(null);
+  const uid = useId();
   const formRef = useRef<HTMLFormElement>(null);
-  const typeLabelId = useId();
-  const { data: categories } = useGetCategoriesByEmail();
+  const [keyboardInset, setKeyboardInset] = useState(0);
 
-  const categoryOptions = useMemo(
-    () =>
-      categories?.map((cat) => ({
-        label: cat.name,
-        value: cat.name,
-      })) ?? [],
-    [categories],
+  // Read once here instead of inside `CardField`, so the row below knows
+  // whether it renders one column or two.
+  const { data: cardsResponse, isPending: cardsPending } = useCards({
+    status: "active",
+  });
+  const cards = useMemo(() => cardsResponse?.data ?? [], [cardsResponse?.data]);
+  const showCardField = cardsPending || cards.length > 0;
+
+  const errorCount = Object.keys(form.formState.errors).length;
+  const showErrorSummary = form.formState.isSubmitted && errorCount > 0;
+
+  useKeyboardInset(setKeyboardInset);
+  const handleMobileInputFocus = useMobileFocusScroll(formRef);
+  const handleSubmit = form.handleSubmit(onSubmit);
+
+  return (
+    <Form {...form}>
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="flex flex-col"
+        autoComplete="off"
+        // Zod owns validation; the native bubbles would fight the inline
+        // messages and are unreadable to screen readers.
+        noValidate
+        aria-busy={isLoading}
+        onFocusCapture={handleMobileInputFocus}
+      >
+        <div className="space-y-6">
+          {/* ── Amount + type ─────────────────────────────────────────────
+            The only raised block in the form: it carries the two decisions
+            everything else depends on. */}
+          <div className="grid gap-5 rounded-3xl border border-border/60 p-4 sm:grid-cols-2 sm:items-start">
+            <AmountField form={form} uid={uid} />
+            <TypeField form={form} uid={uid} />
+          </div>
+
+          {/* ── Details ─────────────────────────────────────────────────── */}
+          <div className="grid gap-5 lg:grid-cols-2 lg:items-start">
+            {/* Loan linkage sits under Category so the column that used to
+                end early carries it, and so DOM order still matches reading
+                order at every breakpoint — no `order` tricks that would
+                desync the tab sequence. */}
+            <div className="grid gap-5">
+              <CategoryField form={form} uid={uid} />
+              <LoanSection form={form} />
+            </div>
+
+            <div className="grid gap-5">
+              <DescriptionField form={form} />
+
+              <div
+                className={cn("grid gap-5", showCardField && "sm:grid-cols-2")}
+              >
+                <DateField
+                  form={form}
+                  description={description}
+                  showDateDescription={showDateDescription}
+                />
+                {showCardField ? <CardField form={form} cards={cards} /> : null}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Keeps the field under the caret reachable above the on-screen
+            keyboard; collapses to nothing when the keyboard is closed. */}
+        <div aria-hidden="true" style={{ height: keyboardInset }} />
+
+        {/* ── Actions ───────────────────────────────────────────────────
+            Pinned to the bottom of the scroller: on a phone the save button
+            is always one thumb away, never a scroll away. */}
+        <div className="sticky bottom-0 z-10 -mx-4 mt-6 -mb-4 border-border/60 border-t bg-popover/95 px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur-sm sm:-mx-6 sm:px-6">
+          {showErrorSummary ? (
+            <p className="mb-3 text-destructive text-sm">
+              {errorCount === 1
+                ? "One field still needs your attention."
+                : `${errorCount} fields still need your attention.`}
+            </p>
+          ) : null}
+          <div className="flex items-center gap-3">
+            <DialogClose
+              render={
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="lg"
+                  className="flex-1 sm:flex-none"
+                />
+              }
+            >
+              <XIcon aria-hidden="true" />
+              Cancel
+            </DialogClose>
+            <Button
+              type="submit"
+              size="lg"
+              disabled={isLoading}
+              className="flex-1 sm:ml-auto sm:flex-none"
+            >
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <SaveIcon className="size-4" aria-hidden="true" />
+              )}
+              {isLoading ? "Saving…" : (buttonText ?? "Save")}
+            </Button>
+          </div>
+          {/* Announced once per submit; the focused field reads its own error. */}
+          <span aria-live="polite" className="sr-only">
+            {showErrorSummary
+              ? `Form not submitted. ${errorCount} field${errorCount === 1 ? "" : "s"} need attention.`
+              : ""}
+          </span>
+        </div>
+      </form>
+    </Form>
   );
-  const userEmail = useRouteUser();
+}
 
+/* ────────────────────────────────────────────────────────────────────────
+   Amount
+   ──────────────────────────────────────────────────────────────────────── */
+
+function AmountField<FormValues extends FieldValues>({
+  form,
+  uid,
+}: {
+  form: UseFormReturn<FormValues>;
+  uid: string;
+}) {
+  const { currency, formatPlain } = useCurrency();
+  const currentType = form.watch(transactionFormNames.type as Path<FormValues>);
+  const isExpense = currentType !== "income";
+  const amountId = `${uid}-amount`;
+  const errorId = `${amountId}-error`;
+
+  const render = useCallback(
+    ({ field, fieldState }: FieldRenderProps<FormValues>) => {
+      const parsed = Number(field.value);
+      const hasAmount = Number.isFinite(parsed) && parsed > 0;
+
+      // Both are pulled out of the JSX: a bare `a ? b : c` between two strings
+      // reads as a leaked render, and the tone was a nested ternary.
+      const echo = hasAmount
+        ? `${isExpense ? "−" : "+"}${formatPlain(parsed)}`
+        : currency;
+      let echoTone = "text-muted-foreground";
+      if (hasAmount) {
+        echoTone = isExpense ? "text-destructive" : "text-success";
+      }
+
+      return (
+        // Not a `FormItem`: `AmountInput` renders a fragment, which
+        // `FormControl`'s Slot cannot forward props to.
+        <div className="grid gap-2">
+          <div className="flex items-baseline justify-between gap-2">
+            <label htmlFor={amountId} className={labelClassName}>
+              Amount
+            </label>
+            {/* Echoes the typed figure back in the user's currency — catches
+                a stray zero before it reaches the ledger. */}
+            <span
+              aria-hidden="true"
+              className={cn("text-xs tabular-nums", echoTone)}
+            >
+              {echo}
+            </span>
+          </div>
+          <AmountInput
+            id={amountId}
+            name={field.name}
+            value={(field.value as string | undefined) ?? ""}
+            onChange={field.onChange}
+            placeholder="0.00"
+            autoComplete="off"
+            aria-invalid={Boolean(fieldState.error)}
+            aria-describedby={fieldState.error ? errorId : undefined}
+            // `md:text-2xl` too: `Input`'s own `md:text-sm` is a different
+            // variant, so it would win from md up.
+            className="h-14 font-semibold text-2xl tabular-nums md:text-2xl"
+          />
+          {fieldState.error ? (
+            <p id={errorId} className="text-destructive text-sm">
+              {fieldState.error.message}
+            </p>
+          ) : null}
+        </div>
+      );
+    },
+    [amountId, currency, errorId, formatPlain, isExpense],
+  );
+
+  return (
+    <FormField
+      control={form.control}
+      name={transactionFormNames.amount as Path<FormValues>}
+      render={render}
+    />
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Type
+   ──────────────────────────────────────────────────────────────────────── */
+
+function TypeField<FormValues extends FieldValues>({
+  form,
+  uid,
+}: {
+  form: UseFormReturn<FormValues>;
+  uid: string;
+}) {
+  const groupName = `${uid}-type`;
+
+  const render = useCallback(
+    ({ field, fieldState }: FieldRenderProps<FormValues>) => {
+      const value = (field.value as string | undefined) ?? "";
+
+      return (
+        <fieldset className="min-w-0">
+          {/* A visible <legend> renders outside the fieldset's layout box, so
+              the grid lives on an inner wrapper. */}
+          <legend className={cn(labelClassName, "mb-2 p-0")}>Type</legend>
+          <SegmentedGroup className="grid-cols-2">
+            <SegmentedOption
+              name={groupName}
+              value="income"
+              checked={value === "income"}
+              onSelect={field.onChange}
+              checkedClassName="peer-checked:bg-success/10 peer-checked:text-success peer-checked:ring-success/25"
+            >
+              <TrendingUpIcon className="size-4" aria-hidden="true" />
+              Income
+            </SegmentedOption>
+            <SegmentedOption
+              name={groupName}
+              value="expense"
+              checked={value === "expense"}
+              onSelect={field.onChange}
+              checkedClassName="peer-checked:bg-destructive/10 peer-checked:text-destructive peer-checked:ring-destructive/25"
+            >
+              <TrendingDownIcon className="size-4" aria-hidden="true" />
+              Expense
+            </SegmentedOption>
+          </SegmentedGroup>
+          {fieldState.error ? (
+            <p className="mt-2 text-destructive text-sm">
+              {fieldState.error.message}
+            </p>
+          ) : null}
+        </fieldset>
+      );
+    },
+    [groupName],
+  );
+
+  return (
+    <FormField
+      control={form.control}
+      name={transactionFormNames.type as Path<FormValues>}
+      render={render}
+    />
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Segmented controls
+   A real <input type="radio"> group gives arrow-key navigation, roving focus
+   and "radio button, 2 of 2" announcements for free. The visible chip is a
+   sibling <span> styled off `peer-checked`, so there is no JS behind it.
+   ──────────────────────────────────────────────────────────────────────── */
+
+function SegmentedGroup({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className={cn("grid gap-1 rounded-full bg-muted p-1", className)}>
+      {children}
+    </div>
+  );
+}
+
+function SegmentedOption({
+  name,
+  value,
+  checked,
+  onSelect,
+  checkedClassName,
+  children,
+}: {
+  name: string;
+  value: string;
+  checked: boolean;
+  onSelect: (value: string) => void;
+  /** `peer-checked:` utilities that colour the selected chip. */
+  checkedClassName?: string;
+  children: ReactNode;
+}) {
+  const handleChange = useCallback(() => onSelect(value), [onSelect, value]);
+
+  return (
+    <label className="group relative flex min-w-0 cursor-pointer">
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        checked={checked}
+        onChange={handleChange}
+        className="peer sr-only"
+      />
+      <span
+        className={cn(
+          "flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 rounded-full px-2 font-medium text-muted-foreground text-sm ring-1 ring-transparent transition-colors",
+          "group-hover:text-foreground",
+          "peer-focus-visible:outline-1 peer-focus-visible:outline-ring peer-focus-visible:ring-3 peer-focus-visible:ring-ring/40",
+          checkedClassName ??
+            "peer-checked:bg-background peer-checked:text-foreground peer-checked:shadow-sm",
+        )}
+      >
+        {children}
+      </span>
+    </label>
+  );
+}
+
+/**
+ * A chip in a group where *nothing* selected is a valid state — so these are
+ * toggle buttons (`aria-pressed`), not radios: Space releases the pressed one,
+ * which a radio group can never do.
+ */
+function SegmentedToggle({
+  pressed,
+  onToggle,
+  children,
+}: {
+  pressed: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={pressed}
+      onClick={onToggle}
+      className={cn(
+        "flex min-h-11 w-full min-w-0 items-center justify-center gap-1.5 rounded-full px-2 font-medium text-sm transition-colors",
+        "focus-visible:outline-1 focus-visible:outline-ring focus-visible:ring-3 focus-visible:ring-ring/40",
+        pressed
+          ? "bg-background text-foreground shadow-sm"
+          : "text-muted-foreground hover:text-foreground",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Description
+   ──────────────────────────────────────────────────────────────────────── */
+
+function DescriptionField<FormValues extends FieldValues>({
+  form,
+}: {
+  form: UseFormReturn<FormValues>;
+}) {
+  const render = useCallback(
+    ({ field }: FieldRenderProps<FormValues>) => (
+      <FormItem>
+        <FormLabel className={labelClassName}>
+          Description {optionalHint}
+        </FormLabel>
+        <FormControl>
+          <Input
+            placeholder="e.g. Weekly groceries"
+            autoCapitalize="sentences"
+            enterKeyHint="next"
+            className={controlClassName}
+            {...field}
+            value={(field.value as string | undefined) ?? ""}
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    ),
+    [],
+  );
+
+  return (
+    <FormField
+      control={form.control}
+      name={transactionFormNames.description as Path<FormValues>}
+      render={render}
+    />
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Dates
+   ──────────────────────────────────────────────────────────────────────── */
+
+type DateInputProps = Omit<
+  ComponentProps<typeof Input>,
+  "onChange" | "type" | "value"
+> & {
+  value: unknown;
+  onValueChange: (value: Date | null | undefined) => void;
+  /**
+   * What an emptied field emits. The transaction date is optional
+   * (`undefined`); the loan due date is nullable (`null`), and its Zod schema
+   * rejects the other one — so the caller says which.
+   */
+  clearedValue?: null;
+};
+
+/**
+ * Native `<input type="date">`: a free calendar, locale-aware display and
+ * keyboard entry on every platform, wrapped so the form only ever sees Dates.
+ */
+function DateInput({
+  value,
+  onValueChange,
+  clearedValue,
+  className,
+  ...props
+}: DateInputProps) {
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onValueChange(
+        event.target.value
+          ? new Date(`${event.target.value}T00:00:00`)
+          : clearedValue,
+      );
+    },
+    [clearedValue, onValueChange],
+  );
+
+  return (
+    <Input
+      type="date"
+      className={cn(
+        controlClassName,
+        // Safari gives date inputs an intrinsic width that ignores the grid
+        // cell, so pin it explicitly.
+        "block w-full min-w-0 cursor-pointer [color-scheme:light] dark:[color-scheme:dark]",
+        className,
+      )}
+      value={value instanceof Date ? format(value, "yyyy-MM-dd") : ""}
+      onChange={handleChange}
+      {...props}
+    />
+  );
+}
+
+function DateField<FormValues extends FieldValues>({
+  form,
+  description,
+  showDateDescription,
+}: {
+  form: UseFormReturn<FormValues>;
+  description?: string;
+  showDateDescription: boolean;
+}) {
+  const render = useCallback(
+    ({ field }: FieldRenderProps<FormValues>) => (
+      <FormItem>
+        <FormLabel className={labelClassName}>Date</FormLabel>
+        <FormControl>
+          <DateInput value={field.value} onValueChange={field.onChange} />
+        </FormControl>
+        {showDateDescription ? (
+          <FormDescription>{description || "Pick a date"}</FormDescription>
+        ) : null}
+        <FormMessage />
+      </FormItem>
+    ),
+    [description, showDateDescription],
+  );
+
+  return (
+    <FormField
+      control={form.control}
+      name={transactionFormNames.date as Path<FormValues>}
+      render={render}
+    />
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Category
+   ──────────────────────────────────────────────────────────────────────── */
+
+function CategoryField<FormValues extends FieldValues>({
+  form,
+  uid,
+}: {
+  form: UseFormReturn<FormValues>;
+  uid: string;
+}) {
+  const render = useCallback(
+    ({ field }: FieldRenderProps<FormValues>) => (
+      <CategoryControl field={field} uid={uid} />
+    ),
+    [uid],
+  );
+
+  return (
+    <FormField
+      control={form.control}
+      name={transactionFormNames.category as Path<FormValues>}
+      render={render}
+    />
+  );
+}
+
+function CategoryControl<FormValues extends FieldValues>({
+  field,
+  uid,
+}: {
+  field: RenderedField<FormValues>;
+  uid: string;
+}) {
+  const userEmail = useRouteUser();
   const queryClient = useQueryClient();
+  const { data: categories, isPending } = useGetCategoriesByEmail();
+
+  const [draft, setDraft] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+  const draftRef = useRef<HTMLInputElement>(null);
+
+  const panelId = `${uid}-new-category`;
+  const hintId = `${uid}-new-category-hint`;
+
+  const hasCategories = categories.length > 0;
+  // With an empty list there is nothing to pick, so the creator is the field.
+  const creatorOpen = isCreating || !(isPending || hasCategories);
+
+  const trimmed = draft.trim();
+  const isDuplicate = categories.some(
+    (cat) => cat.name.toLowerCase() === trimmed.toLowerCase(),
+  );
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
-    onSuccess: async ({ data }) => {
-      if (isErrorPayload(data)) {
-        const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to create category" });
-        return;
-      }
-
-      sileo.success({ title: "Category created successfully" });
-      // Invalidate all queries that depend on category data
-      await invalidateCategoryQueries(queryClient, userEmail);
-    },
     idempotency: {
       getKey: (variables) =>
         JSON.stringify({
@@ -138,548 +663,263 @@ export function TransactionForm<FormValues extends FieldValues>({
         title: "Category is already being created",
       },
       onDuplicateRecentSuccess: {
-        title: "Category already created",
         description: "We ignored the repeated request to avoid duplicates.",
+        title: "Category already created",
       },
+    },
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to create category" });
+        return;
+      }
+
+      sileo.success({ title: "Category created successfully" });
+      // Invalidate all queries that depend on category data
+      await invalidateCategoryQueries(queryClient, userEmail);
     },
   });
 
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const viewport = window.visualViewport;
-    if (!viewport) {
-      return;
-    }
-
-    const updateKeyboardInset = () => {
-      const nextInset = Math.max(
-        0,
-        window.innerHeight - viewport.height - viewport.offsetTop,
-      );
-
-      setKeyboardInset((currentInset) =>
-        Math.abs(currentInset - nextInset) > 1 ? nextInset : currentInset,
-      );
-    };
-
-    updateKeyboardInset();
-
-    viewport.addEventListener("resize", updateKeyboardInset);
-    viewport.addEventListener("scroll", updateKeyboardInset);
-
-    return () => {
-      viewport.removeEventListener("resize", updateKeyboardInset);
-      viewport.removeEventListener("scroll", updateKeyboardInset);
-    };
-  }, []);
+  const isSaving = postCategoryByEmail.status === "pending";
+  const canCreate = trimmed.length > 1 && !isDuplicate && !isSaving;
 
   useEffect(() => {
-    return () => {
-      if (focusScrollTimeoutRef.current) {
-        window.clearTimeout(focusScrollTimeoutRef.current);
+    if (isCreating) {
+      draftRef.current?.focus();
+    }
+  }, [isCreating]);
+
+  const fieldOnChange = field.onChange;
+  const mutateCategory = postCategoryByEmail.mutate;
+
+  const create = useCallback(async () => {
+    if (!canCreate) {
+      return;
+    }
+    const name = trimmed;
+    // Select it right away so the form is valid before the round-trip.
+    fieldOnChange(name);
+    setDraft("");
+    setIsCreating(false);
+    await mutateCategory({
+      data: { category: { icon: "other", name }, email: userEmail },
+    });
+  }, [canCreate, fieldOnChange, mutateCategory, trimmed, userEmail]);
+
+  const handleDraftKeyDown = useCallback(
+    async (event: KeyboardEvent<HTMLInputElement>) => {
+      // Enter here means "create this category", never "submit the
+      // transaction" — the outer form would otherwise steal it.
+      if (event.key === "Enter") {
+        event.preventDefault();
+        await create();
       }
-    };
-  }, []);
-
-  const handleMobileInputFocus = (event: FocusEvent<HTMLFormElement>) => {
-    if (typeof window === "undefined" || window.innerWidth >= 768) {
-      return;
-    }
-
-    const target = event.target;
-    if (!(target instanceof HTMLElement)) {
-      return;
-    }
-
-    if (!target.matches("input, textarea, [role='combobox']")) {
-      return;
-    }
-
-    // Skip scroll for elements inside portals (e.g. popover CommandInput)
-    if (formRef.current && !formRef.current.contains(target)) {
-      return;
-    }
-
-    if (focusScrollTimeoutRef.current) {
-      window.clearTimeout(focusScrollTimeoutRef.current);
-    }
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    focusScrollTimeoutRef.current = window.setTimeout(() => {
-      target.scrollIntoView({
-        behavior: prefersReducedMotion ? "auto" : "smooth",
-        block: "center",
-        inline: "nearest",
-      });
-    }, 140);
-  };
-
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        ref={formRef}
-        className="space-y-4 pb-[calc(env(safe-area-inset-bottom)+0.25rem)] sm:space-y-5 sm:pb-0"
-        autoComplete="off"
-        aria-busy={isLoading}
-        onFocusCapture={handleMobileInputFocus}
-        style={
-          keyboardInset > 0
-            ? {
-                paddingBottom: `calc(${keyboardInset}px + env(safe-area-inset-bottom) + 1rem)`,
-              }
-            : undefined
-        }
-      >
-        {/* Amount + Type row */}
-        <motion.div
-          className={cn(
-            sectionClassName,
-            "transition-colors duration-500",
-            "border-border/60",
-          )}
-          layout
-        >
-          {/* Amount and type sit side by side from sm up; stacked on mobile,
-              where the segmented control needs the full width to breathe. */}
-          <div className="grid gap-5 sm:grid-cols-2 sm:items-start sm:gap-4">
-            <FormField
-              control={form.control}
-              name={transactionFormNames.amount as Path<FormValues>}
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
-                    <DollarSignIcon className="size-3 text-emerald-500" />
-                    Amount
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative flex items-center">
-                      <span className="text-muted-foreground/60 pointer-events-none absolute left-4 text-xl font-semibold select-none">
-                        $
-                      </span>
-                      <Input
-                        id={transactionFormNames.amount}
-                        type="number"
-                        inputMode="decimal"
-                        step="0.01"
-                        placeholder="0.00"
-                        className={cn(
-                          inputClassName,
-                          "[appearance:textfield] pl-9 text-xl font-bold tracking-tight [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",
-                        )}
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(validLimitNumber(e.target.value))
-                        }
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name={transactionFormNames.type as Path<FormValues>}
-              render={({ field }) => {
-                const currentType = (field.value as string) || "";
-                return (
-                  <FormItem className="space-y-2">
-                    <FormLabel
-                      id={typeLabelId}
-                      className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
-                    >
-                      <SparklesIcon className="size-3 text-purple-500" />
-                      Type
-                    </FormLabel>
-                    <FormControl>
-                      <div
-                        className="bg-muted/50 relative flex rounded-xl p-1"
-                        role="radiogroup"
-                        aria-labelledby={typeLabelId}
-                      >
-                        {/* Sliding indicator */}
-                        {currentType && (
-                          <motion.span
-                            className="pointer-events-none absolute inset-y-1 rounded-lg border"
-                            style={{ width: "calc(50% - 4px)" }}
-                            animate={{
-                              left:
-                                currentType === "income"
-                                  ? "4px"
-                                  : "calc(50% + 0px)",
-                              backgroundColor:
-                                currentType === "income"
-                                  ? "rgba(16,185,129,0.10)"
-                                  : "rgba(239,68,68,0.10)",
-                              borderColor:
-                                currentType === "income"
-                                  ? "rgba(16,185,129,0.30)"
-                                  : "rgba(239,68,68,0.30)",
-                            }}
-                            initial={false}
-                            transition={{
-                              type: "spring",
-                              bounce: 0.15,
-                              duration: 0.4,
-                            }}
-                          />
-                        )}
-                        <button
-                          type="button"
-                          role="radio"
-                          aria-checked={currentType === "income"}
-                          onClick={() => field.onChange("income")}
-                          className={cn(
-                            "focus-visible:ring-ring/50 relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none",
-                            currentType === "income"
-                              ? "text-emerald-700 dark:text-emerald-300"
-                              : "text-muted-foreground hover:text-foreground",
-                          )}
-                        >
-                          <TrendingUpIcon className="size-4 shrink-0" />
-                          Income
-                        </button>
-                        <button
-                          type="button"
-                          role="radio"
-                          aria-checked={currentType === "expense"}
-                          onClick={() => field.onChange("expense")}
-                          className={cn(
-                            "focus-visible:ring-ring/50 relative z-10 flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none",
-                            currentType === "expense"
-                              ? "text-red-700 dark:text-red-300"
-                              : "text-muted-foreground hover:text-foreground",
-                          )}
-                        >
-                          <TrendingDownIcon className="size-4 shrink-0" />
-                          Expense
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                );
-              }}
-            />
-          </div>
-        </motion.div>
-
-        <div className="grid gap-4 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:items-start">
-          <div className="space-y-4">
-            <div className={sectionClassName}>
-              <FormField
-                control={form.control}
-                name={transactionFormNames.category as Path<FormValues>}
-                render={({ field }) => {
-                  const value = field.value as string | undefined;
-
-                  const showAddNew =
-                    categoryInputValue.length > 1 &&
-                    !categories?.some(
-                      (cat) =>
-                        cat.name.toLowerCase() ===
-                        categoryInputValue.toLowerCase(),
-                    );
-
-                  return (
-                    <FormItem className="space-y-2">
-                      <FormLabel
-                        htmlFor={transactionFormNames.category}
-                        className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
-                      >
-                        <TagIcon className="size-3 text-blue-500" />
-                        Category
-                      </FormLabel>
-                      <FormControl>
-                        <div className="w-full space-y-3">
-                          {categoryOptions.length > 0 ? (
-                            <NativeSelect
-                              className={nativeSelectClassName}
-                              id={transactionFormNames.category}
-                              value={value ?? ""}
-                              onChange={(event) =>
-                                field.onChange(event.target.value)
-                              }
-                            >
-                              <NativeSelectOption value="" disabled>
-                                Select a category
-                              </NativeSelectOption>
-                              {categoryOptions.map((option) => (
-                                <NativeSelectOption
-                                  key={option.value}
-                                  value={option.value}
-                                  className="capitalize"
-                                >
-                                  {option.label}
-                                </NativeSelectOption>
-                              ))}
-                            </NativeSelect>
-                          ) : (
-                            <p className="text-muted-foreground py-3 text-center text-sm">
-                              No categories yet
-                            </p>
-                          )}
-                          <div className="flex items-center gap-2">
-                            <Input
-                              value={categoryInputValue}
-                              onChange={(e) =>
-                                setCategoryInputValue(e.target.value)
-                              }
-                              placeholder="New category name..."
-                              className="border-border/60 bg-input/40 h-10 flex-1 rounded-xl text-sm shadow-none"
-                            />
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="default"
-                              className="h-10 rounded-xl"
-                              onClick={async () => {
-                                const inputVal = categoryInputValue;
-                                field.onChange(inputVal);
-                                setCategoryInputValue("");
-                                await postCategoryByEmail.mutate({
-                                  data: {
-                                    email: userEmail,
-                                    category: {
-                                      name: inputVal,
-                                      icon: "other",
-                                    },
-                                  },
-                                });
-                              }}
-                              disabled={
-                                !showAddNew ||
-                                postCategoryByEmail.status === "pending"
-                              }
-                            >
-                              <PlusIcon size={14} />
-                              Add
-                            </Button>
-                          </div>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
-            </div>
-            <CardField form={form} />
-          </div>
-
-          <div className={sectionClassName}>
-            <FormField
-              control={form.control}
-              name={transactionFormNames.description as Path<FormValues>}
-              render={({ field }) => (
-                <FormItem className="space-y-2">
-                  <FormLabel
-                    htmlFor={transactionFormNames.description}
-                    className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
-                  >
-                    <FileTextIcon className="size-3 text-orange-500" />
-                    Description
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        placeholder="Add a description..."
-                        id={transactionFormNames.description}
-                        className={cn(inputClassName, "pl-10 text-sm")}
-                        {...field}
-                      />
-                      <FileTextIcon className="text-muted-foreground/60 absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="mt-4">
-              <FormField
-                control={form.control}
-                name={transactionFormNames.date as Path<FormValues>}
-                render={({ field }) => (
-                  <FormItem className="flex flex-col space-y-2">
-                    <FormLabel
-                      htmlFor={transactionFormNames.date}
-                      className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase"
-                    >
-                      <CalendarIcon className="size-3 text-indigo-500" />
-                      Date
-                    </FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          id={transactionFormNames.date}
-                          type="date"
-                          className={cn(
-                            inputClassName,
-                            "w-full cursor-pointer pl-10 [color-scheme:light] dark:[color-scheme:dark]",
-                            "max-w-fit md:max-w-none",
-                          )}
-                          value={
-                            field.value
-                              ? format(field.value as Date, "yyyy-MM-dd")
-                              : ""
-                          }
-                          onChange={(e) => {
-                            const date = e.target.value
-                              ? new Date(`${e.target.value}T00:00:00`)
-                              : undefined;
-                            field.onChange(date);
-                          }}
-                        />
-                        <CalendarIcon className="text-muted-foreground/60 pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-                      </div>
-                    </FormControl>
-                    {showDateDescription && (
-                      <FormDescription>
-                        {description || "Pick a date"}
-                      </FormDescription>
-                    )}
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-        </div>
-
-        <LoanSection form={form} />
-
-        <div className="flex items-center justify-between pt-1 sm:pt-2">
-          <DialogClose
-            render={
-              <Button type="button" variant={"outline"} size={"lg"}></Button>
-            }
-          >
-            <XIcon />
-            Cancel
-          </DialogClose>
-          <Button
-            type="submit"
-            className="font-medium hover:shadow-xl"
-            disabled={isLoading}
-            size={"lg"}
-          >
-            {isLoading ? (
-              <div className="flex items-center gap-2">
-                <div className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                Saving...
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <SaveIcon className="size-4" />
-                {buttonText}
-              </div>
-            )}
-          </Button>
-        </div>
-      </form>
-    </Form>
+    },
+    [create],
   );
-}
 
-const NO_CARD = "none";
+  const handleDraftChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => setDraft(event.target.value),
+    [],
+  );
 
-function CardField<FormValues extends FieldValues>({
-  form,
-}: {
-  form: UseFormReturn<FormValues>;
-}) {
-  const { data, isPending } = useCards({ status: "active" });
-  const cards = useMemo(() => data?.data ?? [], [data?.data]);
+  const toggleCreating = useCallback(() => setIsCreating((open) => !open), []);
 
-  // Nothing to assign until the user has created at least one card. Hiding the
-  // field keeps the form unchanged for users who don't use cards.
-  if (!isPending && cards.length === 0) {
-    return null;
+  let placeholder = "No categories yet";
+  if (hasCategories) {
+    placeholder = "Select a category";
+  } else if (isPending) {
+    placeholder = "Loading categories…";
+  }
+
+  let hint: string | null = null;
+  if (trimmed.length === 1) {
+    hint = "Use at least two characters.";
+  } else if (isDuplicate) {
+    hint = `“${trimmed}” already exists — pick it above.`;
   }
 
   return (
-    <div className={sectionClassName}>
-      <FormField
-        control={form.control}
-        name={transactionFormNames.cardId as Path<FormValues>}
-        render={({ field }) => {
-          const value = (field.value as string | null | undefined) ?? null;
-          // A transaction can still point at a card that dropped out of the
-          // active list (archived, for instance). Keep an option for it so the
-          // select shows the real value instead of silently rendering the first
-          // entry while the form holds something else.
-          const isUnlisted =
-            value !== null && !cards.some((card) => card.id === value);
-          return (
-            <FormItem className="space-y-2">
-              <FormLabel className="text-muted-foreground/70 flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase">
-                <CreditCardIcon className="size-3 text-sky-500" />
-                Card
-                <span className="text-muted-foreground/50 font-normal tracking-normal normal-case">
-                  (optional)
-                </span>
-              </FormLabel>
-              <FormControl>
-                <NativeSelect
-                  className={nativeSelectClassName}
-                  value={value ?? NO_CARD}
-                  onChange={(event) =>
-                    field.onChange(
-                      event.target.value === NO_CARD
-                        ? null
-                        : event.target.value,
-                    )
-                  }
-                >
-                  <NativeSelectOption value={NO_CARD}>
-                    No card
-                  </NativeSelectOption>
-                  {isUnlisted && (
-                    <NativeSelectOption value={value}>
-                      Assigned card (inactive)
-                    </NativeSelectOption>
-                  )}
-                  {cards.map((card) => (
-                    <NativeSelectOption
-                      key={card.id}
-                      value={card.id}
-                      className="capitalize"
-                    >
-                      {card.last4
-                        ? `${card.name} ···· ${card.last4}`
-                        : card.name}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-              </FormControl>
-              <FormDescription className="text-xs">
-                Assign this transaction to a card to track its balance
-                separately.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          );
-        }}
-      />
-    </div>
+    <FormItem>
+      <div className="flex items-center justify-between gap-2">
+        <FormLabel className={labelClassName}>Category</FormLabel>
+        {hasCategories ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            aria-expanded={isCreating}
+            aria-controls={panelId}
+            onClick={toggleCreating}
+          >
+            <PlusIcon aria-hidden="true" />
+            New category
+          </Button>
+        ) : null}
+      </div>
+
+      <FormControl>
+        {/* Native select: the platform picker beats any custom listbox on a
+            phone, and it is keyboard- and screen-reader-complete. */}
+        <NativeSelect
+          className={nativeSelectClassName}
+          disabled={!hasCategories}
+          value={(field.value as string | undefined) ?? ""}
+          onChange={fieldOnChange}
+        >
+          <NativeSelectOption value="" disabled>
+            {placeholder}
+          </NativeSelectOption>
+          {categories.map((category) => (
+            <NativeSelectOption
+              key={category.id}
+              value={category.name}
+              className="capitalize"
+            >
+              {category.name}
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+      </FormControl>
+
+      {creatorOpen ? (
+        <div
+          id={panelId}
+          className="fade-in-0 slide-in-from-top-1 grid animate-in gap-1.5 duration-200"
+        >
+          <div className="flex items-center gap-2">
+            <Input
+              ref={draftRef}
+              value={draft}
+              onChange={handleDraftChange}
+              onKeyDown={handleDraftKeyDown}
+              placeholder="New category name"
+              aria-label="New category name"
+              aria-describedby={hint ? hintId : undefined}
+              autoCapitalize="words"
+              enterKeyHint="done"
+              className={cn(controlClassName, "flex-1")}
+            />
+            <Button
+              type="button"
+              size="lg"
+              onClick={create}
+              disabled={!canCreate}
+            >
+              {isSaving ? <Spinner /> : <PlusIcon aria-hidden="true" />}
+              Add
+            </Button>
+          </div>
+          {hint ? (
+            <p id={hintId} className="text-muted-foreground text-xs">
+              {hint}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
+
+      <FormMessage />
+    </FormItem>
   );
 }
+
+/* ────────────────────────────────────────────────────────────────────────
+   Card
+   ──────────────────────────────────────────────────────────────────────── */
+
+const NO_CARD = "none";
+
+interface ActiveCard {
+  id: string;
+  last4?: string | null;
+  name: string;
+}
+
+function CardField<FormValues extends FieldValues>({
+  form,
+  cards,
+}: {
+  form: UseFormReturn<FormValues>;
+  cards: ActiveCard[];
+}) {
+  const render = useCallback(
+    ({ field }: FieldRenderProps<FormValues>) => (
+      <CardControl field={field} cards={cards} />
+    ),
+    [cards],
+  );
+
+  return (
+    <FormField
+      control={form.control}
+      name={transactionFormNames.cardId as Path<FormValues>}
+      render={render}
+    />
+  );
+}
+
+function CardControl<FormValues extends FieldValues>({
+  field,
+  cards,
+}: {
+  field: RenderedField<FormValues>;
+  cards: ActiveCard[];
+}) {
+  const fieldOnChange = field.onChange;
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      fieldOnChange(event.target.value === NO_CARD ? null : event.target.value);
+    },
+    [fieldOnChange],
+  );
+
+  const value = (field.value as string | null | undefined) ?? null;
+  // A transaction can still point at a card that dropped out of the active
+  // list (archived, for instance). Keep an option for it so the select shows
+  // the real value instead of silently rendering the first entry while the
+  // form holds something else.
+  const isUnlisted = value !== null && !cards.some((card) => card.id === value);
+
+  return (
+    <FormItem>
+      <FormLabel className={labelClassName}>Card {optionalHint}</FormLabel>
+      <FormControl>
+        <NativeSelect
+          className={nativeSelectClassName}
+          value={value ?? NO_CARD}
+          onChange={handleChange}
+        >
+          <NativeSelectOption value={NO_CARD}>No card</NativeSelectOption>
+          {isUnlisted ? (
+            <NativeSelectOption value={value}>
+              Assigned card (inactive)
+            </NativeSelectOption>
+          ) : null}
+          {cards.map((card) => (
+            <NativeSelectOption
+              key={card.id}
+              value={card.id}
+              className="capitalize"
+            >
+              {card.last4 ? `${card.name} ···· ${card.last4}` : card.name}
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Loan linkage
+   ──────────────────────────────────────────────────────────────────────── */
 
 function LoanSection<FormValues extends FieldValues>({
   form,
 }: {
   form: UseFormReturn<FormValues>;
 }) {
-  const currency = usePreferredCurrency();
   const mode = (form.watch(transactionFormNames.loanMode as Path<FormValues>) ??
     "none") as LoanMode;
 
@@ -693,373 +933,440 @@ function LoanSection<FormValues extends FieldValues>({
     );
     return typeof v === "string" && v.length > 0 ? v : null;
   });
-  const includeLoanId = initialLoanId;
 
-  // Only fetch the picker list when the user actually opens "apply" mode.
-  // Avoids one wasted request per form mount in the common case.
-  const enableQuery = mode === "apply";
+  const setMode = useCallback(
+    (next: LoanMode) => {
+      form.setValue(
+        transactionFormNames.loanMode as Path<FormValues>,
+        next as never,
+        { shouldDirty: true, shouldValidate: false },
+      );
+      // Mirror to legacy boolean for any consumer still reading it.
+      form.setValue(
+        transactionFormNames.markAsLoan as Path<FormValues>,
+        (next === "create") as never,
+        { shouldDirty: true },
+      );
+      // Clear fields belonging to the *other* modes so we don't submit stale
+      // data.
+      if (next !== "create") {
+        form.setValue(
+          transactionFormNames.loanDebtor as Path<FormValues>,
+          "" as never,
+        );
+        form.setValue(
+          transactionFormNames.loanDueAt as Path<FormValues>,
+          null as never,
+        );
+      }
+      if (next !== "apply") {
+        form.setValue(
+          transactionFormNames.appliedToLoanId as Path<FormValues>,
+          null as never,
+        );
+      }
+    },
+    [form],
+  );
+
+  const clearMode = useCallback(() => setMode("none"), [setMode]);
+  const toggleCreate = useCallback(
+    () => setMode(mode === "create" ? "none" : "create"),
+    [mode, setMode],
+  );
+  const toggleApply = useCallback(
+    () => setMode(mode === "apply" ? "none" : "apply"),
+    [mode, setMode],
+  );
+
+  return (
+    <fieldset className="min-w-0 border-border/60 border-t pt-5">
+      <legend className="sr-only">Loan linkage (optional)</legend>
+      <div className="grid gap-3">
+        {/* "None" needs no button of its own: a pressed toggle releases on a
+            second press, and the explicit Remove keeps that discoverable. */}
+        <div className="flex min-h-8 items-center justify-between gap-2">
+          <p className={labelClassName} aria-hidden="true">
+            Loan linkage {optionalHint}
+          </p>
+          {mode === "none" ? null : (
+            <Button type="button" variant="ghost" size="sm" onClick={clearMode}>
+              <XIcon aria-hidden="true" />
+              Remove
+            </Button>
+          )}
+        </div>
+
+        <div
+          role="group"
+          aria-label="Loan linkage"
+          className="grid grid-cols-2 gap-1 rounded-full bg-muted p-1"
+        >
+          <SegmentedToggle pressed={mode === "create"} onToggle={toggleCreate}>
+            New loan
+          </SegmentedToggle>
+          <SegmentedToggle pressed={mode === "apply"} onToggle={toggleApply}>
+            Pay a loan
+          </SegmentedToggle>
+        </div>
+
+        {mode === "create" && <LoanCreateFields form={form} />}
+
+        {/* Mounted only in "apply" mode, so the loans request is never made for
+          the ordinary transaction the user is almost always recording. */}
+        {mode === "apply" && (
+          <LoanPicker form={form} initialLoanId={initialLoanId} />
+        )}
+      </div>
+    </fieldset>
+  );
+}
+
+function LoanCreateFields<FormValues extends FieldValues>({
+  form,
+}: {
+  form: UseFormReturn<FormValues>;
+}) {
+  const renderDebtor = useCallback(
+    ({ field }: FieldRenderProps<FormValues>) => (
+      <FormItem>
+        <FormLabel className={labelClassName}>Debtor</FormLabel>
+        <FormControl>
+          <Input
+            placeholder="e.g. Juan, SAT, Insurance Co."
+            autoComplete="off"
+            autoCapitalize="words"
+            enterKeyHint="next"
+            className={controlClassName}
+            {...field}
+            value={(field.value as string | undefined) ?? ""}
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    ),
+    [],
+  );
+
+  const renderDueAt = useCallback(
+    ({ field }: FieldRenderProps<FormValues>) => (
+      <FormItem>
+        <FormLabel className={labelClassName}>
+          Due date {optionalHint}
+        </FormLabel>
+        <FormControl>
+          <DateInput
+            value={field.value}
+            onValueChange={field.onChange}
+            clearedValue={null}
+          />
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    ),
+    [],
+  );
+
+  return (
+    <div className="fade-in-0 slide-in-from-top-1 grid animate-in gap-5 duration-200 sm:grid-cols-2 lg:grid-cols-1">
+      <FormField
+        control={form.control}
+        name={transactionFormNames.loanDebtor as Path<FormValues>}
+        render={renderDebtor}
+      />
+      <FormField
+        control={form.control}
+        name={transactionFormNames.loanDueAt as Path<FormValues>}
+        render={renderDueAt}
+      />
+    </div>
+  );
+}
+
+interface ActiveLoan {
+  amount: number;
+  amountPaid: number;
+  debtor: string;
+  direction: string;
+  id: string;
+}
+
+function LoanPicker<FormValues extends FieldValues>({
+  form,
+  initialLoanId,
+}: {
+  form: UseFormReturn<FormValues>;
+  initialLoanId: string | null;
+}) {
   const { data: activeLoansResponse, isPending } = useActiveLoans({
-    includeId: includeLoanId,
+    includeId: initialLoanId,
   });
   const activeLoans = useMemo(
-    () => activeLoansResponse?.data ?? [],
+    () => (activeLoansResponse?.data ?? []) as ActiveLoan[],
     [activeLoansResponse?.data],
+  );
+
+  const setType = form.setValue;
+
+  // When the user picks a loan, the transaction type is fully determined by
+  // the loan's direction — flipping it here keeps server-side validation
+  // happy and removes a manual coordination step.
+  const applyLoanDirection = useCallback(
+    (loanId: string) => {
+      const loan = activeLoans.find((l) => l.id === loanId);
+      if (!loan) {
+        return;
+      }
+      const nextType: "income" | "expense" =
+        loan.direction === "lent" ? "income" : "expense";
+      setType(
+        transactionFormNames.type as Path<FormValues>,
+        nextType as never,
+        {
+          shouldDirty: true,
+          shouldValidate: true,
+        },
+      );
+    },
+    [activeLoans, setType],
+  );
+
+  const render = useCallback(
+    ({ field }: FieldRenderProps<FormValues>) => (
+      <LoanPickerControl
+        field={field}
+        loans={activeLoans}
+        isPending={isPending}
+        onPick={applyLoanDirection}
+      />
+    ),
+    [activeLoans, applyLoanDirection, isPending],
+  );
+
+  return (
+    <div className="fade-in-0 slide-in-from-top-1 animate-in duration-200">
+      <FormField
+        control={form.control}
+        name={transactionFormNames.appliedToLoanId as Path<FormValues>}
+        render={render}
+      />
+    </div>
+  );
+}
+
+function LoanPickerControl<FormValues extends FieldValues>({
+  field,
+  loans,
+  isPending,
+  onPick,
+}: {
+  field: RenderedField<FormValues>;
+  loans: ActiveLoan[];
+  isPending: boolean;
+  onPick: (loanId: string) => void;
+}) {
+  const fieldOnChange = field.onChange;
+
+  const handleValueChange = useCallback(
+    (value: string | null) => {
+      if (!value) {
+        return;
+      }
+      fieldOnChange(value);
+      onPick(value);
+    },
+    [fieldOnChange, onPick],
   );
 
   // Group loans by direction so the picker can render two clear sections:
   // "Owed to me" (income side) vs "I owe" (expense side).
   const grouped = useMemo(() => {
-    const lent: typeof activeLoans = [];
-    const borrowed: typeof activeLoans = [];
-    for (const loan of activeLoans) {
-      if (loan.direction === "borrowed") borrowed.push(loan);
-      else lent.push(loan);
+    const lent: ActiveLoan[] = [];
+    const borrowed: ActiveLoan[] = [];
+    for (const loan of loans) {
+      if (loan.direction === "borrowed") {
+        borrowed.push(loan);
+      } else {
+        lent.push(loan);
+      }
     }
-    return { lent, borrowed };
-  }, [activeLoans]);
+    return { borrowed, lent };
+  }, [loans]);
 
-  // When the user picks a loan, the transaction type is fully determined by
-  // the loan's direction — flipping it here keeps server-side validation
-  // happy and removes a manual coordination step.
-  const handleLoanPick = (
-    loanId: string,
-    fieldOnChange: (val: string | null) => void,
-  ) => {
-    fieldOnChange(loanId === "" ? null : loanId);
-    if (!loanId) return;
-    const loan = activeLoans.find((l) => l.id === loanId);
-    if (!loan) return;
-    const nextType: "income" | "expense" =
-      loan.direction === "lent" ? "income" : "expense";
-    form.setValue(
-      transactionFormNames.type as Path<FormValues>,
-      nextType as never,
-      { shouldDirty: true, shouldValidate: true },
-    );
-  };
+  let placeholder = "Select a loan";
+  if (isPending) {
+    placeholder = "Loading…";
+  } else if (loans.length === 0) {
+    placeholder = "No active loans";
+  }
 
-  const setMode = (next: LoanMode) => {
-    form.setValue(
-      transactionFormNames.loanMode as Path<FormValues>,
-      next as never,
-      { shouldValidate: false, shouldDirty: true },
-    );
-    // Mirror to legacy boolean for any consumer still reading it.
-    form.setValue(
-      transactionFormNames.markAsLoan as Path<FormValues>,
-      (next === "create") as never,
-      { shouldDirty: true },
-    );
-    // Clear fields belonging to the *other* modes so we don't submit stale data.
-    if (next !== "create") {
-      form.setValue(
-        transactionFormNames.loanDebtor as Path<FormValues>,
-        "" as never,
-      );
-      form.setValue(
-        transactionFormNames.loanDueAt as Path<FormValues>,
-        null as never,
-      );
-    }
-    if (next !== "apply") {
-      form.setValue(
-        transactionFormNames.appliedToLoanId as Path<FormValues>,
-        null as never,
-      );
-    }
-  };
-
-  return (
-    <div className={sectionClassName}>
-      <div className="flex items-center gap-3">
-        <div className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-xl">
-          <HandCoinsIcon className="text-primary size-4" />
-        </div>
-        <div>
-          <FormLabel className="text-foreground text-sm font-medium">
-            Loan linkage
-          </FormLabel>
-          <FormDescription className="text-muted-foreground text-xs">
-            Optionally tie this transaction to a loan.
-          </FormDescription>
-        </div>
-      </div>
-
-      {/* Tri-state segmented control */}
-      <div
-        className="bg-muted/50 mt-4 grid grid-cols-3 gap-1 rounded-xl p-1"
-        role="radiogroup"
-        aria-label="Loan linkage mode"
-      >
-        <ModeButton
-          active={mode === "none"}
-          onClick={() => setMode("none")}
-          label="None"
-        />
-        <ModeButton
-          active={mode === "create"}
-          onClick={() => setMode("create")}
-          label="New loan"
-        />
-        <ModeButton
-          active={mode === "apply"}
-          onClick={() => setMode("apply")}
-          label="Apply to loan"
-        />
-      </div>
-
-      <AnimatePresence initial={false} mode="wait">
-        {mode === "create" && (
-          <motion.div
-            key="loan-create"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="mt-4 grid gap-3 sm:grid-cols-2">
-              <FormField
-                control={form.control}
-                name={transactionFormNames.loanDebtor as Path<FormValues>}
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel className="text-muted-foreground/70 text-xs font-semibold tracking-wider uppercase">
-                      Debtor
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        value={(field.value as string | undefined) ?? ""}
-                        placeholder="e.g. Juan, SAT, Insurance Co."
-                        autoComplete="off"
-                        className={inputClassName}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={transactionFormNames.loanDueAt as Path<FormValues>}
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel className="text-muted-foreground/70 text-xs font-semibold tracking-wider uppercase">
-                      Due date{" "}
-                      <span className="text-muted-foreground/50 font-normal tracking-normal normal-case">
-                        (optional)
-                      </span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        type="date"
-                        className={cn(
-                          inputClassName,
-                          // Safari/iOS give date inputs an intrinsic width that
-                          // ignores the grid cell, so pin it explicitly.
-                          "block w-full min-w-0 cursor-pointer",
-                        )}
-                        value={
-                          (field.value as unknown) instanceof Date
-                            ? format(field.value as Date, "yyyy-MM-dd")
-                            : ""
-                        }
-                        onChange={(e) => {
-                          const date = e.target.value
-                            ? new Date(`${e.target.value}T00:00:00`)
-                            : null;
-                          field.onChange(date);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </motion.div>
-        )}
-
-        {mode === "apply" && (
-          <motion.div
-            key="loan-apply"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="mt-4">
-              <FormField
-                control={form.control}
-                name={transactionFormNames.appliedToLoanId as Path<FormValues>}
-                render={({ field }) => (
-                  <FormItem className="space-y-2">
-                    <FormLabel className="text-muted-foreground/70 text-xs font-semibold tracking-wider uppercase">
-                      Loan to pay
-                    </FormLabel>
-                    <FormControl>
-                      <Select
-                        value={(field.value as string | undefined) ?? ""}
-                        onValueChange={(val) => {
-                          if (val) handleLoanPick(val, field.onChange);
-                        }}
-                        disabled={!enableQuery || isPending}
-                      >
-                        <SelectTrigger
-                          className={cn(
-                            inputClassName,
-                            "w-full justify-between",
-                          )}
-                        >
-                          <SelectValue
-                            placeholder={
-                              isPending
-                                ? "Loading…"
-                                : activeLoans.length === 0
-                                  ? "No active loans"
-                                  : "Select a loan"
-                            }
-                          >
-                            {(value: unknown) => {
-                              const id = typeof value === "string" ? value : "";
-                              const loan = id
-                                ? activeLoans.find((l) => l.id === id)
-                                : undefined;
-                              if (!loan) {
-                                return isPending
-                                  ? "Loading…"
-                                  : activeLoans.length === 0
-                                    ? "No active loans"
-                                    : "Select a loan";
-                              }
-                              // const remaining = loan.amount - loan.amountPaid;
-                              return (
-                                <span className="flex w-full items-center justify-between gap-3">
-                                  <span className="truncate capitalize">
-                                    {loan.debtor}
-                                  </span>
-                                  <span
-                                    className={cn(
-                                      "text-xs tabular-nums",
-                                      loan.direction === "lent"
-                                        ? "text-emerald-600 dark:text-emerald-400"
-                                        : "text-red-600 dark:text-red-400",
-                                    )}
-                                  >
-                                    {formatCurrency(loan.amount, currency)} ·{" "}
-                                    {
-                                      LOAN_DIRECTION_LABEL[
-                                        loan.direction as LoanDirection
-                                      ]
-                                    }
-                                  </span>
-                                </span>
-                              );
-                            }}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                          {grouped.lent.length > 0 && (
-                            <SelectGroup>
-                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold tracking-wider uppercase">
-                                {LOAN_DIRECTION_LABEL.lent} · sets income
-                              </div>
-                              {grouped.lent.map((loan) => (
-                                <LoanOption
-                                  key={loan.id}
-                                  loan={loan}
-                                  direction="lent"
-                                />
-                              ))}
-                            </SelectGroup>
-                          )}
-                          {grouped.borrowed.length > 0 && (
-                            <SelectGroup>
-                              <div className="text-muted-foreground px-2 pt-1.5 pb-1 text-[10px] font-semibold tracking-wider uppercase">
-                                {LOAN_DIRECTION_LABEL.borrowed} · sets expense
-                              </div>
-                              {grouped.borrowed.map((loan) => (
-                                <LoanOption
-                                  key={loan.id}
-                                  loan={loan}
-                                  direction="borrowed"
-                                />
-                              ))}
-                            </SelectGroup>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormDescription className="text-xs">
-                      Pick any active loan. Income for &quot;Owed to me&quot;
-                      (someone paid you); expense for &quot;I owe&quot; (you
-                      paid someone). Transaction type is set automatically.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+  const renderValue = useCallback(
+    (value: unknown) => {
+      const loan =
+        typeof value === "string"
+          ? loans.find((l) => l.id === value)
+          : undefined;
+      return loan ? <LoanOptionRow loan={loan} /> : placeholder;
+    },
+    [loans, placeholder],
   );
-}
 
-function LoanOption({
-  loan,
-  direction,
-}: {
-  loan: { id: string; debtor: string; amount: number; amountPaid: number };
-  direction: LoanDirection;
-}) {
-  const currency = usePreferredCurrency();
-  const remaining = loan.amount - loan.amountPaid;
+  const selected = loans.find((l) => l.id === field.value);
+  const selectedType = selected?.direction === "lent" ? "income" : "expense";
+
   return (
-    <SelectItem value={loan.id}>
-      <span className="flex w-full items-center justify-between gap-3">
-        <span className="truncate capitalize">{loan.debtor}</span>
-        <span
-          className={cn(
-            "text-xs tabular-nums",
-            direction === "lent"
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-red-600 dark:text-red-400",
-          )}
+    <FormItem>
+      <FormLabel className={labelClassName}>Loan to pay</FormLabel>
+      <FormControl>
+        <Select
+          value={(field.value as string | undefined) ?? ""}
+          onValueChange={handleValueChange}
+          disabled={isPending || loans.length === 0}
         >
-          {formatCurrency(remaining, currency)} left
-        </span>
-      </span>
-    </SelectItem>
+          <SelectTrigger
+            className={cn(controlClassName, "w-full justify-between")}
+          >
+            <SelectValue placeholder={placeholder}>{renderValue}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {grouped.lent.length > 0 && (
+              <SelectGroup>
+                <div className="px-2 pt-1.5 pb-1 font-semibold text-[10px] text-muted-foreground uppercase tracking-wider">
+                  {LOAN_DIRECTION_LABEL.lent} · sets income
+                </div>
+                {grouped.lent.map((loan) => (
+                  <SelectItem key={loan.id} value={loan.id}>
+                    <LoanOptionRow loan={loan} />
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            )}
+            {grouped.borrowed.length > 0 && (
+              <SelectGroup>
+                <div className="px-2 pt-1.5 pb-1 font-semibold text-[10px] text-muted-foreground uppercase tracking-wider">
+                  {LOAN_DIRECTION_LABEL.borrowed} · sets expense
+                </div>
+                {grouped.borrowed.map((loan) => (
+                  <SelectItem key={loan.id} value={loan.id}>
+                    <LoanOptionRow loan={loan} />
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            )}
+          </SelectContent>
+        </Select>
+      </FormControl>
+      <FormDescription>
+        Picking a loan sets the transaction type for you: income for “
+        {LOAN_DIRECTION_LABEL.lent}”, expense for “
+        {LOAN_DIRECTION_LABEL.borrowed}”.
+      </FormDescription>
+      {/* The type toggle above flips on its own here — say so out loud for
+          anyone who can't see it happen. */}
+      <p role="status" className="sr-only">
+        {selected ? `Transaction type set to ${selectedType}.` : ""}
+      </p>
+      <FormMessage />
+    </FormItem>
   );
 }
 
-function ModeButton({
-  active,
-  onClick,
-  label,
-}: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-}) {
+/** Debtor on the left, what is still owed on the right. */
+function LoanOptionRow({ loan }: { loan: ActiveLoan }) {
+  const { formatPlain } = useCurrency();
+  const remaining = loan.amount - loan.amountPaid;
+
   return (
-    <button
-      type="button"
-      role="radio"
-      aria-checked={active}
-      onClick={onClick}
-      className={cn(
-        "focus-visible:ring-ring/50 rounded-lg py-2 text-xs font-medium transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none",
-        active
-          ? "bg-background text-foreground shadow-sm"
-          : "text-muted-foreground hover:text-foreground",
-      )}
-    >
-      {label}
-    </button>
+    <span className="flex w-full items-center justify-between gap-3">
+      <span className="truncate capitalize">{loan.debtor}</span>
+      <span
+        className={cn(
+          "text-xs tabular-nums",
+          (loan.direction as LoanDirection) === "lent"
+            ? "text-success"
+            : "text-destructive",
+        )}
+      >
+        {formatPlain(remaining)} left
+      </span>
+    </span>
+  );
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   Mobile keyboard helpers
+   ──────────────────────────────────────────────────────────────────────── */
+
+/** Tracks how much of the viewport the on-screen keyboard covers. */
+function useKeyboardInset(
+  setInset: (updater: (prev: number) => number) => void,
+) {
+  useEffect(() => {
+    const viewport =
+      typeof window === "undefined" ? undefined : window.visualViewport;
+    if (!viewport) {
+      return;
+    }
+
+    const update = () => {
+      const next = Math.max(
+        0,
+        window.innerHeight - viewport.height - viewport.offsetTop,
+      );
+      setInset((current) => (Math.abs(current - next) > 1 ? next : current));
+    };
+
+    update();
+    viewport.addEventListener("resize", update);
+    viewport.addEventListener("scroll", update);
+
+    return () => {
+      viewport.removeEventListener("resize", update);
+      viewport.removeEventListener("scroll", update);
+    };
+  }, [setInset]);
+}
+
+/** Centres the focused control on phones so the keyboard never hides it. */
+function useMobileFocusScroll(formRef: RefObject<HTMLFormElement | null>) {
+  // 0 is never a live timeout id, and `clearTimeout` ignores an unknown one,
+  // so the ref needs no null check on either path.
+  const timeoutRef = useRef(0);
+
+  useEffect(() => () => window.clearTimeout(timeoutRef.current), []);
+
+  return useCallback(
+    (event: FocusEvent<HTMLFormElement>) => {
+      if (typeof window === "undefined" || window.innerWidth >= 768) {
+        return;
+      }
+
+      const { target } = event;
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+      if (!target.matches("input, textarea, select, [role='combobox']")) {
+        return;
+      }
+      // Skip elements inside portals (e.g. the loan picker's popup).
+      if (formRef.current && !formRef.current.contains(target)) {
+        return;
+      }
+
+      window.clearTimeout(timeoutRef.current);
+
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      timeoutRef.current = window.setTimeout(() => {
+        target.scrollIntoView({
+          behavior: prefersReducedMotion ? "auto" : "smooth",
+          block: "center",
+          inline: "nearest",
+        });
+      }, 140);
+    },
+    [formRef],
   );
 }

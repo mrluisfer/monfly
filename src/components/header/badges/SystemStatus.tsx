@@ -23,51 +23,51 @@ type SystemStatus =
   | "maintenance";
 
 interface SystemStatusBadgeProps {
-  status?: SystemStatus;
-  showIcon?: boolean;
   animate?: boolean;
+  className?: string;
   compact?: boolean;
   fullWidth?: boolean;
   isActive?: boolean;
+  showIcon?: boolean;
+  status?: SystemStatus;
   variant?: "default" | "secondary" | "outline";
-  className?: string;
 }
 
 const statusConfig = {
-  operational: {
-    label: "All Systems Operational",
-    shortLabel: "Operational",
-    color: "bg-primary",
-    icon: CheckCircle2,
-    description: "All systems are running smoothly.",
-  },
   degraded: {
+    color: "bg-accent",
+    description: "Some systems are experiencing reduced performance.",
+    icon: AlertTriangle,
     label: "Degraded Performance",
     shortLabel: "Degraded",
-    color: "bg-accent",
-    icon: AlertTriangle,
-    description: "Some systems are experiencing reduced performance.",
-  },
-  partial: {
-    label: "Partial Outage",
-    shortLabel: "Partial Outage",
-    color: "bg-secondary",
-    icon: AlertCircle,
-    description: "Some systems are currently unavailable.",
-  },
-  outage: {
-    label: "Major Outage",
-    shortLabel: "Outage",
-    color: "bg-destructive",
-    icon: XCircle,
-    description: "Critical systems are experiencing issues.",
   },
   maintenance: {
+    color: "bg-muted",
+    description: "Systems are undergoing scheduled maintenance.",
+    icon: Activity,
     label: "Scheduled Maintenance",
     shortLabel: "Maintenance",
-    color: "bg-muted",
-    icon: Activity,
-    description: "Systems are undergoing scheduled maintenance.",
+  },
+  operational: {
+    color: "bg-primary",
+    description: "All systems are running smoothly.",
+    icon: CheckCircle2,
+    label: "All Systems Operational",
+    shortLabel: "Operational",
+  },
+  outage: {
+    color: "bg-destructive",
+    description: "Critical systems are experiencing issues.",
+    icon: XCircle,
+    label: "Major Outage",
+    shortLabel: "Outage",
+  },
+  partial: {
+    color: "bg-secondary",
+    description: "Some systems are currently unavailable.",
+    icon: AlertCircle,
+    label: "Partial Outage",
+    shortLabel: "Partial Outage",
   },
 } as const;
 
@@ -94,7 +94,7 @@ export function SystemStatusBadge({
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
-            <span className="text-xs font-semibold">{config.label}</span>
+            <span className="font-semibold text-xs">{config.label}</span>
           </div>
           <p className="text-[10px]">{config.description}</p>
         </div>
@@ -105,17 +105,17 @@ export function SystemStatusBadge({
         animate={animate && status === "operational"}
       />
 
-      {showIcon && (
+      {showIcon ? (
         <BadgeIcon
           icon={config.icon}
           className="opacity-75"
           fullWidth={fullWidth}
         />
-      )}
+      ) : null}
 
       <span
         className={cn(
-          "min-w-0 truncate text-xs font-medium",
+          "min-w-0 truncate font-medium text-xs",
           fullWidth && "flex-1",
         )}
       >

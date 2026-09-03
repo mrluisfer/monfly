@@ -10,29 +10,29 @@ import {
 import { cn } from "~/lib/utils";
 
 interface OnlineStatusBadgeProps {
-  showIcon?: boolean;
   animate?: boolean;
+  className?: string;
   compact?: boolean;
   fullWidth?: boolean;
   isActive?: boolean;
+  showIcon?: boolean;
   variant?: "default" | "secondary" | "outline";
-  className?: string;
 }
 
 const statusConfig = {
-  online: {
-    label: "Online",
-    compactLabel: "Online",
-    color: "bg-emerald-500",
-    icon: Wifi,
-    description: "You are connected to the internet.",
-  },
   offline: {
-    label: "Offline",
-    compactLabel: "Offline",
     color: "bg-zinc-400 dark:bg-zinc-600",
-    icon: WifiOff,
+    compactLabel: "Offline",
     description: "You are not connected to the internet.",
+    icon: WifiOff,
+    label: "Offline",
+  },
+  online: {
+    color: "bg-emerald-500",
+    compactLabel: "Online",
+    description: "You are connected to the internet.",
+    icon: Wifi,
+    label: "Online",
   },
 } as const;
 
@@ -61,11 +61,15 @@ export function OnlineStatusBadge({
       }
 
       if (action.type === "online") {
-        if (state.isOnline) return state;
+        if (state.isOnline) {
+          return state;
+        }
         return { isOnline: true, lastChanged: Date.now() };
       }
 
-      if (!state.isOnline) return state;
+      if (!state.isOnline) {
+        return state;
+      }
       return { isOnline: false, lastChanged: Date.now() };
     },
     {
@@ -75,7 +79,9 @@ export function OnlineStatusBadge({
   );
 
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive) {
+      return;
+    }
 
     dispatch({ type: "sync", value: window.navigator.onLine });
 
@@ -108,10 +114,10 @@ export function OnlineStatusBadge({
       timeAgo = `${seconds}s ago`;
     } else if (seconds < 3600) {
       timeAgo = `${Math.floor(seconds / 60)}m ago`;
-    } else if (seconds < 86400) {
+    } else if (seconds < 86_400) {
       timeAgo = `${Math.floor(seconds / 3600)}h ago`;
     } else {
-      timeAgo = `${Math.floor(seconds / 86400)}d ago`;
+      timeAgo = `${Math.floor(seconds / 86_400)}d ago`;
     }
   }
 
@@ -127,10 +133,10 @@ export function OnlineStatusBadge({
             <Badge
               variant={variant}
               className={cn(
-                "border-border/70 bg-background/85 text-foreground hover:bg-muted/70 inline-flex max-w-full min-w-0 items-center gap-2 rounded-full border px-3 py-1.5 shadow-xs backdrop-blur-[2px] transition-colors duration-200 select-none",
+                "inline-flex min-w-0 max-w-full select-none items-center gap-2 rounded-full border border-border/70 bg-background/85 px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] transition-colors duration-200 hover:bg-muted/70",
                 fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
                 compact && "h-8 px-2.5 py-1",
-                !compact && !fullWidth && "h-9",
+                !(compact || fullWidth) && "h-9",
                 className,
               )}
             >
@@ -141,17 +147,17 @@ export function OnlineStatusBadge({
                 )}
                 aria-hidden="true"
               >
-                {animate && isOnline && (
+                {animate && isOnline ? (
                   <span
                     className={cn(
                       "absolute inline-flex size-full animate-ping rounded-full opacity-75",
                       config.color,
                     )}
                   />
-                )}
+                ) : null}
               </span>
 
-              {showIcon && (
+              {showIcon ? (
                 <Icon
                   className={cn(
                     "size-3.5 shrink-0 opacity-75",
@@ -159,11 +165,11 @@ export function OnlineStatusBadge({
                   )}
                   aria-hidden="true"
                 />
-              )}
+              ) : null}
 
               <span
                 className={cn(
-                  "min-w-0 truncate text-xs font-medium",
+                  "min-w-0 truncate font-medium text-xs",
                   fullWidth && "flex-1",
                 )}
               >
@@ -177,16 +183,16 @@ export function OnlineStatusBadge({
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
-              <span className="text-xs font-semibold">
+              <span className="font-semibold text-xs">
                 Connection Status: {config.label}
               </span>
             </div>
             <p className="text-[10px]">{config.description}</p>
-            {timeAgo && (
-              <p className="border-border mt-1 border-t pt-1 text-[10px]">
+            {timeAgo ? (
+              <p className="mt-1 border-border border-t pt-1 text-[10px]">
                 Status changed {timeAgo}
               </p>
-            )}
+            ) : null}
           </div>
         </TooltipContent>
       </Tooltip>

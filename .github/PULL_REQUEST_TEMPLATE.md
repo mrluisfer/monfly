@@ -31,9 +31,11 @@ Closes #
 <!-- Describe how you verified your change. Include commands, steps, or test names. -->
 
 - [ ] `pnpm lint` passes
+- [ ] `pnpm typecheck` passes
 - [ ] `pnpm test` passes
 - [ ] `pnpm build` succeeds
 - [ ] Manually verified in the browser (`pnpm dev`)
+- [ ] No new Biome warnings in the files I touched (`pnpm lint:strict <path>`) — the `"warn"` rules in `biome.jsonc` are existing tech debt, not an allowance for new code
 
 ## Database Changes
 

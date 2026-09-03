@@ -19,10 +19,10 @@ export const deleteCategoriesByIdServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "category:delete-many",
-        limit: 8,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 8,
+        scope: "category:delete-many",
+        windowMs: 20_000,
       });
 
       const ownedCategoriesCount = await prismaClient.category.count({
@@ -34,11 +34,11 @@ export const deleteCategoriesByIdServer = createServerFn({ method: "POST" })
 
       if (ownedCategoriesCount !== data.ids.length) {
         return {
-          success: false,
-          message: "Some categories were not found",
           data: null,
           error: true,
+          message: "Some categories were not found",
           statusCode: 404,
+          success: false,
         } as ApiResponse<null>;
       }
 
@@ -50,11 +50,11 @@ export const deleteCategoriesByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
-        success: false,
-        message: "Error deleting categories",
         data: null,
         error: true,
+        message: "Error deleting categories",
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

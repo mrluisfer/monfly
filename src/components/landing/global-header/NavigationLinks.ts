@@ -6,10 +6,10 @@ export type HeaderIconName =
   | "ScaleIcon"
   | "MailIcon";
 
-type NavigationBaseItem = {
+interface NavigationBaseItem {
   href: string;
   label: string;
-};
+}
 
 type NavigationDescriptionItem = NavigationBaseItem & {
   description: string;
@@ -45,48 +45,48 @@ type NavigationLink =
 export const navigationLinks: NavigationLink[] = [
   { href: "/", label: "Home" },
   {
+    items: [
+      {
+        description: "Alerts and forecasts that prevent money surprises.",
+        href: "/#features",
+        label: "Decision Feed",
+      },
+      {
+        description: "Operate your plan quickly with thumb-first actions.",
+        href: "/#features",
+        label: "Mobile Workflow",
+      },
+    ],
     label: "Features",
     submenu: true,
     type: "description",
+  },
+  {
+    href: "/#pricing",
+    label: "Pricing",
+  },
+  {
     items: [
       {
         href: "/#features",
-        label: "Decision Feed",
-        description: "Alerts and forecasts that prevent money surprises.",
+        icon: "BookOpenIcon",
+        label: "How It Works",
       },
-      {
-        href: "/#features",
-        label: "Mobile Workflow",
-        description: "Operate your plan quickly with thumb-first actions.",
-      },
+      { href: "/#pricing", icon: "LifeBuoyIcon", label: "Plans" },
+      { href: "/#about", icon: "InfoIcon", label: "About Monfly" },
     ],
-  },
-  {
-    label: "Pricing",
-    href: "/#pricing",
-  },
-  {
     label: "About",
     submenu: true,
     type: "icon",
-    items: [
-      {
-        href: "/#features",
-        label: "How It Works",
-        icon: "BookOpenIcon",
-      },
-      { href: "/#pricing", label: "Plans", icon: "LifeBuoyIcon" },
-      { href: "/#about", label: "About Monfly", icon: "InfoIcon" },
-    ],
   },
   {
+    items: [
+      { href: "/privacy", icon: "ShieldCheckIcon", label: "Privacy Policy" },
+      { href: "/terms", icon: "ScaleIcon", label: "Terms & Conditions" },
+      { href: "/contact", icon: "MailIcon", label: "Contact" },
+    ],
     label: "Legal",
     submenu: true,
     type: "icon",
-    items: [
-      { href: "/privacy", label: "Privacy Policy", icon: "ShieldCheckIcon" },
-      { href: "/terms", label: "Terms & Conditions", icon: "ScaleIcon" },
-      { href: "/contact", label: "Contact", icon: "MailIcon" },
-    ],
   },
 ];

@@ -3,9 +3,9 @@ declare module "*.css?url" {
   export default url;
 }
 declare module "*.svg?react" {
-  import * as React from "react";
+  import type { FC, SVGProps } from "react";
 
-  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
+  const ReactComponent: FC<SVGProps<SVGSVGElement>>;
   export default ReactComponent;
 }
 

@@ -9,18 +9,18 @@ export interface ChartQueryResponse {
 }
 
 export interface ChartHookOptions {
-  queryKey: string[];
-  queryFn: () => Promise<ChartQueryResponse>;
   enabled?: boolean;
+  queryFn: () => Promise<ChartQueryResponse>;
+  queryKey: string[];
 }
 
 export interface ChartHookResult {
   data: ChartData[];
-  isLoading: boolean;
   error: Error | null;
-  refetch: () => void;
   hasData: boolean;
   isEmpty: boolean;
+  isLoading: boolean;
+  refetch: () => void;
 }
 
 export function useChart({
@@ -36,13 +36,13 @@ export function useChart({
     error,
     refetch,
   } = useQuery({
-    queryKey: [...queryKey, userEmail],
-    queryFn,
     enabled: enabled && !!userEmail,
-    staleTime: 1000 * 60 * 3, // 3 minutes cache
     gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    queryFn,
+    queryKey: [...queryKey, userEmail],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
   });
 
   // Process and sanitize data
@@ -52,15 +52,15 @@ export function useChart({
     : [];
 
   const hasData = processedData.length > 0;
-  const isEmpty = !isLoading && !error && !hasData;
+  const isEmpty = !(isLoading || error || hasData);
 
   return {
     data: processedData,
-    isLoading,
     error,
-    refetch,
     hasData,
     isEmpty,
+    isLoading,
+    refetch,
   };
 }
 
@@ -69,7 +69,7 @@ export function useFinancialChart(
   queryKey: string[],
   queryFn: () => Promise<ChartQueryResponse>,
 ) {
-  const result = useChart({ queryKey, queryFn });
+  const result = useChart({ queryFn, queryKey });
 
   // Add financial-specific processing
   const processedData = result.data.map((item) => {
@@ -78,26 +78,26 @@ export function useFinancialChart(
     const amount = Number(item.amount);
     return {
       ...item,
-      income: Number.isFinite(income) ? Math.max(0, income) : 0,
-      expense: Number.isFinite(expense) ? Math.max(0, expense) : 0,
       amount: Number.isFinite(amount) ? Math.abs(amount) : 0,
+      expense: Number.isFinite(expense) ? Math.max(0, expense) : 0,
+      income: Number.isFinite(income) ? Math.max(0, income) : 0,
     };
   });
 
   // Calculate totals
   const totals = processedData.reduce(
     (acc, item) => ({
-      income: acc.income + item.income,
-      expense: acc.expense + item.expense,
       amount: acc.amount + item.amount,
+      expense: acc.expense + item.expense,
+      income: acc.income + item.income,
     }),
-    { income: 0, expense: 0, amount: 0 },
+    { amount: 0, expense: 0, income: 0 },
   );
 
   return {
     ...result,
     data: processedData,
-    totals,
     netIncome: totals.income - totals.expense,
+    totals,
   };
 }

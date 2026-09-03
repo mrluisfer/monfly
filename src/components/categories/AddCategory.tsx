@@ -24,18 +24,6 @@ export default function AddCategory() {
 
   const postCategoryByEmail = useMutation({
     fn: postCategoryByEmailServer,
-    onSuccess: async ({ data }) => {
-      if (isErrorPayload(data)) {
-        const response = data as { message?: string };
-        sileo.error({ title: response.message ?? "Failed to create category" });
-        return;
-      }
-
-      sileo.success({ title: "Category created successfully" });
-      // Collapsing unmounts the panel, which also clears the form for the next one.
-      setOpen(false);
-      await invalidateCategoryQueries(queryClient, userEmail);
-    },
     idempotency: {
       getKey: (variables) =>
         JSON.stringify({
@@ -50,17 +38,29 @@ export default function AddCategory() {
         title: "Category already created",
       },
     },
+    onSuccess: async ({ data }) => {
+      if (isErrorPayload(data)) {
+        const response = data as { message?: string };
+        sileo.error({ title: response.message ?? "Failed to create category" });
+        return;
+      }
+
+      sileo.success({ title: "Category created successfully" });
+      // Collapsing unmounts the panel, which also clears the form for the next one.
+      setOpen(false);
+      await invalidateCategoryQueries(queryClient, userEmail);
+    },
   });
 
   const handleSubmit = async (data: Record<string, string>) => {
     try {
       await postCategoryByEmail.mutate({
         data: {
-          email: userEmail,
           category: {
-            name: data[categoryFormNames.name],
             icon: getCanonicalCategoryIconName(data[categoryFormNames.icon]),
+            name: data[categoryFormNames.name],
           },
+          email: userEmail,
         },
       });
     } catch {
@@ -74,12 +74,12 @@ export default function AddCategory() {
     <Collapsible open={open} onOpenChange={setOpen} render={<Card />}>
       {/* Default Trigger render is a <button>, so aria-expanded and keyboard
           activation come for free — hence the card header styles live here. */}
-      <CollapsibleTrigger className="group focus-visible:ring-ring/50 mx-(--card-spacing) flex items-center gap-2.5 rounded-md text-left outline-none focus-visible:ring-3">
+      <CollapsibleTrigger className="group mx-(--card-spacing) flex items-center gap-2.5 rounded-md text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
         <span
           aria-hidden="true"
-          className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-4xl"
+          className="flex size-9 shrink-0 items-center justify-center rounded-4xl bg-primary/10"
         >
-          <PlusCircleIcon className="text-primary size-4.5" />
+          <PlusCircleIcon className="size-4.5 text-primary" />
         </span>
         <div className="min-w-0">
           <CardTitle>New Category</CardTitle>
@@ -87,7 +87,7 @@ export default function AddCategory() {
             Add a new expense or income category
           </CardDescription>
         </div>
-        <ChevronDownIcon className="text-muted-foreground ml-auto size-4 shrink-0 transition-transform group-data-[panel-open]:rotate-180 motion-reduce:transition-none" />
+        <ChevronDownIcon className="ml-auto size-4 shrink-0 text-muted-foreground transition-transform group-data-[panel-open]:rotate-180 motion-reduce:transition-none" />
       </CollapsibleTrigger>
       {/* Height animation driven by Base UI's own CSS var, same as ui/accordion. */}
       <CollapsibleContent className="h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-250 ease-in-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none">

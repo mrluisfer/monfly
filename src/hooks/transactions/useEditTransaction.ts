@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Loan, Transaction } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
@@ -26,7 +26,7 @@ export const useEditTransaction = (
 ) => {
   const queryClient = useQueryClient();
   // Holds the loan that's already linked to this transaction (if any).
-  const existingLoanRef = useRef<Loan | null>(null);
+  const existingLoanRef: RefObject<Loan | null> = useRef(null);
 
   // Pre-resolve the initial loan mode from the transaction itself:
   // if the row already has `appliedToLoanId`, we open in "apply" mode.
@@ -36,7 +36,6 @@ export const useEditTransaction = (
       .appliedToLoanId ?? null;
 
   const form = useForm<TransactionFormValues>({
-    resolver: zodResolver(TransactionFormSchema),
     defaultValues: {
       [transactionFormNames.amount]: transaction.amount.toString(),
       [transactionFormNames.type]: transaction.type as "income" | "expense",
@@ -52,13 +51,16 @@ export const useEditTransaction = (
       [transactionFormNames.loanDueAt]: null,
       [transactionFormNames.appliedToLoanId]: initialAppliedToLoanId,
     },
+    resolver: zodResolver(TransactionFormSchema),
   });
 
   // Fetch the linked-origin loan once and pre-fill the form fields, but
   // only when the transaction is not already a payment of another loan
   // (the two modes are mutually exclusive).
   useEffect(() => {
-    if (initialAppliedToLoanId) return;
+    if (initialAppliedToLoanId) {
+      return;
+    }
 
     getLoanByTransactionIdServer({
       data: { transactionId: transaction.id },
@@ -93,6 +95,27 @@ export const useEditTransaction = (
 
   const putTransactionByIdMutation = useMutation({
     fn: putTransactionByIdServer,
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          amount: variables.data.data.amount,
+          appliedToLoanId: variables.data.data.appliedToLoanId ?? null,
+          cardId: variables.data.data.cardId ?? null,
+          category: variables.data.data.category.trim().toLowerCase(),
+          date: variables.data.data.date.toISOString(),
+          description: variables.data.data.description.trim().toLowerCase(),
+          id: variables.data.id,
+          type: variables.data.data.type.toLowerCase(),
+        }),
+      onDuplicatePending: {
+        description: "Please wait for the current update to finish.",
+        title: "Changes are already being saved",
+      },
+      onDuplicateRecentSuccess: {
+        description: "We skipped the duplicate update to keep data consistent.",
+        title: "Changes already applied",
+      },
+    },
     onSuccess: async (ctx) => {
       if (ctx.data?.error) {
         sileo.error({ title: ctx.data.message });
@@ -101,27 +124,6 @@ export const useEditTransaction = (
       sileo.success({ title: ctx.data.message });
 
       await invalidateTransactionQueries(queryClient, transaction.userEmail);
-    },
-    idempotency: {
-      getKey: (variables) =>
-        JSON.stringify({
-          amount: variables.data.data.amount,
-          category: variables.data.data.category.trim().toLowerCase(),
-          date: variables.data.data.date.toISOString(),
-          description: variables.data.data.description.trim().toLowerCase(),
-          id: variables.data.id,
-          type: variables.data.data.type.toLowerCase(),
-          appliedToLoanId: variables.data.data.appliedToLoanId ?? null,
-          cardId: variables.data.data.cardId ?? null,
-        }),
-      onDuplicatePending: {
-        title: "Changes are already being saved",
-        description: "Please wait for the current update to finish.",
-      },
-      onDuplicateRecentSuccess: {
-        title: "Changes already applied",
-        description: "We skipped the duplicate update to keep data consistent.",
-      },
     },
   });
 
@@ -133,24 +135,26 @@ export const useEditTransaction = (
 
       const result = await putTransactionByIdMutation.mutate({
         data: {
-          id: transaction.id,
           data: {
             amount: Number.parseFloat(data.amount),
-            type: data.type,
-            category: data.category,
-            description: data.description || "",
-            date: data.date || new Date(),
             // Send only when in apply or explicitly clearing; in "create"/"none"
             // we want to keep this column in sync (set to null).
             appliedToLoanId: nextAppliedToLoanId,
             // Reassign (or clear) the linked card; the DB layer moves the
             // balance delta to the right card atomically.
             cardId: data.cardId ?? null,
+            category: data.category,
+            date: data.date || new Date(),
+            description: data.description || "",
+            type: data.type,
           },
+          id: transaction.id,
         },
       });
 
-      if (!result || isErrorPayload(result)) return;
+      if (!result || isErrorPayload(result)) {
+        return;
+      }
 
       const amount = Number.parseFloat(data.amount);
       const txDate = data.date || new Date();
@@ -169,11 +173,11 @@ export const useEditTransaction = (
         if (existing) {
           await putLoanByIdServer({
             data: {
-              id: existing.id,
-              debtor,
               amount,
-              issuedAt: txDate,
+              debtor,
               dueAt: data.loanDueAt ?? null,
+              id: existing.id,
+              issuedAt: txDate,
               notes: data.description?.trim() || null,
             },
           });
@@ -182,10 +186,10 @@ export const useEditTransaction = (
             data: {
               email: transaction.userEmail,
               loan: {
-                debtor,
                 amount,
-                issuedAt: txDate,
+                debtor,
                 dueAt: data.loanDueAt ?? null,
+                issuedAt: txDate,
                 notes: data.description?.trim() || null,
                 transactionId: transaction.id,
               },
@@ -215,7 +219,7 @@ export const useEditTransaction = (
 
   return {
     form,
-    onSubmitEditedTransaction,
     mutation: putTransactionByIdMutation,
+    onSubmitEditedTransaction,
   };
 };

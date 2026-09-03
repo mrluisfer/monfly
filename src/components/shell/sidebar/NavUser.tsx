@@ -6,7 +6,7 @@ import {
   SettingsIcon,
   UserIcon,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { UserAvatar } from "@/components/shared";
 import { SignOutDialog } from "@/components/sidebar/SignOutDialog";
 import {
@@ -33,21 +33,25 @@ import { SETTINGS_PATH } from "./sidebar-constants";
 export function NavUser() {
   const userEmail = useRouteUser();
   const { isMobile, state, setOpenMobile } = useSidebar();
+  // A collapsed rail has no room beside it, so the menu flies out to the right.
+  const menuSide = !isMobile && state === "collapsed" ? "right" : "top";
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [signOutOpen, setSignOutOpen] = useState(false);
   const pendingSignOutRef = useRef(false);
 
   const { data, isPending } = useQuery({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
     retry: 1,
+    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
-    if (dropdownOpen || !pendingSignOutRef.current) return;
+    if (dropdownOpen || !pendingSignOutRef.current) {
+      return;
+    }
     const timer = window.setTimeout(() => {
       setSignOutOpen(true);
       pendingSignOutRef.current = false;
@@ -55,15 +59,15 @@ export function NavUser() {
     return () => window.clearTimeout(timer);
   }, [dropdownOpen]);
 
-  const queueSignOut = () => {
+  const queueSignOut = useCallback(() => {
     pendingSignOutRef.current = true;
     setDropdownOpen(false);
-  };
+  }, []);
 
-  const handleNavigate = () => {
+  const handleNavigate = useCallback(() => {
     setDropdownOpen(false);
     setOpenMobile(false);
-  };
+  }, [setOpenMobile]);
 
   const user = data?.data;
   const name = user?.name ?? "Guest";
@@ -103,8 +107,8 @@ export function NavUser() {
             >
               <UserAvatar alt={name} name={name} seed={seed} />
               <div className="grid flex-1 text-left leading-tight">
-                <span className="truncate text-sm font-medium">{name}</span>
-                <span className="text-sidebar-foreground/60 truncate text-xs">
+                <span className="truncate font-medium text-sm">{name}</span>
+                <span className="truncate text-sidebar-foreground/60 text-xs">
                   {email}
                 </span>
               </div>
@@ -114,17 +118,17 @@ export function NavUser() {
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              side={isMobile ? "top" : state === "collapsed" ? "right" : "top"}
+              side={menuSide}
               align="end"
               sideOffset={8}
-              className="w-[14rem] max-w-[calc(100vw-1rem)] min-w-56"
+              className="w-[14rem] min-w-56 max-w-[calc(100vw-1rem)]"
             >
               <DropdownMenuGroup>
                 <DropdownMenuLabel className="flex items-center gap-2 p-2">
                   <UserAvatar alt={name} name={name} seed={seed} />
                   <div className="grid leading-tight">
-                    <span className="truncate text-sm font-medium">{name}</span>
-                    <span className="text-muted-foreground truncate text-xs">
+                    <span className="truncate font-medium text-sm">{name}</span>
+                    <span className="truncate text-muted-foreground text-xs">
                       {email}
                     </span>
                   </div>
@@ -132,7 +136,7 @@ export function NavUser() {
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                {user?.id && (
+                {user?.id ? (
                   <DropdownMenuItem
                     render={
                       <Link
@@ -145,7 +149,7 @@ export function NavUser() {
                     <UserIcon />
                     Profile
                   </DropdownMenuItem>
-                )}
+                ) : null}
                 <DropdownMenuItem
                   render={<Link to={SETTINGS_PATH} onClick={handleNavigate} />}
                 >
@@ -166,12 +170,7 @@ export function NavUser() {
         </SidebarMenuItem>
       </SidebarMenu>
 
-      <SignOutDialog
-        open={signOutOpen}
-        onOpenChange={(open) => {
-          if (!open) setSignOutOpen(false);
-        }}
-      />
+      <SignOutDialog open={signOutOpen} onOpenChange={setSignOutOpen} />
     </>
   );
 }

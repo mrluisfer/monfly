@@ -11,18 +11,18 @@ export const getTrendingMonthlyServer = createServerFn({
 })
   .validator(
     z.object({
+      cardId: z.uuid().nullable().optional(),
       email: z.string(),
       type: z.enum(["income", "expense"]),
-      cardId: z.uuid().nullable().optional(),
     }),
   )
   .handler(async ({ data }) => {
     const sessionEmail = await resolveSessionEmail(data.email);
     enforceRateLimit({
-      scope: "chart:trending-monthly",
-      limit: 120,
-      windowMs: 60_000,
       identifier: sessionEmail,
+      limit: 120,
+      scope: "chart:trending-monthly",
+      windowMs: 60_000,
     });
 
     return await getTrendingMonthly({

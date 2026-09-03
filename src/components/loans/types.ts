@@ -8,8 +8,8 @@ export type DirectionFilter = "all" | LoanDirection;
 export type LoanRow = Loan;
 
 /** Editable fields surfaced by the edit dialog. */
-export type EditLoanPatch = {
-  debtor?: string;
+export interface EditLoanPatch {
   amount?: number;
+  debtor?: string;
   direction?: LoanDirection;
-};
+}

@@ -9,7 +9,9 @@ export const putLoanById = async (
   input: UpdateLoanInput,
 ): Promise<ApiResponse<Loan | null>> => {
   try {
-    if (!email) throw new Error("Email is required");
+    if (!email) {
+      throw new Error("Email is required");
+    }
 
     const existing = await prismaClient.loan.findFirst({
       where: { id: input.id, userEmail: email },
@@ -17,11 +19,11 @@ export const putLoanById = async (
 
     if (!existing) {
       return {
+        data: null,
         error: true,
         message: "Loan not found",
-        data: null,
-        success: false,
         statusCode: 404,
+        success: false,
       };
     }
 
@@ -37,16 +39,23 @@ export const putLoanById = async (
     // If amountPaid changed and caller did not pass an explicit status,
     // derive the status from the totals so it stays consistent.
     if (input.amountPaid !== undefined && input.status === undefined) {
-      if (nextAmountPaid <= 0) nextStatus = "pending";
-      else if (nextAmountPaid >= nextAmount) nextStatus = "paid";
-      else nextStatus = "partial";
+      if (nextAmountPaid <= 0) {
+        nextStatus = "pending";
+      } else if (nextAmountPaid >= nextAmount) {
+        nextStatus = "paid";
+      } else {
+        nextStatus = "partial";
+      }
     }
     // If the caller set status explicitly without an amountPaid, derive
     // amountPaid from the status so the two fields can't disagree
     // (e.g. status="paid" but amountPaid < amount).
     if (input.status !== undefined && input.amountPaid === undefined) {
-      if (input.status === "paid") nextAmountPaid = nextAmount;
-      else if (input.status === "pending") nextAmountPaid = 0;
+      if (input.status === "paid") {
+        nextAmountPaid = nextAmount;
+      } else if (input.status === "pending") {
+        nextAmountPaid = 0;
+      }
       // "partial" leaves the existing amountPaid as-is (clamped above).
     }
 
@@ -54,36 +63,36 @@ export const putLoanById = async (
       nextStatus === "paid" ? (existing.paidAt ?? new Date()) : null;
 
     const loan = await prismaClient.loan.update({
-      where: { id: input.id },
       data: {
-        debtor: input.debtor?.trim() ?? existing.debtor,
         amount: nextAmount,
         amountPaid: nextAmountPaid,
-        status: nextStatus,
+        debtor: input.debtor?.trim() ?? existing.debtor,
         direction: input.direction ?? existing.direction,
-        issuedAt: input.issuedAt ?? existing.issuedAt,
         dueAt: input.dueAt === undefined ? existing.dueAt : input.dueAt,
+        issuedAt: input.issuedAt ?? existing.issuedAt,
         notes: input.notes === undefined ? existing.notes : input.notes,
         paidAt,
+        status: nextStatus,
         updatedAt: new Date(),
       },
+      where: { id: input.id },
     });
 
     return {
+      data: loan,
       error: false,
       message: "Loan updated successfully",
-      data: loan,
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error updating loan: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

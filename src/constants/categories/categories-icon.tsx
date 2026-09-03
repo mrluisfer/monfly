@@ -48,9 +48,9 @@ export const getCategoryIconLabelByName = (name: string) =>
 
 export const getCategoryIconsWithSize = (width: number, height: number) =>
   CATEGORY_ICONS.map(({ name, label, Icon }) => ({
-    name,
-    label,
     icon: <Icon width={width} height={height} />,
+    label,
+    name,
   }));
 
 export function getCategoryIconByName(

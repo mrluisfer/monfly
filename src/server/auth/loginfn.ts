@@ -16,10 +16,10 @@ export const loginFn = createServerFn({ method: "POST" })
       const inputEmail = data.email.trim();
       const normalizedEmail = inputEmail.toLowerCase();
       enforceRateLimit({
-        scope: "auth:login",
-        limit: 8,
-        windowMs: 60_000,
         identifier: normalizedEmail,
+        limit: 8,
+        scope: "auth:login",
+        windowMs: 60_000,
       });
 
       // Find the user
@@ -32,12 +32,12 @@ export const loginFn = createServerFn({ method: "POST" })
       // Check if the user exists
       if (!user) {
         return {
-          error: true,
-          userNotFound: true,
-          message: "User not found",
-          success: false,
-          statusCode: 404,
           data: null,
+          error: true,
+          message: "User not found",
+          statusCode: 404,
+          success: false,
+          userNotFound: true,
         } as ApiResponse<string | null>;
       }
 
@@ -51,8 +51,8 @@ export const loginFn = createServerFn({ method: "POST" })
         return {
           error: true,
           message: "Incorrect password",
-          success: false,
           statusCode: 401,
+          success: false,
         } as ApiResponse<string>;
       }
 
@@ -65,11 +65,11 @@ export const loginFn = createServerFn({ method: "POST" })
       });
 
       return {
+        data: user.email,
         error: false,
         message: "Login successful",
-        data: user.email,
-        success: true,
         statusCode: 200,
+        success: true,
       } as ApiResponse<string>;
     } catch (error) {
       const securityErrorResponse = toSecurityErrorResponse(error);
@@ -78,11 +78,11 @@ export const loginFn = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error logging in",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<string | null>;
     }
   });

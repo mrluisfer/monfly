@@ -10,26 +10,26 @@ export const getUserById = async (userId: string) => {
 
     if (!user) {
       return {
+        data: null,
         error: true,
         message: "User not found",
-        data: null,
       } as ApiResponse<User | null>;
     }
 
     return {
+      data: user,
       error: false,
       message: "User fetched successfully",
-      data: user,
-      success: true,
       statusCode: 200,
+      success: true,
     } as ApiResponse<User>;
   } catch {
     return {
+      data: null,
       error: true,
       message: "Error fetching user",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<User | null>;
   }
 };

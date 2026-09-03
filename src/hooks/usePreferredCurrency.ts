@@ -16,11 +16,11 @@ export function usePreferredCurrency(): SupportedCurrency {
   const userEmail = useRouteUser();
 
   const { data } = useQuery({
-    queryKey: queryKeys.user.byEmail(userEmail),
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: queryKeys.user.byEmail(userEmail),
+    staleTime: 1000 * 60 * 5,
   });
 
   return (

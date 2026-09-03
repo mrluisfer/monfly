@@ -12,15 +12,15 @@ import { ScrollArea } from "../ui/scroll-area";
 export const transactionFormDialogContentClassName =
   "top-auto bottom-0 w-[calc(100vw-0.75rem)] !max-w-[calc(100vw-0.75rem)] -translate-y-0 rounded-t-3xl rounded-b-none p-0 sm:top-1/2 sm:bottom-auto sm:w-[calc(100vw-2rem)] sm:!max-w-2xl sm:-translate-y-1/2 sm:rounded-2xl md:!max-w-3xl lg:!max-w-[58rem] xl:!max-w-[66rem]";
 
-type TransactionFormDialogContentProps = {
-  title: string;
-  description: string;
-  children: ReactNode;
-  showCancelButton?: boolean;
-  cancelLabel?: string;
-  className?: string;
+interface TransactionFormDialogContentProps {
   bodyClassName?: string;
-};
+  cancelLabel?: string;
+  children: ReactNode;
+  className?: string;
+  description: string;
+  showCancelButton?: boolean;
+  title: string;
+}
 
 export function TransactionFormDialogContent({
   title,
@@ -35,9 +35,9 @@ export function TransactionFormDialogContent({
       className={cn(transactionFormDialogContentClassName, className)}
     >
       <div className="flex max-h-[92dvh] flex-col overflow-hidden">
-        <div className="bg-border/80 mx-auto mt-3 h-1.5 w-14 rounded-full sm:hidden" />
+        <div className="mx-auto mt-3 h-1.5 w-14 rounded-full bg-border/80 sm:hidden" />
         <DialogHeader className="border-border/60 border-b px-5 pt-4 pb-4 text-left sm:px-6">
-          <DialogTitle className="text-lg font-semibold tracking-tight">
+          <DialogTitle className="font-semibold text-lg tracking-tight">
             {title}
           </DialogTitle>
           <DialogDescription className="text-sm leading-6">

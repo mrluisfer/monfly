@@ -12,15 +12,19 @@ import type { TransactionWithUser as Transaction } from "~/types/TransactionWith
 import type { CardSummary } from "./CardBadge";
 import { TransactionRow } from "./TransactionRow";
 
-type TransactionCardListProps = {
-  data: Transaction[];
+interface TransactionCardListProps {
   cardsById?: Map<string, CardSummary>;
   categoryIconsByName?: Map<string, string>;
-};
+  data: Transaction[];
+}
 
 function formatRelativeDate(date: Date): string {
-  if (isToday(date)) return "Today";
-  if (isYesterday(date)) return "Yesterday";
+  if (isToday(date)) {
+    return "Today";
+  }
+  if (isYesterday(date)) {
+    return "Yesterday";
+  }
   return format(date, "MMM d, yyyy");
 }
 
@@ -30,7 +34,9 @@ function groupTransactionsByDate(
   const groups: Record<string, Transaction[]> = {};
   for (const tx of transactions) {
     const key = formatRelativeDate(new Date(tx.date));
-    if (!groups[key]) groups[key] = [];
+    if (!groups[key]) {
+      groups[key] = [];
+    }
     groups[key].push(tx);
   }
   return groups;
@@ -46,11 +52,11 @@ export function TransactionCardList({
   if (!data.length) {
     return (
       <div className="flex flex-col items-center justify-center px-6 py-16 text-center">
-        <div className="bg-muted/60 mb-4 rounded-full p-4">
-          <ArrowDownLeftIcon className="text-muted-foreground/60 size-6" />
+        <div className="mb-4 rounded-full bg-muted/60 p-4">
+          <ArrowDownLeftIcon className="size-6 text-muted-foreground/60" />
         </div>
-        <p className="text-muted-foreground font-medium">No transactions yet</p>
-        <p className="text-muted-foreground/60 mt-1 text-sm">
+        <p className="font-medium text-muted-foreground">No transactions yet</p>
+        <p className="mt-1 text-muted-foreground/60 text-sm">
           Your transactions will appear here
         </p>
       </div>
@@ -70,19 +76,19 @@ export function TransactionCardList({
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
-                  duration: shouldReduceMotion ? 0 : 0.3,
                   delay: shouldReduceMotion ? 0 : groupIdx * 0.05,
+                  duration: shouldReduceMotion ? 0 : 0.3,
                 }}
               >
                 <div className="mb-3 flex items-center gap-2 px-1">
-                  <span className="bg-muted inline-flex items-center gap-2 rounded-full px-3 py-1.5">
-                    <CalendarIcon className="text-muted-foreground/70 size-3.5" />
-                    <h3 className="text-muted-foreground text-[0.7rem] font-semibold tracking-[0.22em] uppercase">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
+                    <CalendarIcon className="size-3.5 text-muted-foreground/70" />
+                    <h3 className="font-semibold text-[0.7rem] text-muted-foreground uppercase tracking-[0.22em]">
                       {dateLabel}
                     </h3>
                   </span>
-                  <div className="bg-border/50 h-px flex-1" />
-                  <span className="bg-muted text-muted-foreground rounded-full px-2.5 py-1 text-[10px] font-semibold">
+                  <div className="h-px flex-1 bg-border/50" />
+                  <span className="rounded-full bg-muted px-2.5 py-1 font-semibold text-[10px] text-muted-foreground">
                     {transactions.length}
                   </span>
                 </div>

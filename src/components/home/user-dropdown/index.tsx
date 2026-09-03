@@ -30,13 +30,13 @@ export default function UserDropdown() {
   const pendingActionRef = useRef<"profile-settings" | "sign-out" | null>(null);
 
   const { data, isPending, error } = useQuery<ApiResponse<User | null>>({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: Boolean(userEmail), // Only run query if userEmail exists
-    staleTime: 1000 * 60 * 5, // 5 minutes cache
     gcTime: 1000 * 60 * 10, // 10 minutes garbage collection
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 5, // 5 minutes cache
   });
 
   const openMenuActionDialog = (action: "profile-settings" | "sign-out") => {
@@ -45,7 +45,9 @@ export default function UserDropdown() {
   };
 
   useEffect(() => {
-    if (dropdownOpen || !pendingActionRef.current) return;
+    if (dropdownOpen || !pendingActionRef.current) {
+      return;
+    }
 
     // Defer dialog mount until after dropdown teardown to avoid portal race conditions.
     const timer = window.setTimeout(() => {
@@ -64,7 +66,7 @@ export default function UserDropdown() {
   if (isPending) {
     return (
       <Button variant="outline" size="icon-lg" disabled>
-        <div className="border-primary size-4 animate-spin rounded-full border-b-2"></div>
+        <div className="size-4 animate-spin rounded-full border-primary border-b-2" />
         <span className="sr-only">Loading user...</span>
       </Button>
     );
@@ -123,14 +125,18 @@ export default function UserDropdown() {
       <SignOutDialog
         open={activeDialog === "sign-out"}
         onOpenChange={(open) => {
-          if (!open) setActiveDialog(null);
+          if (!open) {
+            setActiveDialog(null);
+          }
         }}
       />
 
       <ProfileSettings
         open={activeDialog === "profile-settings"}
         onOpenChange={(open) => {
-          if (!open) setActiveDialog(null);
+          if (!open) {
+            setActiveDialog(null);
+          }
         }}
       />
     </>

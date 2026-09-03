@@ -15,10 +15,10 @@ export const postMonthlySummaryByEmailServer = createServerFn({
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "monthly-summary:post",
-        limit: 30,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 30,
+        scope: "monthly-summary:post",
+        windowMs: 60_000,
       });
 
       return await postMonthlySummaryByEmailUtils({ email: sessionEmail });
@@ -29,11 +29,11 @@ export const postMonthlySummaryByEmailServer = createServerFn({
       }
 
       return {
+        data: null,
         error: true,
         message: "Error posting monthly summary",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

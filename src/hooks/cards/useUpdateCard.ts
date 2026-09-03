@@ -29,5 +29,5 @@ export const useUpdateCard = () => {
   const archive = (id: string) => update({ id, status: "archived" });
   const restore = (id: string) => update({ id, status: "active" });
 
-  return { mutation, update, archive, restore };
+  return { archive, mutation, restore, update };
 };

@@ -16,10 +16,10 @@ export const useDarkMode = () => {
 
   return useMemo(
     () => ({
-      theme,
-      setTheme: (nextTheme: DarkModeTheme) => setTheme(nextTheme),
-      toggleDarkMode: () => toggleDarkMode(),
       isDark,
+      setTheme: (nextTheme: DarkModeTheme) => setTheme(nextTheme),
+      theme,
+      toggleDarkMode: () => toggleDarkMode(),
     }),
     [isDark, setTheme, theme, toggleDarkMode],
   );

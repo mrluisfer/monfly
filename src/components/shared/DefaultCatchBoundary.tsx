@@ -34,8 +34,8 @@ function getErrorMessage(error: unknown) {
 export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   const router = useRouter();
   const isRoot = useMatch({
-    strict: false,
     select: (state) => state.id === rootRouteId,
+    strict: false,
   });
   const errorMessage = getErrorMessage(error);
 
@@ -54,7 +54,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   return (
     <RouteStatusCard
       icon={
-        <AlertCircle className="text-destructive size-8" aria-hidden="true" />
+        <AlertCircle className="size-8 text-destructive" aria-hidden="true" />
       }
       title="Something went wrong"
       description="An unexpected error occurred while loading this page."

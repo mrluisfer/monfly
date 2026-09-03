@@ -10,16 +10,16 @@ import {
 import { cn } from "~/lib/utils";
 
 export interface HeaderBadgeProps {
-  variant?: "default" | "secondary" | "outline" | "destructive";
+  ariaLive?: "polite" | "assertive" | "off";
+  children: ReactNode;
+  className?: string;
   compact?: boolean;
   fullWidth?: boolean;
   isActive?: boolean;
-  className?: string;
+  tooltipClassName?: string;
   tooltipContent: ReactNode;
   tooltipSide?: "top" | "bottom" | "left" | "right";
-  tooltipClassName?: string;
-  ariaLive?: "polite" | "assertive" | "off";
-  children: ReactNode;
+  variant?: "default" | "secondary" | "outline" | "destructive";
 }
 
 export function HeaderBadge({
@@ -34,7 +34,9 @@ export function HeaderBadge({
   ariaLive,
   children,
 }: HeaderBadgeProps) {
-  if (!isActive) return null;
+  if (!isActive) {
+    return null;
+  }
 
   return (
     <TooltipProvider>
@@ -44,10 +46,10 @@ export function HeaderBadge({
             <Badge
               variant={variant}
               className={cn(
-                "border-border/70 bg-card text-foreground hover:bg-muted/70 inline-flex max-w-full min-w-0 items-center gap-2 border px-3 py-1.5 shadow-xs backdrop-blur-[2px] transition-colors duration-200 select-none",
+                "inline-flex min-w-0 max-w-full select-none items-center gap-2 border border-border/70 bg-card px-3 py-1.5 text-foreground shadow-xs backdrop-blur-[2px] transition-colors duration-200 hover:bg-muted/70",
                 fullWidth && "h-10 w-full rounded-xl px-3.5 py-2",
                 compact && "h-8 px-2.5 py-1",
-                !compact && !fullWidth && "h-9",
+                !(compact || fullWidth) && "h-9",
                 className,
               )}
               aria-live={ariaLive}
@@ -69,8 +71,8 @@ export function HeaderBadge({
 }
 
 export interface StatusDotProps {
-  color: string;
   animate?: boolean;
+  color: string;
 }
 
 export function StatusDot({ color, animate = false }: StatusDotProps) {
@@ -79,23 +81,23 @@ export function StatusDot({ color, animate = false }: StatusDotProps) {
       className={cn("relative inline-flex size-2 rounded-full", color)}
       aria-hidden="true"
     >
-      {animate && (
+      {animate ? (
         <span
           className={cn(
             "absolute inline-flex size-full animate-ping rounded-full opacity-75",
             color,
           )}
         />
-      )}
+      ) : null}
     </span>
   );
 }
 
 export interface BadgeIconProps {
-  icon: LucideIcon;
+  animate?: boolean;
   className?: string;
   fullWidth?: boolean;
-  animate?: boolean;
+  icon: LucideIcon;
 }
 
 export function BadgeIcon({

@@ -36,10 +36,10 @@ export const Route = createFileRoute("/_authed/user/settings/change-password/")(
   },
 );
 
-type PasswordTip = {
+interface PasswordTip {
   icon: LucideIcon;
   text: string;
-};
+}
 
 const PASSWORD_TIPS: PasswordTip[] = [
   {
@@ -126,7 +126,7 @@ function ChangePasswordRoute() {
         >
           <motion.div
             {...card()}
-            className="bg-card border-border/60 rounded-2xl border p-5 shadow-sm transition-shadow duration-300 hover:shadow-md sm:p-6"
+            className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm transition-shadow duration-300 hover:shadow-md sm:p-6"
           >
             <ChangePasswordForm />
           </motion.div>
@@ -143,7 +143,7 @@ function ChangePasswordRoute() {
         >
           <motion.div
             {...card(0.08)}
-            className="bg-card border-border/60 rounded-2xl border p-5 shadow-sm sm:p-6"
+            className="rounded-2xl border border-border/60 bg-card p-5 shadow-sm sm:p-6"
           >
             <motion.ul
               className="space-y-3"
@@ -153,16 +153,16 @@ function ChangePasswordRoute() {
               {PASSWORD_TIPS.map((tip) => (
                 <motion.li
                   key={tip.text}
-                  className="group flex items-center-safe gap-3"
+                  className="group items-center-safe flex gap-3"
                   {...listItem}
                 >
                   <span
                     aria-hidden="true"
-                    className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-200 group-hover:scale-105"
                   >
                     <tip.icon className="size-4" />
                   </span>
-                  <span className="text-muted-foreground pt-1.5 text-sm leading-relaxed">
+                  <span className="pt-1.5 text-muted-foreground text-sm leading-relaxed">
                     {tip.text}
                   </span>
                 </motion.li>

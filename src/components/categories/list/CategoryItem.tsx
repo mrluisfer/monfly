@@ -12,9 +12,9 @@ import {
 
 import { EditCategoryDialogContent } from "./EditCategoryDialogContent";
 
-type CategoryItemProps = {
+interface CategoryItemProps {
   category: Category;
-};
+}
 
 const CategoryItem = ({ category }: CategoryItemProps) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -31,7 +31,7 @@ const CategoryItem = ({ category }: CategoryItemProps) => {
                   variant="outline"
                   size="icon"
                   aria-label={`Edit ${category.name}`}
-                  className="text-muted-foreground hover:text-foreground hover:bg-accent shrink-0 rounded-full transition-colors"
+                  className="shrink-0 rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 />
               }
             />

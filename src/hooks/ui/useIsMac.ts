@@ -1,15 +1,20 @@
 import { useSyncExternalStore } from "react";
 
-const subscribe = () => () => {};
+// The value never changes after mount, so there is nothing to unsubscribe.
+const subscribe = () => () => undefined;
+
+const APPLE_PLATFORM = /Mac|iPhone|iPad|iPod/i;
 
 function getSnapshot() {
-  if (typeof navigator === "undefined") return false;
+  if (typeof navigator === "undefined") {
+    return false;
+  }
   const platform =
     (navigator as Navigator & { userAgentData?: { platform?: string } })
       .userAgentData?.platform ??
     navigator.platform ??
     "";
-  return /Mac|iPhone|iPad|iPod/i.test(platform);
+  return APPLE_PLATFORM.test(platform);
 }
 
 /**

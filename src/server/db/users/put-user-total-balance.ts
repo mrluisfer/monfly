@@ -8,24 +8,24 @@ export const putUserTotalBalance = async (data: {
 }) => {
   try {
     await prismaClient.user.update({
-      where: { email: data.email },
       data: { totalBalance: data.totalBalance },
+      where: { email: data.email },
     });
 
     return {
-      success: true,
-      message: "User total balance updated",
       data: null,
       error: false,
+      message: "User total balance updated",
       statusCode: 200,
+      success: true,
     } as ApiResponse<User | null>;
   } catch {
     return {
+      data: null,
       error: true,
       message: "User not found or error updating user total balance",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<User | null>;
   }
 };

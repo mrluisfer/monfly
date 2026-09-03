@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "~/components/landing/footer";
 import { GlobalHeader } from "~/components/landing/global-header";
 
-type LegalLayoutProps = {
-  eyebrow: string;
-  title: string;
-  description: string;
-  lastUpdated: string;
+interface LegalLayoutProps {
   breadcrumb: string;
   children: ReactNode;
-};
+  description: string;
+  eyebrow: string;
+  lastUpdated: string;
+  title: string;
+}
 
 export function LegalLayout({
   eyebrow,
@@ -27,7 +27,7 @@ export function LegalLayout({
     <div className="landing-shell relative min-h-screen overflow-x-clip pb-8">
       <a
         href="#legal-content"
-        className="focus:bg-foreground focus:text-background sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-70 focus:rounded-full focus:px-4 focus:py-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-70 focus:rounded-full focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
       >
         Skip to main content
       </a>
@@ -51,9 +51,9 @@ export function LegalLayout({
           <div className="mx-auto flex max-w-4xl flex-col gap-6 xl:max-w-6xl">
             <nav
               aria-label="Breadcrumb"
-              className="text-muted-foreground flex items-center gap-1 text-xs"
+              className="flex items-center gap-1 text-muted-foreground text-xs"
             >
-              <Link to="/" className="hover:text-foreground transition-colors">
+              <Link to="/" className="transition-colors hover:text-foreground">
                 Home
               </Link>
               <ChevronRight className="size-3.5" />
@@ -62,13 +62,13 @@ export function LegalLayout({
 
             <div className="landing-fade-up space-y-5">
               <Badge variant="default">{eyebrow}</Badge>
-              <h1 className="text-foreground font-[family-name:var(--font-syne)] text-[2rem] leading-[1.05] font-bold tracking-tight text-balance sm:text-[2.6rem] md:text-[3rem]">
+              <h1 className="text-balance font-[family-name:var(--font-syne)] font-bold text-[2rem] text-foreground leading-[1.05] tracking-tight sm:text-[2.6rem] md:text-[3rem]">
                 <span className="landing-gradient-text">{title}</span>
               </h1>
-              <p className="text-muted-foreground max-w-2xl text-sm text-pretty sm:text-base">
+              <p className="max-w-2xl text-pretty text-muted-foreground text-sm sm:text-base">
                 {description}
               </p>
-              <p className="text-muted-foreground text-[0.72rem] tracking-[0.13em] uppercase">
+              <p className="text-[0.72rem] text-muted-foreground uppercase tracking-[0.13em]">
                 Last updated · {lastUpdated}
               </p>
             </div>
@@ -91,7 +91,7 @@ export function LegalLayout({
               href="https://github.com/mrluisfer/monfly"
               target="_blank"
               rel="noopener"
-              className="tracking-[0.13em] uppercase"
+              className="uppercase tracking-[0.13em]"
             />
           }
         >
@@ -103,12 +103,12 @@ export function LegalLayout({
   );
 }
 
-type LegalSectionProps = {
+interface LegalSectionProps {
+  children: ReactNode;
   id: string;
   index: number;
   title: string;
-  children: ReactNode;
-};
+}
 
 export function LegalSection({
   id,
@@ -119,14 +119,14 @@ export function LegalSection({
   return (
     <section id={id} className="scroll-mt-24 py-6">
       <div className="flex items-baseline gap-3">
-        <span className="text-muted-foreground font-[family-name:var(--font-sora)] text-xs font-semibold tracking-[0.18em] uppercase">
+        <span className="font-[family-name:var(--font-sora)] font-semibold text-muted-foreground text-xs uppercase tracking-[0.18em]">
           {String(index).padStart(2, "0")}
         </span>
-        <h2 className="text-foreground font-[family-name:var(--font-syne)] text-xl font-semibold tracking-tight sm:text-2xl">
+        <h2 className="font-[family-name:var(--font-syne)] font-semibold text-foreground text-xl tracking-tight sm:text-2xl">
           {title}
         </h2>
       </div>
-      <div className="prose-legal text-muted-foreground mt-3 space-y-3 text-sm leading-relaxed sm:text-[0.95rem]">
+      <div className="prose-legal mt-3 space-y-3 text-muted-foreground text-sm leading-relaxed sm:text-[0.95rem]">
         {children}
       </div>
     </section>

@@ -134,15 +134,15 @@ function Signup() {
           <Card className="order-2 h-fit">
             <CardContent>
               <div>
-                <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.12em] uppercase">
+                <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 font-semibold text-primary text-xs uppercase tracking-[0.12em]">
                   <Sparkles className="size-3.5" />
                   Build Your Money System
                 </p>
-                <h2 className="mt-5 font-[family-name:var(--font-syne)] text-3xl leading-tight font-semibold text-balance xl:text-4xl">
+                <h2 className="mt-5 text-balance font-[family-name:var(--font-syne)] font-semibold text-3xl leading-tight xl:text-4xl">
                   Start with a faster onboarding flow that works on every
                   screen.
                 </h2>
-                <p className="text-muted-foreground mt-3 max-w-lg text-sm sm:text-base">
+                <p className="mt-3 max-w-lg text-muted-foreground text-sm sm:text-base">
                   Create your account and move from scattered expenses to a
                   single operating dashboard.
                 </p>
@@ -153,12 +153,12 @@ function Signup() {
                   {signupStats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="border-border/65 bg-background/80 rounded-2xl border p-3"
+                      className="rounded-2xl border border-border/65 bg-background/80 p-3"
                     >
-                      <dt className="text-muted-foreground text-[0.68rem] tracking-[0.12em] uppercase">
+                      <dt className="text-[0.68rem] text-muted-foreground uppercase tracking-[0.12em]">
                         {stat.label}
                       </dt>
-                      <dd className="text-foreground mt-1 text-lg font-semibold">
+                      <dd className="mt-1 font-semibold text-foreground text-lg">
                         {stat.value}
                       </dd>
                     </div>
@@ -169,9 +169,9 @@ function Signup() {
                   {signupHighlights.map((item) => (
                     <li
                       key={item}
-                      className="text-muted-foreground flex items-start gap-2 text-sm"
+                      className="flex items-start gap-2 text-muted-foreground text-sm"
                     >
-                      <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
+                      <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
                       <span>{item}</span>
                     </li>
                   ))}
@@ -186,15 +186,15 @@ function Signup() {
           </Card>
 
           <section className="order-1 flex items-start sm:items-center">
-            <div className="landing-glass-panel border-border/70 w-full rounded-3xl border p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
-              <p className="border-primary/25 bg-primary/8 text-primary inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-[0.1em] uppercase">
+            <div className="landing-glass-panel w-full rounded-3xl border border-border/70 p-5 shadow-[0_18px_38px_-32px_rgba(15,23,42,0.55)] sm:p-8">
+              <p className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3 py-1 font-semibold text-primary text-xs uppercase tracking-[0.1em]">
                 <BadgeCheck className="size-3.5" />
                 Create Account
               </p>
-              <h1 className="mt-4 font-[family-name:var(--font-syne)] text-2xl leading-tight font-bold text-balance sm:text-3xl">
+              <h1 className="mt-4 text-balance font-[family-name:var(--font-syne)] font-bold text-2xl leading-tight sm:text-3xl">
                 Launch your personal finance workspace
               </h1>
-              <p className="text-muted-foreground mt-2 text-sm sm:text-base">
+              <p className="mt-2 text-muted-foreground text-sm sm:text-base">
                 It takes less than a minute to set up your account and start
                 tracking.
               </p>
@@ -204,11 +204,11 @@ function Signup() {
               </div>
 
               <div className="my-5 flex items-center gap-3">
-                <div className="bg-border h-px flex-1" />
-                <span className="text-muted-foreground text-xs tracking-[0.08em] uppercase">
+                <div className="h-px flex-1 bg-border" />
+                <span className="text-muted-foreground text-xs uppercase tracking-[0.08em]">
                   or continue with email
                 </span>
-                <div className="bg-border h-px flex-1" />
+                <div className="h-px flex-1 bg-border" />
               </div>
 
               <Auth<SignupFormValues>
@@ -230,14 +230,14 @@ function Signup() {
             </div>
           </section>
 
-          <section className="landing-glass-panel border-border/65 order-3 rounded-2xl border p-4 lg:hidden">
-            <h2 className="text-primary text-sm font-semibold tracking-[0.08em] uppercase">
+          <section className="landing-glass-panel order-3 rounded-2xl border border-border/65 p-4 lg:hidden">
+            <h2 className="font-semibold text-primary text-sm uppercase tracking-[0.08em]">
               What you get
             </h2>
-            <ul className="text-muted-foreground mt-3 space-y-2 text-sm">
+            <ul className="mt-3 space-y-2 text-muted-foreground text-sm">
               {signupHighlights.slice(0, 2).map((item) => (
                 <li key={item} className="flex items-start gap-2">
-                  <ChartNoAxesCombined className="text-primary mt-0.5 size-4" />
+                  <ChartNoAxesCombined className="mt-0.5 size-4 text-primary" />
                   <span>{item}</span>
                 </li>
               ))}

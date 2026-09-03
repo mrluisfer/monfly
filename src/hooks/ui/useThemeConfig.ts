@@ -14,8 +14,8 @@ export function useThemeConfig() {
   return useMemo(
     () => ({
       activeTheme,
-      setActiveTheme: (theme: string) => setActiveTheme(theme),
       isDark,
+      setActiveTheme: (theme: string) => setActiveTheme(theme),
     }),
     [activeTheme, isDark, setActiveTheme],
   );

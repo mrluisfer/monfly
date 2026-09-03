@@ -28,7 +28,7 @@ export function ActionButton({
         render={<Button size={"lg"} variant={variant} className={"flex-1"} />}
       >
         {icon}
-        <span className="block truncate text-sm font-semibold tracking-tight">
+        <span className="block truncate font-semibold text-sm tracking-tight">
           {label}
         </span>
       </TooltipTrigger>

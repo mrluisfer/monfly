@@ -1,10 +1,10 @@
 import { prismaClient } from "~/server/prisma";
 
-type TrendingQueryParams = {
+interface TrendingQueryParams {
+  cardId?: string | null;
   email: string;
   type: "income" | "expense";
-  cardId?: string | null;
-};
+}
 
 export async function getTrendingMonthly({
   email,
@@ -30,8 +30,8 @@ export async function getTrendingMonthly({
     prismaClient.transaction.aggregate({
       _sum: { amount: true },
       where: {
-        userEmail: email,
         type,
+        userEmail: email,
         ...(cardId ? { cardId } : {}),
         date: { gte: startOfThisMonth, lt: startOfNextMonth },
       },
@@ -39,8 +39,8 @@ export async function getTrendingMonthly({
     prismaClient.transaction.aggregate({
       _sum: { amount: true },
       where: {
-        userEmail: email,
         type,
+        userEmail: email,
         ...(cardId ? { cardId } : {}),
         date: { gte: startOfPrevMonth, lt: startOfThisMonth },
       },
@@ -58,8 +58,8 @@ export async function getTrendingMonthly({
   }
 
   return {
-    thisMonthTotal,
     lastMonthTotal,
     percentChange,
+    thisMonthTotal,
   };
 }

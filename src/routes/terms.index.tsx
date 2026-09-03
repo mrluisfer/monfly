@@ -62,10 +62,10 @@ function TermsRoute() {
           >
             <CardContent>
               <pillar.icon className={`size-5 ${pillar.tone}`} />
-              <p className="text-foreground mt-2 text-sm font-semibold">
+              <p className="mt-2 font-semibold text-foreground text-sm">
                 {pillar.title}
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="mt-1 text-muted-foreground text-xs">
                 {pillar.description}
               </p>
             </CardContent>
@@ -103,7 +103,7 @@ function TermsRoute() {
               access with. Notify us immediately at{" "}
               <a
                 href="mailto:mrluisfeer@gmail.com"
-                className="text-foreground font-medium underline-offset-4 hover:underline"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 mrluisfeer@gmail.com
               </a>{" "}
@@ -168,7 +168,7 @@ function TermsRoute() {
               on the{" "}
               <a
                 href="/#pricing"
-                className="text-foreground font-medium underline-offset-4 hover:underline"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 pricing section
               </a>{" "}
@@ -233,14 +233,14 @@ function TermsRoute() {
               Questions about these Terms? Reach out via the{" "}
               <Link
                 to="/contact"
-                className="text-foreground font-medium underline-offset-4 hover:underline"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 contact page
               </Link>{" "}
               or email{" "}
               <a
                 href="mailto:mrluisfeer@gmail.com"
-                className="text-foreground font-medium underline-offset-4 hover:underline"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 mrluisfeer@gmail.com
               </a>
@@ -255,8 +255,8 @@ function TermsRoute() {
           <div className="flex items-start gap-3">
             <CheckCircle2 className="mt-0.5 size-5 text-emerald-600 dark:text-emerald-300" />
             <div>
-              <p className="text-foreground text-sm font-semibold">Summary</p>
-              <p className="text-muted-foreground mt-1 text-sm">
+              <p className="font-semibold text-foreground text-sm">Summary</p>
+              <p className="mt-1 text-muted-foreground text-sm">
                 Use Monfly for personal finance, keep your credentials safe, and
                 don&apos;t try to break things. We&apos;ll keep the service
                 running fairly and let you know before anything material

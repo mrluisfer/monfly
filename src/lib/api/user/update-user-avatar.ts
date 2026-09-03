@@ -19,15 +19,15 @@ export const updateUserAvatarServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "user:avatar:update",
-        limit: 30,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 30,
+        scope: "user:avatar:update",
+        windowMs: 20_000,
       });
 
       return await updateUserAvatar({
-        email: sessionEmail,
         avatarSeed: data.avatarSeed,
+        email: sessionEmail,
       });
     } catch (error) {
       const securityErrorResponse = toSecurityErrorResponse(error);
@@ -36,11 +36,11 @@ export const updateUserAvatarServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error updating avatar",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

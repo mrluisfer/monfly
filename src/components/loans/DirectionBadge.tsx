@@ -13,7 +13,7 @@ export function DirectionBadge({ direction }: { direction: LoanDirection }) {
     <StatusBadge
       variant={isBorrowed ? "danger" : "success"}
       size="sm"
-      className="tracking-wide uppercase"
+      className="uppercase tracking-wide"
       icon={<LoanDirectionIcon direction={direction} colored={false} />}
     >
       {LOAN_DIRECTION_LABEL[direction]}
