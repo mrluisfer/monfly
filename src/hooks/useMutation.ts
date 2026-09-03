@@ -194,7 +194,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
             );
           }
 
-          return undefined;
+          return;
         }
       }
 

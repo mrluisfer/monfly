@@ -20,8 +20,10 @@ import {
   SettingsIcon,
   SunIcon,
 } from "lucide-react";
+
 import type { ComponentProps, ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
+
 import {
   Command,
   CommandDialog,
