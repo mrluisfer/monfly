@@ -8,31 +8,31 @@ import {
 describe("formatToTwoDecimals", () => {
   it("formats numeric input to two decimals", () => {
     expect(formatToTwoDecimals(5)).toEqual({
-      stringValue: "5.00",
       numberValue: 5,
+      stringValue: "5.00",
     });
   });
 
   it("rounds to two decimals", () => {
     expect(formatToTwoDecimals(1.005)).toEqual({
-      stringValue: "1.00", // float rounding — locks current behavior
       numberValue: 1,
+      stringValue: "1.00", // float rounding — locks current behavior
     });
     expect(formatToTwoDecimals("2.349")).toEqual({
-      stringValue: "2.35",
       numberValue: 2.35,
+      stringValue: "2.35",
     });
   });
 
   it("parses numeric strings", () => {
     expect(formatToTwoDecimals("42")).toEqual({
-      stringValue: "42.00",
       numberValue: 42,
+      stringValue: "42.00",
     });
   });
 
   it("returns zeroed result for empty / nullish / non-numeric input", () => {
-    const empty = { stringValue: "", numberValue: 0 };
+    const empty = { numberValue: 0, stringValue: "" };
     expect(formatToTwoDecimals("")).toEqual(empty);
     expect(formatToTwoDecimals(null as unknown as string)).toEqual(empty);
     expect(formatToTwoDecimals(undefined as unknown as string)).toEqual(empty);

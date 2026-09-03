@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import { cn } from "~/lib/utils";
 
-type PageHeaderProps = {
-  title: ReactNode;
-  description?: ReactNode | string;
-  icon?: ReactNode;
+interface PageHeaderProps {
   actions?: ReactNode;
   className?: string;
-};
+  description?: ReactNode | string;
+  icon?: ReactNode;
+  title: ReactNode;
+}
 
 export function PageHeader({
   title,
@@ -24,30 +24,30 @@ export function PageHeader({
       )}
     >
       <div className="flex min-w-0 flex-wrap items-start gap-3 lg:flex-nowrap">
-        {icon && (
+        {icon ? (
           <div
             aria-hidden="true"
-            className="bg-primary/10 text-primary border-primary/15 flex size-10 shrink-0 items-center justify-center rounded-xl border"
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-primary/15 bg-primary/10 text-primary"
           >
             {icon}
           </div>
-        )}
+        ) : null}
         <div className="min-w-0 space-y-1">
-          <h1 className="text-foreground truncate text-xl font-semibold tracking-tight">
+          <h1 className="truncate font-semibold text-foreground text-xl tracking-tight">
             {title}
           </h1>
-          {description && (
-            <p className="text-muted-foreground max-w-xs truncate text-sm leading-relaxed text-ellipsis sm:max-w-sm sm:text-base md:max-w-md lg:max-w-lg xl:max-w-7xl">
+          {description ? (
+            <p className="max-w-xs truncate text-ellipsis text-muted-foreground text-sm leading-relaxed sm:max-w-sm sm:text-base md:max-w-md lg:max-w-lg xl:max-w-7xl">
               {description}
             </p>
-          )}
+          ) : null}
         </div>
       </div>
-      {actions && (
+      {actions ? (
         <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
           {actions}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

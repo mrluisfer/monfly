@@ -1,10 +1,10 @@
 import type { SonnerPosition } from "~/types/SonnerPosition";
 
 export const sonnerPositions: { value: SonnerPosition; name: string }[] = [
-  { value: "top-left", name: "Top Left" },
-  { value: "top-right", name: "Top Right" },
-  { value: "bottom-left", name: "Bottom Left" },
-  { value: "bottom-right", name: "Bottom Right" },
-  { value: "top-center", name: "Top Center" },
-  { value: "bottom-center", name: "Bottom Center" },
+  { name: "Top Left", value: "top-left" },
+  { name: "Top Right", value: "top-right" },
+  { name: "Bottom Left", value: "bottom-left" },
+  { name: "Bottom Right", value: "bottom-right" },
+  { name: "Top Center", value: "top-center" },
+  { name: "Bottom Center", value: "bottom-center" },
 ];

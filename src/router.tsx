@@ -7,15 +7,20 @@ import { routeTree } from "./routeTree.gen";
 export function createQueryClient() {
   return new QueryClient({
     defaultOptions: {
+      mutations: {
+        networkMode: "online",
+        retry: 0, // No retries for mutations to prevent conflicts
+      },
       queries: {
-        staleTime: 5 * 60 * 1000, // 5 minutes
         gcTime: 10 * 60 * 1000, // 10 minutes
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
         networkMode: "online", // Only run queries when online
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
         retry: (failureCount, error) => {
           // Reduce retry attempts to prevent stream issues
-          if (failureCount >= 1) return false;
+          if (failureCount >= 1) {
+            return false;
+          }
 
           // Don't retry on 4xx errors
           if (
@@ -30,10 +35,7 @@ export function createQueryClient() {
           return failureCount < 1;
         },
         retryDelay: () => 1000, // Fixed 1 second delay
-      },
-      mutations: {
-        retry: 0, // No retries for mutations to prevent conflicts
-        networkMode: "online",
+        staleTime: 5 * 60 * 1000, // 5 minutes
       },
     },
   });
@@ -46,11 +48,11 @@ export function getRouter() {
   const queryClient = createQueryClient();
 
   return createRouter({
-    routeTree,
     context: { queryClient },
-    defaultPreload: "intent",
     defaultErrorComponent: DefaultCatchBoundary,
     defaultNotFoundComponent: () => <NotFound />,
+    defaultPreload: "intent",
+    routeTree,
     scrollRestoration: true,
   });
 }

@@ -5,15 +5,15 @@ import type { ApiResponse } from "~/types/ApiResponse";
 export const getCategoryByEmail = async (
   email: string,
 ): Promise<ApiResponse<Category[]> | ApiResponse<null>> => {
-  const normalizedEmail = email?.trim().toLowerCase();
+  const normalizedEmail = email.trim().toLowerCase();
 
   if (!normalizedEmail) {
     return {
-      success: false,
-      message: "Email is required",
       data: null,
       error: true,
+      message: "Email is required",
       statusCode: 400,
+      success: false,
     };
   }
 
@@ -27,20 +27,20 @@ export const getCategoryByEmail = async (
     );
 
     return {
-      success: true,
-      message: "Categories fetched successfully",
       data: categories,
       error: false,
+      message: "Categories fetched successfully",
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     console.error("[getCategoryByEmail] failed", error);
     return {
-      success: false,
-      message: "Failed to get categories",
       data: null,
       error: true,
+      message: "Failed to get categories",
       statusCode: 500,
+      success: false,
     };
   }
 };

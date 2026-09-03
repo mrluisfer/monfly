@@ -8,17 +8,17 @@ export const updateUserPassword = async (data: {
 }) => {
   try {
     const user = await prismaClient.user.findUnique({
-      where: { email: data.email },
       select: { id: true, password: true },
+      where: { email: data.email },
     });
 
     if (!user) {
       return {
+        data: null,
         error: true,
         message: "User not found",
-        data: null,
-        success: false,
         statusCode: 404,
+        success: false,
       } as ApiResponse<null>;
     }
 
@@ -29,35 +29,35 @@ export const updateUserPassword = async (data: {
 
     if (!isCurrentPasswordValid) {
       return {
+        data: null,
         error: true,
         message: "Your current password is incorrect",
-        data: null,
-        success: false,
         statusCode: 401,
+        success: false,
       } as ApiResponse<null>;
     }
 
     const hashedPassword = await hashPassword(data.newPassword);
 
     await prismaClient.user.update({
-      where: { email: data.email },
       data: { password: hashedPassword },
+      where: { email: data.email },
     });
 
     return {
+      data: null,
       error: false,
       message: "Password updated successfully",
-      data: null,
-      success: true,
       statusCode: 200,
+      success: true,
     } as ApiResponse<null>;
   } catch {
     return {
+      data: null,
       error: true,
       message: "Error updating password",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

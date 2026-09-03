@@ -22,15 +22,15 @@ export const reverseLoanPaymentsByIdServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "loan:reopen",
-        limit: 30,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 30,
+        scope: "loan:reopen",
+        windowMs: 20_000,
       });
 
       const payments = await prismaClient.transaction.findMany({
-        where: { appliedToLoanId: data.loanId, userEmail: sessionEmail },
         select: { id: true },
+        where: { appliedToLoanId: data.loanId, userEmail: sessionEmail },
       });
 
       // ponytail: delete each payment in its own atomic tx, reusing the existing
@@ -44,22 +44,22 @@ export const reverseLoanPaymentsByIdServer = createServerFn({ method: "POST" })
       // payment rows to reverse — reset their state directly so Reopen still works.
       if (payments.length === 0) {
         await prismaClient.loan.updateMany({
-          where: { id: data.loanId, userEmail: sessionEmail },
           data: {
             amountPaid: 0,
-            status: "pending",
             paidAt: null,
+            status: "pending",
             updatedAt: new Date(),
           },
+          where: { id: data.loanId, userEmail: sessionEmail },
         });
       }
 
       return {
+        data: null,
         error: false,
         message: "Loan reopened",
-        data: null,
-        success: true,
         statusCode: 200,
+        success: true,
       } as ApiResponse<null>;
     } catch (error) {
       const securityErrorResponse = toSecurityErrorResponse(error);
@@ -68,11 +68,11 @@ export const reverseLoanPaymentsByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error reopening loan",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

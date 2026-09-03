@@ -22,7 +22,9 @@ export function CardsInsights() {
     );
   }
 
-  if (cards.length === 0) return null;
+  if (cards.length === 0) {
+    return null;
+  }
 
   const activeCards = cards.filter((c) => c.status !== "archived");
   const archivedCount = cards.length - activeCards.length;
@@ -39,10 +41,10 @@ export function CardsInsights() {
   const positiveCards = activeCards
     .filter((c) => (c.balance ?? 0) > 0)
     .map((c, i) => ({
-      id: c.id,
-      name: c.name,
       balance: c.balance ?? 0,
       color: c.color ?? CARD_FALLBACK_COLORS[i % CARD_FALLBACK_COLORS.length],
+      id: c.id,
+      name: c.name,
     }));
   const positiveTotal = positiveCards.reduce((sum, c) => sum + c.balance, 0);
 
@@ -80,7 +82,7 @@ export function CardsInsights() {
         <Card className="rounded-2xl">
           <CardContent className="space-y-4 p-4 sm:p-5">
             <div className="flex items-baseline justify-between gap-3">
-              <h3 className="text-sm font-semibold tracking-tight">
+              <h3 className="font-semibold text-sm tracking-tight">
                 Balance distribution
               </h3>
               <span className="text-muted-foreground text-xs">
@@ -89,14 +91,14 @@ export function CardsInsights() {
               </span>
             </div>
 
-            <div className="bg-muted flex h-3 w-full overflow-hidden rounded-full">
+            <div className="flex h-3 w-full overflow-hidden rounded-full bg-muted">
               {positiveCards.map((c) => (
                 <div
                   key={c.id}
                   className="h-full transition-[width] duration-500"
                   style={{
-                    width: `${(c.balance / positiveTotal) * 100}%`,
                     backgroundColor: c.color,
+                    width: `${(c.balance / positiveTotal) * 100}%`,
                   }}
                   title={`${c.name}: ${formatAmount(c.balance)}`}
                 />
@@ -119,7 +121,7 @@ export function CardsInsights() {
                       />
                       <span className="truncate capitalize">{c.name}</span>
                     </span>
-                    <span className="text-muted-foreground shrink-0 tabular-nums">
+                    <span className="shrink-0 text-muted-foreground tabular-nums">
                       {formatAmount(c.balance)}
                       <span className="ml-1.5 text-xs">{pct.toFixed(0)}%</span>
                     </span>

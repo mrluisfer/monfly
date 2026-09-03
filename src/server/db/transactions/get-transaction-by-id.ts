@@ -6,11 +6,11 @@ export const getTransactionById = async (data: { id: string }) => {
   try {
     if (!data.id) {
       return {
+        data: null,
         error: true,
         message: "Transaction ID is required",
-        data: null,
-        success: false,
         statusCode: 400,
+        success: false,
       } as ApiResponse<Transaction | null>;
     }
 
@@ -20,29 +20,29 @@ export const getTransactionById = async (data: { id: string }) => {
 
     if (!transaction) {
       return {
+        data: null,
         error: true,
         message: "Transaction not found",
-        data: null,
-        success: false,
         statusCode: 404,
+        success: false,
       } as ApiResponse<Transaction | null>;
     }
 
     return {
-      status: 200,
-      transaction,
       data: transaction,
       error: false,
-      success: true,
       message: "Transaction fetched successfully",
+      status: 200,
+      success: true,
+      transaction,
     } as ApiResponse<Transaction>;
   } catch {
     return {
+      data: null,
       error: true,
       message: "Error fetching transaction",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<Transaction | null>;
   }
 };

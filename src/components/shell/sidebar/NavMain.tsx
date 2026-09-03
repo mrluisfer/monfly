@@ -40,7 +40,7 @@ export function NavMain() {
                   disabled={disabled}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium",
+                    "data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-sidebar-accent-foreground",
                     "transition-colors",
                   )}
                   render={
@@ -48,7 +48,7 @@ export function NavMain() {
                       <button type="button" disabled aria-disabled="true">
                         <Icon aria-hidden="true" />
                         <span>{route.title}</span>
-                        <span className="border-sidebar-border/60 text-sidebar-foreground/60 ml-auto rounded-full border px-1.5 py-0.5 text-[10px] font-medium tracking-wide uppercase">
+                        <span className="ml-auto rounded-full border border-sidebar-border/60 px-1.5 py-0.5 font-medium text-[10px] text-sidebar-foreground/60 uppercase tracking-wide">
                           Soon
                         </span>
                       </button>

@@ -1,18 +1,18 @@
 export const userFormNames = {
-  name: "name",
-  email: "email",
-  password: "password",
-  confirmPassword: "confirmPassword",
-  totalBalance: "totalBalance",
-  preferredCurrency: "preferredCurrency",
-  marketingOptIn: "marketingOptIn",
-  productUpdatesOptIn: "productUpdatesOptIn",
-  acceptTerms: "acceptTerms",
   acceptPrivacy: "acceptPrivacy",
+  acceptTerms: "acceptTerms",
+  confirmPassword: "confirmPassword",
+  email: "email",
+  marketingOptIn: "marketingOptIn",
+  name: "name",
+  password: "password",
+  preferredCurrency: "preferredCurrency",
+  productUpdatesOptIn: "productUpdatesOptIn",
+  totalBalance: "totalBalance",
 } as const;
 
 export const changePasswordFormNames = {
+  confirmNewPassword: "confirmNewPassword",
   currentPassword: "currentPassword",
   newPassword: "newPassword",
-  confirmNewPassword: "confirmNewPassword",
 } as const;

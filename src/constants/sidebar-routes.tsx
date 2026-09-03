@@ -10,14 +10,14 @@ import {
 } from "lucide-react";
 import type { ForwardRefExoticComponent, RefAttributes } from "react";
 
-export type SidebarItemType = {
-  title: string;
+export interface SidebarItemType {
+  disabled?: boolean;
   icon: ForwardRefExoticComponent<
     Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
   >;
+  title: string;
   url: string;
-  disabled?: boolean;
-};
+}
 
 export enum SidebarRouteUrl {
   HOME = "/home",
@@ -30,28 +30,28 @@ export enum SidebarRouteUrl {
 }
 
 export const sidebarRoutes: SidebarItemType[] = [
-  { title: "Home", icon: LayoutDashboard, url: SidebarRouteUrl.HOME },
+  { icon: LayoutDashboard, title: "Home", url: SidebarRouteUrl.HOME },
   {
-    title: "Transactions",
     icon: Receipt,
+    title: "Transactions",
     url: SidebarRouteUrl.TRANSACTIONS,
   },
   {
-    title: "Cards",
     icon: WalletCards,
+    title: "Cards",
     url: SidebarRouteUrl.CARDS,
   },
   {
-    title: "Loans",
-    icon: HandCoins,
-    url: SidebarRouteUrl.LOANS,
     disabled: false,
+    icon: HandCoins,
+    title: "Loans",
+    url: SidebarRouteUrl.LOANS,
   },
-  { title: "Reports", icon: BarChart, url: SidebarRouteUrl.REPORTS },
-  { title: "Categories", icon: FolderTree, url: SidebarRouteUrl.CATEGORIES },
+  { icon: BarChart, title: "Reports", url: SidebarRouteUrl.REPORTS },
+  { icon: FolderTree, title: "Categories", url: SidebarRouteUrl.CATEGORIES },
   {
-    title: "Calculator",
     icon: Calculator,
+    title: "Calculator",
     url: SidebarRouteUrl.CALCULATOR,
   },
 ];

@@ -4,11 +4,11 @@ import type { BalanceSummary, IncomeExpensePoint } from "./types";
 /** Number of most recent periods considered for the summary. */
 const RECENT_PERIODS = 6;
 
-type RawPoint = {
-  month?: unknown;
-  income?: unknown;
+interface RawPoint {
   expense?: unknown;
-};
+  income?: unknown;
+  month?: unknown;
+}
 
 function toFiniteNumber(value: unknown): number {
   const parsed = Number(value);
@@ -19,9 +19,9 @@ function toIncomeExpensePoint(item: RawPoint): IncomeExpensePoint {
   const income = toFiniteNumber(item.income);
   const expense = toFiniteNumber(item.expense);
   return {
-    label: String(item.month ?? "Period"),
-    income,
     expense,
+    income,
+    label: String(item.month ?? "Period"),
     net: income - expense,
   };
 }
@@ -50,8 +50,12 @@ export function deriveBalanceSummary(
   for (const point of recentPoints) {
     totalIncome += point.income;
     totalExpenses += point.expense;
-    if (!bestPoint || point.net > bestPoint.net) bestPoint = point;
-    if (!worstPoint || point.net < worstPoint.net) worstPoint = point;
+    if (!bestPoint || point.net > bestPoint.net) {
+      bestPoint = point;
+    }
+    if (!worstPoint || point.net < worstPoint.net) {
+      worstPoint = point;
+    }
   }
 
   const latestPoint = recentPoints.at(-1) ?? null;
@@ -75,27 +79,30 @@ export function deriveBalanceSummary(
     totalIncome > 0 ? (totalIncome - totalExpenses) / totalIncome : null;
 
   let positiveStreak = 0;
-  for (let i = recentPoints.length - 1; i >= 0; i--) {
-    if (recentPoints[i].net >= 0) positiveStreak++;
-    else break;
+  for (let i = recentPoints.length - 1; i >= 0; i -= 1) {
+    if (recentPoints[i].net >= 0) {
+      positiveStreak += 1;
+    } else {
+      break;
+    }
   }
 
   const runwayMonths =
     avgNet < 0 && balanceValue > 0 ? balanceValue / Math.abs(avgNet) : null;
 
   return {
+    avgNet,
+    bestPoint,
+    expenseBurnRate,
     latestPoint,
+    positiveStreak,
     recentPoints,
-    totalIncome,
+    runwayMonths,
+    savingsRate,
     totalExpenses,
+    totalIncome,
     trendDelta,
     trendPercent,
-    avgNet,
-    savingsRate,
-    bestPoint,
     worstPoint,
-    positiveStreak,
-    runwayMonths,
-    expenseBurnRate,
   };
 }

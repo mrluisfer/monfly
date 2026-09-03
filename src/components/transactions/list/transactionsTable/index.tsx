@@ -12,7 +12,7 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { format } from "date-fns";
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { useCurrency } from "~/hooks/useCurrency";
 import { isErrorPayload, useMutation } from "~/hooks/useMutation";
 import { useRouteUser } from "~/hooks/useRouteUser";
@@ -29,9 +29,9 @@ import { DataTablePagination } from "./DataTablePagination";
 import { DataTableToolbar } from "./DataTableToolbar";
 
 interface DataTableDemoProps {
-  data: TransactionWithUser[];
   cardsById?: Map<string, CardSummary>;
   categoryIconsByName?: Map<string, string>;
+  data: TransactionWithUser[];
 }
 
 export function DataTableDemo({
@@ -39,14 +39,11 @@ export function DataTableDemo({
   cardsById,
   categoryIconsByName,
 }: DataTableDemoProps) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [globalFilter, setGlobalFilter] = React.useState("");
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [globalFilter, setGlobalFilter] = useState("");
 
   const userEmail = useRouteUser();
   const { format: formatAmount } = useCurrency();
@@ -56,47 +53,63 @@ export function DataTableDemo({
   // this is a known library limitation, not a correctness issue here.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
-    data,
     columns: Columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
+    data,
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: (row, _columnId, value) => {
       const search = String(value).toLowerCase().trim();
-      if (!search) return true;
+      if (!search) {
+        return true;
+      }
 
       const searchableFields = [
         (row.getValue("description") as string) || "",
         (row.getValue("category") as string) || "",
         (row.getValue("type") as string) || "",
-        (row.getValue("amount") as number)?.toString() || "",
+        (row.getValue("amount") as number | undefined)?.toString() || "",
       ];
 
       return searchableFields.some((field) =>
         field.toLowerCase().includes(search),
       );
     },
+    meta: { cardsById, categoryIconsByName, formatAmount },
+    onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
+    onGlobalFilterChange: setGlobalFilter,
+    onRowSelectionChange: setRowSelection,
+    onSortingChange: setSorting,
     state: {
-      sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
       globalFilter,
+      rowSelection,
+      sorting,
     },
-    meta: { formatAmount, cardsById, categoryIconsByName },
   });
 
   const deleteTransactionsByIdMutation = useMutation({
     fn: deleteTransactionsByIdServer,
-    onSuccess: async ({ data }) => {
-      if (isErrorPayload(data)) {
-        const response = data as { message?: string };
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify(
+          [...variables.data.ids].sort((left, right) =>
+            left.localeCompare(right),
+          ),
+        ),
+      onDuplicatePending: {
+        title: "Deletion already in progress",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Transactions already deleted",
+      },
+    },
+    onSuccess: async ({ data: result }) => {
+      if (isErrorPayload(result)) {
+        const response = result as { message?: string };
         sileo.error({
           title: response.message ?? "Failed to delete transactions",
         });
@@ -112,23 +125,9 @@ export function DataTableDemo({
       });
       table.resetRowSelection();
     },
-    idempotency: {
-      getKey: (variables) =>
-        JSON.stringify(
-          [...variables.data.ids].sort((left, right) =>
-            left.localeCompare(right),
-          ),
-        ),
-      onDuplicatePending: {
-        title: "Deletion already in progress",
-      },
-      onDuplicateRecentSuccess: {
-        title: "Transactions already deleted",
-      },
-    },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (
       deleteTransactionsByIdMutation.status === "error" &&
       deleteTransactionsByIdMutation.error
@@ -201,29 +200,29 @@ export function DataTableDemo({
 
   const stats = [
     {
+      description: "Visible rows in current view",
       label: "Results",
       value: String(filteredTransactions.length),
-      description: "Visible rows in current view",
     },
     {
+      description: "Sum of visible income rows",
       label: "Income",
       value: formatAmount(filteredIncome),
       valueClassName: "text-primary",
-      description: "Sum of visible income rows",
     },
     {
+      description: "Sum of visible expense rows",
       label: "Expenses",
       value: formatAmount(filteredExpenses),
       valueClassName: "text-destructive",
-      description: "Sum of visible expense rows",
     },
     {
-      label: "Net",
-      value: `${filteredNet >= 0 ? "+" : ""}${formatAmount(filteredNet)}`,
-      valueClassName: filteredNet >= 0 ? "text-primary" : "text-destructive",
       description: latestTransactionDate
         ? `Latest: ${format(new Date(latestTransactionDate), "MMM d, yyyy")}`
         : "No visible transactions",
+      label: "Net",
+      value: `${filteredNet >= 0 ? "+" : ""}${formatAmount(filteredNet)}`,
+      valueClassName: filteredNet >= 0 ? "text-primary" : "text-destructive",
     },
   ] as const;
 
@@ -241,13 +240,13 @@ export function DataTableDemo({
       />
       <div className="mb-4 grid gap-3 lg:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className="bg-muted rounded-xl px-5 py-3">
-            <div className="text-muted-foreground text-xs font-medium tracking-[0.16em] uppercase">
+          <div key={stat.label} className="rounded-xl bg-muted px-5 py-3">
+            <div className="font-medium text-muted-foreground text-xs uppercase tracking-[0.16em]">
               {stat.label}
             </div>
             <div
               className={cn(
-                "text-foreground mt-2 text-lg font-semibold",
+                "mt-2 font-semibold text-foreground text-lg",
                 "valueClassName" in stat && stat.valueClassName,
               )}
             >

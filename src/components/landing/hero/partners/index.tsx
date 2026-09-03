@@ -20,24 +20,24 @@ type PartnerType =
 
 const getPartners = (isDark: boolean): PartnerType[] => [
   {
-    name: "Visa",
     image: "https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png",
+    name: "Visa",
   },
   {
-    name: "Stripe",
     icon: <StripeLight className="size-16" />,
+    name: "Stripe",
   },
   {
-    name: "Paypal",
     icon: <PayPal className="size-8" />,
+    name: "Paypal",
   },
   {
-    name: "Apple Pay",
     icon: isDark ? (
       <AppleDark className="size-8" />
     ) : (
       <AppleLight className="size-8" />
     ),
+    name: "Apple Pay",
   },
 ];
 
@@ -54,7 +54,7 @@ export const Partners = () => {
         <li
           key={partner.name}
           aria-label={partner.name}
-          className="border-border/60 bg-background/85 hover:border-primary/30 hover:bg-background inline-flex h-9 items-center justify-center rounded-full border px-3 transition-colors duration-150 ease-out"
+          className="inline-flex h-9 items-center justify-center rounded-full border border-border/60 bg-background/85 px-3 transition-colors duration-150 ease-out hover:border-primary/30 hover:bg-background"
         >
           {partner.icon ? (
             partner.icon
@@ -62,9 +62,11 @@ export const Partners = () => {
             <img
               src={partner?.image}
               alt={partner.name}
-              className="h-4 object-contain"
+              className="h-4 w-auto object-contain"
               loading="lazy"
               draggable={false}
+              width={48}
+              height={16}
             />
           )}
         </li>

@@ -12,9 +12,9 @@ export function ChangePasswordRow() {
   return (
     <li className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0 space-y-0.5 pr-4">
-        <p className="text-foreground flex items-center gap-1.5 text-sm font-medium">
+        <p className="flex items-center gap-1.5 font-medium text-foreground text-sm">
           <KeyRoundIcon
-            className="text-muted-foreground size-3.5"
+            className="size-3.5 text-muted-foreground"
             aria-hidden="true"
           />
           Change password
@@ -25,11 +25,11 @@ export function ChangePasswordRow() {
       </div>
       <Link
         to={CHANGE_PASSWORD_PATH}
-        className="group bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
+        className="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-foreground/5 px-3 py-1.5 font-medium text-foreground text-sm transition-colors hover:bg-foreground/10"
       >
         Update password
         <ArrowUpRightIcon
-          className="text-muted-foreground size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+          className="size-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
           aria-hidden="true"
         />
       </Link>

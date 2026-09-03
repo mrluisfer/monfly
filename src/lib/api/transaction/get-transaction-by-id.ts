@@ -4,6 +4,4 @@ import { getTransactionById as getTransactionByIdUtils } from "~/server/db/trans
 
 export const getTransactionByIdServer = createServerFn({ method: "GET" })
   .validator((d: { id: string }) => d)
-  .handler(async ({ data }) => {
-    return await getTransactionByIdUtils(data);
-  });
+  .handler(async ({ data }) => await getTransactionByIdUtils(data));

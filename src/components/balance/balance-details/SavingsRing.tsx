@@ -1,11 +1,11 @@
 import { TONE_STROKE, type Tone } from "~/components/shared/tone";
 import { cn } from "~/lib/utils";
 
-type SavingsRingProps = {
-  value: number;
-  tone: Tone;
+interface SavingsRingProps {
   dimmed: boolean;
-};
+  tone: Tone;
+  value: number;
+}
 
 const RADIUS = 16;
 
@@ -28,7 +28,7 @@ export function SavingsRing({ value, tone, dimmed }: SavingsRingProps) {
         cx="20"
         cy="20"
         r={RADIUS}
-        className="stroke-foreground/10 fill-none"
+        className="fill-none stroke-foreground/10"
         strokeWidth={4}
       />
       <circle

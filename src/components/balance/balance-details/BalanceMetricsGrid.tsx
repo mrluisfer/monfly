@@ -12,9 +12,9 @@ import { Sparkline } from "./Sparkline";
 import { TrendBadge } from "./TrendBadge";
 import type { BalanceSummary } from "./types";
 
-type BalanceMetricsGridProps = {
+interface BalanceMetricsGridProps {
   summary: BalanceSummary;
-};
+}
 
 export function BalanceMetricsGrid({ summary }: BalanceMetricsGridProps) {
   const { format: formatAmount, isHidden } = useCurrency();
@@ -63,14 +63,14 @@ export function BalanceMetricsGrid({ summary }: BalanceMetricsGridProps) {
         iconTone="success"
         footer={
           <div className="space-y-1.5">
-            <p className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
+            <p className="flex items-center justify-between gap-2 text-muted-foreground text-xs">
               <span>
                 {hasData
                   ? `${summary.recentPoints.length} recorded periods`
                   : "Recent recorded periods"}
               </span>
               {hasData && !isHidden ? (
-                <span className="text-success font-medium tabular-nums">
+                <span className="font-medium text-success tabular-nums">
                   {(incomeRatio * 100).toFixed(0)}%
                 </span>
               ) : null}
@@ -91,14 +91,14 @@ export function BalanceMetricsGrid({ summary }: BalanceMetricsGridProps) {
         iconTone="warning"
         footer={
           <div className="space-y-1.5">
-            <p className="text-muted-foreground flex items-center justify-between gap-2 text-xs">
+            <p className="flex items-center justify-between gap-2 text-muted-foreground text-xs">
               <span>
                 {hasData
                   ? `~ ${formatAmount(summary.expenseBurnRate)} / period`
                   : "Recent recorded periods"}
               </span>
               {hasData && !isHidden ? (
-                <span className="text-warning font-medium tabular-nums">
+                <span className="font-medium text-warning tabular-nums">
                   {(expenseRatio * 100).toFixed(0)}%
                 </span>
               ) : null}

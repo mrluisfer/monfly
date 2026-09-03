@@ -10,16 +10,22 @@ import {
   Sigma,
   XIcon,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { NumberFormatId } from "~/constants/number-formats";
-import { useNumberFormat } from "~/hooks/ui/useNumberFormat";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import {
+  type RefObject,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useDecimalConvention } from "~/hooks/ui/useDecimalConvention";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import { balanceSimulationAlertDismissedAtom } from "~/state/atoms";
-import { formatCurrency } from "~/utils/format-currency";
+import { parseFormattedNumber } from "~/utils/parse-number";
 
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
@@ -41,179 +47,184 @@ type UnaryToken = "SQUARE" | "SQRT" | "INVERSE";
 type MemoryToken = "MC" | "MR" | "M_PLUS" | "M_MINUS";
 type ButtonRole = "number" | "operator" | "utility" | "equal" | "science";
 
-type HistoryEntry = {
+interface HistoryEntry {
   id: number;
-  statement: string;
   result: string;
-};
+  statement: string;
+}
 
-type CalculatorKey = {
-  token: string;
-  label: string;
+interface CalculatorKey {
   ariaLabel: string;
-  role: ButtonRole;
   colSpan?: 1 | 2;
-};
+  label: string;
+  role: ButtonRole;
+  token: string;
+}
 
-type ScenarioPreset = {
+interface ScenarioPreset {
+  apply: (currentValue: number, baselineValue: number) => number;
+  description: string;
   id: string;
   label: string;
-  description: string;
-  apply: (currentValue: number, baselineValue: number) => number;
-};
+}
 
 const DISPLAY_MAX_DIGITS = 16;
+/** Trailing zeros left by `toFixed`, plus a dangling decimal point. */
+const TRAILING_ZEROS = /\.?0+$/;
+/** A single digit key/token. */
+const SINGLE_DIGIT = /^\d$/;
+
 const DISPLAY_MAX_DECIMALS = 8;
 const HISTORY_LIMIT = 7;
 
 const OPERATOR_SYMBOL: Record<BinaryOperator, string> = {
-  "+": "+",
   "-": "-",
   "*": "×",
   "/": "÷",
   "^": "^",
+  "+": "+",
 };
 
 const BASIC_KEYS: CalculatorKey[] = [
   {
-    token: "AC",
-    label: "AC",
     ariaLabel: "Clear display to zero",
+    label: "AC",
     role: "utility",
+    token: "AC",
   },
   {
-    token: "BACKSPACE",
-    label: "⌫",
     ariaLabel: "Delete last digit",
+    label: "⌫",
     role: "utility",
+    token: "BACKSPACE",
   },
   {
-    token: "TOGGLE_SIGN",
-    label: "±",
     ariaLabel: "Toggle sign",
+    label: "±",
     role: "utility",
+    token: "TOGGLE_SIGN",
   },
   {
-    token: "PERCENT",
-    label: "%",
     ariaLabel: "Convert to percent",
+    label: "%",
     role: "utility",
+    token: "PERCENT",
   },
-  { token: "7", label: "7", ariaLabel: "Number 7", role: "number" },
-  { token: "8", label: "8", ariaLabel: "Number 8", role: "number" },
-  { token: "9", label: "9", ariaLabel: "Number 9", role: "number" },
-  { token: "/", label: "÷", ariaLabel: "Divide", role: "operator" },
-  { token: "4", label: "4", ariaLabel: "Number 4", role: "number" },
-  { token: "5", label: "5", ariaLabel: "Number 5", role: "number" },
-  { token: "6", label: "6", ariaLabel: "Number 6", role: "number" },
-  { token: "*", label: "×", ariaLabel: "Multiply", role: "operator" },
-  { token: "1", label: "1", ariaLabel: "Number 1", role: "number" },
-  { token: "2", label: "2", ariaLabel: "Number 2", role: "number" },
-  { token: "3", label: "3", ariaLabel: "Number 3", role: "number" },
-  { token: "-", label: "−", ariaLabel: "Subtract", role: "operator" },
+  { ariaLabel: "Number 7", label: "7", role: "number", token: "7" },
+  { ariaLabel: "Number 8", label: "8", role: "number", token: "8" },
+  { ariaLabel: "Number 9", label: "9", role: "number", token: "9" },
+  { ariaLabel: "Divide", label: "÷", role: "operator", token: "/" },
+  { ariaLabel: "Number 4", label: "4", role: "number", token: "4" },
+  { ariaLabel: "Number 5", label: "5", role: "number", token: "5" },
+  { ariaLabel: "Number 6", label: "6", role: "number", token: "6" },
+  { ariaLabel: "Multiply", label: "×", role: "operator", token: "*" },
+  { ariaLabel: "Number 1", label: "1", role: "number", token: "1" },
+  { ariaLabel: "Number 2", label: "2", role: "number", token: "2" },
+  { ariaLabel: "Number 3", label: "3", role: "number", token: "3" },
+  { ariaLabel: "Subtract", label: "−", role: "operator", token: "-" },
   {
-    token: "0",
-    label: "0",
     ariaLabel: "Number 0",
-    role: "number",
     colSpan: 2,
+    label: "0",
+    role: "number",
+    token: "0",
   },
-  { token: ".", label: ".", ariaLabel: "Decimal point", role: "number" },
-  { token: "+", label: "+", ariaLabel: "Add", role: "operator" },
+  { ariaLabel: "Decimal point", label: ".", role: "number", token: "." },
+  { ariaLabel: "Add", label: "+", role: "operator", token: "+" },
   {
-    token: "=",
-    label: "=",
     ariaLabel: "Calculate result",
+    label: "=",
     role: "equal",
+    token: "=",
   },
 ];
 
 const SCIENTIFIC_KEYS: CalculatorKey[] = [
   {
-    token: "SQUARE",
-    label: "x²",
     ariaLabel: "Square value",
+    label: "x²",
     role: "science",
+    token: "SQUARE",
   },
   {
-    token: "SQRT",
-    label: "√x",
     ariaLabel: "Square root",
+    label: "√x",
     role: "science",
+    token: "SQRT",
   },
   {
-    token: "INVERSE",
-    label: "1/x",
     ariaLabel: "Multiplicative inverse",
+    label: "1/x",
     role: "science",
+    token: "INVERSE",
   },
-  { token: "^", label: "xʸ", ariaLabel: "Power", role: "science" },
-  { token: "MC", label: "mc", ariaLabel: "Clear memory", role: "science" },
-  { token: "MR", label: "mr", ariaLabel: "Recall memory", role: "science" },
+  { ariaLabel: "Power", label: "xʸ", role: "science", token: "^" },
+  { ariaLabel: "Clear memory", label: "mc", role: "science", token: "MC" },
+  { ariaLabel: "Recall memory", label: "mr", role: "science", token: "MR" },
   {
-    token: "M_PLUS",
-    label: "m+",
     ariaLabel: "Add to memory",
+    label: "m+",
     role: "science",
+    token: "M_PLUS",
   },
   {
-    token: "M_MINUS",
-    label: "m-",
     ariaLabel: "Subtract from memory",
+    label: "m-",
     role: "science",
+    token: "M_MINUS",
   },
 ];
 
 const SCENARIO_PRESETS: ScenarioPreset[] = [
   {
+    apply: (currentValue) => currentValue * 1.05,
+    description: "Conservative growth scenario",
     id: "rise-five",
     label: "+5%",
-    description: "Conservative growth scenario",
-    apply: (currentValue) => currentValue * 1.05,
   },
   {
+    apply: (currentValue) => currentValue * 0.95,
+    description: "Light adjustment scenario",
     id: "drop-five",
     label: "-5%",
-    description: "Light adjustment scenario",
-    apply: (currentValue) => currentValue * 0.95,
   },
   {
+    apply: (currentValue) => currentValue * 1.15,
+    description: "Accelerated growth scenario",
     id: "rise-fifteen",
     label: "+15%",
-    description: "Accelerated growth scenario",
-    apply: (currentValue) => currentValue * 1.15,
   },
   {
+    apply: (currentValue) => currentValue * 0.85,
+    description: "Contraction scenario",
     id: "drop-fifteen",
     label: "-15%",
-    description: "Contraction scenario",
-    apply: (currentValue) => currentValue * 0.85,
   },
   {
+    apply: () => 0,
+    description: "Simulate break-even point",
     id: "break-even",
     label: "0",
-    description: "Simulate break-even point",
-    apply: () => 0,
   },
   {
+    apply: (_, baselineValue) => baselineValue,
+    description: "Return to initial balance",
     id: "baseline",
     label: "Baseline",
-    description: "Return to initial balance",
-    apply: (_, baselineValue) => baselineValue,
   },
 ];
 
 const KEYBOARD_TOKEN_MAP: Record<string, string> = {
-  Enter: "=",
-  "=": "=",
-  Escape: "AC",
-  Backspace: "BACKSPACE",
-  "%": "PERCENT",
-  "+": "+",
   "-": "-",
+  ".": ".",
   "*": "*",
   "/": "/",
-  ".": ".",
+  "%": "PERCENT",
+  "+": "+",
+  "=": "=",
+  Backspace: "BACKSPACE",
+  Enter: "=",
+  Escape: "AC",
 };
 
 function normalizeNumber(value: number): number {
@@ -233,7 +244,7 @@ function toDisplayValue(value: number): string {
 
   const asString = normalized.toString();
   if (asString.includes("e")) {
-    return normalized.toFixed(DISPLAY_MAX_DECIMALS).replace(/\.?0+$/, "");
+    return normalized.toFixed(DISPLAY_MAX_DECIMALS).replace(TRAILING_ZEROS, "");
   }
 
   return asString;
@@ -370,65 +381,6 @@ function getButtonClassName(role: ButtonRole) {
   return "h-13 rounded-md text-lg font-semibold";
 }
 
-function parseClipboardNumber(
-  rawText: string,
-  formatPreference: NumberFormatId,
-): number | null {
-  if (!rawText) {
-    return null;
-  }
-
-  const cleaned = rawText.replace(/[^\d.,-]/g, "").trim();
-  if (!cleaned) {
-    return null;
-  }
-
-  const isNegative = cleaned.startsWith("-");
-  const digits = cleaned.replace(/-/g, "");
-  if (!digits) {
-    return null;
-  }
-
-  const lastDot = digits.lastIndexOf(".");
-  const lastComma = digits.lastIndexOf(",");
-  const dotCount = (digits.match(/\./g) || []).length;
-  const commaCount = (digits.match(/,/g) || []).length;
-
-  let decimalIdx = -1;
-
-  if (formatPreference === "dot-decimal") {
-    decimalIdx = lastDot;
-  } else if (formatPreference === "comma-decimal") {
-    decimalIdx = lastComma;
-  } else if (lastDot !== -1 && lastComma !== -1) {
-    decimalIdx = Math.max(lastDot, lastComma);
-  } else if (lastDot !== -1) {
-    decimalIdx = dotCount === 1 ? lastDot : -1;
-  } else if (lastComma !== -1) {
-    decimalIdx = commaCount === 1 ? lastComma : -1;
-  }
-
-  let integerPart: string;
-  let decimalPart: string;
-  if (decimalIdx === -1) {
-    integerPart = digits.replace(/[.,]/g, "");
-    decimalPart = "";
-  } else {
-    integerPart = digits.slice(0, decimalIdx).replace(/[.,]/g, "");
-    decimalPart = digits.slice(decimalIdx + 1).replace(/[.,]/g, "");
-  }
-
-  if (!integerPart && !decimalPart) {
-    return null;
-  }
-
-  const numericString = `${isNegative ? "-" : ""}${integerPart || "0"}${
-    decimalPart ? `.${decimalPart}` : ""
-  }`;
-  const parsed = Number(numericString);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
 function isFormElement(target: EventTarget | null): boolean {
   const element = target as HTMLElement | null;
   if (!element) {
@@ -445,8 +397,8 @@ function isFormElement(target: EventTarget | null): boolean {
 
 export function BalanceCalculator() {
   const userEmail = useRouteUser();
-  const currency = usePreferredCurrency();
-  const { format: numberFormatPreference } = useNumberFormat();
+  const { formatPlain } = useCurrency();
+  const decimalConvention = useDecimalConvention();
   const historyIdRef = useRef(0);
 
   const [mode, setMode] = useState<CalculatorMode>("normal");
@@ -466,16 +418,16 @@ export function BalanceCalculator() {
 
   const initialBalanceRef = useRef(0);
   const initialDisplayRef = useRef("0");
-  const hasInitializedBalanceRef = useRef(false);
+  const hasInitializedBalanceRef: RefObject<boolean> = useRef(false);
 
   const { data, isPending, error } = useQuery({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: Boolean(userEmail),
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
@@ -515,10 +467,12 @@ export function BalanceCalculator() {
   const pushHistory = useCallback(
     (statement: string, resultDisplay: string) => {
       setHistory((previousHistory) => {
+        const id = historyIdRef.current;
+        historyIdRef.current += 1;
         const nextEntry: HistoryEntry = {
-          id: historyIdRef.current++,
-          statement,
+          id,
           result: formatDisplayValue(resultDisplay),
+          statement,
         };
 
         return [nextEntry, ...previousHistory].slice(0, HISTORY_LIMIT);
@@ -570,7 +524,7 @@ export function BalanceCalculator() {
 
   const handleDigit = useCallback(
     (digit: string) => {
-      if (!/^\d$/.test(digit)) {
+      if (!SINGLE_DIGIT.test(digit)) {
         return;
       }
 
@@ -845,7 +799,7 @@ export function BalanceCalculator() {
 
   const handleInputToken = useCallback(
     (token: string) => {
-      if (/^\d$/.test(token)) {
+      if (SINGLE_DIGIT.test(token)) {
         handleDigit(token);
         return;
       }
@@ -931,7 +885,7 @@ export function BalanceCalculator() {
         return;
       }
 
-      if (/^\d$/.test(event.key)) {
+      if (SINGLE_DIGIT.test(event.key)) {
         event.preventDefault();
         handleInputToken(event.key);
         return;
@@ -959,10 +913,7 @@ export function BalanceCalculator() {
       }
 
       const pastedText = event.clipboardData?.getData("text") ?? "";
-      const parsedValue = parseClipboardNumber(
-        pastedText,
-        numberFormatPreference,
-      );
+      const parsedValue = parseFormattedNumber(pastedText, decimalConvention);
 
       if (parsedValue === null) {
         setStatusMessage("Clipboard does not contain a valid number.");
@@ -982,7 +933,7 @@ export function BalanceCalculator() {
     return () => {
       window.removeEventListener("paste", handlePaste);
     };
-  }, [numberFormatPreference]);
+  }, [decimalConvention]);
 
   const visibleKeys = useMemo(
     () =>
@@ -1008,18 +959,18 @@ export function BalanceCalculator() {
   );
 
   const deltaValueLabel = useMemo(
-    () => formatCurrency(deltaValue, currency),
-    [deltaValue, currency],
+    () => formatPlain(deltaValue),
+    [deltaValue, formatPlain],
   );
 
   const baselineBalanceLabel = useMemo(
-    () => formatCurrency(baselineBalance, currency),
-    [baselineBalance, currency],
+    () => formatPlain(baselineBalance),
+    [baselineBalance, formatPlain],
   );
 
   const simulatedBalanceLabel = useMemo(
-    () => formatCurrency(simulatedValue, currency),
-    [simulatedValue, currency],
+    () => formatPlain(simulatedValue),
+    [simulatedValue, formatPlain],
   );
 
   if (!userEmail) {
@@ -1068,8 +1019,8 @@ export function BalanceCalculator() {
       <SimulationAlert />
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,30rem)_minmax(0,1fr)]">
-        <Card className="border-border/70 from-card via-card to-primary/5 relative h-fit overflow-hidden bg-linear-to-br">
-          <div className="from-primary/10 pointer-events-none absolute inset-0 bg-linear-to-br via-transparent to-transparent" />
+        <Card className="relative h-fit overflow-hidden border-border/70 bg-linear-to-br from-card via-card to-primary/5">
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
 
           <CardHeader className="relative space-y-4">
             <div className="flex items-start justify-between gap-3">
@@ -1119,17 +1070,17 @@ export function BalanceCalculator() {
           <CardContent className="relative space-y-4">
             <div
               className={cn(
-                "border-border/70 bg-background/85 rounded-md border p-4 text-right shadow-inner",
+                "rounded-md border border-border/70 bg-background/85 p-4 text-right shadow-inner",
                 display === "Error" && "border-destructive/50 text-destructive",
               )}
               role="status"
               aria-live="polite"
               aria-atomic="true"
             >
-              <p className="text-muted-foreground text-xs break-all">
+              <p className="break-all text-muted-foreground text-xs">
                 {expression}
               </p>
-              <p className="mt-1 text-[2.15rem] leading-tight font-semibold break-all sm:text-5xl">
+              <p className="mt-1 break-all font-semibold text-[2.15rem] leading-tight sm:text-5xl">
                 {displayLabel}
               </p>
             </div>
@@ -1225,7 +1176,7 @@ export function BalanceCalculator() {
                 ))}
               </div>
 
-              <div className="text-muted-foreground flex items-center gap-2 text-xs">
+              <div className="flex items-center gap-2 text-muted-foreground text-xs">
                 <Sigma className="size-3.5" aria-hidden="true" />
                 Current memory: {formatOperationValue(memoryValue)}
               </div>
@@ -1244,7 +1195,7 @@ export function BalanceCalculator() {
             </CardHeader>
             <CardContent>
               {history.length === 0 ? (
-                <div className="text-muted-foreground rounded-md border border-dashed p-4 text-center text-sm">
+                <div className="rounded-md border border-dashed p-4 text-center text-muted-foreground text-sm">
                   No operations registered yet.
                 </div>
               ) : (
@@ -1252,12 +1203,12 @@ export function BalanceCalculator() {
                   {history.map((entry) => (
                     <li
                       key={entry.id}
-                      className="bg-muted/40 rounded-md border px-3 py-2"
+                      className="rounded-md border bg-muted/40 px-3 py-2"
                     >
                       <p className="text-muted-foreground text-xs">
                         {entry.statement}
                       </p>
-                      <p className="text-sm font-medium">{entry.result}</p>
+                      <p className="font-medium text-sm">{entry.result}</p>
                     </li>
                   ))}
                 </ol>
@@ -1304,6 +1255,10 @@ function SimulationAlert() {
     balanceSimulationAlertDismissedAtom,
   );
 
+  const handleSetDismissed = useCallback(() => {
+    setDismissed(true);
+  }, [setDismissed]);
+
   if (dismissed) {
     return null;
   }
@@ -1319,9 +1274,9 @@ function SimulationAlert() {
       </AlertDescription>
       <AlertAction>
         <Button
-          variant="default"
+          variant="secondary"
           size="icon"
-          onClick={() => setDismissed(true)}
+          onClick={handleSetDismissed}
           aria-label="Dismiss simulation information"
         >
           <XIcon />

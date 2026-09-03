@@ -24,13 +24,13 @@ import { cn } from "~/lib/utils";
  * icon inherits `currentColor` instead of fighting it.
  */
 const DIRECTION_ICON: Record<LoanDirection, LucideIcon> = {
-  lent: ArrowDownLeftIcon,
   borrowed: ArrowUpRightIcon,
+  lent: ArrowDownLeftIcon,
 };
 
 const DIRECTION_COLOR: Record<LoanDirection, string> = {
-  lent: "text-success",
   borrowed: "text-destructive",
+  lent: "text-success",
 };
 
 type LoanDirectionIconProps = LucideProps & {
@@ -55,15 +55,15 @@ export function LoanDirectionIcon({
   );
 }
 
-type LoanDirectionLabelProps = {
-  direction: LoanDirection;
-  /** Set false to inherit the surrounding text color instead of the loan color. */
-  colored?: boolean;
+interface LoanDirectionLabelProps {
   /** Classes for the wrapper (e.g. text size/weight). */
   className?: string;
+  /** Set false to inherit the surrounding text color instead of the loan color. */
+  colored?: boolean;
+  direction: LoanDirection;
   /** Classes for the arrow alone (defaults to `size-3.5`). */
   iconClassName?: string;
-};
+}
 
 /**
  * The arrow paired with its perspective label ("Owed to me" / "I owe"). Use it

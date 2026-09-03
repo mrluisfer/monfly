@@ -7,24 +7,24 @@ export const updateUserAvatar = async (data: {
 }): Promise<ApiResponse<null>> => {
   try {
     await prismaClient.user.update({
-      where: { email: data.email },
       data: { avatarSeed: data.avatarSeed },
+      where: { email: data.email },
     });
 
     return {
+      data: null,
       error: false,
       message: "Avatar updated",
-      data: null,
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch {
     return {
+      data: null,
       error: true,
       message: "Error updating avatar",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

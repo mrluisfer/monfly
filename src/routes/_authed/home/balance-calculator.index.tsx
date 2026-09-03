@@ -18,7 +18,7 @@ function RouteComponent() {
         description="Simulate operations using your total balance without changing real data."
         actions={
           <div className="flex items-center gap-2">
-            <span className="text-muted-foreground text-xs font-medium">
+            <span className="font-medium text-muted-foreground text-xs">
               Number format
             </span>
             <NumberFormatBadge />

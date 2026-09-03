@@ -33,7 +33,7 @@ export async function hashPassword(password: string): Promise<string> {
     return await bcrypt.hash(password, saltRounds);
   } catch (error) {
     console.error("Error hashing password:", error);
-    throw new Error("Failed to hash password");
+    throw new Error("Failed to hash password", { cause: error });
   }
 }
 

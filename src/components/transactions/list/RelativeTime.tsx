@@ -2,13 +2,13 @@ import { format, formatDistanceStrict } from "date-fns";
 import { useNow } from "~/hooks/ui/useNow";
 import { cn } from "~/lib/utils";
 
-type RelativeTimeProps = {
+interface RelativeTimeProps {
+  className?: string;
   /** The moment to describe — accepts a Date, ISO string, or epoch ms. */
   date: Date | string | number;
   /** Optional text rendered before the relative label, e.g. "Recorded". */
   prefix?: string;
-  className?: string;
-};
+}
 
 /**
  * Renders a relative time label ("3 minutes ago") that actually keeps up with

@@ -7,8 +7,7 @@ import {
 import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 
-type PutTransactionInput = {
-  id: string;
+interface PutTransactionInput {
   data: {
     amount: number;
     type: string;
@@ -28,7 +27,8 @@ type PutTransactionInput = {
      */
     cardId?: string | null;
   };
-};
+  id: string;
+}
 
 export const putTransactionById = async (input: PutTransactionInput) => {
   try {
@@ -36,14 +36,14 @@ export const putTransactionById = async (input: PutTransactionInput) => {
 
     const updatedTransaction = await prismaClient.$transaction(async (tx) => {
       const oldTransaction = await tx.transaction.findUniqueOrThrow({
-        where: { id },
         select: {
           amount: true,
-          type: true,
-          userEmail: true,
           appliedToLoanId: true,
           cardId: true,
+          type: true,
+          userEmail: true,
         },
+        where: { id },
       });
 
       // ── Loan side: figure out what changed and emit signed deltas ─────────
@@ -62,27 +62,27 @@ export const putTransactionById = async (input: PutTransactionInput) => {
         const delta = transactionData.amount - oldTransaction.amount;
         if (delta !== 0) {
           await applyLoanPaymentDelta(tx, {
-            loanId: oldLoanId,
             delta,
-            userEmail: oldTransaction.userEmail,
+            loanId: oldLoanId,
             transactionType: transactionData.type,
+            userEmail: oldTransaction.userEmail,
           });
         }
       } else {
         if (oldLoanId) {
           await applyLoanPaymentDelta(tx, {
-            loanId: oldLoanId,
             delta: -oldTransaction.amount,
-            userEmail: oldTransaction.userEmail,
+            loanId: oldLoanId,
             transactionType: oldTransaction.type,
+            userEmail: oldTransaction.userEmail,
           });
         }
         if (nextLoanId) {
           await applyLoanPaymentDelta(tx, {
-            loanId: nextLoanId,
             delta: transactionData.amount,
-            userEmail: oldTransaction.userEmail,
+            loanId: nextLoanId,
             transactionType: transactionData.type,
+            userEmail: oldTransaction.userEmail,
           });
         }
       }
@@ -99,13 +99,12 @@ export const putTransactionById = async (input: PutTransactionInput) => {
       const balanceDelta = newImpact - oldImpact;
 
       const updated = await tx.transaction.update({
-        where: { id },
         data: {
           amount: transactionData.amount,
-          type: transactionData.type,
           category: transactionData.category,
-          description: transactionData.description,
           date: transactionData.date,
+          description: transactionData.description,
+          type: transactionData.type,
           // Only write the column if the caller passed it; otherwise leave as-is.
           ...(transactionData.appliedToLoanId === undefined
             ? {}
@@ -114,12 +113,13 @@ export const putTransactionById = async (input: PutTransactionInput) => {
             ? {}
             : { cardId: transactionData.cardId }),
         },
+        where: { id },
       });
 
       if (balanceDelta !== 0) {
         await tx.user.update({
-          where: { email: oldTransaction.userEmail },
           data: { totalBalance: { increment: balanceDelta } },
+          where: { email: oldTransaction.userEmail },
         });
       }
 
@@ -137,21 +137,21 @@ export const putTransactionById = async (input: PutTransactionInput) => {
       if (oldCardId && oldCardId === nextCardId) {
         if (balanceDelta !== 0) {
           await tx.card.updateMany({
-            where: { id: oldCardId, userEmail: oldTransaction.userEmail },
             data: { balance: { increment: balanceDelta } },
+            where: { id: oldCardId, userEmail: oldTransaction.userEmail },
           });
         }
       } else {
         if (oldCardId) {
           await tx.card.updateMany({
-            where: { id: oldCardId, userEmail: oldTransaction.userEmail },
             data: { balance: { increment: -oldImpact } },
+            where: { id: oldCardId, userEmail: oldTransaction.userEmail },
           });
         }
         if (nextCardId) {
           await tx.card.updateMany({
-            where: { id: nextCardId, userEmail: oldTransaction.userEmail },
             data: { balance: { increment: newImpact } },
+            where: { id: nextCardId, userEmail: oldTransaction.userEmail },
           });
         }
       }
@@ -160,28 +160,28 @@ export const putTransactionById = async (input: PutTransactionInput) => {
     });
 
     return {
-      success: true,
-      message: "Transaction updated successfully",
       data: updatedTransaction,
       error: false,
+      message: "Transaction updated successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<Transaction>;
   } catch (error) {
     if (error instanceof LoanPaymentError) {
       return {
+        data: null,
         error: true,
         message: error.message,
-        data: null,
-        success: false,
         statusCode: error.statusCode,
+        success: false,
       } as ApiResponse<null>;
     }
     return {
+      data: null,
       error: true,
       message: "Transaction not found or error updating transaction",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<Transaction | null>;
   }
 };

@@ -27,10 +27,10 @@ import {
 import { cn } from "~/lib/utils";
 
 interface UserFormActionsProps {
-  submitting: boolean;
   hasChanges: boolean;
-  onExport?: () => void | Promise<void>;
   onDelete?: () => void | Promise<void>;
+  onExport?: () => void | Promise<void>;
+  submitting: boolean;
 }
 
 export function UserFormActions({
@@ -43,7 +43,9 @@ export function UserFormActions({
   const [deleting, setDeleting] = useState(false);
 
   const runExport = async () => {
-    if (!onExport || exporting) return;
+    if (!onExport || exporting) {
+      return;
+    }
     setExporting(true);
     try {
       await onExport();
@@ -53,7 +55,9 @@ export function UserFormActions({
   };
 
   const runDelete = async () => {
-    if (!onDelete || deleting) return;
+    if (!onDelete || deleting) {
+      return;
+    }
     setDeleting(true);
     try {
       await onDelete();
@@ -66,7 +70,7 @@ export function UserFormActions({
     <div
       className={cn(
         "sticky bottom-3 z-30 mt-6",
-        "border-border/60 bg-background/75 ring-foreground/5 rounded-2xl border px-3 py-2.5 shadow-[0_22px_36px_-30px_rgba(2,6,23,0.55)] ring-1 backdrop-blur-md",
+        "rounded-2xl border border-border/60 bg-background/75 px-3 py-2.5 shadow-[0_22px_36px_-30px_rgba(2,6,23,0.55)] ring-1 ring-foreground/5 backdrop-blur-md",
         "supports-backdrop-filter:bg-background/65",
       )}
     >
@@ -127,7 +131,7 @@ export function UserFormActions({
               <AlertDialogHeader>
                 <span
                   data-slot="alert-dialog-media"
-                  className="bg-destructive/10 text-destructive mb-2 inline-flex size-16 items-center justify-center rounded-full"
+                  className="mb-2 inline-flex size-16 items-center justify-center rounded-full bg-destructive/10 text-destructive"
                   aria-hidden="true"
                 >
                   <CircleAlertIcon />
@@ -154,7 +158,7 @@ export function UserFormActions({
 
           <span
             aria-hidden="true"
-            className="bg-border/60 hidden h-6 w-px sm:inline-block"
+            className="hidden h-6 w-px bg-border/60 sm:inline-block"
           />
 
           <Button
@@ -186,7 +190,7 @@ function StatusPill({
   if (submitting) {
     return (
       <span
-        className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+        className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 font-medium text-primary text-xs"
         aria-live="polite"
       >
         <LoaderIcon className="size-3 animate-spin" aria-hidden="true" />
@@ -197,7 +201,7 @@ function StatusPill({
 
   if (hasChanges) {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-700 dark:text-amber-300">
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-1 font-medium text-amber-700 text-xs dark:text-amber-300">
         <CircleAlertIcon className="size-3" aria-hidden="true" />
         Unsaved changes
       </span>
@@ -205,7 +209,7 @@ function StatusPill({
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 font-medium text-emerald-700 text-xs dark:text-emerald-300">
       <CheckCircle2Icon className="size-3" aria-hidden="true" />
       All changes saved
     </span>

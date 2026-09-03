@@ -31,13 +31,13 @@ export const Route = createFileRoute("/_authed/user/help/")({
   component: HelpRoute,
 });
 
-type QuickLink = {
-  title: string;
+interface QuickLink {
+  accent: string;
   description: string;
   icon: LucideIcon;
+  title: string;
   to: string;
-  accent: string;
-};
+}
 
 const quickLinks: QuickLink[] = [
   {
@@ -71,10 +71,10 @@ const quickLinks: QuickLink[] = [
   },
 ];
 
-type Faq = {
-  q: string;
+interface Faq {
   a: string;
-};
+  q: string;
+}
 
 const faqs: Faq[] = [
   {
@@ -103,10 +103,10 @@ const faqs: Faq[] = [
   },
 ];
 
-type Shortcut = {
-  keys: string[];
+interface Shortcut {
   description: string;
-};
+  keys: string[];
+}
 
 const shortcuts: Shortcut[] = [
   { keys: ["Esc"], description: "Close dialogs and drawers" },
@@ -141,7 +141,7 @@ function HelpRoute() {
               <Link
                 key={link.to}
                 to={link.to}
-                className="group bg-card border-border/60 hover:border-border hover:bg-accent/30 flex flex-col gap-3 rounded-2xl border p-4 shadow-xs transition-all hover:-translate-y-0.5 hover:shadow-md"
+                className="group flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-4 shadow-xs transition-all hover:-translate-y-0.5 hover:border-border hover:bg-accent/30 hover:shadow-md"
               >
                 <span
                   aria-hidden="true"
@@ -150,10 +150,10 @@ function HelpRoute() {
                   <Icon className="size-5" />
                 </span>
                 <div className="space-y-1">
-                  <p className="text-foreground text-sm font-semibold tracking-tight">
+                  <p className="font-semibold text-foreground text-sm tracking-tight">
                     {link.title}
                   </p>
-                  <p className="text-muted-foreground line-clamp-2 text-xs leading-relaxed">
+                  <p className="line-clamp-2 text-muted-foreground text-xs leading-relaxed">
                     {link.description}
                   </p>
                 </div>
@@ -167,13 +167,13 @@ function HelpRoute() {
         title="Frequently asked questions"
         description="Short answers to the most common questions about how Monfly works."
       >
-        <Accordion className="bg-card border-border/60 divide-border/60 divide-y">
+        <Accordion className="divide-y divide-border/60 border-border/60 bg-card">
           {faqs.map((faq) => (
             <AccordionItem key={faq.q} value={faq.q} className={"px-2"}>
-              <AccordionTrigger className="text-left text-sm font-medium">
+              <AccordionTrigger className="text-left font-medium text-sm">
                 <span className="flex items-center gap-2">
                   <MessageCircleQuestionIcon
-                    className="text-muted-foreground group-aria-expanded/accordion-trigger:text-primary size-4 shrink-0 transition-colors"
+                    className="size-4 shrink-0 text-muted-foreground transition-colors group-aria-expanded/accordion-trigger:text-primary"
                     aria-hidden="true"
                   />
                   {faq.q}
@@ -194,7 +194,7 @@ function HelpRoute() {
         >
           <ul
             role="list"
-            className="bg-card border-border/60 divide-border/60 divide-y overflow-hidden rounded-2xl border"
+            className="divide-y divide-border/60 overflow-hidden rounded-2xl border border-border/60 bg-card"
           >
             {shortcuts.map((shortcut) => (
               <li
@@ -220,7 +220,7 @@ function HelpRoute() {
         >
           <ul
             role="list"
-            className="bg-card border-border/60 space-y-3 rounded-2xl border p-4"
+            className="space-y-3 rounded-2xl border border-border/60 bg-card p-4"
           >
             {[
               "Log transactions the same day to avoid forgetting context.",
@@ -230,10 +230,10 @@ function HelpRoute() {
             ].map((tip) => (
               <li
                 key={tip}
-                className="text-foreground flex items-start gap-2 text-sm"
+                className="flex items-start gap-2 text-foreground text-sm"
               >
                 <ListChecksIcon
-                  className="text-primary mt-0.5 size-4 shrink-0"
+                  className="mt-0.5 size-4 shrink-0 text-primary"
                   aria-hidden="true"
                 />
                 <span className="leading-relaxed">{tip}</span>
@@ -247,10 +247,10 @@ function HelpRoute() {
         title="Privacy & data"
         description="What we store and how we protect it."
       >
-        <div className="bg-card border-border/60 flex flex-col gap-3 rounded-2xl border p-5 sm:flex-row sm:items-start sm:gap-4">
+        <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-5 sm:flex-row sm:items-start sm:gap-4">
           <span
             aria-hidden="true"
-            className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl"
+            className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"
           >
             <LockKeyholeIcon className="size-5" />
           </span>
@@ -274,16 +274,16 @@ function HelpRoute() {
         title="Still need a hand?"
         description="Reach out and we'll get back to you as soon as we can."
       >
-        <div className="bg-card border-border/60 flex flex-col gap-4 rounded-2xl border p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 rounded-2xl border border-border/60 bg-card p-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-xl"
+              className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"
             >
               <BookOpenIcon className="size-5" />
             </span>
             <div className="space-y-1">
-              <p className="text-foreground text-sm font-medium">
+              <p className="font-medium text-foreground text-sm">
                 Contact support
               </p>
               <p className="text-muted-foreground text-xs">

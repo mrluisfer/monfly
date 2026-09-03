@@ -13,10 +13,10 @@ export const getTransactionsCountByMonthServer = createServerFn({
   .handler(async ({ data }) => {
     const sessionEmail = await resolveSessionEmail(data.email);
     enforceRateLimit({
-      scope: "chart:transactions-count-by-month",
-      limit: 120,
-      windowMs: 60_000,
       identifier: sessionEmail,
+      limit: 120,
+      scope: "chart:transactions-count-by-month",
+      windowMs: 60_000,
     });
 
     return await getTransactionsCountByMonth({ email: sessionEmail });

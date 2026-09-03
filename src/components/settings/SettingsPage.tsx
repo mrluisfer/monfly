@@ -34,7 +34,7 @@ import ToggleDarkMode from "./ToggleDarkMode";
 
 export function SettingsPage() {
   return (
-    <div className="bg-background relative min-h-dvh overflow-x-clip">
+    <div className="relative min-h-dvh overflow-x-clip bg-background">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -top-20 left-1/2 -z-10 size-[40rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,var(--primary)/8%,transparent_70%)] blur-3xl"
@@ -44,24 +44,24 @@ export function SettingsPage() {
         className="pointer-events-none absolute top-40 right-0 -z-10 size-72 rounded-full bg-[radial-gradient(circle,#0f766e_0%,transparent_72%)] opacity-15 blur-3xl dark:opacity-20"
       />
 
-      <main className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-8 sm:py-14 md:max-w-6xl lg:container lg:max-w-none lg:pt-0 lg:pb-16">
+      <main className="mx-auto w-full max-w-4xl px-4 py-10 lg:container sm:px-8 sm:py-14 md:max-w-6xl lg:max-w-none lg:pt-0 lg:pb-16">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="from-primary/20 via-primary/10 text-primary ring-primary/20 relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br to-transparent ring-1"
+              className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 via-primary/10 to-transparent text-primary ring-1 ring-primary/20"
             >
               <SlidersHorizontalIcon className="size-5" />
             </span>
             <div className="space-y-1">
-              <span className="bg-foreground/5 text-muted-foreground inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[0.65rem] font-semibold tracking-[0.13em] uppercase">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/5 px-2 py-0.5 font-semibold text-[0.65rem] text-muted-foreground uppercase tracking-[0.13em]">
                 <Sparkles className="size-3" aria-hidden="true" />
                 Workspace settings
               </span>
-              <h1 className="text-foreground font-[family-name:var(--font-syne)] text-2xl font-semibold tracking-tight sm:text-3xl">
+              <h1 className="font-[family-name:var(--font-syne)] font-semibold text-2xl text-foreground tracking-tight sm:text-3xl">
                 Settings
               </h1>
-              <p className="text-muted-foreground max-w-xl text-sm">
+              <p className="max-w-xl text-muted-foreground text-sm">
                 Personalize the look, behavior, and notifications of your Monfly
                 workspace. Changes save instantly to this device.
               </p>
@@ -69,7 +69,7 @@ export function SettingsPage() {
           </div>
         </header>
 
-        <div className="divide-border/60 mt-10 divide-y sm:mt-14">
+        <div className="mt-10 divide-y divide-border/60 sm:mt-14">
           <SettingsSection
             icon={PaletteIcon}
             title="Appearance"
@@ -89,10 +89,10 @@ export function SettingsPage() {
                   disabled
                   aria-disabled="true"
                   title="Coming soon"
-                  className="bg-foreground/5 text-muted-foreground inline-flex cursor-not-allowed items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium opacity-70"
+                  className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full bg-foreground/5 px-3 py-1.5 font-medium text-muted-foreground text-sm opacity-70"
                 >
                   Open gallery
-                  <span className="bg-muted-foreground/15 rounded-full px-1.5 py-0.5 text-[0.6rem] font-semibold tracking-wide uppercase">
+                  <span className="rounded-full bg-muted-foreground/15 px-1.5 py-0.5 font-semibold text-[0.6rem] uppercase tracking-wide">
                     Soon
                   </span>
                 </button>
@@ -140,7 +140,7 @@ export function SettingsPage() {
           >
             <SettingsRow
               title="Number format"
-              description="Affects how pasted values are parsed in the balance calculator and future inputs."
+              description="How amounts are read and written everywhere — the transaction form, the calculator, lists and charts."
               control={<NumberFormatSelector />}
             />
           </SettingsSection>
@@ -205,12 +205,12 @@ export function SettingsPage() {
   );
 }
 
-type SettingsSectionProps = {
+interface SettingsSectionProps {
+  children: React.ReactNode;
+  description: string;
   icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
   title: string;
-  description: string;
-  children: React.ReactNode;
-};
+}
 
 function SettingsSection({
   icon: Icon,
@@ -223,12 +223,12 @@ function SettingsSection({
       <header className="flex items-start gap-3 md:sticky md:top-24 md:self-start">
         <span
           aria-hidden="true"
-          className="from-primary/15 to-primary/0 text-primary ring-primary/15 after:to-foreground/5 relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ring-1 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent"
+          className="relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-primary/15 to-primary/0 text-primary ring-1 ring-primary/15 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent after:to-foreground/5"
         >
           <Icon className="size-4" aria-hidden={true} />
         </span>
         <div className="min-w-0 space-y-1">
-          <h2 className="text-foreground font-(family-name:--font-syne) text-sm font-semibold tracking-tight sm:text-base">
+          <h2 className="font-(family-name:--font-syne) font-semibold text-foreground text-sm tracking-tight sm:text-base">
             {title}
           </h2>
           <p className="text-muted-foreground text-xs leading-relaxed sm:text-[0.8rem]">
@@ -236,17 +236,17 @@ function SettingsSection({
           </p>
         </div>
       </header>
-      <ul className="divide-border/50 min-w-0 divide-y">{children}</ul>
+      <ul className="min-w-0 divide-y divide-border/50">{children}</ul>
     </section>
   );
 }
 
-type SettingsRowProps = {
-  title: string;
-  description: string;
-  control: React.ReactNode;
+interface SettingsRowProps {
   className?: string;
-};
+  control: React.ReactNode;
+  description: string;
+  title: string;
+}
 
 function SettingsRow({
   title,
@@ -262,7 +262,7 @@ function SettingsRow({
       )}
     >
       <div className="min-w-0 space-y-0.5 pr-4">
-        <p className="text-foreground text-sm font-medium">{title}</p>
+        <p className="font-medium text-foreground text-sm">{title}</p>
         <p className="text-muted-foreground text-xs leading-relaxed">
           {description}
         </p>
@@ -272,11 +272,11 @@ function SettingsRow({
   );
 }
 
-type PrivacyToggleRowProps = {
+interface PrivacyToggleRowProps {
   atom: PrimitiveAtom<boolean>;
-  title: string;
   description: string;
-};
+  title: string;
+}
 
 function PrivacyToggleRow({ atom, title, description }: PrivacyToggleRowProps) {
   const id = useId();
@@ -286,16 +286,16 @@ function PrivacyToggleRow({ atom, title, description }: PrivacyToggleRowProps) {
       <div className="min-w-0 space-y-0.5 pr-4">
         <label
           htmlFor={id}
-          className="text-foreground flex items-center gap-1.5 text-sm font-medium"
+          className="flex items-center gap-1.5 font-medium text-foreground text-sm"
         >
           {enabled ? (
             <EyeOffIcon
-              className="text-muted-foreground size-3.5"
+              className="size-3.5 text-muted-foreground"
               aria-hidden="true"
             />
           ) : (
             <EyeIcon
-              className="text-muted-foreground size-3.5"
+              className="size-3.5 text-muted-foreground"
               aria-hidden="true"
             />
           )}
@@ -310,27 +310,27 @@ function PrivacyToggleRow({ atom, title, description }: PrivacyToggleRowProps) {
   );
 }
 
-type NavLinkProps = {
-  to: string;
-  label: string;
+interface NavLinkProps {
   hint?: string;
   icon?: LucideIcon;
-};
+  label: string;
+  to: string;
+}
 
 function NavLink({ to, label, hint, icon: Icon = UserIcon }: NavLinkProps) {
   return (
     <Link
       to={to}
-      className="group bg-foreground/5 text-foreground hover:bg-foreground/10 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium transition-colors"
+      className="group inline-flex items-center gap-1.5 rounded-full bg-foreground/5 px-3 py-1.5 font-medium text-foreground text-sm transition-colors hover:bg-foreground/10"
     >
       {hint ? (
         <span className="text-muted-foreground text-xs">{hint}</span>
       ) : (
-        <Icon className="text-muted-foreground size-3.5" aria-hidden="true" />
+        <Icon className="size-3.5 text-muted-foreground" aria-hidden="true" />
       )}
       {label}
       <ArrowUpRight
-        className="text-muted-foreground size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+        className="size-3.5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
         aria-hidden="true"
       />
     </Link>

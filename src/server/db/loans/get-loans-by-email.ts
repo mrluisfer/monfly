@@ -2,10 +2,10 @@ import type { Loan } from "@prisma/client";
 import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 
-type GetLoansParams = {
+interface GetLoansParams {
   email: string;
   status?: string;
-};
+}
 
 interface LoansResponse<T> extends ApiResponse<T> {
   total: number;
@@ -17,11 +17,11 @@ export const getLoansByEmail = async ({
 }: GetLoansParams): Promise<LoansResponse<Loan[] | null>> => {
   if (!email) {
     return {
+      data: null,
       error: true,
       message: "Email is required",
-      data: null,
-      success: false,
       statusCode: 400,
+      success: false,
       total: 0,
     };
   }
@@ -34,31 +34,31 @@ export const getLoansByEmail = async ({
 
     const [loans, total] = await Promise.all([
       prismaClient.loan.findMany({
-        where,
         // ponytail: status desc happens to order pending→partial→paid
         // alphabetically, so paid loans sink to the bottom; within each group,
         // newest first. Switch to an explicit ordinal if statuses ever change.
         orderBy: [{ status: "desc" }, { createdAt: "desc" }],
+        where,
       }),
       prismaClient.loan.count({ where }),
     ]);
 
     return {
+      data: loans,
       error: false,
       message: "Loans fetched successfully",
-      data: loans,
-      success: true,
       statusCode: 200,
+      success: true,
       total,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error fetching loans: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
       total: 0,
     };
   }

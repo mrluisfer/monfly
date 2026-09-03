@@ -19,7 +19,7 @@ export function ExternalLogin({
         <FcGoogle />
         {label}
       </Button>
-      <p className="text-muted-foreground text-center text-xs">
+      <p className="text-center text-muted-foreground text-xs">
         This feature is coming soon.
       </p>
     </div>

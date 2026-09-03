@@ -8,7 +8,9 @@ export function CountBadge({
   n: number;
   variant?: "default" | "secondary";
 }) {
-  if (!n) return null;
+  if (!n) {
+    return null;
+  }
   return (
     <Badge
       variant={variant ?? "default"}

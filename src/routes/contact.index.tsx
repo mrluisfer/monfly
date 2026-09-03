@@ -101,11 +101,11 @@ function ContactRoute() {
             <CardContent className="flex h-full flex-col gap-4">
               <div className="flex items-center gap-2">
                 <channel.icon className={`size-5 ${channel.tone}`} />
-                <Badge variant="secondary" className="tracking-wide uppercase">
+                <Badge variant="secondary" className="uppercase tracking-wide">
                   {channel.label}
                 </Badge>
               </div>
-              <p className="text-foreground font-[family-name:var(--font-syne)] text-lg font-semibold">
+              <p className="font-[family-name:var(--font-syne)] font-semibold text-foreground text-lg">
                 {channel.target}
               </p>
               <p className="text-muted-foreground text-sm">
@@ -138,11 +138,11 @@ function ContactRoute() {
           <CardContent>
             <div className="flex items-center gap-2">
               <MessageSquareHeart className="size-5 text-teal-600 dark:text-teal-300" />
-              <p className="text-foreground font-[family-name:var(--font-syne)] text-lg font-semibold">
+              <p className="font-[family-name:var(--font-syne)] font-semibold text-foreground text-lg">
                 Send us a quick message
               </p>
             </div>
-            <p className="text-muted-foreground mt-1 text-sm">
+            <p className="mt-1 text-muted-foreground text-sm">
               Prefer a guided form? This composer opens your email client with
               everything pre-filled.
             </p>
@@ -155,7 +155,7 @@ function ContactRoute() {
           <CardContent>
             <div className="flex items-center gap-2">
               <LifeBuoy className="size-5 text-amber-600 dark:text-amber-300" />
-              <p className="text-foreground font-[family-name:var(--font-syne)] text-lg font-semibold">
+              <p className="font-[family-name:var(--font-syne)] font-semibold text-foreground text-lg">
                 Frequently asked
               </p>
             </div>
@@ -164,12 +164,12 @@ function ContactRoute() {
               {faqs.map((faq) => (
                 <li
                   key={faq.question}
-                  className="border-border/60 bg-background/72 rounded-2xl border p-3"
+                  className="rounded-2xl border border-border/60 bg-background/72 p-3"
                 >
-                  <p className="text-foreground text-sm font-semibold">
+                  <p className="font-semibold text-foreground text-sm">
                     {faq.question}
                   </p>
-                  <p className="text-muted-foreground mt-1 text-xs">
+                  <p className="mt-1 text-muted-foreground text-xs">
                     {faq.answer}
                   </p>
                 </li>
@@ -182,10 +182,10 @@ function ContactRoute() {
       <Card size="sm" className="mt-6">
         <CardContent className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-foreground text-sm font-semibold">
+            <p className="font-semibold text-foreground text-sm">
               Looking for legal information?
             </p>
-            <p className="text-muted-foreground mt-1 text-xs">
+            <p className="mt-1 text-muted-foreground text-xs">
               Read our Privacy Policy and Terms & Conditions for the full
               picture.
             </p>
@@ -227,37 +227,37 @@ function ContactComposer() {
         window.location.href = `mailto:mrluisfeer@gmail.com?subject=${subject}&body=${body}`;
       }}
     >
-      <label className="text-muted-foreground grid gap-1 text-xs font-medium">
+      <label className="grid gap-1 font-medium text-muted-foreground text-xs">
         Your name
         <input
           name="name"
           required
           autoComplete="name"
           placeholder="Jane Doe"
-          className="border-border/65 bg-background/80 text-foreground focus:border-foreground/40 rounded-2xl border px-3 py-2 text-sm ring-0 transition outline-none"
+          className="rounded-2xl border border-border/65 bg-background/80 px-3 py-2 text-foreground text-sm outline-none ring-0 transition focus:border-foreground/40"
         />
       </label>
-      <label className="text-muted-foreground grid gap-1 text-xs font-medium">
+      <label className="grid gap-1 font-medium text-muted-foreground text-xs">
         Subject
         <input
           name="subject"
           required
           placeholder="What is this about?"
-          className="border-border/65 bg-background/80 text-foreground focus:border-foreground/40 rounded-2xl border px-3 py-2 text-sm transition outline-none"
+          className="rounded-2xl border border-border/65 bg-background/80 px-3 py-2 text-foreground text-sm outline-none transition focus:border-foreground/40"
         />
       </label>
-      <label className="text-muted-foreground grid gap-1 text-xs font-medium">
+      <label className="grid gap-1 font-medium text-muted-foreground text-xs">
         Message
         <textarea
           name="message"
           required
           rows={4}
           placeholder="Tell us what you need…"
-          className="border-border/65 bg-background/80 text-foreground focus:border-foreground/40 resize-none rounded-2xl border px-3 py-2 text-sm transition outline-none"
+          className="resize-none rounded-2xl border border-border/65 bg-background/80 px-3 py-2 text-foreground text-sm outline-none transition focus:border-foreground/40"
         />
       </label>
       <div className="flex items-center justify-between gap-3 pt-1">
-        <p className="text-muted-foreground text-[0.7rem] tracking-[0.13em] uppercase">
+        <p className="text-[0.7rem] text-muted-foreground uppercase tracking-[0.13em]">
           Opens your email client
         </p>
         <Button type="submit" size="sm">

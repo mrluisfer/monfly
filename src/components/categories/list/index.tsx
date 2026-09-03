@@ -69,7 +69,9 @@ export const CategoriesList = () => {
   const isFiltering = normalizedQuery.length > 0;
 
   const filteredCategories = useMemo(() => {
-    if (!isFiltering) return allCategories;
+    if (!isFiltering) {
+      return allCategories;
+    }
     return allCategories.filter((category) => {
       const name = category.name?.toLowerCase() ?? "";
       const iconName = category.icon?.toLowerCase() ?? "";
@@ -88,7 +90,9 @@ export const CategoriesList = () => {
   );
 
   const handleConfirmDelete = async () => {
-    if (selectedCategories.length === 0) return;
+    if (selectedCategories.length === 0) {
+      return;
+    }
     setIsDeleting(true);
     try {
       await handleDeleteCategories();
@@ -108,7 +112,7 @@ export const CategoriesList = () => {
 
   if (error) {
     return (
-      <Empty className="border-border/60 rounded-2xl border py-16">
+      <Empty className="rounded-2xl border border-border/60 py-16">
         <EmptyHeader>
           <EmptyMedia
             variant="icon"
@@ -125,7 +129,7 @@ export const CategoriesList = () => {
 
   if (categoriesCount === 0) {
     return (
-      <Empty className="border-border/60 bg-card rounded-2xl border py-20">
+      <Empty className="rounded-2xl border border-border/60 bg-card py-20">
         <EmptyHeader>
           <EmptyMedia variant="icon" className="bg-primary/10 text-primary">
             <FolderOpen aria-hidden="true" />
@@ -144,7 +148,7 @@ export const CategoriesList = () => {
     <div className="space-y-4">
       <header className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <h2 className="text-base font-semibold tracking-tight">
+          <h2 className="font-semibold text-base tracking-tight">
             Your categories
           </h2>
           <StatusBadge variant="neutral" size="sm">
@@ -181,7 +185,7 @@ export const CategoriesList = () => {
       />
 
       {filteredCategories.length === 0 && isFiltering && (
-        <Empty className="border-border/60 rounded-2xl border py-12">
+        <Empty className="rounded-2xl border border-border/60 py-12">
           <EmptyHeader>
             <EmptyMedia variant="icon" className="bg-muted">
               <Search aria-hidden="true" />
@@ -189,7 +193,7 @@ export const CategoriesList = () => {
             <EmptyTitle>No matches</EmptyTitle>
             <EmptyDescription>
               No categories match{" "}
-              <span className="text-foreground font-medium">
+              <span className="font-medium text-foreground">
                 &ldquo;{searchValue}&rdquo;
               </span>
               . Try a different term.
@@ -216,7 +220,7 @@ export const CategoriesList = () => {
       {filteredCategories.length > 0 && viewMode === EViewMode.LIST && (
         <ul
           role="list"
-          className="bg-card border-border/60 divide-border/60 divide-y overflow-hidden rounded-2xl border"
+          className="divide-y divide-border/60 overflow-hidden rounded-2xl border border-border/60 bg-card"
         >
           {filteredCategories.map((category) => {
             const isSelected = selectedSet.has(category.id);
@@ -267,12 +271,12 @@ export const CategoriesList = () => {
                   </div>
                   <div className="min-w-0 flex-1 space-y-1.5">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="text-foreground truncate text-sm font-semibold capitalize sm:text-base">
+                      <span className="truncate font-semibold text-foreground text-sm capitalize sm:text-base">
                         {category.name}
                       </span>
                       <Badge
                         variant="outline"
-                        className="border-border/60 text-muted-foreground gap-1 text-[10px] font-medium tracking-wide uppercase"
+                        className="gap-1 border-border/60 font-medium text-[10px] text-muted-foreground uppercase tracking-wide"
                       >
                         {getCategoryIconByName(category.icon, {
                           className: "size-3",
@@ -280,7 +284,7 @@ export const CategoriesList = () => {
                         {iconLabel}
                       </Badge>
                     </div>
-                    <div className="text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-muted-foreground text-xs">
                       <span className="flex items-center gap-1">
                         <ClockIcon
                           className="size-3 shrink-0"
@@ -289,14 +293,14 @@ export const CategoriesList = () => {
                         Added {createdRelative}
                       </span>
                       {wasEdited && (
-                        <span className="before:text-muted-foreground/50 before:mr-3 before:content-['·']">
+                        <span className="before:mr-3 before:text-muted-foreground/50 before:content-['·']">
                           Edited{" "}
                           {formatDistanceToNow(new Date(category.updatedAt), {
                             addSuffix: true,
                           })}
                         </span>
                       )}
-                      <code className="text-muted-foreground/70 bg-muted/60 hidden rounded-md px-1.5 py-0.5 font-mono text-[10px] sm:inline-block">
+                      <code className="hidden rounded-md bg-muted/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground/70 sm:inline-block">
                         {category.icon}
                       </code>
                     </div>

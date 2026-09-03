@@ -6,7 +6,7 @@ import {
 } from "@/zod-schemas/loan-schema";
 
 describe("LoanFormSchema", () => {
-  const base = { debtor: "Bob", amount: "250", direction: "lent" as const };
+  const base = { amount: "250", debtor: "Bob", direction: "lent" as const };
 
   it("accepts a valid loan form", () => {
     expect(LoanFormSchema.safeParse(base).success).toBe(true);
@@ -37,18 +37,18 @@ describe("LoanFormSchema", () => {
 describe("CreateLoanInputSchema (server shape)", () => {
   it("requires amount to be a positive number, not a string", () => {
     expect(
-      CreateLoanInputSchema.safeParse({ debtor: "Bob", amount: 250 }).success,
+      CreateLoanInputSchema.safeParse({ amount: 250, debtor: "Bob" }).success,
     ).toBe(true);
     expect(
-      CreateLoanInputSchema.safeParse({ debtor: "Bob", amount: "250" }).success,
+      CreateLoanInputSchema.safeParse({ amount: "250", debtor: "Bob" }).success,
     ).toBe(false);
   });
 
   it("rejects an invalid transactionId uuid", () => {
     expect(
       CreateLoanInputSchema.safeParse({
-        debtor: "Bob",
         amount: 250,
+        debtor: "Bob",
         transactionId: "not-a-uuid",
       }).success,
     ).toBe(false);

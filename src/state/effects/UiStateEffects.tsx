@@ -7,7 +7,9 @@ import {
 } from "~/state/atoms";
 
 function syncThemeClass(theme: "light" | "dark") {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") {
+    return;
+  }
   document.documentElement.classList.toggle("dark", theme === "dark");
 }
 
@@ -21,7 +23,9 @@ export function UiStateEffects() {
   }, [theme]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      return;
+    }
 
     const root = document.documentElement;
     root.setAttribute("data-theme", activeTheme);
@@ -36,7 +40,9 @@ export function UiStateEffects() {
   }, [activeTheme]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      return;
+    }
 
     const hasStoredTheme = window.localStorage.getItem("theme") !== null;
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -57,9 +63,11 @@ export function UiStateEffects() {
   }, [setTheme]);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      return;
+    }
 
-    const body = document.body;
+    const { body } = document;
     for (const cls of Array.from(body.classList)) {
       if (cls.startsWith("font-")) {
         body.classList.remove(cls);

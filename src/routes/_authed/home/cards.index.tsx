@@ -16,7 +16,9 @@ export const Route = createFileRoute("/_authed/home/cards/")({
 function CardsCountBadge() {
   const { data } = useCards();
   const count = data?.data?.length ?? 0;
-  if (count === 0) return null;
+  if (count === 0) {
+    return null;
+  }
   return (
     <StatusBadge variant="primary" size="md" icon={<WalletCardsIcon />}>
       {count} {count === 1 ? "card" : "cards"}

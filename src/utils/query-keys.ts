@@ -15,10 +15,79 @@ const withCard = <T extends readonly unknown[]>(
  * Type-safe query key factories for consistent query key generation
  */
 export const queryKeys = {
-  // User queries
-  user: {
-    all: () => [queryDictionary.user] as const,
-    byEmail: (email: string) => [queryDictionary.user, email] as const,
+  // Card queries
+  cards: {
+    all: (email: string) => [queryDictionary.cards, email] as const,
+    byEmail: (email: string) => [queryDictionary.cards, email] as const,
+  },
+
+  // Category queries
+  categories: {
+    all: () => [queryDictionary.categories] as const,
+    byEmail: (email: string) => [queryDictionary.categories, email] as const,
+  },
+
+  // Chart queries. They all share the [charts, email] prefix so a single
+  // invalidateQueries({ queryKey: queryKeys.charts.all(email) }) refreshes
+  // every chart after a transaction/category mutation. An optional cardId is
+  // appended last so card-scoped charts still match the [charts, email] prefix.
+  charts: {
+    all: (email: string) => [queryDictionary.charts, email] as const,
+    byCategory: (email: string, cardId?: string | null) =>
+      withCard(
+        [
+          queryDictionary.charts,
+          email,
+          queryDictionary.incomeExpenseByCategory,
+        ] as const,
+        cardId,
+      ),
+    byMonth: (email: string, cardId?: string | null) =>
+      withCard(
+        [
+          queryDictionary.charts,
+          email,
+          queryDictionary.transactionsByMonth,
+        ] as const,
+        cardId,
+      ),
+    dailyActivity: (email: string, cardId?: string | null) =>
+      withCard(
+        [queryDictionary.charts, email, queryDictionary.dailyActivity] as const,
+        cardId,
+      ),
+    incomeExpense: (email: string, cardId?: string | null) =>
+      withCard(
+        [
+          queryDictionary.charts,
+          email,
+          queryDictionary.incomeExpenseData,
+        ] as const,
+        cardId,
+      ),
+    trending: (
+      email: string,
+      type: "income" | "expense",
+      cardId?: string | null,
+    ) =>
+      withCard(
+        [
+          queryDictionary.charts,
+          email,
+          queryDictionary.trendingMonthly,
+          type,
+        ] as const,
+        cardId,
+      ),
+  },
+
+  // Loan queries. Suggestion lists live under the [loans, email] prefix so
+  // invalidateLoanQueries (which invalidates that prefix) also refreshes the
+  // debtor autocomplete right after a new loan is created.
+  loans: {
+    all: (email: string) => [queryDictionary.loans, email] as const,
+    debtors: (email: string) =>
+      [queryDictionary.loans, email, queryDictionary.loanDebtors] as const,
   },
 
   // Transaction queries
@@ -38,80 +107,10 @@ export const queryKeys = {
         cardId,
       ),
   },
-
-  // Category queries
-  categories: {
-    all: () => [queryDictionary.categories] as const,
-    byEmail: (email: string) => [queryDictionary.categories, email] as const,
-  },
-
-  // Loan queries. Suggestion lists live under the [loans, email] prefix so
-  // invalidateLoanQueries (which invalidates that prefix) also refreshes the
-  // debtor autocomplete right after a new loan is created.
-  loans: {
-    all: (email: string) => [queryDictionary.loans, email] as const,
-    debtors: (email: string) =>
-      [queryDictionary.loans, email, queryDictionary.loanDebtors] as const,
-  },
-
-  // Card queries
-  cards: {
-    all: (email: string) => [queryDictionary.cards, email] as const,
-    byEmail: (email: string) => [queryDictionary.cards, email] as const,
-  },
-
-  // Chart queries. They all share the [charts, email] prefix so a single
-  // invalidateQueries({ queryKey: queryKeys.charts.all(email) }) refreshes
-  // every chart after a transaction/category mutation. An optional cardId is
-  // appended last so card-scoped charts still match the [charts, email] prefix.
-  charts: {
-    all: (email: string) => [queryDictionary.charts, email] as const,
-    incomeExpense: (email: string, cardId?: string | null) =>
-      withCard(
-        [
-          queryDictionary.charts,
-          email,
-          queryDictionary.incomeExpenseData,
-        ] as const,
-        cardId,
-      ),
-    byCategory: (email: string, cardId?: string | null) =>
-      withCard(
-        [
-          queryDictionary.charts,
-          email,
-          queryDictionary.incomeExpenseByCategory,
-        ] as const,
-        cardId,
-      ),
-    byMonth: (email: string, cardId?: string | null) =>
-      withCard(
-        [
-          queryDictionary.charts,
-          email,
-          queryDictionary.transactionsByMonth,
-        ] as const,
-        cardId,
-      ),
-    trending: (
-      email: string,
-      type: "income" | "expense",
-      cardId?: string | null,
-    ) =>
-      withCard(
-        [
-          queryDictionary.charts,
-          email,
-          queryDictionary.trendingMonthly,
-          type,
-        ] as const,
-        cardId,
-      ),
-    dailyActivity: (email: string, cardId?: string | null) =>
-      withCard(
-        [queryDictionary.charts, email, queryDictionary.dailyActivity] as const,
-        cardId,
-      ),
+  // User queries
+  user: {
+    all: () => [queryDictionary.user] as const,
+    byEmail: (email: string) => [queryDictionary.user, email] as const,
   },
 } as const;
 

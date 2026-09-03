@@ -9,23 +9,21 @@ export enum ManagementTab {
 }
 
 interface ManagementTabsProps {
-  /** Default tab to show when component mounts (uncontrolled mode) */
-  defaultTab?: ManagementTab;
   /** Currently active tab (controlled mode) */
   activeTab?: string;
-  /** Callback when tab changes. Required for controlled mode */
-  onTabChange?: (tab: string) => void;
   /** Optional className for the tabs container */
   className?: string;
+  /** Default tab to show when component mounts (uncontrolled mode) */
+  defaultTab?: ManagementTab;
+  /** Callback when tab changes. Required for controlled mode */
+  onTabChange?: (tab: string) => void;
 }
 
 /** Helper function to check if a specific tab is active */
 export const isTabActive = (
   currentTab: string,
   targetTab: ManagementTab,
-): boolean => {
-  return currentTab === targetTab;
-};
+): boolean => currentTab === targetTab;
 
 /** Get all available tabs */
 export const getAvailableTabs = () => Object.values(ManagementTab);
@@ -44,9 +42,9 @@ export const useManagementTabs = (
 
   return {
     activeTab,
+    isActive,
     setActiveTab,
     switchToTab,
-    isActive,
   };
 };
 
@@ -85,7 +83,7 @@ export const ManagementTabs = ({
     useState<string>(defaultTab);
 
   // Use controlled or uncontrolled state
-  const currentTab = activeTab !== undefined ? activeTab : internalActiveTab;
+  const currentTab = activeTab === undefined ? internalActiveTab : activeTab;
 
   const handleTabChange = (tab: string) => {
     if (activeTab === undefined) {

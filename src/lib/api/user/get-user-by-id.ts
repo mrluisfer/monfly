@@ -14,24 +14,24 @@ export const getUserByIdServer = createServerFn({ method: "GET" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "user:by-id",
-        limit: 60,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 60,
+        scope: "user:by-id",
+        windowMs: 60_000,
       });
 
       const targetUser = await prismaClient.user.findUnique({
-        where: { id: data.userId },
         select: { email: true },
+        where: { id: data.userId },
       });
 
       if (!targetUser || targetUser.email !== sessionEmail) {
         return {
+          data: null,
           error: true,
           message: "User not found",
-          data: null,
-          success: false,
           statusCode: 404,
+          success: false,
         } as ApiResponse<null>;
       }
 
@@ -43,11 +43,11 @@ export const getUserByIdServer = createServerFn({ method: "GET" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error fetching user",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

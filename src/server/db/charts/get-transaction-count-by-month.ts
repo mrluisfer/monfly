@@ -29,34 +29,38 @@ export const getTransactionsCountByMonth = async ({
       ORDER BY 1 ASC
     `;
 
-    type ChartRow = { month: string; year: number; count: number };
+    interface ChartRow {
+      count: number;
+      month: string;
+      year: number;
+    }
 
     const chartData: ChartRow[] = rows.map((row) => {
       const date = new Date(row.month);
       return {
+        count: row.count,
         // Fixed locale + UTC so labels are deterministic across environments:
         // date_trunc returns UTC timestamps, and local getters could shift the
         // bucket into the previous month on non-UTC machines.
         month: date.toLocaleString("en-US", { month: "long", timeZone: "UTC" }),
         year: date.getUTCFullYear(),
-        count: row.count,
       };
     });
 
     return {
       data: chartData,
-      message: "Transactions by month retrieved successfully",
-      success: true,
       error: false,
+      message: "Transactions by month retrieved successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<typeof chartData>;
   } catch {
     return {
       data: null,
-      message: "Failed to retrieve transactions by month",
-      success: false,
       error: true,
+      message: "Failed to retrieve transactions by month",
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

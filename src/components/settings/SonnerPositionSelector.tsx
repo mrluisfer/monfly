@@ -27,13 +27,13 @@ function PositionGlyph({
     <span
       aria-hidden="true"
       className={cn(
-        "border-border/70 bg-muted/40 relative inline-flex h-4 w-5 shrink-0 rounded-[3px] border",
+        "relative inline-flex h-4 w-5 shrink-0 rounded-[3px] border border-border/70 bg-muted/40",
         className,
       )}
     >
       <span
         className={cn(
-          "bg-primary absolute size-1.5 rounded-full",
+          "absolute size-1.5 rounded-full bg-primary",
           vertical === "top" ? "top-0.5" : "bottom-0.5",
           horizontal === "left" && "left-0.5",
           horizontal === "right" && "right-0.5",
@@ -46,12 +46,12 @@ function PositionGlyph({
 
 const POSITION_GROUPS = [
   {
-    label: "Top",
     items: sonnerPositions.filter((p) => p.value.startsWith("top")),
+    label: "Top",
   },
   {
-    label: "Bottom",
     items: sonnerPositions.filter((p) => p.value.startsWith("bottom")),
+    label: "Bottom",
   },
 ];
 
@@ -61,9 +61,9 @@ export const SonnerPositionSelector = () => {
   const handlePositionChange = (value: SonnerPosition) => {
     setPosition(value);
     sileo.info({
-      title: "Notification position updated",
       description:
         sonnerPositions.find((p) => p.value === value)?.name ?? value,
+      title: "Notification position updated",
     });
   };
 
@@ -71,7 +71,9 @@ export const SonnerPositionSelector = () => {
     <Select
       value={position}
       onValueChange={(value) => {
-        if (value) handlePositionChange(value as SonnerPosition);
+        if (value) {
+          handlePositionChange(value as SonnerPosition);
+        }
       }}
     >
       <SelectTrigger className="w-full sm:w-56">

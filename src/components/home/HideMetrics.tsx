@@ -19,12 +19,12 @@ export const HideMetrics = ({ className }: { className?: string }) => {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <div className="flex items-center gap-3">
-              <div className="bg-muted flex size-10 shrink-0 items-center justify-center rounded-full">
-                <VisibilityIcon className="text-primary size-4" />
+              <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-muted">
+                <VisibilityIcon className="size-4 text-primary" />
               </div>
               <div className="min-w-0">
                 <label
-                  className="text-foreground mt-1 block cursor-pointer text-sm font-semibold tracking-tight"
+                  className="mt-1 block cursor-pointer font-semibold text-foreground text-sm tracking-tight"
                   htmlFor="hide-metrics"
                 >
                   {hideMetrics
@@ -35,10 +35,10 @@ export const HideMetrics = ({ className }: { className?: string }) => {
             </div>
           </div>
 
-          <div className="bg-muted flex items-center justify-between gap-3 rounded-full px-3 py-2 sm:justify-center">
+          <div className="flex items-center justify-between gap-3 rounded-full bg-muted px-3 py-2 sm:justify-center">
             <Label
               htmlFor="hide-metrics"
-              className="text-muted-foreground text-xs font-medium"
+              className="font-medium text-muted-foreground text-xs"
             >
               Hide cards
             </Label>

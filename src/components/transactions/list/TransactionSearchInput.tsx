@@ -2,17 +2,17 @@ import { SearchIcon } from "lucide-react";
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 
-type TransactionSearchInputProps = {
-  value: string;
-  onValueChange: (value: string) => void;
-  /** Unique id so the field and its sr-only label stay associated. */
-  id: string;
-  placeholder?: string;
+interface TransactionSearchInputProps {
   /** Applied to the wrapper — use it for width constraints (e.g. `xl:max-w-sm`). */
   className?: string;
+  /** Unique id so the field and its sr-only label stay associated. */
+  id: string;
   /** Accessible name, rendered as an sr-only `<label>`. */
   label?: string;
-};
+  onValueChange: (value: string) => void;
+  placeholder?: string;
+  value: string;
+}
 
 /**
  * The single search field used by both the desktop table toolbar and the mobile
@@ -34,7 +34,7 @@ export function TransactionSearchInput({
         {label}
       </label>
       <SearchIcon
-        className="text-muted-foreground/70 pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2"
+        className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground/70"
         aria-hidden="true"
       />
       <Input

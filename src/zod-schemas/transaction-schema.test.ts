@@ -4,8 +4,8 @@ import { TransactionFormSchema } from "@/zod-schemas/transaction-schema";
 
 const base = {
   amount: "100",
-  type: "expense" as const,
   category: "food",
+  type: "expense" as const,
 };
 
 describe("TransactionFormSchema amount", () => {
@@ -66,8 +66,8 @@ describe("TransactionFormSchema loan mode (superRefine)", () => {
     expect(
       TransactionFormSchema.safeParse({
         ...base,
-        loanMode: "create",
         loanDebtor: "Alice",
+        loanMode: "create",
       }).success,
     ).toBe(true);
   });
@@ -89,8 +89,8 @@ describe("TransactionFormSchema loan mode (superRefine)", () => {
     expect(
       TransactionFormSchema.safeParse({
         ...base,
-        loanMode: "apply",
         appliedToLoanId: "11111111-1111-4111-8111-111111111111",
+        loanMode: "apply",
       }).success,
     ).toBe(true);
   });

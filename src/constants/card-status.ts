@@ -10,9 +10,9 @@ export const CARD_TYPES = ["debit", "credit", "cash", "other"] as const;
 export type CardType = (typeof CARD_TYPES)[number];
 
 export const CARD_TYPE_LABEL: Record<CardType, string> = {
-  debit: "Debit",
-  credit: "Credit",
   cash: "Cash",
+  credit: "Credit",
+  debit: "Debit",
   other: "Other",
 };
 

@@ -52,6 +52,6 @@ if (isProduction) {
 
 export const serverEnv = {
   isProduction,
-  sessionPassword,
   sessionCookieSecure: parseBooleanEnv("SESSION_COOKIE_SECURE"),
+  sessionPassword,
 };

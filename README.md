@@ -12,7 +12,6 @@ Monfly provides an integrated solution for personal financial management. You ca
 
 ```text
 .gitignore
-.prettierignore
 README.md
 vite.config.mjs
 package.json
@@ -65,8 +64,9 @@ Optional: `SESSION_COOKIE_SECURE`, `BUILD_SOURCEMAP` (see comments in `.env.exam
 pnpm dev        # Dev server (port 3000)
 pnpm build      # Production build
 pnpm test       # Run tests (Vitest)
-pnpm lint       # ESLint
-pnpm format     # Prettier
+pnpm lint       # Biome + Ultracite
+pnpm check      # Lint + format + organize imports (writes fixes)
+pnpm typecheck  # tsc --noEmit
 pnpm prisma studio   # Browse the DB in a GUI
 ```
 
@@ -114,11 +114,11 @@ UI & Styling:
 
 - Dev & Build Tools:
 
-- Vinxi (build system)
+- Vite + Nitro (build system)
 
-- Jest & React Testing Library
+- Vitest & React Testing Library
 
-- ESLint & Prettier
+- Biome + Ultracite (lint + format)
 
 ### 📐 System Architecture
 
@@ -192,10 +192,13 @@ pnpm build # Production build
 
 ## 🧪 Testing & Quality
 
-• Jest & React Testing Library: Components and integration tests
-• ESLint: Linting with TypeScript, React, Tailwind, a11y
-• Prettier: Formatting with import sorting
+• Vitest & React Testing Library: Components and integration tests
+• Biome + Ultracite: Linting and formatting with TypeScript, React, TanStack, a11y and import sorting
 • Strict TypeScript: Compile-time error prevention
+
+Rules set to `"warn"` in `biome.jsonc` are pre-existing tech debt, tracked with their
+violation counts — see [CONTRIBUTING.md](./CONTRIBUTING.md#linting--formatting).
+Run `pnpm check` before committing.
 
 ```bash
 📁 src/

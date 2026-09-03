@@ -18,10 +18,10 @@ export const getLoanByTransactionIdServer = createServerFn({ method: "GET" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "loan:get",
-        limit: 120,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 120,
+        scope: "loan:get",
+        windowMs: 60_000,
       });
 
       return await getLoanByTransactionId(data.transactionId, sessionEmail);
@@ -32,11 +32,11 @@ export const getLoanByTransactionIdServer = createServerFn({ method: "GET" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error fetching loan",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

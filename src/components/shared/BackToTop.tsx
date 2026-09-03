@@ -14,7 +14,13 @@ import { cn } from "~/lib/utils";
 /** A ref to the scroll element, or a CSS selector resolved against the document. */
 type ScrollTarget = RefObject<HTMLElement | null> | string;
 
-type BackToTopProps = {
+interface BackToTopProps {
+  /** Floating: overrides the fixed placement. Inline: classes for the wrapper. */
+  className?: string;
+  /** Render just the arrow (a compact FAB) instead of the labelled pill. */
+  iconOnly?: boolean;
+  /** Accessible label / tooltip and pill text. */
+  label?: string;
   /**
    * Explicit scroll element to control — a ref or CSS selector. Omit it and the
    * component auto-detects the nearest scrollable ancestor, falling back to the
@@ -22,6 +28,8 @@ type BackToTopProps = {
    * hard-coded `#main-content` would be a no-op — hence the detection.)
    */
   target?: ScrollTarget;
+  /** Pixels scrolled before the floating button reveals itself. */
+  threshold?: number;
   /**
    * - `"floating"` (default): a fixed FAB that fades in once scrolled past
    *   `threshold`.
@@ -29,18 +37,12 @@ type BackToTopProps = {
    *   reaching the bottom reveals it and a tap returns to the top.
    */
   variant?: "floating" | "inline";
-  /** Pixels scrolled before the floating button reveals itself. */
-  threshold?: number;
-  /** Render just the arrow (a compact FAB) instead of the labelled pill. */
-  iconOnly?: boolean;
-  /** Accessible label / tooltip and pill text. */
-  label?: string;
-  /** Floating: overrides the fixed placement. Inline: classes for the wrapper. */
-  className?: string;
-};
+}
 
 function resolveExplicitTarget(target?: ScrollTarget): HTMLElement | null {
-  if (typeof document === "undefined" || !target) return null;
+  if (typeof document === "undefined" || !target) {
+    return null;
+  }
   if (typeof target === "string") {
     return document.querySelector<HTMLElement>(target);
   }
@@ -48,8 +50,10 @@ function resolveExplicitTarget(target?: ScrollTarget): HTMLElement | null {
 }
 
 function isScrollable(element: HTMLElement): boolean {
-  if (element.scrollHeight <= element.clientHeight) return false;
-  const overflowY = getComputedStyle(element).overflowY;
+  if (element.scrollHeight <= element.clientHeight) {
+    return false;
+  }
+  const { overflowY } = getComputedStyle(element);
   return (
     overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay"
   );
@@ -59,7 +63,9 @@ function isScrollable(element: HTMLElement): boolean {
 function getScrollableAncestor(node: HTMLElement | null): HTMLElement | null {
   let element = node?.parentElement ?? null;
   while (element) {
-    if (isScrollable(element)) return element;
+    if (isScrollable(element)) {
+      return element;
+    }
     element = element.parentElement;
   }
   return null;
@@ -102,7 +108,9 @@ export function BackToTop({
 
     // Inline lives in the flow and is always present — only the floating FAB
     // needs to track scroll position to decide when to appear.
-    if (!isFloating) return;
+    if (!isFloating) {
+      return;
+    }
 
     const getScrollTop = () =>
       scroller === window
@@ -120,8 +128,8 @@ export function BackToTop({
   const scrollToTop = useCallback(() => {
     const scroller = scrollerRef.current ?? resolveScroller();
     scroller.scrollTo({
-      top: 0,
       behavior: prefersReducedMotion ? "auto" : "smooth",
+      top: 0,
     });
   }, [prefersReducedMotion, resolveScroller]);
 
@@ -135,7 +143,7 @@ export function BackToTop({
       title={label}
       className={cn(
         "rounded-full",
-        isFloating && "border-border/60 border shadow-lg backdrop-blur",
+        isFloating && "border border-border/60 shadow-lg backdrop-blur",
       )}
     >
       <ArrowUpIcon aria-hidden="true" />
@@ -156,23 +164,23 @@ export function BackToTop({
     // adding a box, while the button itself is portaled into a fixed corner.
     <div ref={rootRef} className="contents">
       <AnimatePresence>
-        {isVisible && (
+        {isVisible ? (
           <motion.div
             initial={
-              prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.9 }
+              prefersReducedMotion ? false : { opacity: 0, scale: 0.9, y: 12 }
             }
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={
               prefersReducedMotion
                 ? { opacity: 0 }
-                : { opacity: 0, y: 12, scale: 0.9 }
+                : { opacity: 0, scale: 0.9, y: 12 }
             }
             transition={{ duration: 0.18, ease: "easeOut" }}
             className={cn("fixed right-5 bottom-6 z-50", className)}
           >
             {button}
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   );

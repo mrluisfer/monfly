@@ -12,7 +12,7 @@ function RouteComponent() {
 
   if (!userEmail) {
     return (
-      <div className="text-muted-foreground py-10 text-center text-sm">
+      <div className="py-10 text-center text-muted-foreground text-sm">
         No user session found.
       </div>
     );

@@ -23,8 +23,8 @@ export default function UsernameInput<
     maxLength: limit,
   } = useCharacterLimit({
     maxLength,
-    value: field.value ?? "",
     onChange: field.onChange,
+    value: field.value ?? "",
   });
 
   return (
@@ -47,7 +47,7 @@ export default function UsernameInput<
             />
             <div
               id={`${id}-description`}
-              className="text-muted-foreground pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-xs tabular-nums peer-disabled:opacity-50"
+              className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground text-xs tabular-nums peer-disabled:opacity-50"
               aria-live="polite"
               role="status"
             >

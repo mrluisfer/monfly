@@ -21,10 +21,10 @@ export const postLoanByEmailServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "loan:create",
-        limit: 10,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 10,
+        scope: "loan:create",
+        windowMs: 20_000,
       });
 
       return await postLoanByEmail(sessionEmail, data.loan);
@@ -35,11 +35,11 @@ export const postLoanByEmailServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error creating loan",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

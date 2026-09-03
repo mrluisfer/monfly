@@ -2,11 +2,11 @@ import type { ReactNode } from "react";
 
 import { useIsMounted } from "~/hooks/ui/useIsMounted";
 
-type ClientOnlyProps = {
+interface ClientOnlyProps {
   children: ReactNode;
   /** Rendered on the server and during the first client render. */
   fallback?: ReactNode;
-};
+}
 
 /**
  * Renders `children` only after the component has mounted on the client.

@@ -32,7 +32,7 @@ export function MobileContent({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState<MobileFilter>("all");
-  const pathname = useLocation().pathname;
+  const { pathname } = useLocation();
   const isTransactionsPage = pathname.includes("/transactions");
 
   const filteredTransactions = useMemo(() => {

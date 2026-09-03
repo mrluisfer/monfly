@@ -13,13 +13,13 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
     z.object({
       email: z.string(),
       transaction: z.object({
-        type: z.string(),
-        date: z.date(),
         amount: z.number(),
-        category: z.string(),
-        description: z.string().nullable().optional(),
         appliedToLoanId: z.uuid().nullable().optional(),
         cardId: z.uuid().nullable().optional(),
+        category: z.string(),
+        date: z.date(),
+        description: z.string().nullable().optional(),
+        type: z.string(),
       }),
     }),
   )
@@ -27,21 +27,21 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail(email);
       enforceRateLimit({
-        scope: "transaction:create",
-        limit: 10,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 10,
+        scope: "transaction:create",
+        windowMs: 20_000,
       });
 
       const fullTransaction = {
         ...transaction,
-        description: transaction.description ?? null,
         appliedToLoanId: transaction.appliedToLoanId ?? null,
         cardId: transaction.cardId ?? null,
-        id: crypto.randomUUID(),
-        userEmail: sessionEmail,
         createdAt: new Date(),
+        description: transaction.description ?? null,
+        id: crypto.randomUUID(),
         updatedAt: new Date(),
+        userEmail: sessionEmail,
       };
 
       return await postTransactionByEmail(sessionEmail, fullTransaction);
@@ -52,11 +52,11 @@ export const postTransactionByEmailServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error creating transaction",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

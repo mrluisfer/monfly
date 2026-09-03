@@ -3,23 +3,24 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "~/components/ui/tooltip";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
-import { formatCurrency } from "~/utils/format-currency";
 
 import type { IncomeExpensePoint } from "./types";
 
-type SparklineProps = {
-  points: IncomeExpensePoint[];
+interface SparklineProps {
   max: number;
-};
+  points: IncomeExpensePoint[];
+}
 
 /** Minimum bar height (in %) so near-zero periods stay visible. */
 const MIN_BAR_HEIGHT_PCT = 6;
 
 export function Sparkline({ points, max }: SparklineProps) {
-  const currency = usePreferredCurrency();
-  if (max <= 0) return null;
+  const { formatPlain } = useCurrency();
+  if (max <= 0) {
+    return null;
+  }
   return (
     <div
       className="flex h-8 items-end gap-1"
@@ -58,7 +59,7 @@ export function Sparkline({ points, max }: SparklineProps) {
                     isPositive ? "text-primary" : "text-destructive",
                   )}
                 >
-                  {formatCurrency(point.net, currency)}
+                  {formatPlain(point.net)}
                 </span>
               </p>
             </TooltipContent>

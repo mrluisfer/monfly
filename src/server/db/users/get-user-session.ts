@@ -11,11 +11,11 @@ export const getUserSession = createServerFn({ method: "GET" }).handler(
 
       if (typeof session === "undefined" || !session.data.email) {
         return {
+          data: null,
           error: true,
           message: "User session not found",
-          data: null,
-          success: false,
           statusCode: 404,
+          success: false,
         } as ApiResponse<string | null>;
       }
 
@@ -25,35 +25,35 @@ export const getUserSession = createServerFn({ method: "GET" }).handler(
       // symptom. Validate against the DB and clear the cookie if it's invalid,
       // so the session is wrong only once.
       const user = await prismaClient.user.findUnique({
-        where: { email: session.data.email },
         select: { email: true },
+        where: { email: session.data.email },
       });
 
       if (!user) {
         await session.clear();
         return {
+          data: null,
           error: true,
           message: "User session is no longer valid",
-          data: null,
-          success: false,
           statusCode: 401,
+          success: false,
         } as ApiResponse<string | null>;
       }
 
       return {
         data: user.email,
         error: false,
-        success: true,
-        statusCode: 200,
         message: "User session fetched successfully",
+        statusCode: 200,
+        success: true,
       } as ApiResponse<string>;
     } catch {
       return {
+        data: null,
         error: true,
         message: "Error fetching user session",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<string | null>;
     }
   },

@@ -10,7 +10,7 @@ import {
   WalletIcon,
 } from "lucide-react";
 import { useId } from "react";
-import type { UseFormReturn } from "react-hook-form";
+import type { ControllerProps, UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
 import { ChangePasswordRow } from "~/components/settings/ChangePasswordRow";
 import { ConsentRow } from "~/components/shared/ConsentRow";
@@ -41,6 +41,138 @@ import {
 
 type UserFormValues = z.infer<typeof userFormSchema>;
 
+type UserFieldRender = ControllerProps<UserFormValues>["render"];
+
+const renderEmail: UserFieldRender = ({ field }) => (
+  <FormItem className="md:col-span-2">
+    <FormLabel>Email</FormLabel>
+    <FormControl>
+      <div className="relative">
+        <MailIcon
+          className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true"
+        />
+        <Input
+          type="email"
+          inputMode="email"
+          placeholder="you@email.com"
+          readOnly
+          aria-readonly="true"
+          className="h-11 bg-muted/40 pl-9 opacity-90"
+          {...field}
+        />
+      </div>
+    </FormControl>
+    <FormDescription>
+      This is your sign-in email and cannot be changed here.
+    </FormDescription>
+    <FormMessage />
+  </FormItem>
+);
+
+const renderName: UserFieldRender = ({ field }) => (
+  <FormItem>
+    <FormLabel>Name</FormLabel>
+    <FormControl>
+      <Input
+        placeholder="Your name"
+        autoComplete="name"
+        className="h-11"
+        {...field}
+      />
+    </FormControl>
+    <FormDescription>This is your public display name.</FormDescription>
+    <FormMessage />
+  </FormItem>
+);
+
+const renderCurrency: UserFieldRender = ({ field }) => (
+  <FormItem>
+    <FormLabel>Preferred currency</FormLabel>
+    <Select
+      value={field.value ?? DEFAULT_CURRENCY}
+      onValueChange={field.onChange}
+    >
+      <FormControl>
+        <SelectTrigger
+          ref={field.ref}
+          onBlur={field.onBlur}
+          className="w-full justify-between"
+        >
+          <SelectValue placeholder="Select a currency" />
+        </SelectTrigger>
+      </FormControl>
+      <SelectContent>
+        {supportedCurrencies.map((currency) => (
+          <SelectItem key={currency} value={currency}>
+            {currency}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+    <FormDescription>Used by reports and the dashboard.</FormDescription>
+    <FormMessage />
+  </FormItem>
+);
+
+const renderProductUpdates: UserFieldRender = ({ field }) => (
+  <SwitchRow
+    title="Product updates"
+    description="Occasional emails about new features and improvements."
+    checked={!!field.value}
+    onCheckedChange={field.onChange}
+  />
+);
+
+const renderMarketing: UserFieldRender = ({ field }) => (
+  <SwitchRow
+    title="Marketing emails"
+    description="Tips, financial guides and seasonal offers. Opt-in only."
+    checked={!!field.value}
+    onCheckedChange={field.onChange}
+  />
+);
+
+const renderTerms: UserFieldRender = ({ field, fieldState }) => (
+  <ConsentRow
+    checked={!!field.value}
+    onCheckedChange={field.onChange}
+    error={fieldState.error?.message}
+    title={
+      <>
+        I accept the{" "}
+        <Link
+          to="/terms"
+          className="font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Terms &amp; Conditions
+        </Link>
+      </>
+    }
+    description="You agree to abide by the rules that govern the service."
+  />
+);
+
+const renderPrivacy: UserFieldRender = ({ field, fieldState }) => (
+  <ConsentRow
+    checked={!!field.value}
+    onCheckedChange={field.onChange}
+    error={fieldState.error?.message}
+    title={
+      <>
+        I have read the{" "}
+        <Link
+          to="/privacy"
+          className="font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Privacy Policy
+        </Link>
+      </>
+    }
+    description="You acknowledge how Monfly handles your personal data."
+  />
+);
+
 interface UserFormFieldsProps {
   form: UseFormReturn<UserFormValues>;
   onBalanceBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
@@ -55,7 +187,7 @@ export function UserFormFields({
   updatingBalance = false,
 }: UserFormFieldsProps) {
   return (
-    <div className="divide-border/60 divide-y">
+    <div className="divide-y divide-border/60">
       <FormSection
         icon={UserIcon}
         title="Account details"
@@ -65,89 +197,19 @@ export function UserFormFields({
           <FormField
             control={form.control}
             name={userFormNames.email}
-            render={({ field }) => (
-              <FormItem className="md:col-span-2">
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <MailIcon
-                      className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2"
-                      aria-hidden="true"
-                    />
-                    <Input
-                      type="email"
-                      inputMode="email"
-                      placeholder="you@email.com"
-                      readOnly
-                      aria-readonly="true"
-                      className="bg-muted/40 h-11 pl-9 opacity-90"
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-                <FormDescription>
-                  This is your sign-in email and cannot be changed here.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={renderEmail}
           />
 
           <FormField
             control={form.control}
             name={userFormNames.name}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your name"
-                    autoComplete="name"
-                    className="h-11"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  This is your public display name.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={renderName}
           />
 
           <FormField
             control={form.control}
             name={userFormNames.preferredCurrency}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Preferred currency</FormLabel>
-                <Select
-                  value={field.value ?? DEFAULT_CURRENCY}
-                  onValueChange={field.onChange}
-                >
-                  <FormControl>
-                    <SelectTrigger
-                      ref={field.ref}
-                      onBlur={field.onBlur}
-                      className="w-full justify-between"
-                    >
-                      <SelectValue placeholder="Select a currency" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {supportedCurrencies.map((currency) => (
-                      <SelectItem key={currency} value={currency}>
-                        {currency}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  Used by reports and the dashboard.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={renderCurrency}
           />
         </div>
       </FormSection>
@@ -165,8 +227,8 @@ export function UserFormFields({
               <FormLabel>Total balance</FormLabel>
               <div className="flex items-center gap-2">
                 <FormControl>
-                  <div className="border-input bg-background focus-within:border-ring focus-within:ring-ring/30 flex h-11 w-full overflow-hidden rounded-md border shadow-xs focus-within:ring-3">
-                    <span className="border-input text-muted-foreground inline-flex w-10 shrink-0 items-center justify-center border-e text-sm">
+                  <div className="flex h-11 w-full overflow-hidden rounded-md border border-input bg-background shadow-xs focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/30">
+                    <span className="inline-flex w-10 shrink-0 items-center justify-center border-input border-e text-muted-foreground text-sm">
                       $
                     </span>
                     <Input
@@ -182,13 +244,13 @@ export function UserFormFields({
                         onBalanceBlur(e);
                       }}
                     />
-                    <span className="border-input bg-muted/30 text-muted-foreground inline-flex items-center border-s px-3 text-sm font-medium">
+                    <span className="inline-flex items-center border-input border-s bg-muted/30 px-3 font-medium text-muted-foreground text-sm">
                       {form.watch(userFormNames.preferredCurrency) ??
                         DEFAULT_CURRENCY}
                     </span>
                   </div>
                 </FormControl>
-                {onUpdateBalance && (
+                {onUpdateBalance ? (
                   <Button
                     type="button"
                     variant="default"
@@ -206,7 +268,7 @@ export function UserFormFields({
                       {updatingBalance ? "Updating…" : "Update"}
                     </span>
                   </Button>
-                )}
+                ) : null}
               </div>
               <FormDescription>
                 Sets your starting balance for new period summaries. Use
@@ -223,7 +285,7 @@ export function UserFormFields({
         title="Security"
         description="Manage your account password from a dedicated, secure page."
       >
-        <ul className="divide-border/50 divide-y">
+        <ul className="divide-y divide-border/50">
           <ChangePasswordRow />
         </ul>
       </FormSection>
@@ -233,30 +295,16 @@ export function UserFormFields({
         title="Communication preferences"
         description="Decide how Monfly may contact you. You can change this anytime."
       >
-        <ul className="divide-border/50 divide-y">
+        <ul className="divide-y divide-border/50">
           <FormField
             control={form.control}
             name={userFormNames.productUpdatesOptIn}
-            render={({ field }) => (
-              <SwitchRow
-                title="Product updates"
-                description="Occasional emails about new features and improvements."
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-              />
-            )}
+            render={renderProductUpdates}
           />
           <FormField
             control={form.control}
             name={userFormNames.marketingOptIn}
-            render={({ field }) => (
-              <SwitchRow
-                title="Marketing emails"
-                description="Tips, financial guides and seasonal offers. Opt-in only."
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-              />
-            )}
+            render={renderMarketing}
           />
         </ul>
       </FormSection>
@@ -266,52 +314,16 @@ export function UserFormFields({
         title="Legal acknowledgements"
         description="Required to keep using Monfly. Read them anytime from your account."
       >
-        <ul className="divide-border/50 divide-y">
+        <ul className="divide-y divide-border/50">
           <FormField
             control={form.control}
             name={userFormNames.acceptTerms}
-            render={({ field, fieldState }) => (
-              <ConsentRow
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-                error={fieldState.error?.message}
-                title={
-                  <>
-                    I accept the{" "}
-                    <Link
-                      to="/terms"
-                      className="text-primary font-medium underline-offset-4 hover:underline"
-                    >
-                      Terms &amp; Conditions
-                    </Link>
-                  </>
-                }
-                description="You agree to abide by the rules that govern the service."
-              />
-            )}
+            render={renderTerms}
           />
           <FormField
             control={form.control}
             name={userFormNames.acceptPrivacy}
-            render={({ field, fieldState }) => (
-              <ConsentRow
-                checked={!!field.value}
-                onCheckedChange={field.onChange}
-                error={fieldState.error?.message}
-                title={
-                  <>
-                    I have read the{" "}
-                    <Link
-                      to="/privacy"
-                      className="text-primary font-medium underline-offset-4 hover:underline"
-                    >
-                      Privacy Policy
-                    </Link>
-                  </>
-                }
-                description="You acknowledge how Monfly handles your personal data."
-              />
-            )}
+            render={renderPrivacy}
           />
         </ul>
       </FormSection>
@@ -319,12 +331,12 @@ export function UserFormFields({
   );
 }
 
-type FormSectionProps = {
+interface FormSectionProps {
+  children: React.ReactNode;
+  description: string;
   icon: React.ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
   title: string;
-  description: string;
-  children: React.ReactNode;
-};
+}
 
 function FormSection({
   icon: Icon,
@@ -337,12 +349,12 @@ function FormSection({
       <header className="flex items-start gap-3 md:sticky md:top-24 md:self-start">
         <span
           aria-hidden="true"
-          className="from-primary/15 to-primary/0 text-primary ring-primary/15 after:to-foreground/5 relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ring-1 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent"
+          className="relative inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-primary/0 text-primary ring-1 ring-primary/15 after:absolute after:inset-0 after:rounded-xl after:bg-gradient-to-tr after:from-transparent after:to-foreground/5"
         >
           <Icon className="size-4" aria-hidden={true} />
         </span>
         <div className="min-w-0 space-y-1">
-          <h4 className="text-foreground font-[family-name:var(--font-syne)] text-sm font-semibold tracking-tight sm:text-base">
+          <h4 className="font-[family-name:var(--font-syne)] font-semibold text-foreground text-sm tracking-tight sm:text-base">
             {title}
           </h4>
           <p className="text-muted-foreground text-xs leading-relaxed sm:text-[0.8rem]">
@@ -355,12 +367,12 @@ function FormSection({
   );
 }
 
-type SwitchRowProps = {
-  title: string;
-  description: string;
+interface SwitchRowProps {
   checked: boolean;
+  description: string;
   onCheckedChange: (checked: boolean) => void;
-};
+  title: string;
+}
 
 function SwitchRow({
   title,
@@ -372,7 +384,7 @@ function SwitchRow({
   return (
     <FormItem className="flex flex-row items-center justify-between gap-4 px-0 py-3 first:pt-0 last:pb-0">
       <div className="min-w-0 space-y-0.5">
-        <FormLabel htmlFor={id} className="text-sm font-medium">
+        <FormLabel htmlFor={id} className="font-medium text-sm">
           {title}
         </FormLabel>
         <p className="text-muted-foreground text-xs">{description}</p>

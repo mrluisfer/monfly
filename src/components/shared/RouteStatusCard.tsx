@@ -9,13 +9,13 @@ import {
   CardTitle,
 } from "../ui/card";
 
-type RouteStatusCardProps = {
+interface RouteStatusCardProps {
+  actions: ReactNode;
+  description: ReactNode;
+  details?: ReactNode;
   icon: ReactNode;
   title: string;
-  description: ReactNode;
-  actions: ReactNode;
-  details?: ReactNode;
-};
+}
 
 export function RouteStatusCard({
   icon,
@@ -29,12 +29,12 @@ export function RouteStatusCard({
       className="flex min-h-[60vh] items-center justify-center px-4 py-10"
       role="alert"
     >
-      <Card className="border-border/70 bg-background/95 w-full max-w-xl shadow-xl backdrop-blur-sm">
+      <Card className="w-full max-w-xl border-border/70 bg-background/95 shadow-xl backdrop-blur-sm">
         <CardHeader className="items-center text-center">
-          <div className="bg-muted text-muted-foreground mb-2 flex size-14 items-center justify-center rounded-full">
+          <div className="mb-2 flex size-14 items-center justify-center rounded-full bg-muted text-muted-foreground">
             {icon}
           </div>
-          <CardTitle className="text-2xl font-semibold tracking-tight md:text-3xl">
+          <CardTitle className="font-semibold text-2xl tracking-tight md:text-3xl">
             {title}
           </CardTitle>
           <CardDescription className="mx-auto max-w-md text-base">

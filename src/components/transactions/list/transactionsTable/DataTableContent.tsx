@@ -17,26 +17,24 @@ export function DataTableContent({
   getColumnClassName: (columnId: string) => string;
 }) {
   return (
-    <div className="border-border/70 bg-background/65 overflow-hidden rounded-[1.5rem] border">
-      <Table className="[&_td]:border-border/40 [&_th]:border-border/60 min-w-190">
+    <div className="overflow-hidden rounded-[1.5rem] border border-border/70 bg-background/65">
+      <Table className="min-w-190 [&_td]:border-border/40 [&_th]:border-border/60">
         <TableHeader className="bg-muted/35">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead
-                    key={header.id}
-                    className={`${getColumnClassName(header.column.id)} h-12`}
-                  >
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <TableHead
+                  key={header.id}
+                  className={`${getColumnClassName(header.column.id)} h-12`}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
         </TableHeader>

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link, useLocation } from "@tanstack/react-router";
-import { RefreshCcwIcon, WalletIcon } from "lucide-react";
-import { useMemo } from "react";
+import { ExternalLinkIcon, RefreshCcwIcon, WalletIcon } from "lucide-react";
+import { useCallback, useMemo } from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { BackToTop } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
@@ -26,43 +26,44 @@ import { MobileContent } from "./MobileContent";
 import { MobileHeader } from "./MobileHeader";
 import { TransactionsInsights } from "./TransactionsInsights";
 
-type TransactionsResponse = {
+interface TransactionsResponse {
   data?: TransactionWithUser[];
   total?: number;
-};
+}
 
-type CardRecord = {
-  id: string;
-  name: string;
-  last4?: string | null;
+interface CardRecord {
   color?: string | null;
-};
+  id: string;
+  last4?: string | null;
+  name: string;
+}
 
 export default function TransactionsList() {
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
-  const pathname = useLocation().pathname;
+  const { pathname } = useLocation();
   const isTransactionsRoute = pathname.includes("/transactions");
   const limit = isTransactionsRoute ? 1000 : 30;
 
   const { data, isPending, error, refetch, isRefetching } = useQuery({
-    queryKey: [...queryKeys.transactions.byEmail(userEmail, activeCard), limit],
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5,
     queryFn: createSafeQuery(
       () =>
         getTransactionByEmailServer({
-          data: { email: userEmail, limit, cardId: activeCard },
+          data: { cardId: activeCard, email: userEmail, limit },
         }),
       8000,
     ),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 2,
-    gcTime: 1000 * 60 * 5,
+    queryKey: [...queryKeys.transactions.byEmail(userEmail, activeCard), limit],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 2,
   });
 
-  const transactions = (data as TransactionsResponse)?.data ?? [];
-  const total = (data as TransactionsResponse)?.total ?? 0;
+  const response = data as TransactionsResponse | undefined;
+  const transactions = response?.data ?? [];
+  const total = response?.total ?? 0;
 
   // Resolve each transaction's `cardId` to a card so rows can show which card
   // they belong to now that the app is multi-card. Shares the cached cards
@@ -73,10 +74,10 @@ export default function TransactionsList() {
     const cards = (cardsData?.data as CardRecord[] | undefined) ?? [];
     for (const card of cards) {
       map.set(card.id, {
-        id: card.id,
-        name: card.name,
-        last4: card.last4,
         color: card.color,
+        id: card.id,
+        last4: card.last4,
+        name: card.name,
       });
     }
     return map;
@@ -102,8 +103,12 @@ export default function TransactionsList() {
   // versa).
   const isMobile = useIsMobile();
   const isMounted = useIsMounted();
-  const showDesktop = !isMounted || !isMobile;
+  const showDesktop = !(isMounted && isMobile);
   const showMobile = !isMounted || isMobile;
+
+  const handleRefetch = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <TransactionHoverProvider>
@@ -118,20 +123,21 @@ export default function TransactionsList() {
                 <Badge variant={"default"}>
                   {total} {total === 1 ? "record" : "records"}
                 </Badge>
-                {activeCardSummary && (
+                {activeCardSummary ? (
                   <CardBadge
                     card={activeCardSummary}
                     hint="Showing transactions for this card"
                   />
-                )}
+                ) : null}
                 <BalanceStatusBadge />
                 {isTransactionsRoute ? null : (
                   <Button render={<Link to="/home/transactions" />}>
+                    <ExternalLinkIcon />
                     All transactions
                   </Button>
                 )}
                 <Button
-                  onClick={() => refetch()}
+                  onClick={handleRefetch}
                   disabled={isPending || transactions.length === 0}
                   title="Refresh transactions"
                   variant={isRefetching ? "default" : "outline"}
@@ -175,9 +181,9 @@ export default function TransactionsList() {
         </div>
       )}
 
-      {showMobile && (
+      {showMobile ? (
         <div className="min-w-0 space-y-4 md:hidden">
-          <section className="bg-card min-w-0 rounded-2xl px-1 py-4 sm:px-2 lg:p-4">
+          <section className="min-w-0 rounded-2xl bg-card px-1 py-4 sm:px-2 lg:p-4">
             <MobileHeader
               total={total}
               isPending={isPending}
@@ -200,7 +206,7 @@ export default function TransactionsList() {
             <TransactionsInsights transactions={transactions} />
           )}
         </div>
-      )}
+      ) : null}
     </TransactionHoverProvider>
   );
 }

@@ -10,7 +10,9 @@ if ("serviceWorker" in navigator) {
         // When a new SW is found, tell it to skip waiting and take control
         registration.addEventListener("updatefound", () => {
           const newWorker = registration.installing;
-          if (!newWorker) return;
+          if (!newWorker) {
+            return;
+          }
 
           newWorker.addEventListener("statechange", () => {
             if (

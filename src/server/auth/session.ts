@@ -3,13 +3,15 @@ import type { User } from "@prisma/client";
 import { useSession } from "@tanstack/react-start/server";
 import { serverEnv } from "~/utils/env.server";
 
-type SessionUser = {
+interface SessionUser {
   email: User["email"];
-};
+}
 
 function resolveSessionCookieSecure() {
   const secureOverride = serverEnv.sessionCookieSecure;
-  if (typeof secureOverride === "boolean") return secureOverride;
+  if (typeof secureOverride === "boolean") {
+    return secureOverride;
+  }
 
   // In local development (including host/IP testing over HTTP), secure cookies
   // are not sent by the browser. Keep them secure by default in production.
@@ -18,12 +20,12 @@ function resolveSessionCookieSecure() {
 
 export function useAppSession() {
   return useSession<SessionUser>({
-    password: serverEnv.sessionPassword,
     cookie: {
-      path: "/",
       httpOnly: true,
+      path: "/",
       sameSite: "lax",
       secure: resolveSessionCookieSecure(),
     },
+    password: serverEnv.sessionPassword,
   });
 }

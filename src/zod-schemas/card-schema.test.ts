@@ -13,28 +13,28 @@ describe("CardFormSchema", () => {
 
   it("accepts an empty/absent last4 (optional)", () => {
     expect(
-      CardFormSchema.safeParse({ name: "Personal", last4: "" }).success,
+      CardFormSchema.safeParse({ last4: "", name: "Personal" }).success,
     ).toBe(true);
   });
 
   it("requires last4 to be exactly 4 digits when present", () => {
     expect(
-      CardFormSchema.safeParse({ name: "Personal", last4: "1234" }).success,
+      CardFormSchema.safeParse({ last4: "1234", name: "Personal" }).success,
     ).toBe(true);
     expect(
-      CardFormSchema.safeParse({ name: "Personal", last4: "12a4" }).success,
+      CardFormSchema.safeParse({ last4: "12a4", name: "Personal" }).success,
     ).toBe(false);
     expect(
-      CardFormSchema.safeParse({ name: "Personal", last4: "123" }).success,
+      CardFormSchema.safeParse({ last4: "123", name: "Personal" }).success,
     ).toBe(false);
   });
 
   it("rejects a non-numeric balance string", () => {
     expect(
-      CardFormSchema.safeParse({ name: "Personal", balance: "10.5" }).success,
+      CardFormSchema.safeParse({ balance: "10.5", name: "Personal" }).success,
     ).toBe(true);
     expect(
-      CardFormSchema.safeParse({ name: "Personal", balance: "abc" }).success,
+      CardFormSchema.safeParse({ balance: "abc", name: "Personal" }).success,
     ).toBe(false);
   });
 });

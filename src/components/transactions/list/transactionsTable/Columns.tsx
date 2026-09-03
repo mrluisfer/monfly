@@ -23,23 +23,35 @@ import { TransactionActionsCell } from "./TransactionActionsCell";
 declare module "@tanstack/react-table" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData> {
-    /** Currency formatter from `useCurrency`, already honoring "hide balances". */
-    formatAmount?: (amount: number) => string;
     cardsById?: Map<string, CardSummary>;
     /** Lowercased category name → the icon name the user picked for it. */
     categoryIconsByName?: Map<string, string>;
+    /** Currency formatter from `useCurrency`, already honoring "hide balances". */
+    formatAmount?: (amount: number) => string;
   }
 }
 
 function formatRelativeTransactionDay(date: Date) {
-  if (isToday(date)) return "Today";
-  if (isYesterday(date)) return "Yesterday";
+  if (isToday(date)) {
+    return "Today";
+  }
+  if (isYesterday(date)) {
+    return "Yesterday";
+  }
   return format(date, "EEE");
 }
 
 export const Columns: ColumnDef<TransactionWithUser>[] = [
   {
-    id: "select",
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableHiding: false,
+    enableSorting: false,
     header: ({ table }) => (
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
@@ -50,29 +62,10 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         aria-label="Select all"
       />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
+    id: "select",
   },
   {
     accessorKey: "type",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Type
-          <ArrowUpDownIcon />
-        </Button>
-      );
-    },
     cell: ({ row }) => {
       const type = String(row.getValue("type") || "").toLowerCase();
       const isIncome = type === "income";
@@ -82,8 +75,8 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
           variant="outline"
           className={
             isIncome
-              ? "border-primary/25 bg-primary/10 text-primary gap-1.5"
-              : "border-destructive/25 bg-destructive/10 text-destructive gap-1.5"
+              ? "gap-1.5 border-primary/25 bg-primary/10 text-primary"
+              : "gap-1.5 border-destructive/25 bg-destructive/10 text-destructive"
           }
         >
           {isIncome ? (
@@ -96,23 +89,21 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       );
     },
     filterFn: (row, id, value) => {
-      const cellValue = row.getValue(id) as string;
+      const cellValue = row.getValue(id) as string | undefined;
       return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
     },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Type
+        <ArrowUpDownIcon />
+      </Button>
+    ),
   },
   {
     accessorKey: "description",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Details
-          <ArrowUpDownIcon />
-        </Button>
-      );
-    },
     cell: ({ row, table }) => {
       const description = row.getValue("description") as string;
       const transaction = row.original;
@@ -126,10 +117,10 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       return (
         <div className="flex max-w-[340px] flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="text-foreground leading-5 font-medium break-words whitespace-normal capitalize">
+            <div className="whitespace-normal break-words font-medium text-foreground capitalize leading-5">
               {getTransactionTitle(description, transaction.category)}
             </div>
-            {isLoan && <LoanBadge isPayment={isLoanPayment} />}
+            {isLoan ? <LoanBadge isPayment={isLoanPayment} /> : null}
           </div>
           {/* Keep this row light — the Activity column already carries the
               timestamps, so here we only surface which card it belongs to. */}
@@ -138,25 +129,21 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       );
     },
     filterFn: (row, id, value) => {
-      const cellValue = row.getValue(id) as string;
+      const cellValue = row.getValue(id) as string | undefined;
       return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
     },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Details
+        <ArrowUpDownIcon />
+      </Button>
+    ),
   },
   {
     accessorKey: "category",
-    header: ({ column }) => {
-      return (
-        <div className="flex justify-center">
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Category
-            <ArrowUpDownIcon />
-          </Button>
-        </div>
-      );
-    },
     cell: ({ row, table }) => {
       const category = row.getValue("category") as string;
       // Mirror the icon the user assigned to this category in the Categories
@@ -169,12 +156,12 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         <div className="flex justify-center">
           <Badge
             variant="secondary"
-            className="border-border/60 text-foreground max-w-[170px] gap-1.5 border px-2.5 font-medium capitalize"
+            className="max-w-[170px] gap-1.5 border border-border/60 px-2.5 font-medium text-foreground capitalize"
           >
             {iconName ? (
               getCategoryIconByName(iconName, {
-                className: "text-primary",
                 "aria-hidden": true,
+                className: "text-primary",
               })
             ) : (
               <TagIcon className="text-primary" aria-hidden="true" />
@@ -185,26 +172,25 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       );
     },
     filterFn: (row, id, value) => {
-      const cellValue = row.getValue(id) as string;
+      const cellValue = row.getValue(id) as string | undefined;
       return cellValue?.toLowerCase().includes(value.toLowerCase()) ?? false;
     },
-  },
-  {
-    accessorKey: "amount",
     header: ({ column }) => (
-      <div className="text-right">
+      <div className="flex justify-center">
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          className="h-auto p-0"
         >
-          Amount
+          Category
           <ArrowUpDownIcon />
         </Button>
       </div>
     ),
+  },
+  {
+    accessorKey: "amount",
     cell: ({ row, table }) => {
-      const amount = parseFloat(row.getValue("amount"));
+      const amount = Number.parseFloat(row.getValue("amount"));
       const type = String(row.getValue("type") || "").toLowerCase();
       const isIncome = type === "income";
       const formatted = table.options.meta?.formatAmount?.(amount) ?? "";
@@ -229,25 +215,26 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
       const amount = row.getValue(id) as number;
       return amount.toString().includes(value);
     },
-  },
-  {
-    accessorKey: "date",
-    header: ({ column }) => {
-      return (
+    header: ({ column }) => (
+      <div className="text-right">
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="h-auto p-0"
         >
-          Date
+          Amount
           <ArrowUpDownIcon />
         </Button>
-      );
-    },
+      </div>
+    ),
+  },
+  {
+    accessorKey: "date",
     cell: ({ row }) => {
       const date = new Date(row.getValue("date") as Date);
       return (
         <div className="space-y-0.5">
-          <div className="text-foreground text-sm font-medium">
+          <div className="font-medium text-foreground text-sm">
             {format(date, "MMM d, yyyy")}
           </div>
           <div className="text-muted-foreground text-xs">
@@ -256,20 +243,18 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         </div>
       );
     },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Date
+        <ArrowUpDownIcon />
+      </Button>
+    ),
   },
   {
     accessorKey: "createdAt",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Activity
-          <ArrowUpDownIcon />
-        </Button>
-      );
-    },
     cell: ({ row }) => {
       const createdAt = new Date(row.original.createdAt);
       const updatedAt = new Date(row.original.updatedAt);
@@ -279,13 +264,13 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         <div className="space-y-0.5">
           <RelativeTime
             date={createdAt}
-            className="text-foreground block text-sm font-medium"
+            className="block font-medium text-foreground text-sm"
           />
           {wasEdited ? (
             <RelativeTime
               date={updatedAt}
               prefix="Updated"
-              className="text-muted-foreground inline-flex items-center gap-1 text-xs"
+              className="inline-flex items-center gap-1 text-muted-foreground text-xs"
             />
           ) : (
             <div className="text-muted-foreground text-xs">Not edited</div>
@@ -293,15 +278,24 @@ export const Columns: ColumnDef<TransactionWithUser>[] = [
         </div>
       );
     },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Activity
+        <ArrowUpDownIcon />
+      </Button>
+    ),
   },
   {
-    id: "actions",
-    enableHiding: false,
     cell: ({ row, table }) => (
       <TransactionActionsCell
         transaction={row.original}
         disabled={table.getSelectedRowModel().rows.length > 1}
       />
     ),
+    enableHiding: false,
+    id: "actions",
   },
 ];

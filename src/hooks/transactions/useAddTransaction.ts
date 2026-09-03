@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { type RefObject, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 import { transactionFormNames } from "~/constants/forms/transaction-form-names";
@@ -47,24 +47,51 @@ export const useAddTransaction = () => {
   const defaultCardId = activeCard ?? cardsResponse?.data?.[0]?.id ?? null;
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(TransactionFormSchema),
     defaultValues: buildDefaultValues(defaultCardId),
+    resolver: zodResolver(TransactionFormSchema),
   });
 
   // The cards query usually resolves after the first render, so `defaultCardId`
   // can start out null. Seed it once the list lands, unless the user already
   // touched the field themselves.
-  const seededCardRef = useRef(false);
+  const seededCardRef: RefObject<boolean> = useRef(false);
   useEffect(() => {
-    if (seededCardRef.current || !defaultCardId) return;
-    if (form.getValues(transactionFormNames.cardId) != null) return;
-    if (form.formState.dirtyFields[transactionFormNames.cardId]) return;
+    if (seededCardRef.current || !defaultCardId) {
+      return;
+    }
+    if (form.getValues(transactionFormNames.cardId) !== null) {
+      return;
+    }
+    if (form.formState.dirtyFields[transactionFormNames.cardId]) {
+      return;
+    }
     seededCardRef.current = true;
     form.setValue(transactionFormNames.cardId, defaultCardId);
   }, [defaultCardId, form]);
 
   const postTransactionByEmail = useMutation({
     fn: postTransactionByEmailServer,
+    idempotency: {
+      getKey: (variables) =>
+        JSON.stringify({
+          amount: variables.data.transaction.amount,
+          appliedToLoanId: variables.data.transaction.appliedToLoanId ?? null,
+          cardId: variables.data.transaction.cardId ?? null,
+          category: variables.data.transaction.category.trim().toLowerCase(),
+          date: variables.data.transaction.date.toISOString(),
+          description:
+            variables.data.transaction.description?.trim().toLowerCase() ?? "",
+          type: variables.data.transaction.type.toLowerCase(),
+        }),
+      onDuplicatePending: {
+        description: "Please wait while we finish the current request.",
+        title: "Transaction is already being saved",
+      },
+      onDuplicateRecentSuccess: {
+        description: "We ignored the duplicate submission to avoid duplicates.",
+        title: "Transaction already saved",
+      },
+    },
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
@@ -77,33 +104,14 @@ export const useAddTransaction = () => {
       sileo.success({ title: "Transaction created successfully" });
       await invalidateTransactionQueries(queryClient, userEmail);
     },
-    idempotency: {
-      getKey: (variables) =>
-        JSON.stringify({
-          amount: variables.data.transaction.amount,
-          category: variables.data.transaction.category.trim().toLowerCase(),
-          date: variables.data.transaction.date.toISOString(),
-          description:
-            variables.data.transaction.description?.trim().toLowerCase() ?? "",
-          type: variables.data.transaction.type.toLowerCase(),
-          appliedToLoanId: variables.data.transaction.appliedToLoanId ?? null,
-          cardId: variables.data.transaction.cardId ?? null,
-        }),
-      onDuplicatePending: {
-        title: "Transaction is already being saved",
-        description: "Please wait while we finish the current request.",
-      },
-      onDuplicateRecentSuccess: {
-        title: "Transaction already saved",
-        description: "We ignored the duplicate submission to avoid duplicates.",
-      },
-    },
   });
 
   const onSubmit = async (data: FormValues) => {
     try {
       const { data: sessionEmail } = await getUserSession();
-      if (!sessionEmail) throw new Error("User email not found");
+      if (!sessionEmail) {
+        throw new Error("User email not found");
+      }
 
       const txDate = data.date ? new Date(data.date) : new Date();
       const amount = Number.parseFloat(data.amount);
@@ -116,14 +124,14 @@ export const useAddTransaction = () => {
           email: sessionEmail,
           transaction: {
             amount,
-            type: data.type,
-            category: data.category,
-            description: data.description || null,
-            date: txDate,
             appliedToLoanId,
             // Card chosen in the form (pre-seeded from the active dashboard
             // card; null = no card).
             cardId: data.cardId ?? null,
+            category: data.category,
+            date: txDate,
+            description: data.description || null,
+            type: data.type,
           },
         },
       });
@@ -138,10 +146,10 @@ export const useAddTransaction = () => {
             data: {
               email: sessionEmail,
               loan: {
-                debtor,
                 amount,
-                issuedAt: txDate,
+                debtor,
                 dueAt: data.loanDueAt ?? null,
+                issuedAt: txDate,
                 notes: data.description?.trim() || null,
                 transactionId: createdTx.id,
               },
@@ -171,5 +179,5 @@ export const useAddTransaction = () => {
     }
   };
 
-  return { form, onSubmit, mutation: postTransactionByEmail };
+  return { form, mutation: postTransactionByEmail, onSubmit };
 };

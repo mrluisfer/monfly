@@ -15,10 +15,10 @@ export const deleteCardByIdServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "card:delete",
-        limit: 15,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 15,
+        scope: "card:delete",
+        windowMs: 20_000,
       });
 
       return await deleteCardById(sessionEmail, data.id);
@@ -29,11 +29,11 @@ export const deleteCardByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error deleting card",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

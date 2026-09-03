@@ -53,15 +53,25 @@ export function EditLoanButton({
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     const parsed = Number(amount);
-    if (!Number.isFinite(parsed) || parsed <= 0) return;
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      return;
+    }
 
     const patch: EditLoanPatch = {};
     const trimmed = debtor.trim();
-    if (trimmed && trimmed !== loan.debtor) patch.debtor = trimmed;
-    if (parsed !== loan.amount) patch.amount = parsed;
-    if (direction !== initialDirection) patch.direction = direction;
+    if (trimmed && trimmed !== loan.debtor) {
+      patch.debtor = trimmed;
+    }
+    if (parsed !== loan.amount) {
+      patch.amount = parsed;
+    }
+    if (direction !== initialDirection) {
+      patch.direction = direction;
+    }
 
-    if (Object.keys(patch).length > 0) onSubmit(patch);
+    if (Object.keys(patch).length > 0) {
+      onSubmit(patch);
+    }
     setOpen(false);
   };
 
@@ -77,7 +87,7 @@ export function EditLoanButton({
                   size="icon"
                   variant="outline"
                   aria-label={`Edit loan from ${loan.debtor}`}
-                  className="text-muted-foreground hover:bg-accent shrink-0"
+                  className="shrink-0 text-muted-foreground hover:bg-accent"
                 >
                   <PencilIcon className="size-4" aria-hidden="true" />
                 </Button>

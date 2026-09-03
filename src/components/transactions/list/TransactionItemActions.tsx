@@ -32,28 +32,28 @@ const TransactionItemActions = ({
               variant="outline"
               size="icon-sm"
               aria-label="Open transaction actions"
-              className="hover:border-primary/20 dark:hover:shadow-primary/10 rounded-full transition-all duration-200 ease-out hover:scale-105 hover:shadow-sm focus-visible:scale-105 active:scale-95 data-[state=open]:scale-105 data-[state=open]:shadow-sm sm:size-9"
+              className="rounded-full transition-all duration-200 ease-out hover:scale-105 hover:border-primary/20 hover:shadow-sm focus-visible:scale-105 active:scale-95 data-[state=open]:scale-105 data-[state=open]:shadow-sm sm:size-9 dark:hover:shadow-primary/10"
             >
               <Ellipsis className="transition-transform duration-200 hover:rotate-90" />
             </Button>
           }
         />
-        <DropdownMenuContent className="animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 space-y-2 duration-200">
+        <DropdownMenuContent className="fade-in-0 zoom-in-95 slide-in-from-top-2 animate-in space-y-2 duration-200">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant="default"
-            className="hover:bg-primary/10 focus:bg-primary/10 group cursor-pointer transition-all duration-200 ease-out"
+            className="group cursor-pointer transition-all duration-200 ease-out hover:bg-primary/10 focus:bg-primary/10"
             onClick={() => setIsOpenDialog(true)}
           >
-            <Edit className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            <Edit className="transition-transform duration-200 group-hover:rotate-12 group-hover:scale-110" />
             Edit transaction
           </DropdownMenuItem>
           <DropdownMenuItem
             variant="destructive"
-            className="hover:bg-destructive/10 focus:bg-destructive/10 group cursor-pointer transition-all duration-200 ease-out"
+            className="group cursor-pointer transition-all duration-200 ease-out hover:bg-destructive/10 focus:bg-destructive/10"
             onClick={() =>
               deleteTransactionByIdMutation.mutate({
                 data: {
@@ -62,7 +62,7 @@ const TransactionItemActions = ({
               })
             }
           >
-            <Trash className="transition-transform duration-200 group-hover:scale-110 group-hover:rotate-12" />
+            <Trash className="transition-transform duration-200 group-hover:rotate-12 group-hover:scale-110" />
             Delete transaction
           </DropdownMenuItem>
         </DropdownMenuContent>

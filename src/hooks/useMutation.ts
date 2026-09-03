@@ -1,4 +1,4 @@
-import * as React from "react";
+import { type RefObject, useCallback, useMemo, useRef, useState } from "react";
 import { type SileoOptions, sileo } from "~/lib/toaster";
 
 type ToastInput = string | SileoOptions;
@@ -7,19 +7,19 @@ type MutationFeedbackResolver<TVariables, TData> =
   | ToastInput
   | ((ctx: { data?: TData; variables: TVariables }) => ToastInput);
 
-type MutationIdempotencyConfig<TVariables, TData> = {
+interface MutationIdempotencyConfig<TVariables, TData> {
   enabled?: boolean;
   getKey?: (variables: TVariables) => string;
-  windowMs?: number;
+  onBlockedConcurrent?: MutationFeedbackResolver<TVariables, TData>;
   onDuplicatePending?: MutationFeedbackResolver<TVariables, TData>;
   onDuplicateRecentSuccess?: MutationFeedbackResolver<TVariables, TData>;
-  onBlockedConcurrent?: MutationFeedbackResolver<TVariables, TData>;
-};
+  windowMs?: number;
+}
 
-type RecentSuccessfulMutation<TData> = {
+interface RecentSuccessfulMutation<TData> {
   data?: TData;
   expiresAt: number;
-};
+}
 
 const DEFAULT_IDEMPOTENCY_WINDOW_MS = 4000;
 
@@ -79,18 +79,19 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
   allowConcurrent?: boolean;
   idempotency?: MutationIdempotencyConfig<TVariables, TData>;
 }) {
-  const [submittedAt, setSubmittedAt] = React.useState<number | undefined>();
-  const [variables, setVariables] = React.useState<TVariables | undefined>();
-  const [error, setError] = React.useState<TError | undefined>();
-  const [data, setData] = React.useState<TData | undefined>();
-  const [status, setStatus] = React.useState<
+  const [submittedAt, setSubmittedAt] = useState<number | undefined>();
+  const [variables, setVariables] = useState<TVariables | undefined>();
+  const [error, setError] = useState<TError | undefined>();
+  const [data, setData] = useState<TData | undefined>();
+  const [status, setStatus] = useState<
     "idle" | "pending" | "success" | "error"
   >("idle");
-  const inFlightRef = React.useRef<Promise<TData | undefined> | null>(null);
-  const inFlightKeyRef = React.useRef<string | null>(null);
-  const recentSuccessRef = React.useRef<
-    Map<string, RecentSuccessfulMutation<TData>>
-  >(new Map());
+  const inFlightRef: RefObject<Promise<TData | undefined> | null> =
+    useRef(null);
+  const inFlightKeyRef: RefObject<string | null> = useRef(null);
+  const recentSuccessRef = useRef<Map<string, RecentSuccessfulMutation<TData>>>(
+    new Map(),
+  );
   // Pulled apart before the memo on purpose: callers pass `idempotency` as an
   // inline object literal, so depending on it directly would recompute (and
   // destabilize `mutate`) on every render. Reading the fields out here means the
@@ -105,16 +106,14 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
     onDuplicateRecentSuccess,
   } = opts.idempotency ?? {};
 
-  const resolvedIdempotency = React.useMemo(() => {
+  const resolvedIdempotency = useMemo(() => {
     if (!hasIdempotency || idempotencyEnabled === false) {
       return null;
     }
 
     return {
       getKey:
-        idempotencyGetKey ??
-        ((variables: TVariables) => stableSerialize(variables)),
-      windowMs: idempotencyWindowMs ?? DEFAULT_IDEMPOTENCY_WINDOW_MS,
+        idempotencyGetKey ?? ((input: TVariables) => stableSerialize(input)),
       onBlockedConcurrent:
         onBlockedConcurrent ?? "Please wait for the current action to finish.",
       onDuplicatePending:
@@ -122,6 +121,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
       onDuplicateRecentSuccess:
         onDuplicateRecentSuccess ??
         "This action was already applied a moment ago.",
+      windowMs: idempotencyWindowMs ?? DEFAULT_IDEMPOTENCY_WINDOW_MS,
     };
   }, [
     hasIdempotency,
@@ -133,10 +133,10 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
     onDuplicateRecentSuccess,
   ]);
 
-  const mutate = React.useCallback(
-    async (variables: TVariables): Promise<TData | undefined> => {
+  const mutate = useCallback(
+    async (input: TVariables): Promise<TData | undefined> => {
       const mutationKey =
-        resolvedIdempotency?.getKey(variables) ?? stableSerialize(variables);
+        resolvedIdempotency?.getKey(input) ?? stableSerialize(input);
       const now = Date.now();
 
       if (resolvedIdempotency?.windowMs) {
@@ -154,7 +154,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
           if (feedback) {
             emitFeedbackToast(
               typeof feedback === "function"
-                ? feedback({ data: recentSuccess.data, variables })
+                ? feedback({ data: recentSuccess.data, variables: input })
                 : feedback,
               "info",
             );
@@ -172,7 +172,7 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
           if (feedback) {
             emitFeedbackToast(
               typeof feedback === "function"
-                ? feedback({ variables })
+                ? feedback({ variables: input })
                 : feedback,
               "info",
             );
@@ -188,34 +188,34 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
           if (feedback) {
             emitFeedbackToast(
               typeof feedback === "function"
-                ? feedback({ variables })
+                ? feedback({ variables: input })
                 : feedback,
               "warning",
             );
           }
 
-          return undefined;
+          return;
         }
       }
 
       const mutationPromise = (async () => {
         setStatus("pending");
         setSubmittedAt(now);
-        setVariables(variables);
+        setVariables(input);
 
         try {
-          const data = await opts.fn(variables);
-          await opts.onSuccess?.({ data });
+          const result = await opts.fn(input);
+          await opts.onSuccess?.({ data: result });
           setStatus("success");
           setError(undefined);
-          setData(data);
-          if (!isErrorPayload(data) && mutationKey && resolvedIdempotency) {
+          setData(result);
+          if (!isErrorPayload(result) && mutationKey && resolvedIdempotency) {
             recentSuccessRef.current.set(mutationKey, {
-              data,
+              data: result,
               expiresAt: Date.now() + resolvedIdempotency.windowMs,
             });
           }
-          return data;
+          return result;
         } catch (err) {
           setStatus("error");
           setError(err as TError);
@@ -226,8 +226,8 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
       })();
 
       inFlightRef.current = mutationPromise;
-      inFlightKeyRef.current = mutationKey ?? null;
-      return mutationPromise;
+      inFlightKeyRef.current = mutationKey;
+      return await mutationPromise;
     },
     // Granular deps are intentional to keep `mutate` referentially stable even
     // when callers pass inline option objects.
@@ -235,11 +235,11 @@ export function useMutation<TVariables, TData, TError = Error>(opts: {
   );
 
   return {
-    status,
-    variables,
-    submittedAt,
-    mutate,
-    error,
     data,
+    error,
+    mutate,
+    status,
+    submittedAt,
+    variables,
   };
 }

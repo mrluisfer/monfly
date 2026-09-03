@@ -8,24 +8,19 @@ export const createTransaction = async (data: {
   category: string;
   description?: string;
   date: Date;
-}) => {
-  return prisma.transaction.create({ data });
-};
+}) => prisma.transaction.create({ data });
 
-export const getTransactionsByUser = async (userEmail: string) => {
-  return prisma.transaction.findMany({ where: { userEmail } });
-};
+export const getTransactionsByUser = async (userEmail: string) =>
+  prisma.transaction.findMany({ where: { userEmail } });
 
 export const updateTransaction = async (
   id: string,
   data: Partial<Omit<Prisma.TransactionUpdateInput, "userEmail">>,
-) => {
-  return prisma.transaction.update({
-    where: { id },
+) =>
+  prisma.transaction.update({
     data,
+    where: { id },
   });
-};
 
-export const deleteTransaction = async (id: string) => {
-  return prisma.transaction.delete({ where: { id } });
-};
+export const deleteTransaction = async (id: string) =>
+  prisma.transaction.delete({ where: { id } });

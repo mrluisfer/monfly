@@ -2,14 +2,14 @@ import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 import type { TransactionWithUser } from "~/types/TransactionWithUser";
 
-type GetTransactionsParams = {
-  email: string;
+interface GetTransactionsParams {
   cardId?: string | null;
-};
+  email: string;
+}
 
 interface TransactionsResponse<T> extends ApiResponse<T> {
-  total: number;
   limit?: number;
+  total: number;
 }
 
 export const getTransactionsByEmail = async ({
@@ -26,23 +26,23 @@ export const getTransactionsByEmail = async ({
 
     const [transactions, total] = await Promise.all([
       prismaClient.transaction.findMany({
-        where,
-        take: limit,
-        select: {
-          id: true,
-          userEmail: true,
-          amount: true,
-          type: true,
-          category: true,
-          description: true,
-          date: true,
-          cardId: true,
-          appliedToLoanId: true,
-          createdAt: true,
-          updatedAt: true,
-          _count: { select: { loans: true } },
-        },
         orderBy: { createdAt: "desc" },
+        select: {
+          _count: { select: { loans: true } },
+          amount: true,
+          appliedToLoanId: true,
+          cardId: true,
+          category: true,
+          createdAt: true,
+          date: true,
+          description: true,
+          id: true,
+          type: true,
+          updatedAt: true,
+          userEmail: true,
+        },
+        take: limit,
+        where,
       }),
       prismaClient.transaction.count({
         where,
@@ -55,11 +55,11 @@ export const getTransactionsByEmail = async ({
     }));
 
     return {
+      data: enriched,
       error: false,
       message: "Transactions fetched successfully",
-      data: enriched,
-      success: true,
       statusCode: 200,
+      success: true,
       total,
     } as TransactionsResponse<TransactionWithUser[]>;
   } catch (error) {
@@ -67,12 +67,12 @@ export const getTransactionsByEmail = async ({
       error instanceof Error ? error.message : "Unknown error";
 
     return {
+      data: null,
       error: true,
       message: `Error fetching transactions: ${errorMessage}`,
-      data: null,
       statusCode: 500,
-      total: 0,
       success: false,
+      total: 0,
     } as TransactionsResponse<TransactionWithUser[] | null>;
   }
 };

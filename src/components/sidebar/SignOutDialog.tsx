@@ -17,8 +17,8 @@ import {
 
 interface SignOutDialogProps {
   children?: ReactElement;
-  open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  open?: boolean;
 }
 
 export const SignOutDialog = ({
@@ -31,7 +31,9 @@ export const SignOutDialog = ({
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleLogOut = async () => {
-    if (isSigningOut) return;
+    if (isSigningOut) {
+      return;
+    }
     setIsSigningOut(true);
 
     try {
@@ -59,7 +61,7 @@ export const SignOutDialog = ({
       onOpenChange={isControlled ? onOpenChange : undefined}
     >
       {/* Only render trigger if children are provided */}
-      {children && <AlertDialogTrigger render={children} />}
+      {children ? <AlertDialogTrigger render={children} /> : null}
       <AlertDialogContent>
         <div className="flex flex-col gap-2 max-sm:items-center sm:flex-row sm:gap-4">
           <div

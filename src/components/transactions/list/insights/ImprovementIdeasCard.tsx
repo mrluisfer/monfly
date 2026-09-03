@@ -1,16 +1,16 @@
 import { CircleAlertIcon, LightbulbIcon } from "lucide-react";
 import Card from "~/components/shared/Card";
 
-type ImprovementIdeasCardProps = {
+interface ImprovementIdeasCardProps {
   ideas: string[];
-};
+}
 
 export function ImprovementIdeasCard({ ideas }: ImprovementIdeasCardProps) {
   return (
     <Card
       title={
         <span className="flex items-center gap-2">
-          <LightbulbIcon className="text-warning size-4" aria-hidden="true" />
+          <LightbulbIcon className="size-4 text-warning" aria-hidden="true" />
           Improvement ideas
         </span>
       }
@@ -20,10 +20,10 @@ export function ImprovementIdeasCard({ ideas }: ImprovementIdeasCardProps) {
         {ideas.map((idea) => (
           <li
             key={idea}
-            className="bg-muted/50 text-muted-foreground flex items-start gap-2 rounded-lg px-3 py-2.5 text-sm"
+            className="flex items-start gap-2 rounded-lg bg-muted/50 px-3 py-2.5 text-muted-foreground text-sm"
           >
             <CircleAlertIcon
-              className="text-primary mt-0.5 size-4 shrink-0"
+              className="mt-0.5 size-4 shrink-0 text-primary"
               aria-hidden="true"
             />
             <span>{idea}</span>

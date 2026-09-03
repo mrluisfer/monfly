@@ -31,14 +31,14 @@ import type { TransactionWithUser } from "~/types/TransactionWithUser";
 import { TransactionSearchInput } from "../TransactionSearchInput";
 
 interface DataTableToolbarProps {
-  table: TanstackTable<TransactionWithUser>;
-  globalFilter: string;
-  setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
-  typeFilterValue: string;
-  hasActiveFilters: boolean;
-  selectedRowsCount: number;
   deleteTransactionsStatus: "idle" | "pending" | "success" | "error";
+  globalFilter: string;
+  hasActiveFilters: boolean;
   onDeleteRows: () => void;
+  selectedRowsCount: number;
+  setGlobalFilter: React.Dispatch<React.SetStateAction<string>>;
+  table: TanstackTable<TransactionWithUser>;
+  typeFilterValue: string;
 }
 
 export function DataTableToolbar({
@@ -55,7 +55,7 @@ export function DataTableToolbar({
     <div className="flex flex-col gap-3 py-4 xl:flex-row xl:items-center">
       <TransactionSearchInput
         id="desktop-transaction-search"
-        value={globalFilter ?? ""}
+        value={globalFilter}
         onValueChange={setGlobalFilter}
         className="w-full lg:max-w-sm xl:max-w-md"
       />
@@ -93,7 +93,7 @@ export function DataTableToolbar({
             <BanknoteArrowDownIcon className="size-4" />
             <span className="hidden sm:inline">Expense</span>
           </Button>
-          {hasActiveFilters && (
+          {hasActiveFilters ? (
             <Button
               size="lg"
               variant="outline"
@@ -105,7 +105,7 @@ export function DataTableToolbar({
               <XIcon className="size-4" />
               <span className="hidden sm:inline">Clear filter</span>
             </Button>
-          )}
+          ) : null}
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -174,20 +174,18 @@ export function DataTableToolbar({
               {table
                 .getAllColumns()
                 .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
+                .map((column) => (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

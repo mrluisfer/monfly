@@ -20,7 +20,9 @@ export function PartialPaymentControl({
         const fd = new FormData(e.currentTarget);
         const raw = String(fd.get("amount") ?? "");
         const amount = Number(raw);
-        if (!Number.isFinite(amount) || amount <= 0) return;
+        if (!Number.isFinite(amount) || amount <= 0) {
+          return;
+        }
         onSubmit(amount);
         (e.currentTarget as HTMLFormElement).reset();
       }}

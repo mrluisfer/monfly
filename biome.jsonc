@@ -1,0 +1,178 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": [
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/tanstack",
+    "ultracite/biome/vitest"
+  ],
+  "files": {
+    "ignoreUnknown": true,
+    // Sin `"**"` inicial: el preset `core` de ultracite ya trae el catch-all
+    // mas sus negaciones duras (`!!`), que sobreviven al merge. Repetirlo aqui
+    // dispara lint/suspicious/noBiomeFirstException.
+    "includes": [
+      "!**/src/components/ui",
+      "!**/src/routeTree.gen.ts",
+      "!**/.output",
+      "!**/.tanstack",
+      "!**/coverage",
+      "!**/public",
+      "!**/prisma/migrations"
+    ]
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        // BUG (biome 2.5.6 y 2.5.11): al reordenar atributos JSX donde uno es
+        // una expresion multilinea (p.ej. `render={<Link>...</Link>}` de
+        // base-ui), duplica ese atributo y descarta los demas. Reproducido en
+        // src/components/auth/SharedHeader.tsx. Mantener en "off" hasta que
+        // biome lo corrija.
+        "useSortedAttributes": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "trailingCommas": "all"
+    }
+  },
+  "linter": {
+    "rules": {
+      // ======================================================================
+      // 1. Decisiones permanentes del proyecto
+      // ======================================================================
+      "a11y": {
+        "noLabelWithoutControl": "off",
+        "noNoninteractiveTabindex": "off",
+        "noRedundantRoles": "off",
+        "noSvgWithoutTitle": "off",
+        "useAriaPropsSupportedByRole": "off",
+        "useSemanticElements": "off"
+      },
+      "complexity": {
+        "noImportantStyles": "off"
+      },
+      "performance": {
+        // Los barriles `index.ts` son un patron documentado del repo
+        // (src/hooks, src/server/db, src/state). Ver CLAUDE.md.
+        "noBarrelFile": "off"
+      },
+      "style": {
+        // src/queries/dictionary.ts y src/constants/* usan enums a proposito.
+        "noEnum": "off",
+        // Los componentes son PascalCase; utils y server, kebab-case.
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["camelCase", "kebab-case", "PascalCase"],
+            "requireAscii": true
+          }
+        }
+      },
+
+      // ======================================================================
+      // 2. Deuda tecnica de la adopcion de Ultracite
+      //
+      // Cada regla aqui esta en "warn" solo porque el codigo previo la
+      // incumple. NO son preferencias: no escribas codigo nuevo que las
+      // dispare. Conteo al 2026-09-02 (`pnpm lint:debt` para el actual);
+      // cuando una llegue a 0, borra su linea para que vuelva a "error"
+      // heredado de ultracite.
+      //
+      // Un solo `pnpm check` (fix seguro, ~324 archivos) liquida ~950 de estos:
+      // useSortedClasses, useBlockStatements, useConsistentArrowReturn,
+      // useSimplifiedLogicExpression, useNumericSeparators, noInferrableTypes,
+      // useSelfClosingElements, useNumberNamespace, noNegationElse,
+      // noUselessUndefined, noUnusedTemplateLiteral, useCollapsedElseIf,
+      // noConstantBinaryExpressions y casi todo useAwait. Verificado: el
+      // typecheck queda en verde despues.
+      //
+      // El resto es manual. useConsistentTypeDefinitions (119) NO cuenta como
+      // automatico: su unico fix es unsafe (`type` -> `interface`).
+      // NUNCA uses `--unsafe`: useAtIndex reescribe `arr[i]` a `arr.at(i)` y
+      // rompe el typecheck.
+      // ======================================================================
+      "nursery": {
+        "useSortedClasses": {
+          // 608
+          "fix": "safe",
+          "level": "warn",
+          "options": {
+            "attributes": ["className"],
+            "functions": ["clsx", "cva", "tw", "twMerge", "cn", "twJoin", "tv"]
+          }
+        }
+      }
+    }
+  },
+  "overrides": [
+    {
+      // Las server functions de TanStack Start llaman `useSession()` fuera de
+      // un componente; la regla de hooks de React no aplica aqui.
+      "includes": ["**/src/server/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useHookAtTopLevel": "off"
+          }
+        }
+      }
+    },
+    {
+      // Deuda tecnica (continuacion): agrupada en un override para que este
+      // bloque completo se pueda ir vaciando sin tocar la seccion 1.
+      "includes": ["**"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveCognitiveComplexity": "warn", // 12
+            "noUselessUndefined": "warn", // 3
+            "noVoid": "warn", // 3
+            "useSimplifiedLogicExpression": "warn" // 23
+          },
+          "correctness": {
+            "useImageSize": "warn", // 4
+            "useSingleJsDocAsterisk": "warn" // 3
+          },
+          "performance": {
+            "noAwaitInLoops": "warn", // 4
+            "noJsxPropsBind": "warn", // 201
+            "noNamespaceImport": "warn", // 7
+            "useTopLevelRegex": "warn" // 8
+          },
+          "style": {
+            "noExportedImports": "warn", // 2
+            "noIncrementDecrement": "warn", // 5
+            "noInferrableTypes": "warn", // 6
+            "noNegationElse": "warn", // 5
+            "noNestedTernary": "warn", // 20
+            "noUnusedTemplateLiteral": "warn", // 2
+            "useAtIndex": "warn", // 5
+            "useBlockStatements": "warn", // 168
+            "useCollapsedElseIf": "warn", // 1
+            "useConsistentArrowReturn": "warn", // 35
+            "useConsistentTypeDefinitions": "warn", // 119
+            "useDestructuring": "warn", // 7
+            "useErrorCause": "warn", // 2
+            "useNumberNamespace": "warn", // 5
+            "useNumericSeparators": "warn", // 7
+            "useSelfClosingElements": "warn" // 5
+          },
+          "suspicious": {
+            "noConstantBinaryExpressions": "warn", // 1
+            "noEmptyBlockStatements": "warn", // 5
+            "noEqualsToNull": "warn", // 1
+            "noLeakedRender": "warn", // 83
+            "noReactForwardRef": "warn", // 1
+            "noShadow": "warn", // 7
+            "noUnnecessaryConditions": "warn", // 48
+            "useAwait": "warn" // 14
+          }
+        }
+      }
+    }
+  ]
+}

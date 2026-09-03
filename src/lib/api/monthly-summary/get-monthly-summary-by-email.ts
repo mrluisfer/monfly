@@ -13,10 +13,10 @@ export const getMonthlySummaryByEmailServer = createServerFn({ method: "GET" })
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "monthly-summary:get",
-        limit: 60,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 60,
+        scope: "monthly-summary:get",
+        windowMs: 60_000,
       });
 
       return await getMonthlySummaryByEmailUtils({ email: sessionEmail });
@@ -27,11 +27,11 @@ export const getMonthlySummaryByEmailServer = createServerFn({ method: "GET" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error fetching monthly summary",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

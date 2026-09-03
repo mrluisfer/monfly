@@ -11,11 +11,11 @@ import type { HeaderIconName } from "./NavigationLinks";
 
 const iconMap: Record<HeaderIconName, typeof BookOpenIcon> = {
   BookOpenIcon,
-  LifeBuoyIcon,
   InfoIcon,
-  ShieldCheckIcon,
-  ScaleIcon,
+  LifeBuoyIcon,
   MailIcon,
+  ScaleIcon,
+  ShieldCheckIcon,
 };
 
 export function HeaderMenuIcon({
@@ -26,7 +26,9 @@ export function HeaderMenuIcon({
   label: string;
 }) {
   const Icon = iconMap[icon];
-  if (!Icon) return <span>{label}</span>;
+  if (!Icon) {
+    return <span>{label}</span>;
+  }
 
   return (
     <span className="flex items-center gap-2">

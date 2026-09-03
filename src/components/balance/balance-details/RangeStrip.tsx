@@ -1,53 +1,54 @@
 import { CalendarRangeIcon } from "lucide-react";
 
 import { Card } from "~/components/ui/card";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
-import { formatCurrency } from "~/utils/format-currency";
+import { useCurrency } from "~/hooks/useCurrency";
 
 import type { IncomeExpensePoint } from "./types";
 
-type RangeStripProps = {
+interface RangeStripProps {
   best: IncomeExpensePoint;
   worst: IncomeExpensePoint;
-};
+}
 
 export function RangeStrip({ best, worst }: RangeStripProps) {
-  const currency = usePreferredCurrency();
-  if (best.label === worst.label) return null;
+  const { formatPlain } = useCurrency();
+  if (best.label === worst.label) {
+    return null;
+  }
   return (
     <Card
       size="sm"
       className="px-(--card-spacing) text-xs sm:flex-row sm:items-center sm:justify-between"
     >
-      <span className="text-muted-foreground flex items-center gap-2">
+      <span className="flex items-center gap-2 text-muted-foreground">
         <CalendarRangeIcon
-          className="text-muted-foreground size-3.5"
+          className="size-3.5 text-muted-foreground"
           aria-hidden={true}
         />
         Range across recent periods
       </span>
       <span className="flex flex-wrap items-center gap-3">
         <span className="inline-flex items-center gap-1.5">
-          <span className="bg-chart-1 size-2 rounded-full" aria-hidden={true} />
+          <span className="size-2 rounded-full bg-chart-1" aria-hidden={true} />
           <span className="text-muted-foreground">Best</span>
-          <span className="text-foreground font-medium tabular-nums">
+          <span className="font-medium text-foreground tabular-nums">
             {best.label}
           </span>
           <span className="text-chart-1 tabular-nums">
-            {formatCurrency(best.net, currency)}
+            {formatPlain(best.net)}
           </span>
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span
-            className="bg-destructive size-2 rounded-full"
+            className="size-2 rounded-full bg-destructive"
             aria-hidden={true}
           />
           <span className="text-muted-foreground">Lowest</span>
-          <span className="text-foreground font-medium tabular-nums">
+          <span className="font-medium text-foreground tabular-nums">
             {worst.label}
           </span>
           <span className="text-destructive tabular-nums">
-            {formatCurrency(worst.net, currency)}
+            {formatPlain(worst.net)}
           </span>
         </span>
       </span>

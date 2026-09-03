@@ -17,6 +17,6 @@ export const Route = createFileRoute("/_authed/user/$userId")({
 });
 
 function RouteComponent() {
-  const { userId, user } = Route.useLoaderData();
-  return <UserProfilePage userId={userId} user={user} />;
+  const { user } = Route.useLoaderData();
+  return <UserProfilePage user={user} />;
 }

@@ -24,7 +24,7 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { queryDictionary } from "~/queries/dictionary";
-import { formatCurrency, getCurrencySymbol } from "~/utils/format-currency";
+import { getCurrencySymbol } from "~/utils/format-currency";
 import { queryKeys } from "~/utils/query-keys";
 
 import { CopyButton } from "../copy-button/copy-button";
@@ -32,12 +32,12 @@ import { Badge } from "../ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { BalanceActions } from "./BalanceActions";
 
-type IncomeExpensePoint = {
+interface IncomeExpensePoint {
+  expense: number;
+  income: number;
   month: string;
   year: number;
-  income: number;
-  expense: number;
-};
+}
 
 const LONG_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
   day: "numeric",
@@ -46,35 +46,35 @@ const LONG_DATE_FORMATTER = new Intl.DateTimeFormat(undefined, {
 });
 
 export const TotalBalance = () => {
-  const { currency, isHidden: isBalanceHidden } = useCurrency();
+  const { currency, formatPlain, isHidden: isBalanceHidden } = useCurrency();
   const shouldReduceMotion = useReducedMotion();
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
 
   const { error, isPending, data } = useQuery({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 5,
   });
 
   // Only fetched when a card is active; otherwise the query stays disabled.
   const { data: cardsData } = useCards();
 
   const { data: incomeExpenseData } = useQuery({
-    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5,
     queryFn: () =>
       getIncomeExpenseDataServer({
-        data: { email: userEmail, cardId: activeCard },
+        data: { cardId: activeCard, email: userEmail },
       }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 3,
-    gcTime: 1000 * 60 * 5,
+    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 3,
   });
 
   // When a card is selected, show that card's balance; otherwise the global
@@ -83,13 +83,17 @@ export const TotalBalance = () => {
     ? (cardsData?.data?.find((card) => card.id === activeCard)?.balance ?? 0)
     : data?.data?.totalBalance;
 
-  // Currency-aware display string (symbol + grouping for the active currency).
-  const displayBalance = formatCurrency(
+  // Currency- and convention-aware display string.
+  // (the masked variant is derived just below)
+  const displayBalance = formatPlain(
     scopedBalance !== undefined && scopedBalance !== null
       ? Number(scopedBalance)
       : 0,
-    currency,
   );
+
+  const balanceLabel = isBalanceHidden
+    ? `${getCurrencySymbol(currency)}••••••`
+    : displayBalance;
 
   // ponytail: only the last period label + period count are rendered, so we
   // derive just those instead of the full income/expense/trend summary.
@@ -137,7 +141,7 @@ export const TotalBalance = () => {
     <Card>
       <CardHeader>
         <CardTitle className="flex flex-wrap items-center gap-2">
-          <span className="text-muted-foreground text-sm font-medium">
+          <span className="font-medium text-muted-foreground text-sm">
             Net total
           </span>
           <Tooltip>
@@ -160,7 +164,7 @@ export const TotalBalance = () => {
               render={
                 <CopyButton
                   text={displayBalance}
-                  variant="outline"
+                  variant="secondary"
                   size="default"
                 />
               }
@@ -186,26 +190,24 @@ export const TotalBalance = () => {
                 initial={
                   shouldReduceMotion
                     ? false
-                    : { opacity: 0, y: 8, filter: "blur(4px)" }
+                    : { filter: "blur(4px)", opacity: 0, y: 8 }
                 }
-                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
                 exit={
                   shouldReduceMotion
                     ? { opacity: 0 }
-                    : { opacity: 0, y: -8, filter: "blur(4px)" }
+                    : { filter: "blur(4px)", opacity: 0, y: -8 }
                 }
                 transition={{
                   duration: shouldReduceMotion ? 0 : 0.22,
                   ease: "easeOut",
                 }}
-                className="text-foreground text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
+                className="font-semibold text-4xl text-foreground tracking-tight sm:text-5xl lg:text-6xl"
                 aria-label={
                   isBalanceHidden ? "Total balance hidden" : undefined
                 }
               >
-                {isBalanceHidden
-                  ? `${getCurrencySymbol(currency)}••••••`
-                  : displayBalance}
+                {balanceLabel}
               </m.span>
             </AnimatePresence>
           </div>

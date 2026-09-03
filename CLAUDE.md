@@ -12,7 +12,9 @@ Monfly is a full-stack personal finance dashboard built with **TanStack Start** 
 pnpm dev                    # Start dev server (port 3000)
 pnpm build                  # Production build
 pnpm lint                   # Biome lint check
-pnpm lint:fix               # Auto-fix lint issues
+pnpm lint:fix               # Auto-fix lint issues (safe fixes only)
+pnpm lint:debt              # Ranked table of remaining Ultracite tech debt
+pnpm lint:strict [path]     # Fail on warnings — verifies an area is debt-free
 pnpm format                 # Biome format
 pnpm check                  # Biome lint + format + organize imports, writes fixes
 pnpm typecheck              # tsc --noEmit
@@ -102,6 +104,17 @@ pnpm prisma studio          # Open Prisma database GUI
 - **Email normalization:** All emails lowercased before lookup/storage
 - **Conventional commits:** Use `feat:`, `fix:`, `refactor:`, etc. prefixes
 
+## Linting (Biome + Ultracite)
+
+Full reference — rationale, rule-by-rule decisions, cleanup workflow — in `docs/agents/linting.md`. The non-negotiables:
+
+- Config is **`biome.jsonc`**, never `biome.json`: it carries comments, and `.json` rejects them (Biome then reports only parse errors and falls back to defaults). It extends the Ultracite presets `core`, `react`, `tanstack`, `vitest` — no `next` preset, this is TanStack Start
+- **`assist.source.useSortedAttributes` must stay `off`**: Biome 2.5.6/2.5.11 duplicate a multi-line JSX expression attribute (e.g. base-ui's `render={<Link>…</Link>}`) and silently drop its siblings. Repro: `src/components/auth/SharedHeader.tsx`
+- **Never run `biome check --write --unsafe`**: `useAtIndex` rewrites `arr[i]` to `arr.at(i)` and breaks `tsc`. The safe `pnpm check` keeps typecheck green
+- Rules **permanently off** are project decisions, not gaps — don't re-enable them or refactor code to satisfy them: `noBarrelFile`, `noEnum`, `noImportantStyles`, the pre-existing a11y set, and `useHookAtTopLevel` scoped to `src/server/**`
+- Rules at `"warn"` in the last `overrides` entry are **tech debt with counts attached**. Don't write new code that trips them. Fix, then delete the line so the rule reverts to `"error"`
+- `pnpm lint:debt` ranks what's left; `pnpm lint:strict [path]` fails on warnings — use it to confirm an area is clean
+
 ## Environment Variables
 
 Required in `.env`:
@@ -128,3 +141,7 @@ The five canonical triage roles, used verbatim as label strings. See `docs/agent
 ### Domain docs
 
 Single-context: `CONTEXT.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
+
+### Linting
+
+Biome + Ultracite, the rules deliberately disabled, and how to retire the `"warn"` tech debt. See `docs/agents/linting.md`.

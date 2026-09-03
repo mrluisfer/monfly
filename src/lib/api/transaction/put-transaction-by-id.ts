@@ -12,40 +12,40 @@ import type { ApiResponse } from "~/types/ApiResponse";
 export const putTransactionByIdServer = createServerFn({ method: "POST" })
   .validator(
     z.object({
-      id: z.string(),
       data: z.object({
         amount: z.number(),
-        type: z.string(),
-        category: z.string(),
-        description: z.string(),
-        date: z.date(),
         appliedToLoanId: z.uuid().nullable().optional(),
         cardId: z.uuid().nullable().optional(),
+        category: z.string(),
+        date: z.date(),
+        description: z.string(),
+        type: z.string(),
       }),
+      id: z.string(),
     }),
   )
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "transaction:update",
-        limit: 12,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 12,
+        scope: "transaction:update",
+        windowMs: 20_000,
       });
 
       const ownsTransaction = await prismaClient.transaction.findFirst({
-        where: { id: data.id, userEmail: sessionEmail },
         select: { id: true },
+        where: { id: data.id, userEmail: sessionEmail },
       });
 
       if (!ownsTransaction) {
         return {
+          data: null,
           error: true,
           message: "Transaction not found",
-          data: null,
-          success: false,
           statusCode: 404,
+          success: false,
         } as ApiResponse<null>;
       }
 
@@ -57,11 +57,11 @@ export const putTransactionByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Transaction update failed",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

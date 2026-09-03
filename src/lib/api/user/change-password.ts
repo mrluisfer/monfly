@@ -19,15 +19,15 @@ export const changePasswordServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "user:password:update",
-        limit: 5,
-        windowMs: 5 * 60_000,
         identifier: sessionEmail,
+        limit: 5,
+        scope: "user:password:update",
+        windowMs: 5 * 60_000,
       });
 
       return await updateUserPassword({
-        email: sessionEmail,
         currentPassword: data.currentPassword,
+        email: sessionEmail,
         newPassword: data.newPassword,
       });
     } catch (error) {
@@ -37,11 +37,11 @@ export const changePasswordServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error updating password",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

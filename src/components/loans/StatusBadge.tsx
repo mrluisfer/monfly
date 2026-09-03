@@ -18,7 +18,7 @@ export function StatusBadge({ status }: { status: LoanStatus }) {
     <UIStatusBadge
       variant={STATUS_VARIANT[status] ?? "neutral"}
       size="sm"
-      className="tracking-wide uppercase"
+      className="uppercase tracking-wide"
     >
       {LOAN_STATUS_LABEL[status]}
     </UIStatusBadge>

@@ -77,10 +77,10 @@ describe("enforceRateLimit", () => {
   });
 
   const config = {
-    scope: "test:scope",
-    limit: 2,
-    windowMs: 1000,
     identifier: "user-1",
+    limit: 2,
+    scope: "test:scope",
+    windowMs: 1000,
   };
 
   it("allows requests up to the limit", () => {
@@ -126,11 +126,11 @@ describe("toSecurityErrorResponse", () => {
       new SecurityError("Forbidden", 403),
     );
     expect(response).toEqual({
-      error: true,
-      success: false,
-      message: "Forbidden",
       data: null,
+      error: true,
+      message: "Forbidden",
       statusCode: 403,
+      success: false,
     });
   });
 

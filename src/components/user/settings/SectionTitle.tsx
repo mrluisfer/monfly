@@ -10,7 +10,7 @@ export function SectionTitle({
 }) {
   return (
     <span className="flex items-center gap-2">
-      <Icon className="text-primary size-4 shrink-0" aria-hidden="true" />
+      <Icon className="size-4 shrink-0 text-primary" aria-hidden="true" />
       {children}
     </span>
   );

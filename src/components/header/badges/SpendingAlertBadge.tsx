@@ -8,27 +8,23 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { useMemo } from "react";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getTotalExpensesByEmailServer } from "~/lib/api/transaction/get-total-expenses-by-email";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
-import {
-  formatCurrency,
-  type SupportedCurrency,
-} from "~/utils/format-currency";
 import { queryKeys } from "~/utils/query-keys";
 import { BadgeIcon, HeaderBadge, StatusDot } from "./HeaderBadge";
 
 interface SpendingAlertBadgeProps {
-  showIcon?: boolean;
-  showPercentage?: boolean;
   animate?: boolean;
+  className?: string;
   compact?: boolean;
   fullWidth?: boolean;
   isActive?: boolean;
-  className?: string;
+  showIcon?: boolean;
+  showPercentage?: boolean;
 }
 
 type SpendingStatus =
@@ -42,77 +38,77 @@ type SpendingStatus =
   | "error";
 
 const statusConfig = {
-  safe: {
-    label: "Budget Safe",
-    compactLabel: "Safe",
-    color: "bg-primary",
-    variant: "outline" as const,
-    icon: CheckCircle2,
-    iconColor: "text-primary",
-    description: "Your spending is well within budget.",
-  },
-  moderate: {
-    label: "Budget Moderate",
-    compactLabel: "Moderate",
-    color: "bg-secondary",
-    variant: "outline" as const,
-    icon: TrendingUp,
-    iconColor: "text-secondary-foreground",
-    description: "You're using a moderate amount of your budget.",
-  },
-  warning: {
-    label: "Budget Warning",
-    compactLabel: "Warning",
-    color: "bg-accent",
-    variant: "outline" as const,
-    icon: AlertTriangle,
-    iconColor: "text-accent-foreground",
-    description: "You're approaching your budget limit!",
-  },
-  exceeded: {
-    label: "Budget Exceeded",
-    compactLabel: "Exceeded",
-    color: "bg-destructive",
-    variant: "outline" as const,
-    icon: AlertCircle,
-    iconColor: "text-destructive",
-    description: "You have exceeded your budget limit!",
-  },
-  zero: {
-    label: "Zero Balance",
-    compactLabel: "Zero",
-    color: "bg-muted",
-    variant: "outline" as const,
-    icon: AlertTriangle,
-    iconColor: "text-muted-foreground",
-    description: "Your balance is zero or negative.",
-  },
-  notSet: {
-    label: "Balance Not Set",
-    compactLabel: "No Balance",
-    color: "bg-muted",
-    variant: "outline" as const,
-    icon: ChartSpline,
-    iconColor: "text-muted-foreground",
-    description: "Please configure your balance to track spending.",
-  },
-  loading: {
-    label: "Loading",
-    compactLabel: "Loading",
-    color: "bg-muted",
-    variant: "outline" as const,
-    icon: Loader2,
-    iconColor: "text-muted-foreground",
-    description: "Fetching budget information.",
-  },
   error: {
-    label: "Error",
-    compactLabel: "Error",
     color: "bg-destructive",
-    variant: "destructive" as const,
+    compactLabel: "Error",
+    description: "Failed to load budget data.",
     icon: AlertCircle,
     iconColor: "text-destructive-foreground",
-    description: "Failed to load budget data.",
+    label: "Error",
+    variant: "destructive" as const,
+  },
+  exceeded: {
+    color: "bg-destructive",
+    compactLabel: "Exceeded",
+    description: "You have exceeded your budget limit!",
+    icon: AlertCircle,
+    iconColor: "text-destructive",
+    label: "Budget Exceeded",
+    variant: "outline" as const,
+  },
+  loading: {
+    color: "bg-muted",
+    compactLabel: "Loading",
+    description: "Fetching budget information.",
+    icon: Loader2,
+    iconColor: "text-muted-foreground",
+    label: "Loading",
+    variant: "outline" as const,
+  },
+  moderate: {
+    color: "bg-secondary",
+    compactLabel: "Moderate",
+    description: "You're using a moderate amount of your budget.",
+    icon: TrendingUp,
+    iconColor: "text-secondary-foreground",
+    label: "Budget Moderate",
+    variant: "outline" as const,
+  },
+  notSet: {
+    color: "bg-muted",
+    compactLabel: "No Balance",
+    description: "Please configure your balance to track spending.",
+    icon: ChartSpline,
+    iconColor: "text-muted-foreground",
+    label: "Balance Not Set",
+    variant: "outline" as const,
+  },
+  safe: {
+    color: "bg-primary",
+    compactLabel: "Safe",
+    description: "Your spending is well within budget.",
+    icon: CheckCircle2,
+    iconColor: "text-primary",
+    label: "Budget Safe",
+    variant: "outline" as const,
+  },
+  warning: {
+    color: "bg-accent",
+    compactLabel: "Warning",
+    description: "You're approaching your budget limit!",
+    icon: AlertTriangle,
+    iconColor: "text-accent-foreground",
+    label: "Budget Warning",
+    variant: "outline" as const,
+  },
+  zero: {
+    color: "bg-muted",
+    compactLabel: "Zero",
+    description: "Your balance is zero or negative.",
+    icon: AlertTriangle,
+    iconColor: "text-muted-foreground",
+    label: "Zero Balance",
+    variant: "outline" as const,
   },
 };
 
@@ -124,9 +120,13 @@ const detailStatuses = new Set<SpendingStatus>([
 ]);
 
 const toSafeNumber = (value: unknown) => {
-  if (value === null || value === undefined) return 0;
+  if (value === null || value === undefined) {
+    return 0;
+  }
   const parsed = Number(value);
-  if (!Number.isFinite(parsed)) return 0;
+  if (!Number.isFinite(parsed)) {
+    return 0;
+  }
   return parsed;
 };
 
@@ -140,7 +140,6 @@ export function SpendingAlertBadge({
   className = "",
 }: SpendingAlertBadgeProps) {
   const userEmail = useRouteUser();
-  const currency = usePreferredCurrency();
 
   const isQueryEnabled = Boolean(userEmail && isActive);
 
@@ -149,15 +148,15 @@ export function SpendingAlertBadge({
     isPending: isSpentLoading,
     error: spentError,
   } = useQuery({
-    queryKey: queryKeys.transactions.totalExpenses(userEmail),
+    enabled: isQueryEnabled,
+    gcTime: 1000 * 60 * 5,
     queryFn: () =>
       getTotalExpensesByEmailServer({ data: { email: userEmail } }),
-    enabled: isQueryEnabled,
-    staleTime: 1000 * 60 * 2,
-    gcTime: 1000 * 60 * 5,
+    queryKey: queryKeys.transactions.totalExpenses(userEmail),
+    refetchOnWindowFocus: false,
     retry: 1,
     retryDelay: 1000,
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 2,
   });
 
   const {
@@ -165,14 +164,14 @@ export function SpendingAlertBadge({
     isPending: isUserLoading,
     error: userError,
   } = useQuery({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: isQueryEnabled,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
+    refetchOnWindowFocus: false,
     retry: 1,
     retryDelay: 1000,
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 
   const spent = useMemo(
@@ -187,18 +186,18 @@ export function SpendingAlertBadge({
 
   const { status, percent } = useMemo(() => {
     if (isSpentLoading || isUserLoading) {
-      return { status: "loading" as const, percent: 0 };
+      return { percent: 0, status: "loading" as const };
     }
 
     if (spentError || userError) {
-      return { status: "error" as const, percent: 0 };
+      return { percent: 0, status: "error" as const };
     }
 
     const rawBalance = toSafeNumber(userData?.data?.totalBalance);
     if (rawBalance <= 0) {
       return {
-        status: rawBalance === 0 ? ("notSet" as const) : ("zero" as const),
         percent: 0,
+        status: rawBalance === 0 ? ("notSet" as const) : ("zero" as const),
       };
     }
 
@@ -208,16 +207,16 @@ export function SpendingAlertBadge({
       : 0;
 
     if (safePercent >= 100) {
-      return { status: "exceeded" as const, percent: safePercent };
+      return { percent: safePercent, status: "exceeded" as const };
     }
     if (safePercent >= 80) {
-      return { status: "warning" as const, percent: safePercent };
+      return { percent: safePercent, status: "warning" as const };
     }
     if (safePercent >= 50) {
-      return { status: "moderate" as const, percent: safePercent };
+      return { percent: safePercent, status: "moderate" as const };
     }
 
-    return { status: "safe" as const, percent: safePercent };
+    return { percent: safePercent, status: "safe" as const };
   }, [isSpentLoading, isUserLoading, spentError, userError, spent, userData]);
 
   const remaining = useMemo(
@@ -225,7 +224,7 @@ export function SpendingAlertBadge({
     [balance, spent],
   );
 
-  if (!userEmail || !isActive) {
+  if (!(userEmail && isActive)) {
     return null;
   }
 
@@ -257,31 +256,30 @@ export function SpendingAlertBadge({
           percent={percent}
           spentError={spentError}
           userError={userError}
-          currency={currency}
         />
       }
     >
       <StatusDot color={config.color} animate={shouldAnimateDot} />
 
-      {showIcon && (
+      {showIcon ? (
         <BadgeIcon
           icon={config.icon}
           className={config.iconColor}
           fullWidth={fullWidth}
           animate={status === "loading"}
         />
-      )}
+      ) : null}
 
       <span className="inline-flex min-w-0 flex-1 items-center gap-2">
-        <span className="truncate text-xs font-medium">
+        <span className="truncate font-medium text-xs">
           {compact ? config.compactLabel : config.label}
         </span>
 
-        {showPercentage && canShowDetails && (
+        {showPercentage && canShowDetails ? (
           <span className="shrink-0 font-mono text-xs tabular-nums">
             {percentLabel}
           </span>
-        )}
+        ) : null}
       </span>
     </HeaderBadge>
   );
@@ -296,7 +294,6 @@ function SpendingTooltip({
   percent,
   spentError,
   userError,
-  currency,
 }: {
   config: (typeof statusConfig)[keyof typeof statusConfig];
   canShowDetails: boolean;
@@ -306,24 +303,31 @@ function SpendingTooltip({
   percent: number;
   spentError: Error | null;
   userError: Error | null;
-  currency: SupportedCurrency;
 }) {
+  const { formatPlain } = useCurrency();
+
+  // Whichever request failed first has the message worth showing.
+  const failure = [spentError, userError].find(
+    (candidate) => candidate instanceof Error,
+  );
+  const errorMessage = failure?.message ?? "Unknown error occurred";
+
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-2">
         <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
-        <span className="text-xs font-semibold">
+        <span className="font-semibold text-xs">
           Budget Status: {config.label}
         </span>
       </div>
       <p className="text-[10px]">{config.description}</p>
 
-      {canShowDetails && (
-        <div className="border-border mt-1 space-y-1 border-t pt-1">
+      {canShowDetails ? (
+        <div className="mt-1 space-y-1 border-border border-t pt-1">
           <div className="flex items-center justify-between gap-4 text-[10px]">
             <span>Total budget:</span>
             <span className="font-mono font-semibold">
-              {formatCurrency(balance, currency)}
+              {formatPlain(balance)}
             </span>
           </div>
           <div className="flex items-center justify-between gap-4 text-[10px]">
@@ -334,7 +338,7 @@ function SpendingTooltip({
                 percent >= 80 && "text-destructive",
               )}
             >
-              {formatCurrency(spent, currency)}
+              {formatPlain(spent)}
             </span>
           </div>
           <div className="flex items-center justify-between gap-4 text-[10px]">
@@ -345,10 +349,10 @@ function SpendingTooltip({
                 remaining > 0 ? "text-foreground" : "text-destructive",
               )}
             >
-              {formatCurrency(remaining, currency)}
+              {formatPlain(remaining)}
             </span>
           </div>
-          <div className="border-border flex items-center justify-between gap-4 border-t pt-1 text-[10px]">
+          <div className="flex items-center justify-between gap-4 border-border border-t pt-1 text-[10px]">
             <span>Usage:</span>
             <span
               className={cn(
@@ -363,17 +367,13 @@ function SpendingTooltip({
             </span>
           </div>
         </div>
-      )}
+      ) : null}
 
-      {(spentError || userError) && (
-        <p className="border-border text-destructive mt-1 border-t pt-1 text-[10px]">
-          {spentError instanceof Error
-            ? spentError.message
-            : userError instanceof Error
-              ? userError.message
-              : "Unknown error occurred"}
+      {spentError || userError ? (
+        <p className="mt-1 border-border border-t pt-1 text-[10px] text-destructive">
+          {errorMessage}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }

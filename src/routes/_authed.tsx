@@ -17,13 +17,11 @@ export const Route = createFileRoute("/_authed")({
   },
   errorComponent: (props) => <DefaultCatchBoundary {...props} />,
   pendingComponent: AuthPending,
-  component: () => {
-    return (
-      <Layout>
-        <Outlet />
-      </Layout>
-    );
-  },
+  component: () => (
+    <Layout>
+      <Outlet />
+    </Layout>
+  ),
 });
 
 function AuthPending() {
@@ -33,7 +31,7 @@ function AuthPending() {
       aria-label="Verifying your session"
       className="flex min-h-dvh w-full flex-col items-center justify-center gap-3"
     >
-      <Spinner className="text-muted-foreground size-7" />
+      <Spinner className="size-7 text-muted-foreground" />
       <p className="text-muted-foreground text-sm">Verifying your session…</p>
     </div>
   );

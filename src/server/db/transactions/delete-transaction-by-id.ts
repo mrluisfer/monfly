@@ -13,24 +13,24 @@ export const deleteTransactionById = async (transactionId: string) => {
       // Read transaction before deleting to know the balance impact and any
       // linked loan we need to refund.
       const transaction = await tx.transaction.findUniqueOrThrow({
-        where: { id: transactionId },
         select: {
           amount: true,
-          type: true,
-          userEmail: true,
           appliedToLoanId: true,
           cardId: true,
+          type: true,
+          userEmail: true,
         },
+        where: { id: transactionId },
       });
 
       // If the transaction was applied to a loan, undo that payment first so
       // the loan totals stay consistent before the row goes away.
       if (transaction.appliedToLoanId) {
         await applyLoanPaymentDelta(tx, {
-          loanId: transaction.appliedToLoanId,
           delta: -transaction.amount,
-          userEmail: transaction.userEmail,
+          loanId: transaction.appliedToLoanId,
           transactionType: transaction.type,
+          userEmail: transaction.userEmail,
         });
       }
 
@@ -44,16 +44,16 @@ export const deleteTransactionById = async (transactionId: string) => {
           : transaction.amount;
 
       await tx.user.update({
-        where: { email: transaction.userEmail },
         data: { totalBalance: { increment: balanceReversal } },
+        where: { email: transaction.userEmail },
       });
 
       // Mirror the reversal on the linked card so its balance stays in sync
       // with totalBalance.
       if (transaction.cardId) {
         await tx.card.updateMany({
-          where: { id: transaction.cardId, userEmail: transaction.userEmail },
           data: { balance: { increment: balanceReversal } },
+          where: { id: transaction.cardId, userEmail: transaction.userEmail },
         });
       }
 
@@ -61,28 +61,28 @@ export const deleteTransactionById = async (transactionId: string) => {
     });
 
     return {
-      success: true,
-      message: "Transaction deleted successfully",
       data: transactionDeleted,
       error: false,
+      message: "Transaction deleted successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<Transaction>;
   } catch (error) {
     if (error instanceof LoanPaymentError) {
       return {
+        data: null,
         error: true,
         message: error.message,
-        data: null,
-        success: false,
         statusCode: error.statusCode,
+        success: false,
       } as ApiResponse<null>;
     }
     return {
-      success: false,
-      message: "Error deleting transaction",
       data: null,
       error: true,
+      message: "Error deleting transaction",
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

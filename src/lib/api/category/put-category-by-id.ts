@@ -13,36 +13,36 @@ export const putCategoryByIdServer = createServerFn({ method: "POST" })
   .validator(
     z.object({
       categoryId: z.string(),
-      name: z.string(),
       icon: z.string(),
+      name: z.string(),
     }),
   )
   .handler(async ({ data: { categoryId, name, icon } }) => {
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "category:update",
-        limit: 12,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 12,
+        scope: "category:update",
+        windowMs: 20_000,
       });
 
       const ownsCategory = await prismaClient.category.findFirst({
-        where: { id: categoryId, userEmail: sessionEmail },
         select: { id: true },
+        where: { id: categoryId, userEmail: sessionEmail },
       });
 
       if (!ownsCategory) {
         return {
-          success: false,
-          message: "Category not found",
           data: null,
           error: true,
+          message: "Category not found",
           statusCode: 404,
+          success: false,
         } as ApiResponse<null>;
       }
 
-      return await putCategoryById({ categoryId, name, icon });
+      return await putCategoryById({ categoryId, icon, name });
     } catch (error) {
       const securityErrorResponse = toSecurityErrorResponse(error);
       if (securityErrorResponse) {
@@ -50,11 +50,11 @@ export const putCategoryByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
-        success: false,
-        message: "Error updating category",
         data: null,
         error: true,
+        message: "Error updating category",
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

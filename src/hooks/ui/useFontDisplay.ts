@@ -9,8 +9,8 @@ export const useFontDisplay = () => {
   return useMemo(
     () => ({
       fontDisplay,
-      setFontDisplay: (value: string) => setFontDisplay(value),
       onChangeFontDisplay: (value: string) => setFontDisplay(value),
+      setFontDisplay: (value: string) => setFontDisplay(value),
     }),
     [fontDisplay, setFontDisplay],
   );

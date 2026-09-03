@@ -21,21 +21,21 @@ const miniMetrics = [
 
 const decisionFeed = [
   {
-    title: "Overspending alert",
     description: "Food spend is 18% above baseline this week.",
     icon: CircleAlert,
+    title: "Overspending alert",
     tone: "text-amber-600 dark:text-amber-300",
   },
   {
-    title: "Bill forecast updated",
     description: "Expected fixed costs for next month: $1,945.",
     icon: MoveUpRight,
+    title: "Bill forecast updated",
     tone: "text-teal-600 dark:text-teal-300",
   },
   {
-    title: "Goal progress locked",
     description: "Emergency fund target reached 74% this quarter.",
     icon: CheckCheck,
+    title: "Goal progress locked",
     tone: "text-emerald-600 dark:text-emerald-300",
   },
 ];
@@ -57,14 +57,14 @@ export function LandingHero() {
           <div className="space-y-4">
             <h1
               id="hero-title"
-              className="text-foreground font-[family-name:var(--font-syne)] text-[2.1rem] leading-[1.02] font-bold tracking-tight text-balance sm:text-[2.85rem] md:text-[3.4rem]"
+              className="text-balance font-[family-name:var(--font-syne)] font-bold text-[2.1rem] text-foreground leading-[1.02] tracking-tight sm:text-[2.85rem] md:text-[3.4rem]"
             >
               See your money clearly
               <span className="landing-gradient-text block">
                 act on it instantly
               </span>
             </h1>
-            <p className="max-w-xl text-sm text-pretty sm:text-base md:text-lg">
+            <p className="max-w-xl text-pretty text-sm sm:text-base md:text-lg">
               Monfly converts raw transactions into decisions you can act on in
               seconds. Budget pressure, cashflow risks, and plan changes are
               visible before they become expensive.
@@ -92,13 +92,13 @@ export function LandingHero() {
             {miniMetrics.map((metric, index) => (
               <div
                 key={metric.label}
-                className="landing-fade-up landing-glass-panel border-border/65 rounded-2xl border p-3.5"
+                className="landing-fade-up landing-glass-panel rounded-2xl border border-border/65 p-3.5"
                 style={{ animationDelay: `${index * 0.08 + 0.08}s` }}
               >
-                <dt className="text-muted-foreground text-[0.68rem] tracking-[0.12em] uppercase">
+                <dt className="text-[0.68rem] text-muted-foreground uppercase tracking-[0.12em]">
                   {metric.label}
                 </dt>
-                <dd className="text-foreground mt-1 text-xl font-semibold">
+                <dd className="mt-1 font-semibold text-foreground text-xl">
                   {metric.value}
                 </dd>
               </div>
@@ -117,23 +117,23 @@ export function LandingHero() {
           <Card>
             <CardContent>
               <div className="mb-5 flex items-center justify-between gap-2">
-                <p className="text-muted-foreground text-xs font-semibold tracking-[0.13em] uppercase">
+                <p className="font-semibold text-muted-foreground text-xs uppercase tracking-[0.13em]">
                   Live Decision Feed
                 </p>
-                <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-[0.72rem] font-semibold text-emerald-700 dark:text-emerald-300">
+                <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 font-semibold text-[0.72rem] text-emerald-700 dark:text-emerald-300">
                   <ShieldCheck className="size-3.5" />
                   Encrypted
                 </span>
               </div>
 
-              <div className="border-border/65 bg-background/80 rounded-md border p-4">
-                <p className="text-muted-foreground text-xs tracking-[0.12em] uppercase">
+              <div className="rounded-md border border-border/65 bg-background/80 p-4">
+                <p className="text-muted-foreground text-xs uppercase tracking-[0.12em]">
                   Available Cash
                 </p>
-                <p className="text-foreground mt-2 font-[family-name:var(--font-sora)] text-3xl font-semibold">
+                <p className="mt-2 font-[family-name:var(--font-sora)] font-semibold text-3xl text-foreground">
                   $82,490
                 </p>
-                <p className="mt-1 text-xs text-emerald-700 dark:text-emerald-300">
+                <p className="mt-1 text-emerald-700 text-xs dark:text-emerald-300">
                   +8.2% versus last month
                 </p>
               </div>
@@ -142,12 +142,12 @@ export function LandingHero() {
                 {decisionFeed.map((item) => (
                   <li
                     key={item.title}
-                    className="border-border/60 bg-background/72 rounded-md border px-3 py-2.5"
+                    className="rounded-md border border-border/60 bg-background/72 px-3 py-2.5"
                   >
                     <div className="flex items-start gap-2.5 lg:items-center">
                       <item.icon className={`mt-0.5 size-4 ${item.tone}`} />
                       <div>
-                        <p className="text-foreground text-sm font-semibold">
+                        <p className="font-semibold text-foreground text-sm">
                           {item.title}
                         </p>
                         <p className="text-muted-foreground text-xs">
@@ -164,11 +164,11 @@ export function LandingHero() {
           <Card>
             <CardContent>
               <figure>
-                <blockquote className="text-foreground leading-relaxed tracking-wide italic">
+                <blockquote className="text-foreground italic leading-relaxed tracking-wide">
                   &ldquo;We replaced three dashboards and two spreadsheets with
                   one decision stream.&rdquo;
                 </blockquote>
-                <figcaption className="text-muted-foreground mt-1 text-[0.7rem] font-semibold tracking-[0.12em] uppercase">
+                <figcaption className="mt-1 font-semibold text-[0.7rem] text-muted-foreground uppercase tracking-[0.12em]">
                   Finance Ops, Salt Studio
                 </figcaption>
               </figure>

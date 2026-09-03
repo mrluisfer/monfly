@@ -68,17 +68,17 @@ export function TransactionRow({
               initial={reduceMotion ? false : { opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{
-                duration: reduceMotion ? 0 : 0.25,
                 delay: reduceMotion
                   ? 0
                   : groupDelay + Math.min(index * 0.04, 0.2),
+                duration: reduceMotion ? 0 : 0.25,
                 ease: "easeOut",
               }}
               className={cn(
-                "group relative flex items-center gap-3 rounded-2xl px-3 py-3 select-none",
-                "bg-card ring-border/60 ring-1 ring-inset",
+                "group relative flex select-none items-center gap-3 rounded-2xl px-3 py-3",
+                "bg-card ring-1 ring-border/60 ring-inset",
                 "transition-[background-color,box-shadow] duration-200",
-                "hover:bg-accent/40 hover:ring-border hover:shadow-sm",
+                "hover:bg-accent/40 hover:shadow-sm hover:ring-border",
                 "active:scale-[0.98] active:transition-transform active:duration-100",
               )}
             >
@@ -102,39 +102,39 @@ export function TransactionRow({
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="text-foreground truncate text-sm leading-tight font-semibold tracking-tight">
+                <p className="truncate font-semibold text-foreground text-sm leading-tight tracking-tight">
                   {getTransactionTitle(transaction.description, category)}
                 </p>
                 <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                  <span className="text-muted-foreground/78 inline-flex max-w-full min-w-0 items-center gap-1.5 text-xs capitalize [&>svg]:size-3 [&>svg]:shrink-0">
+                  <span className="inline-flex min-w-0 max-w-full items-center gap-1.5 text-muted-foreground/78 text-xs capitalize [&>svg]:size-3 [&>svg]:shrink-0">
                     {categoryIconName ? (
                       getCategoryIconByName(categoryIconName, {
-                        className: "text-primary",
                         "aria-hidden": true,
+                        className: "text-primary",
                       })
                     ) : (
-                      <TagIcon className="text-primary size-3" />
+                      <TagIcon className="size-3 text-primary" />
                     )}
                     <span className="truncate">{category}</span>
                   </span>
-                  <span className="bg-border/80 h-1 w-1 rounded-full" />
+                  <span className="h-1 w-1 rounded-full bg-border/80" />
                   <RelativeTime
                     date={transaction.createdAt}
                     className="text-muted-foreground/78 text-xs"
                   />
-                  {card && (
+                  {card ? (
                     <>
-                      <span className="bg-border/80 h-1 w-1 rounded-full" />
+                      <span className="h-1 w-1 rounded-full bg-border/80" />
                       <CardBadge
                         card={card}
                         className="max-w-[140px] px-2 py-0 text-[11px]"
                       />
                     </>
-                  )}
+                  ) : null}
                   {((transaction.loanCount ?? 0) > 0 ||
                     transaction.appliedToLoanId) && (
                     <>
-                      <span className="bg-border/80 h-1 w-1 rounded-full" />
+                      <span className="h-1 w-1 rounded-full bg-border/80" />
                       <LoanBadge
                         isPayment={Boolean(transaction.appliedToLoanId)}
                       />
@@ -149,7 +149,7 @@ export function TransactionRow({
               <div className="flex shrink-0 items-center gap-1">
                 <span
                   className={cn(
-                    "text-sm font-semibold tabular-nums",
+                    "font-semibold text-sm tabular-nums",
                     isIncome ? "text-primary" : "text-destructive",
                   )}
                 >
@@ -165,7 +165,7 @@ export function TransactionRow({
           }
         />
 
-        <ContextMenuContent className="animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 w-56 space-y-2 duration-200">
+        <ContextMenuContent className="fade-in-0 zoom-in-95 slide-in-from-top-2 w-56 animate-in space-y-2 duration-200">
           <ContextMenuGroup>
             <ContextMenuLabel>Actions for transaction</ContextMenuLabel>
           </ContextMenuGroup>

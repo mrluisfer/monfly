@@ -7,10 +7,7 @@ export const createRecurringBill = async (data: {
   frequency: string;
   nextDueDate: Date;
   category: string;
-}) => {
-  return prisma.recurringBill.create({ data });
-};
+}) => prisma.recurringBill.create({ data });
 
-export const getRecurringBillsByUser = async (userEmail: string) => {
-  return prisma.recurringBill.findMany({ where: { userEmail } });
-};
+export const getRecurringBillsByUser = async (userEmail: string) =>
+  prisma.recurringBill.findMany({ where: { userEmail } });

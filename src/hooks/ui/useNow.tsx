@@ -29,7 +29,9 @@ export function useNow(intervalMs = 30_000): number | null {
   const getSnapshot = useCallback(() => {
     // Seed once on the first client read, then only the interval moves it — so
     // the snapshot is stable between ticks and React doesn't loop.
-    if (cached.current === null) cached.current = Date.now();
+    if (cached.current === null) {
+      cached.current = Date.now();
+    }
     return cached.current;
   }, []);
 

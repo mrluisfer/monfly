@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { ClipboardIcon, EditIcon, Ellipsis, TrashIcon } from "lucide-react";
-import React from "react";
+import React, { useCallback } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,6 +49,15 @@ export function TransactionActionsCell({
 
   const deleteTransactionByIdMutation = useMutation({
     fn: deleteTransactionByIdServer,
+    idempotency: {
+      getKey: (variables) => (variables as { data: { id: string } }).data.id,
+      onDuplicatePending: {
+        title: "Transaction is already being deleted",
+      },
+      onDuplicateRecentSuccess: {
+        title: "Transaction already deleted",
+      },
+    },
     onSuccess: async ({ data }) => {
       if (isErrorPayload(data)) {
         const response = data as { message?: string };
@@ -68,18 +77,9 @@ export function TransactionActionsCell({
       });
       setIsDeleteDialogOpen(false);
     },
-    idempotency: {
-      getKey: (variables) => (variables as { data: { id: string } }).data.id,
-      onDuplicatePending: {
-        title: "Transaction is already being deleted",
-      },
-      onDuplicateRecentSuccess: {
-        title: "Transaction already deleted",
-      },
-    },
   });
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     const result = await deleteTransactionByIdMutation.mutate({
       data: {
         id: transaction.id,
@@ -89,7 +89,30 @@ export function TransactionActionsCell({
       sileo.error({ title: "Failed to delete transaction" });
       setIsDeleteDialogOpen(false);
     }
-  };
+  }, [deleteTransactionByIdMutation, transaction.id]);
+
+  const handleCopyAlert = useCallback(() => {
+    sileo.promise(navigator.clipboard.writeText(transaction.id), {
+      error: { title: "Failed to copy transaction ID" },
+      loading: { title: "Copying transaction ID..." },
+      success: { title: "Transaction ID copied" },
+    });
+  }, [transaction.id]);
+
+  const handleChangeEditDialogOpen = useCallback(
+    () => setIsEditDialogOpen(true),
+    [],
+  );
+
+  const handleChangeDeleteDialogOpen = useCallback(
+    () => setIsDeleteDialogOpen(true),
+    [],
+  );
+
+  const handleCloseEditDialog = useCallback(
+    () => setIsEditDialogOpen(false),
+    [],
+  );
 
   return (
     <>
@@ -100,7 +123,7 @@ export function TransactionActionsCell({
               variant="outline"
               size="icon-lg"
               disabled={disabled}
-              className="hover:border-primary/20 dark:hover:shadow-primary/10 rounded-full transition-all duration-200 ease-out hover:scale-105 hover:shadow-sm focus-visible:scale-105 active:scale-95 data-[state=open]:scale-105 data-[state=open]:shadow-sm"
+              className="rounded-full transition-all duration-200 ease-out hover:scale-105 hover:border-primary/20 hover:shadow-sm focus-visible:scale-105 active:scale-95 data-[state=open]:scale-105 data-[state=open]:shadow-sm dark:hover:shadow-primary/10"
             >
               <span className="sr-only">
                 {disabled
@@ -113,29 +136,21 @@ export function TransactionActionsCell({
         />
         <DropdownMenuContent
           align="end"
-          className="animate-in fade-in-0 zoom-in-95 slide-in-from-top-2 w-[200px] space-y-2 border duration-200"
+          className="fade-in-0 zoom-in-95 slide-in-from-top-2 w-[200px] animate-in space-y-2 border duration-200"
         >
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions for transaction</DropdownMenuLabel>
           </DropdownMenuGroup>
-          <DropdownMenuItem
-            onClick={() => {
-              sileo.promise(navigator.clipboard.writeText(transaction.id), {
-                loading: { title: "Copying transaction ID..." },
-                success: { title: "Transaction ID copied" },
-                error: { title: "Failed to copy transaction ID" },
-              });
-            }}
-          >
+          <DropdownMenuItem onClick={handleCopyAlert}>
             <ClipboardIcon />
             Copy transaction ID
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+          <DropdownMenuItem onClick={handleChangeEditDialogOpen}>
             <EditIcon />
             Edit transaction
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
+          <DropdownMenuItem onClick={handleChangeDeleteDialogOpen}>
             <TrashIcon />
             Delete transaction
           </DropdownMenuItem>
@@ -149,7 +164,7 @@ export function TransactionActionsCell({
         >
           <EditTransaction
             transaction={transaction}
-            onClose={() => setIsEditDialogOpen(false)}
+            onClose={handleCloseEditDialog}
           />
         </TransactionFormDialogContent>
       </Dialog>

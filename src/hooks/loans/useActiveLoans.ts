@@ -4,14 +4,14 @@ import { useRouteUser } from "~/hooks/useRouteUser";
 import { getActiveLoansByEmailServer } from "~/lib/api/loan/get-active-loans-by-email";
 import { queryDictionary } from "~/queries/dictionary";
 
-type UseActiveLoansOptions = {
+interface UseActiveLoansOptions {
   /**
    * When provided, the response will include this loan even if it's already
    * fully paid. Used by the edit-transaction form so the currently linked
    * loan stays visible while the user edits.
    */
   includeId?: string | null;
-};
+}
 
 /**
  * Loans that still have an outstanding balance, projected to the minimum
@@ -23,15 +23,15 @@ export const useActiveLoans = (options: UseActiveLoansOptions = {}) => {
   const includeId = options.includeId ?? null;
 
   return useQuery({
-    queryKey: [queryDictionary.activeLoans, userEmail, includeId ?? "none"],
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5,
     queryFn: () =>
       getActiveLoansByEmailServer({
         data: { email: userEmail, includeId },
       }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 2,
-    gcTime: 1000 * 60 * 5,
+    queryKey: [queryDictionary.activeLoans, userEmail, includeId ?? "none"],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 2,
   });
 };

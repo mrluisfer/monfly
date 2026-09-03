@@ -6,14 +6,10 @@ import { Area, AreaChart, CartesianGrid, Legend, XAxis, YAxis } from "recharts";
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { DataNotFoundPlaceholder } from "~/components/shared/DataNotFoundPlaceholder";
 import { useActiveCard } from "~/hooks/cards";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getIncomeExpenseDataServer } from "~/lib/api/chart/get-income-expense-chart";
-import {
-  formatCurrency,
-  getCurrencySymbol,
-  type SupportedCurrency,
-} from "~/utils/format-currency";
+import { getCurrencySymbol } from "~/utils/format-currency";
 import { queryKeys } from "~/utils/query-keys";
 
 import Card from "../shared/Card";
@@ -21,20 +17,20 @@ import { MetricsGrid } from "../shared/MetricsGrid";
 import { MetricTile } from "../shared/MetricTile";
 import { ChartError, ChartLoading } from "./ChartLoading";
 
-type IncomeExpenseTooltipProps = {
+interface IncomeExpenseTooltipProps {
   active?: boolean;
-  payload?: Array<{ dataKey?: string; value?: number }>;
   label?: string;
-  currency?: SupportedCurrency;
-};
+  payload?: Array<{ dataKey?: string; value?: number }>;
+}
 
 function IncomeExpenseTooltip({
   active,
   payload,
   label,
-  currency = "USD",
 }: IncomeExpenseTooltipProps) {
-  if (!active || !payload?.length) {
+  const { formatPlain } = useCurrency();
+
+  if (!(active && payload?.length)) {
     return null;
   }
 
@@ -43,37 +39,37 @@ function IncomeExpenseTooltip({
   const net = income - expense;
 
   return (
-    <div className="bg-background/95 border-border min-w-[200px] rounded-lg border p-4 shadow-lg backdrop-blur-sm">
-      <p className="text-foreground mb-2 font-semibold">{label}</p>
+    <div className="min-w-[200px] rounded-lg border border-border bg-background/95 p-4 shadow-lg backdrop-blur-sm">
+      <p className="mb-2 font-semibold text-foreground">{label}</p>
       <div className="space-y-2">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="bg-chart-1 size-3 rounded-full" />
+            <div className="size-3 rounded-full bg-chart-1" />
             <span className="text-muted-foreground text-sm">Income:</span>
           </div>
-          <span className="text-chart-1 font-semibold">
-            {formatCurrency(income, currency)}
+          <span className="font-semibold text-chart-1">
+            {formatPlain(income)}
           </span>
         </div>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="bg-destructive size-3 rounded-full" />
+            <div className="size-3 rounded-full bg-destructive" />
             <span className="text-muted-foreground text-sm">Expenses:</span>
           </div>
-          <span className="text-destructive font-semibold">
-            {formatCurrency(expense, currency)}
+          <span className="font-semibold text-destructive">
+            {formatPlain(expense)}
           </span>
         </div>
         <div className="border-border border-t pt-2">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-muted-foreground text-sm font-medium">
+            <span className="font-medium text-muted-foreground text-sm">
               Net:
             </span>
             <span
               className={`font-bold ${net >= 0 ? "text-chart-1" : "text-destructive"}`}
             >
               {net >= 0 ? "+" : ""}
-              {formatCurrency(net, currency)}
+              {formatPlain(net)}
             </span>
           </div>
         </div>
@@ -85,19 +81,19 @@ function IncomeExpenseTooltip({
 export default function IncomeExpenseChart() {
   const userEmail = useRouteUser();
   const activeCard = useActiveCard();
-  const currency = usePreferredCurrency();
+  const { currency, formatPlain } = useCurrency();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
     queryFn: () =>
       getIncomeExpenseDataServer({
-        data: { email: userEmail, cardId: activeCard },
+        data: { cardId: activeCard, email: userEmail },
       }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 3, // 3 minutes cache
-    gcTime: 1000 * 60 * 5, // 5 minutes garbage collection
+    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 3, // 3 minutes cache
   });
 
   // Process and validate chart data
@@ -109,9 +105,9 @@ export default function IncomeExpenseChart() {
       const income = Number.isFinite(rawIncome) ? Math.max(0, rawIncome) : 0;
       const expense = Number.isFinite(rawExpense) ? Math.max(0, rawExpense) : 0;
       return {
-        month: String(item.month || "Unknown"),
-        income,
         expense,
+        income,
+        month: String(item.month || "Unknown"),
         net:
           (Number.isFinite(rawIncome) ? rawIncome : 0) -
           (Number.isFinite(rawExpense) ? rawExpense : 0),
@@ -124,8 +120,8 @@ export default function IncomeExpenseChart() {
   const totalExpenses = chartData.reduce((sum, item) => sum + item.expense, 0);
   const netTotal = totalIncome - totalExpenses;
 
-  const shownChart = !isLoading && !error && chartData.length > 0;
-  const shownPlaceholder = !isLoading && !error && chartData.length === 0;
+  const shownChart = !(isLoading || error) && chartData.length > 0;
+  const shownPlaceholder = !(isLoading || error) && chartData.length === 0;
 
   return (
     <Card
@@ -133,31 +129,31 @@ export default function IncomeExpenseChart() {
       title="Income vs Expenses"
       subtitle={
         totalIncome > 0 || totalExpenses > 0
-          ? `${formatCurrency(totalIncome, currency)} in • ${formatCurrency(totalExpenses, currency)} out`
+          ? `${formatPlain(totalIncome)} in • ${formatPlain(totalExpenses)} out`
           : "Track your monthly financial flow"
       }
     >
-      {isLoading && <ChartLoading message="Loading financial data..." />}
+      {isLoading ? <ChartLoading message="Loading financial data..." /> : null}
 
-      {error && (
+      {error ? (
         <ChartError
           title="Failed to load financial data"
           message={error.message}
           onRetry={() => window.location.reload()}
         />
-      )}
+      ) : null}
 
-      {shownChart && (
+      {shownChart ? (
         <div className="space-y-5">
           <ChartContainer
             config={{
-              income: {
-                label: "Income",
-                color: "var(--chart-1)",
-              },
               expense: {
-                label: "Expenses",
                 color: "var(--destructive)",
+                label: "Expenses",
+              },
+              income: {
+                color: "var(--chart-1)",
+                label: "Income",
               },
             }}
             className="h-64 w-full sm:h-80"
@@ -165,15 +161,13 @@ export default function IncomeExpenseChart() {
             <AreaChart
               data={chartData}
               margin={{
-                top: 20,
-                right: 10,
-                left: 10,
                 bottom: 20,
+                left: 10,
+                right: 10,
+                top: 20,
               }}
             >
-              <ChartTooltip
-                content={<IncomeExpenseTooltip currency={currency} />}
-              />
+              <ChartTooltip content={<IncomeExpenseTooltip />} />
               <CartesianGrid
                 strokeDasharray="3 3"
                 className="stroke-border/30"
@@ -253,8 +247,8 @@ export default function IncomeExpenseChart() {
                 height={36}
                 iconType="circle"
                 wrapperStyle={{
-                  paddingBottom: "20px",
                   fontSize: "14px",
+                  paddingBottom: "20px",
                 }}
               />
             </AreaChart>
@@ -263,34 +257,34 @@ export default function IncomeExpenseChart() {
           <MetricsGrid>
             <MetricTile
               label="Income"
-              value={formatCurrency(totalIncome, currency)}
+              value={formatPlain(totalIncome)}
               valueTone="primary"
             />
             <MetricTile
               label="Expenses"
-              value={formatCurrency(totalExpenses, currency)}
+              value={formatPlain(totalExpenses)}
               valueTone="destructive"
             />
             <MetricTile
               label="Net"
-              value={`${netTotal >= 0 ? "+" : ""}${formatCurrency(netTotal, currency)}`}
+              value={`${netTotal >= 0 ? "+" : ""}${formatPlain(netTotal)}`}
               valueTone={netTotal >= 0 ? "primary" : "destructive"}
             />
           </MetricsGrid>
         </div>
-      )}
+      ) : null}
 
-      {shownPlaceholder && (
+      {shownPlaceholder ? (
         <DataNotFoundPlaceholder>
           No financial data found.
           <br />
-          <span className="text-muted-foreground mt-2 block text-xs">
+          <span className="mt-2 block text-muted-foreground text-xs">
             <DollarSign className="mr-1 inline size-4" />
             Start adding income and expense transactions to see your financial
             flow.
           </span>
         </DataNotFoundPlaceholder>
-      )}
+      ) : null}
     </Card>
   );
 }

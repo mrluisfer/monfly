@@ -15,10 +15,10 @@ export const deleteLoanByIdServer = createServerFn({ method: "POST" })
     try {
       const sessionEmail = await resolveSessionEmail();
       enforceRateLimit({
-        scope: "loan:delete",
-        limit: 15,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 15,
+        scope: "loan:delete",
+        windowMs: 20_000,
       });
 
       return await deleteLoanById(sessionEmail, data.id);
@@ -29,11 +29,11 @@ export const deleteLoanByIdServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error deleting loan",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

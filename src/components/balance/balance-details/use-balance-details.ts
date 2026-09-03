@@ -11,11 +11,11 @@ import { queryKeys } from "~/utils/query-keys";
 import { deriveBalanceSummary } from "./derive-balance-summary";
 import type { BalanceSummary } from "./types";
 
-type UseBalanceDetailsResult = {
-  summary: BalanceSummary;
-  isPending: boolean;
+interface UseBalanceDetailsResult {
   error: unknown;
-};
+  isPending: boolean;
+  summary: BalanceSummary;
+}
 
 /**
  * Fetches the user balance and income/expense series, then derives the
@@ -26,13 +26,13 @@ export function useBalanceDetails(): UseBalanceDetailsResult {
   const activeCard = useActiveCard();
 
   const { data: userData, isPending: isUserPending } = useQuery({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: !!userEmail,
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 5,
   });
 
   const { data: cardsData } = useCards();
@@ -42,16 +42,16 @@ export function useBalanceDetails(): UseBalanceDetailsResult {
     isPending: isIncomeExpensePending,
     error,
   } = useQuery({
-    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
+    enabled: !!userEmail,
+    gcTime: 1000 * 60 * 5,
     queryFn: () =>
       getIncomeExpenseDataServer({
-        data: { email: userEmail, cardId: activeCard },
+        data: { cardId: activeCard, email: userEmail },
       }),
-    enabled: !!userEmail,
-    staleTime: 1000 * 60 * 3,
-    gcTime: 1000 * 60 * 5,
+    queryKey: queryKeys.charts.incomeExpense(userEmail, activeCard),
     retry: 1,
     retryDelay: 1000,
+    staleTime: 1000 * 60 * 3,
   });
 
   // Card-scoped view shows the card balance; otherwise the global user total.
@@ -67,8 +67,8 @@ export function useBalanceDetails(): UseBalanceDetailsResult {
   );
 
   return {
-    summary,
-    isPending: isUserPending || isIncomeExpensePending,
     error,
+    isPending: isUserPending || isIncomeExpensePending,
+    summary,
   };
 }

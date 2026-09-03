@@ -14,15 +14,15 @@ import { LoanDirectionIcon } from "./LoanDirectionIcon";
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 const MAX_VISIBLE = 5;
 
-type ReceivableEntry = {
-  id: string;
-  debtor: string;
-  remaining: number;
-  dueAt: Date | null;
+interface ReceivableEntry {
   daysUntilDue: number | null;
-  status: string;
+  debtor: string;
   direction: LoanDirection;
-};
+  dueAt: Date | null;
+  id: string;
+  remaining: number;
+  status: string;
+}
 
 function buildEntries(loans: Loan[], now: Date): ReceivableEntry[] {
   // Include both directions for visibility, but `direction` lets the UI (and
@@ -36,13 +36,13 @@ function buildEntries(loans: Loan[], now: Date): ReceivableEntry[] {
         ? Math.round((dueAt.getTime() - now.getTime()) / MS_PER_DAY)
         : null;
       return {
-        id: l.id,
-        debtor: l.debtor,
-        remaining,
-        dueAt,
         daysUntilDue,
-        status: l.status,
+        debtor: l.debtor,
         direction: (l.direction ?? "lent") as LoanDirection,
+        dueAt,
+        id: l.id,
+        remaining,
+        status: l.status,
       };
     })
     .filter((e) => e.remaining > 0);
@@ -50,9 +50,15 @@ function buildEntries(loans: Loan[], now: Date): ReceivableEntry[] {
   // Sort: items with a due date first (earliest first), then dateless ones,
   // and within those by remaining desc so the largest unscheduled debts surface.
   entries.sort((a, b) => {
-    if (a.dueAt && b.dueAt) return a.dueAt.getTime() - b.dueAt.getTime();
-    if (a.dueAt) return -1;
-    if (b.dueAt) return 1;
+    if (a.dueAt && b.dueAt) {
+      return a.dueAt.getTime() - b.dueAt.getTime();
+    }
+    if (a.dueAt) {
+      return -1;
+    }
+    if (b.dueAt) {
+      return 1;
+    }
     return b.remaining - a.remaining;
   });
 
@@ -60,23 +66,38 @@ function buildEntries(loans: Loan[], now: Date): ReceivableEntry[] {
 }
 
 function dueLabel(entry: ReceivableEntry) {
-  if (entry.dueAt === null) return "No due date";
-  if (entry.daysUntilDue === null) return "—";
+  if (entry.dueAt === null) {
+    return "No due date";
+  }
+  if (entry.daysUntilDue === null) {
+    return "—";
+  }
   if (entry.daysUntilDue < 0) {
     const overdue = Math.abs(entry.daysUntilDue);
     return `${overdue}d overdue`;
   }
-  if (entry.daysUntilDue === 0) return "Due today";
-  if (entry.daysUntilDue === 1) return "Due tomorrow";
+  if (entry.daysUntilDue === 0) {
+    return "Due today";
+  }
+  if (entry.daysUntilDue === 1) {
+    return "Due tomorrow";
+  }
   return `In ${entry.daysUntilDue}d`;
 }
 
 function dueTone(entry: ReceivableEntry) {
-  if (entry.dueAt === null) return "text-muted-foreground";
-  if (entry.daysUntilDue === null) return "text-muted-foreground";
-  if (entry.daysUntilDue < 0) return "text-destructive";
-  if (entry.daysUntilDue <= 3)
+  if (entry.dueAt === null) {
+    return "text-muted-foreground";
+  }
+  if (entry.daysUntilDue === null) {
+    return "text-muted-foreground";
+  }
+  if (entry.daysUntilDue < 0) {
+    return "text-destructive";
+  }
+  if (entry.daysUntilDue <= 3) {
     return "text-warning-foreground dark:text-warning";
+  }
   return "text-muted-foreground";
 }
 
@@ -85,17 +106,17 @@ export function UpcomingReceivablesCard() {
   const now = new Date();
 
   return (
-    <section className="bg-card border-border/60 flex flex-col gap-3 rounded-2xl border">
+    <section className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-card">
       <header className="flex items-center justify-between gap-2 px-4 pt-4">
         <div className="flex items-center gap-2">
           <span
             aria-hidden="true"
-            className="bg-warning/15 text-warning-foreground dark:text-warning flex size-8 items-center justify-center rounded-xl"
+            className="flex size-8 items-center justify-center rounded-xl bg-warning/15 text-warning-foreground dark:text-warning"
           >
             <HandCoinsIcon className="size-4" />
           </span>
           <div>
-            <h3 className="text-foreground text-sm font-semibold tracking-tight">
+            <h3 className="font-semibold text-foreground text-sm tracking-tight">
               Upcoming receivables
             </h3>
             <p className="text-muted-foreground text-xs">
@@ -162,7 +183,7 @@ function UpcomingBody({
 
   if (entries.length === 0) {
     return (
-      <p className="text-muted-foreground py-2 text-sm">
+      <p className="py-2 text-muted-foreground text-sm">
         Nothing pending. You&apos;re fully collected.
       </p>
     );
@@ -181,8 +202,8 @@ function UpcomingBody({
 
   return (
     <div className="space-y-3">
-      <div className="text-foreground flex items-baseline justify-between px-4">
-        <span className="text-success text-2xl font-semibold tracking-tight tabular-nums">
+      <div className="flex items-baseline justify-between px-4 text-foreground">
+        <span className="font-semibold text-2xl text-success tabular-nums tracking-tight">
           {formatAmount(totalOutstanding)}
         </span>
         <span className="text-muted-foreground text-xs">
@@ -200,7 +221,7 @@ function UpcomingBody({
         render={
           <ul
             role="list"
-            className="divide-border/60 h-40 lg:h-56 divide-y px-2"
+            className="h-40 divide-y divide-border/60 px-2 lg:h-56"
           />
         }
       >
@@ -229,7 +250,7 @@ function UpcomingBody({
                   />
                 </span>
                 <div className="min-w-0">
-                  <p className="text-foreground truncate text-sm font-medium capitalize">
+                  <p className="truncate font-medium text-foreground text-sm capitalize">
                     {entry.debtor}
                   </p>
                   <p
@@ -245,7 +266,7 @@ function UpcomingBody({
               </div>
               <span
                 className={cn(
-                  "shrink-0 text-sm font-semibold tabular-nums",
+                  "shrink-0 font-semibold text-sm tabular-nums",
                   isBorrowed ? "text-destructive" : "text-success",
                 )}
               >
@@ -258,10 +279,10 @@ function UpcomingBody({
       </ScrollArea>
 
       {hidden > 0 && (
-        <p className="text-muted-foreground text-xs pl-4 pb-2">
+        <p className="pb-2 pl-4 text-muted-foreground text-xs">
           + {hidden} more —{" "}
           <Link to="/home/loans" className="text-primary hover:underline">
-            see all <ArrowRightIcon className="size-3 inline-flex" />
+            see all <ArrowRightIcon className="inline-flex size-3" />
           </Link>
         </p>
       )}

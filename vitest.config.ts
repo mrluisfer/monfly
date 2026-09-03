@@ -10,18 +10,18 @@ export default defineConfig({
     tsconfigPaths: true, // honors @/* and ~/* aliases
   },
   test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: ["./src/setupTests.ts"],
     coverage: {
-      provider: "v8",
-      reporter: ["text", "html"],
-      include: ["src/**/*.{ts,tsx}"],
       exclude: [
         "src/**/*.test.{ts,tsx}",
         "src/**/*.gen.ts",
         "src/components/ui/**",
       ],
+      include: ["src/**/*.{ts,tsx}"],
+      provider: "v8",
+      reporter: ["text", "html"],
     },
+    environment: "jsdom",
+    globals: true,
+    setupFiles: ["./src/setupTests.ts"],
   },
 });

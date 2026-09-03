@@ -18,18 +18,18 @@ export const useEditCard = (
   const userEmail = useRouteUser();
 
   const form = useForm<CardFormValues>({
-    resolver: zodResolver(CardFormSchema),
     defaultValues: {
-      name: card.name,
-      type: card.type ?? null,
-      last4: card.last4 ?? null,
-      provider: card.provider ?? null,
       balance:
         card.balance !== null && card.balance !== undefined
           ? String(card.balance)
           : "",
       color: card.color ?? null,
+      last4: card.last4 ?? null,
+      name: card.name,
+      provider: card.provider ?? null,
+      type: card.type ?? null,
     },
+    resolver: zodResolver(CardFormSchema),
   });
 
   const mutation = useMutation({
@@ -50,11 +50,6 @@ export const useEditCard = (
     try {
       await mutation.mutate({
         data: {
-          id: card.id,
-          name: values.name.trim(),
-          type: values.type ?? null,
-          last4: values.last4 ?? null,
-          provider: values.provider ?? null,
           // Empty string = leave the balance untouched; a number adjusts it
           // (the server moves the delta to the user total atomically).
           balance:
@@ -62,6 +57,11 @@ export const useEditCard = (
               ? Number(values.balance)
               : null,
           color: values.color ?? null,
+          id: card.id,
+          last4: values.last4 ?? null,
+          name: values.name.trim(),
+          provider: values.provider ?? null,
+          type: values.type ?? null,
         },
       });
     } catch {
@@ -69,5 +69,5 @@ export const useEditCard = (
     }
   };
 
-  return { form, onSubmit, mutation };
+  return { form, mutation, onSubmit };
 };

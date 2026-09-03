@@ -4,6 +4,4 @@ export const TransactionHoverProvider = ({
   children,
 }: {
   children: ReactNode;
-}) => {
-  return <>{children}</>;
-};
+}) => <>{children}</>;

@@ -13,30 +13,30 @@ import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const legalLinks = [
-  { to: "/privacy", label: "Privacy", icon: Shield },
-  { to: "/terms", label: "Terms", icon: FileText },
-  { to: "/contact", label: "Contact", icon: Mail },
+  { icon: Shield, label: "Privacy", to: "/privacy" },
+  { icon: FileText, label: "Terms", to: "/terms" },
+  { icon: Mail, label: "Contact", to: "/contact" },
 ] as const;
 
 const Footer = () => {
   const year = new Date().getFullYear();
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth", left: 0 });
+    window.scrollTo({ behavior: "smooth", left: 0, top: 0 });
   };
 
   return (
     <motion.footer
       initial={{ opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
+      viewport={{ margin: "-40px", once: true }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className="text-muted-foreground mt-8 text-xs sm:text-sm"
+      className="mt-8 text-muted-foreground text-xs sm:text-sm"
     >
-      <Separator className="bg-border/60 dark:bg-border/40 mb-4 sm:mb-5" />
+      <Separator className="mb-4 bg-border/60 sm:mb-5 dark:bg-border/40" />
 
       <div className="flex flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center sm:gap-4">
         <p className="flex flex-wrap items-center justify-center gap-1.5 md:justify-start">
-          <span className="text-foreground font-semibold tracking-tight">
+          <span className="font-semibold text-foreground tracking-tight">
             Monfly
           </span>
           <span className="text-muted-foreground/60" aria-hidden>
@@ -44,7 +44,7 @@ const Footer = () => {
           </span>
           <span>© {year}</span>
           <span
-            className="text-muted-foreground/60 hidden sm:inline"
+            className="hidden text-muted-foreground/60 sm:inline"
             aria-hidden
           >
             ·
@@ -60,7 +60,7 @@ const Footer = () => {
             <Link
               key={to}
               to={to}
-              className="group hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:ring-ring dark:hover:bg-accent/60 inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:px-2.5"
+              className="group inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 transition-colors hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 sm:px-2.5 dark:hover:bg-accent/60"
               activeProps={{
                 className:
                   "text-foreground bg-accent/70 dark:bg-accent/40 dark:text-foreground",
@@ -76,7 +76,7 @@ const Footer = () => {
 
           <Separator
             orientation="vertical"
-            className="bg-border/60 dark:bg-border/40 mx-1 hidden h-4 sm:block"
+            className="mx-1 hidden h-4 bg-border/60 sm:block dark:bg-border/40"
           />
 
           <Tooltip>
@@ -96,7 +96,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="View source on GitHub"
-                  className="hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:ring-ring dark:hover:bg-accent/60 ml-auto inline-flex size-8 items-center justify-center rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none sm:ml-0"
+                  className="ml-auto inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 sm:ml-0 dark:hover:bg-accent/60"
                 >
                   <GitBranchIcon className="size-4" aria-hidden />
                 </a>

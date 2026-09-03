@@ -2,14 +2,14 @@ import { Component, type ErrorInfo, type ReactNode } from "react";
 
 import { Card } from "~/components/ui/card";
 
-type Props = {
+interface Props {
   children: ReactNode;
   label?: string;
-};
+}
 
-type State = {
+interface State {
   hasError: boolean;
-};
+}
 
 export class InsightErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {

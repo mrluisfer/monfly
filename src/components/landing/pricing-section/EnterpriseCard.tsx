@@ -12,30 +12,30 @@ import { PricingCard } from "./PricingCard";
 
 const enterpriseFeatures = [
   {
-    label: "Everything in Pro with advanced governance",
     icon: ReplaceAll,
+    label: "Everything in Pro with advanced governance",
   },
-  { label: "Role-based access and security controls", icon: Cog },
+  { icon: Cog, label: "Role-based access and security controls" },
   {
-    label: "Dedicated onboarding and migration support",
     icon: ChartNoAxesGantt,
+    label: "Dedicated onboarding and migration support",
   },
-  { label: "Multi-region deployment and API contracts", icon: Globe },
+  { icon: Globe, label: "Multi-region deployment and API contracts" },
 ];
 
 export function EnterpriseCard() {
   return (
     <PricingCard title={<span>Enterprise</span>}>
-      <span className="text-muted-foreground text-sm font-medium">
+      <span className="font-medium text-muted-foreground text-sm">
         Custom contracts for high-scale finance organizations
       </span>
       <div className="mt-5 flex flex-col gap-2.5 text-sm">
         {enterpriseFeatures.map((feature) => (
           <div
             key={feature.label}
-            className="group border-border/55 bg-background/72 hover:border-primary/35 flex items-center gap-2 rounded-xl border px-3 py-2.5 transition-colors duration-150 ease-out"
+            className="group flex items-center gap-2 rounded-xl border border-border/55 bg-background/72 px-3 py-2.5 transition-colors duration-150 ease-out hover:border-primary/35"
           >
-            <feature.icon className="text-primary size-4" />
+            <feature.icon className="size-4 text-primary" />
             <span className="text-muted-foreground group-hover:text-foreground">
               {feature.label}
             </span>

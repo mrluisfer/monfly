@@ -11,21 +11,21 @@ import type { ApiResponse } from "~/types/ApiResponse";
 export const postCategoryByEmailServer = createServerFn({ method: "POST" })
   .validator(
     z.object({
-      email: z.string(),
       category: z.object({
-        name: z.string(),
         icon: z.string(),
+        name: z.string(),
       }),
+      email: z.string(),
     }),
   )
   .handler(async ({ data: { email, category } }) => {
     try {
       const sessionEmail = await resolveSessionEmail(email);
       enforceRateLimit({
-        scope: "category:create",
-        limit: 8,
-        windowMs: 30_000,
         identifier: sessionEmail,
+        limit: 8,
+        scope: "category:create",
+        windowMs: 30_000,
       });
 
       return await postCategoryByEmail(category, sessionEmail);
@@ -36,11 +36,11 @@ export const postCategoryByEmailServer = createServerFn({ method: "POST" })
       }
 
       return {
-        success: false,
-        message: "Error posting category",
         data: null,
         error: true,
+        message: "Error posting category",
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

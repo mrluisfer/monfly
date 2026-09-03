@@ -67,7 +67,7 @@ function RouteComponent() {
           whole dashboard subtree. Widgets stream in on their own skeletons, so
           a single CSS fade is enough (and respects prefers-reduced-motion via
           tw-animate-css). */}
-      <div className="motion-safe:animate-in motion-safe:fade-in space-y-6 duration-300 sm:space-y-8">
+      <div className="motion-safe:fade-in space-y-6 duration-300 motion-safe:animate-in sm:space-y-8">
         <div
           className={cn(
             "grid grid-cols-1 gap-6",

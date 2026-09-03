@@ -3,9 +3,9 @@ import { useNumberFormat } from "~/hooks/ui/useNumberFormat";
 
 import { Badge } from "../ui/badge";
 
-type NumberFormatBadgeProps = {
+interface NumberFormatBadgeProps {
   className?: string;
-};
+}
 
 export const NumberFormatBadge = ({ className }: NumberFormatBadgeProps) => {
   const { format } = useNumberFormat();

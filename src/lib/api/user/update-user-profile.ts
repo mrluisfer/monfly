@@ -13,23 +13,23 @@ import { supportedCurrencies } from "~/zod-schemas/user-schema";
 export const updateUserProfileServer = createServerFn({ method: "POST" })
   .validator(
     z.object({
+      acceptPrivacy: z.boolean(),
+      acceptTerms: z.boolean(),
       email: z.string().email(),
+      marketingOptIn: z.boolean().optional(),
       name: z.string().trim().min(1).max(80),
       preferredCurrency: z.enum(supportedCurrencies).nullable().optional(),
-      marketingOptIn: z.boolean().optional(),
       productUpdatesOptIn: z.boolean().optional(),
-      acceptTerms: z.boolean(),
-      acceptPrivacy: z.boolean(),
     }),
   )
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "user:profile:update",
-        limit: 20,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 20,
+        scope: "user:profile:update",
+        windowMs: 20_000,
       });
 
       return await updateUserProfile({ ...data, email: sessionEmail });
@@ -40,11 +40,11 @@ export const updateUserProfileServer = createServerFn({ method: "POST" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error updating profile",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

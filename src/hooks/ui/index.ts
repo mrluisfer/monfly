@@ -1,4 +1,5 @@
 export { useDarkMode } from "./useDarkMode";
+export { useDecimalConvention } from "./useDecimalConvention";
 export { useFontDisplay } from "./useFontDisplay";
 export { useInView } from "./useInView";
 export { useIsDesktop } from "./useIsDesktop";

@@ -6,15 +6,19 @@ export const deleteCardById = async (
   id: string,
 ): Promise<ApiResponse<{ id: string } | null>> => {
   try {
-    if (!email) throw new Error("Email is required");
+    if (!email) {
+      throw new Error("Email is required");
+    }
 
     const result = await prismaClient.$transaction(async (tx) => {
       const existing = await tx.card.findFirst({
+        select: { balance: true, id: true },
         where: { id, userEmail: email },
-        select: { id: true, balance: true },
       });
 
-      if (!existing) return { notFound: true as const };
+      if (!existing) {
+        return { notFound: true as const };
+      }
 
       // The FK is ON DELETE SET NULL, so this card's transactions become
       // card-less (cardId = null) and keep counting in the user total. To keep
@@ -24,12 +28,12 @@ export const deleteCardById = async (
       // transaction-driven portion simply moves to the card-less bucket.
       const [incomeAgg, expenseAgg] = await Promise.all([
         tx.transaction.aggregate({
-          where: { cardId: id, userEmail: email, type: "income" },
           _sum: { amount: true },
+          where: { cardId: id, type: "income", userEmail: email },
         }),
         tx.transaction.aggregate({
-          where: { cardId: id, userEmail: email, type: "expense" },
           _sum: { amount: true },
+          where: { cardId: id, type: "expense", userEmail: email },
         }),
       ]);
 
@@ -39,8 +43,8 @@ export const deleteCardById = async (
 
       if (openingPortion !== 0) {
         await tx.user.update({
-          where: { email },
           data: { totalBalance: { increment: -openingPortion } },
+          where: { email },
         });
       }
 
@@ -52,29 +56,29 @@ export const deleteCardById = async (
 
     if (result.notFound) {
       return {
+        data: null,
         error: true,
         message: "Card not found",
-        data: null,
-        success: false,
         statusCode: 404,
+        success: false,
       };
     }
 
     return {
+      data: { id },
       error: false,
       message: "Card deleted successfully",
-      data: { id },
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error deleting card: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

@@ -25,22 +25,22 @@ export const postTransactionByEmail = async (
       // so we never end up with a transaction-without-loan-update inconsistency.
       if (data.appliedToLoanId) {
         await applyLoanPaymentDelta(tx, {
-          loanId: data.appliedToLoanId,
           delta: data.amount,
-          userEmail: email,
+          loanId: data.appliedToLoanId,
           transactionType: data.type,
+          userEmail: email,
         });
       }
 
       const signedDelta = data.type === "income" ? data.amount : -data.amount;
 
       await tx.user.update({
-        where: { email },
         data: {
           totalBalance: {
             increment: signedDelta,
           },
         },
+        where: { email },
       });
 
       // Keep the per-card balance in sync within the same atomic transaction
@@ -49,8 +49,8 @@ export const postTransactionByEmail = async (
       // the card belongs to this user.
       if (data.cardId) {
         const { count } = await tx.card.updateMany({
-          where: { id: data.cardId, userEmail: email },
           data: { balance: { increment: signedDelta } },
+          where: { id: data.cardId, userEmail: email },
         });
         if (count === 0) {
           throw new Error("Card not found for this user");
@@ -61,28 +61,28 @@ export const postTransactionByEmail = async (
     });
 
     return {
+      data: transaction,
       error: false,
       message: "Transaction created successfully",
-      data: transaction,
-      success: true,
       statusCode: 200,
+      success: true,
     } as ApiResponse<Transaction>;
   } catch (error) {
     if (error instanceof LoanPaymentError) {
       return {
+        data: null,
         error: true,
         message: error.message,
-        data: null,
-        success: false,
         statusCode: error.statusCode,
+        success: false,
       } as ApiResponse<null>;
     }
     return {
+      data: null,
       error: true,
       message: "Error creating transaction",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<string | null>;
   }
 };

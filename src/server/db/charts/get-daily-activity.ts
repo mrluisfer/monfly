@@ -3,13 +3,13 @@ import { DAILY_ACTIVITY_DAYS } from "~/constants/daily-activity";
 import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 
-export type DailyActivityRow = {
+export interface DailyActivityRow {
+  count: number;
   /** UTC calendar day in YYYY-MM-DD format. */
   date: string;
-  income: number;
   expense: number;
-  count: number;
-};
+  income: number;
+}
 
 /**
  * Daily income/expense totals for the last `DAILY_ACTIVITY_DAYS` days,
@@ -64,26 +64,26 @@ export const getDailyActivity = async ({
     `;
 
     const data: DailyActivityRow[] = rows.map((row) => ({
-      date: row.day,
-      income: row.income,
-      expense: row.expense,
       count: row.count,
+      date: row.day,
+      expense: row.expense,
+      income: row.income,
     }));
 
     return {
       data,
-      message: "Daily activity retrieved successfully",
-      success: true,
       error: false,
+      message: "Daily activity retrieved successfully",
       statusCode: 200,
+      success: true,
     } as ApiResponse<DailyActivityRow[]>;
   } catch {
     return {
       data: null,
-      message: "Failed to retrieve daily activity",
-      success: false,
       error: true,
+      message: "Failed to retrieve daily activity",
       statusCode: 500,
+      success: false,
     } as ApiResponse<null>;
   }
 };

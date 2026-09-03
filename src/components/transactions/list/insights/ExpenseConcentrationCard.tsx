@@ -4,18 +4,18 @@ import { FlowBar } from "~/components/shared/FlowBar";
 import { useCurrency } from "~/hooks/useCurrency";
 import { cn } from "~/lib/utils";
 
-type TopCategory = {
+interface TopCategory {
   amount: number;
   category: string;
   share: number;
-};
+}
 
-type ExpenseConcentrationCardProps = {
+interface ExpenseConcentrationCardProps {
   isPositiveLast30: boolean;
   topCategories: TopCategory[];
   totalExpense: number;
   totalIncome: number;
-};
+}
 
 export function ExpenseConcentrationCard({
   isPositiveLast30,
@@ -53,7 +53,7 @@ export function ExpenseConcentrationCard({
           topCategories.map((category) => (
             <div key={category.category} className="space-y-1.5">
               <div className="flex items-center justify-between gap-2 text-sm">
-                <span className="text-foreground truncate">
+                <span className="truncate text-foreground">
                   {category.category}
                 </span>
                 <span className="text-muted-foreground tabular-nums">

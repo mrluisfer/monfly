@@ -2,32 +2,32 @@ import type { User } from "@prisma/client";
 import { prismaClient } from "~/server/prisma";
 import type { ApiResponse } from "~/types/ApiResponse";
 
-export type UpdateUserProfileInput = {
+export interface UpdateUserProfileInput {
+  acceptPrivacy: boolean;
+  acceptTerms: boolean;
   email: string;
+  marketingOptIn?: boolean;
   name: string;
   preferredCurrency?: string | null;
-  marketingOptIn?: boolean;
   productUpdatesOptIn?: boolean;
-  acceptTerms: boolean;
-  acceptPrivacy: boolean;
-};
+}
 
 export const updateUserProfile = async (
   data: UpdateUserProfileInput,
 ): Promise<ApiResponse<User | null>> => {
   try {
     const existing = await prismaClient.user.findUnique({
+      select: { acceptedPrivacyAt: true, acceptedTermsAt: true, id: true },
       where: { email: data.email },
-      select: { id: true, acceptedTermsAt: true, acceptedPrivacyAt: true },
     });
 
     if (!existing) {
       return {
+        data: null,
         error: true,
         message: "User not found",
-        data: null,
-        success: false,
         statusCode: 404,
+        success: false,
       };
     }
 
@@ -42,7 +42,6 @@ export const updateUserProfile = async (
       : null;
 
     const user = await prismaClient.user.update({
-      where: { email: data.email },
       data: {
         name: data.name.trim(),
         preferredCurrency: data.preferredCurrency ?? null,
@@ -52,26 +51,27 @@ export const updateUserProfile = async (
         ...(data.productUpdatesOptIn === undefined
           ? {}
           : { productUpdatesOptIn: data.productUpdatesOptIn }),
-        acceptedTermsAt,
         acceptedPrivacyAt,
+        acceptedTermsAt,
       },
+      where: { email: data.email },
     });
 
     return {
+      data: user,
       error: false,
       message: "Profile updated successfully",
-      data: user,
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error updating profile: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

@@ -48,7 +48,7 @@ export function LoansList() {
 
   if (error || !data || data.error || !data.data) {
     return (
-      <div className="bg-destructive/5 border-destructive/20 text-destructive flex items-center gap-3 rounded-xl border p-5 text-sm">
+      <div className="flex items-center gap-3 rounded-xl border border-destructive/20 bg-destructive/5 p-5 text-destructive text-sm">
         <AlertCircleIcon className="size-5 shrink-0" aria-hidden="true" />
         <span>Failed to load loans. Please try again later.</span>
       </div>
@@ -59,15 +59,15 @@ export function LoansList() {
 
   if (allLoans.length === 0) {
     return (
-      <div className="bg-card border-border/60 flex h-fit flex-col items-center gap-3 rounded-2xl border p-12 text-center">
+      <div className="flex h-fit flex-col items-center gap-3 rounded-2xl border border-border/60 bg-card p-12 text-center">
         <span
           aria-hidden="true"
-          className="bg-muted text-muted-foreground flex size-12 items-center justify-center rounded-2xl"
+          className="flex size-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground"
         >
           <HandCoinsIcon className="size-6" />
         </span>
         <div className="space-y-1">
-          <p className="text-foreground text-sm font-medium">No loans yet</p>
+          <p className="font-medium text-foreground text-sm">No loans yet</p>
           <p className="text-muted-foreground text-xs">
             Register your first loan using the form.
           </p>
@@ -82,7 +82,7 @@ export function LoansList() {
       acc[l.status as LoanStatus] = (acc[l.status as LoanStatus] ?? 0) + 1;
       return acc;
     },
-    { all: 0, pending: 0, partial: 0, paid: 0 } as Record<StatusFilter, number>,
+    { all: 0, paid: 0, partial: 0, pending: 0 } as Record<StatusFilter, number>,
   );
 
   const loans = allLoans.filter((l) => {
@@ -98,13 +98,13 @@ export function LoansList() {
       acc[dir] += 1;
       return acc;
     },
-    { lent: 0, borrowed: 0 } as Record<LoanDirection, number>,
+    { borrowed: 0, lent: 0 } as Record<LoanDirection, number>,
   );
 
   const totals = allLoans.reduce(
     (acc, l) => {
       const dir = (l.direction ?? "lent") as LoanDirection;
-      const remaining = l.status !== "paid" ? l.amount - l.amountPaid : 0;
+      const remaining = l.status === "paid" ? 0 : l.amount - l.amountPaid;
       if (dir === "lent") {
         acc.lentOutstanding += remaining;
         acc.lentReceived += l.amountPaid;
@@ -115,10 +115,10 @@ export function LoansList() {
       return acc;
     },
     {
-      lentOutstanding: 0,
-      lentReceived: 0,
       borrowedOutstanding: 0,
       borrowedPaid: 0,
+      lentOutstanding: 0,
+      lentReceived: 0,
     },
   );
 
@@ -216,7 +216,7 @@ export function LoansList() {
 
       {/* Loan items */}
       {loans.length === 0 ? (
-        <div className="bg-card border-border/60 text-muted-foreground rounded-2xl border p-8 text-center text-sm">
+        <div className="rounded-2xl border border-border/60 bg-card p-8 text-center text-muted-foreground text-sm">
           No {filter} loans.
         </div>
       ) : (

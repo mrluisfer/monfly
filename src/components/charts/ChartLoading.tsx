@@ -31,8 +31,8 @@ export function ChartLoading({
         </div>
       ) : (
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="text-primary size-8 animate-spin" />
-          <span className="text-muted-foreground text-sm font-medium">
+          <Loader2 className="size-8 animate-spin text-primary" />
+          <span className="font-medium text-muted-foreground text-sm">
             {message}
           </span>
         </div>
@@ -42,9 +42,9 @@ export function ChartLoading({
 }
 
 interface ChartErrorProps {
-  title?: string;
   message?: string;
   onRetry?: () => void;
+  title?: string;
 }
 
 export function ChartError({
@@ -55,24 +55,24 @@ export function ChartError({
   return (
     <div className="flex flex-col items-center justify-center space-y-4 py-12">
       <div className="flex flex-col items-center gap-3 text-center">
-        <div className="bg-destructive/10 flex size-12 items-center justify-center rounded-full">
-          <div className="bg-destructive size-6 rounded-full" />
+        <div className="flex size-12 items-center justify-center rounded-full bg-destructive/10">
+          <div className="size-6 rounded-full bg-destructive" />
         </div>
         <div>
-          <p className="text-destructive font-medium">{title}</p>
-          {message && (
-            <p className="text-muted-foreground mt-1 text-sm">{message}</p>
-          )}
+          <p className="font-medium text-destructive">{title}</p>
+          {message ? (
+            <p className="mt-1 text-muted-foreground text-sm">{message}</p>
+          ) : null}
         </div>
-        {onRetry && (
+        {onRetry ? (
           <button
             type="button"
             onClick={onRetry}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-3 py-2 text-sm transition-colors"
+            className="rounded-md bg-primary px-3 py-2 text-primary-foreground text-sm transition-colors hover:bg-primary/90"
           >
             Try Again
           </button>
-        )}
+        ) : null}
       </div>
     </div>
   );

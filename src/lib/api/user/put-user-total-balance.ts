@@ -11,18 +11,18 @@ import type { ApiResponse } from "~/types/ApiResponse";
 export const putUserTotalBalanceServer = createServerFn({ method: "POST" })
   .validator(
     z.object({
-      totalBalance: z.number(),
       email: z.string().email(),
+      totalBalance: z.number(),
     }),
   )
   .handler(async ({ data }) => {
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "user:balance:update",
-        limit: 12,
-        windowMs: 20_000,
         identifier: sessionEmail,
+        limit: 12,
+        scope: "user:balance:update",
+        windowMs: 20_000,
       });
 
       return await putUserTotalBalanceUtils({
@@ -36,11 +36,11 @@ export const putUserTotalBalanceServer = createServerFn({ method: "POST" })
       }
 
       return {
-        success: false,
-        message: "Error updating user balance",
         data: null,
         error: true,
+        message: "Error updating user balance",
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

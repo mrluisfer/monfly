@@ -28,7 +28,28 @@ describe("formatCurrency", () => {
   });
 
   it("honors an explicit locale override", () => {
-    expect(formatCurrency(1234.5, "EUR", "en-US")).toBe("€1,234.50");
+    expect(formatCurrency(1234.5, "EUR", { locale: "en-US" })).toBe(
+      "€1,234.50",
+    );
+  });
+
+  it("swaps the separators for the user's convention", () => {
+    expect(formatCurrency(1234.5, "USD", { convention: "comma-decimal" })).toBe(
+      "$1.234,50",
+    );
+    expect(formatCurrency(1234.5, "MXN", { convention: "comma-decimal" })).toBe(
+      "$1.234,50",
+    );
+    expect(formatCurrency(1234.5, "USD", { convention: "dot-decimal" })).toBe(
+      "$1,234.50",
+    );
+  });
+
+  it("keeps the currency's own symbol and placement when swapping", () => {
+    // de-DE writes the symbol last; only the separators should move.
+    expect(formatCurrency(1234.5, "EUR", { convention: "dot-decimal" })).toBe(
+      "1,234.50\u00a0€",
+    );
   });
 });
 

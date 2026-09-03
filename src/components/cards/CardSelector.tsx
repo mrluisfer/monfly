@@ -34,12 +34,12 @@ export function CardSelector({ className }: { className?: string }) {
 
   const handleChange = async (value: string | null) => {
     await navigate({
-      to: ".",
+      replace: true,
       search: (prev: Record<string, unknown>) => ({
         ...prev,
         card: !value || value === ALL_CARDS ? undefined : value,
       }),
-      replace: true,
+      to: ".",
     });
   };
 
@@ -56,14 +56,14 @@ export function CardSelector({ className }: { className?: string }) {
             if (!card) {
               return (
                 <span className="flex items-center gap-2">
-                  <LayersIcon className="text-muted-foreground size-4" />
+                  <LayersIcon className="size-4 text-muted-foreground" />
                   All cards
                 </span>
               );
             }
             return (
               <span className="flex items-center gap-2">
-                <CreditCardIcon className="text-primary size-4" />
+                <CreditCardIcon className="size-4 text-primary" />
                 <span className="truncate">{card.name}</span>
               </span>
             );
@@ -72,13 +72,13 @@ export function CardSelector({ className }: { className?: string }) {
       </SelectTrigger>
       <SelectContent alignItemWithTrigger={false} className="min-w-72">
         <SelectItem value={ALL_CARDS}>
-          <LayersIcon className="text-muted-foreground size-4" />
+          <LayersIcon className="size-4 text-muted-foreground" />
           <span>All cards</span>
         </SelectItem>
         <SelectSeparator />
         {cards.map((card) => (
           <SelectItem key={card.id} value={card.id}>
-            <CreditCardIcon className="text-primary size-4" />
+            <CreditCardIcon className="size-4 text-primary" />
             <span className="flex w-full items-center justify-between gap-3">
               <span className="flex min-w-0 flex-col">
                 <span className="truncate capitalize">{card.name}</span>
@@ -88,7 +88,7 @@ export function CardSelector({ className }: { className?: string }) {
                   </span>
                 ) : null}
               </span>
-              <span className="text-muted-foreground shrink-0 text-xs font-medium tabular-nums">
+              <span className="shrink-0 font-medium text-muted-foreground text-xs tabular-nums">
                 {formatAmount(card.balance ?? 0)}
               </span>
             </span>

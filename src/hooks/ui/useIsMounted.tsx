@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 
-const subscribe = () => () => {};
+// The value never changes after mount, so there is nothing to unsubscribe.
+const subscribe = () => () => undefined;
 
 /**
  * Returns `false` during server render and the initial client render, then
@@ -8,7 +9,7 @@ const subscribe = () => () => {};
  * client-only state (e.g. `localStorage`-backed atoms) so the first client
  * render matches the server HTML and avoids hydration mismatches.
  */
-export const useIsMounted = () =>
+export const useIsMounted = (): boolean =>
   useSyncExternalStore(
     subscribe,
     () => true,

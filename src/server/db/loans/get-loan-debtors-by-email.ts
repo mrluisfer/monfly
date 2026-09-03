@@ -14,18 +14,20 @@ export const getLoanDebtorsByEmail = async (
   email: string,
 ): Promise<ApiResponse<string[] | null>> => {
   try {
-    if (!email) throw new Error("Email is required");
+    if (!email) {
+      throw new Error("Email is required");
+    }
 
     const grouped = await prismaClient.loan.groupBy({
-      by: ["debtor"],
-      where: { userEmail: email },
       _count: { debtor: true },
       _max: { createdAt: true },
+      by: ["debtor"],
       orderBy: [
         { _count: { debtor: "desc" } },
         { _max: { createdAt: "desc" } },
       ],
       take: 50,
+      where: { userEmail: email },
     });
 
     const debtors = grouped
@@ -33,20 +35,20 @@ export const getLoanDebtorsByEmail = async (
       .filter((name) => name.length > 0);
 
     return {
+      data: debtors,
       error: false,
       message: "Loan debtors fetched successfully",
-      data: debtors,
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error fetching loan debtors: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

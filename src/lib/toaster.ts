@@ -1,18 +1,16 @@
 import { type ComponentProps, createElement, useEffect } from "react";
-import {
-  Toaster as BaseSileoToaster,
-  sileo as baseSileo,
-  type SileoOptions,
-  type SileoPosition,
-} from "sileo";
+import type { SileoOptions, SileoPosition } from "sileo";
+import { Toaster as BaseSileoToaster, sileo as baseSileo } from "sileo";
 
-type SileoPromiseOptions<T = unknown> = {
-  loading: SileoOptions;
-  success: SileoOptions | ((data: T) => SileoOptions);
-  error: SileoOptions | ((err: unknown) => SileoOptions);
+export type { SileoOptions, SileoPosition } from "sileo";
+
+interface SileoPromiseOptions<T = unknown> {
   action?: SileoOptions | ((data: T) => SileoOptions);
+  error: SileoOptions | ((err: unknown) => SileoOptions);
+  loading: SileoOptions;
   position?: SileoPosition;
-};
+  success: SileoOptions | ((data: T) => SileoOptions);
+}
 
 type ToastInput = string | SileoOptions;
 
@@ -23,7 +21,9 @@ let isToasterReady = false;
 const pendingCalls: Array<() => void> = [];
 
 const runWhenReady = <T>(fn: () => T, fallback: T): T => {
-  if (isToasterReady) return fn();
+  if (isToasterReady) {
+    return fn();
+  }
   pendingCalls.push(() => {
     fn();
   });
@@ -31,14 +31,20 @@ const runWhenReady = <T>(fn: () => T, fallback: T): T => {
 };
 
 const flushPendingCalls = () => {
-  if (!pendingCalls.length) return;
+  if (!pendingCalls.length) {
+    return;
+  }
   const calls = [...pendingCalls];
   pendingCalls.length = 0;
-  for (const call of calls) call();
+  for (const call of calls) {
+    call();
+  }
 };
 
 const ensureSileoBrowserApis = () => {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") {
+    return;
+  }
 
   if (typeof window.requestAnimationFrame !== "function") {
     window.requestAnimationFrame = (cb: FrameRequestCallback) =>
@@ -52,10 +58,18 @@ const ensureSileoBrowserApis = () => {
   }
 
   if (typeof window.ResizeObserver === "undefined") {
+    // A shim for environments without ResizeObserver: the toaster only needs
+    // the methods to exist, never to report anything.
     class ResizeObserverFallback {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
+      observe() {
+        // no-op
+      }
+      unobserve() {
+        // no-op
+      }
+      disconnect() {
+        // no-op
+      }
     }
 
     window.ResizeObserver =
@@ -108,52 +122,50 @@ const promise = <T>(
 const dismiss = (id: string) => {
   runWhenReady(() => {
     baseSileo.dismiss(id);
-    return undefined;
   }, undefined);
 };
 const clear = (position?: SileoPosition) => {
   runWhenReady(() => {
     baseSileo.clear(position);
-    return undefined;
   }, undefined);
 };
 
 // Useful semantic helpers for consistent user feedback across the app.
 const feedback = {
+  copied: (label = "Copied to clipboard") => info({ title: label }),
   created: (entity = "Item") =>
     success({ title: `${entity} created successfully` }),
-  updated: (entity = "Item") =>
-    success({ title: `${entity} updated successfully` }),
   deleted: (entity = "Item") =>
     success({ title: `${entity} deleted successfully` }),
-  copied: (label = "Copied to clipboard") => info({ title: label }),
-  validationError: (
-    description = "Please review the form fields and try again.",
-  ) =>
-    warning({
-      title: "Validation error",
-      description,
-    }),
   networkError: (
     description = "Check your connection and try again in a moment.",
   ) =>
     error({
-      title: "Network error",
       description,
+      title: "Network error",
+    }),
+  updated: (entity = "Item") =>
+    success({ title: `${entity} updated successfully` }),
+  validationError: (
+    description = "Please review the form fields and try again.",
+  ) =>
+    warning({
+      description,
+      title: "Validation error",
     }),
 };
 
 export const sileo = {
+  action,
+  clear,
+  dismiss,
+  error,
+  feedback,
+  info,
+  promise,
   show,
   success,
-  error,
   warning,
-  info,
-  action,
-  promise,
-  dismiss,
-  clear,
-  feedback,
 };
 
-export type { SileoOptions, SileoPosition, SileoPromiseOptions };
+export type { SileoPromiseOptions };

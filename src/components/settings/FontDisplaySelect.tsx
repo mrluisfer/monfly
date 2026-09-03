@@ -21,7 +21,7 @@ const Square = ({
   <span
     data-square
     className={cn(
-      "bg-muted text-muted-foreground flex size-5 items-center justify-center rounded text-xs font-medium",
+      "flex size-5 items-center justify-center rounded bg-muted font-medium text-muted-foreground text-xs",
       className,
     )}
     aria-hidden="true"
@@ -81,7 +81,9 @@ export default function FontDisplaySelect() {
       <Select
         value={fontDisplay}
         onValueChange={(value) => {
-          if (value) onChangeFontDisplay(value);
+          if (value) {
+            onChangeFontDisplay(value);
+          }
         }}
       >
         <SelectTrigger>

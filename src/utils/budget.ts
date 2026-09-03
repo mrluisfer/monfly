@@ -6,10 +6,7 @@ export const createBudget = async (data: {
   amountLimit: number;
   startDate: Date;
   endDate: Date;
-}) => {
-  return prisma.budget.create({ data });
-};
+}) => prisma.budget.create({ data });
 
-export const getBudgetsByUser = async (userEmail: string) => {
-  return prisma.budget.findMany({ where: { userEmail } });
-};
+export const getBudgetsByUser = async (userEmail: string) =>
+  prisma.budget.findMany({ where: { userEmail } });

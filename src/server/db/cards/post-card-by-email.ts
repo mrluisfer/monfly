@@ -9,7 +9,9 @@ export const postCardByEmail = async (
   input: CreateCardInput,
 ): Promise<ApiResponse<Card | null>> => {
   try {
-    if (!email) throw new Error("Email is required");
+    if (!email) {
+      throw new Error("Email is required");
+    }
 
     const openingBalance = input.balance ?? 0;
 
@@ -19,21 +21,21 @@ export const postCardByEmail = async (
     const card = await prismaClient.$transaction(async (tx) => {
       const created = await tx.card.create({
         data: {
-          userEmail: email,
-          name: input.name.trim(),
-          type: input.type ?? null,
-          last4: input.last4 ?? null,
-          provider: input.provider ?? null,
           balance: openingBalance,
           color: input.color ?? null,
+          last4: input.last4 ?? null,
+          name: input.name.trim(),
+          provider: input.provider ?? null,
           status: "active",
+          type: input.type ?? null,
+          userEmail: email,
         },
       });
 
       if (openingBalance !== 0) {
         await tx.user.update({
-          where: { email },
           data: { totalBalance: { increment: openingBalance } },
+          where: { email },
         });
       }
 
@@ -41,20 +43,20 @@ export const postCardByEmail = async (
     });
 
     return {
+      data: card,
       error: false,
       message: "Card created successfully",
-      data: card,
-      success: true,
       statusCode: 201,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error creating card: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

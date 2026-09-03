@@ -9,55 +9,57 @@ export const postLoanByEmail = async (
   input: CreateLoanInput,
 ): Promise<ApiResponse<Loan | null>> => {
   try {
-    if (!email) throw new Error("Email is required");
+    if (!email) {
+      throw new Error("Email is required");
+    }
 
     // If transactionId provided, ensure it belongs to the same user.
     if (input.transactionId) {
       const tx = await prismaClient.transaction.findFirst({
-        where: { id: input.transactionId, userEmail: email },
         select: { id: true },
+        where: { id: input.transactionId, userEmail: email },
       });
       if (!tx) {
         return {
+          data: null,
           error: true,
           message: "Linked transaction not found",
-          data: null,
-          success: false,
           statusCode: 404,
+          success: false,
         };
       }
     }
 
     const loan = await prismaClient.loan.create({
       data: {
-        userEmail: email,
-        debtor: input.debtor.trim(),
         amount: input.amount,
         amountPaid: 0,
-        status: "pending",
+        debtor: input.debtor.trim(),
         direction: input.direction ?? "lent",
-        issuedAt: input.issuedAt ?? new Date(),
         dueAt: input.dueAt ?? null,
+        issuedAt: input.issuedAt ?? new Date(),
         notes: input.notes ?? null,
+        status: "pending",
         transactionId: input.transactionId ?? null,
+        userEmail: email,
       },
     });
 
     return {
+      data: loan,
       error: false,
       message: "Loan created successfully",
-      data: loan,
-      success: true,
       statusCode: 201,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error creating loan: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

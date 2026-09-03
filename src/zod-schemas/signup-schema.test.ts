@@ -4,11 +4,11 @@ import { signupSchema } from "@/zod-schemas/signup-schema";
 
 describe("signupSchema", () => {
   const valid = {
-    email: "someone@monfly.app",
-    password: "supersecret",
-    name: "Someone",
-    acceptTerms: true,
     acceptPrivacy: true,
+    acceptTerms: true,
+    email: "someone@monfly.app",
+    name: "Someone",
+    password: "supersecret",
   };
 
   it("accepts a signup with both acknowledgements checked", () => {

@@ -29,7 +29,9 @@ export function EditCard({ card }: { card: Card }) {
   // Reset back to the card's values whenever the dialog (re)opens so a
   // cancelled edit doesn't leak into the next one.
   const handleOpenChange = (next: boolean) => {
-    if (next) form.reset();
+    if (next) {
+      form.reset();
+    }
     setOpen(next);
   };
 

@@ -5,7 +5,9 @@ const MOBILE_BREAKPOINT = 768;
 export const isMobileAtom = atom(false);
 
 isMobileAtom.onMount = (setValue) => {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") {
+    return;
+  }
 
   const mediaQuery = window.matchMedia(
     `(max-width: ${MOBILE_BREAKPOINT - 1}px)`,

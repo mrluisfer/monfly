@@ -32,13 +32,13 @@ function ThemeOption({
     >
       {icon}
 
-      {isActive && (
+      {isActive ? (
         <motion.div
           layoutId="theme-option"
-          transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
+          transition={{ bounce: 0.3, duration: 0.6, type: "spring" }}
           className="absolute inset-0 rounded-full border border-zinc-200 dark:border-zinc-700"
         />
-      )}
+      ) : null}
     </button>
   );
 }

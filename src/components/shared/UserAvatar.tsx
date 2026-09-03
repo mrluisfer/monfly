@@ -11,8 +11,6 @@ const UserAvatar = ({
   /** Overrides the avatar seed without changing the displayed name (used to reshuffle). */
   seed?: string;
   size?: number;
-}) => {
-  return <BoringAvatar name={seed ?? name} variant="beam" size={size} />;
-};
+}) => <BoringAvatar name={seed ?? name} variant="beam" size={size} />;
 
 export default UserAvatar;

@@ -6,27 +6,27 @@ export const postMonthlySummaryByEmail = async (data: { email: string }) => {
   try {
     const monthlySummary = await prismaClient.monthlySummary.create({
       data: {
-        userEmail: data.email,
         month: new Date().getMonth(),
+        userEmail: data.email,
         year: new Date().getFullYear(),
       },
     });
 
     return {
-      success: true,
-      message: "Monthly summary created successfully",
-      monthlySummary,
       data: monthlySummary,
       error: false,
+      message: "Monthly summary created successfully",
+      monthlySummary,
       statusCode: 200,
+      success: true,
     } as ApiResponse<MonthlySummary>;
   } catch {
     return {
+      data: null,
       error: true,
       message: "Error creating monthly summary",
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     } as ApiResponse<MonthlySummary | null>;
   }
 };

@@ -7,71 +7,67 @@ import {
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
-import { usePreferredCurrency } from "~/hooks/usePreferredCurrency";
+import { useCurrency } from "~/hooks/useCurrency";
 import { useRouteUser } from "~/hooks/useRouteUser";
 import { getUserByEmailServer } from "~/lib/api/user/get-user-by-email";
 import { cn } from "~/lib/utils";
 import { queryDictionary } from "~/queries/dictionary";
 import type { ApiResponse } from "~/types/ApiResponse";
-import {
-  formatCurrency,
-  type SupportedCurrency,
-} from "~/utils/format-currency";
 
 import { BadgeIcon, HeaderBadge } from "./HeaderBadge";
 
 interface BalanceStatusBadgeProps {
-  showIcon?: boolean;
-  showAmount?: boolean;
   animate?: boolean;
+  className?: string;
   compact?: boolean;
   fullWidth?: boolean;
   isActive?: boolean;
-  className?: string;
+  showAmount?: boolean;
+  showIcon?: boolean;
 }
 
 type BalanceStatus = "surplus" | "balanced" | "deficit" | "loading" | "error";
 
 const statusConfig = {
-  surplus: {
-    label: "Surplus",
-    color: "bg-primary",
-    variant: "secondary" as const,
-    icon: TrendingUp,
-    iconColor: "text-primary",
-    description: "Your balance is positive.",
-  },
   balanced: {
-    label: "Balanced",
     color: "bg-secondary",
-    variant: "secondary" as const,
+    description: "Your balance is at zero.",
     icon: Minus,
     iconColor: "text-secondary-foreground",
-    description: "Your balance is at zero.",
+    label: "Balanced",
+    variant: "secondary" as const,
   },
   deficit: {
-    label: "Deficit",
     color: "bg-destructive",
-    variant: "destructive" as const,
+    description: "Your balance is negative.",
     icon: TrendingDown,
     iconColor: "text-destructive",
-    description: "Your balance is negative.",
-  },
-  loading: {
-    label: "Loading...",
-    color: "bg-muted",
-    variant: "outline" as const,
-    icon: Loader2,
-    iconColor: "text-muted-foreground",
-    description: "Fetching balance information.",
+    label: "Deficit",
+    variant: "destructive" as const,
   },
   error: {
-    label: "Error",
     color: "bg-destructive",
-    variant: "destructive" as const,
+    description: "Failed to load balance.",
     icon: AlertCircle,
     iconColor: "text-destructive-foreground",
-    description: "Failed to load balance.",
+    label: "Error",
+    variant: "destructive" as const,
+  },
+  loading: {
+    color: "bg-muted",
+    description: "Fetching balance information.",
+    icon: Loader2,
+    iconColor: "text-muted-foreground",
+    label: "Loading...",
+    variant: "outline" as const,
+  },
+  surplus: {
+    color: "bg-primary",
+    description: "Your balance is positive.",
+    icon: TrendingUp,
+    iconColor: "text-primary",
+    label: "Surplus",
+    variant: "secondary" as const,
   },
 };
 
@@ -85,28 +81,40 @@ export function BalanceStatusBadge({
   className = "",
 }: BalanceStatusBadgeProps) {
   const userEmail = useRouteUser();
-  const currency = usePreferredCurrency();
+  const { formatPlain } = useCurrency();
 
   const { error, isPending, data } = useQuery<ApiResponse<User | null>>({
-    queryKey: [queryDictionary.user, userEmail],
-    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
     enabled: Boolean(userEmail && isActive),
-    staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    queryFn: () => getUserByEmailServer({ data: { email: userEmail } }),
+    queryKey: [queryDictionary.user, userEmail],
+    refetchOnWindowFocus: false,
     retry: 1,
     retryDelay: 1000,
-    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
 
   const getStatus = (): BalanceStatus => {
-    if (error) return "error";
-    if (isPending) return "loading";
-    if (data?.error || !data?.data) return "error";
+    if (error) {
+      return "error";
+    }
+    if (isPending) {
+      return "loading";
+    }
+    if (data?.error || !data?.data) {
+      return "error";
+    }
 
     const balance = data.data.totalBalance;
-    if (balance === undefined || balance === null) return "error";
-    if (balance > 0) return "surplus";
-    if (balance < 0) return "deficit";
+    if (balance === undefined || balance === null) {
+      return "error";
+    }
+    if (balance > 0) {
+      return "surplus";
+    }
+    if (balance < 0) {
+      return "deficit";
+    }
     return "balanced";
   };
 
@@ -114,7 +122,9 @@ export function BalanceStatusBadge({
   const config = statusConfig[status];
   const balance = data?.data?.totalBalance ?? 0;
 
-  if (!userEmail) return null;
+  if (!userEmail) {
+    return null;
+  }
 
   return (
     <HeaderBadge
@@ -129,25 +139,22 @@ export function BalanceStatusBadge({
           status={status}
           balance={balance}
           error={error}
-          currency={currency}
         />
       }
     >
-      {showIcon && (
+      {showIcon ? (
         <BadgeIcon
           icon={config.icon}
           className={config.iconColor}
           fullWidth={fullWidth}
           animate={animate && status === "loading"}
         />
-      )}
+      ) : null}
 
-      <span className="text-xs font-medium">
+      <span className="font-medium text-xs">
         {config.label}
         {showAmount && status !== "loading" && status !== "error" && (
-          <span className="ml-1.5 font-mono">
-            {formatCurrency(balance, currency)}
-          </span>
+          <span className="ml-1.5 font-mono">{formatPlain(balance)}</span>
         )}
       </span>
     </HeaderBadge>
@@ -159,40 +166,40 @@ function BalanceTooltip({
   status,
   balance,
   error,
-  currency,
 }: {
   config: (typeof statusConfig)[keyof typeof statusConfig];
   status: BalanceStatus;
   balance: number;
   error: Error | null;
-  currency: SupportedCurrency;
 }) {
+  const { formatPlain } = useCurrency();
+
   return (
     <div className="space-y-1">
       <div className="flex items-center gap-2">
         <span className={cn("h-1.5 w-1.5 rounded-full", config.color)} />
-        <span className="text-xs font-semibold">
+        <span className="font-semibold text-xs">
           Balance Status: {config.label}
         </span>
       </div>
       <p className="text-[10px]">{config.description}</p>
 
       {status !== "loading" && status !== "error" && (
-        <div className="border-border mt-1 border-t pt-1">
+        <div className="mt-1 border-border border-t pt-1">
           <div className="flex items-center justify-between gap-4 text-[10px]">
             <span>Current balance:</span>
             <span className={cn("font-mono font-semibold")}>
-              {formatCurrency(balance, currency)}
+              {formatPlain(balance)}
             </span>
           </div>
         </div>
       )}
 
-      {error && (
-        <p className="border-border text-destructive mt-1 border-t pt-1 text-[10px]">
+      {error ? (
+        <p className="mt-1 border-border border-t pt-1 text-[10px] text-destructive">
           {error instanceof Error ? error.message : "Unknown error occurred"}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }

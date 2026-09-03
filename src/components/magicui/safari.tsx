@@ -4,12 +4,12 @@ import { cn } from "~/lib/utils";
 type SafariMode = "default" | "simple";
 
 export interface SafariProps extends SVGProps<SVGSVGElement> {
-  url?: string;
+  height?: number;
   imageSrc?: string;
+  mode?: SafariMode;
+  url?: string;
   videoSrc?: string;
   width?: number;
-  height?: number;
-  mode?: SafariMode;
 }
 
 export function Safari({
@@ -140,7 +140,7 @@ export function Safari({
             </g>
           </>
         ) : null}
-        {imageSrc && (
+        {imageSrc ? (
           <image
             href={imageSrc}
             width="1200"
@@ -150,8 +150,8 @@ export function Safari({
             preserveAspectRatio="xMidYMid slice"
             clipPath="url(#roundedBottom)"
           />
-        )}
-        {videoSrc && (
+        ) : null}
+        {videoSrc ? (
           <foreignObject
             x="1"
             y="52"
@@ -169,7 +169,7 @@ export function Safari({
               playsInline
             />
           </foreignObject>
-        )}
+        ) : null}
       </g>
       <defs>
         <clipPath id="path0">

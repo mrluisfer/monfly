@@ -13,10 +13,10 @@ export const getUserByEmailServer = createServerFn({ method: "GET" })
     try {
       const sessionEmail = await resolveSessionEmail(data.email);
       enforceRateLimit({
-        scope: "user:profile",
-        limit: 120,
-        windowMs: 60_000,
         identifier: sessionEmail,
+        limit: 120,
+        scope: "user:profile",
+        windowMs: 60_000,
       });
 
       return await getUserByEmail(sessionEmail);
@@ -27,11 +27,11 @@ export const getUserByEmailServer = createServerFn({ method: "GET" })
       }
 
       return {
+        data: null,
         error: true,
         message: "Error fetching user",
-        data: null,
-        success: false,
         statusCode: 500,
+        success: false,
       } as ApiResponse<null>;
     }
   });

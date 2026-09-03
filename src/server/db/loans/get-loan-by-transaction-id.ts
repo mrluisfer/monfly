@@ -12,20 +12,20 @@ export const getLoanByTransactionId = async (
     });
 
     return {
+      data: loan ?? null,
       error: false,
       message: loan ? "Loan found" : "No loan linked to this transaction",
-      data: loan ?? null,
-      success: true,
       statusCode: 200,
+      success: true,
     };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     return {
+      data: null,
       error: true,
       message: `Error fetching loan: ${message}`,
-      data: null,
-      success: false,
       statusCode: 500,
+      success: false,
     };
   }
 };

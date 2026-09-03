@@ -2,11 +2,11 @@ import { HandCoinsIcon } from "lucide-react";
 import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
 
-type LoanBadgeProps = {
+interface LoanBadgeProps {
+  className?: string;
   /** `true` when the transaction is a payment applied to a loan, vs. the loan origin. */
   isPayment?: boolean;
-  className?: string;
-};
+}
 
 /**
  * Marks a transaction as loan-related. Built on the shadcn `Badge` (outline
@@ -20,7 +20,7 @@ export function LoanBadge({ isPayment, className }: LoanBadgeProps) {
     <Badge
       variant="outline"
       className={cn(
-        "border-warning/30 bg-warning/10 text-warning-foreground dark:text-warning gap-1 text-[10px] tracking-wide uppercase",
+        "gap-1 border-warning/30 bg-warning/10 text-[10px] text-warning-foreground uppercase tracking-wide dark:text-warning",
         className,
       )}
       title={

@@ -73,10 +73,10 @@ function PrivacyRoute() {
           >
             <CardContent>
               <item.icon className={`size-5 ${item.tone}`} />
-              <p className="text-foreground mt-2 text-sm font-semibold">
+              <p className="mt-2 font-semibold text-foreground text-sm">
                 {item.title}
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="mt-1 text-muted-foreground text-xs">
                 {item.description}
               </p>
             </CardContent>
@@ -258,14 +258,14 @@ function PrivacyRoute() {
               For privacy-related questions, write to{" "}
               <a
                 href="mailto:mrluisfeer@gmail.com"
-                className="text-foreground font-medium underline-offset-4 hover:underline"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 mrluisfeer@gmail.com
               </a>{" "}
               or visit the{" "}
               <Link
                 to="/contact"
-                className="text-foreground font-medium underline-offset-4 hover:underline"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 contact page
               </Link>
@@ -280,10 +280,10 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Database className="mt-0.5 size-5 text-teal-600 dark:text-teal-300" />
             <div>
-              <p className="text-foreground text-sm font-semibold">
+              <p className="font-semibold text-foreground text-sm">
                 Data portability
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="mt-1 text-muted-foreground text-xs">
                 Export your transactions, budgets, and reports whenever you need
                 them.
               </p>
@@ -294,10 +294,10 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Scale className="mt-0.5 size-5 text-amber-600 dark:text-amber-300" />
             <div>
-              <p className="text-foreground text-sm font-semibold">
+              <p className="font-semibold text-foreground text-sm">
                 Compliance-ready
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="mt-1 text-muted-foreground text-xs">
                 Designed with GDPR, CCPA, and similar privacy regimes in mind.
               </p>
             </div>
@@ -307,10 +307,10 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Cookie className="mt-0.5 size-5 text-emerald-600 dark:text-emerald-300" />
             <div>
-              <p className="text-foreground text-sm font-semibold">
+              <p className="font-semibold text-foreground text-sm">
                 Minimal cookies
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="mt-1 text-muted-foreground text-xs">
                 Only the essentials we need to keep your session alive.
               </p>
             </div>
@@ -320,10 +320,10 @@ function PrivacyRoute() {
           <CardContent className="flex items-start gap-3">
             <Mail className="mt-0.5 size-5 text-sky-600 dark:text-sky-300" />
             <div>
-              <p className="text-foreground text-sm font-semibold">
+              <p className="font-semibold text-foreground text-sm">
                 Direct line
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">
+              <p className="mt-1 text-muted-foreground text-xs">
                 Real humans answer privacy requests at mrluisfeer@gmail.com.
               </p>
             </div>

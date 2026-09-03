@@ -25,8 +25,8 @@ export const NumberFormatSelector = () => {
       (option) => option.id === value,
     );
     sileo.info({
-      title: "Number format updated",
       description: selected?.label ?? value,
+      title: "Number format updated",
     });
   };
 
@@ -36,7 +36,9 @@ export const NumberFormatSelector = () => {
       <Select
         value={format}
         onValueChange={(value) => {
-          if (value) handleChange(value as NumberFormatId);
+          if (value) {
+            handleChange(value as NumberFormatId);
+          }
         }}
       >
         <SelectTrigger className="w-full sm:w-72">
@@ -63,7 +65,7 @@ export const NumberFormatSelector = () => {
                   <span className="text-muted-foreground text-xs">
                     {option.description}
                   </span>
-                  <span className="text-muted-foreground/80 font-mono text-[0.7rem]">
+                  <span className="font-mono text-[0.7rem] text-muted-foreground/80">
                     {option.example}
                   </span>
                 </div>

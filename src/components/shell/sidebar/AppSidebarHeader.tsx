@@ -14,16 +14,23 @@ export function AppSidebarHeader() {
         <SidebarMenuItem>
           <SidebarMenuButton
             size="lg"
-            className="hover:bg-sidebar-accent/40 active:bg-sidebar-accent/40 group-data-[collapsible=icon]:!p-2"
+            className="group-data-[collapsible=icon]:!p-2 hover:bg-sidebar-accent/40 active:bg-sidebar-accent/40"
             tooltip="Monfly"
             render={<Link to="/home" />}
           >
-            <img src={LogoSvg} alt="" aria-hidden="true" className="size-5" />
+            <img
+              src={LogoSvg}
+              alt=""
+              aria-hidden="true"
+              className="size-5"
+              width={20}
+              height={20}
+            />
             <div className="grid flex-1 text-left leading-tight">
-              <span className="truncate text-sm font-semibold tracking-tight">
+              <span className="truncate font-semibold text-sm tracking-tight">
                 Monfly
               </span>
-              <span className="text-sidebar-foreground/60 truncate text-xs">
+              <span className="truncate text-sidebar-foreground/60 text-xs">
                 Personal finance
               </span>
             </div>
