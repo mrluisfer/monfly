@@ -20,6 +20,8 @@ model User {
   acceptedTermsAt     DateTime?
   acceptedPrivacyAt   DateTime?
   avatarSeed          String?
+  /// Monthly spending budget in cents, set from monfly-v2's dashboard. Null when none is set.
+  monthlyBudgetCents  Int?
   budgets        Budget[]
   cards          Card[]
   categories     Category[]
