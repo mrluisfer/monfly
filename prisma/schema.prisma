@@ -22,6 +22,8 @@ model User {
   avatarSeed          String?
   /// Monthly spending budget in cents, set from monfly-v2's dashboard. Null when none is set.
   monthlyBudgetCents  Int?
+  /// Colours picked in monfly-v2, one JSON document: { "category": { "<name>": "<palette id>" } }.
+  colors              Json?
   budgets        Budget[]
   cards          Card[]
   categories     Category[]
