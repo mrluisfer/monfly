@@ -9,7 +9,7 @@ datasource db {
 model User {
   id                  String           @id @default(uuid())
   email               String           @unique
-  password            String
+  password            String? // legacy: Auth0 owns credentials; null for new users
   name                String?
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @default(now()) @updatedAt
