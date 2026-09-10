@@ -41,11 +41,11 @@ export const loginFn = createServerFn({ method: "POST" })
         } as ApiResponse<string | null>;
       }
 
-      // Check if the password is correct
-      const isPasswordCorrect = await bcrypt.compare(
-        data.password,
-        user.password,
-      );
+      // Check if the password is correct. Accounts created through Auth0
+      // (monfly-v2) have no local password and can't log in here.
+      const isPasswordCorrect =
+        user.password !== null &&
+        (await bcrypt.compare(data.password, user.password));
 
       if (!isPasswordCorrect) {
         return {

@@ -22,10 +22,10 @@ export const updateUserPassword = async (data: {
       } as ApiResponse<null>;
     }
 
-    const isCurrentPasswordValid = await verifyPassword(
-      data.currentPassword,
-      user.password,
-    );
+    // Accounts created through Auth0 (monfly-v2) have no local password.
+    const isCurrentPasswordValid =
+      user.password !== null &&
+      (await verifyPassword(data.currentPassword, user.password));
 
     if (!isCurrentPasswordValid) {
       return {

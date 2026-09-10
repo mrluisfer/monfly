@@ -17,7 +17,7 @@ export interface TransactionWithUser {
     email: string;
     createdAt: Date;
     id: string;
-    password: string;
+    password: string | null;
     totalBalance: number;
     updatedAt: Date;
   };
