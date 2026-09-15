@@ -24,6 +24,8 @@ model User {
   monthlyBudgetCents  Int?
   /// Colours picked in monfly-v2, one JSON document: { "category": { "<name>": "<palette id>" } }.
   colors              Json?
+  /// Header shortcuts pinned in monfly-v2, by id ("transactions", "insights", …). Overview is always shown, so it isn't stored.
+  shortcuts           String[]         @default(["transactions"])
   budgets        Budget[]
   cards          Card[]
   categories     Category[]
